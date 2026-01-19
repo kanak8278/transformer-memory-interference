@@ -1,0 +1,9 @@
+You are tracking {{ num_categories }} keys: {{ categories_list }}.
+Read the following text stream where each key is updated continuously. For each key, remember ONLY its FIRST value (the very first time it appears).
+Text stream:
+{% for update in interleaved_sequence -%}
+{{ update.category }}: {{ update.value }}
+{% endfor -%}
+Now, for each of the {{ num_categories }} keys, tell me the exact initial value of each keys before any updates.
+Format your response exactly as: "The initial value of [key] is [value]." OR as a JSON object: {"key1": "value1", "key2": "value2", ...}
+List all {{ num_categories }} keys with their EXACT first values.

@@ -1,0 +1,3130 @@
+{
+  "experiment": "interleaved_retroactive_interference",
+  "model": "bedrock-ministral-3b",
+  "levels": [
+    3,
+    10,
+    50,
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "sample_size": 46,
+  "timestamp": "20251231_190645",
+  "results": [
+    {
+      "model": "bedrock-ministral-3b",
+      "interference_level": 3,
+      "sample_size": 46,
+      "accuracy": 95.65217391304348,
+      "correct_count": 44,
+      "total_count": 46,
+      "missing_count": 0,
+      "missing_rate": 0.0,
+      "sequence_length": 138,
+      "batch_response": "Here is the exact initial value for each of the 46 keys in the requested format:\n\n```json\n{\n  \"visual art\": \"art nouveau\",\n  \"tools\": \"vise\",\n  \"landform\": \"strait\",\n  \"musical instrument\": \"tambourine\",\n  \"gemstone\": \"prasiolite\",\n  \"fabric\": \"cotton\",\n  \"tree species\": \"jacaranda\",\n  \"cheese variety\": \"brie\",\n  \"architectural style\": \"greek revival\",\n  \"cloud formation\": \"cirrus\",\n  \"bird species\": \"falcon\",\n  \"culinary herb\": \"gotu kola\",\n  \"flower species\": \"primrose\",\n  \"wine variety\": \"malbec\",\n  \"dance style\": \"contemporary\",\n  \"pasta shape\": \"corzetti\",\n  \"literary genre\": \"dark fantasy\",\n  \"cooking method\": \"simmering\",\n  \"mathematical concept\": \"differential equations\",\n  \"weather phenomenon\": \"snow squall\",\n  \"ocean current\": \"boundary current\",\n  \"mineral type\": \"hematite\",\n  \"coffee variety\": \"jamaican\",\n  \"telescope type\": \"optical\",\n  \"martial art\": \"tai chi\",\n  \"sea creature\": \"sea otter\",\n  \"psychology term\": \"schema\",\n  \"chemical element\": \"iodine\",\n  \"dinosaur genus\": \"parasaurolophus\",\n  \"programming language\": \"scheme\",\n  \"ancient civilization\": \"moche\",\n  \"bridge type\": \"pony truss\",\n  \"photography technique\": \"leading lines\",\n  \"cartoon character\": \"scooby doo\",\n  \"stadium name\": \"est\u00e1dio da luz\",\n  \"surgical procedure\": \"thrombectomy\",\n  \"constellation\": \"scorpius\",\n  \"fruit variety\": \"mangosteen\",\n  \"guitar type\": \"thinline\",\n  \"spice blend\": \"mole\",\n  \"hat style\": \"ivy cap\",\n  \"painting medium\": \"illumination\",\n  \"volcano name\": \"galunggung\",\n  \"sea creature\": \"sea cucumber\",\n  \"cloud formation\": \"fractus\",\n  \"landform\": \"levee\",\n  \"board game\": \"scythe\",\n  \"culinary herb\": \"fennel\",\n  \"architectural style\": \"new urbanism\",\n  \"spice blend\": \"baharat\",\n  \"chemical element\": \"nickel\",\n  \"bird species\": \"egret\",\n  \"literary genre\": \"magical realism\",\n  \"telescope type\": \"equatorial\",\n  \"dinosaur genus\": \"dilophosaurus\",\n  \"fabric\": \"modal\",\n  \"hat style\": \"beret\",\n  \"ocean current\": \"labrador\",\n  \"wine variety\": \"roussanne\",\n  \"coffee variety\": \"pacas\",\n  \"architectural style\": \"streamline moderne\",\n  \"sword type\": \"kampilan\",\n  \"flower species\": \"narcissus\",\n  \"photography technique\": \"silhouette\",\n  \"painting medium\": \"verdaccio\",\n  \"weather phenomenon\": \"graupel\",\n  \"mineral type\": \"graphite\",\n  \"boat type\": \"speedboat\",\n  \"cartoon character\": \"daisy duck\",\n  \"board game\": \"mancala\",\n  \"psychology term\": \"punishment\",\n  \"stadium name\": \"signal iduna\",\n  \"tree species\": \"maple\",\n  \"visual art\": \"conceptual art\",\n  \"constellation\": \"carina\",\n  \"martial art\": \"shuai jiao\",\n  \"dance style\": \"freestyle\",\n  \"gemstone\": \"jadeite\",\n  \"sea creature\": \"sea dragon\",\n  \"chemical element\": \"xenon\",\n  \"mathematical concept\": \"series\",\n  \"cartoon character\": \"donald duck\",\n  \"musical instrument\": \"chimes\",\n  \"ancient civilization\": \"sumerian\",\n  \"surgical procedure\": \"colonoscopy\",\n  \"fruit variety\": \"pomelo\",\n  \"cooking method\": \"piping\",\n  \"ocean current\": \"leeuwin\",\n  \"wine variety\": \"mourvedre\",\n  \"literary genre\": \"drama\",\n  \"painting medium\": \"acrylic\",\n  \"coffee variety\": \"gesha\",\n  \"ancient civilization\": \"harappan\",\n  \"programming language\": \"sed\",\n  \"board game\": \"power grid\",\n  \"guitar type\": \"silent guitar\",\n  \"sword type\": \"hook sword\",\n  \"flower species\": \"lily\",\n  \"spice blend\": \"herbes de provence\",\n  \"boat type\": \"barque\",\n  \"dance style\": \"tango\",\n  \"fruit variety\": \"cherry\"\n}\n```",
+      "token_usage": {
+        "input_tokens": 1218,
+        "output_tokens": 1075,
+        "total_tokens": 2293,
+        "was_truncated": false,
+        "error": null
+      },
+      "results": [
+        {
+          "category": "visual art",
+          "expected": "art nouveau",
+          "extracted": "art nouveau",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 1
+        },
+        {
+          "category": "tools",
+          "expected": "vise",
+          "extracted": "vise",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 25
+        },
+        {
+          "category": "landform",
+          "expected": "strait",
+          "extracted": "strait",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 6
+        },
+        {
+          "category": "musical instrument",
+          "expected": "tambourine",
+          "extracted": "tambourine",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 10
+        },
+        {
+          "category": "gemstone",
+          "expected": "prasiolite",
+          "extracted": "prasiolite",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 49
+        },
+        {
+          "category": "fabric",
+          "expected": "cotton",
+          "extracted": "cotton",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 27
+        },
+        {
+          "category": "tree species",
+          "expected": "jacaranda",
+          "extracted": "jacaranda",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 34
+        },
+        {
+          "category": "cheese variety",
+          "expected": "brie",
+          "extracted": "brie",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 16
+        },
+        {
+          "category": "architectural style",
+          "expected": "greek revival",
+          "extracted": "greek revival",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 3
+        },
+        {
+          "category": "cloud formation",
+          "expected": "cirrus",
+          "extracted": "cirrus",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 74
+        },
+        {
+          "category": "bird species",
+          "expected": "falcon",
+          "extracted": "falcon",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 78
+        },
+        {
+          "category": "culinary herb",
+          "expected": "gotu kola",
+          "extracted": "gotu kola",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 21
+        },
+        {
+          "category": "flower species",
+          "expected": "primrose",
+          "extracted": "primrose",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 99
+        },
+        {
+          "category": "wine variety",
+          "expected": "malbec",
+          "extracted": "malbec",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 15
+        },
+        {
+          "category": "dance style",
+          "expected": "contemporary",
+          "extracted": "contemporary",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 12
+        },
+        {
+          "category": "pasta shape",
+          "expected": "corzetti",
+          "extracted": "corzetti",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 41
+        },
+        {
+          "category": "literary genre",
+          "expected": "dark fantasy",
+          "extracted": "dark fantasy",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 103
+        },
+        {
+          "category": "cooking method",
+          "expected": "simmering",
+          "extracted": "simmering",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 30
+        },
+        {
+          "category": "mathematical concept",
+          "expected": "differential equations",
+          "extracted": "differential equations",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 20
+        },
+        {
+          "category": "weather phenomenon",
+          "expected": "snow squall",
+          "extracted": "snow squall",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 5
+        },
+        {
+          "category": "ocean current",
+          "expected": "boundary current",
+          "extracted": "boundary current",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 69
+        },
+        {
+          "category": "mineral type",
+          "expected": "hematite",
+          "extracted": "hematite",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 18
+        },
+        {
+          "category": "coffee variety",
+          "expected": "jamaican",
+          "extracted": "jamaican",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 35
+        },
+        {
+          "category": "telescope type",
+          "expected": "optical",
+          "extracted": "optical",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 38
+        },
+        {
+          "category": "martial art",
+          "expected": "tai chi",
+          "extracted": "tai chi",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 9
+        },
+        {
+          "category": "sea creature",
+          "expected": "sea otter",
+          "extracted": "sea otter",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 73
+        },
+        {
+          "category": "psychology term",
+          "expected": "schema",
+          "extracted": "schema",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 2
+        },
+        {
+          "category": "chemical element",
+          "expected": "iodine",
+          "extracted": "iodine",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 4
+        },
+        {
+          "category": "dinosaur genus",
+          "expected": "parasaurolophus",
+          "extracted": "parasaurolophus",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 48
+        },
+        {
+          "category": "programming language",
+          "expected": "scheme",
+          "extracted": "scheme",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 24
+        },
+        {
+          "category": "ancient civilization",
+          "expected": "moche",
+          "extracted": "moche",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 96
+        },
+        {
+          "category": "bridge type",
+          "expected": "pony truss",
+          "extracted": "pony truss",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 19
+        },
+        {
+          "category": "photography technique",
+          "expected": "leading lines",
+          "extracted": "leading lines",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 7
+        },
+        {
+          "category": "boat type",
+          "expected": "speedboat",
+          "extracted": "speedboat",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 31
+        },
+        {
+          "category": "cartoon character",
+          "expected": "scooby doo",
+          "extracted": "scooby doo",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 8
+        },
+        {
+          "category": "stadium name",
+          "expected": "estadio da luz",
+          "extracted": "signal iduna",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 33
+        },
+        {
+          "category": "surgical procedure",
+          "expected": "thrombectomy",
+          "extracted": "thrombectomy",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 14
+        },
+        {
+          "category": "constellation",
+          "expected": "scorpius",
+          "extracted": "scorpius",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 52
+        },
+        {
+          "category": "spice blend",
+          "expected": "mole",
+          "extracted": "mole",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 11
+        },
+        {
+          "category": "guitar type",
+          "expected": "thinline",
+          "extracted": "thinline",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 40
+        },
+        {
+          "category": "hat style",
+          "expected": "beret",
+          "extracted": "ivy cap",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 109
+        },
+        {
+          "category": "painting medium",
+          "expected": "illumination",
+          "extracted": "illumination",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 13
+        },
+        {
+          "category": "volcano name",
+          "expected": "galunggung",
+          "extracted": "galunggung",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 28
+        },
+        {
+          "category": "fruit variety",
+          "expected": "mangosteen",
+          "extracted": "mangosteen",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 0
+        },
+        {
+          "category": "sword type",
+          "expected": "kampilan",
+          "extracted": "kampilan",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 76
+        },
+        {
+          "category": "board game",
+          "expected": "scythe",
+          "extracted": "scythe",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 23
+        }
+      ]
+    },
+    {
+      "model": "bedrock-ministral-3b",
+      "interference_level": 10,
+      "sample_size": 46,
+      "accuracy": 97.82608695652173,
+      "correct_count": 45,
+      "total_count": 46,
+      "missing_count": 0,
+      "missing_rate": 0.0,
+      "sequence_length": 460,
+      "batch_response": "Here is the exact first value for each of the 46 keys in the requested format:\n\n```json\n{\n  \"visual art\": \"video art\",\n  \"tools\": \"allen key\",\n  \"landform\": \"plain\",\n  \"musical instrument\": \"piccolo\",\n  \"gemstone\": \"sapphire\",\n  \"fabric\": \"cashmere\",\n  \"tree species\": \"cherry\",\n  \"cheese variety\": \"cantal\",\n  \"architectural style\": \"vernacular\",\n  \"cloud formation\": \"opacus\",\n  \"bird species\": \"hawk\",\n  \"culinary herb\": \"gotu kola\",\n  \"flower species\": \"azalea\",\n  \"wine variety\": \"merlot\",\n  \"dance style\": \"forr\u00f3\",\n  \"pasta shape\": \"trenette\",\n  \"literary genre\": \"historical fiction\",\n  \"cooking method\": \"deglazing\",\n  \"mathematical concept\": \"group\",\n  \"weather phenomenon\": \"graupel\",\n  \"ocean current\": \"oyashio\",\n  \"mineral type\": \"pentlandite\",\n  \"coffee variety\": \"natural\",\n  \"telescope type\": \"submillimeter\",\n  \"martial art\": \"bartitsu\",\n  \"sea creature\": \"barnacle\",\n  \"psychology term\": \"conformity\",\n  \"chemical element\": \"argon\",\n  \"dinosaur genus\": \"dilophosaurus\",\n  \"programming language\": \"php\",\n  \"ancient civilization\": \"babylonian\",\n  \"bridge type\": \"movable\",\n  \"photography technique\": \"symmetry\",\n  \"boat type\": \"canoe\",\n  \"cartoon character\": \"huckleberry hound\",\n  \"stadium name\": \"camp nou\",\n  \"surgical procedure\": \"appendectomy\",\n  \"constellation\": \"leo\",\n  \"spice blend\": \"chermoula\",\n  \"guitar type\": \"mandolin guitar\",\n  \"hat style\": \"boonie hat\",\n  \"painting medium\": \"watercolor\",\n  \"volcano name\": \"merapi\",\n  \"fruit variety\": \"grape\",\n  \"sword type\": \"khanda\",\n  \"board game\": \"terra mystica\",\n  \"literary genre\": \"adventure\",\n  \"flower species\": \"primrose\",\n  \"musical instrument\": \"clarinet\",\n  \"cooking method\": \"sous vide\",\n  \"pasta shape\": \"couscous\",\n  \"ocean current\": \"agulhas\",\n  \"gemstone\": \"padparadscha\",\n  \"architectural style\": \"bungalow\",\n  \"cloud formation\": \"flammagenitus\",\n  \"spice blend\": \"baharat\",\n  \"musical instrument\": \"saxophone\",\n  \"dance style\": \"mambo\",\n  \"volcano name\": \"paricutin\",\n  \"psychology term\": \"metacognition\",\n  \"sword type\": \"tanto\",\n  \"painting medium\": \"engraving\",\n  \"cooking method\": \"folding\",\n  \"bridge type\": \"k truss\",\n  \"cartoon character\": \"pluto\",\n  \"pasta shape\": \"malloreddus\",\n  \"mathematical concept\": \"dimension\",\n  \"mathematical concept\": \"symmetry\",\n  \"surgical procedure\": \"laparoscopy\",\n  \"dinosaur genus\": \"camarasaurus\",\n  \"landform\": \"terrace\",\n  \"wine variety\": \"albarino\",\n  \"boat type\": \"bowrider\",\n  \"visual art\": \"african modernism\",\n  \"musical instrument\": \"banjo\",\n  \"telescope type\": \"spectrograph\",\n  \"spice blend\": \"wasabi\",\n  \"coffee variety\": \"typica\",\n  \"dance style\": \"rumba\",\n  \"constellation\": \"canis major\",\n  \"boat type\": \"walkaround\",\n  \"martial art\": \"submission wrestling\",\n  \"coffee variety\": \"kenyan\",\n  \"cooking method\": \"kneading\",\n  \"gemstone\": \"morganite\",\n  \"wine variety\": \"roussanne\",\n  \"bridge type\": \"elliptical arch\",\n  \"board game\": \"scythe\",\n  \"fabric\": \"denim\",\n  \"dinosaur genus\": \"pentaceratops\",\n  \"mineral type\": \"cuprite\",\n  \"cloud formation\": \"cavum\",\n  \"coffee variety\": \"bourbon\",\n  \"dinosaur genus\": \"megalosaurus\",\n  \"sword type\": \"epee\",\n  \"landform\": \"fjord\",\n  \"constellation\": \"vela\",\n  \"flower species\": \"iris\",\n  \"bridge type\": \"bascule\",\n  \"spice blend\": \"sambal\",\n  \"weather phenomenon\": \"drizzle\",\n  \"boat type\": \"research vessel\",\n  \"constellation\": \"lyra\",\n  \"sword type\": \"kilij\",\n  \"surgical procedure\": \"hip resurfacing\",\n  \"sword type\": \"pugio\",\n  \"visual art\": \"environmental art\",\n  \"landform\": \"escarpment\",\n  \"dinosaur genus\": \"maiasaura\",\n  \"stadium name\": \"millennium stadium\",\n  \"mineral type\": \"sphalerite\",\n  \"weather phenomenon\": \"haze\",\n  \"landform\": \"arroyo\",\n  \"cartoon character\": \"yogi bear\",\n  \"dance style\": \"voguing\",\n  \"constellation\": \"crater\",\n  \"architectural style\": \"baroque\",\n  \"musical instrument\": \"drums\",\n  \"cartoon character\": \"road runner\",\n  \"coffee variety\": \"stenophylla\",\n  \"constellation\": \"octans\",\n  \"bird species\": \"nuthatch\",\n  \"ancient civilization\": \"olmec\",\n  \"sword type\": \"khopesh\",\n  \"chemical element\": \"carbon\",\n  \"ancient civilization\": \"athenian\",\n  \"spice blend\": \"togarashi\",\n  \"mathematical concept\": \"limit\",\n  \"sword type\": \"makhaira\",\n  \"surgical procedure\": \"cholecystectomy\",\n  \"photography technique\": \"golden ratio\",\n  \"coffee variety\": \"tekisic\",\n  \"bridge type\": \"pontoon\",\n  \"bird species\": \"warbler\",\n  \"flower species\": \"peony\",\n  \"sword type\": \"spatha\",\n  \"landform\": \"volcano\",\n  \"weather phenomenon\": \"aurora\",\n  \"tree species\": \"walnut\",\n  \"psychology term\": \"executive function\",\n  \"constellation\": \"contrail\",\n  \"musical instrument\": \"tabla\",\n  \"board game\": \"pandemic\",\n  \"dinosaur genus\": \"velociraptor\",\n  \"programming language\": \"rust\",\n  \"pasta shape\": \"mafalde\",\n  \"sword type\": \"yataghan\",\n  \"constellation\": \"draco\",\n  \"cartoon character\": \"johnny bravo\",\n  \"musical instrument\": \"cornet\",\n  \"cloud formation\": \"stratus\",\n  \"chemical element\": \"titanium\",\n  \"weather phenomenon\": \"derecho\",\n  \"psychology term\": \"classical\",\n  \"dance style\": \"lambada\",\n  \"chemical element\": \"helium gas\",\n  \"bridge type\": \"swing\",\n  \"cooking method\": \"curing\",\n  \"gemstone\": \"spinel\",\n  \"ocean current\": \"south pacific\",\n  \"chemical element\": \"neon light\",\n  \"mineral type\": \"smithsonite\",\n  \"architectural style\": \"bauhaus\",\n  \"sea creature\": \"sea cucumber\",\n  \"musical instrument\": \"cowbell\",\n  \"constellation\": \"ar\",\n  \"coffee variety\": \"kent\",\n  \"fabric\": \"bamboo\",\n  \"visual art\": \"lowbrow\",\n  \"boat type\": \"trawler\",\n  \"fruit variety\": \"raspberry\",\n  \"martial art\": \"greco roman\",\n  \"chemical element\": \"mercury\",\n  \"bridge type\": \"corbel arch\",\n  \"photography technique\": \"light painting\",\n  \"cloud formation\": \"cirrus\",\n  \"board game\": \"othello\",\n  \"landform\": \"glacier\",\n  \"musical instrument\": \"vibraphone\",\n  \"programming language\": \"d\",\n  \"tree species\": \"cacao\",\n  \"fruit variety\": \"guava\",\n  \"visual art\": \"street art\",\n  \"literary genre\": \"parable\",\n  \"coffee variety\": \"villa sarchi\",\n  \"ocean current\": \"arctic ocean\",\n  \"telescope type\": \"astrograph\",\n  \"volcano name\": \"popocatepetl\",\n  \"ocean current\": \"downwelling\",\n  \"wine variety\": \"sangiovese\",\n  \"chemical element\": \"calcium\",\n  \"chemical element\": \"beryllium\",\n  \"architectural style\": \"sustainable\",\n  \"gemstone\": \"chrysocolla\",\n  \"gemstone\": \"sunstone\",\n  \"bridge type\": \"drawbridge\",\n  \"coffee variety\": \"liberica\",\n  \"ancient civilization\": \"chinese\",\n  \"bird species\": \"sparrow\",\n  \"fabric\": \"taffeta\",\n  \"mineral type\": \"sillimanite\",\n  \"cartoon character\": \"bart simpson\",\n  \"musical instrument\": \"bass clarinet\",\n  \"chemical element\": \"hydrogen\",\n  \"spice blend\": \"poultry seasoning\",\n  \"bird species\": \"ostrich\",\n  \"hat style\": \"toque\",\n  \"stadium name\": \"lords\",\n  \"sword type\": \"flathead screwdriver\",\n  \"dance style\": \"merengue\",\n  \"cooking method\": \"stewing\",\n  \"gemstone\": \"moonstone\",\n  \"landform\": \"peninsula\",\n  \"ancient civilization\": \"toltec\",\n  \"tree species\": \"elm\",\n  \"pasta shape\": \"gnocchi\",\n  \"martial art\": \"boxing\",\n  \"cartoon character\": \"minnie mouse\",\n  \"gemstone\": \"shell\",\n  \"coffee variety\": \"sl34\",\n  \"photography technique\": \"bokeh\",\n  \"guitar type\": \"thinline\",\n  \"programming language\": \"visual basic\",\n  \"bridge type\": \"lift\",\n  \"guitar type\": \"grand auditorium\",\n  \"mathematical concept\": \"differential equations\",\n  \"sword type\": \"spatha\",\n  \"spice blend\": \"bouquet garni\",\n  \"fruits\": \"fennel\",\n  \"landform\": \"crag\",\n  \"ancient civilization\": \"mississippian\",\n  \"literary genre\": \"dark fantasy\",\n  \"hat style\": \"flat cap\",\n  \"hat style\": \"trapper hat\",\n  \"telescope type\": \"space telescope\",\n  \"literary genre\": \"hard sci fi\",\n  \"visual art\": \"surrealism\",\n  \"wine variety\": \"cabernet sauvignon\",\n  \"programming language\": \"fortran\",\n  \"architectural style\": \"jacobean\",\n  \"tree species\": \"breadfruit\",\n  \"dinosaur genus\": \"maiasaura\",\n  \"dance style\": \"tango\",\n  \"mineral type\": \"chromite\",\n  \"musical instrument\": \"drums\",\n  \"landform\": \"terrace\",\n  \"cooking method\": \"folding\",\n  \"sword type\": \"spatha\",\n  \"musical instrument\": \"tabla\",\n  \"coffee variety\": \"kenyan\",\n  \"sword type\": \"kilij\",\n  \"surgical procedure\": \"hip replacement\",\n  \"sword type\": \"khanjar\",\n  \"musical instrument\": \"clarinet\",\n  \"cooking method\": \"poaching\",\n  \"painting medium\": \"oil\",\n  \"ocean current\": \"east australian\",\n  \"tree species\": \"balsam fir\",\n  \"mathematical concept\": \"real number\",\n  \"flower species\": \"delphinium\",\n  \"wine variety\": \"primitivo\",\n  \"constellation\": \"phoenix\",\n  \"ancient civilization\": \"moche\",\n  \"sea creature\": \"beluga\",\n  \"fruit variety\": \"bergamot\",\n  \"martial art\": \"shuai jiao\",\n  \"spice blend\": \"pumpkin pie spice\",\n  \"tree species\": \"buckeye\",\n  \"mathematical concept\": \"tensor\",\n  \"musical instrument\": \"piccolo\",\n  \"cooking method\": \"sous vide\",\n  \"pasta shape\": \"couscous\",\n  \"flower species\": \"primrose\",\n  \"fruit variety\": \"persimmon\",\n  \"chemical element\": \"magnesium\",\n  \"tools\": \"locking pliers\",\n  \"tree species\": \"cashew\",\n  \"psychology term\": \"conditioning\",\n  \"fabric\": \"burlap\",\n  \"constellation\": \"draco\",\n  \"ancient civilization\": \"chaldean\",\n  \"literary genre\": \"fable\",\n  \"flower species\": \"petunia\",\n  \"flower species\": \"hydrangea\",\n  \"landform\": \"hill\",\n  \"wine variety\": \"chardonnay\",\n  \"photography technique\": \"double exposure\",\n  \"volcano name\": \"mauna loa\",\n  \"guitar type\": \"gretsch\",\n  \"architectural style\": \"colonial\",\n  \"telescope type\": \"coude\",\n  \"culinary herb\": \"sage\",\n  \"sea creature\": \"shrimp\",\n  \"tree species\": \"elm\",\n  \"programming language\": \"kotlin\",\n  \"mathematical concept\": \"symmetry\",\n  \"painting medium\": \"varnish\",\n  \"pasta shape\": \"campanelle\",\n  \"gemstone\": \"sapphire\",\n  \"surgical procedure\": \"appendectomy\",\n  \"photography technique\": \"symmetry\",\n  \"musical instrument\": \"clarinet\",\n  \"cooking method\": \"deglazing\",\n  \"landform\": \"terrace\",\n  \"musical instrument\": \"piccolo\",\n  \"cooking method\": \"sous vide\",\n  \"pasta shape\": \"couscous\",\n  \"flower species\": \"primrose\",\n  \"musical instrument\": \"clarinet\",\n  \"cooking method\": \"poaching\",\n  \"painting medium\": \"oil\",\n  \"ocean current\"",
+      "token_usage": {
+        "input_tokens": 3476,
+        "output_tokens": 8192,
+        "total_tokens": 11668,
+        "was_truncated": true,
+        "error": null
+      },
+      "results": [
+        {
+          "category": "visual art",
+          "expected": "video art",
+          "extracted": "video art",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 1
+        },
+        {
+          "category": "tools",
+          "expected": "allen key",
+          "extracted": "allen key",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 11
+        },
+        {
+          "category": "landform",
+          "expected": "plain",
+          "extracted": "plain",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 110
+        },
+        {
+          "category": "musical instrument",
+          "expected": "piccolo",
+          "extracted": "piccolo",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 95
+        },
+        {
+          "category": "gemstone",
+          "expected": "sapphire",
+          "extracted": "sapphire",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 44
+        },
+        {
+          "category": "fabric",
+          "expected": "cashmere",
+          "extracted": "cashmere",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 35
+        },
+        {
+          "category": "tree species",
+          "expected": "cherry",
+          "extracted": "cherry",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 47
+        },
+        {
+          "category": "cheese variety",
+          "expected": "cantal",
+          "extracted": "cantal",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 21
+        },
+        {
+          "category": "architectural style",
+          "expected": "vernacular",
+          "extracted": "vernacular",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 12
+        },
+        {
+          "category": "cloud formation",
+          "expected": "opacus",
+          "extracted": "opacus",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 84
+        },
+        {
+          "category": "bird species",
+          "expected": "hawk",
+          "extracted": "hawk",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 53
+        },
+        {
+          "category": "culinary herb",
+          "expected": "gotu kola",
+          "extracted": "gotu kola",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 0
+        },
+        {
+          "category": "flower species",
+          "expected": "azalea",
+          "extracted": "azalea",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 75
+        },
+        {
+          "category": "wine variety",
+          "expected": "merlot",
+          "extracted": "merlot",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 2
+        },
+        {
+          "category": "dance style",
+          "expected": "forr\u00f3",
+          "extracted": "mambo",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 69
+        },
+        {
+          "category": "pasta shape",
+          "expected": "trenette",
+          "extracted": "trenette",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 29
+        },
+        {
+          "category": "literary genre",
+          "expected": "historical fiction",
+          "extracted": "historical fiction",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 68
+        },
+        {
+          "category": "cooking method",
+          "expected": "deglazing",
+          "extracted": "deglazing",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 4
+        },
+        {
+          "category": "mathematical concept",
+          "expected": "group",
+          "extracted": "group",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 83
+        },
+        {
+          "category": "weather phenomenon",
+          "expected": "graupel",
+          "extracted": "graupel",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 16
+        },
+        {
+          "category": "ocean current",
+          "expected": "oyashio",
+          "extracted": "oyashio",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 63
+        },
+        {
+          "category": "mineral type",
+          "expected": "pentlandite",
+          "extracted": "pentlandite",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 26
+        },
+        {
+          "category": "coffee variety",
+          "expected": "natural",
+          "extracted": "natural",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 153
+        },
+        {
+          "category": "telescope type",
+          "expected": "submillimeter",
+          "extracted": "submillimeter",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 7
+        },
+        {
+          "category": "martial art",
+          "expected": "bartitsu",
+          "extracted": "bartitsu",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 19
+        },
+        {
+          "category": "sea creature",
+          "expected": "barnacle",
+          "extracted": "barnacle",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 8
+        },
+        {
+          "category": "psychology term",
+          "expected": "conformity",
+          "extracted": "conformity",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 103
+        },
+        {
+          "category": "chemical element",
+          "expected": "argon",
+          "extracted": "argon",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 41
+        },
+        {
+          "category": "dinosaur genus",
+          "expected": "dilophosaurus",
+          "extracted": "dilophosaurus",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 31
+        },
+        {
+          "category": "programming language",
+          "expected": "php",
+          "extracted": "php",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 25
+        },
+        {
+          "category": "ancient civilization",
+          "expected": "babylonian",
+          "extracted": "babylonian",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 38
+        },
+        {
+          "category": "bridge type",
+          "expected": "movable",
+          "extracted": "movable",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 33
+        },
+        {
+          "category": "photography technique",
+          "expected": "symmetry",
+          "extracted": "symmetry",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 46
+        },
+        {
+          "category": "boat type",
+          "expected": "canoe",
+          "extracted": "canoe",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 10
+        },
+        {
+          "category": "cartoon character",
+          "expected": "huckleberry hound",
+          "extracted": "huckleberry hound",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 14
+        },
+        {
+          "category": "stadium name",
+          "expected": "camp nou",
+          "extracted": "camp nou",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 22
+        },
+        {
+          "category": "surgical procedure",
+          "expected": "appendectomy",
+          "extracted": "appendectomy",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 45
+        },
+        {
+          "category": "constellation",
+          "expected": "leo",
+          "extracted": "leo",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 17
+        },
+        {
+          "category": "spice blend",
+          "expected": "chermoula",
+          "extracted": "chermoula",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 3
+        },
+        {
+          "category": "guitar type",
+          "expected": "mandolin guitar",
+          "extracted": "mandolin guitar",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 9
+        },
+        {
+          "category": "hat style",
+          "expected": "boonie hat",
+          "extracted": "boonie hat",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 28
+        },
+        {
+          "category": "painting medium",
+          "expected": "watercolor",
+          "extracted": "watercolor",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 6
+        },
+        {
+          "category": "volcano name",
+          "expected": "merapi",
+          "extracted": "merapi",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 30
+        },
+        {
+          "category": "fruit variety",
+          "expected": "grape",
+          "extracted": "grape",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 18
+        },
+        {
+          "category": "sword type",
+          "expected": "khanda",
+          "extracted": "khanda",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 24
+        },
+        {
+          "category": "board game",
+          "expected": "terra mystica",
+          "extracted": "terra mystica",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 5
+        }
+      ]
+    },
+    {
+      "model": "bedrock-ministral-3b",
+      "interference_level": 50,
+      "sample_size": 46,
+      "accuracy": 97.82608695652173,
+      "correct_count": 45,
+      "total_count": 46,
+      "missing_count": 0,
+      "missing_rate": 0.0,
+      "sequence_length": 2300,
+      "batch_response": "Here is the exact first value for each of the 46 keys in the requested format:\n\n```json\n{\n  \"visual art\": \"baroque\",\n  \"tools\": \"aviation snips\",\n  \"landform\": \"lagoon\",\n  \"musical instrument\": \"cowbell\",\n  \"gemstone\": \"green beryl\",\n  \"fabric\": \"voile\",\n  \"tree species\": \"palm\",\n  \"cheese variety\": \"saint nectaire\",\n  \"architectural style\": \"romanesque revival\",\n  \"cloud formation\": \"praecipitatio\",\n  \"bird species\": \"heron\",\n  \"culinary herb\": \"bay leaf\",\n  \"flower species\": \"iris\",\n  \"wine variety\": \"carmenere\",\n  \"dance style\": \"waacking\",\n  \"pasta shape\": \"orzo\",\n  \"literary genre\": \"history\",\n  \"cooking method\": \"blanching\",\n  \"mathematical concept\": \"prime number\",\n  \"weather phenomenon\": \"derecho\",\n  \"ocean current\": \"convergence\",\n  \"mineral type\": \"pentlandite\",\n  \"coffee variety\": \"catuai\",\n  \"telescope type\": \"newtonian\",\n  \"martial art\": \"sanda\",\n  \"sea creature\": \"porpoise\",\n  \"psychology term\": \"repression\",\n  \"chemical element\": \"silicon\",\n  \"dinosaur genus\": \"tyrannosaurus\",\n  \"programming language\": \"ada\",\n  \"ancient civilization\": \"mohenjo daro\",\n  \"bridge type\": \"lift\",\n  \"photography technique\": \"underwater\",\n  \"boat type\": \"trawler\",\n  \"cartoon character\": \"snagglepuss\",\n  \"stadium name\": \"anfield\",\n  \"surgical procedure\": \"biopsy\",\n  \"constellation\": \"lacerta\",\n  \"spice blend\": \"furikake\",\n  \"guitar type\": \"twelve string\",\n  \"hat style\": \"ushanka\",\n  \"painting medium\": \"tempera\",\n  \"volcano name\": \"kilimanjaro\",\n  \"fruit variety\": \"peach\",\n  \"sword type\": \"greatsword\",\n  \"board game\": \"gloomhaven\",\n  \"literary genre\": \"dark fantasy\",\n  \"mathematical concept\": \"division\",\n  \"wine variety\": \"mourvedre\",\n  \"musical instrument\": \"steel drum\",\n  \"photography technique\": \"rule of thirds\",\n  \"chemical element\": \"carbon\",\n  \"dinosaur genus\": \"brachiosaurus\",\n  \"ocean current\": \"coastal current\",\n  \"fabric\": \"felt\",\n  \"culinary herb\": \"dill\",\n  \"landform\": \"mountain\",\n  \"constellation\": \"lyra\",\n  \"cooking method\": \"tempering\",\n  \"fabric\": \"alpaca\",\n  \"musical instrument\": \"panpipes\",\n  \"architectural style\": \"gothic revival\",\n  \"weather phenomenon\": \"sleet\",\n  \"sea creature\": \"sea turtle\",\n  \"photography technique\": \"symmetry\",\n  \"visual art\": \"rococo\",\n  \"painting medium\": \"sepia\",\n  \"programming language\": \"zig\",\n  \"photography technique\": \"golden ratio\",\n  \"sea creature\": \"brittle star\",\n  \"cloud formation\": \"flammagenitus\",\n  \"visual art\": \"african modernism\",\n  \"wine variety\": \"vermentino\",\n  \"architectural style\": \"second empire\",\n  \"gemstone\": \"black opal\",\n  \"landform\": \"delta\",\n  \"gemstone\": \"malachite\",\n  \"coffee variety\": \"tanzanian\",\n  \"cloud formation\": \"murus\",\n  \"bridge type\": \"floating\",\n  \"ancient civilization\": \"axumite\",\n  \"fruit variety\": \"durian\",\n  \"dance style\": \"folk\",\n  \"sword type\": \"estoc\",\n  \"wine variety\": \"vermentino\",\n  \"literary genre\": \"space opera\",\n  \"psychology term\": \"classical\",\n  \"cooking method\": \"kneading\",\n  \"stadium name\": \"allegiant stadium\",\n  \"dinosaur genus\": \"corythosaurus\",\n  \"ancient civilization\": \"amorite\",\n  \"ancient civilization\": \"assyrian\",\n  \"tree species\": \"yew\",\n  \"cloud formation\": \"mediocris\",\n  \"dinosaur genus\": \"giganotosaurus\",\n  \"telescope type\": \"gregorian\",\n  \"stadium name\": \"twickenham\",\n  \"painting medium\": \"block print\",\n  \"musical instrument\": \"english horn\",\n  \"sword type\": \"arming sword\",\n  \"dance style\": \"freestyle\",\n  \"wine variety\": \"gruner veltliner\",\n  \"visual art\": \"conceptual art\",\n  \"sea creature\": \"barracuda\",\n  \"visual art\": \"mannerism\",\n  \"landform\": \"fjord\",\n  \"spice blend\": \"baharat\",\n  \"dance style\": \"modern\",\n  \"sword type\": \"seax\",\n  \"gemstone\": \"jadeite\",\n  \"coffee variety\": \"anaerobic\",\n  \"pasta shape\": \"rotini\",\n  \"psychology term\": \"superego\",\n  \"landform\": \"moraine\",\n  \"dance style\": \"samba\",\n  \"painting medium\": \"airbrush\",\n  \"cooking method\": \"blanching\",\n  \"landform\": \"estuary\",\n  \"ancient civilization\": \"harappan\",\n  \"board game\": \"twilight imperium\",\n  \"sword type\": \"foil\",\n  \"bridge type\": \"railway\",\n  \"spice blend\": \"chinese five spice\",\n  \"surgical procedure\": \"prostatectomy\",\n  \"architectural style\": \"parametric\",\n  \"psychology term\": \"socialization\",\n  \"cheese variety\": \"epoisses\",\n  \"gemstone\": \"azurite\",\n  \"wine variety\": \"madeira\",\n  \"coffee variety\": \"pacas\",\n  \"spice blend\": \"panch phoron\",\n  \"architectural style\": \"constructivism\",\n  \"fabric\": \"kevlar\",\n  \"volcano name\": \"kelud\",\n  \"mathematical concept\": \"derivative\",\n  \"programming language\": \"tcl\",\n  \"visual art\": \"impressionism\",\n  \"culinary herb\": \"ramps\",\n  \"psychology term\": \"identity\",\n  \"constellation\": \"gemini\",\n  \"mathematical concept\": \"manifold\",\n  \"musical instrument\": \"cello\",\n  \"chemical element\": \"potassium\",\n  \"tree species\": \"buckeye\",\n  \"telescope type\": \"herschelian\",\n  \"gemstone\": \"coral\",\n  \"pasta shape\": \"cannelloni\",\n  \"literary genre\": \"techno thriller\",\n  \"bridge type\": \"footbridge\",\n  \"ancient civilization\": \"moche\",\n  \"tools\": \"pliers\",\n  \"wine variety\": \"champagne\",\n  \"spice blend\": \"garam masala\",\n  \"photography technique\": \"vignetting\",\n  \"psychology term\": \"reinforcement\",\n  \"dinosaur genus\": \"deinonychus\",\n  \"cooking method\": \"boiling\",\n  \"surgical procedure\": \"spinal fusion\",\n  \"stadium name\": \"fenway park\",\n  \"telescope type\": \"ritchey chretien\",\n  \"chemical element\": \"oxygen\",\n  \"tree species\": \"fir\",\n  \"bridge type\": \"quadrangular truss\",\n  \"culinary herb\": \"lovage\",\n  \"architectural style\": \"beaux arts\",\n  \"musical instrument\": \"cymbals\",\n  \"dance style\": \"waltz\",\n  \"cartoon character\": \"kenny mccormick\",\n  \"tree species\": \"ash\",\n  \"gemstone\": \"agate\",\n  \"volcano name\": \"taranaki\",\n  \"mathematical concept\": \"composite number\",\n  \"constellation\": \"ursa minor\",\n  \"dance style\": \"kizomba\",\n  \"mathematical concept\": \"subtraction\",\n  \"cartoon character\": \"jetsons\",\n  \"gemstone\": \"amber\",\n  \"chemical element\": \"krypton\",\n  \"weather phenomenon\": \"mist\",\n  \"spice blend\": \"togarashi\",\n  \"hat style\": \"boater\",\n  \"weather phenomenon\": \"thunder\",\n  \"board game\": \"candy land\",\n  \"spice blend\": \"za'atar\",\n  \"cloud formation\": \"castellanus\",\n  \"sea creature\": \"squid\",\n  \"tree species\": \"walnut\",\n  \"boat type\": \"pontoon\",\n  \"photography technique\": \"silhouette\",\n  \"mathematical concept\": \"irrational number\",\n  \"tree species\": \"banyan\",\n  \"spice blend\": \"tandoori masala\",\n  \"flower species\": \"geranium\",\n  \"tree species\": \"cherry\",\n  \"surgical procedure\": \"colectomy\",\n  \"coffee variety\": \"villa sarchi\",\n  \"mineral type\": \"galena\",\n  \"fruit variety\": \"apple\",\n  \"stadium name\": \"cotton bowl\",\n  \"volcano name\": \"mount lamington\",\n  \"cooking method\": \"poaching\",\n  \"dance style\": \"mambo\",\n  \"culinary herb\": \"basil\",\n  \"dinosaur genus\": \"pentaceratops\",\n  \"fabric\": \"hemp\",\n  \"fruit variety\": \"guava\",\n  \"psychology term\": \"intelligence\",\n  \"gemstone\": \"garnet\",\n  \"fruit variety\": \"kiwi\",\n  \"fabric\": \"mesh\",\n  \"dinosaur genus\": \"parasaurolophus\",\n  \"mineral type\": \"siderite\",\n  \"sea creature\": \"whale\",\n  \"musical instrument\": \"lyre\",\n  \"coffee variety\": \"wet hulled\",\n  \"weather phenomenon\": \"dust devil\",\n  \"wine variety\": \"cortese\",\n  \"guitar type\": \"resonator\",\n  \"ocean current\": \"east greenland\",\n  \"ancient civilization\": \"khmer\",\n  \"martial art\": \"bajiquan\",\n  \"boat type\": \"clipper\",\n  \"tools\": \"drill\",\n  \"fabric\": \"jute\",\n  \"pasta shape\": \"pastina\",\n  \"boat type\": \"brig\",\n  \"flower species\": \"camellia\",\n  \"pasta shape\": \"macaroni\",\n  \"dinosaur genus\": \"alamosaurus\",\n  \"bird species\": \"finch\",\n  \"visual art\": \"graffiti art\",\n  \"tools\": \"compass saw\",\n  \"dance style\": \"cumbia\",\n  \"sea creature\": \"coral\",\n  \"ancient civilization\": \"chaldean\",\n  \"sea creature\": \"hermit crab\",\n  \"martial art\": \"wrestling\",\n  \"landform\": \"valley\",\n  \"bridge type\": \"through truss\",\n  \"musical instrument\": \"banjo\",\n  \"landform\": \"gorge\",\n  \"bird species\": \"tern\",\n  \"guitar type\": \"bass\",\n  \"bridge type\": \"transporter\",\n  \"architectural style\": \"romanesque\",\n  \"literary genre\": \"travelogue\",\n  \"board game\": \"descent\",\n  \"fabric\": \"nylon\",\n  \"surgical procedure\": \"shoulder replacement\",\n  \"stadium name\": \"wembley\",\n  \"musical instrument\": \"mandolin\",\n  \"board game\": \"carcassonne\",\n  \"bird species\": \"magpie\",\n  \"sword type\": \"epee\",\n  \"photography technique\": \"short exposure\",\n  \"stadium name\": \"wells fargo center\",\n  \"culinary herb\": \"horseradish\",\n  \"surgical procedure\": \"liposuction\",\n  \"stadium name\": \"emirates\",\n  \"sword type\": \"pugio\",\n  \"spice blend\": \"pumpkin pie spice\",\n  \"cooking method\": \"creaming\",\n  \"cheese variety\": \"havarti\",\n  \"culinary herb\": \"arugula\",\n  \"architectural style\": \"palladian\",\n  \"architectural style\": \"georgian\",\n  \"painting medium\": \"woodcut\",\n  \"chemical element\": \"plutonium\",\n  \"pasta shape\": \"conchiglioni\",\n  \"stadium name\": \"lords\",\n  \"guitar type\": \"grand auditorium\",\n  \"bird species\": \"hawk\",\n  \"cheese variety\": \"cabrales\",\n  \"photography technique\": \"fashion\",\n  \"board game\": \"mancala\",\n  \"surgical procedure\": \"stenting\",\n  \"ocean current\": \"california\",\n  \"mathematical concept\": \"complex analysis\",\n  \"chemical element\": \"astatine\",\n  \"stadium name\": \"camp nou\",\n  \"gemstone\": \"topaz\",\n  \"telescope type\": \"off axis\",\n  \"tree species\": \"juniper\",\n  \"sea creature\": \"dolphin\",\n  \"martial art\": \"freestyle wrestling\",\n  \"tree species\": \"sequoia\",\n  \"bird species\": \"mockingbird\",\n  \"cooking method\": \"searing\",\n  \"literary genre\": \"spy thriller\",\n  \"painting medium\": \"wash\",\n  \"volcano name\": \"nyiragongo\",\n  \"bird species\": \"albatross\",\n  \"martial art\": \"savate\",\n  \"chemical element\": \"beryllium 4\",\n  \"musical instrument\": \"flugelhorn\",\n  \"board game\": \"monopoly\",\n  \"visual art\": \"dadaism\",\n  \"visual art\": \"installation art\",\n  \"hat style\": \"ski cap\",\n  \"programming language\": \"nim\",\n  \"pasta shape\": \"lorighittas\",\n  \"literary genre\": \"poetry\",\n  \"cheese variety\": \"stilton\",\n  \"boat type\": \"catamaran\",\n  \"dinosaur genus\": \"stegosaurus\",\n  \"musical instrument\": \"chimes\",\n  \"architectural style\": \"art deco\",\n  \"stadium name\": \"etihad\",\n  \"painting medium\": \"illumination\",\n  \"surgical procedure\": \"pacemaker insertion\",\n ",
+      "token_usage": {
+        "input_tokens": 16395,
+        "output_tokens": 8192,
+        "total_tokens": 24587,
+        "was_truncated": true,
+        "error": null
+      },
+      "results": [
+        {
+          "category": "visual art",
+          "expected": "baroque",
+          "extracted": "baroque",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 88
+        },
+        {
+          "category": "tools",
+          "expected": "aviation snips",
+          "extracted": "aviation snips",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 37
+        },
+        {
+          "category": "landform",
+          "expected": "lagoon",
+          "extracted": "lagoon",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 48
+        },
+        {
+          "category": "musical instrument",
+          "expected": "cowbell",
+          "extracted": "cowbell",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 21
+        },
+        {
+          "category": "gemstone",
+          "expected": "green beryl",
+          "extracted": "green beryl",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 43
+        },
+        {
+          "category": "fabric",
+          "expected": "voile",
+          "extracted": "voile",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 1
+        },
+        {
+          "category": "tree species",
+          "expected": "palm",
+          "extracted": "palm",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 22
+        },
+        {
+          "category": "cheese variety",
+          "expected": "saint nectaire",
+          "extracted": "saint nectaire",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 8
+        },
+        {
+          "category": "architectural style",
+          "expected": "romanesque revival",
+          "extracted": "romanesque revival",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 19
+        },
+        {
+          "category": "cloud formation",
+          "expected": "praecipitatio",
+          "extracted": "praecipitatio",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 0
+        },
+        {
+          "category": "bird species",
+          "expected": "heron",
+          "extracted": "heron",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 27
+        },
+        {
+          "category": "culinary herb",
+          "expected": "bay leaf",
+          "extracted": "bay leaf",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 46
+        },
+        {
+          "category": "flower species",
+          "expected": "iris",
+          "extracted": "iris",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 17
+        },
+        {
+          "category": "wine variety",
+          "expected": "carmenere",
+          "extracted": "carmenere",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 100
+        },
+        {
+          "category": "dance style",
+          "expected": "waacking",
+          "extracted": "waacking",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 6
+        },
+        {
+          "category": "pasta shape",
+          "expected": "orzo",
+          "extracted": "orzo",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 4
+        },
+        {
+          "category": "literary genre",
+          "expected": "history",
+          "extracted": "history",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 20
+        },
+        {
+          "category": "cooking method",
+          "expected": "kneading 5",
+          "extracted": "blanching",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 144
+        },
+        {
+          "category": "mathematical concept",
+          "expected": "prime number",
+          "extracted": "prime number",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 49
+        },
+        {
+          "category": "weather phenomenon",
+          "expected": "derecho",
+          "extracted": "derecho",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 44
+        },
+        {
+          "category": "ocean current",
+          "expected": "convergence",
+          "extracted": "convergence",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 36
+        },
+        {
+          "category": "mineral type",
+          "expected": "pentlandite",
+          "extracted": "pentlandite",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 13
+        },
+        {
+          "category": "coffee variety",
+          "expected": "catuai",
+          "extracted": "catuai",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 75
+        },
+        {
+          "category": "telescope type",
+          "expected": "newtonian",
+          "extracted": "newtonian",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 25
+        },
+        {
+          "category": "martial art",
+          "expected": "sanda",
+          "extracted": "sanda",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 52
+        },
+        {
+          "category": "sea creature",
+          "expected": "porpoise",
+          "extracted": "porpoise",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 18
+        },
+        {
+          "category": "psychology term",
+          "expected": "repression",
+          "extracted": "repression",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 5
+        },
+        {
+          "category": "chemical element",
+          "expected": "silicon",
+          "extracted": "silicon",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 12
+        },
+        {
+          "category": "dinosaur genus",
+          "expected": "tyrannosaurus",
+          "extracted": "tyrannosaurus",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 3
+        },
+        {
+          "category": "programming language",
+          "expected": "ada",
+          "extracted": "ada",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 39
+        },
+        {
+          "category": "ancient civilization",
+          "expected": "mohenjo daro",
+          "extracted": "mohenjo daro",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 24
+        },
+        {
+          "category": "bridge type",
+          "expected": "lift",
+          "extracted": "lift",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 28
+        },
+        {
+          "category": "photography technique",
+          "expected": "underwater",
+          "extracted": "underwater",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 79
+        },
+        {
+          "category": "boat type",
+          "expected": "trawler",
+          "extracted": "trawler",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 30
+        },
+        {
+          "category": "cartoon character",
+          "expected": "snagglepuss",
+          "extracted": "snagglepuss",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 32
+        },
+        {
+          "category": "stadium name",
+          "expected": "anfield",
+          "extracted": "anfield",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 16
+        },
+        {
+          "category": "surgical procedure",
+          "expected": "biopsy",
+          "extracted": "biopsy",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 2
+        },
+        {
+          "category": "constellation",
+          "expected": "lacerta",
+          "extracted": "lacerta",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 55
+        },
+        {
+          "category": "spice blend",
+          "expected": "furikake",
+          "extracted": "furikake",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 31
+        },
+        {
+          "category": "guitar type",
+          "expected": "twelve string",
+          "extracted": "twelve string",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 40
+        },
+        {
+          "category": "hat style",
+          "expected": "ushanka",
+          "extracted": "ushanka",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 9
+        },
+        {
+          "category": "painting medium",
+          "expected": "tempera",
+          "extracted": "tempera",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 74
+        },
+        {
+          "category": "volcano name",
+          "expected": "kilimanjaro",
+          "extracted": "kilimanjaro",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 58
+        },
+        {
+          "category": "fruit variety",
+          "expected": "peach",
+          "extracted": "peach",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 41
+        },
+        {
+          "category": "sword type",
+          "expected": "greatsword",
+          "extracted": "greatsword",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 14
+        },
+        {
+          "category": "board game",
+          "expected": "gloomhaven",
+          "extracted": "gloomhaven",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 23
+        }
+      ]
+    },
+    {
+      "model": "bedrock-ministral-3b",
+      "interference_level": 100,
+      "sample_size": 46,
+      "accuracy": 43.47826086956522,
+      "correct_count": 20,
+      "total_count": 46,
+      "missing_count": 0,
+      "missing_rate": 0.0,
+      "sequence_length": 4600,
+      "batch_response": "Here is the exact first value for each of the 46 keys in the order they first appeared in the text stream:\n\n```json\n{\n  \"visual art\": \"bauhaus\",\n  \"tools\": \"tack hammer\",\n  \"landform\": \"karst\",\n  \"musical instrument\": \"harmonica\",\n  \"gemstone\": \"jasper\",\n  \"fabric\": \"burlap\",\n  \"tree species\": \"walnut\",\n  \"cheese variety\": \"pecorino\",\n  \"architectural style\": \"beaux arts\",\n  \"cloud formation\": \"virga\",\n  \"bird species\": \"penguin\",\n  \"culinary herb\": \"cumin\",\n  \"flower species\": \"tulip\",\n  \"wine variety\": \"vermentino\",\n  \"dance style\": \"tap\",\n  \"pasta shape\": \"stringozzi\",\n  \"literary genre\": \"horror\",\n  \"cooking method\": \"browning\",\n  \"mathematical concept\": \"lattice\",\n  \"weather phenomenon\": \"light pillar\",\n  \"ocean current\": \"cromwell\",\n  \"mineral type\": \"copal\",\n  \"coffee variety\": \"colombian\",\n  \"telescope type\": \"coude\",\n  \"martial art\": \"krav maga\",\n  \"sea creature\": \"sea cucumber\",\n  \"psychology term\": \"attention\",\n  \"chemical element\": \"nitrogen\",\n  \"dinosaur genus\": \"brontosaurus\",\n  \"programming language\": \"objective-c\",\n  \"ancient civilization\": \"moche\",\n  \"bridge type\": \"warren truss\",\n  \"photography technique\": \"golden ratio\",\n  \"boat type\": \"junk\",\n  \"cartoon character\": \"goofy\",\n  \"stadium name\": \"dodger stadium\",\n  \"surgical procedure\": \"colonoscopy\",\n  \"constellation\": \"taurus\",\n  \"spice blend\": \"greek seasoning\",\n  \"guitar type\": \"silent guitar\",\n  \"hat style\": \"bomber\",\n  \"painting medium\": \"egg tempera\",\n  \"volcano name\": \"mount hood\",\n  \"fruit variety\": \"orange\",\n  \"sword type\": \"longsword\",\n  \"literary genre\": \"science fiction\",\n  \"painting medium\": \"colored pencil\",\n  \"landform\": \"kame\",\n  \"pasta shape\": \"farfalle\",\n  \"board game\": \"concordia\",\n  \"gemstone\": \"labradorite\",\n  \"musical instrument\": \"ukulele\",\n  \"architectural style\": \"critical regionalism\",\n  \"cloud formation\": \"arcus\",\n  \"cooking method\": \"stewing\",\n  \"mathematical concept\": \"irrational number\",\n  \"psychology term\": \"reinforcement\",\n  \"ocean current\": \"benguela\",\n  \"fruit variety\": \"grape\",\n  \"wine variety\": \"greco\",\n  \"surgical procedure\": \"splenectomy\",\n  \"gemstone\": \"rhodochrosite\",\n  \"dinosaur genus\": \"gallimimus\",\n  \"musical instrument\": \"contrabassoon\",\n  \"coffee variety\": \"liberica\",\n  \"tree species\": \"basswood\",\n  \"surgical procedure\": \"valve replacement\",\n  \"programming language\": \"visual basic\",\n  \"visual art\": \"vorticism\",\n  \"telescope type\": \"nasmyth\",\n  \"dance style\": \"krumping\",\n  \"weather phenomenon\": \"corona\",\n  \"photography technique\": \"tracking\",\n  \"culinary herb\": \"borage\",\n  \"musical instrument\": \"dulcimer\",\n  \"fabric\": \"fleece\",\n  \"cloud formation\": \"kelvin helmholtz\",\n  \"cooking method\": \"stewing\",\n  \"mathematical concept\": \"limit\",\n  \"dance style\": \"house\",\n  \"ocean current\": \"gyre\",\n  \"dinosaur genus\": \"titanosaurus\",\n  \"dance style\": \"swing\",\n  \"chemical element\": \"hydrogen\",\n  \"coffee variety\": \"honey process\",\n  \"wine variety\": \"gewurztraminer\",\n  \"dinosaur genus\": \"allosaurus\",\n  \"sea creature\": \"halibut\",\n  \"mineral type\": \"aragonite\",\n  \"bridge type\": \"skyway\",\n  \"stadium name\": \"lords\",\n  \"dinosaur genus\": \"protoceratops\",\n  \"musical instrument\": \"glockenspiel\",\n  \"architectural style\": \"vernacular\",\n  \"visual art\": \"conceptual art\",\n  \"coffee variety\": \"maragogype\",\n  \"mathematical concept\": \"complex number\",\n  \"cartoon character\": \"courage\",\n  \"architectural style\": \"modernist\",\n  \"pasta shape\": \"orecchiette\",\n  \"programming language\": \"ruby\",\n  \"surgical procedure\": \"adrenalectomy\",\n  \"fruit variety\": \"pear\",\n  \"stadium name\": \"melbourne cricket ground\",\n  \"painting medium\": \"screen print\",\n  \"guitar type\": \"firebird\",\n  \"gemstone\": \"rhodonite\",\n  \"cheese variety\": \"chevre\",\n  \"mathematical concept\": \"combinatorics\",\n  \"painting medium\": \"sanguine\",\n  \"dance style\": \"jitterbug\",\n  \"volcano name\": \"eyjafjallajokull\",\n  \"musical instrument\": \"ukulele\",\n  \"telescope type\": \"x-ray\",\n  \"stadium name\": \"eden gardens\",\n  \"landform\": \"floodplain\",\n  \"pasta shape\": \"malloreddus\",\n  \"cartoon character\": \"bart simpson\",\n  \"stadium name\": \"sugar bowl\",\n  \"wine variety\": \"gamay\",\n  \"programming language\": \"perl\",\n  \"tools\": \"heat gun\",\n  \"gemstone\": \"bloodstone\",\n  \"photography technique\": \"rule of thirds\",\n  \"coffee variety\": \"java\",\n  \"bridge type\": \"suspension\",\n  \"pasta shape\": \"acini di pepe\",\n  \"cartoon character\": \"patrick star\",\n  \"painting medium\": \"verdaccio\",\n  \"programming language\": \"typescript\",\n  \"hat style\": \"kufi\",\n  \"guitar type\": \"dreadnought\",\n  \"ocean current\": \"norwegian\",\n  \"guitar type\": \"surf guitar\",\n  \"cooking method\": \"glazing\",\n  \"boat type\": \"trimaran\",\n  \"chemical element\": \"krypton\",\n  \"spice blend\": \"chinese five spice\",\n  \"bird species\": \"loon\",\n  \"sea creature\": \"nautilus\",\n  \"dinosaur genus\": \"parasaurolophus\",\n  \"painting medium\": \"gesso\",\n  \"fabric\": \"modal\",\n  \"bridge type\": \"space frame\",\n  \"cartoon character\": \"dexter\",\n  \"sword type\": \"katana\",\n  \"volcano name\": \"eyjafjallajokull\",\n  \"sword type\": \"bastard sword\",\n  \"fruit variety\": \"plum\",\n  \"hat style\": \"boater\",\n  \"martial art\": \"jiu jitsu\",\n  \"sword type\": \"greatsword\",\n  \"bridge type\": \"pointed arch\",\n  \"pasta shape\": \"conchiglioni\",\n  \"guitar type\": \"flamenco\",\n  \"chemical element\": \"sodium\",\n  \"gemstone\": \"chrysocolla\",\n  \"chemical element\": \"uranium\",\n  \"martial art\": \"brazilian jiu jitsu\",\n  \"ancient civilization\": \"lydian\",\n  \"cartoon character\": \"bart simpson\",\n  \"landform\": \"terrace\",\n  \"ancient civilization\": \"parthian\",\n  \"coffee variety\": \"honduran\",\n  \"landform\": \"dune\",\n  \"pasta shape\": \"cannelloni\",\n  \"volcano name\": \"elbrus\",\n  \"programming language\": \"d\",\n  \"musical instrument\": \"glockenspiel\",\n  \"wine variety\": \"mourvedre\",\n  \"mineral type\": \"halite\",\n  \"volcano name\": \"kilimanjaro\",\n  \"musical instrument\": \"clarinet\",\n  \"pasta shape\": \"cappelletti\",\n  \"gemstone\": \"red beryl\",\n  \"guitar type\": \"es 335\",\n  \"chemical element\": \"oxygen\",\n  \"telescope type\": \"ultraviolet\",\n  \"landform\": \"karst\",\n  \"sea creature\": \"coral\",\n  \"sea creature\": \"humpback whale\",\n  \"cheese variety\": \"cambozola\",\n  \"ancient civilization\": \"mayan\",\n  \"telescope type\": \"ground based\",\n  \"wine variety\": \"sauternes\",\n  \"coffee variety\": \"bourbon\",\n  \"visual art\": \"abstract expressionism\",\n  \"telescope type\": \"reflector\",\n  \"bird species\": \"nuthatch\",\n  \"gemstone\": \"heliodor\",\n  \"boat type\": \"deck boat\",\n  \"weather phenomenon\": \"cyclone\",\n  \"fruit variety\": \"grapefruit\",\n  \"guitar type\": \"dobro\",\n  \"bridge type\": \"trestle\",\n  \"mathematical concept\": \"derivative\",\n  \"cloud formation\": \"radiatus\",\n  \"bird species\": \"goose\",\n  \"ancient civilization\": \"spartan\",\n  \"architectural style\": \"gothic\",\n  \"gemstone\": \"bloodstone\",\n  \"boat type\": \"houseboat\",\n  \"bridge type\": \"pratt truss\",\n  \"literary genre\": \"history\",\n  \"spice blend\": \"fajita seasoning\",\n  \"chemical element\": \"argon gas\",\n  \"cartoon character\": \"minnie mouse\",\n  \"telescope type\": \"astrograph\",\n  \"architectural style\": \"minimalist\",\n  \"coffee variety\": \"mexican\",\n  \"cheese variety\": \"epoisses\",\n  \"surgical procedure\": \"rotator cuff repair\",\n  \"sword type\": \"kilij\",\n  \"literary genre\": \"thriller\",\n  \"musical instrument\": \"tabla\",\n  \"mineral type\": \"pyrite\",\n  \"tools\": \"rubber mallet\",\n  \"guitar type\": \"stratocaster\",\n  \"spice blend\": \"pickling spice\",\n  \"bird species\": \"gull\",\n  \"landform\": \"ravine\",\n  \"ancient civilization\": \"assyrian\",\n  \"bird species\": \"owl\",\n  \"ancient civilization\": \"minoan\",\n  \"tools\": \"dead blow hammer\",\n  \"sword type\": \"smallsword\",\n  \"dinosaur genus\": \"hypsilophodon\",\n  \"dinosaur genus\": \"dilophosaurus\",\n  \"gemstone\": \"pearl\",\n  \"flower species\": \"hydrangea\",\n  \"landform\": \"glacier\",\n  \"musical instrument\": \"marimba\",\n  \"stadium name\": \"stamford bridge\",\n  \"board game\": \"scrabble\",\n  \"painting medium\": \"chalk\",\n  \"culinary herb\": \"welsh onion\",\n  \"flower species\": \"narcissus\",\n  \"coffee variety\": \"blue mountain\",\n  \"landform\": \"drumlin\",\n  \"gemstone\": \"black opal\",\n  \"cooking method\": \"en papillote\",\n  \"spice blend\": \"garam masala\",\n  \"architectural style\": \"split level\",\n  \"culinary herb\": \"pandan\",\n  \"ocean current\": \"west greenland\",\n  \"cloud formation\": \"fibratus\",\n  \"flower species\": \"daffodil\",\n  \"cloud formation\": \"pannus\",\n  \"ancient civilization\": \"greek\",\n  \"tools\": \"pipe wrench\",\n  \"sea creature\": \"lobster\",\n  \"fruit variety\": \"longan\",\n  \"tools\": \"brick hammer\",\n  \"sword type\": \"estoc\",\n  \"psychology term\": \"emotion\",\n  \"programming language\": \"powershell\",\n  \"bridge type\": \"concrete arch\",\n  \"psychology term\": \"schedules\",\n  \"chemical element\": \"gold\",\n  \"tree species\": \"cherry\",\n  \"musical instrument\": \"shakuhachi\",\n  \"gemstone\": \"tanzanite\",\n  \"coffee variety\": \"liberica\",\n  \"photography technique\": \"golden hour\",\n  \"programming language\": \"c\",\n  \"cheese variety\": \"cambozola\",\n  \"guitar type\": \"acoustic\",\n  \"weather phenomenon\": \"ice pellets\",\n  \"photography technique\": \"long exposure\",\n  \"dance style\": \"folk\",\n  \"dinosaur genus\": \"brachiosaurus\",\n  \"programming language\": \"haskell\",\n  \"cartoon character\": \"porky pig\",\n  \"stadium name\": \"etihad\",\n  \"photography technique\": \"underwater\",\n  \"sea creature\": \"beluga\",\n  \"ancient civilization\": \"spartan\",\n  \"pasta shape\": \"spaghetti\",\n  \"dance style\": \"locking\",\n  \"mineral type\": \"bornite\",\n  \"cloud formation\": \"contrail\",\n  \"cloud formation\": \"cirrocumulus\",\n  \"ancient civilization\": \"teotihuacan\",\n  \"gemstone\": \"malachite\",\n  \"pasta shape\": \"casarecce\",\n  \"programming language\": \"lua\",\n  \"flower species\": \"snowdrop\",\n  \"coffee variety\": \"sl34\",\n  \"tools\": \"impact driver\",\n  \"board game\": \"wingspan\",\n  \"mineral type\": \"kyanite\",\n  \"coffee variety\": \"pacas\",\n  \"fabric\": \"velvet\",\n  \"literary genre\": \"horror\",\n  \"chemical element\": \"nitrogen\",\n  \"tree species\": \"ponderosa pine\",\n  \"musical instrument\": \"bass clarinet\",\n  \"dinosaur genus\": \"edmontosaurus\",\n  \"ocean current\": \"norwegian\",\n  \"telescope type\": \"herschelian\",\n  \"board game\": \"tzolkin\",\n  \"hat style\": \"baseball cap\",\n  \"sword type\": \"ida\",\n  \"cartoon character\": \"sylvester\",\n  \"wine variety\": \"albarino\",\n  \"ancient civi",
+      "token_usage": {
+        "input_tokens": 38633,
+        "output_tokens": 5425,
+        "total_tokens": 44058,
+        "was_truncated": false,
+        "error": null
+      },
+      "results": [
+        {
+          "category": "visual art",
+          "expected": "bauhaus 10",
+          "extracted": "bauhaus",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 30
+        },
+        {
+          "category": "tools",
+          "expected": "tack hammer",
+          "extracted": "tack hammer",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 124
+        },
+        {
+          "category": "landform",
+          "expected": "karst 41",
+          "extracted": "karst",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 35
+        },
+        {
+          "category": "musical instrument",
+          "expected": "harmonica",
+          "extracted": "harmonica",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 55
+        },
+        {
+          "category": "gemstone",
+          "expected": "jasper",
+          "extracted": "jasper",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 74
+        },
+        {
+          "category": "fabric",
+          "expected": "burlap",
+          "extracted": "burlap",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 49
+        },
+        {
+          "category": "tree species",
+          "expected": "walnut 40",
+          "extracted": "walnut",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 68
+        },
+        {
+          "category": "cheese variety",
+          "expected": "pecorino 34",
+          "extracted": "pecorino",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 25
+        },
+        {
+          "category": "architectural style",
+          "expected": "beaux arts 9",
+          "extracted": "beaux arts",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 2
+        },
+        {
+          "category": "cloud formation",
+          "expected": "virga 37",
+          "extracted": "virga",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 7
+        },
+        {
+          "category": "bird species",
+          "expected": "penguin",
+          "extracted": "penguin",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 43
+        },
+        {
+          "category": "culinary herb",
+          "expected": "cumin",
+          "extracted": "cumin",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 32
+        },
+        {
+          "category": "flower species",
+          "expected": "tulip 11",
+          "extracted": "tulip",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 6
+        },
+        {
+          "category": "wine variety",
+          "expected": "vermentino 18",
+          "extracted": "vermentino",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 24
+        },
+        {
+          "category": "dance style",
+          "expected": "tap",
+          "extracted": "tap",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 60
+        },
+        {
+          "category": "pasta shape",
+          "expected": "stringozzi 20",
+          "extracted": "stringozzi",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 65
+        },
+        {
+          "category": "literary genre",
+          "expected": "horror",
+          "extracted": "horror",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 9
+        },
+        {
+          "category": "cooking method",
+          "expected": "browning",
+          "extracted": "browning",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 48
+        },
+        {
+          "category": "mathematical concept",
+          "expected": "lattice 41",
+          "extracted": "lattice",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 10
+        },
+        {
+          "category": "weather phenomenon",
+          "expected": "light pillar",
+          "extracted": "light pillar",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 18
+        },
+        {
+          "category": "ocean current",
+          "expected": "cromwell",
+          "extracted": "cromwell",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 1
+        },
+        {
+          "category": "mineral type",
+          "expected": "epidote 1",
+          "extracted": "copal",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 150
+        },
+        {
+          "category": "coffee variety",
+          "expected": "colombian",
+          "extracted": "colombian",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 67
+        },
+        {
+          "category": "telescope type",
+          "expected": "coude 2",
+          "extracted": "coude",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 80
+        },
+        {
+          "category": "martial art",
+          "expected": "tomoi 14",
+          "extracted": "krav maga",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 14
+        },
+        {
+          "category": "sea creature",
+          "expected": "mahi mahi",
+          "extracted": "sea cucumber",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 93
+        },
+        {
+          "category": "psychology term",
+          "expected": "attention 30",
+          "extracted": "attention",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 91
+        },
+        {
+          "category": "chemical element",
+          "expected": "nitrogen 21",
+          "extracted": "nitrogen",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 36
+        },
+        {
+          "category": "dinosaur genus",
+          "expected": "brontosaurus 40",
+          "extracted": "brontosaurus",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 44
+        },
+        {
+          "category": "programming language",
+          "expected": "objective-c 46",
+          "extracted": "objective-c",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 16
+        },
+        {
+          "category": "ancient civilization",
+          "expected": "moche",
+          "extracted": "moche",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 5
+        },
+        {
+          "category": "bridge type",
+          "expected": "warren truss 8",
+          "extracted": "warren truss",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 71
+        },
+        {
+          "category": "photography technique",
+          "expected": "golden ratio 5",
+          "extracted": "golden ratio",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 15
+        },
+        {
+          "category": "boat type",
+          "expected": "junk",
+          "extracted": "junk",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 8
+        },
+        {
+          "category": "cartoon character",
+          "expected": "goofy 7",
+          "extracted": "goofy",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 62
+        },
+        {
+          "category": "stadium name",
+          "expected": "dodger stadium",
+          "extracted": "dodger stadium",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 26
+        },
+        {
+          "category": "surgical procedure",
+          "expected": "colonoscopy",
+          "extracted": "colonoscopy",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 42
+        },
+        {
+          "category": "constellation",
+          "expected": "taurus 10",
+          "extracted": "taurus",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 13
+        },
+        {
+          "category": "spice blend",
+          "expected": "greek seasoning",
+          "extracted": "greek seasoning",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 21
+        },
+        {
+          "category": "guitar type",
+          "expected": "silent guitar 30",
+          "extracted": "silent guitar",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 11
+        },
+        {
+          "category": "hat style",
+          "expected": "bomber",
+          "extracted": "bomber",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 12
+        },
+        {
+          "category": "painting medium",
+          "expected": "egg tempera 44",
+          "extracted": "egg tempera",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 46
+        },
+        {
+          "category": "volcano name",
+          "expected": "mount hood 50",
+          "extracted": "mount hood",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 3
+        },
+        {
+          "category": "fruit variety",
+          "expected": "orange",
+          "extracted": "orange",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 29
+        },
+        {
+          "category": "sword type",
+          "expected": "longsword 48",
+          "extracted": "longsword",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 51
+        },
+        {
+          "category": "board game",
+          "expected": "concordia",
+          "extracted": "concordia",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 0
+        }
+      ]
+    },
+    {
+      "model": "bedrock-ministral-3b",
+      "interference_level": 200,
+      "sample_size": 46,
+      "accuracy": 32.608695652173914,
+      "correct_count": 15,
+      "total_count": 46,
+      "missing_count": 0,
+      "missing_rate": 0.0,
+      "sequence_length": 9200,
+      "batch_response": "Here is the exact first value for each of the 46 keys in the format requested:\n\n```plaintext\nThe initial value of visual art is pointillism.\nThe initial value of tools is plane.\nThe initial value of landform is canyon.\nThe initial value of musical instrument is bassoon.\nThe initial value of gemstone is emerald.\nThe initial value of fabric is gauze.\nThe initial value of tree species is hemlock.\nThe initial value of cheese variety is comte.\nThe initial value of architectural style is parametric.\nThe initial value of cloud formation is humilis.\nThe initial value of bird species is parrot.\nThe initial value of culinary herb is sorrel.\nThe initial value of flower species is dandelion.\nThe initial value of wine variety is syrah.\nThe initial value of dance style is bolero.\nThe initial value of pasta shape is gnocchi.\nThe initial value of literary genre is thriller.\nThe initial value of cooking method is smoking.\nThe initial value of mathematical concept is combinatorics.\nThe initial value of weather phenomenon is blizzard.\nThe initial value of ocean current is oyashio.\nThe initial value of mineral type is apatite.\nThe initial value of coffee variety is honduran.\nThe initial value of telescope type is soft x-ray.\nThe initial value of martial art is submission wrestling.\nThe initial value of sea creature is gray whale.\nThe initial value of psychology term is thinking.\nThe initial value of chemical element is platinum.\nThe initial value of dinosaur genus is megalosaurus.\nThe initial value of programming language is assembly.\nThe initial value of ancient civilization is egyptian.\nThe initial value of bridge type is warren truss.\nThe initial value of photography technique is golden hour.\nThe initial value of boat type is icebreaker.\nThe initial value of cartoon character is sylvester.\nThe initial value of stadium name is cotton bowl.\nThe initial value of surgical procedure is varicose vein surgery.\nThe initial value of constellation is canis major.\nThe initial value of spice blend is garam masala.\nThe initial value of guitar type is archtop electric.\nThe initial value of hat style is panama.\nThe initial value of painting medium is impasto.\nThe initial value of volcano name is kilimanjaro.\nThe initial value of fruit variety is watermelon.\nThe initial value of sword type is shamshir.\nThe initial value of board game is clue.\nThe initial value of visual art is video art.\nThe initial value of ocean current is agulhas.\nThe initial value of gemstone is tiger eye.\nThe initial value of bird species is chickadee.\nThe initial value of cloud formation is humilis.\nThe initial value of landform is mound.\nThe initial value of coffee variety is congensis.\nThe initial value of wine variety is cabernet sauvignon.\nThe initial value of gemstone is labradorite.\nThe initial value of sea creature is sea fan.\nThe initial value of musical instrument is bassoon.\nThe initial value of mineral type is diamond.\nThe initial value of coffee variety is honduran.\nThe initial value of gemstone is citrine.\nThe initial value of bird species is chickadee.\nThe initial value of flower species is orchid.\nThe initial value of gemstone is emerald.\nThe initial value of gemstone is tiger eye.\nThe initial value of gemstone is citrine.\n```\n\nSince the stream is long and I need to ensure the first occurrence for each key, here is a **clean JSON format** with the first value for each key:\n\n```json\n{\n  \"visual art\": \"pointillism\",\n  \"tools\": \"plane\",\n  \"landform\": \"canyon\",\n  \"musical instrument\": \"bassoon\",\n  \"gemstone\": \"emerald\",\n  \"fabric\": \"gauze\",\n  \"tree species\": \"hemlock\",\n  \"cheese variety\": \"comte\",\n  \"architectural style\": \"parametric\",\n  \"cloud formation\": \"humilis\",\n  \"bird species\": \"parrot\",\n  \"culinary herb\": \"sorrel\",\n  \"flower species\": \"dandelion\",\n  \"wine variety\": \"syrah\",\n  \"dance style\": \"bolero\",\n  \"pasta shape\": \"gnocchi\",\n  \"literary genre\": \"thriller\",\n  \"cooking method\": \"smoking\",\n  \"mathematical concept\": \"combinatorics\",\n  \"weather phenomenon\": \"blizzard\",\n  \"ocean current\": \"oyashio\",\n  \"mineral type\": \"apatite\",\n  \"coffee variety\": \"honduran\",\n  \"telescope type\": \"soft x-ray\",\n  \"martial art\": \"submission wrestling\",\n  \"sea creature\": \"gray whale\",\n  \"psychology term\": \"thinking\",\n  \"chemical element\": \"platinum\",\n  \"dinosaur genus\": \"megalosaurus\",\n  \"programming language\": \"assembly\",\n  \"ancient civilization\": \"egyptian\",\n  \"bridge type\": \"warren truss\",\n  \"photography technique\": \"golden hour\",\n  \"boat type\": \"icebreaker\",\n  \"cartoon character\": \"sylvester\",\n  \"stadium name\": \"cotton bowl\",\n  \"surgical procedure\": \"varicose vein surgery\",\n  \"constellation\": \"canis major\",\n  \"spice blend\": \"garam masala\",\n  \"guitar type\": \"archtop electric\",\n  \"hat style\": \"panama\",\n  \"painting medium\": \"impasto\",\n  \"volcano name\": \"kilimanjaro\",\n  \"fruit variety\": \"watermelon\",\n  \"sword type\": \"shamshir\",\n  \"board game\": \"clue\",\n  \"ocean current\": \"agulhas\",\n  \"gemstone\": \"tiger eye\",\n  \"bird species\": \"chickadee\"\n}\n```\n\n*(Note: Some keys like \"sea creature\" and \"ocean current\" had multiple entries, but the first occurrence is retained.)*\n\nFor a complete JSON list of all 46 keys with their first values:\n\n```json\n{\n  \"visual art\": \"pointillism\",\n  \"tools\": \"plane\",\n  \"landform\": \"canyon\",\n  \"musical instrument\": \"bassoon\",\n  \"gemstone\": \"emerald\",\n  \"fabric\": \"gauze\",\n  \"tree species\": \"hemlock\",\n  \"cheese variety\": \"comte\",\n  \"architectural style\": \"parametric\",\n  \"cloud formation\": \"humilis\",\n  \"bird species\": \"parrot\",\n  \"culinary herb\": \"sorrel\",\n  \"flower species\": \"dandelion\",\n  \"wine variety\": \"syrah\",\n  \"dance style\": \"bolero\",\n  \"pasta shape\": \"gnocchi\",\n  \"literary genre\": \"thriller\",\n  \"cooking method\": \"smoking\",\n  \"mathematical concept\": \"combinatorics\",\n  \"weather phenomenon\": \"blizzard\",\n  \"ocean current\": \"oyashio\",\n  \"mineral type\": \"apatite\",\n  \"coffee variety\": \"honduran\",\n  \"telescope type\": \"soft x-ray\",\n  \"martial art\": \"submission wrestling\",\n  \"sea creature\": \"gray whale\",\n  \"psychology term\": \"thinking\",\n  \"chemical element\": \"platinum\",\n  \"dinosaur genus\": \"megalosaurus\",\n  \"programming language\": \"assembly\",\n  \"ancient civilization\": \"egyptian\",\n  \"bridge type\": \"warren truss\",\n  \"photography technique\": \"golden hour\",\n  \"boat type\": \"icebreaker\",\n  \"cartoon character\": \"sylvester\",\n  \"stadium name\": \"cotton bowl\",\n  \"surgical procedure\": \"varicose vein surgery\",\n  \"constellation\": \"canis major\",\n  \"spice blend\": \"garam masala\",\n  \"guitar type\": \"archtop electric\",\n  \"hat style\": \"panama\",\n  \"painting medium\": \"impasto\",\n  \"volcano name\": \"kilimanjaro\",\n  \"fruit variety\": \"watermelon\",\n  \"sword type\": \"shamshir\",\n  \"board game\": \"clue\",\n  \"visual art\": \"video art\",\n  \"ocean current\": \"agulhas\",\n  \"gemstone\": \"tiger eye\",\n  \"bird species\": \"chickadee\",\n  \"cloud formation\": \"humilis\",\n  \"landform\": \"mound\",\n  \"coffee variety\": \"congensis\",\n  \"wine variety\": \"cabernet sauvignon\",\n  \"gemstone\": \"labradorite\",\n  \"sea creature\": \"sea fan\",\n  \"musical instrument\": \"bassoon\",\n  \"mineral type\": \"diamond\",\n  \"coffee variety\": \"honduran\",\n  \"gemstone\": \"citrine\",\n  \"bird species\": \"chickadee\",\n  \"flower species\": \"orchid\",\n  \"gemstone\": \"emerald\",\n  \"gemstone\": \"tiger eye\",\n  \"gemstone\": \"citrine\"\n}\n```\n\n*(Note: Some keys like \"sea creature\" and \"ocean current\" were not repeated in the stream, so I've only included the first occurrence for each.)*\n\nFor a **complete and accurate JSON list** of all 46 keys with their first values:\n\n```json\n{\n  \"visual art\": \"pointillism\",\n  \"tools\": \"plane\",\n  \"landform\": \"canyon\",\n  \"musical instrument\": \"bassoon\",\n  \"gemstone\": \"emerald\",\n  \"fabric\": \"gauze\",\n  \"tree species\": \"hemlock\",\n  \"cheese variety\": \"comte\",\n  \"architectural style\": \"parametric\",\n  \"cloud formation\": \"humilis\",\n  \"bird species\": \"parrot\",\n  \"culinary herb\": \"sorrel\",\n  \"flower species\": \"dandelion\",\n  \"wine variety\": \"syrah\",\n  \"dance style\": \"bolero\",\n  \"pasta shape\": \"gnocchi\",\n  \"literary genre\": \"thriller\",\n  \"cooking method\": \"smoking\",\n  \"mathematical concept\": \"combinatorics\",\n  \"weather phenomenon\": \"blizzard\",\n  \"ocean current\": \"oyashio\",\n  \"mineral type\": \"apatite\",\n  \"coffee variety\": \"honduran\",\n  \"telescope type\": \"soft x-ray\",\n  \"martial art\": \"submission wrestling\",\n  \"sea creature\": \"gray whale\",\n  \"psychology term\": \"thinking\",\n  \"chemical element\": \"platinum\",\n  \"dinosaur genus\": \"megalosaurus\",\n  \"programming language\": \"assembly\",\n  \"ancient civilization\": \"egyptian\",\n  \"bridge type\": \"warren truss\",\n  \"photography technique\": \"golden hour\",\n  \"boat type\": \"icebreaker\",\n  \"cartoon character\": \"sylvester\",\n  \"stadium name\": \"cotton bowl\",\n  \"surgical procedure\": \"varicose vein surgery\",\n  \"constellation\": \"canis major\",\n  \"spice blend\": \"garam masala\",\n  \"guitar type\": \"archtop electric\",\n  \"hat style\": \"panama\",\n  \"painting medium\": \"impasto\",\n  \"volcano name\": \"kilimanjaro\",\n  \"fruit variety\": \"watermelon\",\n  \"sword type\": \"shamshir\",\n  \"board game\": \"clue\",\n  \"visual art\": \"video art\",\n  \"ocean current\": \"agulhas\",\n  \"gemstone\": \"tiger eye\",\n  \"bird species\": \"chickadee\",\n  \"cloud formation\": \"humilis\",\n  \"landform\": \"mound\",\n  \"coffee variety\": \"congensis\",\n  \"wine variety\": \"cabernet sauvignon\",\n  \"gemstone\": \"labradorite\",\n  \"sea creature\": \"sea fan\",\n  \"musical instrument\": \"bassoon\",\n  \"mineral type\": \"diamond\",\n  \"coffee variety\": \"honduran\",\n  \"gemstone\": \"citrine\",\n  \"bird species\": \"chickadee\",\n  \"flower species\": \"orchid\",\n  \"gemstone\": \"emerald\",\n  \"gemstone\": \"tiger eye\",\n  \"gemstone\": \"citrine\",\n  \"landform\": \"precipice\",\n  \"coffee variety\": \"congensis\",\n  \"cloud formation\": \"humilis\",\n  \"landform\": \"hill\",\n  \"flower species\": \"dandelion\",\n  \"bird species\": \"chickadee\",\n  \"cloud formation\": \"humilis\",\n  \"landform\": \"mound\",\n  \"ocean current\": \"oyashio\",\n  \"wine variety\": \"cabernet sauvignon\",\n  \"gemstone\": \"labradorite\",\n  \"sea creature\": \"sea fan\",\n  \"musical instrument\": \"bassoon\",\n  \"mineral type\": \"diamond\",\n  \"coffee variety\": \"honduran\",\n  \"gemstone\": \"citrine\",\n  \"bird species\": \"chicka",
+      "token_usage": {
+        "input_tokens": 86837,
+        "output_tokens": 8192,
+        "total_tokens": 95029,
+        "was_truncated": true,
+        "error": null
+      },
+      "results": [
+        {
+          "category": "visual art",
+          "expected": "pointillism 14",
+          "extracted": "pointillism",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 6
+        },
+        {
+          "category": "tools",
+          "expected": "plane 69",
+          "extracted": "plane",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 128
+        },
+        {
+          "category": "landform",
+          "expected": "canyon 110",
+          "extracted": "canyon",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 10
+        },
+        {
+          "category": "musical instrument",
+          "expected": "bassoon 106",
+          "extracted": "bassoon",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 78
+        },
+        {
+          "category": "gemstone",
+          "expected": "emerald 101",
+          "extracted": "emerald",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 7
+        },
+        {
+          "category": "fabric",
+          "expected": "gauze",
+          "extracted": "gauze",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 34
+        },
+        {
+          "category": "tree species",
+          "expected": "hemlock",
+          "extracted": "hemlock",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 53
+        },
+        {
+          "category": "cheese variety",
+          "expected": "comte",
+          "extracted": "comte",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 26
+        },
+        {
+          "category": "architectural style",
+          "expected": "parametric 95",
+          "extracted": "parametric",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 1
+        },
+        {
+          "category": "cloud formation",
+          "expected": "humilis 75",
+          "extracted": "humilis",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 62
+        },
+        {
+          "category": "bird species",
+          "expected": "parrot",
+          "extracted": "parrot",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 2
+        },
+        {
+          "category": "culinary herb",
+          "expected": "sorrel 139",
+          "extracted": "sorrel",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 14
+        },
+        {
+          "category": "flower species",
+          "expected": "dandelion 141",
+          "extracted": "dandelion",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 22
+        },
+        {
+          "category": "wine variety",
+          "expected": "syrah 145",
+          "extracted": "syrah",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 105
+        },
+        {
+          "category": "dance style",
+          "expected": "bolero",
+          "extracted": "bolero",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 56
+        },
+        {
+          "category": "pasta shape",
+          "expected": "gnocchi",
+          "extracted": "gnocchi",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 9
+        },
+        {
+          "category": "literary genre",
+          "expected": "thriller 8",
+          "extracted": "thriller",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 33
+        },
+        {
+          "category": "cooking method",
+          "expected": "smoking",
+          "extracted": "smoking",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 36
+        },
+        {
+          "category": "mathematical concept",
+          "expected": "combinatorics 97",
+          "extracted": "combinatorics",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 71
+        },
+        {
+          "category": "weather phenomenon",
+          "expected": "blizzard 125",
+          "extracted": "blizzard",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 118
+        },
+        {
+          "category": "ocean current",
+          "expected": "oyashio",
+          "extracted": "oyashio",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 69
+        },
+        {
+          "category": "mineral type",
+          "expected": "apatite 15",
+          "extracted": "apatite",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 5
+        },
+        {
+          "category": "coffee variety",
+          "expected": "honduran 106",
+          "extracted": "honduran",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 18
+        },
+        {
+          "category": "telescope type",
+          "expected": "soft x-ray",
+          "extracted": "soft x-ray",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 24
+        },
+        {
+          "category": "martial art",
+          "expected": "submission wrestling 71",
+          "extracted": "submission wrestling",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 42
+        },
+        {
+          "category": "sea creature",
+          "expected": "gray whale 119",
+          "extracted": "gray whale",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 31
+        },
+        {
+          "category": "psychology term",
+          "expected": "thinking 139",
+          "extracted": "thinking",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 126
+        },
+        {
+          "category": "chemical element",
+          "expected": "platinum 113",
+          "extracted": "platinum",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 73
+        },
+        {
+          "category": "dinosaur genus",
+          "expected": "megalosaurus 41",
+          "extracted": "megalosaurus",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 0
+        },
+        {
+          "category": "programming language",
+          "expected": "assembly 139",
+          "extracted": "assembly",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 152
+        },
+        {
+          "category": "ancient civilization",
+          "expected": "egyptian 108",
+          "extracted": "egyptian",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 116
+        },
+        {
+          "category": "bridge type",
+          "expected": "warren truss",
+          "extracted": "warren truss",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 48
+        },
+        {
+          "category": "photography technique",
+          "expected": "golden hour 46",
+          "extracted": "golden hour",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 46
+        },
+        {
+          "category": "boat type",
+          "expected": "icebreaker",
+          "extracted": "icebreaker",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 45
+        },
+        {
+          "category": "cartoon character",
+          "expected": "sylvester",
+          "extracted": "sylvester",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 19
+        },
+        {
+          "category": "stadium name",
+          "expected": "cotton bowl 56",
+          "extracted": "cotton bowl",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 40
+        },
+        {
+          "category": "surgical procedure",
+          "expected": "varicose vein surgery 97",
+          "extracted": "varicose vein surgery",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 64
+        },
+        {
+          "category": "constellation",
+          "expected": "canis major",
+          "extracted": "canis major",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 15
+        },
+        {
+          "category": "spice blend",
+          "expected": "garam masala 72",
+          "extracted": "garam masala",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 66
+        },
+        {
+          "category": "guitar type",
+          "expected": "archtop electric 134",
+          "extracted": "archtop electric",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 37
+        },
+        {
+          "category": "hat style",
+          "expected": "panama",
+          "extracted": "panama",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 38
+        },
+        {
+          "category": "painting medium",
+          "expected": "impasto 102",
+          "extracted": "impasto",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 11
+        },
+        {
+          "category": "volcano name",
+          "expected": "kilimanjaro 100",
+          "extracted": "kilimanjaro",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 83
+        },
+        {
+          "category": "fruit variety",
+          "expected": "watermelon 121",
+          "extracted": "watermelon",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 35
+        },
+        {
+          "category": "sword type",
+          "expected": "shamshir",
+          "extracted": "shamshir",
+          "correct": true,
+          "missing": false,
+          "baseline_position": 27
+        },
+        {
+          "category": "board game",
+          "expected": "clue 145",
+          "extracted": "clue",
+          "correct": false,
+          "missing": false,
+          "baseline_position": 30
+        }
+      ]
+    },
+    {
+      "model": "bedrock-ministral-3b",
+      "interference_level": 300,
+      "sample_size": 46,
+      "accuracy": 0.0,
+      "correct_count": 0,
+      "total_count": 46,
+      "missing_count": 46,
+      "missing_rate": 100.0,
+      "sequence_length": 13800,
+      "batch_response": "Error: Invalid request. Model might not support this format.",
+      "token_usage": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "was_truncated": false,
+        "error": "An error occurred (ValidationException) when calling the Converse operation: The model returned the following errors: {\"code\":\"validation_error\",\"message\":\"ErrorEvent { error: APIError { type: \\\"BadRequestError\\\", code: Some(400), message: \\\"max_tokens must be at least 1, got -6348.\\\", param: None } }\",\"param\":null,\"type\":\"invalid_request_error\"}"
+      },
+      "results": [
+        {
+          "category": "visual art",
+          "expected": "abstract expressionism 1",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 268
+        },
+        {
+          "category": "tools",
+          "expected": "brick hammer 141",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 30
+        },
+        {
+          "category": "landform",
+          "expected": "kame 39",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 38
+        },
+        {
+          "category": "musical instrument",
+          "expected": "harpsichord 215",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 20
+        },
+        {
+          "category": "gemstone",
+          "expected": "padparadscha 171",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 14
+        },
+        {
+          "category": "fabric",
+          "expected": "nylon",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 2
+        },
+        {
+          "category": "tree species",
+          "expected": "balsam fir 123",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 46
+        },
+        {
+          "category": "cheese variety",
+          "expected": "fourme d'ambert 64",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 51
+        },
+        {
+          "category": "architectural style",
+          "expected": "rococo",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 61
+        },
+        {
+          "category": "cloud formation",
+          "expected": "mediocris 37",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 0
+        },
+        {
+          "category": "bird species",
+          "expected": "penguin 75",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 42
+        },
+        {
+          "category": "culinary herb",
+          "expected": "mint 208",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 214
+        },
+        {
+          "category": "flower species",
+          "expected": "hibiscus 173",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 18
+        },
+        {
+          "category": "wine variety",
+          "expected": "prosecco 140",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 13
+        },
+        {
+          "category": "dance style",
+          "expected": "square dance 138",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 16
+        },
+        {
+          "category": "pasta shape",
+          "expected": "pizzoccheri 20",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 65
+        },
+        {
+          "category": "literary genre",
+          "expected": "memoir 116",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 3
+        },
+        {
+          "category": "cooking method",
+          "expected": "poaching 55",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 4
+        },
+        {
+          "category": "mathematical concept",
+          "expected": "exponentiation 118",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 130
+        },
+        {
+          "category": "weather phenomenon",
+          "expected": "light pillar 138",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 101
+        },
+        {
+          "category": "ocean current",
+          "expected": "east australian 75",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 47
+        },
+        {
+          "category": "mineral type",
+          "expected": "cinnabar 241",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 32
+        },
+        {
+          "category": "coffee variety",
+          "expected": "salvadoran 105",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 41
+        },
+        {
+          "category": "telescope type",
+          "expected": "near infrared 102",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 8
+        },
+        {
+          "category": "martial art",
+          "expected": "huka huka 140",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 9
+        },
+        {
+          "category": "sea creature",
+          "expected": "brittle star",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 33
+        },
+        {
+          "category": "psychology term",
+          "expected": "persuasion 213",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 11
+        },
+        {
+          "category": "chemical element",
+          "expected": "copper 158",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 10
+        },
+        {
+          "category": "dinosaur genus",
+          "expected": "albertosaurus 143",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 23
+        },
+        {
+          "category": "programming language",
+          "expected": "scratch 44",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 6
+        },
+        {
+          "category": "ancient civilization",
+          "expected": "persian",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 152
+        },
+        {
+          "category": "bridge type",
+          "expected": "covered 99",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 39
+        },
+        {
+          "category": "photography technique",
+          "expected": "foreground interest 191",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 7
+        },
+        {
+          "category": "boat type",
+          "expected": "speedboat 76",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 64
+        },
+        {
+          "category": "cartoon character",
+          "expected": "peter griffin 24",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 17
+        },
+        {
+          "category": "stadium name",
+          "expected": "eden gardens 64",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 37
+        },
+        {
+          "category": "surgical procedure",
+          "expected": "meniscectomy 186",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 36
+        },
+        {
+          "category": "constellation",
+          "expected": "aquila 167",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 27
+        },
+        {
+          "category": "spice blend",
+          "expected": "greek seasoning 117",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 60
+        },
+        {
+          "category": "guitar type",
+          "expected": "thinline 7",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 54
+        },
+        {
+          "category": "hat style",
+          "expected": "toque 80",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 28
+        },
+        {
+          "category": "painting medium",
+          "expected": "encaustic 15",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 99
+        },
+        {
+          "category": "volcano name",
+          "expected": "mount rainier 186",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 1
+        },
+        {
+          "category": "fruit variety",
+          "expected": "cranberry 45",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 58
+        },
+        {
+          "category": "sword type",
+          "expected": "tachi 18",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 145
+        },
+        {
+          "category": "board game",
+          "expected": "chess 243",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 5
+        }
+      ]
+    },
+    {
+      "model": "bedrock-ministral-3b",
+      "interference_level": 400,
+      "sample_size": 46,
+      "accuracy": 0.0,
+      "correct_count": 0,
+      "total_count": 46,
+      "missing_count": 46,
+      "missing_rate": 100.0,
+      "sequence_length": 18400,
+      "batch_response": "Error: Invalid request. Model might not support this format.",
+      "token_usage": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "was_truncated": false,
+        "error": "An error occurred (ValidationException) when calling the Converse operation: The model returned the following errors: {\"code\":\"validation_error\",\"message\":\"ErrorEvent { error: APIError { type: \\\"BadRequestError\\\", code: Some(400), message: \\\"max_tokens must be at least 1, got -56917.\\\", param: None } }\",\"param\":null,\"type\":\"invalid_request_error\"}"
+      },
+      "results": [
+        {
+          "category": "visual art",
+          "expected": "cubism 280",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 17
+        },
+        {
+          "category": "tools",
+          "expected": "hammer",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 20
+        },
+        {
+          "category": "landform",
+          "expected": "glacier 272",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 49
+        },
+        {
+          "category": "musical instrument",
+          "expected": "flute 168",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 32
+        },
+        {
+          "category": "gemstone",
+          "expected": "heliodor 78",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 156
+        },
+        {
+          "category": "fabric",
+          "expected": "mohair 177",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 66
+        },
+        {
+          "category": "tree species",
+          "expected": "teak 291",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 73
+        },
+        {
+          "category": "cheese variety",
+          "expected": "pont l'eveque 20",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 0
+        },
+        {
+          "category": "architectural style",
+          "expected": "split level 97",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 1
+        },
+        {
+          "category": "cloud formation",
+          "expected": "cumulus 124",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 13
+        },
+        {
+          "category": "bird species",
+          "expected": "buzzard 191",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 165
+        },
+        {
+          "category": "culinary herb",
+          "expected": "shiso 300",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 18
+        },
+        {
+          "category": "flower species",
+          "expected": "orchid 144",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 35
+        },
+        {
+          "category": "wine variety",
+          "expected": "chenin blanc 101",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 78
+        },
+        {
+          "category": "dance style",
+          "expected": "paso doble 257",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 5
+        },
+        {
+          "category": "pasta shape",
+          "expected": "fusilli 300",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 133
+        },
+        {
+          "category": "literary genre",
+          "expected": "dark fantasy 190",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 110
+        },
+        {
+          "category": "cooking method",
+          "expected": "fermenting",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 43
+        },
+        {
+          "category": "mathematical concept",
+          "expected": "differential equations",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 10
+        },
+        {
+          "category": "weather phenomenon",
+          "expected": "drought 219",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 16
+        },
+        {
+          "category": "ocean current",
+          "expected": "indian ocean 94",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 84
+        },
+        {
+          "category": "mineral type",
+          "expected": "rhodochrosite 136",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 36
+        },
+        {
+          "category": "coffee variety",
+          "expected": "sumatran",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 33
+        },
+        {
+          "category": "telescope type",
+          "expected": "spectrograph",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 42
+        },
+        {
+          "category": "martial art",
+          "expected": "greco roman 206",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 55
+        },
+        {
+          "category": "sea creature",
+          "expected": "sea otter 230",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 63
+        },
+        {
+          "category": "psychology term",
+          "expected": "conditioning 280",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 14
+        },
+        {
+          "category": "chemical element",
+          "expected": "silicon 176",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 23
+        },
+        {
+          "category": "dinosaur genus",
+          "expected": "dilophosaurus 256",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 87
+        },
+        {
+          "category": "programming language",
+          "expected": "ocaml 313",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 51
+        },
+        {
+          "category": "ancient civilization",
+          "expected": "celt 156",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 8
+        },
+        {
+          "category": "bridge type",
+          "expected": "camelback truss 2",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 39
+        },
+        {
+          "category": "photography technique",
+          "expected": "framing 16",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 40
+        },
+        {
+          "category": "boat type",
+          "expected": "cuddy cabin 270",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 3
+        },
+        {
+          "category": "cartoon character",
+          "expected": "tasmanian devil 289",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 6
+        },
+        {
+          "category": "stadium name",
+          "expected": "gillette stadium 204",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 86
+        },
+        {
+          "category": "surgical procedure",
+          "expected": "facelift 124",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 7
+        },
+        {
+          "category": "constellation",
+          "expected": "aquarius 276",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 11
+        },
+        {
+          "category": "spice blend",
+          "expected": "mole 114",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 45
+        },
+        {
+          "category": "guitar type",
+          "expected": "bass 171",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 88
+        },
+        {
+          "category": "hat style",
+          "expected": "picture hat 319",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 24
+        },
+        {
+          "category": "painting medium",
+          "expected": "collage 244",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 58
+        },
+        {
+          "category": "volcano name",
+          "expected": "arenal 138",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 15
+        },
+        {
+          "category": "fruit variety",
+          "expected": "blueberry 26",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 2
+        },
+        {
+          "category": "sword type",
+          "expected": "short sword",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 4
+        },
+        {
+          "category": "board game",
+          "expected": "backgammon 54",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 38
+        }
+      ]
+    },
+    {
+      "model": "bedrock-ministral-3b",
+      "interference_level": 500,
+      "sample_size": 46,
+      "accuracy": 0.0,
+      "correct_count": 0,
+      "total_count": 46,
+      "missing_count": 46,
+      "missing_rate": 100.0,
+      "sequence_length": 23000,
+      "batch_response": "Error: Invalid request. Model might not support this format.",
+      "token_usage": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "was_truncated": false,
+        "error": "An error occurred (ValidationException) when calling the Converse operation: The model returned the following errors: {\"code\":\"validation_error\",\"message\":\"ErrorEvent { error: APIError { type: \\\"BadRequestError\\\", code: Some(400), message: \\\"max_tokens must be at least 1, got -107490.\\\", param: None } }\",\"param\":null,\"type\":\"invalid_request_error\"}"
+      },
+      "results": [
+        {
+          "category": "visual art",
+          "expected": "romanticism 307",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 4
+        },
+        {
+          "category": "tools",
+          "expected": "phillips screwdriver 32",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 25
+        },
+        {
+          "category": "landform",
+          "expected": "arroyo 33",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 27
+        },
+        {
+          "category": "musical instrument",
+          "expected": "contrabassoon 410",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 45
+        },
+        {
+          "category": "gemstone",
+          "expected": "chrysoprase 32",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 5
+        },
+        {
+          "category": "fabric",
+          "expected": "taffeta 191",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 68
+        },
+        {
+          "category": "tree species",
+          "expected": "elm",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 64
+        },
+        {
+          "category": "cheese variety",
+          "expected": "raclette 8",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 19
+        },
+        {
+          "category": "architectural style",
+          "expected": "second empire 154",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 17
+        },
+        {
+          "category": "cloud formation",
+          "expected": "incus 133",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 113
+        },
+        {
+          "category": "bird species",
+          "expected": "egret 280",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 89
+        },
+        {
+          "category": "culinary herb",
+          "expected": "borage",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 83
+        },
+        {
+          "category": "flower species",
+          "expected": "primrose",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 99
+        },
+        {
+          "category": "wine variety",
+          "expected": "madeira 115",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 47
+        },
+        {
+          "category": "dance style",
+          "expected": "reggaeton 129",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 42
+        },
+        {
+          "category": "pasta shape",
+          "expected": "bigoli",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 16
+        },
+        {
+          "category": "literary genre",
+          "expected": "hard sci fi 396",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 124
+        },
+        {
+          "category": "cooking method",
+          "expected": "reduction 223",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 37
+        },
+        {
+          "category": "mathematical concept",
+          "expected": "field 292",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 70
+        },
+        {
+          "category": "weather phenomenon",
+          "expected": "rain 420",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 24
+        },
+        {
+          "category": "ocean current",
+          "expected": "alaska",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 71
+        },
+        {
+          "category": "mineral type",
+          "expected": "quartz 427",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 29
+        },
+        {
+          "category": "coffee variety",
+          "expected": "kenyan 251",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 9
+        },
+        {
+          "category": "telescope type",
+          "expected": "transit 332",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 1
+        },
+        {
+          "category": "martial art",
+          "expected": "silat 259",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 26
+        },
+        {
+          "category": "sea creature",
+          "expected": "dolphin 208",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 28
+        },
+        {
+          "category": "psychology term",
+          "expected": "conditioning 218",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 49
+        },
+        {
+          "category": "chemical element",
+          "expected": "sodium 6",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 18
+        },
+        {
+          "category": "dinosaur genus",
+          "expected": "stegosaurus 185",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 0
+        },
+        {
+          "category": "programming language",
+          "expected": "labview 395",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 109
+        },
+        {
+          "category": "ancient civilization",
+          "expected": "zapotec 129",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 122
+        },
+        {
+          "category": "bridge type",
+          "expected": "space frame 111",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 78
+        },
+        {
+          "category": "photography technique",
+          "expected": "vignetting 380",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 15
+        },
+        {
+          "category": "boat type",
+          "expected": "cutter 37",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 10
+        },
+        {
+          "category": "cartoon character",
+          "expected": "foghorn leghorn",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 21
+        },
+        {
+          "category": "stadium name",
+          "expected": "dodger stadium 175",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 62
+        },
+        {
+          "category": "surgical procedure",
+          "expected": "transplant 261",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 14
+        },
+        {
+          "category": "constellation",
+          "expected": "crux 285",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 34
+        },
+        {
+          "category": "spice blend",
+          "expected": "chaat masala 195",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 7
+        },
+        {
+          "category": "guitar type",
+          "expected": "surf guitar 280",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 67
+        },
+        {
+          "category": "hat style",
+          "expected": "cowboy hat 90",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 12
+        },
+        {
+          "category": "painting medium",
+          "expected": "collage 92",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 3
+        },
+        {
+          "category": "volcano name",
+          "expected": "tambora 127",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 11
+        },
+        {
+          "category": "fruit variety",
+          "expected": "orange 342",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 8
+        },
+        {
+          "category": "sword type",
+          "expected": "zweihander 267",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 2
+        },
+        {
+          "category": "board game",
+          "expected": "connect four 312",
+          "extracted": null,
+          "correct": false,
+          "missing": true,
+          "baseline_position": 30
+        }
+      ]
+    }
+  ]
+}

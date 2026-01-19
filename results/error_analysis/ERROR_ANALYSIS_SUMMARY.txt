@@ -1,0 +1,51 @@
+======================================================================
+ERROR TYPE CLASSIFICATION - KEY FINDINGS
+======================================================================
+
+Total Errors Analyzed: 5,409
+Models: 54
+Interference Levels: [3, 10, 50, 100, 200, 300]
+
+OVERALL ERROR DISTRIBUTION:
+  Same-Key Interference         :  2490 ( 46.0%)
+  Cross-Key Interference        :    30 (  0.6%)
+  Partial Match                 :    95 (  1.8%)
+  Hallucination                 :    47 (  0.9%)
+  Retrieval Failure             :  2747 ( 50.8%)
+
+======================================================================
+THREE-STAGE PROGRESSION (from 'Unable to Forget' Paper)
+======================================================================
+
+STAGE 1 - LOW INTERFERENCE (Levels 3, 10): Tightly Focused Errors
+  Same-Key Interference: 6.4%
+  Cross-Key Interference: 1.8%
+  Hallucination: 4.5%
+  Retrieval Failure: 80.1%
+
+STAGE 2 - MODERATE INTERFERENCE (Levels 50, 100): Dispersed Errors
+  Same-Key Interference: 25.8%
+  Cross-Key Interference: 0.3%
+  Hallucination: 1.1%
+  Retrieval Failure: 72.9%
+
+STAGE 3 - HIGH INTERFERENCE (Levels 200, 300): Hallucinatory Responses
+  Same-Key Interference: 55.8%
+  Cross-Key Interference: 0.5%
+  Hallucination: 0.1%
+  Retrieval Failure: 42.0%
+
+======================================================================
+SAME-KEY INTERFERENCE POSITION ANALYSIS
+======================================================================
+
+(Position 1 = first/target, higher = more recent)
+
+  Level   3: Avg position=  2.4, Recency=  1.6 steps back, Most recent=4.0/9 (44%)
+  Level  10: Avg position=  2.5, Recency=  8.4 steps back, Most recent=0.0/20 (0%)
+  Level  50: Avg position= 20.4, Recency= 30.6 steps back, Most recent=0.0/39 (0%)
+  Level 100: Avg position= 53.6, Recency= 47.4 steps back, Most recent=0.0/387 (0%)
+  Level 200: Avg position=112.0, Recency= 89.0 steps back, Most recent=31.0/950 (3%)
+  Level 300: Avg position=137.6, Recency=163.4 steps back, Most recent=0.0/1085 (0%)
+
+======================================================================
