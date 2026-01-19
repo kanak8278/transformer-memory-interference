@@ -1,0 +1,288 @@
+#!/usr/bin/env python3
+"""
+Proactive Interference (PI) Experiment Script
+
+Tests how FIRST-learned information interferes with recall of LAST-learned values.
+
+Paradigm:
+1. Present 46 initial category-value pairs
+2. Update N categories with new values (interference)
+3. Query for LAST-LEARNED values (not first!)
+
+This complements run_interleaved_experiment.py (RI) to enable RI vs. PI comparison.
+
+Key Difference from RI:
+- RI: Query first-learned values → measures how new info disrupts old
+- PI: Query last-learned values → measures how old info disrupts new
+
+Usage:
+    python run_proactive_interference_experiment.py \\
+        --model claude-4.5-sonnet \\
+        --levels 3 10 50 100 200 300 \\
+        --output-dir data/raw_experiments_pi
+"""
+
+import sys
+import os
+import json
+import argparse
+from datetime import datetime
+from typing import Dict
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
+from datasets.interleaved_dataset_loader import InterleavedDatasetLoader
+from datasets.category_response_parser import CategoryResponseParser
+from models import create_model
+
+
+def build_pi_prompt(initial_facts: Dict[str, str],
+                    updated_facts: Dict[str, str],
+                    all_categories: list) -> str:
+    """
+    Build prompt for Proactive Interference experiment.
+
+    Query for LAST-learned values (most recent for updated categories,
+    initial values for non-updated categories).
+
+    Args:
+        initial_facts: {category: initial_value}
+        updated_facts: {category: new_value} for updated categories
+        all_categories: List of all 46 categories
+
+    Returns:
+        Formatted prompt string
+    """
+    prompt = """You will learn initial facts about categories, then see updates to some of those facts.
+Later, you must recall the CURRENT (most recent) value for ALL categories.
+
+=== INITIAL LEARNING ===
+Please memorize these category-value pairs:
+
+"""
+
+    # Present initial facts
+    for category, value in sorted(initial_facts.items()):
+        prompt += f"{category}: {value}\n"
+
+    prompt += "\n=== INTERFERENCE (UPDATES) ===\n"
+    prompt += "The following facts have been UPDATED with new values:\n\n"
+
+    # Present updates
+    for category, new_value in sorted(updated_facts.items()):
+        prompt += f"{category}: {new_value} [UPDATED]\n"
+
+    prompt += "\n=== RETRIEVAL (CURRENT VALUES) ===\n"
+    prompt += "Now, please tell me the CURRENT (most recent) value for each category below.\n"
+    prompt += "For updated categories, provide the NEW value. For others, provide the initial value.\n\n"
+    prompt += "Please respond in JSON format: {\"category\": \"current_value\", ...}\n\n"
+
+    # Query all categories
+    for category in sorted(all_categories):
+        prompt += f"What is the current value of {category}?\n"
+
+    return prompt
+
+
+def run_experiment(model_id: str, interference_levels: list, output_dir: str = "data/raw_experiments_pi"):
+    """
+    Run Proactive Interference experiment for a single model across multiple interference levels.
+
+    Args:
+        model_id: Model identifier (e.g., "claude-4.5-sonnet")
+        interference_levels: List of interference levels to test
+        output_dir: Directory to save results
+    """
+    print(f"\n{'='*80}")
+    print(f"PROACTIVE INTERFERENCE EXPERIMENT")
+    print(f"{'='*80}")
+    print(f"Model: {model_id}")
+    print(f"Interference Levels: {interference_levels}")
+    print(f"Paradigm: Query LAST-learned values (PI)")
+    print(f"{'='*80}\n")
+
+    # Create output directory
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Load dataset
+    print("Loading interleaved dataset...")
+    dataset_loader = InterleavedDatasetLoader("data/interleaved_dataset_meaningful.json")
+
+    # Create model
+    print(f"Initializing model: {model_id}")
+    model = create_model(model_id)
+
+    # Initialize parser
+    parser = CategoryResponseParser()
+
+    # Store results for all levels
+    all_results = {
+        "model_id": model_id,
+        "model_name": model.model_name,
+        "experiment_type": "proactive_interference",
+        "timestamp": datetime.now().strftime("%Y%m%d_%H%M%S"),
+        "interference_levels": interference_levels,
+        "results": []
+    }
+
+    # Test each interference level
+    for level in interference_levels:
+        print(f"\n{'-'*80}")
+        print(f"Testing Interference Level: {level}")
+        print(f"{'-'*80}")
+
+        # Get interleaved dataset for this level
+        dataset = dataset_loader.get_interleaved_dataset(level)
+
+        initial_facts = dataset["initial_facts"]
+        updated_facts = dataset["updated_facts"]
+        all_categories = list(initial_facts.keys())
+
+        # Build prompt
+        prompt = build_pi_prompt(initial_facts, updated_facts, all_categories)
+
+        print(f"Prompt length: {len(prompt)} characters")
+        print(f"Initial facts: {len(initial_facts)}")
+        print(f"Updated facts: {len(updated_facts)}")
+
+        # Query model
+        print("Querying model...")
+        try:
+            response = model.query(prompt)
+            print(f"Response received ({len(response)} characters)")
+
+            # Parse response
+            print("Parsing response...")
+            parsed_values = parser.parse_batch_response(response, all_categories)
+
+            # Calculate accuracy - check against LAST-learned values
+            correct = 0
+            total = len(all_categories)
+            details = {}
+
+            for category in all_categories:
+                # Expected: new value if updated, else initial value
+                expected = updated_facts.get(category, initial_facts[category])
+                actual = parsed_values.get(category, "")
+
+                is_correct = (actual.lower().strip() == expected.lower().strip())
+                if is_correct:
+                    correct += 1
+
+                details[category] = {
+                    "initial_value": initial_facts[category],
+                    "updated_value": updated_facts.get(category),  # None if not updated
+                    "expected_value": expected,  # Last-learned (PI paradigm)
+                    "retrieved_value": actual,
+                    "correct": is_correct
+                }
+
+            accuracy = (correct / total) * 100
+
+            print(f"\n✓ Accuracy: {correct}/{total} ({accuracy:.1f}%)")
+
+            # Count errors by type
+            retrieved_initial = sum(1 for cat, info in details.items()
+                                   if cat in updated_facts and
+                                   info['retrieved_value'].lower() == info['initial_value'].lower())
+
+            print(f"  Proactive interference errors: {retrieved_initial} " +
+                  f"(retrieved initial instead of updated)")
+
+            # Store result
+            level_result = {
+                "interference_level": level,
+                "accuracy": accuracy,
+                "correct": correct,
+                "total": total,
+                "proactive_interference_errors": retrieved_initial,
+                "details": details,
+                "prompt": prompt,
+                "response": response,
+                "input_tokens": model.last_input_tokens,
+                "output_tokens": model.last_output_tokens,
+                "error": None
+            }
+
+        except Exception as e:
+            print(f"✗ Error: {str(e)}")
+            level_result = {
+                "interference_level": level,
+                "accuracy": 0,
+                "correct": 0,
+                "total": len(all_categories),
+                "proactive_interference_errors": 0,
+                "details": {},
+                "prompt": prompt,
+                "response": "",
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "error": f"Error: {str(e)}"
+            }
+
+        all_results["results"].append(level_result)
+
+    # Save results
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_file = f"{output_dir}/{model_id}_pi_levels_{'_'.join(map(str, interference_levels))}_{timestamp}.json"
+
+    with open(output_file, 'w') as f:
+        json.dump(all_results, f, indent=2)
+
+    print(f"\n{'='*80}")
+    print(f"EXPERIMENT COMPLETE")
+    print(f"{'='*80}")
+    print(f"Results saved to: {output_file}")
+
+    # Print summary
+    print(f"\nSummary across {len(interference_levels)} levels:")
+    for result in all_results["results"]:
+        level = result["interference_level"]
+        acc = result["accuracy"]
+        pi_errors = result["proactive_interference_errors"]
+        print(f"  Level {level:3d}: {acc:5.1f}% accuracy ({pi_errors} PI errors)")
+
+    return all_results
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Run Proactive Interference experiment on a single model'
+    )
+    parser.add_argument(
+        '--model',
+        required=True,
+        help='Model identifier (e.g., claude-4.5-sonnet, gpt-4o, bedrock-llama-3.1-405b)'
+    )
+    parser.add_argument(
+        '--levels',
+        nargs='+',
+        type=int,
+        default=[3, 10, 50, 100, 200, 300],
+        help='Interference levels to test (default: 3 10 50 100 200 300)'
+    )
+    parser.add_argument(
+        '--output-dir',
+        type=str,
+        default='data/raw_experiments_pi',
+        help='Output directory for results (default: data/raw_experiments_pi)'
+    )
+
+    args = parser.parse_args()
+
+    # Create output directory
+    os.makedirs(args.output_dir, exist_ok=True)
+
+    # Run experiment
+    results = run_experiment(
+        model_id=args.model,
+        interference_levels=args.levels,
+        output_dir=args.output_dir
+    )
+
+    print(f"\nResults saved to: {args.output_dir}")
+
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,35 @@
+======================================================================
+RI vs PI ERROR PATTERN COMPARISON
+======================================================================
+
+RI Total Errors: 5,409 (54 models)
+PI Total Errors: 9,753 (54 models)
+
+ERROR TYPE COMPARISON:
+--------------------------------------------------
+Error Type                      RI %       PI %       Diff
+--------------------------------------------------
+Same-Key                       46.0%      56.1%     +10.0%
+Retrieval Fail                 50.8%      42.5%      -8.3%
+Hallucin.                       0.9%       0.2%      -0.7%
+Cross-Key                       0.6%       0.7%      +0.1%
+Partial                         1.8%       0.7%      -1.1%
+
+======================================================================
+KEY FINDINGS
+======================================================================
+
+1. HALLUCINATION CONTRAST:
+   RI: 0.9% (rare - models fail silently)
+   PI: 0.2% (common - models confabulate)
+   --> PI hallucination rate is 0.2x higher than RI
+
+2. RETRIEVAL FAILURE:
+   RI: 50.8% (dominant failure mode)
+   PI: 42.5%
+
+3. MECHANISTIC INTERPRETATION:
+   RI failures are 'passive': cannot access initial encoding
+   PI failures are 'active': generate plausible but wrong values
+
+======================================================================

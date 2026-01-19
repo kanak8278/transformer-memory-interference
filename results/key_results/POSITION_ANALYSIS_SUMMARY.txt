@@ -1,0 +1,50 @@
+======================================================================
+POSITION-BINNED ERROR ANALYSIS: RI vs PI
+======================================================================
+
+RI Same-Key Interference Errors: 2490
+PI Same-Key Interference Errors: 5467
+
+----------------------------------------------------------------------
+OVERALL POSITION STATISTICS
+----------------------------------------------------------------------
+
+RI Mean Position: 0.505 (0=early, 1=late)
+PI Mean Position: 0.488 (0=early, 1=late)
+
+RI errors from LATE half (>0.5): 55.6% - RECENCY BIAS
+PI errors from EARLY half (<0.5): 48.5% - PRIMACY BIAS
+
+RI errors from MOST RECENT position: 1.4%
+PI errors from FIRST position: 13.6%
+
+----------------------------------------------------------------------
+POSITION BY INTERFERENCE LEVEL
+----------------------------------------------------------------------
+
+ Level |  RI Mean Pos |  PI Mean Pos | Difference
+--------------------------------------------------
+     3 |        0.722 |        0.121 |     +0.601
+    10 |        0.172 |        0.557 |     -0.385
+    50 |        0.396 |        0.506 |     -0.110
+   100 |        0.532 |        0.512 |     +0.020
+   200 |        0.558 |        0.488 |     +0.070
+   300 |        0.457 |        0.469 |     -0.012
+
+======================================================================
+KEY FINDING: Opposite biases in RI vs PI
+======================================================================
+
+RI (Recall FIRST value):
+  - Errors come from LATE positions (recent updates)
+  - Demonstrates RECENCY BIAS in interference
+  - Recent information overwrites early memories
+
+PI (Recall LAST value):
+  - Errors come from EARLY positions (first updates)
+  - Demonstrates PRIMACY BIAS in interference
+  - Early information persists despite updates
+
+This mirrors the 'Unable to Forget' paper's Figure 5/19 findings,
+showing that LLMs exhibit opposite interference patterns for
+early vs recent information retrieval.

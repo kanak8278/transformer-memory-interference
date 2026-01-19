@@ -1,0 +1,28 @@
+# Core dependencies
+anthropic>=0.39.0          # Claude models
+google-cloud-aiplatform    # Gemini models
+requests>=2.31.0          # HTTP requests (for HF Router, OpenAI)
+python-dotenv>=1.0.0      # Environment variables
+boto3>=1.34.0             # AWS Bedrock (Llama, Titan, Mistral, etc.)
+botocore>=1.34.0          # AWS SDK core
+jinja2
+
+# Optional dependencies (install based on your use case)
+
+# For local Llama inference (Google Colab with GPU)
+# torch>=2.1.0
+# transformers>=4.36.0
+# bitsandbytes>=0.41.0     # 4-bit quantization
+# accelerate>=0.25.0       # Device management
+
+# For Jupyter notebooks
+# jupyter>=1.0.0
+# ipykernel>=6.27.0
+
+# For testing
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+
+# For visualization
+# matplotlib>=3.8.0
+# seaborn>=0.13.0

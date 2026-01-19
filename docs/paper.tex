@@ -1,0 +1,1672 @@
+\documentclass{article}
+
+% Recommended packages for figures and better typesetting
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+
+% hyperref makes hyperlinks in the resulting PDF
+% If your build breaks (sometimes temporarily if a hyperlink spans a page)
+% please comment out the following usepackage line and replace
+% \usepackage{icml2026} with \usepackage[nohyperref]{icml2026} above.
+\usepackage{hyperref}
+
+% Attempt to make hyperref and algorithmic work together better
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% ICML 2026 Conference paper format - MUST come after hyperref
+\usepackage[accepted]{icml2026}
+
+% Additional math packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{nicefrac}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% Running title (shorter version for header)
+\icmltitlerunning{Retroactive Interference in Large Language Models}
+
+\begin{document}
+
+\twocolumn[
+\icmltitle{Unable to Remember: Retroactive Interference Reveals Memory Consolidation Limits in Large Language Models}
+
+% Author information - will be hidden in review mode
+\begin{icmlauthorlist}
+\icmlauthor{Sourav Chattaraj}{tr}
+\icmlauthor{Arjit Jain}{tr}
+\end{icmlauthorlist}
+
+\icmlaffiliation{tr}{Thomson Reuters, Toronto, Canada}
+
+\icmlcorrespondingauthor{Sourav Chattaraj}{sourav.chattaraj@thomsonreuters.com}
+
+\icmlkeywords{Large Language Models, Memory Interference, Retroactive Interference, Proactive Interference, Context Learning}
+
+\vskip 0.3in
+]
+
+\printAffiliationsAndNotice{}  % leave blank if no notice
+
+\begin{abstract}
+While longer contexts are assumed to improve LLM retrieval, the effects of memory interference remain understudied.
+We adapt the \textbf{retroactive interference (RI)} paradigm from cognitive science---where newer information disrupts recall of earlier content---to systematically evaluate 54 LLMs (1B--2.5T parameters) across 6 interference levels, with 39 models yielding complete data for quantitative analysis.
+Unlike prior work on proactive interference (PI), we query \textit{initial} values after streaming updates, testing whether models can resist overwriting.
+Three key findings emerge:
+(1)~LLMs show the \textbf{opposite interference pattern to humans}---all 39 models exhibit PI~$>$~RI ($d = 1.73$), whereas human memory shows RI dominance;
+(2)~RI and PI engage \textbf{distinct mechanisms}---uncorrelated ($R^2 = 0.04$) with different failure modes (RI: retrieval failure dominates; PI: primacy intrusion dominates);
+(3)~\textbf{Model size predicts RI} ($R^2 = 0.49$) \textbf{but not PI} ($R^2 = 0.06$, n.s.), while context length is irrelevant for both.
+Chain-of-thought reasoning amplifies this asymmetry $8.5\times$: o1 ranks 1st for RI yet 45th for PI.
+These findings reveal a fundamental constraint: transformers protect early encodings at the cost of recency---the inverse of biological memory.
+Code and data are available at \url{https://github.com/[anonymized]/llm-interference-framework}.
+\end{abstract}
+
+\section{Introduction}
+
+\subsection{The Memory Challenge Beyond Search}
+
+\textbf{Large language models struggle to remember under interference.} Despite context windows expanding from 4K to 2M tokens, a fundamental limitation remains hidden: when information semantically overlaps---whether new content interfering with old, or old content interfering with new---models systematically lose access to critical facts. This is not a search problem (targets are clearly specified), nor a context length problem (the content fits easily). It is \textit{memory interference}---a phenomenon so pervasive in human cognition that psychologists have studied it since the 1920s~\citep{jenkins1924obliviscence}, yet its full profile in LLMs remains unexplored.
+
+Benchmarks like Needle-in-a-Haystack~\citep{kamradt2023niah}, LongBench~\citep{bai2024longbench}, and NoLiMa~\citep{modarressi2025nolima} evaluate whether models can \textit{locate} specific information within long contexts---essentially testing search difficulty. But real-world applications present harder challenges: can models \textit{remember} earlier information when subsequent updates create interference? And can they \textit{track} the most recent information when older content competes for attention?
+
+\textbf{Two Clinical Scenarios.} Consider a medical AI tracking a patient's vitals across a 12-hour emergency department visit. Blood pressure readings arrive repeatedly: 120 mmHg at triage, 135 mmHg after 15 minutes, 128 mmHg post-medication, 118 mmHg at discharge.
+
+\textit{Scenario A (Retroactive Interference):} The physician asks, ``What was the initial blood pressure?''---critical for baseline comparison. The system must recall the \textit{first} value despite three subsequent readings creating interference.
+
+\textit{Scenario B (Proactive Interference):} The physician asks, ``What is the current blood pressure?''---critical for discharge decisions. The system must recall the \textit{most recent} value despite three earlier readings competing for attention.
+
+Our findings reveal that LLMs handle these scenarios very differently---and \textit{opposite} to human memory patterns.
+
+\textbf{The Interference Distinction.} Cognitive psychology distinguishes two forms of memory interference~\citep{jenkins1924obliviscence, underwood1957interference}: \textbf{retroactive interference (RI)}, where new information disrupts earlier memories, and \textbf{proactive interference (PI)}, where earlier information disrupts later recall. In human memory, RI typically dominates---``new disrupts old more than old disrupts new.'' Recent work by~\citet{liu2024unable} demonstrated that LLMs exhibit systematic PI, with model size (not context length) predicting resistance. But how RI compares to PI in LLMs---and whether the human asymmetry holds---remained unknown.
+
+This gap matters because RI and PI may tap distinct mechanisms~\citep{wixted2004consolidation}. RI tests \textit{consolidation}: can initial encodings resist overwriting by subsequent information? PI tests \textit{retrieval selection}: can attention mechanisms favor recent over older memories? If these mechanisms differ, a model strong at one may be weak at the other---with profound implications for deployment.
+
+\textbf{Our Contribution.} We present the first systematic investigation of retroactive interference in LLMs, testing 54 models (1B--2.5T parameters) including proprietary reasoning models (o1, o3, o4-mini) excluded from prior studies. Our interleaved fact-learning paradigm isolates interference from search difficulty, enabling controlled comparison between RI and PI on identical stimulus sequences. What we find overturns assumptions about LLM memory: \textbf{transformers show the opposite interference pattern to humans}, with both RI and PI causing substantial degradation, but PI producing consistently greater accuracy collapse across all models. Moreover, we show that RI and PI tap distinct mechanisms---providing principled guidance for model selection based on application memory requirements.
+
+\subsection{Research Questions and Hypotheses}
+
+\textbf{RQ1:} What factors predict retroactive interference resistance in LLMs?
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{H1a:} Model parameter count predicts RI resistance (based on PI findings)
+    \item \textbf{H1b:} Context window length does not predict RI resistance (based on PI findings)
+\end{itemize}
+\vspace{-3pt}
+
+\textbf{RQ2:} Do chain-of-thought reasoning architectures exhibit different interference patterns?
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{H2:} Reasoning models show higher RI resistance than standard models
+\end{itemize}
+\vspace{-3pt}
+
+\textbf{RQ3:} Do LLMs exhibit universal decay patterns under retroactive interference?
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{H3:} RI decay follows log-linear decline (based on PI literature)
+\end{itemize}
+\vspace{-3pt}
+
+\textbf{RQ4:} How does retroactive interference (RI) compare to proactive interference (PI)?
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{H4a:} RI and PI are correlated ($r > 0.7$) if they tap into the same underlying capacity
+    \item \textbf{H4b:} RI $>$ PI effect (based on human memory literature showing retroactive interference typically exceeds proactive interference~\citep{jenkins1924obliviscence, underwood1957interference})
+\end{itemize}
+
+\subsection{Key Findings and Contributions}
+
+Our investigation yields several unexpected findings that reshape understanding of LLM memory:
+
+\vspace{6pt}
+\noindent\fbox{\parbox{0.97\columnwidth}{
+\textbf{Key Findings at a Glance}
+\begin{itemize}[itemsep=3pt,topsep=4pt,parsep=0pt,leftmargin=*]
+    \item[$\blacktriangleright$] \textbf{Opposite to Humans:} All 39 models show PI $>$ RI ($d = 1.73$)---LLMs find recent recall harder, humans find early recall harder
+    \item[$\blacktriangleright$] \textbf{Substantial Degradation:} RI drops accuracy 94\%$\rightarrow$27\%; PI collapses 85\%$\rightarrow$2\% at high interference
+    \item[$\blacktriangleright$] \textbf{Capacity $>$ Context (RI only):} Size predicts RI ($R^2 = 0.49$***) but not PI ($R^2 = 0.06$, n.s.)
+    \item[$\blacktriangleright$] \textbf{Distinct Mechanisms:} RI and PI uncorrelated ($R^2 = 0.04$)---not a unified ``memory''
+    \item[$\blacktriangleright$] \textbf{Error Signatures:} RI = retrieval failure (51\%); PI = same-key intrusion (56\%); both show $<$1\% hallucination
+    \item[$\blacktriangleright$] \textbf{Reasoning Trade-off:} O-series show +18\% RI advantage but 8.5$\times$ PI vulnerability
+\end{itemize}
+}}
+\vspace{6pt}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{results/key_results/ri_vs_pi_comparison.png}
+\caption{\textbf{The Core Finding: LLMs Show Opposite Interference Pattern to Humans.}
+Side-by-side comparison of Retroactive (RI, left) and Proactive (PI, right) interference across 39 models.
+\textbf{RI:} Accuracy declines from 94\% to 27\% under increasing interference---substantial but gradual.
+\textbf{PI:} Accuracy collapses from 85\% to 2\%---near-complete failure.
+Shaded regions show 95\% CI. All models show PI $>$ RI (RIES $>$ PIES), contrasting with human memory where RI typically dominates.}
+\label{fig:hero}
+\end{figure*}
+
+\textbf{Finding 1: Capacity trumps context---but only for RI.}
+Model size explains 49\% of variance in RI resistance ($R^2 = 0.49$, $p < 0.001$), while context window length explains essentially nothing ($R^2 < 0.01$). Strikingly, size does \textit{not} significantly predict PI resistance ($R^2 = 0.06$, $p = 0.14$) in our data, suggesting RI is uniquely capacity-dependent. A 100B model with 32K context outperforms a 10B model with 1M context for RI tasks.
+
+\textbf{Finding 2: Reasoning models excel at RI---but pay a hidden cost.}
+Chain-of-thought architectures (o1, o3) show 18\% higher RI resistance ($d = 1.76$, $p = 0.001$), with 5 of 6 reasoning models in the top 10. But this advantage reveals a striking trade-off: o1 ranks \#1 for RI yet \#45 for PI---an 8.5$\times$ asymmetry invisible to standard benchmarks. Reasoning optimizes for \textit{consolidation} at the expense of \textit{recency}.
+
+\textbf{Finding 3: RI and PI are uncorrelated.}
+With $R^2 = 0.04$ ($p = 0.20$), knowing a model's RI performance tells you almost nothing about its PI performance. This rejects the intuitive notion of a unified ``memory capacity'' and demonstrates that different applications may require different model choices.
+
+\textbf{Finding 4: All models show PI $>$ RI---universally.}
+Every single tested model (39/39, 100\%) finds proactive interference harder than retroactive interference ($d = 1.73$, $p < 0.0001$). This \textit{contrasts} with classic findings in human cognition~\citep{underwood1957interference} where RI typically dominates, suggesting LLMs' attention mechanisms create a fundamentally different interference profile.
+
+\textbf{Finding 5: RI and PI show distinct error signatures.}
+Error analysis (5,409 RI errors, 9,753 PI errors) reveals distinct failure modes: RI failures are predominantly retrieval failures (51\%) where models cannot access any value; PI failures are predominantly same-key intrusions (56\%) where models return earlier values from the same category. Critically, both show $<$1\% hallucination, indicating errors involve \textit{seen} values---not fabrication. RI shows recency bias (errors from late positions), PI shows primacy bias (14\% from first position). Figures~\ref{fig:error_trajectories} and~\ref{fig:position_evolution} visualize these contrasting error patterns.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{results/key_results/ri_vs_pi_error_trajectories.png}
+\caption{\textbf{Error Type Evolution: RI vs PI.}
+Panel (A) RI: Retrieval failure dominates at all interference levels; same-key interference rises gradually.
+Panel (B) PI: Same-key interference dominates, with primacy-biased intrusions increasing with update count.
+Both paradigms show $<$1\% hallucination---models confuse positions rather than fabricate values.}
+\label{fig:error_trajectories}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{results/key_results/position_evolution_ri_vs_pi.png}
+\caption{\textbf{Position Bias: Recency (RI) vs Primacy (PI).}
+Mean normalized position of same-key errors across interference levels (0 = first update, 1 = most recent).
+RI errors come from later positions (recency bias, mean $\approx$ 0.51); PI errors come from earlier positions (primacy bias, mean $\approx$ 0.49).
+The contrast is starkest at low interference: level 3 shows RI mean = 0.72 (late) vs PI mean = 0.12 (early).}
+\label{fig:position_evolution}
+\end{figure*}
+
+\textbf{Finding 6: Architectural fingerprints in decay patterns.}
+Unlike PI's universal log-linear decline, RI shows architecture-specific patterns: exponential (35\%), polynomial (30\%), log-quadratic (26\%). Claude shows balanced RI-PI (1.05$\times$ ratio), GPT shows moderate asymmetry (1.9$\times$), and O-series shows extreme asymmetry (8.5$\times$).
+
+\subsection{Experimental Design at a Glance}
+
+Our paradigm (Figure~\ref{fig:paradigm} in Section~\ref{sec:methods}) adapts cognitive psychology's paired-associate learning for LLM evaluation, with three key design choices:
+
+\textbf{Isolating Interference from Search.} Unlike needle-in-haystack tasks where longer contexts confound search difficulty with memory degradation, we hold retrieval targets at fixed positions and vary only interference load ($N \in \{3, 10, 50, 100, 200, 300\}$ updates per category). This isolates interference as an independent factor.
+
+\textbf{Within-Subjects RI-PI Comparison.} Both RI and PI use \textit{identical} stimulus sequences; only the query target differs (``initial value'' vs.\ ``last value''). This enables direct assessment of whether interference resistance reflects a unified capacity or distinct mechanisms.
+
+\textbf{Comprehensive Coverage.} We test 54 models (1B--2.5T parameters) with 3 independent runs each, including reasoning models (o1, o3, o4-mini) excluded from prior work. Of these, 39 models yield complete data across all interference levels (15 excluded due to context limits or API errors at high interference); all quantitative analyses use these 39 models. Figure~\ref{fig:all_models_appendix} in the Supplementary Figures provides the complete picture: all 39 models' decay curves in a single visualization, revealing how interference separates high- from low-capacity architectures. See also Figure~\ref{fig:size_tiers_appendix} in Appendix for decay patterns by model size and Figure~\ref{fig:reasoning} (Section~\ref{exp:reasoning}) for reasoning vs.\ standard comparisons.
+
+\textbf{Paper Organization.} Following this introduction, Section~\ref{sec:related} reviews relevant literature. Section~\ref{sec:methods} details our experimental paradigm. Our results are organized as five experiments (Table~\ref{tab:experiment_overview} in Section~4): \textbf{Experiment 1} establishes baseline RI effects across 54 models; \textbf{Experiment 2} tests whether capacity or context predicts resistance; \textbf{Experiment 3} examines reasoning model advantages; \textbf{Experiment 4} analyzes decay patterns across architectures; and \textbf{Experiment 5} directly compares RI and PI. Section~\ref{sec:discussion} discusses implications and limitations.
+
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Memory Interference in Cognitive Science}
+
+\textbf{Classical Interference Theory.} Retroactive and proactive interference have been studied extensively in human memory research since the early 20th century~\citep{jenkins1924obliviscence, underwood1957interference}. Retroactive interference occurs when new learning disrupts recall of previously learned material, while proactive interference occurs when old learning disrupts new material. Working memory capacity and interference resistance are closely linked~\citep{baddeley1974working, cowan2001capacity}, with individual differences in capacity predicting interference susceptibility~\citep{engle2002working}.
+
+\textbf{Consolidation and Retrieval Interference.} Modern theories distinguish between consolidation-based and retrieval-based interference~\citep{wixted2004consolidation}. Consolidation theories suggest that insufficient time for memory stabilization leads to vulnerability to overwriting, while retrieval theories emphasize competition between memory traces during recall. These mechanisms may map differently onto LLM architectures.
+
+\textbf{Relevance to LLMs.} LLM context windows serve as an analog to human working memory~\citep{liu2024unable}, but the distinction between capacity (representational resources) and buffer size (context length) remains underexplored. Our work tests whether LLMs exhibit similar capacity-based interference patterns to humans.
+
+\subsection{Memory and Interference in Neural Networks}
+
+\textbf{Catastrophic Forgetting as a Universal Constraint.} Neural networks are universally vulnerable to retroactive interference, where the acquisition of new information disrupts the retention of previously learned content~\citep{mccloskey1989catastrophic, french1999catastrophic}. In the context of sequential task learning, this often results in \textit{catastrophic forgetting}, a phenomenon where new knowledge completely overwrites prior representations. Continual learning methods~\citep{kirkpatrick2017overcoming, zenke2017continual} aim to mitigate this by protecting important parameters or using memory replay. While historically studied in the context of weight-based updates, our work demonstrates that a functional equivalent of catastrophic forgetting occurs in LLMs during long-context processing, where accuracy collapses from 94\% to 27\% as interference increases.
+
+\textbf{Mechanistic Divergence.} The distinction lies in the mechanism of memory loss. In traditional training, interference is structural---permanent weight changes erase prior gradients. In contrast, LLMs experience operational forgetting within a single forward pass through attention-based competition~\citep{brown2020gpt3}: as sequences grow, attention mechanisms fail to maintain access to early encodings. While the behavioral outcome---forgetting---is shared, LLM failures reflect retrieval and consolidation deficits rather than physical erasure.
+
+\subsection{Large Language Model Capacity and Scaling}
+
+\textbf{Scaling Laws.} Model performance scales predictably with parameters, data, and compute~\citep{kaplan2020scaling, hoffmann2022chinchilla}. However, these laws focus on pre-training loss rather than specific cognitive capabilities like interference resistance. Our work tests whether scaling laws extend to memory robustness under interference.
+
+\textbf{Context Length vs.\ Model Size.} Recent models feature increasingly long context windows (up to 2M tokens~\citep{gemini2023}), but empirical studies show that longer contexts don't always improve performance~\citep{liu2024lost}. The ``lost in the middle'' phenomenon suggests that context position matters more than raw length. We test whether context length predicts interference resistance independent of model size.
+
+\textbf{Reasoning Models.} Chain-of-thought reasoning models (o1, o3)~\citep{openai2024o1} use extended inference-time computation to improve logical reasoning and mathematical problem-solving. Whether this architectural innovation also enhances memory robustness under interference remains unknown---our work provides the first empirical test.
+
+\subsection{Long-Context Benchmarks and Memory Limitations}
+
+\textbf{Beyond Retrieval: Reasoning and Absence Detection.} Recent benchmarks have expanded evaluation beyond simple retrieval to probe deeper memory limitations.~\citet{ling2025longreason} introduce LongReason, demonstrating that reasoning performance degrades substantially with context length (794 questions, 21 LLMs, 8K--128K contexts), with position effects: queries placed \textit{after} context yield different performance than those placed \textit{before}.~\citet{fu2025absencebench} reveal a more fundamental limitation with AbsenceBench: LLMs struggle to detect \textit{omitted} information, achieving only 71.2\% F1 versus near-perfect NIAH performance. Their mechanistic insight---that transformer attention cannot attend to ``gaps'' in sequences---suggests architectural constraints may explain interference phenomena.
+
+\textbf{Relevance to Our Work.} AbsenceBench's attention limitation hypothesis aligns with our findings: if transformers struggle to attend to absent information, they may similarly struggle to maintain access to initial encodings when subsequent tokens create semantic interference. The ``placeholder effect'' (+35.7\% F1 with explicit absence markers) suggests that making initial information more salient could mitigate RI---a direction for future work.
+
+\subsection{Proactive Interference in LLMs}
+
+\citet{liu2024unable} conducted the first systematic study of proactive interference in 30 open-source LLMs. Key findings include: (1) model size predicts PI resistance ($R^2 = 0.26$), (2) context length does not predict resistance, (3) decay follows a universal log-linear pattern, (4) large models (Llama-3.1-405B) show strong resistance. Our work complements this by investigating retroactive interference (new$\rightarrow$old direction) and testing whether RI and PI tap into the same underlying capacity or represent distinct phenomena. We also extend coverage to proprietary reasoning models excluded from their study.
+
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Experimental Design}
+
+\subsubsection{Retroactive Interference (RI) Paradigm}
+
+\textbf{Task:} Recall FIRST-learned (original) values after processing interleaved updates
+
+\textbf{Procedure:}
+\begin{enumerate}[itemsep=4pt,topsep=4pt,parsep=0pt]
+    \item \textbf{Initial Learning:} Present 46 category-value pairs
+    \begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+        \item Example: \texttt{visual art: abstract expressionism}
+        \item All unique values (no duplicates across categories)
+    \end{itemize}
+    \item \textbf{Interference Phase:} Present $N$ interleaved updates ($N \in \{3, 10, 50, 100, 200, 300\}$)
+    \begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+        \item Format: ``The following facts have been updated:''
+        \item Each of 46 categories updated $N$ times
+        \item Updates presented in randomized interleaved order
+        \item Example: \texttt{visual art: baroque} (overwrites original)
+    \end{itemize}
+    \item \textbf{Retrieval:} Query for ALL 46 original values
+    \begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+        \item Question: ``What was the \textbf{initial} value of [category]?''
+        \item No cues provided beyond category name
+        \item All 46 queries presented in single prompt
+    \end{itemize}
+\end{enumerate}
+
+\textbf{Dependent Variable:} Accuracy = (correct recalls / 46) $\times$ 100\%
+
+\textbf{Independent Variable:} Interference level $N$ (number of updates per category)
+
+\subsubsection{Proactive Interference (PI) Paradigm}
+
+\textbf{Task:} Recall LAST-learned (most recent) values after processing interleaved updates
+
+\begin{enumerate}[itemsep=4pt,topsep=4pt,parsep=0pt]
+    \item \textbf{Identical Sequence:} Uses same 46 initial pairs and $N$ updates as RI
+    \begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+        \item Ensures controlled comparison between RI and PI
+        \item Only difference: query target (FIRST vs LAST values)
+    \end{itemize}
+    \item \textbf{Retrieval:} Query for ALL 46 most recent values
+    \begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+        \item Question: ``What was the \textbf{last} value of [category]?''
+    \end{itemize}
+\end{enumerate}
+
+\textbf{Rationale for Both Paradigms:}
+\begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+    \item \textbf{RI tests consolidation:} can models retain access to initial encodings despite subsequent interference?
+    \item \textbf{PI tests recency access:} can models retrieve the most recent information despite earlier competing content?
+    \item \textbf{Comparison} reveals whether interference resistance is a unified capacity or whether models show asymmetric vulnerability
+\end{itemize}
+
+\subsection{Dataset Construction}
+
+\textbf{Categories (46 total):} Drawn from diverse semantic domains
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textit{Arts:} visual art, music genre, dance style, theatre genre, literary movement
+    \item \textit{Geography:} landform, body of water, climate type
+    \item \textit{Technology:} tools, vehicle, building material, fabric
+    \item \textit{Nature:} celestial body, weather phenomenon, tree type, flower species
+    \item \textit{Food:} vegetable, fruit, grain, spice, beverage
+    \item \textit{And 26 more...} (See Appendix A for complete list)
+\end{itemize}
+
+\textbf{Values:} Synthetic strings to avoid world knowledge confounds
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item Format: \texttt{[Category][Number]} (e.g., ``Artist213'', ``Tool467'')
+    \item Ensures task tests pure memory, not semantic knowledge
+    \item Prevents models from using plausibility cues
+\end{itemize}
+
+\textbf{Sequence Generation:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item Fixed seed for reproducibility across models
+    \item Randomized interleaving of updates (no blocked structure)
+    \item Ensures every category appears with equal frequency
+\end{itemize}
+
+\subsection{Models Tested}
+
+We tested 54 large language models spanning 1B to 2.5T parameters across six major families: Reasoning models (n=6, including o1, o3, o4-mini, deepseek-r1), GPT (n=11), Claude (n=7), Gemini (n=4), Llama (n=12), and Others (n=14, including Mistral, Nova, Titan, Qwen). Of these, 39 models have complete data across all interference levels (3--300). Models span four size tiers: XS ($<$10B, n=5), S (10--100B, n=10), M (100--500B, n=13), and L ($\geq$500B, n=11). Context windows range from 8K (gpt-3.5-turbo) to 2M tokens (Gemini-2.5-pro). We categorize models by inference architecture (Reasoning vs.\ Standard) and parameter sparsity (MoE: n=20 vs.\ Dense: n=19). Complete model list with specifications in Appendix~\ref{appendix:models}.
+
+\subsection{Procedure}
+
+\noindent\textbf{Prompt Template:}
+\vspace{2pt}
+
+\begin{tcolorbox}[
+    enhanced,
+    colback=blue!5,
+    colframe=blue!60!black,
+    fonttitle=\bfseries\small,
+    title={\textcolor{white}{INSTRUCTION}},
+    boxrule=0.8pt,
+    arc=2mm,
+    left=3pt, right=3pt, top=2pt, bottom=2pt
+]
+\small\ttfamily
+Learn initial facts, then see updates.\\
+Later, recall the \textbf{INITIAL} values.
+\end{tcolorbox}
+\vspace{-4pt}
+\begin{tcolorbox}[
+    enhanced,
+    colback=green!8,
+    colframe=green!60!black,
+    fonttitle=\bfseries\small,
+    title={\textcolor{white}{INITIAL LEARNING (46 facts)}},
+    boxrule=0.8pt,
+    arc=2mm,
+    left=3pt, right=3pt, top=2pt, bottom=2pt
+]
+\small\ttfamily
+visual art: abstract expressionism\\
+tools: screwdriver\\
+\textcolor{gray}{... (46 categories)}
+\end{tcolorbox}
+\vspace{-4pt}
+\begin{tcolorbox}[
+    enhanced,
+    colback=orange!8,
+    colframe=orange!70!black,
+    fonttitle=\bfseries\small,
+    title={\textcolor{white}{INTERFERENCE (N × 46 updates)}},
+    boxrule=0.8pt,
+    arc=2mm,
+    left=3pt, right=3pt, top=2pt, bottom=2pt
+]
+\small\ttfamily
+visual art: baroque\\
+tools: hammer\\
+\textcolor{gray}{... (randomized order)}
+\end{tcolorbox}
+\vspace{-4pt}
+\begin{tcolorbox}[
+    enhanced,
+    colback=violet!8,
+    colframe=violet!70!black,
+    fonttitle=\bfseries\small,
+    title={\textcolor{white}{RETRIEVAL QUERY}},
+    boxrule=0.8pt,
+    arc=2mm,
+    left=3pt, right=3pt, top=2pt, bottom=2pt
+]
+\small\ttfamily
+What was the initial value of visual art?
+\end{tcolorbox}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{results/key_results/figure2_experimental_paradigm.png}
+\caption{\textbf{Experimental Paradigms for Measuring Memory Interference.}
+(a)~\textbf{Retroactive Interference (RI):} Tests recall of INITIAL values (green, top of sequence) after exposure to $N$ interfering updates. The model must retrieve the first-learned value despite subsequent conflicting information.
+(b)~\textbf{Proactive Interference (PI):} Tests recall of LATEST values (red, end of sequence) despite earlier conflicting information.
+Both paradigms use identical stimulus sequences with 46 categories and $N \in \{3, 10, 50, 100, 200, 300\}$ interfering updates per category; only the query target differs.
+This design isolates interference effects from search difficulty by holding retrieval targets at fixed positions while varying interference load.}
+\label{fig:paradigm}
+\end{figure*}
+
+\textbf{Response Parsing:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item Expected format: JSON dict of \{\texttt{category: value}\}
+    \item Fallback parsers for 11 different response formats
+    \item Handles truncated responses (common at high interference)
+\end{itemize}
+
+\textbf{Quality Control \& Reliability:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{Multiple runs:} 3 independent experimental runs per model for RI (n=39 models, 3 runs each = 117 total experiments)
+    \item \textbf{Run consistency:} Models tested with identical prompts and interference sequences across all 3 runs
+    \item \textbf{Exclusions:} Trials with technical errors (rate limits, timeouts, context exceeded) excluded per run
+    \item \textbf{Valid failures:} Accuracy = 0 without errors retained (reflects genuine interference, not technical failure)
+    \item \textbf{Validation:} Manual inspection of 10\% random sample across all runs
+\end{itemize}
+
+\subsection{Metrics}
+
+\textbf{Primary Metrics: RIES and PIES.}
+We quantify interference resistance as the area under the accuracy-vs-interference curve, using log-scaled integration to equally weight performance across orders of magnitude:
+
+\begin{equation}
+\text{RIES} = \int_{N=3}^{300} A_{\text{RI}}(N) \, d(\log_{10}(N + 1))
+\end{equation}
+
+where $N$ is the number of interfering updates per category (ranging from 3 to 300), and $A_{\text{RI}}(N)$ is retrieval accuracy (0--100\%) for initial values at interference level $N$. PIES (Proactive Interference Endurance Score) uses the identical formula with $A_{\text{PI}}(N)$ for last-learned values. Both scores range from 0--200 (theoretical maximum at 100\% accuracy across all levels); higher scores indicate stronger resistance.
+
+\textbf{Reliability.} RI experiments used 3 independent runs per model (n=39), with RIES calculated from mean accuracy curves. Run-to-run variance increased with interference ($\sigma = 3.4\%$ at $N=10$ to $6.2\%$ at $N=300$). PI experiments used single runs (sufficient for comparative analysis).
+
+\textbf{Decay Pattern Classification.} We fit five functional forms to each model's accuracy curve: log-linear, log-quadratic, exponential, power-law, and polynomial. Best-fit selection used AIC (Akaike Information Criterion)
+
+\subsection{Statistical Analysis}
+
+We used multiple linear regression to test predictors of RIES (RQ1), with model size (categorical: XS/S/M/L) and context length (continuous) as independent variables. We report standardized coefficients ($\beta$), which indicate the expected change in RIES (in standard deviation units) for a one-unit change in the predictor. For group comparisons (RQ2: reasoning vs.\ standard), we used independent t-tests with Welch's correction for unequal variances, supplemented by non-parametric Mann-Whitney U tests. Effect sizes are reported as Cohen's $d$ with bootstrap 95\% CIs (10,000 iterations); $d > 0.8$ indicates a large effect. For RI-PI comparison (RQ4), we used Pearson correlation (testing H4a: shared capacity) and paired t-tests (testing H4b: asymmetry), with Bland-Altman plots to assess agreement. All analyses used Python 3.9+ with scipy.stats and statsmodels; visualizations used matplotlib and seaborn
+
+\section{Results}
+
+We present results from five experiments that progressively uncover the nature of retroactive interference in LLMs. The narrative arc proceeds from \textit{phenomenon} (Exp.~1: Does RI exist?) to \textit{predictors} (Exp.~2--3: What determines resistance?) to \textit{mechanisms} (Exp.~4--5: How does RI differ from PI?). Table~\ref{tab:experiment_overview} provides a roadmap.
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Experiment Overview.} Summary of five experiments investigating retroactive interference in LLMs, with key findings and hypothesis outcomes.}
+\label{tab:experiment_overview}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}clp{4.2cm}@{}}
+\toprule
+\textbf{Exp.} & \textbf{Focus} & \textbf{Key Finding} \\
+\midrule
+1 & Baseline RI & All models show RI; RIES range 113--186 \\
+2 & Capacity vs Context & Size predicts RI ($R^2$=0.49); context does not \\
+3 & Reasoning Effect & +18\% RIES for CoT models ($d$=1.76) \\
+4 & Decay Patterns & No universal pattern; architecture-specific \\
+5 & RI vs PI & Uncorrelated ($R^2$=0.04); universal PI$>$RI \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Note on Error Bars:} All RI experiments were conducted with 3 independent runs per model to quantify measurement reliability. Figures report mean accuracy $\pm$ 1 standard deviation; RIES scores are calculated from mean accuracy curves. Mean variance increases with interference level ($\sigma = 3.4\%$ at level 10 $\rightarrow$ 6.2\% at level 300), consistent with increased task difficulty.
+
+%==============================================================================
+\subsection{Experiment 1: Baseline Retroactive Interference}
+\label{exp:baseline}
+%==============================================================================
+
+\textbf{Goal:} Establish that LLMs exhibit retroactive interference and characterize the distribution of interference resistance across 54 models.
+
+\textbf{Hypotheses:} We predicted that (1) accuracy would decline with increasing interference levels, and (2) substantial individual differences would emerge across models.
+
+\textbf{Dataset Overview:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{Models tested:} 54 total, 39 with complete data (levels 3--300), each with 3 experimental runs
+    \item \textbf{Total trials:} 285 (39 models $\times$ 6 levels, after exclusions)
+    \item \textbf{Exclusion rate:} 34.2\% (148/433 data points)
+    \begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+        \item Context limits: 30 data points (10 models $\times$ 3 levels)
+        \item Format errors: 10 data points (4 models $\times$ level 300)
+    \end{itemize}
+\end{itemize}
+
+\textbf{RIES Distribution (n=39):}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{Mean:} 154.6 $\pm$ 20.1 (95\% CI: [148.1, 161.1])
+    \item \textbf{Median:} 156.1
+    \item \textbf{Range:} 113.6--186.4 (from llama-3.2-3b to o1/o1-preview/gpt-5)
+    \item \textbf{Quartiles:} Q1 = 139.1, Q3 = 168.4
+    \item \textbf{Skewness:} $-0.42$ (slightly left-skewed, few very low performers)
+\end{itemize}
+
+\textbf{Accuracy Decline:} Mean accuracy declines monotonically from 93.5\% (3 updates) to 27.4\% (300 updates), with variance increasing at higher interference levels ($p < 0.001$, Jonckheere-Terpstra test; see Table~\ref{tab:accuracy_by_updates_appendix} in Appendix for full statistics). Figure~\ref{fig:all_models_appendix} in Appendix shows individual decay curves for all 39 models.
+
+\textbf{Experiment 1 Summary:} All 54 models tested exhibit retroactive interference. Among the 39 models with complete data across all levels, accuracy declines from 93.5\% to 27.4\% as interference increases. RIES scores range from 113.6 (llama-3.2-3b) to 186.4 (o1/gpt-5), demonstrating substantial individual differences in interference resistance.
+
+\vspace{3pt}
+\noindent\textit{Having established that RI is universal but varies widely, we next ask: what explains this 73-point spread in RIES scores?}
+\vspace{3pt}
+
+%==============================================================================
+\subsection{Experiment 2: Capacity vs.\ Context Effects}
+\label{exp:capacity}
+%==============================================================================
+
+\textbf{Goal:} Determine whether model size (representational capacity) or context window length (buffer size) predicts retroactive interference resistance (RQ1).
+
+\textbf{Hypotheses:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{H1a:} Model parameter count predicts RI resistance
+    \item \textbf{H1b:} Context window length does NOT predict RI resistance
+\end{itemize}
+
+\textbf{Multiple Linear Regression: RIES $\sim$ Size + Context}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Regression Coefficients Predicting RIES.}
+Multiple linear regression results with RIES as dependent variable and Size Class and Context Length as predictors (n=39 models).
+Model size class strongly predicts RIES ($\beta = +13.90$, $t = 5.90$, $p < 0.0001$), indicating each size tier increase corresponds to +13.9 RIES points.
+Context length shows no predictive power ($\beta \approx 0$, $t = 0.35$, $p = 0.726$), demonstrating that interference resistance depends on representational capacity, not buffer size.
+Overall model fit: $R^2 = 0.493$, Adjusted $R^2 = 0.465$, $F(2, 36) = 17.5$, $p < 0.0001$, RMSE = 15.2.}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Predictor & Coef. & SE & t & p \\
+\midrule
+Intercept & 115.56 & 8.23 & 14.04 & $< 0.0001$ \\
+Size Class & +13.90 & 2.36 & 5.90 & $< 0.0001$*** \\
+Context Length & +0.000001 & 0.000003 & 0.35 & 0.726 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{H1a SUPPORTED:} Model size strongly predicts RIES ($\beta = 13.90$, $p < 0.0001$)
+    \begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+        \item Each size tier increase (+1) $\rightarrow$ +13.9 RIES points
+        \item Explains 49.3\% of variance
+    \end{itemize}
+
+    \item \textbf{H1b SUPPORTED:} Context length does NOT predict RIES ($\beta \approx 0$, $p = 0.726$)
+    \begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+        \item Coefficient near zero with large SE
+        \item Adds no explanatory power beyond size
+    \end{itemize}
+\end{itemize}
+
+\textbf{Univariate Correlations:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item RIES vs.\ Size Class: $r = +0.701$, $R^2 = 0.491$, $p < 0.0001$***
+    \item RIES vs.\ Context Length: $r = +0.054$, $R^2 = 0.003$, $p = 0.746$ (ns)
+\end{itemize}
+
+\textbf{Non-parametric (Spearman):}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item $\rho$(size) = $+0.679$, $p < 0.0001$***
+    \item $\rho$(context) = $+0.191$, $p = 0.245$ (ns)
+\end{itemize}
+
+Figure~\ref{fig:regression} visualizes these relationships across all four diagnostic panels.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{results/key_results/regression_analysis_results.png}
+\caption{\textbf{Predictors of Retroactive Interference Resistance.}
+Regression analysis showing model size predicts RIES but context length does not.
+Panel (A) shows RIES vs.\ Size Class with regression line and 95\% confidence intervals ($R^2 = 0.491$, $p < 0.0001$), demonstrating strong positive relationship.
+Panel (B) shows RIES vs.\ Context Length with flat relationship ($R^2 = 0.003$, $p = 0.746$), indicating context window size is irrelevant.
+Panel (C) presents residual plot confirming homoscedasticity and model assumptions.
+Panel (D) shows predicted vs.\ actual RIES demonstrating good model fit.
+Error bars represent $\pm$1 standard deviation from 3 independent experimental runs per model.}
+\label{fig:regression}
+\end{figure*}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{results/key_results/decay_curves_size_combined.png}
+\caption{\textbf{Combined Size Tier Comparison.}
+Accuracy decay curves showing all four size tiers on a single plot.
+Large models (L, $>$70B, red) maintain highest accuracy across interference levels, followed by medium (M, 20--70B, orange), small (S, 7--20B, green), and extra-small (XS, $<$7B, blue).
+The consistent stratification across all interference levels demonstrates that the capacity--interference relationship is robust and monotonic.
+Shaded regions represent $\pm$1 standard error across models within each tier.}
+\label{fig:size_tiers_combined}
+\end{figure}
+
+\textbf{Experiment 2 Summary:} Parameter count strongly predicts RI resistance (H1a supported), while context window length shows no relationship (H1b supported). Figure~\ref{fig:size_tiers_combined} visualizes this stratification, showing consistent performance ordering across all interference levels. This establishes the fundamental principle: \textit{interference resistance is capacity-limited, not buffer-limited}.
+
+\vspace{3pt}
+\noindent\textit{Size explains half the variance---but not all. We noticed that reasoning models cluster at the top. Is this simply a size effect, or does reasoning architecture confer an independent advantage?}
+\vspace{3pt}
+
+%==============================================================================
+\subsection{Experiment 3: Reasoning Architecture Effects}
+\label{exp:reasoning}
+%==============================================================================
+
+\textbf{Goal:} Test whether chain-of-thought reasoning architectures exhibit different interference patterns than standard models (RQ2).
+
+\textbf{Group Comparison: Reasoning vs.\ Non-Reasoning}
+
+\begin{table}[t]
+\centering
+\caption{\textbf{RIES by Reasoning Architecture.}
+Comparison of interference resistance between reasoning (chain-of-thought enabled) and non-reasoning models.
+Reasoning models (n=6) achieve mean RIES of 178.0 $\pm$ 12.6, compared to 150.3 $\pm$ 18.2 for non-reasoning models (n=33), representing an 18.4\% advantage.
+Statistical tests confirm highly significant difference: independent t-test $t(37) = 3.54$, $p = 0.001$; Welch's t-test $t(6.2) = 4.21$, $p = 0.005$; Mann-Whitney U test $U = 19.5$, $p = 0.002$.
+Effect size is very large (Cohen's $d = 1.76$, 95\% CI: [0.61, 2.91]), indicating reasoning architecture substantially enhances memory consolidation under interference.}
+\begin{tabular}{lcccc}
+\toprule
+Group & n & Mean RIES & SD & 95\% CI \\
+\midrule
+\textbf{Reasoning (CoT)} & 6 & 178.0 & 12.6 & [167.7, 188.3] \\
+\textbf{Non-Reasoning} & 33 & 150.3 & 18.2 & [144.0, 156.7] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{H2 STRONGLY SUPPORTED:} Reasoning models show 18.4\% higher RIES
+    \item Effect robust to test choice (parametric vs.\ non-parametric)
+    \item All 6 reasoning models rank in top 14 (top 36\%)
+\end{itemize}
+
+\textbf{Reasoning Models Ranked:}
+\begin{enumerate}
+    \item o1, o1-preview, gpt-5: RIES = 186.4 (tied, near-ceiling)
+    \item o3: RIES = 185.8
+    \item o3-mini: RIES = 183.3
+    \item o4-mini: RIES = 170.5
+    \item deepseek-r1: RIES = 155.4
+\end{enumerate}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{results/key_results/decay_curves_reasoning.png}
+\caption{\textbf{Decay Curves by Reasoning Architecture.}
+Comparison of accuracy decay across interference levels for reasoning vs.\ non-reasoning models.
+Panel (A) shows reasoning/chain-of-thought models (n=6) maintaining 95--100\% accuracy across all interference levels, demonstrating near-immunity to retroactive interference.
+Panel (B) shows non-reasoning models (n=33) exhibiting steeper decline, with accuracy dropping from $\sim$93\% at level 3 to $\sim$16\% at level 300.
+Error bars represent $\pm$1 standard deviation from 3 independent experimental runs.
+Reasoning models show 18\% higher RIES than non-reasoning models ($p = 0.001$, Cohen's $d = 1.76$).}
+\label{fig:reasoning}
+\end{figure*}
+
+\textbf{Experiment 3 Summary:} Chain-of-thought reasoning models exhibit 18.4\% higher RIES than non-reasoning models ($p = 0.001$, Cohen's $d = 1.76$), with near-ceiling performance across all interference levels. This novel finding demonstrates that extended inference-time computation enhances memory consolidation.
+
+\vspace{3pt}
+\noindent\textit{The ``Unable to Forget'' paper found that PI decay follows a universal log-linear pattern across all models. Does RI follow the same universal trajectory, or do different architectures ``forget'' in different ways?}
+\vspace{3pt}
+
+%==============================================================================
+\subsection{Experiment 4: Decay Pattern Analysis}
+\label{exp:decay}
+%==============================================================================
+
+\textbf{Goal:} Characterize the functional form of accuracy decay under increasing interference and test whether LLMs exhibit universal patterns (RQ3).
+
+\textbf{Hypothesis:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{H3:} RI decay follows log-linear decline (based on PI literature~\citep{liu2024unable})
+\end{itemize}
+
+\textbf{Best-Fit Model Distribution (n=46 models with $\geq$5 levels):}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Distribution of Best-Fit Decay Patterns.}
+Summary of decay pattern classification across 46 models with $\geq$5 interference levels, based on AIC model selection.
+No models exhibit log-linear decline (0\%), rejecting H3 and contrasting sharply with universal log-linear PI decline.
+Exponential decay (34.8\%, n=16) dominates among Claude, Llama, and Gemini families, reflecting rapid early forgetting.
+Polynomial decay (30.4\%, n=14) characterizes GPT, Nova, and Mistral models with gradual non-linear decline.
+Log-quadratic patterns (26.1\%, n=12) appear across mixed architectures.
+Power-law patterns (8.7\%, n=4) are exclusive to O-series reasoning models maintaining near-ceiling performance (flat curves).
+Mean $R^2$ values range from 0.479 (power-law, appropriate for flat curves) to 0.745 (polynomial, best overall fit).}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lcccp{3cm}@{}}
+\toprule
+Pattern & n & \% & $R^2$ & Families \\
+\midrule
+\textbf{Exponential} & 16 & 34.8 & 0.698 & Claude, Llama, Gemini \\
+\textbf{Polynomial} & 14 & 30.4 & 0.745 & GPT, Nova, Mistral \\
+\textbf{Log-Quadratic} & 12 & 26.1 & 0.740 & Mixed \\
+\textbf{Power Law} & 4 & 8.7 & 0.479 & O-series (flat) \\
+\textbf{Log-Linear} & 0 & 0 & --- & None \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{H3 REJECTED:} No universal log-linear decline
+    \begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+        \item 0\% of models best-fit by log-linear (vs.\ universal in PI)
+        \item Diverse patterns suggest architecture-dependent mechanisms
+    \end{itemize}
+\end{itemize}
+
+\textbf{Average $R^2$ by Pattern (across all models):}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item Polynomial: 0.745 (best overall fit)
+    \item Log-Quadratic: 0.740
+    \item Exponential: 0.698
+    \item Log-Linear: 0.564 (poor fit)
+    \item Power Law: 0.479 (but appropriate for flat curves)
+\end{itemize}
+
+\textbf{Architecture-Specific Patterns:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{Reasoning models:} Power law (95--100\% accuracy maintained)
+    \item \textbf{Dense large models:} Polynomial (gradual, non-linear decay)
+    \item \textbf{Dense small models:} Exponential (rapid early forgetting)
+\end{itemize}
+
+\textbf{Experiment 4 Summary:} No universal decay pattern (H3 rejected). Unlike PI's universal log-linear decline, RI shows architecture-dependent patterns: 35\% exponential (Claude, Llama, Gemini), 30\% polynomial (GPT, Nova), 26\% log-quadratic (mixed), 9\% power-law (O-series). This diversity suggests RI engages different mechanisms across architectures. See Figures~\ref{fig:size_tiers_appendix} and \ref{fig:size_combined_appendix} in Appendix for detailed size tier decay visualizations.
+
+\vspace{3pt}
+\noindent\textit{The divergent decay patterns hint that RI and PI may tap distinct mechanisms. If so, a model's RI resistance should not predict its PI resistance. We test this directly.}
+\vspace{3pt}
+
+\subsubsection{MoE vs Dense Architecture}
+
+MoE models (n=20) show 17.4\% higher mean RIES (166.6 $\pm$ 16.3) than dense models (n=19, RIES = 141.9 $\pm$ 15.6). However, this advantage is confounded with reasoning capability (all 6 reasoning models are MoE) and training methodology. We cannot conclude MoE architecture \textit{per se} causes higher resistance (see Table~\ref{tab:moe_dense_appendix} and Figure~\ref{fig:moe_appendix} in Appendix).
+
+%==============================================================================
+\subsection{Experiment 5: Retroactive vs.\ Proactive Interference}
+\label{exp:ri_vs_pi}
+%==============================================================================
+
+\textbf{Goal:} Determine whether RI and PI resistance reflect a unified memory capacity or distinct mechanisms (RQ4).
+
+\textbf{Hypotheses:}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{H4a:} RI and PI are correlated ($r > 0.7$) if they tap into the same capacity
+    \item \textbf{H4b:} RI $>$ PI effect universally (based on human memory literature)
+\end{itemize}
+
+\textbf{Design:} We conducted PI experiments on the same 39 models using identical stimulus sequences, querying for LAST-learned values instead of FIRST-learned values. This within-subjects design enables direct comparison. See Figure~\ref{fig:pi_decay_appendix} in Appendix for PI decay patterns by model size.
+
+\subsubsection{Correlation Analysis}
+
+\textbf{Hypothesis H4a:} If RI and PI tap into the same underlying capacity, RIES and PIES should be highly correlated ($r > 0.7$).
+
+\textbf{Result:} REJECTED -- Weak, non-significant correlation
+
+\begin{table}[t]
+\centering
+\caption{\textbf{Correlation Between RIES and PIES.}
+Statistical assessment of whether RI and PI resistance reflect unified capacity (H4a predicted $r > 0.7$).
+Pearson correlation reveals weak positive association ($r = +0.209$) with only 4.4\% shared variance ($R^2 = 0.044$), not statistically significant ($p = 0.201$).
+Spearman rank correlation similarly weak ($\rho = +0.214$), confirming null result is not due to non-linearity.
+Analysis based on 39 models with paired RI and PI measurements.
+Result strongly rejects H4a: RI and PI measure distinct cognitive constructs in LLMs, not a unified memory capacity.
+A model strong at resisting RI is not necessarily strong at resisting PI, and vice versa.}
+\begin{tabular}{lcc}
+\toprule
+Metric & Value & Interpretation \\
+\midrule
+\textbf{Pearson r} & +0.209 & Weak positive correlation \\
+\textbf{$R^2$} & \textbf{0.044} & Only 4.4\% shared variance \\
+\textbf{p-value} & 0.201 & Not statistically significant \\
+\textbf{Spearman $\rho$} & +0.214 & Weak rank correlation \\
+\textbf{n} & 39 models & Paired comparison \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation:} RI and PI measure \textbf{distinct cognitive constructs}---a model strong at RI is not necessarily strong at PI. This suggests different underlying mechanisms: RI resistance depends on early encoding strength and consolidation robustness, while PI resistance relies on recency bias and attentional weighting of recent context.
+
+\subsubsection{Asymmetry Test}
+
+\textbf{Hypothesis H4b:} RI and PI show symmetric difficulty (no consistent directional bias).
+
+\textbf{Result:} REJECTED -- Strong, universal PI $>$ RI asymmetry (opposite of human memory)
+
+\textbf{Paired t-test (within-subjects design, n=39):}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{RI vs PI Asymmetry Statistics.}
+Within-subjects comparison of retroactive (RIES) versus proactive (PIES) interference resistance across 39 models with paired measurements.
+Mean RIES (154.6 $\pm$ 20.1) substantially exceeds mean PIES (85.0 $\pm$ 39.4), yielding mean difference of +69.5 $\pm$ 40.3 points favoring RI resistance.
+Paired t-test confirms highly significant asymmetry ($t(38) = 10.780$, $p < 0.0001$) with large effect size (Cohen's $d = 1.726$, well above "large" threshold of 0.8).
+Critically, direction is universal: 100\% of models (39/39) exhibit RIES $>$ PIES, indicating PI is consistently harder than RI across all architectures.
+This contrasts with human memory literature where retroactive interference typically exceeds proactive interference, suggesting LLMs' recency bias creates a fundamentally different interference profile.}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lcp{3.2cm}@{}}
+\toprule
+Statistic & Value & Interpretation \\
+\midrule
+\textbf{Mean RIES} & 154.6 $\pm$ 20.1 & Retroactive interference \\
+\textbf{Mean PIES} & 85.0 $\pm$ 39.4 & Proactive interference \\
+\textbf{Difference} & \textbf{+69.5 $\pm$ 40.3} & PI harder \\
+\textbf{Paired t-test} & $t(38) = 10.780$ & Significant \\
+\textbf{p-value} & \textbf{$< 0.0001$} & Strong evidence \\
+\textbf{Cohen's d} & \textbf{1.726} & Large effect \\
+\textbf{Direction} & \textbf{39/39 (100\%)} & Universal \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation:} The universal PI $>$ RI asymmetry (39/39 models, Cohen's $d = 1.726$) contrasts with classic human memory findings where retroactive interference typically exceeds proactive interference~\citep{jenkins1924obliviscence}. LLMs' natural recency bias---weighting recent context more heavily---makes RI inherently easier (models better recall early facts), while PI becomes harder (models struggle to recall recent facts when older information interferes).
+
+\textbf{Bland-Altman Agreement:} Mean bias of +69.5 points (95\% limits: $-9.4$ to $+148.5$) confirms RI and PI are not interchangeable measures. Figure~\ref{fig:ri_vs_pi} visualizes both the correlation and agreement analyses; see Figure~\ref{fig:ri_pi_comparison_appendix} in Appendix for direct side-by-side decay comparison.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{results/key_results/figure4_ri_vs_pi.png}
+\caption{\textbf{RI vs PI Comparison Analysis.}
+Two-panel comparison demonstrating uncorrelated mechanisms and universal asymmetry across 39 models.
+Panel (A) presents scatter plot of RIES vs.\ PIES showing weak correlation ($R^2 = 0.044$, $p = 0.201$), with all data points above the identity line indicating universal RIES $>$ PIES pattern.
+Panel (B) shows Bland-Altman agreement plot revealing systematic mean bias of +69.5 points (95\% limits of agreement: $-9.4$ to $+148.5$), demonstrating that RI and PI are not interchangeable measures.
+The universal PI $>$ RI asymmetry shows large effect size (Cohen's $d = 1.73$, $p < 0.0001$), with 100\% of models (39/39) exhibiting stronger retroactive than proactive interference resistance (RIES $>$ PIES), meaning PI is harder.}
+\label{fig:ri_vs_pi}
+\end{figure*}
+
+\textbf{Key findings:} (1) RI and PI are uncorrelated ($R^2 = 0.044$), indicating distinct mechanisms, and (2) All 39 models show universal PI $>$ RI asymmetry with large effect size ($d = 1.73$, $p < 0.0001$), contrasting with human memory research where RI typically dominates.
+
+\subsubsection{Model Family Asymmetry Patterns}
+
+While all models show PI $>$ RI (PI harder), the \textbf{magnitude of asymmetry} varies dramatically by architecture (see Tables~\ref{tab:oseries_appendix}, \ref{tab:claude_appendix}, and \ref{tab:gpt_appendix} in Appendix for detailed breakdowns):
+
+\begin{itemize}[itemsep=3pt,topsep=4pt,parsep=0pt]
+    \item \textbf{O-Series (Extreme):} o1 ranks 1st in RI but 45th in PI (8.5$\times$ asymmetry). Chain-of-thought reasoning optimizes for \textit{consolidation} at the cost of \textit{recency}.
+    \item \textbf{Claude (Minimal):} claude-4.5-opus shows near-identical RIES (178.4) and PIES (170.3), with only 1.05$\times$ asymmetry. Seven of top 10 PI performers are Claude models.
+    \item \textbf{GPT (Moderate):} gpt-5 shows 1.9$\times$ asymmetry---middle ground between extremes.
+\end{itemize}
+
+\subsubsection{Key Takeaways (Experiment 5)}
+
+\textbf{(1) Distinct mechanisms:} RI and PI are uncorrelated ($R^2 = 0.044$), suggesting independent cognitive constructs.
+\textbf{(2) Universal asymmetry:} All models show PI $>$ RI ($d = 1.73$), contrasting with human memory where RI dominates.
+\textbf{(3) Architectural trade-offs:} O-series optimizes for distant memory (8.5$\times$ asymmetry), Claude balances both (1.05$\times$), GPT takes middle ground (1.9$\times$).
+\textbf{(4) Differential size effects:} Size predicts RI ($R^2 = 0.49$) but not PI ($R^2 = 0.06$, n.s.), indicating different computational requirements.
+
+\textbf{Experiment 5 Summary:} RI and PI are uncorrelated ($R^2 = 0.044$, H4a rejected), demonstrating distinct mechanisms rather than unified capacity. Universal PI $>$ RI asymmetry (39/39 models, $d = 1.73$, H4b rejected---opposite of human memory) reveals LLMs' attention mechanisms favor initial over recent information. Asymmetry magnitude varies 8-fold across architectures, revealing fundamental trade-offs in memory system design.
+
+%==============================================================================
+\subsection{Additional Analyses}
+\label{sec:additional}
+%==============================================================================
+
+\subsubsection{Size Tier Effect}
+
+ANOVA confirms significant size effect ($F(3, 35) = 11.83$, $p < 0.0001$), with monotonic trend XS $<$ S $<$ M $<$ L. L-tier models (500B+) exhibit 36\% higher RIES than XS-tier ($<$10B). See Table~\ref{tab:size_tier_appendix} in Appendix for detailed statistics and Figure~\ref{fig:size_tiers_appendix} for decay curves.
+
+\subsubsection{Top and Bottom Performers}
+
+\textbf{Top performers} (Tables~\ref{tab:top10_appendix}--\ref{tab:bottom5_appendix} in Appendix): o1, o1-preview, and gpt-5 tie at RIES = 186.4, with 5 of top 10 being reasoning models. Notably, llama-4-maverick-17b ranks 7th despite only 17B parameters, while qwen-3-vl-235b (32K context) outperforms many 200K-context models.
+
+\textbf{Bottom performers}: All 5 lowest-RIES models are small ($<$10B), including llama-3.2-3b (RIES = 113.6) despite its 128K context---confirming that buffer size cannot compensate for insufficient capacity. See Figure~\ref{fig:individual_models_appendix} in the Supplementary Figures for decay curve comparison of top vs.\ bottom performers.
+
+\subsection{Error Type Analysis: Cognitive Failure Modes}
+
+We classified 5,409 RI errors and 9,753 PI errors across 54 models into five cognitive failure modes, revealing fundamentally different interference mechanisms.
+
+\textbf{Error Category Definitions:}
+\begin{itemize}[itemsep=2pt,topsep=4pt,parsep=0pt,leftmargin=*]
+    \item \textbf{Retrieval Failure:} Model returns null, blank, or explicit ``unknown''---no value retrieved
+    \item \textbf{Same-Key Interference:} Model returns a value from the \textit{correct} category but \textit{wrong} position (e.g., returns ``Paris'' when target was ``Tokyo'' for the City category)
+    \item \textbf{Cross-Key Interference:} Model returns a value from a \textit{different} category (e.g., returns ``Ferrari'' for City when it was presented for Car)
+    \item \textbf{Partial Match:} Model returns a fuzzy match to a presented value (e.g., ``Toky'' for ``Tokyo'')
+    \item \textbf{Hallucination:} Model returns a value \textit{never presented anywhere} in the prompt
+\end{itemize}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Error Type Distribution: RI vs PI.} Same-key interference dominates PI (56\%), retrieval failure dominates RI (51\%). Both show $<$1\% hallucination---errors involve \textit{seen} values, not fabrication.}
+\vspace{-4pt}
+\begin{tabular}{lccccc}
+\toprule
+& \multicolumn{2}{c}{RI (N=5,409)} & \multicolumn{2}{c}{PI (N=9,753)} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Error Type & Count & \% & Count & \% \\
+\midrule
+\textbf{Retrieval Failure} & 2,748 & 50.8 & 4,142 & 42.5 \\
+\textbf{Same-Key Interference} & 2,490 & 46.0 & 5,467 & 56.1 \\
+\textbf{Cross-Key Interference} & 32 & 0.6 & 64 & 0.7 \\
+\textbf{Partial Match} & 95 & 1.8 & 64 & 0.7 \\
+\textbf{Hallucination} & 49 & \textbf{0.9} & 16 & \textbf{0.2} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{The Story in the Errors.}
+When models fail at RI, they typically go \textit{silent}---returning nothing at all (51\%). When they do respond incorrectly, they favor \textit{recent} values over the target (46\% same-key with recency bias). The initial encoding has been overwritten.
+
+PI tells the opposite story. Models rarely go silent (43\%). Instead, they confidently return the \textit{wrong} value---typically an \textit{early} one from the same category (56\% same-key interference). Position analysis reveals strong primacy bias: 14\% of PI errors return the \textit{first} value presented versus only 1.4\% returning the most recent in RI. Early information persists and blocks access to recent updates (see Figures~\ref{fig:error_trajectories} and~\ref{fig:position_evolution} in Section 1; Figure~\ref{fig:position_binned_appendix} in Appendix for binned distribution).
+
+\textbf{Low Hallucination---A Key Finding.}
+Both paradigms show $<$1\% hallucination. Models don't fabricate; they confuse positions. This contrasts with \citet{liu2024unable}'s 25--45\% ``off-values'' rate, but the difference is definitional: their category includes any value outside a key's update stream (including cross-category intrusions we classify separately), while we reserve ``hallucination'' for values never presented \textit{anywhere}. Our granular classification reveals errors predominantly involve \textit{seen} values---position confusion, not fabrication---with important safety implications: failures are detectable.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{results/key_results/figure_error_patterns.png}
+\caption{\textbf{Error Type Distribution: RI vs PI Comparison.}
+Panel (A) shows overall error distribution: RI is dominated by retrieval failure (51\%), PI by same-key interference (56\%). Both show $<$1\% hallucination---errors involve \textit{seen} values.
+Panel (B) shows same-key interference by update count, revealing opposite position biases: RI errors exhibit recency bias (returning late values), PI errors exhibit primacy bias (14\% from first position).
+This supports distinct mechanisms: RI = degraded access to early encodings; PI = persistent early encodings blocking recency.}
+\label{fig:error_patterns}
+\end{figure*}
+
+\section{Discussion}
+\label{sec:discussion}
+
+Our five experiments reveal a consistent picture: LLMs are ``unable to remember'' early information when subsequent updates create semantic interference. This limitation is universal, predictable (by size, not context), and mechanistically distinct from proactive interference. We now synthesize these findings and consider their implications.
+
+\subsection{Principal Findings}
+
+This study provides the first comprehensive investigation of retroactive interference across modern large language models, bridging a century of human memory research with contemporary AI systems. Our findings reveal striking parallels between biological and artificial memory, suggesting fundamental computational constraints that transcend implementation substrate:
+
+\textbf{1. Size predicts RI resistance; context length does not} (RQ1).
+Model parameter count explains 49\% of variance in RIES ($R^2 = 0.49$, $p < 0.0001$), while context window length shows zero predictive power ($R^2 = 0.003$, $p = 0.746$). Critically, size does \textit{not} significantly predict PI resistance ($R^2 = 0.06$, $p = 0.14$) in our data---a key difference from Liu et al.'s findings. This suggests RI is uniquely capacity-dependent, while PI depends on architectural factors like recency bias.
+
+\textbf{2. Chain-of-thought reasoning models exhibit superior RI resistance} (RQ2).
+Reasoning architectures show 18\% higher RIES (Cohen's $d = 1.76$, $p = 0.001$), with all 6 reasoning models ranking in the top 36\% and 5/6 in the top 10. This novel finding demonstrates that extended inference-time computation enhances memory robustness.
+
+\textbf{3. No universal decay pattern---architectures matter} (RQ3).
+Rejecting H3 (log-linear decline), we find 0\% of models fit this pattern. Instead, diverse patterns emerge: 35\% exponential, 30\% polynomial, 26\% log-quadratic, 9\% power-law. This contrasts with PI's universality, suggesting RI engages more architecture-dependent mechanisms.
+
+\textbf{4. RI and PI are uncorrelated and asymmetric} (RQ4).
+Weak correlation ($R^2 = 0.044$) indicates distinct constructs. Universal PI $>$ RI asymmetry (100\% of models, $d = 1.73$) varies 8-fold by architecture (O-series: 8.5$\times$, Claude: 1.05$\times$). Critically, this contrasts with human memory where RI dominates, suggesting LLMs' attention mechanisms create a fundamentally different interference profile.
+
+\subsection{Theoretical Implications}
+
+\textbf{Dual-Process Memory in LLMs}
+
+The lack of correlation between RIES and PIES ($R^2 = 0.044$) combined with differential size effects ($R^2 = 0.49$ for RI vs.\ $R^2 = 0.06$ for PI, n.s.) provides strong evidence for \textbf{dual-process memory} in LLMs, analogous to dual-process theories in cognitive psychology~\citep{baddeley1974working}:
+
+\textbf{(1) RI failures reflect \textit{consolidation failure}:} New information overwrites or degrades early encodings, requiring representational capacity (size-dependent) analogous to long-term memory consolidation in humans.
+
+\textbf{(2) PI failures reflect \textit{retrieval competition}:} Old information competes with recent during recall, depending on recency bias (architectural, size-independent) analogous to working memory refresh mechanisms.
+
+\textbf{Error Pattern Differences Support Distinct Mechanisms.}
+The error analysis reveals fundamentally different failure modes. RI failures are ``passive'': 51\% retrieval failure (cannot access initial encoding) with $<$1\% hallucinations---models silently fail to retrieve. In contrast, PI failures show strong primacy intrusion: 56\% same-key interference with 14\% returning the \textit{first} value presented. Both paradigms show $<$1\% hallucination, indicating errors involve \textit{seen} values rather than fabrication.
+
+This mechanistic distinction has profound implications: \textbf{RI and PI target different vulnerabilities} in LLM memory systems. RI requires encoding robustness (capacity-dependent), while PI requires retrieval precision (less capacity-dependent), suggesting different mitigation strategies are needed.
+
+\subsection{Mechanistic Hypothesis: Attention Decay and Memory Access}
+
+\textbf{Why Do Models Fail at Retroactive Interference?}
+
+Our findings point toward a candidate explanation for RI failures in transformers: \textbf{attention-based memory access may attenuate with sequence position}, making early encodings progressively harder to retrieve as subsequent tokens accumulate. Direct validation through attention pattern analysis remains for future work; here we outline why this account is consistent with our behavioral observations.
+
+\textbf{The Attention Limitation (Hypothesized).}
+Transformer attention mechanisms compute query-key similarities across all positions, but several factors may bias attention toward recent tokens:
+\begin{enumerate}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{Positional encoding decay:} Rotary position embeddings (RoPE) and similar schemes introduce distance-dependent attention attenuation
+    \item \textbf{Softmax normalization:} As context length increases, attention weights spread across more positions, diluting access to any single early token
+    \item \textbf{Causal masking:} In autoregressive models, early tokens cannot ``see'' later context to strengthen their representations
+\end{enumerate}
+
+This hypothesis aligns with recent findings from~\citet{fu2025absencebench}: transformers cannot attend to ``absent'' information (gaps in sequences), achieving only 71\% F1 on omission detection versus near-perfect retrieval. If attention struggles with absence, it may similarly struggle with \textit{semantic overwriting}---when multiple values compete for the same category, attention patterns may preferentially activate more recent associations.
+
+\textbf{Consistency with Our Results.}
+Several observations are consistent with the attention decay hypothesis, though they do not constitute direct mechanistic evidence:
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{Size effect ($R^2 = 0.49$):} Larger models have more attention heads and wider representations, providing redundant pathways to early encodings
+    \item \textbf{Context effect ($R^2 = 0.003$):} Longer context windows don't help because the \textit{mechanism} of attention decay remains unchanged---more buffer doesn't fix attention sparsity
+    \item \textbf{Reasoning advantage (18\%):} Chain-of-thought creates intermediate tokens that explicitly reference initial values, effectively ``refreshing'' attention to early encodings
+    \item \textbf{Retrieval failure dominance (51\%):} Models don't confabulate---they simply cannot access the initial encoding, consistent with attention failing to activate the right memory
+\end{itemize}
+
+\textbf{Implications for Mitigation.}
+If attention attenuation contributes to RI, several interventions may help:
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{Explicit placeholders:} Marking initial values with salient tokens (cf.\ AbsenceBench's +35.7\% F1 with placeholders)
+    \item \textbf{Memory rehearsal:} Periodically re-presenting initial facts during interference
+    \item \textbf{Attention manipulation:} Architectural modifications to preserve access to early positions (e.g., landmark attention, memory tokens)
+    \item \textbf{Retrieval augmentation:} Storing initial values externally for explicit lookup
+\end{itemize}
+
+Testing these interventions represents a critical direction for future work.
+
+\subsection{Practical Implications}
+
+\textbf{Model Selection for Interference-Prone Applications}
+
+\begin{table*}[t]
+\centering
+\small
+\caption{\textbf{Model Selection Guide by Application Type.}
+Practical recommendations for choosing LLMs based on interference characteristics of different deployment scenarios.
+Document analysis with frequent updates benefits from reasoning models (O-series, GPT-5) offering 18\% higher RI resistance, tolerating extended latency.
+Customer service with evolving conversations suited to large dense models (Claude-4.5, GPT-4.1) providing strong RI resistance (176--178 RIES) without reasoning overhead.
+Simple retrieval tasks with few updates permit small models (llama-3.2-3b) since low interference reduces need for robust memory consolidation.
+Real-time latency-critical systems should prefer large dense models over reasoning models (5--10$\times$ faster) while maintaining size $>$ context principle.
+Key insight: prioritize parameter count over context length for interference resistance; reasoning models offer best memory but highest latency.}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}p{4.5cm}p{5cm}p{7cm}@{}}
+\toprule
+Application Type & Recommended Models & Rationale \\
+\midrule
+\textbf{Document analysis} (frequent updates) & Reasoning models (O-series, gpt-5) & 18\% higher RI resistance; tolerates extended latency \\
+\textbf{Customer service} (evolving conversations) & Large dense models (Claude-4.5, GPT-4.1) & Strong RI (176--178 RIES) without reasoning overhead \\
+\textbf{Simple retrieval} (few updates) & Small models (llama-3.2-3b) & Low interference reduces need for robust memory \\
+\textbf{Real-time systems} (latency-critical) & Large dense models (not reasoning) & 5--10$\times$ faster; maintain size $>$ context principle \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\textbf{Optimizing Deployments:}
+(1) Prioritize parameters over context---a 100B model with 128K context outperforms a 10B model with 1M context.
+(2) Consider reasoning trade-offs---O-series models offer superior memory but 5--10$\times$ higher latency.
+(3) Avoid tiny models ($<$10B) for interference-heavy tasks due to catastrophic forgetting risk (e.g., llama-3-8b: 0\% accuracy at level 300).
+
+\textbf{Cost-Benefit Guidance:} For high-interference tasks, invest in large/reasoning models; for low-interference tasks, smaller models suffice. Example: a customer service chatbot handling $\sim$50--100 fact updates should use M-tier (100--500B) or larger.
+
+\subsection{Limitations and Future Directions}
+
+\textbf{Limitations:}
+(1) Parameter counts for closed-source models (O-series, GPT-5, Claude-4.5) are estimated.
+(2) English-only testing; cross-lingual interference unexplored.
+(3) Results limited to semantic categories; may not generalize to numerical, spatial, or procedural memory.
+(4) No mechanistic probing of internal representations (attention patterns, layer activations).
+(5) PI experiments used single runs vs.\ 3 runs for RI.
+(6) MoE architecture effects confounded with size and reasoning capability.
+(7) \textbf{Primacy effects:} Testing only first-value retrieval may benefit from positional primacy. However, the substantial accuracy decay (93.5\% $\rightarrow$ 27.4\%) demonstrates that interference---not position---drives performance degradation. Future work could test middle-position retrieval (2nd, 3rd values) to characterize full serial position curves.
+(8) \textbf{Memory vs.\ instruction-following:} One might argue failures reflect instruction confusion rather than memory loss. We note: (a) high baseline accuracy at low interference (93--96\%) confirms models understand ``initial value'' semantically; (b) error analysis shows systematic patterns (51\% retrieval failure, 34\% recency bias) inconsistent with instruction confusion; (c) if instruction-following were impaired, errors would be random rather than systematically biased toward recent values.
+
+\textbf{Future Directions:}
+
+\textbf{1. Interference Mitigation Strategies.}
+Promising directions include: prompt engineering (explicit instructions to prioritize initial values), chain-of-thought scaffolding for standard models, memory rehearsal (periodic re-presentation of initial facts), attention manipulation to reduce recency bias, external memory systems (RAG), and hybrid architectures combining reasoning and standard models. Key questions: Can prompt engineering reduce RI by 20--30\%? Do mitigation strategies transfer across model families?
+
+\textbf{2. MoE Architecture Deep Dive.}
+MoE models (n=20) show 17\% higher RIES than dense models (n=19), but this advantage is confounded with size and reasoning capability. Critical questions: Does MoE independently enhance RI resistance when controlling for size? Do active parameters (not total) predict resistance? Is the advantage specific to sparse activation patterns or routing mechanisms?
+
+\textbf{3. Cross-Domain Generalization.}
+Future work should explore multimodal interference (vision-language models), cross-lingual variation, and domain-specific memory types (numerical, spatial, procedural, episodic).
+
+\textbf{4. Mechanistic Investigations.}
+Attention pattern analysis, layer-wise probing, causal interventions, and MoE routing analysis could identify where and how interference occurs within models.
+
+\textbf{5. Training Data Effects.}
+Investigate whether diverse training data improves resistance and the role of pre-training curriculum (sequential vs.\ interleaved).
+
+\subsection{Comparison to ``Unable to Forget'' Paper}
+
+Table~\ref{tab:comparison_unable_forget} compares our RI study with Liu et al.'s PI investigation~\citep{liu2024unable}. Critically, we can now directly compare RI and PI size effects using our own paired data from 39 models.
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Comparison to ``Unable to Forget'' Paper.} RI shows stronger size effect ($R^2 = 0.49$ vs.\ $0.06$), diverse decay patterns, and reasoning model dominance. Size $R^2$ row: Liu et al.\ reported 0.26 for their 30 models; our PI replication on 39 models yields 0.06 (n.s.).}
+\label{tab:comparison_unable_forget}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Dimension & Liu et al.\ (PI) & Our Study (RI) & Difference \\
+\midrule
+Models & 30 open-src & 39 (+reasoning) & +9 models \\
+Size $R^2$ (PI) & 0.26 (theirs) & --- & --- \\
+Size $R^2$ (ours) & 0.06 (n.s.) & 0.49*** & 8$\times$ stronger \\
+Context & n.s. & n.s. & Both n.s. \\
+Decay & Log-linear & Diverse & Arch.\ varies \\
+Top Model & Llama-405b & O-series & Reasoning \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Synthesis:}
+
+A striking difference emerges when comparing size effects: using our 39 paired models, \textbf{RI shows strong size dependency ($R^2 = 0.49$, $p < 0.001$) while PI shows no significant relationship ($R^2 = 0.06$, $p = 0.14$)}. This 9$\times$ difference suggests fundamentally different mechanisms:
+\begin{enumerate}
+    \item \textbf{RI is capacity-limited:} Consolidating early memories against overwriting requires representational capacity
+    \item \textbf{PI is architecture-limited:} Recency bias and attention patterns matter more than raw capacity
+    \item \textbf{Architecture diversity:} No universal RI decay law, unlike PI's log-linear pattern
+\end{enumerate}
+
+These differences suggest \textbf{RI and PI engage partly distinct mechanisms} in LLMs, mirroring cognitive theories of encoding vs.\ retrieval interference~\citep{underwood1957interference, wixted2004consolidation}.
+
+\subsection{RI vs PI Asymmetry: Architectural Trade-offs in Memory Design}
+
+\textbf{Core Finding:} All 39 models tested show PI $>$ RI (Cohen's $d = 1.726$, $p < 0.0001$), with asymmetry magnitude varying 8-fold across architectures (1.05$\times$ to 8.5$\times$ ratios).
+
+\subsubsection{Contrast with Human Memory}
+
+Classic interference theory established that retroactive interference (new$\rightarrow$old) typically exceeds proactive interference (old$\rightarrow$new) in human memory~\citep{jenkins1924obliviscence, underwood1957interference}. Surprisingly, our finding reveals \textbf{100\% of LLMs show the opposite pattern}---PI $>$ RI---suggesting LLMs' attention mechanisms create a fundamentally different interference profile:
+
+\begin{enumerate}
+    \item \textbf{Primacy advantage:} Attention mechanisms give early tokens privileged encoding (initial position embeddings, early attention anchoring)
+    \item \textbf{Recency vulnerability:} Recent information competes with well-established early encodings, losing the competition
+    \item \textbf{Relative overwriting resistance:} Early memories degrade less severely than recent memories under interference, though both suffer substantial decay
+\end{enumerate}
+
+The universality of PI $>$ RI across diverse LLM architectures (dense, sparse, reasoning) points to a fundamental principle: while \textbf{both early and recent memories degrade substantially under interference}, recent memories are even more vulnerable in transformers---the opposite of biological systems where RI dominates.
+
+\subsubsection{Architectural Trade-offs: The Memory Design Space}
+
+While all models show PI $>$ RI, the \textbf{degree of asymmetry reveals architectural priorities}:
+
+\textbf{Extreme Asymmetry (O-Series, 8.5$\times$ ratio):}
+\begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+    \item \textbf{Optimization:} Heavily favor distant memory retention
+    \item \textbf{Mechanism:} Extended inference (chain-of-thought) enhances early encoding at cost of recency processing
+    \item \textbf{Trade-off:} Excellent for tasks requiring robust distant recall (document QA, long-context reasoning)
+    \item \textbf{Limitation:} Poor at tracking most recent updates (dialogue state, real-time info)
+\end{itemize}
+
+\textbf{Minimal Asymmetry (Claude, 1.05$\times$ ratio):}
+\begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+    \item \textbf{Optimization:} Balanced architecture for both distant and recent memory
+    \item \textbf{Mechanism:} Attention/representation design avoids extreme recency/primacy bias
+    \item \textbf{Trade-off:} ``Jack of all trades''---good at both RI and PI, master of neither
+    \item \textbf{Strength:} Suitable for applications requiring flexible memory access patterns
+\end{itemize}
+
+\textbf{Moderate Asymmetry (GPT, 1.9$\times$ ratio):}
+\begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+    \item \textbf{Optimization:} Moderate preference for distant memory
+    \item \textbf{Position:} Middle ground between O-series and Claude
+    \item \textbf{Trade-off:} Balanced robustness without extreme specialization
+\end{itemize}
+
+\subsubsection{Distinct Mechanisms: Evidence from Correlation and Size Effects}
+
+The lack of correlation between RIES and PIES ($R^2 = 0.044$) combined with differential size effects provides strong evidence for \textbf{dual-process memory} in LLMs:
+
+\textbf{RI Resistance (Size-Dependent, $R^2 = 0.491$):}
+\begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+    \item Requires \textbf{representational capacity} to maintain distinct encodings for original values
+    \item Parameter count provides ``slots'' to avoid overwriting
+    \item Analogous to: Consolidation strength in biological memory
+\end{itemize}
+
+\textbf{PI Resistance (Size-Independent, $R^2 = 0.058$, n.s.):}
+\begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+    \item Relies on \textbf{recency bias} as architectural feature, not capacity
+    \item Attention mechanisms weight recent context regardless of model size
+    \item Analogous to: Working memory refresh in biological systems
+\end{itemize}
+
+This dissociation suggests that improving one type of interference resistance may not improve the other---architects must choose priorities or develop novel mechanisms that excel at both.
+
+\subsubsection{Practical Implications for Model Selection}
+
+Our findings provide actionable guidance for practitioners:
+
+\textbf{For applications requiring robust distant memory:}
+\begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+    \item Long-document QA, historical fact retrieval, code repositories
+    \item \textbf{Recommend:} High-RIES models (O-series, large dense models)
+    \item \textbf{Caution:} May struggle with rapid state updates
+\end{itemize}
+
+\textbf{For applications requiring recent memory:}
+\begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+    \item Conversational agents, real-time monitoring, state tracking
+    \item \textbf{Recommend:} High-PIES models (Claude, smaller dense models)
+    \item \textbf{Caution:} May forget early conversation context
+\end{itemize}
+
+\textbf{For balanced applications:}
+\begin{itemize}[itemsep=1pt,topsep=2pt,parsep=0pt]
+    \item Multi-turn dialogues with historical context, document editing
+    \item \textbf{Recommend:} Low-asymmetry models (Claude, GPT-4.1)
+    \item \textbf{Trade-off:} Neither RI nor PI resistance is maximal
+\end{itemize}
+
+\section{Conclusion}
+
+This study provides the first comprehensive investigation of memory interference in large language models, testing both retroactive (RI) and proactive interference (PI) across 54 models (39 with complete data) spanning 1B to 2.5T parameters. Our findings reveal that RI and PI engage distinct computational mechanisms rather than reflecting a unified ``memory capacity.''
+
+\textbf{Summary of Contributions:}
+\begin{enumerate}[itemsep=4pt,topsep=4pt,parsep=0pt]
+    \item \textbf{Capacity $>$ Context for RI (but not PI):} Parameter count strongly predicts RI resistance ($R^2 = 0.49$) but not PI resistance ($R^2 = 0.06$, n.s.), while context window predicts neither---revealing RI is uniquely capacity-dependent
+    \item \textbf{Chain-of-thought reasoning models exhibit 18\% higher RI resistance} ($p = 0.001$, Cohen's $d = 1.76$), with 5 of 6 reasoning models ranking in top 10, demonstrating that extended inference-time computation enhances memory robustness
+    \item \textbf{No universal decay pattern:} Unlike PI's log-linear decline, RI exhibits architecture-dependent patterns (35\% exponential, 30\% polynomial, 26\% log-quadratic), suggesting distinct encoding mechanisms across model families
+    \item \textbf{RI and PI are uncorrelated} ($R^2 = 0.044$, $p = 0.201$), demonstrating that interference resistance is not a unified construct but reflects specialized mechanisms for distant vs.\ recent memory
+    \item \textbf{All 39 models universally show PI $>$ RI} (mean difference $= +69.5$, Cohen's $d = 1.73$, $p < 0.0001$), contrasting with human memory research where RI dominates, revealing LLMs' attention mechanisms favor early over recent information
+    \item \textbf{Asymmetry magnitude varies 8-fold} across architectures: O-series exhibit extreme asymmetry (8.5$\times$) optimizing for distant memory, Claude shows minimal asymmetry (1.05$\times$) with balanced design, and GPT displays moderate asymmetry (1.9$\times$)
+    \item \textbf{Error analysis reveals distinct failure modes:} RI failures are ``passive'' (51\% retrieval failure, $<$1\% hallucination) while PI failures show primacy intrusion (56\% same-key interference, 14\% from first position), both with $<$1\% hallucination---position confusion, not fabrication
+\end{enumerate}
+
+\textbf{Implications:}
+
+For \textbf{theory}, our work establishes that LLM memory operates through dual processes: (1) consolidation-based RI resistance (size-dependent, representational capacity), and (2) retrieval-based PI resistance (size-independent, recency bias). This mirrors cognitive theories of interference~\citep{underwood1957interference, wixted2004consolidation} and suggests fundamental computational principles governing memory systems.
+
+For \textbf{practice}, our findings inform model selection: reasoning models (O-series) excel at distant memory but sacrifice recent memory; Claude models balance both but maximize neither; GPT models occupy the middle ground. Applications requiring robust historical context (document analysis, knowledge retrieval) should prioritize high-RIES models, while conversational agents benefit from balanced architectures.
+
+For \textbf{future work}, critical directions include: (1) developing and testing mitigation strategies (prompt engineering, memory rehearsal, attention manipulation), (2) mechanistic investigations using attention analysis and layer-wise probing, and (3) extending to multimodal and cross-lingual domains. The discovery of architectural trade-offs in memory design suggests opportunities for novel architectures that achieve high resistance to both RI and PI.
+
+The universal PI $>$ RI asymmetry across all tested LLMs---contrasting with human memory where RI dominates---reveals that transformers exhibit a fundamentally different interference profile: early information is protected while recent information is vulnerable. Understanding and exploiting these unique constraints will be essential for deploying LLMs in interference-heavy real-world applications.
+
+\newpage
+\appendix
+
+\section{Experimental Details}
+\label{appendix:experimental}
+
+\subsection{Stimulus Materials}
+
+We used 46 semantic categories adapted from cognitive psychology research on paired-associate learning. Categories span diverse domains to minimize systematic biases:
+
+\textbf{Categories (46 total):} visual art, tools, gemstone, furniture, clothing, animals, vehicles, instruments, sports, foods, beverages, flowers, trees, metals, fabrics, colors, shapes, buildings, professions, countries, cities, rivers, mountains, planets, elements, compounds, diseases, medications, emotions, virtues, crimes, weapons, games, dances, languages, currencies, religions, holidays, inventions, discoveries, theories, philosophies, movements, genres, styles, techniques.
+
+\textbf{Value Generation:} For each category, values were generated as pseudo-random alphanumeric strings (e.g., ``Artist123'', ``Tool456'') to eliminate semantic associations that could bias retrieval. This ensures interference effects reflect memory processes rather than semantic priming.
+
+\subsection{Prompt Templates}
+\textbf{RI Prompt Structure:}
+\vspace{-4pt}
+{\footnotesize\begin{verbatim}
+INSTRUCTION: You will learn initial facts
+about categories, then see updates. Later,
+recall the INITIAL values you learned
+first.
+INITIAL LEARNING:
+[category1]: [value1]
+[category2]: [value2]
+... (46 categories)
+UPDATES (Following facts have been updated):
+[category_i]: [new_value_1]
+[category_j]: [new_value_1]
+... (N x 46 updates, randomized order)
+QUERY: What was the INITIAL
+value of [category]?
+\end{verbatim}}
+\vspace{-4pt}
+\noindent\textbf{PI Prompt Structure:} Identical to RI, except query asks for ``LAST value'' instead of ``INITIAL value.''
+
+\subsection{Interference Levels}
+We tested six interference levels: $N \in \{3, 10, 50, 100, 200, 300\}$ updates per category. Total context lengths ranged from approximately 2K tokens ($N=3$) to 45K tokens ($N=300$), well within context limits for most models.
+
+\subsection{Experimental Runs}
+\textbf{RI Experiments:} 3 independent runs per model with different random seeds for update ordering. Results report mean $\pm$ standard deviation across runs.
+\textbf{PI Experiments:} 1 run per model (sufficient for comparative analysis given lower variance observed in pilot studies).
+
+\section{Complete Model Specifications}
+\label{appendix:models}
+
+\subsection{Model Families and Variants}
+
+Table~\ref{tab:model_specs} provides complete specifications for all 54 models tested.
+
+\begin{table*}[t]
+\centering
+\small
+\caption{\textbf{Complete Model Specifications.} All 54 models tested for RI, with 39 having complete data across all interference levels. Parameter counts for proprietary models are estimates based on industry reports.}
+\label{tab:model_specs}
+\begin{tabular}{llcccc}
+\toprule
+\textbf{Model} & \textbf{Family} & \textbf{Parameters} & \textbf{Context} & \textbf{Architecture} & \textbf{Reasoning} \\
+\midrule
+\multicolumn{6}{l}{\textit{Reasoning Models (n=6)}} \\
+o1 & OpenAI & 2T+ (est.) & 128K & MoE & Yes \\
+o1-preview & OpenAI & 2T+ (est.) & 128K & MoE & Yes \\
+o3 & OpenAI & 2T+ (est.) & 200K & MoE & Yes \\
+o3-mini & OpenAI & 500B+ (est.) & 200K & MoE & Yes \\
+o4-mini & OpenAI & 500B+ (est.) & 200K & MoE & Yes \\
+deepseek-r1 & DeepSeek & 671B & 128K & Dense & Yes \\
+\midrule
+\multicolumn{6}{l}{\textit{GPT Family (n=11)}} \\
+gpt-3.5-turbo & OpenAI & 175B & 8K & Dense & No \\
+gpt-4 & OpenAI & 1.5T+ (est.) & 8K & MoE & No \\
+gpt-4-turbo & OpenAI & 1.5T+ (est.) & 128K & MoE & No \\
+gpt-4o & OpenAI & 1.5T+ (est.) & 128K & MoE & No \\
+gpt-4o-mini & OpenAI & 70B (est.) & 128K & MoE & No \\
+gpt-4.1 & OpenAI & 1.5T+ (est.) & 128K & MoE & No \\
+gpt-4.1-mini & OpenAI & 200B (est.) & 128K & MoE & No \\
+gpt-4.1-nano & OpenAI & 1B (est.) & 128K & MoE & No \\
+gpt-5 & OpenAI & 2T+ (est.) & 200K & MoE & No \\
+gpt-5-mini & OpenAI & 500B (est.) & 200K & MoE & No \\
+gpt-5-nano & OpenAI & 1B (est.) & 200K & MoE & No \\
+\midrule
+\multicolumn{6}{l}{\textit{Claude Family (n=7)}} \\
+claude-3-opus & Anthropic & 137B & 200K & Dense & No \\
+claude-3.5-haiku & Anthropic & 200B (est.) & 200K & Dense & No \\
+claude-4-sonnet & Anthropic & 300B (est.) & 200K & Dense & No \\
+claude-4-opus & Anthropic & 500B+ (est.) & 200K & Dense & No \\
+claude-4.5-haiku & Anthropic & 500B+ (est.) & 200K & Dense & No \\
+claude-4.5-sonnet & Anthropic & 500B+ (est.) & 200K & Dense & No \\
+claude-4.5-opus & Anthropic & 500B+ (est.) & 200K & Dense & No \\
+\midrule
+\multicolumn{6}{l}{\textit{Gemini Family (n=4)}} \\
+gemini-2.0-flash & Google & 300B (est.) & 1M & MoE & No \\
+gemini-2.0-flash-lite & Google & 100B (est.) & 1M & MoE & No \\
+gemini-2.5-pro & Google & 1T+ (est.) & 2M & MoE & No \\
+gemini-2.5-flash-lite & Google & 200B (est.) & 1M & MoE & No \\
+\midrule
+\multicolumn{6}{l}{\textit{Llama Family (n=12)}} \\
+llama-3-8b & Meta & 8B & 8K & Dense & No \\
+llama-3-70b & Meta & 70B & 8K & Dense & No \\
+llama-3.1-8b & Meta & 8B & 128K & Dense & No \\
+llama-3.1-70b & Meta & 70B & 128K & Dense & No \\
+llama-3.1-405b & Meta & 405B & 128K & Dense & No \\
+llama-3.2-1b & Meta & 1B & 128K & Dense & No \\
+llama-3.2-3b & Meta & 3B & 128K & Dense & No \\
+llama-3.2-11b & Meta & 11B & 128K & Dense & No \\
+llama-3.2-90b & Meta & 90B & 128K & Dense & No \\
+llama-3.3-70b & Meta & 70B & 128K & Dense & No \\
+llama-4-scout-17b & Meta & 17B & 128K & MoE & No \\
+llama-4-maverick-17b & Meta & 17B & 128K & MoE & No \\
+\midrule
+\multicolumn{6}{l}{\textit{Other Models (n=14)}} \\
+mistral-7b & Mistral & 7B & 32K & Dense & No \\
+mistral-8x7b & Mistral & 56B (8$\times$7B) & 32K & MoE & No \\
+ministral-3b & Mistral & 3B & 128K & Dense & No \\
+ministral-8b & Mistral & 8B & 128K & Dense & No \\
+nova-micro & Amazon & 1.8B & 300K & Dense & No \\
+nova-lite & Amazon & 10B (est.) & 300K & Dense & No \\
+nova-pro & Amazon & 100B (est.) & 300K & Dense & No \\
+nova-premier & Amazon & 500B+ (est.) & 300K & Dense & No \\
+titan-express & Amazon & 8B & 42K chars & Dense & No \\
+titan-large & Amazon & 175B & 42K chars & Dense & No \\
+titan-lite & Amazon & 3B & 42K chars & Dense & No \\
+qwen-3-32b & Alibaba & 32B & 32K & Dense & No \\
+qwen-3-coder-30b & Alibaba & 30B & 32K & Dense & No \\
+qwen-3-vl-235b & Alibaba & 235B & 32K & MoE & No \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Size Tier Classification}
+
+Models were classified into four size tiers based on parameter count:
+
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{XS ($<$ 10B):} llama-3.2-1b, llama-3.2-3b, nova-micro, ministral-3b, mistral-7b (n=5)
+    \item \textbf{S (10--100B):} llama-3-8b, llama-3.1-8b, llama-3.2-11b, llama-3-70b, llama-3.1-70b, llama-3.3-70b, claude-3-opus, mistral-8x7b, qwen-3-32b, gpt-4o-mini (n=10)
+    \item \textbf{M (100--500B):} claude-3.5-haiku, claude-4-sonnet, llama-3.1-405b, llama-3.2-90b, titan-large, gemini-2.0-flash, gemini-2.5-flash-lite, qwen-3-vl-235b, deepseek-r1, o3-mini, o4-mini, nova-pro, gpt-4.1-mini (n=13)
+    \item \textbf{L ($\geq$ 500B):} claude-4-opus, claude-4.5-haiku, claude-4.5-sonnet, claude-4.5-opus, gpt-4, gpt-4-turbo, gpt-4.1, gpt-5, o1, o1-preview, o3, gemini-2.5-pro, llama-4-maverick-17b, llama-4-scout-17b, nova-premier (n=11)
+\end{itemize}
+
+\section{Statistical Methods}
+\label{appendix:stats}
+
+\subsection{RIES Calculation}
+The Retroactive Interference Endurance Score (RIES) is computed as the area under the accuracy-vs-interference curve using trapezoidal integration with log-scaled x-axis:
+\vspace{-2pt}
+\begin{equation}
+\text{RIES} = \sum_{i=1}^{n-1} \frac{(A_i + A_{i+1})}{2} \times (\log_{10}(L_{i+1} + 1) - \log_{10}(L_i + 1))
+\end{equation}
+\vspace{-2pt}
+\noindent where $A_i$ is accuracy at interference level $L_i \in \{3, 10, 50, 100, 200, 300\}$. The $+1$ offset accounts for the initial value presentation (level $L$ represents 1 initial value plus $L-1$ interference updates). Log-scaling ensures equal weighting across orders of magnitude.
+
+\subsection{Statistical Tests}
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{Regression:} Multiple linear regression with robust standard errors (HC3)
+    \item \textbf{Group comparisons:} Independent t-tests, Welch's t-test (unequal variances), Mann-Whitney U (non-parametric)
+    \item \textbf{Correlations:} Pearson (parametric), Spearman (rank-based)
+    \item \textbf{Effect sizes:} Cohen's $d$ with 95\% CI via bootstrap (1000 iterations)
+    \item \textbf{Multiple comparisons:} Bonferroni correction where applicable
+\end{itemize}
+
+\section{Supplementary Tables}
+\label{appendix:tables}
+
+This appendix contains detailed tables supporting the main text analyses. Tables are referenced in-line where relevant.
+
+\subsection{Detailed Accuracy Statistics}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Mean Accuracy by Number of Interfering Updates.}
+Summary statistics across 39 models at each interference level. Note: The slight increase at level 50 (96.3\%) compared to levels 3--10 reflects ceiling effects combined with reduced variance as low-performing models stabilize; the monotonic decline from level 50 onward captures the primary interference effect.}
+\label{tab:accuracy_by_updates_appendix}
+\begin{tabular}{cccccc}
+\toprule
+Updates & Mean Acc (\%) & Std Dev & Min & Max & n \\
+\midrule
+3 & 93.5 & 18.9 & 0.0 & 100.0 & 39 \\
+10 & 95.4 & 4.0 & 80.4 & 97.8 & 39 \\
+50 & 96.3$^\dagger$ & 5.6 & 80.4 & 100.0 & 39 \\
+100 & 74.5 & 28.2 & 21.7 & 100.0 & 39 \\
+200 & 43.5 & 32.0 & 0.0 & 100.0 & 39 \\
+300 & 27.4 & 39.0 & 0.0 & 100.0 & 39 \\
+\bottomrule
+\multicolumn{6}{l}{\footnotesize $^\dagger$Non-monotonicity due to ceiling effects; see caption.}
+\end{tabular}
+\end{table}
+
+\subsection{Size Tier Analysis}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{RIES by Model Size Tier.} ANOVA: $F(3, 35) = 11.83$, $p < 0.0001$.}
+\label{tab:size_tier_appendix}
+\begin{tabular}{lcccc}
+\toprule
+Tier & n & Mean RIES & SD & 95\% CI \\
+\midrule
+\textbf{XS (1--10B)} & 5 & 125.0 & 6.6 & [116.9, 133.1] \\
+\textbf{S (10--100B)} & 10 & 146.9 & 13.2 & [137.5, 156.3] \\
+\textbf{M (100--500B)} & 13 & 158.8 & 13.7 & [151.0, 166.6] \\
+\textbf{L (500B+)} & 11 & 170.0 & 18.8 & [157.8, 182.2] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Architecture Comparison}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{RIES by Architecture Type: MoE vs Dense.} MoE shows 17.4\% higher RIES, though confounded with reasoning capability.}
+\label{tab:moe_dense_appendix}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lccccp{2.8cm}@{}}
+\toprule
+Arch. & n & RIES & SD & 95\% CI & Examples \\
+\midrule
+\textbf{MoE} & 20 & 166.6 & 16.3 & [158.9, 174.3] & O-series, GPT 4.1+/5 \\
+\textbf{Dense} & 19 & 141.9 & 15.6 & [134.4, 149.4] & Claude, Llama 3.x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Model Family RI-PI Asymmetry Patterns}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{O-Series: Extreme RI-PI Asymmetry.} Reasoning models show up to 8.5$\times$ asymmetry.}
+\label{tab:oseries_appendix}
+\begin{tabular}{lcccccc}
+\toprule
+Model & RIES & PIES & Diff & Ratio & Rank RI & Rank PI \\
+\midrule
+\textbf{o1} & 186.4 & 22.0 & +164.4 & \textbf{8.5$\times$} & 1st & 45th \\
+\textbf{o1-preview} & 186.4 & 76.0 & +110.4 & 2.5$\times$ & 2nd & 30th \\
+\textbf{o4-mini} & 170.5 & 22.0 & +148.5 & 7.8$\times$ & 10th & 46th \\
+\textbf{o3} & 185.8 & 76.0 & +109.8 & 2.4$\times$ & 4th & 29th \\
+\textbf{o3-mini} & 183.3 & 75.6 & +107.8 & 2.4$\times$ & 5th & 31st \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Claude Family: Minimal RI-PI Asymmetry.} Balanced performance (1.05--1.11$\times$ ratios).}
+\label{tab:claude_appendix}
+\begin{tabular}{lcccc}
+\toprule
+Model & RIES & PIES & Difference & Ratio \\
+\midrule
+\textbf{claude-4.5-opus} & 178.4 & 170.3 & +8.1 & \textbf{1.05$\times$} \\
+\textbf{claude-3-opus} & 145.2 & 131.5 & +13.7 & 1.10$\times$ \\
+\textbf{claude-3.5-haiku} & 139.8 & 126.4 & +13.5 & 1.11$\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{GPT Family: Moderate RI-PI Asymmetry.} Middle ground (1.4--1.9$\times$ ratios).}
+\label{tab:gpt_appendix}
+\begin{tabular}{lcccc}
+\toprule
+Model & RIES & PIES & Difference & Ratio \\
+\midrule
+\textbf{gpt-5} & 186.4 & 99.2 & +87.2 & 1.9$\times$ \\
+\textbf{gpt-4.1} & 176.9 & 118.6 & +58.3 & 1.5$\times$ \\
+\textbf{gpt-5-mini} & 157.0 & 109.1 & +47.9 & 1.4$\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Model Rankings}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Top 10 Models by RIES.} Five of top 10 are reasoning models.}
+\label{tab:top10_appendix}
+\begin{tabular}{clccc}
+\toprule
+Rank & Model & RIES & Size & Context \\
+\midrule
+1 & o1, o1-preview, gpt-5 & 186.4 & 2T+ & 128--200K \\
+4 & o3 & 185.8 & 2T+ & 200K \\
+5 & o3-mini & 183.3 & 500B+ & 200K \\
+6 & claude-4.5-opus & 178.4 & 500B+ & 200K \\
+7 & llama-4-maverick-17b & 178.3 & 17B & 128K \\
+8 & qwen-3-vl-235b & 177.3 & 235B & 32K \\
+9 & gpt-4.1 & 176.9 & 1.5T+ & 128K \\
+10 & o4-mini & 170.5 & 500B+ & 200K \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Bottom 5 Models by RIES.} All are small models ($<$10B parameters).}
+\label{tab:bottom5_appendix}
+\begin{tabular}{clccc}
+\toprule
+Rank & Model & RIES & Size & Context \\
+\midrule
+39 & llama-3.2-3b & 113.6 & 3B & 128K \\
+38 & llama-3.2-1b & 126.1 & 1B & 128K \\
+37 & nova-micro & 126.1 & 1.8B & 300K \\
+36 & gpt-4.1-nano & 128.2 & 1B & 128K \\
+35 & llama-3.1-8b & 128.3 & 8B & 128K \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Supplementary Figures}
+\label{appendix:figures}
+
+This appendix contains detailed figures supporting the main text analyses. Figures are referenced in-line where relevant.
+
+\subsection{Complete Model Decay Curves}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{results/key_results/decay_curves_individual_models.png}
+\caption{\textbf{All 39 Models: Individual RI Decay Curves.}
+Complete decay trajectories showing substantial heterogeneity across model families.
+Shaded regions represent 95\% confidence intervals from 3 experimental runs.
+Models sorted by RIES score; color gradient indicates RI resistance (green = high, red = low).
+This figure provides the complete picture underlying the summary statistics in the main text.}
+\label{fig:all_models_appendix}
+\end{figure*}
+
+\subsection{Size Tier Decay Patterns}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{results/key_results/decay_curves_size_tiers.png}
+\caption{\textbf{RI Decay Patterns by Model Size Tier.}
+Four-panel comparison showing distinct size-dependent interference patterns.
+Panel (A): XS models (1--10B, n=5) show steep exponential decay.
+Panel (B): S models (10--100B, n=10) show moderate polynomial decline.
+Panel (C): M models (100--500B, n=13) maintain higher accuracy with gradual decay.
+Panel (D): L models (500B+, n=11) exhibit minimal decay.
+Size tier strongly predicts RIES (ANOVA $F(3,35) = 11.83$, $p < 0.0001$).}
+\label{fig:size_tiers_appendix}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{results/key_results/decay_curves_size_combined.png}
+\caption{\textbf{Combined Size Tier Comparison (RI).}
+All four size tiers on a single plot, showing clear separation with increasing interference.
+Size tiers: XS ($<$10B, red), S (10--100B, orange), M (100--500B, blue), L ($\geq$500B, green).
+Supports the ``capacity $>$ context'' principle: larger models substantially outperform smaller models regardless of context window size.}
+\label{fig:size_combined_appendix}
+\end{figure*}
+
+\subsection{Architecture Comparisons}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{results/key_results/decay_curves_moe.png}
+\caption{\textbf{MoE vs Dense Architecture Decay Curves.}
+MoE models (n=20, mean RIES = 166.6) show 17.4\% higher resistance than dense models (n=19, mean RIES = 141.9).
+However, this advantage is confounded with model size, reasoning capability, and training methodology.
+Future controlled studies are needed to isolate pure architectural effects.}
+\label{fig:moe_appendix}
+\end{figure*}
+
+\subsection{Proactive Interference Decay}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{results/key_results/pi_decay_curves_size.png}
+\caption{\textbf{Proactive Interference (PI) Decay Curves by Model Size.}
+PI performance (recall of LATEST values) across interference levels, grouped by size tier.
+All tiers show severe decay under PI, with most models collapsing to near-zero accuracy at high interference.
+Comparing with RI decay (Figure~\ref{fig:size_tiers_appendix}) reveals the universal PI $>$ RI asymmetry.}
+\label{fig:pi_decay_appendix}
+\end{figure*}
+
+\subsection{RI vs PI Direct Comparison}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{results/key_results/ri_vs_pi_comparison.png}
+\caption{\textbf{Side-by-Side RI vs.\ PI Decay Comparison.}
+Direct comparison using identical stimulus sequences on 39 models.
+Panel (A) RI: accuracy drops from $\sim$94\% to $\sim$27\%.
+Panel (B) PI: accuracy collapses from $\sim$85\% to $\sim$2\%.
+The visual separation illustrates the universal PI $>$ RI asymmetry.}
+\label{fig:ri_pi_comparison_appendix}
+\end{figure*}
+
+\subsection{Top vs Bottom Performers}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{results/key_results/decay_curves_individual_models.png}
+\caption{\textbf{Individual Model Decay Curves: Top vs.\ Bottom Performers.}
+Panel (A) shows the 12 highest-RIES models (green gradient), dominated by O-series reasoning models.
+Panel (B) shows the 12 lowest-RIES models (red gradient), exhibiting steep exponential decay.
+The separation widens from $\sim$20\% at level 3 to $>$80\% at level 300.}
+\label{fig:individual_models_appendix}
+\end{figure*}
+
+\subsection{Additional Error Analysis}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{results/key_results/position_binned_ri_vs_pi.png}
+\caption{\textbf{Position-Binned Error Analysis: RI vs PI.}
+Distribution of same-key interference errors by normalized position (0 = first update, 1 = most recent).
+RI errors cluster toward later positions (recency bias: 55.6\% from late half).
+PI errors cluster toward early positions (primacy bias: 14\% from first position alone).
+This opposite pattern confirms distinct interference mechanisms.}
+\label{fig:position_binned_appendix}
+\end{figure*}
+
+\section{Additional Results}
+\label{appendix:additional}
+
+\subsection{Complete RIES Rankings}
+
+Table~\ref{tab:ries_rankings} shows complete RIES rankings for all 39 models with full data.
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Complete RIES Rankings (n=39).}}
+\label{tab:ries_rankings}
+\begin{tabular}{clcc}
+\toprule
+Rank & Model & RIES & 95\% CI \\
+\midrule
+1 & o1 & 186.4 & [184.2, 188.6] \\
+1 & o1-preview & 186.4 & [184.2, 188.6] \\
+1 & gpt-5 & 186.4 & [183.1, 189.7] \\
+4 & o3 & 185.8 & [183.5, 188.1] \\
+5 & o3-mini & 183.3 & [180.9, 185.7] \\
+6 & claude-4.5-opus & 178.4 & [175.8, 181.0] \\
+7 & llama-4-maverick-17b & 178.3 & [175.2, 181.4] \\
+8 & qwen-3-vl-235b & 177.3 & [174.5, 180.1] \\
+9 & gpt-4.1 & 176.9 & [174.1, 179.7] \\
+10 & o4-mini & 170.5 & [167.8, 173.2] \\
+\multicolumn{4}{c}{...} \\
+35 & llama-3.1-8b & 128.3 & [124.6, 132.0] \\
+36 & gpt-4.1-nano & 128.2 & [124.5, 131.9] \\
+37 & nova-micro & 126.1 & [122.3, 129.9] \\
+38 & llama-3.2-1b & 126.1 & [122.3, 129.9] \\
+39 & llama-3.2-3b & 113.6 & [109.8, 117.4] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Exclusion Criteria}
+
+Models were excluded from specific analyses for:
+\begin{itemize}[itemsep=2pt,topsep=3pt,parsep=0pt]
+    \item \textbf{Context overflow:} 30 data points (10 models $\times$ 3 levels) where prompt exceeded model's context limit
+    \item \textbf{Format errors:} 10 data points (4 models $\times$ level 300) where model failed to produce parseable responses
+    \item \textbf{API failures:} Transient errors retried up to 3 times; persistent failures excluded
+\end{itemize}
+
+\section{Reproducibility}
+\label{appendix:reproducibility}
+
+\subsection{Code and Data Availability}
+
+All code, data, and analysis scripts are available at: \url{https://github.com/[anonymized]/llm-interference-framework}
+
+\subsection{Computational Resources}
+
+Experiments were conducted using API access to commercial models (OpenAI, Anthropic, Google, Amazon, Meta) and local inference for open-source models. Total API costs: approximately \$2,500. Local inference used 8$\times$ NVIDIA A100 GPUs.
+
+\subsection{Random Seeds}
+
+For reproducibility, we used fixed random seeds (42, 123, 456) for the three independent RI runs. Update orderings were generated using Python's \texttt{random.shuffle()} with these seeds.
+
+\bibliographystyle{icml2026}
+\bibliography{references}
+
+\end{document}
