@@ -15,8 +15,8 @@ from typing import Dict
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
-from datasets.interleaved_dataset_loader import InterleavedDatasetLoader
-from datasets.category_response_parser import CategoryResponseParser
+from datasets_v0.interleaved_dataset_loader import InterleavedDatasetLoader
+from datasets_v0.category_response_parser import CategoryResponseParser
 from models import create_model
 
 def run_experiment(model_name: str, interference_level: int, dataset_path: str, sample_size: int = 46):
