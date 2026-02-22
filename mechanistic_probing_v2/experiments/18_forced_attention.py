@@ -31,7 +31,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
-from core.dataset import format_for_chat
+from core.dataset import format_for_chat, ORIGINAL_CATEGORIES
 from core.single_token_values import verify_single_token
 
 
@@ -164,17 +164,13 @@ def main():
     categories = ["color", "animal", "material", "weather", "weapon"]
 
     # Load primacy-biased heads
-    results_dir = Path(__file__).parent.parent / "results"
-    head_id_path = results_dir / f"head_identification_{args.model.split('/')[-1]}.json"
-
-    if head_id_path.exists():
-        with open(head_id_path) as f:
-            head_data = json.load(f)
-        primacy_heads = [(h["layer"], h["head"]) for h in head_data["primacy_biased_heads"]]
+    from core.output import load_head_identification
+    try:
+        primacy_heads = load_head_identification(args.model, args.keys, args.updates)
         print(f"Loaded {len(primacy_heads)} primacy-biased heads")
-    else:
+    except FileNotFoundError:
         primacy_heads = [(16, 3)]
-        print("Using default: L16H3")
+        print("head_identification not found for this operating point, using default: L16H3")
 
     for l, h in primacy_heads:
         print(f"  L{l}H{h}")
@@ -306,10 +302,8 @@ def main():
             for cfg in configs
         },
     }
-    out_path = results_dir / f"forced_attention_{args.model.split('/')[-1]}.json"
-    with open(out_path, "w") as f:
-        json.dump(save_data, f, indent=2)
-    print(f"\nSaved to {out_path}")
+    from core.output import save_results
+    out_path = save_results(save_data, args.model, args.keys, args.updates, "forced_attention")
 
 
 if __name__ == "__main__":

@@ -1,18 +1,16 @@
 """
-Phase 2 trial run: mechanistic analysis at a few operating points.
+Logit lens + attention + DLA analysis at a single operating point.
 
-Uses SINGLE-TOKEN values (not synthetic multi-token "Art42" values) so that:
+Uses SINGLE-TOKEN values so that:
   - Logit lens can track P(initial) vs P(final) as distinct tokens
   - DLA can measure per-component contribution to each token's logit
   - Attention analysis can identify which positions heads attend to
 
-Operating points (from partial Phase 1 results on Qwen2.5-0.5B):
-  - Point A (easy):    keys=2, updates=1  — both RI and PI work
-  - Point B (PI edge): keys=2, updates=5  — PI starting to crack
+Run once per operating point. Use --keys and --updates to specify the point.
 
 Usage:
     cd mechanistic_probing_v2
-    uv run python experiments/12_phase2_trial.py [--trials 3]
+    uv run python experiments/12_phase2_trial.py --keys 2 --updates 5 [--trials 100]
 """
 
 import sys
@@ -27,7 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
-from core.dataset import format_for_chat, SYSTEM_PROMPT
+from core.dataset import format_for_chat, SYSTEM_PROMPT, ORIGINAL_CATEGORIES
 from core.single_token_values import get_single_token_pool, verify_single_token
 from core.token_tracker import build_token_map, summarize_token_map
 from core.analysis_utils import (
@@ -36,13 +34,7 @@ from core.analysis_utils import (
     compute_dla, dla_to_dict,
     get_positions_by_role,
 )
-
-
-OPERATING_POINTS = {
-    "A_easy": {"keys": 2, "updates": 1, "desc": "No interference"},
-    "B_pi_edge": {"keys": 2, "updates": 5, "desc": "PI cracking edge"},
-    "C_deep": {"keys": 3, "updates": 10, "desc": "Deep asymmetry"},
-}
+from core.output import save_results
 
 
 def build_single_token_trial(
@@ -53,16 +45,12 @@ def build_single_token_trial(
     value_pool: list[str],
     categories: list[str] = None,
 ) -> dict:
-    """Build a trial using single-token values.
-
-    Returns dict with prompt, metadata, and value token info.
-    """
+    """Build a trial using single-token values."""
     rng = random.Random(seed)
 
     if categories is None:
         categories = [f"category_{i}" for i in range(num_keys)]
 
-    # Assign unique single-token values to each (category, update_idx)
     total_values_needed = num_keys * num_updates
     if total_values_needed > len(value_pool):
         raise ValueError(f"Need {total_values_needed} unique values, pool has {len(value_pool)}")
@@ -75,17 +63,14 @@ def build_single_token_trial(
         values_per_cat[cat] = selected_values[idx:idx + num_updates]
         idx += num_updates
 
-    # Pick test category
     test_cat = categories[seed % num_keys]
 
-    # Build interleaved sequence (no consecutive same-category)
     items = []
     for cat in categories:
         for ui, val in enumerate(values_per_cat[cat]):
             items.append({"category": cat, "value": val, "update_idx": ui})
 
     rng.shuffle(items)
-    # Simple constraint: no consecutive same-category
     for attempt in range(100):
         ok = True
         for i in range(1, len(items)):
@@ -96,7 +81,6 @@ def build_single_token_trial(
             break
         rng.shuffle(items)
 
-    # Build prompt
     stream_lines = [f"{it['category']}: {it['value']}" for it in items]
     stream_text = "\n".join(stream_lines)
     query_word = "first" if condition == "RI" else "last"
@@ -131,13 +115,10 @@ def build_single_token_trial(
 def run_analysis(model, tokenizer, trial: dict, value_to_tid: dict) -> dict:
     """Run logit lens + attention + DLA on one trial."""
 
-    # Token IDs for our target values (space-prefixed = in-context form)
     init_tid = value_to_tid[trial["initial_value"]]
     final_tid = value_to_tid[trial["final_value"]]
     inter_tids = [value_to_tid[v] for v in trial["intermediate_values"]]
 
-    # Also get bare (no-space) token IDs for logit lens
-    # The model may output the bare form in later layers
     init_bare_tid = tokenizer.encode(trial["initial_value"], add_special_tokens=False)[0]
     final_bare_tid = tokenizer.encode(trial["final_value"], add_special_tokens=False)[0]
     init_tids = list(set([init_tid, init_bare_tid]))
@@ -147,9 +128,8 @@ def run_analysis(model, tokenizer, trial: dict, value_to_tid: dict) -> dict:
           f"final='{trial['final_value']}' (tids={final_tids})")
 
     if init_tid == final_tid:
-        print(f"    WARNING: init and final share same token ID! (updates=1, same value)")
+        print(f"    WARNING: init and final share same token ID!")
 
-    # Tokenize with chat template
     formatted = format_for_chat(trial["prompt"], tokenizer)
     tokens = model.to_tokens(formatted)
     token_ids = tokens[0].tolist()
@@ -158,17 +138,14 @@ def run_analysis(model, tokenizer, trial: dict, value_to_tid: dict) -> dict:
 
     print(f"    Tokens: {seq_len}")
 
-    # Forward pass with cache
     with torch.no_grad():
         logits, cache = model.run_with_cache(tokens)
 
-    # What does the model predict?
     pred_tid = logits[0, -1].argmax().item()
     pred_text = tokenizer.decode([pred_tid]).strip()
     correct = pred_text.lower() == trial["expected"].lower()
     print(f"    Predicts: '{pred_text}' (expected: '{trial['expected']}') -> {'CORRECT' if correct else 'WRONG'}")
 
-    # Build token map
     tmap = build_token_map(str_tokens, token_ids, init_tid, final_tid, inter_tids)
     tmap_summary = summarize_token_map(tmap)
     print(f"    Token map: init@{tmap.initial_value_positions}, "
@@ -178,7 +155,6 @@ def run_analysis(model, tokenizer, trial: dict, value_to_tid: dict) -> dict:
     # ── Logit Lens ──
     ll_results = logit_lens_all_layers(model, cache, init_tids, final_tids, answer_position=-1)
 
-    # Print sampled layers
     sample_layers = list(range(0, model.cfg.n_layers, max(1, model.cfg.n_layers // 6)))
     for r in [ll_results[i] for i in sample_layers]:
         winner = "INIT" if r.prob_initial > r.prob_final else "FINAL"
@@ -186,24 +162,17 @@ def run_analysis(model, tokenizer, trial: dict, value_to_tid: dict) -> dict:
               f"rank_i={r.rank_initial:>5} rank_f={r.rank_final:>5} -> {winner}")
 
     # ── Attention ──
-    init_pos = tmap.initial_value_positions
-    final_pos = tmap.final_value_positions
-    inter_pos = tmap.intermediate_value_positions
-    query_pos = tmap.query_positions
-    instr_pos = tmap.instruction_positions
-
     attn_stats = extract_attention_stats(
         cache, model.cfg.n_layers, model.cfg.n_heads,
         answer_position=seq_len - 1,
-        initial_positions=init_pos,
-        final_positions=final_pos,
-        intermediate_positions=inter_pos,
-        query_positions=query_pos,
-        instruction_positions=instr_pos,
+        initial_positions=tmap.initial_value_positions,
+        final_positions=tmap.final_value_positions,
+        intermediate_positions=tmap.intermediate_value_positions,
+        query_positions=tmap.query_positions,
+        instruction_positions=tmap.instruction_positions,
     )
     attn_arrays = attention_stats_to_arrays(attn_stats, model.cfg.n_layers, model.cfg.n_heads)
 
-    # Top retrieval heads
     retr = attn_arrays["retrieval_score"]
     prim = attn_arrays["primacy_score"]
     flat_top5 = np.argsort(retr.ravel())[-5:][::-1]
@@ -222,7 +191,6 @@ def run_analysis(model, tokenizer, trial: dict, value_to_tid: dict) -> dict:
         print(f"      L{l}H{h}: logit_diff={hd[l,h]:+.4f}")
     print(f"    MLP total: {dla_result.mlp_logit_diff.sum():+.4f}")
 
-    # Cleanup
     del cache
     if torch.backends.mps.is_available():
         torch.mps.empty_cache()
@@ -249,19 +217,20 @@ def run_analysis(model, tokenizer, trial: dict, value_to_tid: dict) -> dict:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Phase 2 Trial Run")
+    parser = argparse.ArgumentParser(description="Logit lens + attention + DLA at a single operating point")
     parser.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
-    parser.add_argument("--trials", type=int, default=3)
+    parser.add_argument("--keys", type=int, default=2)
+    parser.add_argument("--updates", type=int, default=5)
+    parser.add_argument("--trials", type=int, default=100)
     parser.add_argument("--n-ctx", type=int, default=2048)
     args = parser.parse_args()
 
     print("=" * 70)
-    print("PHASE 2 TRIAL RUN — Single-Token Mechanistic Analysis")
+    print(f"LOGIT LENS — keys={args.keys}, updates={args.updates}")
     print("=" * 70)
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
 
-    # Verify single-token values
     value_to_tid = verify_single_token(tokenizer)
     value_pool = list(value_to_tid.keys())
     print(f"\nVerified {len(value_pool)} single-token values")
@@ -273,76 +242,52 @@ def main():
         "n_layers": info.n_layers,
         "n_heads": info.n_heads,
         "d_model": info.d_model,
-        "trials_per_point": args.trials,
-        "operating_points": OPERATING_POINTS,
+        "keys": args.keys,
+        "updates": args.updates,
+        "trials_per_condition": args.trials,
         "analyses": [],
     }
 
     t_start = time.time()
 
-    for point_name, cfg in OPERATING_POINTS.items():
-        print(f"\n{'='*70}")
-        print(f"Point {point_name}: {cfg['desc']} (keys={cfg['keys']}, updates={cfg['updates']})")
-        print(f"{'='*70}")
+    for condition in ["RI", "PI"]:
+        print(f"\n  --- {condition} ---")
+        for t_idx in range(args.trials):
+            seed = hash((condition, t_idx, args.updates, "logit_lens")) % (2**31)
+            trial = build_single_token_trial(
+                num_keys=args.keys,
+                num_updates=args.updates,
+                condition=condition,
+                seed=seed,
+                value_pool=value_pool,
+                categories=categories[:args.keys],
+            )
+            print(f"\n  Trial {t_idx+1}/{args.trials} (seed={seed})")
 
-        for condition in ["RI", "PI"]:
-            print(f"\n  --- {condition} ---")
-            for t_idx in range(args.trials):
-                seed = hash((point_name, condition, t_idx)) % (2**31)
-                trial = build_single_token_trial(
-                    num_keys=cfg["keys"],
-                    num_updates=cfg["updates"],
-                    condition=condition,
-                    seed=seed,
-                    value_pool=value_pool,
-                    categories=categories[:cfg["keys"]],
-                )
-                print(f"\n  Trial {t_idx+1}/{args.trials} (seed={seed})")
-
-                t0 = time.time()
-                result = run_analysis(model, tokenizer, trial, value_to_tid)
-                result["point"] = point_name
-                result["elapsed_sec"] = round(time.time() - t0, 1)
-                all_results["analyses"].append(result)
+            t0 = time.time()
+            result = run_analysis(model, tokenizer, trial, value_to_tid)
+            result["elapsed_sec"] = round(time.time() - t0, 1)
+            all_results["analyses"].append(result)
 
     total = time.time() - t_start
     all_results["total_elapsed_sec"] = round(total, 1)
 
-    # Save
-    results_dir = Path(__file__).parent.parent / "results"
-    results_dir.mkdir(exist_ok=True)
-    model_short = args.model.split("/")[-1]
-    out_path = results_dir / f"phase2_trial_{model_short}.json"
-    with open(out_path, "w") as f:
-        json.dump(all_results, f, indent=2)
-    print(f"\nSaved to {out_path}")
+    save_results(all_results, args.model, args.keys, args.updates, "logit_lens")
 
     # Summary
     print(f"\n{'='*70}")
     print(f"SUMMARY ({total:.1f}s total)")
     print(f"{'='*70}")
 
-    for point_name in OPERATING_POINTS:
-        print(f"\n{point_name}:")
-        point_res = [r for r in all_results["analyses"] if r["point"] == point_name]
-        for cond in ["RI", "PI"]:
-            cond_res = [r for r in point_res if r["condition"] == cond]
-            n_correct = sum(1 for r in cond_res if r["correct"])
-            print(f"  {cond}: {n_correct}/{len(cond_res)} correct")
+    for cond in ["RI", "PI"]:
+        cond_res = [r for r in all_results["analyses"] if r["condition"] == cond]
+        n_correct = sum(1 for r in cond_res if r["correct"])
+        print(f"  {cond}: {n_correct}/{len(cond_res)} correct")
 
-            if cond_res:
-                # Logit lens at last layer
-                avg_pi = np.mean([r["logit_lens"]["prob_initial"][-1] for r in cond_res])
-                avg_pf = np.mean([r["logit_lens"]["prob_final"][-1] for r in cond_res])
-                print(f"    Last layer avg: P(init)={avg_pi:.4f}, P(final)={avg_pf:.4f}")
-
-                # Average primacy score of top retrieval heads
-                for r in cond_res:
-                    retr = np.array(r["attention"]["retrieval_score"])
-                    prim = np.array(r["attention"]["primacy_score"])
-                    top5 = np.unravel_index(np.argsort(retr.ravel())[-5:][::-1], retr.shape)
-                    avg_prim = np.mean([prim[l, h] for l, h in zip(top5[0], top5[1])])
-                    print(f"    Trial seed={r['seed']}: top-5 retrieval heads avg primacy={avg_prim:.3f}")
+        if cond_res:
+            avg_pi = np.mean([r["logit_lens"]["prob_initial"][-1] for r in cond_res])
+            avg_pf = np.mean([r["logit_lens"]["prob_final"][-1] for r in cond_res])
+            print(f"    Last layer avg: P(init)={avg_pi:.4f}, P(final)={avg_pf:.4f}")
 
 
 if __name__ == "__main__":

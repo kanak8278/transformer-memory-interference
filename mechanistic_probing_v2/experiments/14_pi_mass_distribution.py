@@ -1,22 +1,17 @@
 """
 Where does the probability mass land in PI (recall last)?
 
-Runs positional gradient analysis at multiple interference levels
-(updates = 3, 5, 10, 15, 20) and tracks:
+Runs at a single (keys, updates) operating point and tracks:
   - Which position index gets the highest P?
   - Is it the literal last (v_{N-1})? Second-to-last? Somewhere in the middle?
   - How concentrated vs spread is the distribution?
 
-This answers: does the model have a "last value" retrieval mechanism,
-or is it doing something else?
-
 Usage:
     cd mechanistic_probing_v2
-    uv run python experiments/14_pi_mass_distribution.py [--trials 8]
+    uv run python experiments/14_pi_mass_distribution.py --keys 2 --updates 5 [--trials 100]
 """
 
 import sys
-import json
 import time
 import random
 import argparse
@@ -27,11 +22,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
-from core.dataset import format_for_chat
+from core.dataset import format_for_chat, ORIGINAL_CATEGORIES
 from core.single_token_values import verify_single_token
-
-
-UPDATE_LEVELS = [3, 5, 10, 15, 20]
+from core.output import save_results
 
 
 def build_trial(num_keys, num_updates, condition, seed, value_pool, categories):
@@ -184,15 +177,17 @@ def run_analysis(model, tokenizer, trial, value_to_tid):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
-    parser.add_argument("--trials", type=int, default=8)
+    parser.add_argument("--trials", type=int, default=100)
     parser.add_argument("--keys", type=int, default=2)
+    parser.add_argument("--updates", type=int, default=5)
     parser.add_argument("--n-ctx", type=int, default=2048)
     args = parser.parse_args()
 
+    n_updates = args.updates
+
     print("=" * 70)
     print("PI MASS DISTRIBUTION ANALYSIS")
-    print(f"  Where does the probability land across value positions?")
-    print(f"  keys={args.keys}, trials={args.trials}, updates={UPDATE_LEVELS}")
+    print(f"  keys={args.keys}, updates={n_updates}, trials={args.trials}")
     print("=" * 70)
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
@@ -203,112 +198,69 @@ def main():
 
     all_results = {
         "model": args.model,
-        "config": {"keys": args.keys, "trials": args.trials, "update_levels": UPDATE_LEVELS},
+        "config": {"keys": args.keys, "trials": args.trials, "updates": n_updates},
         "analyses": [],
     }
 
     t_start = time.time()
 
-    for n_updates in UPDATE_LEVELS:
-        for condition in ["RI", "PI"]:
-            print(f"\n--- updates={n_updates}, {condition} ---")
-            for t_idx in range(args.trials):
-                seed = hash((condition, t_idx, n_updates, "v2")) % (2**31)
-                trial = build_trial(args.keys, n_updates, condition, seed, value_pool, categories)
+    for condition in ["RI", "PI"]:
+        print(f"\n--- {condition} ---")
+        for t_idx in range(args.trials):
+            seed = hash((condition, t_idx, args.updates, "pi_mass")) % (2**31)
+            trial = build_trial(args.keys, n_updates, condition, seed, value_pool, categories)
 
-                result = run_analysis(model, tokenizer, trial, value_to_tid)
-                result["elapsed_sec"] = 0
-                all_results["analyses"].append(result)
+            result = run_analysis(model, tokenizer, trial, value_to_tid)
+            result["elapsed_sec"] = 0
+            all_results["analyses"].append(result)
 
-                status = "OK" if result["correct"] else "WRONG"
-                print(f"  t{t_idx}: pred='{result['predicted']}' exp='{result['expected']}' "
-                      f"{status} | peak@v{result['argmax_position']}/{n_updates-1} "
-                      f"(rel={result['argmax_relative_pos']:.2f}) "
-                      f"P={result['max_prob']:.4f} "
-                      f"top1={result['top1_concentration']:.0%} top3={result['top3_concentration']:.0%}")
+            status = "OK" if result["correct"] else "WRONG"
+            print(f"  t{t_idx}: pred='{result['predicted']}' exp='{result['expected']}' "
+                  f"{status} | peak@v{result['argmax_position']}/{n_updates-1} "
+                  f"(rel={result['argmax_relative_pos']:.2f}) "
+                  f"P={result['max_prob']:.4f} "
+                  f"top1={result['top1_concentration']:.0%} top3={result['top3_concentration']:.0%}")
 
     total = time.time() - t_start
     all_results["total_elapsed_sec"] = round(total, 1)
 
-    # Save
-    results_dir = Path(__file__).parent.parent / "results"
-    results_dir.mkdir(exist_ok=True)
-    model_short = args.model.split("/")[-1]
-    out_path = results_dir / f"pi_mass_distribution_{model_short}.json"
-    with open(out_path, "w") as f:
-        json.dump(all_results, f, indent=2)
-    print(f"\nSaved to {out_path}")
+    save_results(all_results, args.model, args.keys, n_updates, "pi_mass_distribution")
 
     # ── Aggregate ──
     print(f"\n{'='*70}")
     print("AGGREGATE: Where does peak probability land?")
     print(f"{'='*70}")
 
-    print(f"\n{'Updates':>8} {'Cond':>4} {'Acc':>5} | {'Peak@':>6} {'RelPos':>7} | "
-          f"{'MaxP':>6} {'Top1%':>6} {'Top3%':>6} | Distribution shape")
-    print("-" * 90)
+    print(f"\n{'Cond':>4} {'Acc':>5} | {'Peak@':>6} {'RelPos':>7} | "
+          f"{'MaxP':>6} {'Top1%':>6} {'Top3%':>6}")
+    print("-" * 60)
 
-    for n_updates in UPDATE_LEVELS:
-        for condition in ["RI", "PI"]:
-            results = [r for r in all_results["analyses"]
-                       if r["num_updates"] == n_updates and r["condition"] == condition]
-            if not results:
-                continue
-
-            n_correct = sum(1 for r in results if r["correct"])
-            acc = n_correct / len(results)
-            avg_peak = np.mean([r["argmax_position"] for r in results])
-            avg_rel = np.mean([r["argmax_relative_pos"] for r in results])
-            avg_maxp = np.mean([r["max_prob"] for r in results])
-            avg_top1 = np.mean([r["top1_concentration"] for r in results])
-            avg_top3 = np.mean([r["top3_concentration"] for r in results])
-
-            # Build average probability profile (normalized to N positions)
-            # Bin into relative positions [0, 0.25, 0.5, 0.75, 1.0]
-            bins = [0, 0.25, 0.5, 0.75, 1.0]
-            bin_avgs = []
-            for r in results:
-                n = len(r["probs_final_layer"])
-                for b_lo, b_hi in zip(bins[:-1], bins[1:]):
-                    lo_idx = int(b_lo * n)
-                    hi_idx = max(lo_idx + 1, int(b_hi * n))
-                    bin_avgs.append(np.mean(r["probs_final_layer"][lo_idx:hi_idx]))
-
-            # Reshape to [n_trials, 4 bins] and average
-            bin_avgs = np.array(bin_avgs).reshape(len(results), 4)
-            avg_bins = bin_avgs.mean(axis=0)
-            bar = "".join("█" if v > 0.01 else "▄" if v > 0.001 else "░" for v in avg_bins)
-
-            print(f"{n_updates:>8} {condition:>4} {acc:>5.0%} | "
-                  f"v{avg_peak:>4.1f} {avg_rel:>7.2f} | "
-                  f"{avg_maxp:>6.4f} {avg_top1:>5.0%} {avg_top3:>5.0%} | "
-                  f"[0-25%:{avg_bins[0]:.4f} 25-50%:{avg_bins[1]:.4f} "
-                  f"50-75%:{avg_bins[2]:.4f} 75-100%:{avg_bins[3]:.4f}]")
-
-    # ── PI-specific: peak position histogram ──
-    print(f"\n{'='*70}")
-    print("PI: Peak position relative to sequence length")
-    print(f"{'='*70}")
-
-    for n_updates in UPDATE_LEVELS:
-        pi_results = [r for r in all_results["analyses"]
-                      if r["num_updates"] == n_updates and r["condition"] == "PI"]
-        if not pi_results:
+    for condition in ["RI", "PI"]:
+        results = [r for r in all_results["analyses"] if r["condition"] == condition]
+        if not results:
             continue
 
-        peaks = [r["argmax_position"] for r in pi_results]
+        n_correct = sum(1 for r in results if r["correct"])
+        acc = n_correct / len(results)
+        avg_peak = np.mean([r["argmax_position"] for r in results])
+        avg_rel = np.mean([r["argmax_relative_pos"] for r in results])
+        avg_maxp = np.mean([r["max_prob"] for r in results])
+        avg_top1 = np.mean([r["top1_concentration"] for r in results])
+        avg_top3 = np.mean([r["top3_concentration"] for r in results])
+
+        print(f"{condition:>4} {acc:>5.0%} | "
+              f"v{avg_peak:>4.1f} {avg_rel:>7.2f} | "
+              f"{avg_maxp:>6.4f} {avg_top1:>5.0%} {avg_top3:>5.0%}")
+
+    # ── PI-specific: peak position histogram ──
+    pi_results = [r for r in all_results["analyses"] if r["condition"] == "PI"]
+    if pi_results:
+        print(f"\nPI peak positions:")
         rel_peaks = [r["argmax_relative_pos"] for r in pi_results]
-
-        # Count: how many times is peak at last position, second-to-last, etc.
         at_last = sum(1 for r in pi_results if r["argmax_position"] == n_updates - 1)
-        at_2nd_last = sum(1 for r in pi_results if r["argmax_position"] == n_updates - 2)
-        in_last_quarter = sum(1 for r in pi_results if r["argmax_relative_pos"] >= 0.75)
         in_first_quarter = sum(1 for r in pi_results if r["argmax_relative_pos"] <= 0.25)
-
         n = len(pi_results)
-        print(f"  updates={n_updates:>2}: "
-              f"@last={at_last}/{n} @2nd_last={at_2nd_last}/{n} "
-              f"last_25%={in_last_quarter}/{n} first_25%={in_first_quarter}/{n} "
+        print(f"  @last={at_last}/{n} first_25%={in_first_quarter}/{n} "
               f"avg_rel_pos={np.mean(rel_peaks):.2f}")
 
 

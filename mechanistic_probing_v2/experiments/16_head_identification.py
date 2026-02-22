@@ -27,7 +27,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
-from core.dataset import format_for_chat
+from core.dataset import format_for_chat, ORIGINAL_CATEGORIES
 from core.single_token_values import verify_single_token
 
 
@@ -399,10 +399,6 @@ def main():
         print(f"{config_name:<35} {ri_acc:>5.0%} {pi_acc:>5.0%} {gap:>+9.0%}{marker}")
 
     # Save
-    results_dir = Path(__file__).parent.parent / "results"
-    results_dir.mkdir(exist_ok=True)
-    model_short = args.model.split("/")[-1]
-
     save_data = {
         "model": args.model,
         "config": {"keys": args.keys, "updates": args.updates, "trials": args.trials,
@@ -431,10 +427,8 @@ def main():
         "total_time_sec": round(total_time, 1),
     }
 
-    out_path = results_dir / f"head_identification_{model_short}.json"
-    with open(out_path, "w") as f:
-        json.dump(save_data, f, indent=2)
-    print(f"\nSaved to {out_path}")
+    from core.output import save_results
+    out_path = save_results(save_data, args.model, args.keys, args.updates, "head_identification")
     print(f"Total time: {total_time:.1f}s")
 
 

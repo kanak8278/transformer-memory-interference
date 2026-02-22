@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mechanistic Probing of Memory Interference in Transformers — Research Proposal</title>
+<style>
+:root {
+  --bg: #f8f9fa; --surface: #ffffff; --surface-alt: #f1f3f5; --border: #dee2e6;
+  --text: #212529; --text-secondary: #495057; --text-muted: #868e96;
+  --primary: #5f3dc4; --primary-light: #f3f0ff; --primary-dark: #4c2889;
+  --accent: #2f9e44; --accent-light: #ebfbee;
+  --danger: #e03131; --danger-light: #fff5f5;
+  --warning: #f08c00; --warning-light: #fff9db;
+  --info: #1098ad; --info-light: #e3fafc;
+  --blue: #1971c2; --blue-light: #e7f5ff;
+  --grape: #ae3ec9; --grape-light: #f8f0fc;
+  --code-bg: #1e1e2e; --code-text: #cdd6f4;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --radius: 8px; --radius-sm: 4px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+/* Header */
+.header { background: linear-gradient(135deg, #4c2889 0%, #5f3dc4 40%, #7048e8 70%, #1098ad 100%); color: white; padding: 32px 40px; }
+.header h1 { font-size: 1.65rem; font-weight: 700; margin-bottom: 6px; }
+.header .subtitle { font-size: 1rem; opacity: 0.9; font-weight: 400; margin-bottom: 4px; }
+.header p { font-size: 0.85rem; opacity: 0.8; }
+.header .meta { display: flex; gap: 24px; margin-top: 12px; font-size: 0.78rem; opacity: 0.7; flex-wrap: wrap; }
+
+/* Tab Navigation */
+.tab-nav { display: flex; gap: 0; background: var(--surface); border-bottom: 2px solid var(--border); padding: 0 24px; overflow-x: auto; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
+.tab-btn { padding: 12px 20px; border: none; background: none; cursor: pointer; font-size: 0.82rem; font-weight: 500; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; transition: all 0.2s; }
+.tab-btn:hover { color: var(--text); background: var(--surface-alt); }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+
+/* Tab Content */
+.tab-content { display: none; padding: 32px 40px; max-width: 1200px; margin: 0 auto; }
+.tab-content.active { display: block; }
+
+/* Typography */
+h2 { font-size: 1.35rem; font-weight: 700; margin: 0 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid var(--primary); color: var(--primary-dark); }
+h3 { font-size: 1.05rem; font-weight: 600; margin: 24px 0 12px 0; color: var(--text); }
+h4 { font-size: 0.92rem; font-weight: 600; margin: 16px 0 8px 0; color: var(--text-secondary); }
+p { margin-bottom: 12px; font-size: 0.9rem; }
+ul, ol { margin: 0 0 12px 20px; font-size: 0.9rem; }
+li { margin-bottom: 4px; }
+
+/* Details / Accordion */
+details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; box-shadow: var(--shadow); }
+details[open] { box-shadow: var(--shadow-md); }
+summary { padding: 14px 20px; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--text); user-select: none; list-style: none; display: flex; align-items: center; gap: 8px; }
+summary::before { content: '\25B6'; font-size: 0.7rem; transition: transform 0.2s; color: var(--primary); }
+details[open] > summary::before { transform: rotate(90deg); }
+summary::-webkit-details-marker { display: none; }
+.details-body { padding: 0 20px 20px 20px; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 12px 0 20px 0; font-size: 0.83rem; }
+th { background: var(--primary); color: white; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.3px; }
+td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+tr:nth-child(even) { background: var(--surface-alt); }
+tr:hover { background: var(--primary-light); }
+
+/* Badges */
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; }
+.badge-done { background: var(--accent); color: white; }
+.badge-progress { background: var(--warning); color: white; }
+.badge-todo { background: var(--text-muted); color: white; }
+.badge-critical { background: var(--danger); color: white; }
+.badge-phase { background: var(--primary); color: white; }
+.badge-model { background: var(--info); color: white; }
+.badge-finding { background: var(--grape); color: white; }
+.badge-type { background: var(--primary-light); color: var(--primary-dark); }
+
+/* Cards */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px; box-shadow: var(--shadow); }
+.card-title { font-weight: 600; font-size: 0.92rem; margin-bottom: 6px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin: 12px 0 20px 0; }
+
+/* Callouts */
+.callout { padding: 16px 20px; border-radius: var(--radius); margin: 12px 0 20px 0; font-size: 0.88rem; border-left: 4px solid; }
+.callout-danger { background: var(--danger-light); border-color: var(--danger); }
+.callout-warning { background: var(--warning-light); border-color: var(--warning); }
+.callout-info { background: var(--info-light); border-color: var(--info); }
+.callout-success { background: var(--accent-light); border-color: var(--accent); }
+.callout-insight { background: var(--grape-light); border-color: var(--grape); }
+.callout strong { display: block; margin-bottom: 4px; }
+
+/* Stat Cards */
+.stat-row { display: flex; gap: 16px; flex-wrap: wrap; margin: 12px 0 20px 0; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; min-width: 120px; flex: 1; }
+.stat-card .num { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+.stat-card .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Code */
+pre { background: var(--code-bg); color: var(--code-text); padding: 16px; border-radius: var(--radius); overflow-x: auto; margin: 10px 0 16px 0; font-size: 0.8rem; line-height: 1.5; }
+code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.82em; }
+:not(pre) > code { background: var(--surface-alt); padding: 2px 6px; border-radius: 3px; color: var(--danger); }
+
+/* SubTabs */
+.subtab-nav { display: flex; gap: 0; background: var(--surface-alt); border-radius: var(--radius) var(--radius) 0 0; overflow: hidden; margin-bottom: 0; border: 1px solid var(--border); border-bottom: none; }
+.subtab-btn { padding: 10px 24px; border: none; background: none; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); transition: all 0.2s; border-bottom: 2px solid transparent; }
+.subtab-btn:hover { color: var(--text); background: var(--surface); }
+.subtab-btn.active { color: var(--primary); background: var(--surface); border-bottom-color: var(--primary); }
+.subtab-content { display: none; border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); padding: 20px; background: var(--surface); margin-bottom: 20px; }
+.subtab-content.active { display: block; }
+
+/* Flow Diagram */
+.flow-container { display: flex; flex-direction: column; align-items: center; gap: 0; margin: 24px 0; }
+.flow-step { width: 100%; max-width: 750px; border: 2px solid var(--border); border-radius: var(--radius); padding: 16px 20px; position: relative; background: var(--surface); }
+.flow-arrow { text-align: center; color: var(--primary); font-size: 1.4rem; padding: 4px 0; }
+.flow-label { font-weight: 700; font-size: 0.82rem; color: white; padding: 2px 10px; border-radius: 10px; display: inline-block; margin-bottom: 6px; }
+.flow-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.flow-desc { font-size: 0.82rem; color: var(--text-secondary); }
+.flow-desc ul { margin: 4px 0 0 16px; }
+.flow-desc li { margin-bottom: 2px; }
+.f-phase1 { border-color: #1971c2; } .f-phase1 .flow-label { background: #1971c2; }
+.f-phase2 { border-color: #5f3dc4; } .f-phase2 .flow-label { background: #5f3dc4; }
+.f-phase2b { border-color: #ae3ec9; } .f-phase2b .flow-label { background: #ae3ec9; }
+.f-phase3 { border-color: #2f9e44; } .f-phase3 .flow-label { background: #2f9e44; }
+.f-finding { border-color: #e03131; background: #fff5f5; } .f-finding .flow-label { background: #e03131; }
+
+/* Finding cards */
+.finding-card { background: var(--surface); border: 2px solid var(--grape); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+.finding-card .finding-label { display: inline-block; background: var(--grape); color: white; font-size: 0.72rem; font-weight: 700; padding: 2px 10px; border-radius: 10px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.finding-card h4 { margin: 0 0 8px 0; font-size: 1rem; color: var(--text); }
+.finding-card p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
+.finding-card .evidence { font-size: 0.82rem; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
+
+/* Two-column layout */
+.dual-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+.dual-col > div { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 28px; margin: 16px 0; }
+.timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--primary); }
+.timeline-item { position: relative; margin-bottom: 20px; }
+.timeline-item::before { content: ''; position: absolute; left: -24px; top: 4px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--primary); background: white; }
+.timeline-item.done::before { background: var(--accent); border-color: var(--accent); }
+.timeline-item.active::before { background: var(--warning); border-color: var(--warning); }
+.timeline-item .tl-title { font-weight: 600; font-size: 0.9rem; }
+.timeline-item .tl-desc { font-size: 0.82rem; color: var(--text-secondary); }
+
+/* Comparison blocks */
+.vs-block { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; margin: 16px 0; }
+.vs-side { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
+.vs-side h4 { margin: 0 0 8px 0; }
+.vs-divider { font-size: 1.4rem; font-weight: 700; color: var(--text-muted); }
+
+/* Print */
+@media print { .tab-nav { display: none; } .tab-content { display: block !important; page-break-before: always; } }
+@media (max-width: 768px) { .tab-content { padding: 20px 16px; } .header { padding: 20px 16px; } .tab-nav { padding: 0 8px; } .tab-btn { padding: 10px 12px; font-size: 0.75rem; } .dual-col { grid-template-columns: 1fr; } .vs-block { grid-template-columns: 1fr; } .vs-divider { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- ======================== HEADER ======================== -->
+<div class="header">
+  <h1>Why Transformers Remember First and Forget Last</h1>
+  <div class="subtitle">Mechanistic Probing of Dual-Process Memory Interference in LLMs</div>
+  <p>NeurIPS 2026 Expansion &mdash; From behavioral observation to causal mechanistic explanation</p>
+  <div class="meta">
+    <span>Status: Active Research</span>
+    <span>Target: NeurIPS 2026</span>
+    <span>Foundation: ACL Paper (39 models, Cohen's d=1.73)</span>
+    <span>Primary Model: Qwen2.5-0.5B-Instruct</span>
+    <span>Last Updated: Feb 2026</span>
+  </div>
+</div>
+
+<!-- ======================== TAB NAV ======================== -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('overview')">The Big Picture</button>
+  <button class="tab-btn" onclick="showTab('phenomenon')">The Phenomenon</button>
+  <button class="tab-btn" onclick="showTab('pipeline')">Experimental Pipeline</button>
+  <button class="tab-btn" onclick="showTab('findings')">Key Findings</button>
+  <button class="tab-btn" onclick="showTab('mechanism')">The Mechanism</button>
+  <button class="tab-btn" onclick="showTab('remaining')">Remaining Work</button>
+  <button class="tab-btn" onclick="showTab('deliverables')">Deliverables</button>
+</nav>
+
+<!-- ======================== TAB 1: THE BIG PICTURE ======================== -->
+<div id="overview" class="tab-content active">
+<h2>The Big Picture</h2>
+
+<p>This research explains a fundamental asymmetry in how large language models process conflicting information in context &mdash; and traces it to a precise circuit-level mechanism involving a small minority of attention heads.</p>
+
+<div class="stat-row">
+  <div class="stat-card"><div class="num">39</div><div class="label">Models Tested (ACL)</div></div>
+  <div class="stat-card"><div class="num">1.73</div><div class="label">Cohen's d Effect Size</div></div>
+  <div class="stat-card"><div class="num">8</div><div class="label">Primacy-Biased Heads</div></div>
+  <div class="stat-card"><div class="num">100%</div><div class="label">PI Recovery (Forced Attn)</div></div>
+  <div class="stat-card"><div class="num">0.14%</div><div class="label">Params to Fix (Proposed)</div></div>
+</div>
+
+<details open>
+<summary>What Is This Research About?</summary>
+<div class="details-body">
+<p>When you tell a language model conflicting things &mdash; "the color is red," then later "the color is blue" &mdash; and ask it to recall, a striking asymmetry emerges:</p>
+
+<div class="vs-block">
+  <div class="vs-side" style="border-color: var(--accent);">
+    <h4 style="color: var(--accent);">Retroactive Interference (RI)</h4>
+    <p style="font-size:0.85rem;">"What was the <strong>first</strong> value?"</p>
+    <div style="font-size: 2rem; font-weight: 700; color: var(--accent);">~90% accurate</div>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Models easily recall the first value despite later updates</p>
+  </div>
+  <div class="vs-divider">vs</div>
+  <div class="vs-side" style="border-color: var(--danger);">
+    <h4 style="color: var(--danger);">Proactive Interference (PI)</h4>
+    <p style="font-size:0.85rem;">"What was the <strong>last</strong> value?"</p>
+    <div style="font-size: 2rem; font-weight: 700; color: var(--danger);">~40-55% accurate</div>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Models struggle to recall the most recent value</p>
+  </div>
+</div>
+
+<div class="callout callout-insight">
+<strong>The Opposite of Human Memory</strong>
+In human cognition, new memories overwrite old ones (retroactive interference dominates). Transformers show the reverse: old information blocks access to new information (proactive interference dominates). This is PI > RI &mdash; and it holds across every model we tested, from 135M to GPT-4 class.
+</div>
+
+<p>The ACL paper established <strong>that</strong> this happens. The NeurIPS expansion explains <strong>why</strong> &mdash; down to specific attention heads, specific layers, and a specific circuit defect.</p>
+</div>
+</details>
+
+<details>
+<summary>Why Does This Matter?</summary>
+<div class="details-body">
+<h4>For AI Safety &amp; Reliability</h4>
+<ul>
+  <li><strong>In-context learning failures:</strong> When models can't properly access recent information, few-shot prompting becomes unreliable at scale</li>
+  <li><strong>RAG pipeline degradation:</strong> Retrieval-augmented generation assumes models can use the latest retrieved context. PI means earlier retrieved passages can block later, more relevant ones</li>
+  <li><strong>Long-context reliability:</strong> As context windows grow to 128K+, the inability to access late-position information becomes a critical limitation</li>
+</ul>
+
+<h4>For Scientific Understanding</h4>
+<ul>
+  <li><strong>Attention mechanism theory:</strong> Proves that causal masking creates an inherent primacy bias &mdash; this is architectural, not learned</li>
+  <li><strong>Mechanistic interpretability:</strong> Demonstrates a complete causal chain from a behavioral phenomenon to specific circuit components</li>
+  <li><strong>Dual-process evidence:</strong> Shows that RI resistance and PI resistance are mechanistically independent (different heads, different scaling)</li>
+</ul>
+
+<h4>For Practitioners</h4>
+<ul>
+  <li><strong>Prompt engineering:</strong> Understanding positional bias helps design prompts that place critical information where models can access it</li>
+  <li><strong>Fine-tuning targets:</strong> We identify exactly which 0.14% of parameters to tune to fix the asymmetry</li>
+  <li><strong>Architecture design:</strong> Points toward what needs to change in attention mechanisms for better recency handling</li>
+</ul>
+</div>
+</details>
+
+<details>
+<summary>Research Strategy: Three Pillars</summary>
+<div class="details-body">
+<div class="card-grid">
+  <div class="card" style="border-top: 3px solid #1971c2;">
+    <div class="card-title" style="color: #1971c2;">Pillar 1: Formal Theory</div>
+    <p style="font-size:0.85rem;">Cite existing proofs (Wu et al. 2025, Ramsauer et al. 2021) that causal masking &rarr; primacy bias is a mathematical necessity. Our contribution: empirical validation, not new theorem.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);"><strong>Status:</strong> Framing complete. Relies on published results.</p>
+  </div>
+  <div class="card" style="border-top: 3px solid #5f3dc4;">
+    <div class="card-title" style="color: #5f3dc4;">Pillar 2: Mechanistic Probing</div>
+    <p style="font-size:0.85rem;">Internal model analysis: logit lens, attention pattern classification, direct logit attribution, activation patching, ablation studies. Identifies the specific heads and circuits responsible.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);"><strong>Status:</strong> Core story complete on Qwen2.5-0.5B. Cross-model replication needed.</p>
+  </div>
+  <div class="card" style="border-top: 3px solid #2f9e44;">
+    <div class="card-title" style="color: #2f9e44;">Pillar 3: Architectural Controls</div>
+    <p style="font-size:0.85rem;">Test state-space models (Mamba/RWKV) that lack causal attention. Prediction: different interference profile. Confirms the finding is attention-specific.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);"><strong>Status:</strong> Planned. Behavioral sweep only, no mechanistic probing needed.</p>
+  </div>
+</div>
+</div>
+</details>
+
+<details>
+<summary>Model Lineup</summary>
+<div class="details-body">
+<table>
+  <tr><th>Model</th><th>Size</th><th>Heads (Q/KV)</th><th>Layers</th><th>Role</th><th>Status</th></tr>
+  <tr><td>Qwen2.5-0.5B-Instruct</td><td>0.5B</td><td>14/2</td><td>24</td><td>Primary probing target</td><td><span class="badge badge-done">Phase 2 Done</span></td></tr>
+  <tr><td>Qwen2.5-1.5B-Instruct</td><td>1.5B</td><td>12/2</td><td>28</td><td>Size scaling within family</td><td><span class="badge badge-todo">TODO</span></td></tr>
+  <tr><td>Gemma-2-2B-IT</td><td>2.6B</td><td>8/4</td><td>26</td><td>Cross-family + SAE analysis</td><td><span class="badge badge-todo">TODO</span></td></tr>
+  <tr><td>SmolLM2-135M-Instruct</td><td>135M</td><td>9/3</td><td>30</td><td>Original validation (retained)</td><td><span class="badge badge-done">Complete</span></td></tr>
+  <tr><td>Mamba/RWKV (~130M)</td><td>~130M</td><td>N/A (SSM)</td><td>—</td><td>Architectural control (no attention)</td><td><span class="badge badge-todo">TODO</span></td></tr>
+</table>
+</div>
+</details>
+</div>
+
+<!-- ======================== TAB 2: THE PHENOMENON ======================== -->
+<div id="phenomenon" class="tab-content">
+<h2>The Phenomenon: PI > RI</h2>
+
+<p>This tab explains the core phenomenon we are investigating &mdash; what proactive and retroactive interference are, how we measure them, and what the ACL paper established.</p>
+
+<details open>
+<summary>What Are PI and RI?</summary>
+<div class="details-body">
+<h4>The Experimental Setup</h4>
+<p>We present models with a key-value stream where categories get updated multiple times:</p>
+<pre>
+Read the following key-value stream. Each key gets updated multiple times.
+
+color: red          &larr; initial value (v0)
+fruit: apple
+color: blue         &larr; intermediate value (v1)
+fruit: mango
+color: green        &larr; final value (v2)
+fruit: grape
+
+What was the <strong>first</strong> value of color?    &larr; RI test (answer: red)
+What was the <strong>last</strong> value of color?     &larr; PI test (answer: green)
+</pre>
+
+<div class="dual-col">
+  <div style="border-top: 3px solid var(--accent);">
+    <h4 style="color: var(--accent); margin-top: 0;">Retroactive Interference (RI)</h4>
+    <p style="font-size:0.85rem;"><strong>Question:</strong> "What was the <strong>first</strong> value?"</p>
+    <p style="font-size:0.85rem;"><strong>Challenge:</strong> Later values (blue, green) might overwrite the first (red)</p>
+    <p style="font-size:0.85rem;"><strong>Result:</strong> Models handle this easily &mdash; high accuracy even with many updates</p>
+    <p style="font-size:0.85rem;"><strong>In human terms:</strong> Like remembering your first phone number despite having many since</p>
+  </div>
+  <div style="border-top: 3px solid var(--danger);">
+    <h4 style="color: var(--danger); margin-top: 0;">Proactive Interference (PI)</h4>
+    <p style="font-size:0.85rem;"><strong>Question:</strong> "What was the <strong>last</strong> value?"</p>
+    <p style="font-size:0.85rem;"><strong>Challenge:</strong> Earlier values (red, blue) might block access to the latest (green)</p>
+    <p style="font-size:0.85rem;"><strong>Result:</strong> Models struggle badly &mdash; accuracy drops quickly with interference</p>
+    <p style="font-size:0.85rem;"><strong>In human terms:</strong> Like trying to remember your current password when you've changed it many times</p>
+  </div>
+</div>
+
+<div class="callout callout-info">
+<strong>Key Terminology</strong>
+"Proactive" and "retroactive" refer to the <em>direction</em> of interference relative to the target memory. In PI, earlier memories <em>proactively</em> block access to later ones. In RI, later memories <em>retroactively</em> interfere with earlier ones. The finding is that transformers are resistant to RI but vulnerable to PI &mdash; the opposite of the human pattern.
+</div>
+</div>
+</details>
+
+<details>
+<summary>What the ACL Paper Established</summary>
+<div class="details-body">
+
+<div class="stat-row">
+  <div class="stat-card"><div class="num">39</div><div class="label">Models Tested</div></div>
+  <div class="stat-card"><div class="num">46</div><div class="label">Categories</div></div>
+  <div class="stat-card"><div class="num">300+</div><div class="label">Max Interference Levels</div></div>
+  <div class="stat-card"><div class="num" style="color: var(--danger);">1.73</div><div class="label">Cohen's d (PI > RI)</div></div>
+</div>
+
+<h4>Finding 1: Universal PI > RI</h4>
+<p>All 39 models &mdash; from 135M to GPT-4 class, spanning 7 model families &mdash; show PI > RI. This is not a quirk of one architecture or training set. Cohen's d = 1.73 is a massive effect size.</p>
+
+<h4>Finding 2: RI Scales with Size, PI Does Not</h4>
+<table>
+  <tr><th>Metric</th><th>Correlation with Model Size</th><th>Interpretation</th></tr>
+  <tr><td>RI resistance</td><td>R&sup2; = 0.49 (strong)</td><td>Bigger models &rarr; better at recalling first value under interference</td></tr>
+  <tr><td>PI resistance</td><td>R&sup2; = 0.06 (none)</td><td>Bigger models &rarr; NO improvement at recalling last value</td></tr>
+</table>
+
+<h4>Finding 3: RI and PI Are Uncorrelated</h4>
+<p>Across all 39 models, RI performance and PI performance are uncorrelated (R&sup2; = 0.044). This suggests they rely on <strong>different mechanisms</strong> &mdash; the dual-process hypothesis.</p>
+
+<div class="callout callout-warning">
+<strong>The Gap in the ACL Paper</strong>
+The ACL paper proves THAT PI > RI exists and characterizes its behavioral properties. It does NOT explain WHY. That's what the NeurIPS expansion addresses: the mechanistic explanation, from attention heads to circuits to a precise causal chain.
+</div>
+</div>
+</details>
+
+<details>
+<summary>How We Measure It: The Behavioral Sweep</summary>
+<div class="details-body">
+<h4>The Grid</h4>
+<p>We sweep across two dimensions to map the full "interference landscape":</p>
+<table>
+  <tr><th>Parameter</th><th>Values</th><th>Why</th></tr>
+  <tr><td><strong>Keys (categories)</strong></td><td>2, 3, 5, 7, 10, 15, 20, 25, 30, 35, 40, 46</td><td>More keys = more context, harder retrieval</td></tr>
+  <tr><td><strong>Updates per key</strong></td><td>1, 3, 5, 10, 15, 20, 30, ..., 300</td><td>More updates = more interference</td></tr>
+  <tr><td><strong>Conditions</strong></td><td>RI (recall first) &amp; PI (recall last)</td><td>Same prompts, only query word changes</td></tr>
+  <tr><td><strong>Trials per cell</strong></td><td>30+ (different random seeds)</td><td>Statistical reliability</td></tr>
+</table>
+
+<h4>What This Produces</h4>
+<ul>
+  <li><strong>Decay curves:</strong> RI and PI accuracy vs. number of updates &mdash; shows where each condition "cracks"</li>
+  <li><strong>Cracking points:</strong> The exact interference level where accuracy drops below 50%</li>
+  <li><strong>Regime map:</strong> Classifies each (keys, updates) cell into Regime A (both work), B (PI fails, RI works), C (both fail)</li>
+  <li><strong>Error taxonomy:</strong> When the model fails, does it output the wrong positional value (primacy intrusion) or something else entirely?</li>
+</ul>
+
+<h4>Operating Points for Mechanistic Analysis</h4>
+<p>The behavioral sweep identifies specific operating points where the mechanistic probing is most informative:</p>
+<table>
+  <tr><th>Point</th><th>Description</th><th>Why Analyze Here</th></tr>
+  <tr><td><strong>A</strong></td><td>No interference (1 update)</td><td>Baseline &mdash; what does normal retrieval look like?</td></tr>
+  <tr><td><strong>B</strong></td><td>PI cracking edge</td><td>The transition zone &mdash; where does PI start failing?</td></tr>
+  <tr><td><strong>C</strong></td><td>Deep asymmetry (PI&asymp;0%, RI>80%)</td><td>Maximum gap &mdash; clearest mechanistic signal</td></tr>
+  <tr><td><strong>D</strong></td><td>RI cracking edge</td><td>Where does even RI start failing?</td></tr>
+  <tr><td><strong>E</strong></td><td>Both failing</td><td>Total breakdown &mdash; is the mechanism different from partial failure?</td></tr>
+</table>
+</div>
+</details>
+
+<details>
+<summary>Controls &amp; Methodology Safeguards</summary>
+<div class="details-body">
+<h4>Single-Token Values (Critical)</h4>
+<div class="callout callout-danger">
+<strong>Hard-Won Lesson</strong>
+Multi-token synthetic values (e.g., "Hat380", "Art42") are <strong>unusable for mechanistic probing</strong>. Values in the same category share the first subtoken, making logit lens and DLA return identical results for initial and final values. All Phase 2 analyses use a pool of 96 common English words verified as single-token in the target tokenizer.
+</div>
+
+<h4>Tokenizer Trap</h4>
+<p>Values appear in prompts as <code>" red"</code> (space-prefixed), not <code>"red"</code> (bare). These are different token IDs. The logit lens must track both variants: space-prefixed dominates in early-mid layers, bare form takes over at the final layer.</p>
+
+<h4>Token Frequency Balance</h4>
+<p>For each trial, we log the mean log-frequency of initial and final value tokens and report correlation between frequency and accuracy &mdash; ensuring results aren't driven by common vs. rare words.</p>
+
+<h4>Paired Design</h4>
+<p>All mechanistic analyses run RI and PI with <strong>identical prompts</strong> &mdash; same categories, same values, same interleaved stream. Only the query word ("first" vs "last") changes. This isolates the effect of instruction processing.</p>
+
+<h4>Context Length Safety</h4>
+<p>Before running any behavioral sweep cell, we tokenize a sample prompt and verify it fits within 90% of the model's maximum context. Cells that overflow are logged as skipped.</p>
+</div>
+</details>
+</div>
+
+<!-- ======================== TAB 3: EXPERIMENTAL PIPELINE ======================== -->
+<div id="pipeline" class="tab-content">
+<h2>Experimental Pipeline</h2>
+
+<p>Each experiment builds on the previous one. This pipeline transforms a behavioral observation into a complete causal mechanistic explanation.</p>
+
+<nav class="subtab-nav">
+  <button class="subtab-btn active" onclick="showSubTab('sub-overview')">Pipeline Overview</button>
+  <button class="subtab-btn" onclick="showSubTab('sub-phase1')">Phase 1: Behavioral</button>
+  <button class="subtab-btn" onclick="showSubTab('sub-phase2')">Phase 2: Mechanistic</button>
+  <button class="subtab-btn" onclick="showSubTab('sub-phase3')">Phase 3: Controls</button>
+</nav>
+
+<!-- Pipeline Overview subtab -->
+<div id="sub-overview" class="subtab-content active">
+<h3 style="margin-top:0;">End-to-End Pipeline</h3>
+<p>The pipeline has a strict dependency structure. Each step's output informs the next step's design.</p>
+
+<div class="flow-container">
+  <div class="flow-step f-phase1">
+    <span class="flow-label">Phase 1</span>
+    <div class="flow-title">Behavioral Sweep</div>
+    <div class="flow-desc">Map the full interference landscape. Identify operating points A-E.</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step f-phase2">
+    <span class="flow-label">Phase 2A</span>
+    <div class="flow-title">Logit Lens</div>
+    <div class="flow-desc">What does the model "think" at each layer? Does the first value dominate the residual stream?</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step f-phase2">
+    <span class="flow-label">Phase 2B</span>
+    <div class="flow-title">Attention Pattern Analysis</div>
+    <div class="flow-desc">Which heads attend to value positions? Do they shift when instruction says "first" vs "last"? &rarr; Head classification.</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step f-phase2">
+    <span class="flow-label">Phase 2C</span>
+    <div class="flow-title">Direct Logit Attribution (DLA)</div>
+    <div class="flow-desc">Quantify each head's contribution to the output logit for initial vs final value. Converge with attention analysis.</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step f-phase2">
+    <span class="flow-label">Phase 2D</span>
+    <div class="flow-title">Activation Patching</div>
+    <div class="flow-desc">Causal evidence: swap clean activations into corrupted runs. Where is the critical information?</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step f-phase2">
+    <span class="flow-label">Phase 2E</span>
+    <div class="flow-title">Ablation &amp; Intervention</div>
+    <div class="flow-desc">Knock out identified heads. Force attention to correct positions. QK fine-tuning.</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step f-phase2b">
+    <span class="flow-label">Phase 2 &times; N</span>
+    <div class="flow-title">Cross-Model Replication</div>
+    <div class="flow-desc">Repeat Phase 2 on Qwen-1.5B and Gemma-2B. Convergent evidence across model families.</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step f-phase3">
+    <span class="flow-label">Phase 3</span>
+    <div class="flow-title">Architectural Controls &amp; Theory</div>
+    <div class="flow-desc">SSM control (Mamba/RWKV behavioral sweep). Training dynamics. Theory framing.</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step f-finding">
+    <span class="flow-label">Output</span>
+    <div class="flow-title">Complete Mechanistic Explanation</div>
+    <div class="flow-desc">From "PI > RI exists" to "here's the specific circuit, here's why it's broken, and here's how to fix it."</div>
+  </div>
+</div>
+
+<div class="callout callout-info">
+<strong>Shared Infrastructure</strong>
+All experiments import from <code>core/</code>: model loader, dataset generator, token tracker, analysis utilities. No copy-pasting between experiments. Every script saves raw results as JSON and generates at least one diagnostic plot.
+</div>
+</div>
+
+<!-- Phase 1 subtab -->
+<div id="sub-phase1" class="subtab-content">
+<h3 style="margin-top:0;">Phase 1: Comprehensive Behavioral Characterization</h3>
+
+<div class="callout callout-info">
+<strong>Goal</strong>
+Map the full interference landscape for each model. The cracking pattern itself is data. This is NOT a quick screen &mdash; it's the first major analysis.
+</div>
+
+<details open>
+<summary>Step 1.1: Full Behavioral Sweep</summary>
+<div class="details-body">
+<p><strong>What:</strong> Run a grid of (keys &times; updates &times; condition) with 30+ trials per cell.</p>
+<p><strong>Why:</strong> Establishes the empirical foundation for everything else. Identifies where PI cracks, where RI cracks, and the operating points for mechanistic analysis.</p>
+<p><strong>How:</strong></p>
+<ul>
+  <li>Parameterized script that works for any model</li>
+  <li>Pre-flight context length check skips infeasible cells</li>
+  <li>Uses the same 46 categories from the original paper for comparability</li>
+  <li>Prompt format matches the ACL study (no few-shot)</li>
+  <li>Auto-truncates when both conditions hit 0% for 5+ consecutive levels</li>
+</ul>
+<p><strong>Output:</strong> Full accuracy grid with 95% bootstrap CIs, decay curves, cracking point identification, error type breakdown, regime map.</p>
+</div>
+</details>
+
+<details>
+<summary>Step 1.2: Few-Shot vs No-Few-Shot Comparison</summary>
+<div class="details-body">
+<p><strong>What:</strong> At the PI cracking edge, compare performance with and without few-shot examples.</p>
+<p><strong>Why:</strong> Separates comprehension failure from retrieval failure.</p>
+<p><strong>How:</strong></p>
+<ul>
+  <li>Select 3-5 cells at the PI cracking edge from Step 1.1</li>
+  <li>Run with 2 solved examples from other categories vs. no examples</li>
+  <li>50 trials per cell per format</li>
+</ul>
+<p><strong>Possible outcomes:</strong></p>
+<table>
+  <tr><th>If...</th><th>Then...</th></tr>
+  <tr><td>Few-shot helps PI more than RI</td><td>Part of PI failure is comprehension ("last" is harder than "first")</td></tr>
+  <tr><td>Few-shot doesn't change asymmetry</td><td>PI failure is purely retrieval (model understands, can't access)</td></tr>
+  <tr><td>Few-shot helps both equally</td><td>Format disambiguation, not interference-specific</td></tr>
+</table>
+</div>
+</details>
+
+<details>
+<summary>Step 1.3: Cross-Model Behavioral Comparison</summary>
+<div class="details-body">
+<p><strong>What:</strong> Compare behavioral sweep results across all models.</p>
+<p><strong>Why:</strong> Validates that PI > RI is universal across our model lineup and identifies size-dependent scaling.</p>
+<p><strong>Output:</strong> Multi-panel figure (rows = models, columns = key counts, showing RI/PI accuracy vs. updates with CI bands). This is a paper figure.</p>
+</div>
+</details>
+</div>
+
+<!-- Phase 2 subtab -->
+<div id="sub-phase2" class="subtab-content">
+<h3 style="margin-top:0;">Phase 2: Mechanistic Analysis</h3>
+
+<div class="callout callout-insight">
+<strong>Core Approach</strong>
+Run each analysis at MULTIPLE operating points (A through E), not just the "sweet spot." The mechanism may change between mild and severe interference. All analyses use paired RI/PI trials with identical prompts except the query word.
+</div>
+
+<details open>
+<summary>Step 2.1: Logit Lens &mdash; "What does the model think at each layer?"</summary>
+<div class="details-body">
+<p><strong>What:</strong> At each layer, project the residual stream at the answer position through the unembedding matrix to see which token the model would predict if forced to output at that layer.</p>
+
+<p><strong>Why:</strong> Shows how the model's "belief" about the answer evolves across layers. If the first value dominates at every layer even in PI trials, the model never forms the correct representation &mdash; the problem is early and pervasive.</p>
+
+<p><strong>How:</strong></p>
+<ul>
+  <li>100 trials per operating point</li>
+  <li>Track P(initial_value) and P(final_value) at each layer</li>
+  <li>Both space-prefixed and bare token variants</li>
+  <li>TransformerLens: <code>cache["resid_post", layer]</code></li>
+</ul>
+
+<p><strong>Key questions:</strong></p>
+<ul>
+  <li>Does the initial value dominate all layers (as found in SmolLM2)?</li>
+  <li>Is there a layer where the final value appears briefly before being suppressed?</li>
+  <li>Does the pattern change across operating points?</li>
+</ul>
+
+<p><strong>Paper figure:</strong> Layer-by-layer probability curves for P(initial) and P(final), with CI bands, separate per operating point.</p>
+</div>
+</details>
+
+<details>
+<summary>Step 2.2: Attention Head Classification &mdash; "Which heads retrieve values?"</summary>
+<div class="details-body">
+<p><strong>What:</strong> Classify every attention head by its function during value retrieval. The most important mechanistic step.</p>
+
+<p><strong>Why:</strong> Identifies the specific heads responsible for value retrieval and whether they have primacy bias. If retrieval heads ignore the "first"/"last" instruction, that's the smoking gun.</p>
+
+<p><strong>How (per head, at the answer position):</strong></p>
+<ol>
+  <li>Use token tracker to classify every position (initial_value, final_value, key, instruction, query)</li>
+  <li>Extract attention vector at the last token</li>
+  <li>Sum attention weights by semantic role</li>
+  <li>Compute: <code>retrieval_score</code> = total attention to any value position; <code>primacy_score</code> = attention_to_initial / (initial + final)</li>
+  <li>Run for both RI and PI trials with identical prompts</li>
+</ol>
+
+<p><strong>Head classification scheme:</strong></p>
+<table>
+  <tr><th>Category</th><th>Criterion</th><th>Meaning</th></tr>
+  <tr><td>Retrieval head</td><td>Mean retrieval score &gt; threshold</td><td>Consistently attends to value tokens</td></tr>
+  <tr><td>Primacy-biased</td><td>PI primacy &gt; 0.6</td><td>Attends to initial even when asked for last</td></tr>
+  <tr><td>Recency-responsive</td><td>PI primacy &lt; 0.4</td><td>Correctly shifts to final in PI</td></tr>
+  <tr><td>Condition-sensitive</td><td>|RI_primacy - PI_primacy| &gt; threshold</td><td>Changes behavior with instruction</td></tr>
+</table>
+
+<div class="callout callout-warning">
+<strong>GQA Complication</strong>
+Qwen2.5-0.5B has 14 query heads but only 2 KV heads (7:1 ratio). Attention patterns are per-query-head, but value vectors are shared within KV groups. If all 7 query heads in a KV group show primacy bias, that's one shared mechanism, not 7 independent ones.
+</div>
+</div>
+</details>
+
+<details>
+<summary>Step 2.3: Direct Logit Attribution (DLA) &mdash; "Who pushes the output?"</summary>
+<div class="details-body">
+<p><strong>What:</strong> Decompose the model's output logit into per-component (per-head + per-MLP-layer) contributions, exploiting the residual stream's additive structure.</p>
+
+<p><strong>Why:</strong> Attention analysis shows where heads LOOK. DLA shows what they DO to the output. A head that attends to the initial value AND promotes it in the logit is doubly confirmed as a primacy mechanism.</p>
+
+<p><strong>How:</strong></p>
+<pre>
+# Per attention head: contribution to logit of token t at answer position
+logit_diff[layer, head] = (attn_out[layer, head, -1, :] @ W_U[:, initial_token])
+                        - (attn_out[layer, head, -1, :] @ W_U[:, final_token])
+
+# Positive = promotes initial value, Negative = promotes final value
+# In RI: positive = helpful.  In PI: positive = HARMFUL (primacy intrusion)
+</pre>
+
+<p><strong>Key questions:</strong></p>
+<ul>
+  <li>Do the highest-DLA heads overlap with retrieval heads from Step 2.2? (Convergent evidence)</li>
+  <li>Do MLPs contribute to primacy bias, or is it purely attention?</li>
+  <li>Does any component flip sign between RI and PI? (Instruction-responsive output)</li>
+</ul>
+</div>
+</details>
+
+<details>
+<summary>Step 2.4: Activation Patching &mdash; "Causal proof"</summary>
+<div class="details-body">
+<p><strong>What:</strong> Swap activations between a "clean" run (no interference, model gets it right trivially) and a "corrupted" run (full interference, model may fail). Measure accuracy recovery.</p>
+
+<p><strong>Why:</strong> Patching provides <em>causal</em> evidence, not just correlational. If patching at position X recovers accuracy, then position X contains the critical information.</p>
+
+<p><strong>How:</strong></p>
+<ol>
+  <li><strong>Attribution patching (fast):</strong> Gradient-based approximation across full (layer &times; position) grid</li>
+  <li><strong>Targeted patching (precise):</strong> Actual activation swap at top-20 positions from attribution</li>
+  <li><strong>Component-specific:</strong> Full residual, attention-only, MLP-only at query position</li>
+  <li><strong>Layer-specific:</strong> Early (0-8), mid (8-15), late (16-23) at query position</li>
+</ol>
+
+<p><strong>Key questions:</strong></p>
+<ul>
+  <li>Can we RESTORE PI accuracy by patching? Where is the critical position?</li>
+  <li>Is the problem at value positions (storage failure) or query position (routing failure)?</li>
+  <li>Which layer range contains the critical corruption?</li>
+</ul>
+</div>
+</details>
+
+<details>
+<summary>Step 2.5: Ablation &amp; Forced Attention &mdash; "Circuit surgery"</summary>
+<div class="details-body">
+<p><strong>What:</strong> Surgically modify identified heads: zero them out (ablation) or force their attention to specific positions.</p>
+
+<p><strong>Why:</strong> The definitive test. If ablating primacy-biased heads closes the PI-RI gap, they are causal. If forcing them to the correct position gives 100% accuracy, the OV circuit works and the problem is purely in QK routing.</p>
+
+<p><strong>Experiments:</strong></p>
+<table>
+  <tr><th>Intervention</th><th>What It Tests</th><th>Expected Result</th></tr>
+  <tr><td>Knockout all primacy-biased heads</td><td>Are they causal for PI > RI?</td><td>Gap shrinks dramatically</td></tr>
+  <tr><td>Knockout all recency-responsive heads</td><td>Are they necessary for retrieval?</td><td>Both RI and PI go to 0%</td></tr>
+  <tr><td>Force primacy heads to correct position</td><td>Is the OV circuit functional?</td><td>100% accuracy on both RI and PI</td></tr>
+  <tr><td>Force primacy heads to wrong position</td><td>Negative control</td><td>Accuracy destroyed</td></tr>
+</table>
+</div>
+</details>
+
+<details>
+<summary>Step 2.6-2.8: Deeper Investigations</summary>
+<div class="details-body">
+<h4>Positional Gradient Analysis</h4>
+<p><strong>What:</strong> Track P(v<sub>i</sub>) across all N value positions. Is primacy "first only" or gradual?</p>
+<p><strong>Why:</strong> Distinguishes exact primacy (sharp cliff at v0) from graded recency (spread across late positions).</p>
+
+<h4>PI Mass Distribution</h4>
+<p><strong>What:</strong> Where does the peak probability land in PI failures? Is it the actual last position or somewhere nearby?</p>
+<p><strong>Why:</strong> If the model retrieves "a late value" rather than "the last value," the mechanism is approximate recency, not failed recency.</p>
+
+<h4>Instruction Sensitivity Probe</h4>
+<p><strong>What:</strong> Do primacy-biased heads even read the "first"/"last" query word?</p>
+<p><strong>Why:</strong> If they put zero attention on the query word, they CAN'T be instruction-sensitive &mdash; the routing failure is complete and architectural.</p>
+
+<h4>Granular Query-Position Patching</h4>
+<p><strong>What:</strong> Patch attn_out vs mlp_out separately at each layer at the query position.</p>
+<p><strong>Why:</strong> Disambiguates "query representation failure" (model can't understand "last") from "value routing through query position" (correct values get overwritten by primacy-biased heads writing to the query position).</p>
+</div>
+</details>
+</div>
+
+<!-- Phase 3 subtab -->
+<div id="sub-phase3" class="subtab-content">
+<h3 style="margin-top:0;">Phase 3: Architectural Controls &amp; Theory</h3>
+
+<div class="callout callout-success">
+<strong>Prerequisite</strong>
+Only proceed here after Phase 2 shows convergent mechanistic findings across &ge;2 models. Phase 3 strengthens the story but doesn't change it.
+</div>
+
+<details open>
+<summary>SSM Control: Mamba / RWKV</summary>
+<div class="details-body">
+<p><strong>What:</strong> Run behavioral sweep (Phase 1 only) on a state-space model that lacks attention entirely.</p>
+<p><strong>Why:</strong> If PI > RI is caused by attention's primacy bias, models without attention should show a different pattern.</p>
+<p><strong>Prediction:</strong> SSMs show either RI > PI (the human pattern &mdash; recency dominates because state gets overwritten) or symmetric interference.</p>
+<p><strong>If prediction holds:</strong> Confirms attention-specificity. Clean control for the paper.</p>
+<p><strong>If prediction fails:</strong> PI > RI might be a more general property of autoregressive sequence processing, not attention-specific. This would weaken the mechanistic story but would itself be an interesting finding.</p>
+</div>
+</details>
+
+<details>
+<summary>Training Dynamics</summary>
+<div class="details-body">
+<p><strong>What:</strong> Run behavioral sweep at each of 8 SmolLM2-135M intermediate training checkpoints.</p>
+<p><strong>Why:</strong> Determines whether PI > RI is present from the earliest checkpoint (architectural) or develops during training (data/optimization effect).</p>
+<p><strong>Models:</strong> SmolLM2-135M-intermediate-checkpoints (8 checkpoints across training)</p>
+</div>
+</details>
+
+<details>
+<summary>Theory Framing</summary>
+<div class="details-body">
+<p><strong>Strategy:</strong> Don't prove new theorems. Cite existing formal results and present our empirical findings as mechanistic validation.</p>
+<table>
+  <tr><th>Theoretical Result</th><th>Source</th><th>Our Contribution</th></tr>
+  <tr><td>Causal masking &rarr; primacy bias</td><td>Wu et al. (2025, ICML)</td><td>Empirical validation via head-level analysis</td></tr>
+  <tr><td>Attention = Hopfield retrieval</td><td>Ramsauer et al. (2021)</td><td>Connects to associative memory interference framework</td></tr>
+  <tr><td>RI capacity scales with d_model</td><td>Our observation (R&sup2;=0.49)</td><td>Mechanistic explanation via retrieval head count/strength</td></tr>
+</table>
+</div>
+</details>
+</div>
+</div>
+
+<!-- ======================== TAB 4: KEY FINDINGS ======================== -->
+<div id="findings" class="tab-content">
+<h2>Key Findings (Qwen2.5-0.5B-Instruct)</h2>
+
+<p>These are the core results from Phase 2 mechanistic probing. Each finding is supported by a specific experiment with causal evidence.</p>
+
+<div class="stat-row">
+  <div class="stat-card"><div class="num">336</div><div class="label">Total Heads</div></div>
+  <div class="stat-card"><div class="num">65</div><div class="label">Retrieval Heads</div></div>
+  <div class="stat-card"><div class="num" style="color: var(--danger);">8</div><div class="label">Primacy-Biased</div></div>
+  <div class="stat-card"><div class="num" style="color: var(--accent);">53</div><div class="label">Recency-Responsive</div></div>
+  <div class="stat-card"><div class="num" style="color: var(--grape);">L16H3</div><div class="label">Smoking Gun Head</div></div>
+</div>
+
+<div class="finding-card">
+  <div class="finding-label">Finding 1 &mdash; Head Classification</div>
+  <h4>Most Retrieval Heads Work Correctly. A Small Minority Is Broken.</h4>
+  <p>Of 336 total attention heads, 65 function as value retrievers. 53 of these (82%) correctly shift attention from initial to final value when the query says "last." But 8 heads (12%) always attend to the first value regardless of instruction.</p>
+  <div class="evidence"><strong>Evidence:</strong> 30 trials &times; 2 conditions. Head L16H3 has condition sensitivity = 0.008 (effectively zero). <strong>Script:</strong> <code>16_head_identification.py</code></div>
+</div>
+
+<div class="finding-card">
+  <div class="finding-label">Finding 2 &mdash; Ablation</div>
+  <h4>Removing the 8 Primacy Heads Nearly Eliminates PI > RI</h4>
+  <p>Ablating the 8 primacy-biased heads reduces the RI-PI accuracy gap from 35% to 5%. Ablating the 53 recency-responsive heads kills both RI and PI entirely (0% accuracy).</p>
+  <table style="font-size:0.82rem;">
+    <tr><th>Configuration</th><th>RI</th><th>PI</th><th>Gap</th></tr>
+    <tr><td>Baseline</td><td>90%</td><td>55%</td><td style="color:var(--danger);font-weight:700;">35%</td></tr>
+    <tr><td>Knockout L16H3 alone</td><td>80%</td><td>50%</td><td>30%</td></tr>
+    <tr><td><strong>Knockout all 8 primacy-biased</strong></td><td><strong>60%</strong></td><td><strong>55%</strong></td><td style="color:var(--accent);font-weight:700;"><strong>5%</strong></td></tr>
+    <tr><td>Knockout all 53 recency-responsive</td><td>0%</td><td>0%</td><td>0%</td></tr>
+  </table>
+  <div class="evidence"><strong>Evidence:</strong> 20 ablation trials. <strong>Script:</strong> <code>16_head_identification.py</code></div>
+</div>
+
+<div class="finding-card">
+  <div class="finding-label">Finding 3 &mdash; Root Cause</div>
+  <h4>Primacy Heads Never Read the Instruction</h4>
+  <p>All 8 primacy-biased heads put <strong>literally zero attention</strong> on the query word "first"/"last." They attend to early-position value tokens and instruction prefix tokens, completely ignoring the query. They cannot be instruction-sensitive because they never read the instruction.</p>
+  <div class="evidence"><strong>Evidence:</strong> 20 trials, attention to query word = 0.000 for all 8 heads. <strong>Script:</strong> <code>17_instruction_sensitivity.py</code></div>
+</div>
+
+<div class="finding-card">
+  <div class="finding-label">Finding 4 &mdash; Causal Proof</div>
+  <h4>Forcing Heads to Correct Position &rarr; 100% Accuracy on Both RI and PI</h4>
+  <p>The OV circuits of the 8 primacy heads are perfectly functional. They correctly copy any value they attend to. The problem is purely in the QK circuit (where they look), not what they output.</p>
+  <table style="font-size:0.82rem;">
+    <tr><th>Configuration</th><th>RI</th><th>PI</th><th>Gap</th></tr>
+    <tr><td>Baseline</td><td>90%</td><td>40%</td><td>+50%</td></tr>
+    <tr><td>Knockout primacy heads</td><td>50%</td><td>40%</td><td>+10%</td></tr>
+    <tr><td><strong>Force to correct position</strong></td><td><strong>100%</strong></td><td><strong>100%</strong></td><td style="color:var(--accent);font-weight:700;"><strong>0%</strong></td></tr>
+    <tr><td>Force to wrong position</td><td>5%</td><td>25%</td><td>-20%</td></tr>
+  </table>
+  <div class="evidence"><strong>Evidence:</strong> 20 trials. <strong>Script:</strong> <code>18_forced_attention.py</code></div>
+</div>
+
+<div class="finding-card">
+  <div class="finding-label">Finding 5 &mdash; Patching</div>
+  <h4>PI Failure Is Value-Routing Corruption, Not Storage Failure</h4>
+  <p>Patching at value positions does nothing (0% recovery). Patching the full residual stream at the <strong>query position</strong> fully restores PI accuracy (100%+ recovery). The values are stored correctly in context; the model can't decode "last" into the right retrieval pattern because primacy-biased heads at L16-18 overwrite the query-position representation with initial-value information.</p>
+  <div class="evidence"><strong>Evidence:</strong> 4+10 trials across two patching experiments. Recovery peaks at layers 21-23. Component-specific patching confirms corruption is cumulative in residual stream, not in any single component. <strong>Scripts:</strong> <code>15_activation_patching.py</code>, <code>22_query_patching_granular.py</code></div>
+</div>
+
+<div class="finding-card">
+  <div class="finding-label">Finding 6 &mdash; Positional Asymmetry</div>
+  <h4>Primacy Is Exact, Recency Is Approximate</h4>
+  <p>For RI, the model places P=0.78 on v<sub>0</sub> with a sharp cliff (v<sub>1</sub>=0.00). For PI, probability is spread across the last ~25% of positions, peaking at the ~80th percentile &mdash; not the actual last position. The model retrieves "a late value," not "the last value."</p>
+  <div class="evidence"><strong>Evidence:</strong> 5+8 trials across two experiments. PI peak drifts further from actual last position as interference increases. <strong>Scripts:</strong> <code>13_positional_gradient.py</code>, <code>14_pi_mass_distribution.py</code></div>
+</div>
+
+<div class="finding-card">
+  <div class="finding-label">Finding 7 &mdash; Layer Localization</div>
+  <h4>Two-Layer Corruption: L16-18 (Primacy Heads) + L20-23 (Unknown)</h4>
+  <p>Ablating the 8 primacy heads eliminates query-position patching recovery at L16-18 (from 35% &rarr; 5%), confirming they cause the corruption there. But L20-23 shows 81-100% recovery regardless of ablation &mdash; an independent corruption source exists in late layers.</p>
+  <table style="font-size:0.82rem;">
+    <tr><th>Layer</th><th>Normal Recovery</th><th>Ablated Recovery</th><th>Interpretation</th></tr>
+    <tr><td>L0-L12</td><td>0-2%</td><td>1-10%</td><td>No critical info here</td></tr>
+    <tr><td style="color:var(--danger);font-weight:600;">L16-L18</td><td style="font-weight:600;">35-36%</td><td style="font-weight:600;">5-9%</td><td style="color:var(--danger);">Primacy heads confirmed causal</td></tr>
+    <tr><td>L20-L23</td><td>89-100%</td><td>81-100%</td><td>Independent corruption source</td></tr>
+  </table>
+  <div class="evidence"><strong>Evidence:</strong> 10 trials. <strong>Script:</strong> <code>23_ablation_patching_interaction.py</code></div>
+</div>
+
+<div class="finding-card">
+  <div class="finding-label">Finding 8 &mdash; Intervention Proof-of-Concept</div>
+  <h4>Oracle Positional Bias Closes the Gap Without Degrading RI</h4>
+  <p>Adding a recency bias (&lambda;=10) to only value-token positions in the 8 primacy heads brings PI from 70% to 90% while RI stays rock-solid at 90%. The gap goes to zero. Blind positional bias (applied to all tokens) fails because attention shifts to non-value tokens instead.</p>
+  <div class="evidence"><strong>Evidence:</strong> 20 trials. Attention pattern proof shows oracle bias redirects from 2.9% &rarr; 40.7% final-value attention. <strong>Scripts:</strong> <code>19_positional_bias_sweep.py</code>, <code>19b_bias_attention_proof.py</code></div>
+</div>
+</div>
+
+<!-- ======================== TAB 5: THE MECHANISM ======================== -->
+<div id="mechanism" class="tab-content">
+<h2>The Complete Mechanistic Story</h2>
+
+<p>This tab synthesizes all findings into the paper-ready narrative: a step-by-step causal explanation of why transformers show PI > RI.</p>
+
+<details open>
+<summary>The Causal Chain (8 Steps)</summary>
+<div class="details-body">
+
+<div class="flow-container">
+  <div class="flow-step" style="border-color: var(--blue); background: var(--blue-light);">
+    <span class="flow-label" style="background: var(--blue);">Step 1</span>
+    <div class="flow-title">Retrieval Architecture</div>
+    <div class="flow-desc">65 out of 336 attention heads function as value retrievers, attending to value token positions from the answer position. The other 271 heads handle instruction processing, key matching, and other functions.</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step" style="border-color: var(--accent); background: var(--accent-light);">
+    <span class="flow-label" style="background: var(--accent);">Step 2</span>
+    <div class="flow-title">The Majority Works Correctly</div>
+    <div class="flow-desc">53/65 retrieval heads (82%) are recency-responsive &mdash; they shift attention from initial to final value when the query says "last" instead of "first." These heads correctly process the instruction.</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step" style="border-color: var(--danger); background: var(--danger-light);">
+    <span class="flow-label" style="background: var(--danger);">Step 3</span>
+    <div class="flow-title">A Minority Is Broken</div>
+    <div class="flow-desc">8/65 retrieval heads (12%), led by L16H3, are primacy-biased &mdash; they always attend to the first value regardless of instruction. L16H3 has condition sensitivity = 0.008 (effectively zero).</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step" style="border-color: var(--danger); background: var(--danger-light);">
+    <span class="flow-label" style="background: var(--danger);">Step 4</span>
+    <div class="flow-title">WHY They're Broken: Zero Query Attention</div>
+    <div class="flow-desc">These 8 heads put <strong>literally zero attention</strong> on the query word "first"/"last." Their QK circuits attend to early-position value tokens and instruction prefix tokens. They never read the instruction, so they can't respond to it.</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step" style="border-color: var(--warning); background: var(--warning-light);">
+    <span class="flow-label" style="background: var(--warning);">Step 5</span>
+    <div class="flow-title">The Minority Corrupts the Query Position</div>
+    <div class="flow-desc">At layers 16-18, the primacy-biased heads write initial-value information into the residual stream at the query position. This cumulative corruption drowns out the correct "last" signal by the time the model generates an answer. (Confirmed: ablating these heads reduces L16-18 patching recovery from 35% &rarr; 5%.)</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step" style="border-color: var(--grape); background: var(--grape-light);">
+    <span class="flow-label" style="background: var(--grape);">Step 6</span>
+    <div class="flow-title">The OV Circuit Is Fine &mdash; QK Is Broken</div>
+    <div class="flow-desc">Forcing the 8 heads to attend to the correct position gives 100% accuracy on BOTH RI and PI. The gap goes to zero. These heads are powerful retrievers when aimed correctly &mdash; the problem is purely where they look (QK), not what they output (OV).</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step" style="border-color: var(--info); background: var(--info-light);">
+    <span class="flow-label" style="background: var(--info);">Step 7</span>
+    <div class="flow-title">Primacy Is Exact, Recency Is Approximate</div>
+    <div class="flow-desc">The initial value gets P=0.78 with a sharp cliff (v<sub>1</sub>=0.00). The final value probability is spread across the last ~25% of positions, peaking at the 80th percentile rather than the actual last position. The model has exact primacy retrieval but only approximate recency retrieval.</div>
+  </div>
+  <div class="flow-arrow">&darr;</div>
+  <div class="flow-step" style="border-color: var(--primary); background: var(--primary-light);">
+    <span class="flow-label" style="background: var(--primary);">Step 8</span>
+    <div class="flow-title">The Asymmetry Is Architectural</div>
+    <div class="flow-desc">"First" works because attention naturally defaults to the first occurrence &mdash; no explicit routing needed (consistent with causal masking's primacy bias). "Last" requires active QK routing that reads the instruction and redirects to the final position &mdash; and a minority of heads can't do this. The asymmetry is a consequence of how causal attention inherently prioritizes early positions.</div>
+  </div>
+</div>
+</div>
+</details>
+
+<details>
+<summary>Why This Story Is Compelling</summary>
+<div class="details-body">
+<h4>Multiple Convergent Lines of Evidence</h4>
+<table>
+  <tr><th>Method</th><th>What It Shows</th><th>Consistent With Story?</th></tr>
+  <tr><td>Logit lens</td><td>Initial value dominates residual stream at all layers</td><td style="color:var(--accent);font-weight:600;">Yes</td></tr>
+  <tr><td>Attention patterns</td><td>8 heads always attend to initial; 53 shift correctly</td><td style="color:var(--accent);font-weight:600;">Yes</td></tr>
+  <tr><td>DLA</td><td>Real per-head contributions up to &plusmn;12 logits in late layers</td><td style="color:var(--accent);font-weight:600;">Yes</td></tr>
+  <tr><td>Activation patching</td><td>Query position is critical; value positions are not</td><td style="color:var(--accent);font-weight:600;">Yes</td></tr>
+  <tr><td>Ablation</td><td>Removing 8 heads: gap 35%&rarr;5%</td><td style="color:var(--accent);font-weight:600;">Yes</td></tr>
+  <tr><td>Forced attention</td><td>Correct positioning: 100%/100%</td><td style="color:var(--accent);font-weight:600;">Yes</td></tr>
+  <tr><td>Instruction sensitivity</td><td>Zero attention to query word</td><td style="color:var(--accent);font-weight:600;">Yes</td></tr>
+  <tr><td>Positional gradient</td><td>Exact primacy, approximate recency</td><td style="color:var(--accent);font-weight:600;">Yes</td></tr>
+  <tr><td>Granular patching</td><td>Corruption at L16-18 from primacy heads confirmed</td><td style="color:var(--accent);font-weight:600;">Yes</td></tr>
+</table>
+
+<h4>The Story Has a Beginning, Middle, and End</h4>
+<ul>
+  <li><strong>Beginning (behavioral):</strong> PI > RI exists universally across 39 models</li>
+  <li><strong>Middle (mechanistic):</strong> 8 primacy-biased heads that never read the instruction cause it</li>
+  <li><strong>End (intervention):</strong> Forcing/fine-tuning their QK circuits fixes it with 0.14% of parameters</li>
+</ul>
+</div>
+</details>
+
+<details>
+<summary>Open Questions &amp; Weaknesses</summary>
+<div class="details-body">
+<div class="callout callout-danger">
+<strong>Critical Gap: How Does the Minority Override the Majority?</strong>
+DLA shows recency heads win the logit-space tug of war (net -12.86 toward final value). Yet PI accuracy is only 55%. All three initial hypotheses (DLA magnitude, OV gain, last-word effect) were rejected. The mechanism by which 8 heads override 53 is not yet explained.
+<br><br>
+<strong>Leading hypothesis:</strong> The effect is trial-dependent and nonlinear. On the ~45% of PI trials that FAIL, primacy heads may dominate via information-flow corruption (corrupting the residual stream that downstream recency heads read), not raw logit magnitude.
+</div>
+
+<div class="callout callout-warning">
+<strong>N=1 Model Problem</strong>
+All mechanistic findings are on Qwen2.5-0.5B only. Cross-model replication on Qwen-1.5B and Gemma-2B is essential for a NeurIPS submission.
+</div>
+
+<div class="callout callout-warning">
+<strong>Small Trial Counts</strong>
+Core Phase 2 results use 3-30 trials. Ablation results with 20 trials have confidence intervals of ~&plusmn;20%. Need 100+ trials for statistical reliability.
+</div>
+
+<div class="callout callout-info">
+<strong>L20-23 Corruption Source Unknown</strong>
+Patching at L20+ recovers PI accuracy regardless of whether primacy heads are ablated. Something else corrupts the query position in late layers. Candidates: MLP layers, non-retrieval heads, or accumulated small biases from many components.
+</div>
+</div>
+</details>
+</div>
+
+<!-- ======================== TAB 6: REMAINING WORK ======================== -->
+<div id="remaining" class="tab-content">
+<h2>Remaining Work &amp; Priorities</h2>
+
+<p>Prioritized by impact on NeurIPS submission strength.</p>
+
+<h3>Essential (Must Complete)</h3>
+
+<div class="timeline">
+  <div class="timeline-item active">
+    <div class="tl-title">1. Behavioral Sweep Completion <span class="badge badge-progress">In Progress</span></div>
+    <div class="tl-desc">Running on Colab. Full (keys &times; updates) grid for all models. Foundation for everything else.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="tl-title">2. Cross-Model Replication <span class="badge badge-critical">Critical</span></div>
+    <div class="tl-desc">Run experiments 12-18 on Qwen2.5-1.5B and Gemma-2-2B. If the same "small minority of primacy-biased heads" pattern holds across model families, the story is solid. If it doesn't replicate, we need to know immediately.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="tl-title">3. Scale Up Trial Counts <span class="badge badge-critical">Critical</span></div>
+    <div class="tl-desc">100+ trials for head identification, ablation, and patching on Qwen2.5-0.5B. Current 20-30 trial results have overlapping confidence intervals. Table stakes for NeurIPS.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="tl-title">4. Resolve Override Mechanism <span class="badge badge-critical">Critical</span></div>
+    <div class="tl-desc">Split DLA by trial outcome (correct vs incorrect). Run logit lens with/without primacy head ablation. Explain HOW 8 heads override 53 &mdash; the weakest link in the causal chain.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="tl-title">5. SSM Architectural Control <span class="badge badge-phase">Phase 3</span></div>
+    <div class="tl-desc">Behavioral sweep only on Mamba/RWKV. If different interference profile &rarr; attention-specificity confirmed. High impact, low effort.</div>
+  </div>
+</div>
+
+<h3>Strengthening (If Time Permits)</h3>
+
+<div class="timeline">
+  <div class="timeline-item">
+    <div class="tl-title">6. QK Fine-Tuning Intervention</div>
+    <div class="tl-desc">Fine-tune only W_Q and W_K of the 8 primacy-biased heads (~917K params, 0.14% of model). If PI improves without RI degradation &rarr; proves the circuit defect is minimal and fixable.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="tl-title">7. Prompt Format Experiments</div>
+    <div class="tl-desc">Place query BEFORE the stream ("You will need to recall the LAST value..."). If this fixes PI &rarr; the QK routing failure is positional (heads can't see late-position instructions), not semantic.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="tl-title">8. Gemma SAE Analysis</div>
+    <div class="tl-desc">Use Gemma Scope pre-trained SAEs to find features corresponding to "initial value" vs "final value" concepts. Check if initial-value features activate even during PI failures.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="tl-title">9. Training Dynamics</div>
+    <div class="tl-desc">SmolLM2-135M checkpoints: when does PI > RI emerge during training? Early = architectural. Late = data/optimization.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="tl-title">10. Paper-Ready Visualizations</div>
+    <div class="tl-desc">Heatmaps, scatter plots, multi-panel comparison figures for all 10 target paper figures.</div>
+  </div>
+</div>
+
+<h3>Risk Assessment</h3>
+
+<table>
+  <tr><th>Risk</th><th>Impact</th><th>Likelihood</th><th>Mitigation</th></tr>
+  <tr>
+    <td>Cross-model replication fails</td>
+    <td><span class="badge badge-critical">High</span></td>
+    <td>Low-Medium</td>
+    <td>Reframe as model-specific finding; add more models to find pattern</td>
+  </tr>
+  <tr>
+    <td>Override mechanism remains unexplained</td>
+    <td><span class="badge badge-progress">Medium</span></td>
+    <td>Medium</td>
+    <td>The ablation and forced-attention results are causal proof regardless; "how" is less critical than "that"</td>
+  </tr>
+  <tr>
+    <td>SSM shows same PI > RI pattern</td>
+    <td><span class="badge badge-progress">Medium</span></td>
+    <td>Low</td>
+    <td>Reframe: PI > RI is a property of autoregressive processing, not just attention. Interesting finding in itself.</td>
+  </tr>
+  <tr>
+    <td>Compute constraints (Colab limits)</td>
+    <td><span class="badge badge-progress">Medium</span></td>
+    <td>High</td>
+    <td>Prioritize Qwen-0.5B (small) and batch runs carefully. Gemma-2B may need cloud GPU.</td>
+  </tr>
+</table>
+</div>
+
+<!-- ======================== TAB 7: DELIVERABLES ======================== -->
+<div id="deliverables" class="tab-content">
+<h2>Final Deliverables</h2>
+
+<p>What the completed NeurIPS submission will contain.</p>
+
+<details open>
+<summary>Paper Structure</summary>
+<div class="details-body">
+<table>
+  <tr><th>Section</th><th>Content</th><th>Key Figures</th></tr>
+  <tr>
+    <td><strong>1. Introduction</strong></td>
+    <td>PI > RI phenomenon. Opposite of human memory. 39 models, Cohen's d=1.73. "We explain WHY."</td>
+    <td>&mdash;</td>
+  </tr>
+  <tr>
+    <td><strong>2. Background</strong></td>
+    <td>Interference in human memory. Transformer attention. Causal masking &rarr; primacy bias (theory).</td>
+    <td>&mdash;</td>
+  </tr>
+  <tr>
+    <td><strong>3. Behavioral Characterization</strong></td>
+    <td>Full interference landscape across 4+ models. Cracking patterns, regime maps, size scaling.</td>
+    <td>Fig 1: Behavioral landscape<br>Fig 2: Decay curves across model sizes</td>
+  </tr>
+  <tr>
+    <td><strong>4. Mechanistic Analysis</strong></td>
+    <td>The 8-step causal chain. Logit lens, head classification, DLA, patching, ablation, forced attention.</td>
+    <td>Fig 3: Logit lens trajectories<br>Fig 4: Head classification scatter/heatmap<br>Fig 5: DLA decomposition<br>Fig 6: Patching heatmaps</td>
+  </tr>
+  <tr>
+    <td><strong>5. Positional Analysis</strong></td>
+    <td>Exact primacy vs approximate recency. PI mass drift. Positional gradient.</td>
+    <td>Fig 7: Positional gradient<br>Fig 8: PI mass distribution</td>
+  </tr>
+  <tr>
+    <td><strong>6. Cross-Model Validation</strong></td>
+    <td>Same mechanistic story across Qwen-0.5B, Qwen-1.5B, Gemma-2B. SSM control.</td>
+    <td>Fig 9: Cross-model consistency<br>Fig 10: SSM comparison</td>
+  </tr>
+  <tr>
+    <td><strong>7. Discussion</strong></td>
+    <td>Implications for RAG, long-context, prompt engineering. Theoretical connection (Wu et al., Ramsauer et al.). Limitations.</td>
+    <td>&mdash;</td>
+  </tr>
+</table>
+</div>
+</details>
+
+<details open>
+<summary>Target Paper Figures (10)</summary>
+<div class="details-body">
+<div class="card-grid">
+  <div class="card">
+    <div class="card-title">Fig 1: Behavioral Landscape</div>
+    <p style="font-size:0.82rem;">Multi-panel heatmap: RI/PI accuracy across (keys &times; updates) for each model. Shows where PI cracks while RI holds.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Source: Phase 1 behavioral sweep</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fig 2: Decay Curves</div>
+    <p style="font-size:0.82rem;">RI and PI accuracy vs updates with CI bands, overlaid across model sizes. Shows RI scales with size, PI does not.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Source: Phase 1 behavioral sweep</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fig 3: Logit Lens Trajectories</div>
+    <p style="font-size:0.82rem;">P(initial) and P(final) across layers, at different operating points. Shows initial value dominates at all layers.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Source: Step 2.1 logit lens</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fig 4: Head Classification</div>
+    <p style="font-size:0.82rem;">Scatter (attn_initial vs attn_final) + heatmap (layers &times; heads), side-by-side for RI/PI. Shows 8 heads that don't shift.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Source: Step 2.2 attention analysis</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fig 5: DLA Decomposition</div>
+    <p style="font-size:0.82rem;">Heatmap of (layer &times; head) &rarr; logit_diff, RI vs PI side-by-side. Retrieval heads marked. Attention vs MLP bar chart.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Source: Step 2.3 DLA</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fig 6: Activation Patching</div>
+    <p style="font-size:0.82rem;">Two heatmaps (layer &times; token_position) colored by accuracy recovery. RI vs PI. Shows query position is critical for PI.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Source: Step 2.4 patching</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fig 7: Positional Gradient</div>
+    <p style="font-size:0.82rem;">P(v<sub>i</sub>) across all N value positions. Sharp cliff for RI (exact primacy), gradual rise for PI (approximate recency).</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Source: Step 2.6 positional gradient</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fig 8: PI Mass Distribution</div>
+    <p style="font-size:0.82rem;">Where peak probability lands vs where it should land, across interference levels. Shows PI peak drifts from actual last position.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Source: Step 2.6 PI mass distribution</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fig 9: Cross-Model Consistency</div>
+    <p style="font-size:0.82rem;">Same mechanistic metrics across Qwen-0.5B, Qwen-1.5B, Gemma-2B. Head classification, DLA patterns, patching results.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Source: Phase 2B cross-model replication</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fig 10: SSM Control</div>
+    <p style="font-size:0.82rem;">Behavioral comparison: transformer vs SSM interference profiles. Different pattern confirms attention-specificity.</p>
+    <p style="font-size:0.8rem; color: var(--text-muted);">Source: Phase 3 SSM control</p>
+  </div>
+</div>
+</div>
+</details>
+
+<details>
+<summary>Core Claims (What the Paper Will Argue)</summary>
+<div class="details-body">
+<ol>
+  <li style="margin-bottom:12px;"><strong>PI > RI is universal in transformers.</strong> All 39 models tested show it (Cohen's d=1.73). It appears even at 135M parameters and persists across model families.</li>
+  <li style="margin-bottom:12px;"><strong>The cause is a small minority of instruction-insensitive retrieval heads.</strong> ~12% of retrieval heads always attend to the first value regardless of instruction. They never read the "first"/"last" query word.</li>
+  <li style="margin-bottom:12px;"><strong>The defect is in QK routing, not OV processing.</strong> Forcing the broken heads to attend correctly gives 100% accuracy. The information encoding is fine; the address lookup is broken.</li>
+  <li style="margin-bottom:12px;"><strong>The asymmetry is architectural.</strong> Causal attention inherently biases toward early positions (primacy). "First" retrieval is the default. "Last" retrieval requires active routing that a subset of heads can't perform.</li>
+  <li style="margin-bottom:12px;"><strong>RI resistance scales with model capacity; PI resistance does not.</strong> Because RI uses the default attention bias (scales with head count and d_model), while PI requires all retrieval heads to be instruction-sensitive (bounded by the weakest heads).</li>
+  <li style="margin-bottom:12px;"><strong>The defect is fixable.</strong> Fine-tuning only the QK circuits of 8 heads (0.14% of parameters) can close the gap. This validates the mechanistic explanation and points toward targeted architectural fixes.</li>
+</ol>
+</div>
+</details>
+
+<details>
+<summary>Code Deliverables</summary>
+<div class="details-body">
+<h4>Repository Structure</h4>
+<pre>
+mechanistic_probing_v2/
+├── core/                              # Shared infrastructure
+│   ├── model_loader.py                # TransformerLens + HuggingFace loading
+│   ├── dataset.py                     # Trial generation, 46 categories
+│   ├── single_token_values.py         # 96 verified single-token values
+│   ├── token_tracker.py               # Position tracking by token ID
+│   └── analysis_utils.py              # Logit lens, attention, DLA, patching
+├── experiments/                       # Numbered experiment scripts
+│   ├── 10_setup_qwen.py               # Setup validation
+│   ├── 11_behavioral_sweep.py         # Phase 1: full grid sweep
+│   ├── 12_phase2_trial.py             # Logit lens + attention + DLA
+│   ├── 13_positional_gradient.py      # P(v_i) across value positions
+│   ├── 14_pi_mass_distribution.py     # Where PI probability peaks
+│   ├── 15_activation_patching.py      # Causal patching
+│   ├── 16_head_identification.py      # Head classification + ablation
+│   ├── 17_instruction_sensitivity.py  # Query word attention analysis
+│   ├── 18_forced_attention.py         # Force heads to correct position
+│   ├── 19_positional_bias_sweep.py    # Recency bias intervention
+│   └── 20+                            # Additional experiments
+├── results/                           # JSON outputs per experiment
+├── figures/                           # Paper-ready plots
+└── notebooks/                         # Analysis and comparison notebooks
+</pre>
+
+<h4>Reproducibility</h4>
+<ul>
+  <li>All experiments save full raw results as JSON (not just summary statistics)</li>
+  <li>Random seeds logged for every trial</li>
+  <li>All experiments parameterized: <code>--model</code>, <code>--keys</code>, <code>--updates</code>, <code>--n_trials</code></li>
+  <li>Experiment log (<code>EXPERIMENT_LOG.md</code>) records every run with date, config, results, and observations</li>
+</ul>
+</div>
+</details>
+
+<details>
+<summary>Contribution Summary</summary>
+<div class="details-body">
+<div class="callout callout-success">
+<strong>What This Paper Adds Beyond the ACL Paper</strong>
+<br><br>
+<strong>ACL (prior work):</strong> PI > RI exists across 39 models. RI scales with size, PI doesn't. They're uncorrelated.<br><br>
+<strong>NeurIPS (this work):</strong>
+<ul style="margin-top:8px;">
+  <li>Complete causal mechanistic explanation (8-step chain)</li>
+  <li>Circuit-level identification: 8 specific heads in specific layers</li>
+  <li>Root cause: QK routing failure due to zero query-word attention</li>
+  <li>Causal proof via ablation (+forced attention +patching)</li>
+  <li>Cross-model validation (3+ architectures)</li>
+  <li>Architectural control (SSM comparison)</li>
+  <li>Targeted fix: 0.14% parameter surgery</li>
+  <li>Theory connection: empirical validation of causal masking &rarr; primacy bias</li>
+</ul>
+</div>
+</div>
+</details>
+</div>
+
+<!-- ======================== JAVASCRIPT ======================== -->
+<script>
+function showTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function showSubTab(subId) {
+  const parent = event.target.closest('.tab-content');
+  parent.querySelectorAll('.subtab-content').forEach(t => t.classList.remove('active'));
+  parent.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(subId).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

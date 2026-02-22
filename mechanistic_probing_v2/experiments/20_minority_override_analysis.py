@@ -23,7 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
-from core.dataset import format_for_chat
+from core.dataset import format_for_chat, ORIGINAL_CATEGORIES
 from core.single_token_values import verify_single_token
 from core.analysis_utils import compute_dla
 
@@ -112,11 +112,8 @@ def main():
     categories = ["color", "animal", "material", "weather", "weapon"]
 
     # Load head classification
-    results_dir = Path(__file__).parent.parent / "results"
-    head_id_path = results_dir / f"head_identification_{args.model.split('/')[-1]}.json"
-
-    with open(head_id_path) as f:
-        head_data = json.load(f)
+    from core.output import load_results
+    head_data = load_results(args.model, args.keys, args.updates, "head_identification")
 
     primacy_heads = [(h["layer"], h["head"]) for h in head_data["primacy_biased_heads"]]
     recency_heads = [(h["layer"], h["head"]) for h in head_data["recency_responsive_heads"]]
@@ -408,10 +405,8 @@ def main():
             "per_head": head_impacts,
         },
     }
-    out_path = results_dir / f"minority_override_{args.model.split('/')[-1]}.json"
-    with open(out_path, "w") as f:
-        json.dump(save_data, f, indent=2, default=str)
-    print(f"\nSaved to {out_path}")
+    from core.output import save_results
+    out_path = save_results(save_data, args.model, args.keys, args.updates, "minority_override")
 
 
 if __name__ == "__main__":

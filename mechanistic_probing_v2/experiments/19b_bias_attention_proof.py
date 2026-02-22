@@ -25,7 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
-from core.dataset import format_for_chat
+from core.dataset import format_for_chat, ORIGINAL_CATEGORIES
 from core.single_token_values import verify_single_token
 
 
@@ -190,12 +190,8 @@ def main():
     categories = ["color", "animal", "material", "weather", "weapon"]
 
     # Load primacy-biased heads
-    results_dir = Path(__file__).parent.parent / "results"
-    head_id_path = results_dir / f"head_identification_{args.model.split('/')[-1]}.json"
-
-    with open(head_id_path) as f:
-        head_data = json.load(f)
-    primacy_heads = [(h["layer"], h["head"]) for h in head_data["primacy_biased_heads"]]
+    from core.output import load_head_identification
+    primacy_heads = load_head_identification(args.model, args.keys, args.updates)
     print(f"Tracking {len(primacy_heads)} primacy-biased heads")
 
     modes = ["none", "blind", "oracle"]
@@ -308,10 +304,8 @@ def main():
             avg[role] /= n_heads
         save_data["avg_attention_by_role"][mode] = avg
 
-    out_path = results_dir / f"bias_attention_proof_{args.model.split('/')[-1]}.json"
-    with open(out_path, "w") as f:
-        json.dump(save_data, f, indent=2)
-    print(f"\nSaved to {out_path}")
+    from core.output import save_results
+    out_path = save_results(save_data, args.model, args.keys, args.updates, "bias_attention_proof")
 
 
 if __name__ == "__main__":

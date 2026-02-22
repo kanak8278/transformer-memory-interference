@@ -31,7 +31,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
-from core.dataset import format_for_chat
+from core.dataset import format_for_chat, ORIGINAL_CATEGORIES
 from core.single_token_values import verify_single_token
 
 
@@ -304,13 +304,8 @@ def main():
     all_results["total_elapsed_sec"] = round(total, 1)
 
     # Save
-    results_dir = Path(__file__).parent.parent / "results"
-    results_dir.mkdir(exist_ok=True)
-    model_short = args.model.split("/")[-1]
-    out_path = results_dir / f"positional_gradient_{model_short}.json"
-    with open(out_path, "w") as f:
-        json.dump(all_results, f, indent=2)
-    print(f"\nSaved to {out_path}")
+    from core.output import save_results
+    out_path = save_results(all_results, args.model, args.keys, args.updates, "positional_gradient")
 
     # ── Aggregate summary ──
     print(f"\n{'='*70}")
