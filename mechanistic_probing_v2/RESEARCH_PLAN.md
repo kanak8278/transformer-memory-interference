@@ -12,12 +12,70 @@ ACL paper showed PI > RI across 39 models (Cohen's d=1.73) using 46 categories a
 
 ## Model Lineup
 
-| Model | Size | Heads (Q/KV) | Layers | Role | TransformerLens |
-|-------|------|--------------|--------|------|-----------------|
-| Qwen2.5-0.5B-Instruct | 0.5B | 14/2 | 24 | Primary probing target | Yes |
-| Qwen2.5-1.5B-Instruct | 1.5B | 12/2 | 28 | Size scaling within family | Yes |
-| Gemma-2-2B-IT | 2.6B | 8/4 | 26 | Cross-family validation + SAE | Yes |
-| SmolLM2-135M-Instruct | 135M | 9/3 | 30 | Already done, keep as data point | No (manual hooks) |
+### Primary Models (Active)
+
+| Model | Size | Heads (Q/KV) | Layers | Role | TransformerLens | Status |
+|-------|------|--------------|--------|------|-----------------|--------|
+| Qwen2.5-0.5B-Instruct | 0.5B | 14/2 | 24 | Primary probing target | Yes | DONE — full mechanistic suite |
+| Qwen2.5-1.5B-Instruct | 1.5B | 12/2 | 28 | Size scaling within Qwen family (3x) | Yes | DONE — full mechanistic suite |
+| Qwen2.5-3B-Instruct | 3B | 16/2 | 36 | Size scaling within Qwen family (6x) | Yes | Behavioral IN PROGRESS (Colab), mechanistic TODO |
+| Gemma-3-1B-IT | 1B | TBD | TBD | Cross-family validation + SAE deep-dive | Yes (v3/TransformerBridge) | TODO |
+| Pythia-160M (or 410M) | 160M/410M | MHA (clean) | 12/24 | Training dynamics + community anchor | Native (gold standard) | TODO |
+
+### Model Selection Rationale
+
+**Qwen 2.5 family (0.5B, 1.5B, 3B):** Primary data. 7 solid mechanistic findings on 0.5B+1.5B. Within-family scaling from 0.5B→3B. Instruction-tuned, 32K context. Limitation: no pre-trained SAEs, no training checkpoints, GQA complicates head analysis.
+
+**Gemma 3 1B IT:** Best instruction-tuned model under 3B for interpretability. Has Gemma Scope 2 pre-trained SAEs + transcoders on every layer of the IT variant (not just base). Neuronpedia integration. Enables SAE feature analysis: "which features fire during PI failure?" Different architecture family from Qwen → cross-family validation. 32K context.
+
+**Pythia 160M (or 410M):** Canonical mech interp model. Native TransformerLens support (gold standard). 154 intermediate training checkpoints (every 1000 steps) → enables Phase 3 training dynamics: "when does PI>RI emerge during training?" MHA (no GQA) → clean head-level analysis. Pre-trained SAEs available (EleutherAI/sparsify). Completion-only (not instruction-tuned) → requires few-shot pattern-completion reformulation (see Pythia Prompt Format below). Community trust: reviewers know Pythia, results are independently verifiable.
+
+### Deprioritized Models
+
+| Model | Size | Reason |
+|-------|------|--------|
+| SmolLM2-135M-Instruct | 135M | Preliminary work done, but no SAEs, limited community, GQA. Not investing further. Keep existing behavioral data as supplementary. |
+| Gemma-2-2B-IT | 2.6B | Superseded by Gemma 3 1B IT — Gemma 3 has IT SAEs (Gemma 2 only has base SAEs for 2B), smaller (faster), newer tooling. |
+
+### Pythia Prompt Format (Few-Shot Pattern Completion)
+
+Pythia is completion-only — can't follow "What was the first value of X?" instructions. Reformulate as pattern completion:
+
+```
+art: impressionism
+tool: hammer
+gem: ruby
+art: baroque
+tool: screwdriver
+gem: sapphire
+art: cubism
+tool: wrench
+gem: emerald
+
+The first value of art was: impressionism
+The first value of tool was: hammer
+The first value of gem was:
+```
+
+Model should complete with `ruby`. For PI (proactive interference):
+```
+The last value of gem was:
+```
+
+The few solved examples before the test query teach the model the task format in-context. This is a different prompt format but tests the same retrieval mechanism. Key considerations:
+- Use 5-10 categories (not 46) — small completion models cap out earlier
+- Short keys (3-5 chars): "art", "gem", "tool"
+- Single-token values where possible
+- N ∈ {1, 3, 5, 10, 20} updates — Pythia will saturate earlier than instruction-tuned models
+
+### Data Setup
+
+Two data configurations are used:
+
+1. **Behavioral sweep** (Colab, synthetic values): Semantic keys + "Art375" style values. Multi-token. Used for full landscape mapping and paper behavioral figures.
+2. **Mechanistic experiments** (local, single-token values): Semantic keys + single-token English words. Required for logit lens/DLA/attention analysis. Lower accuracy than synthetic values.
+
+Key finding: single-token English words are significantly harder for the model than synthetic values. Operating points must be recalibrated per data setup.
 
 ---
 
@@ -55,8 +113,10 @@ Before running any cell, generate ONE sample prompt, tokenize it, and check:
 - Get max context from `model.config.max_position_embeddings` or known values:
   - Qwen2.5-0.5B: 32,768
   - Qwen2.5-1.5B: 32,768
-  - Gemma-2-2B: 8,192
-  - SmolLM2-135M: 8,192
+  - Qwen2.5-3B: 32,768
+  - Gemma-3-1B: 32,768
+  - Pythia-160M: 2,048 (much smaller — limits grid significantly)
+  - Pythia-410M: 2,048
 - If exceeds limit → skip cell, log it as "SKIPPED: context overflow (N tokens > limit)"
 - Run the pre-flight for ALL cells first, print the feasible grid before starting trials
 
@@ -362,24 +422,58 @@ Actually patch clean activations into the corrupted run at the highest-effect po
 
 ## Phase 2B: Repeat Phase 2 on Additional Models
 
-### Step 2B.1: Qwen2.5-1.5B-Instruct
+### Step 2B.1: Qwen2.5-1.5B-Instruct — DONE
 
-Run Steps 2.1-2.4 on Qwen2.5-1.5B. Key comparison:
+Run Steps 2.1-2.4 on Qwen2.5-1.5B. COMPLETED — all 12 experiments at 4 operating points.
+
+Key comparison:
 - Does the primacy bias in retrieval heads weaken? (Would explain R²=0.49 for size→RI)
 - Are there MORE recency-biased heads at larger scale?
 - Does the DLA show the same circuit pattern?
 
-### Step 2B.2: Gemma-2-2B-IT
+### Step 2B.2: Qwen2.5-3B-Instruct — IN PROGRESS
 
-Run Steps 2.1-2.4 on Gemma-2-2B. Key comparison:
-- Different architecture family (different training, different tokenizer)
-- Same mechanistic story? If yes → architecture-general finding.
+Behavioral sweep running on Colab. Recalibration sweep DONE. Mechanistic experiments TODO.
+See `QWEN_3B_EXPERIMENT_LOG.md` for details.
 
-**Bonus: SAE analysis using Gemma Scope:**
-- Load pre-trained SAEs for Gemma 2 2B
+### Step 2B.3: Gemma-3-1B-IT — TODO (Cross-Family Validation + SAE)
+
+Run Steps 2.1-2.4 on Gemma-3-1B-IT. Key comparison:
+- Different architecture family (different training, different tokenizer, Google vs Alibaba)
+- Same mechanistic story? If yes → architecture-general finding
+- Does the primacy cliff, late-layer localization, and query-position corruption replicate?
+
+**SAE feature analysis using Gemma Scope 2 (unique to this model):**
+- Load pre-trained SAEs from Gemma Scope 2 (available for IT variant, every layer)
+- Load transcoders (trace feature-to-feature across layers)
 - For RI and PI trials, check which SAE features activate at the answer position
 - Look for features corresponding to "initial value" vs "final value" concepts
-- Check if "initial value" features are active even during PI failures
+- Check if "initial value" features are active even during PI failures → direct evidence for "information present but inaccessible"
+- Use Neuronpedia to browse and label features interactively
+- Compare SAE features across RI-correct, PI-correct, PI-failure trials
+- This analysis is NOT possible on Qwen (no SAEs) — unique contribution of adding Gemma
+
+**Dependencies:** `sae_lens` (SAELens library), `transformer_lens` v3 with TransformerBridge support
+
+### Step 2B.4: Pythia-160M (or 410M) — TODO (Community Anchor + Training Dynamics)
+
+**Behavioral sweep only (Phase 1).** Use few-shot pattern-completion format (see Pythia Prompt Format above).
+
+Key questions:
+- Does PI > RI appear in a completion model with no instruction tuning? If yes → the asymmetry is not an artifact of instruction tuning
+- How does the cracking pattern compare to instruction-tuned models?
+- At what interference level does Pythia-160M saturate? (2048 context limits the grid)
+
+**Mechanistic probing (Phase 2) — if behavioral sweep confirms PI > RI:**
+- Pythia is native TransformerLens → gold standard hook access, no GQA complications
+- MHA architecture means each head has its own KV — cleaner head-level analysis than Qwen/Gemma
+- Pre-trained SAEs available via EleutherAI/sparsify → can do SAE feature analysis similar to Gemma
+- This would be the cleanest mechanistic analysis of any model in the study
+
+**Training dynamics (Phase 3) — the unique Pythia contribution:**
+- 154 intermediate checkpoints available (every 1000 steps)
+- Run behavioral sweep at each checkpoint → track when PI > RI emerges
+- See Phase 3, Step 3.2 for full design
 
 ---
 
@@ -395,13 +489,23 @@ Run behavioral sweep (Phase 1 only) on a state-space model:
 - Key prediction: SSMs should show different interference profile (possibly RI > PI or symmetric)
 - If prediction holds → confirms attention-specificity of PI > RI
 
-### Step 3.2: Training Dynamics
+### Step 3.2: Training Dynamics (Pythia Checkpoints)
 
-Using SmolLM2-135M intermediate checkpoints (8 available):
-- Run behavioral sweep at each checkpoint
+**Primary: Pythia-410M** (154 checkpoints, every 1000 steps from step 0 to step 143000):
+- Run behavioral sweep (few-shot completion format) at ~20 evenly-spaced checkpoints
 - Track: when does PI > RI emerge during training?
-- If present from earliest checkpoint → architectural
-- If develops over training → data/optimization effect
+- If present from earliest checkpoint → architectural (causal masking imposes it from init)
+- If develops over training → data/optimization effect (learned from training distribution)
+- Pythia checkpoints available as HuggingFace branches: `revision="step-{N}"`
+
+**Secondary: Pythia-160M** (same 154 checkpoints):
+- Run same analysis at 160M for size comparison
+- If PI > RI emerges at same training step across sizes → architecture-driven
+- If larger model develops it later → capacity interaction
+
+**Supplementary: SmolLM2-135M** intermediate checkpoints (~8 available, every ~250B tokens):
+- Coarser granularity than Pythia but instruction-tuned checkpoints
+- Can test whether instruction tuning changes when PI > RI appears
 
 ### Step 3.3: Theory Framing
 
@@ -425,87 +529,134 @@ Create a reusable module: `mechanistic_probing_v2/core/`
 All experiment scripts import from core/ — no copy-pasting between experiments.
 
 ### File Structure
+
 ```
-mechanistic_probing/
+mechanistic_probing_v2/
 ├── core/
-│   ├── model_loader.py
-│   ├── dataset.py
-│   ├── token_tracker.py
-│   └── analysis_utils.py
+│   ├── __init__.py
+│   ├── model_loader.py           # TransformerLens + HuggingFace loading
+│   ├── dataset.py                # Trial generation, 46 categories, interleaving
+│   ├── single_token_values.py    # Single-token value pools (per-tokenizer)
+│   ├── token_tracker.py          # Position tracking by token ID
+│   ├── output.py                 # Result saving utilities
+│   └── analysis_utils.py         # Logit lens, attention, DLA, patching helpers
 ├── experiments/
-│   ├── 10_setup_qwen.py
-│   ├── 11_behavioral_sweep.py          # Parameterized: any model, full grid
-│   ├── 12_logit_lens.py                # Parameterized: any model, any operating points
-│   ├── 13_attention_analysis.py        # Head classification
-│   ├── 14_dla.py                       # Direct logit attribution
-│   ├── 15_activation_patching.py       # Causal evidence
-│   ├── 16_gemma_sae.py                 # Gemma-specific SAE analysis
-│   ├── 17_ssm_control.py              # Phase 3: SSM behavioral comparison
-│   └── 18_training_dynamics.py         # Phase 3: checkpoint analysis
-├── results/                            # JSON outputs per experiment per model
-├── figures/                            # Paper-ready plots
+│   ├── 10_setup_qwen.py          # Setup validation (Qwen)
+│   ├── 10b_setup_gemma.py        # Setup validation (Gemma 3 1B IT)     [NEW]
+│   ├── 10c_setup_pythia.py       # Setup validation (Pythia 410M/160M)  [NEW]
+│   ├── 11_behavioral_sweep.py    # Phase 1: full grid sweep (instruction-tuned models)
+│   ├── 11_behavioral_sweep_pythia.py  # Phase 1: few-shot completion format [NEW]
+│   ├── 11b_behavioral_validation.py
+│   ├── 11c_recalibrate_sweep.py
+│   ├── 11d_neutral_keys_sweep.py
+│   ├── 12_phase2_trial.py        # Phase 2: logit lens + attention + DLA
+│   ├── 13_positional_gradient.py # Phase 2: P(v_i) across all value positions
+│   ├── 14_pi_mass_distribution.py # Phase 2: where PI probability peaks
+│   ├── 15_activation_patching.py  # Phase 2: causal patching
+│   ├── 16_head_identification.py  # Phase 2: head classification + ablation
+│   ├── 17_instruction_sensitivity.py # Phase 2: does model distinguish first/last?
+│   ├── 18_forced_attention.py     # Phase 2: force heads to correct position
+│   ├── 19_positional_bias_sweep.py # Phase 2: recency bias λ sweep
+│   ├── 19b_bias_attention_proof.py
+│   ├── 20_minority_override_analysis.py # Phase 2: why minority overrides majority
+│   ├── 21a_logit_lens_under_ablation.py
+│   ├── 21b_dla_split_by_outcome.py
+│   ├── 21c_failure_output_classification.py
+│   ├── 22_query_patching_granular.py
+│   ├── 23_ablation_patching_interaction.py
+│   ├── 24_ov_theory_tests.py
+│   ├── 24b_single_head_force.py
+│   ├── 25_gemma_sae_analysis.py   # Gemma Scope 2 SAE feature analysis  [NEW]
+│   ├── 26_pythia_training_dynamics.py  # Phase 3: checkpoint sweep       [NEW]
+│   └── 27_ssm_control.py         # Phase 3: Mamba/RWKV behavioral       [NEW]
+├── results/
+│   ├── Qwen2.5-0.5B-Instruct/    # Per-model, per-operating-point
+│   ├── Qwen2.5-1.5B-Instruct/
+│   ├── Qwen2.5-3B-Instruct/
+│   ├── gemma-3-1b-it/             # [NEW]
+│   ├── pythia-410m/               # [NEW]
+│   ├── pythia-160m/               # [NEW]
+│   └── *.json                     # Legacy flat results
+├── figures/
 └── notebooks/
-    └── cross_model_comparison.ipynb    # Phase 2B analysis
+    ├── behavioral_sweep_colab.ipynb
+    └── cross_model_comparison.ipynb
 ```
 
 ### Dependencies to Install
+
 ```
-transformer_lens    # Core mechanistic interpretability library
+transformer_lens    # Core mechanistic interpretability library (v3 for Gemma 3 support)
 einops              # Required by TransformerLens
 jaxtyping           # Required by TransformerLens
-sae_lens            # For Gemma Scope SAE analysis (Phase 2B.2 only)
+sae_lens            # For Gemma Scope 2 SAE analysis + Pythia SAEs
 scipy               # For bootstrap CIs, curve fitting
 ```
 
 ### Execution Order
+
 ```
-Phase 1 (Qwen2.5-0.5B):
-  10 → 11 → analyze cracking patterns → identify operating points A-E
+═══ DONE ═══════════════════════════════════════════════════════════════
+Phase 1 (Qwen2.5-0.5B):  10 → 11 → operating points A-E identified
+Phase 2 (Qwen2.5-0.5B):  12-24b at 4 operating points → mechanistic story
+Phase 1 (Qwen2.5-1.5B):  11c recalibration → operating points
+Phase 2B.1 (Qwen2.5-1.5B): 12-23 at 4 operating points → cross-model validation
 
-Phase 2 (Qwen2.5-0.5B):
-  12 → 13 → 14 → 15 → synthesize mechanistic story
+═══ IN PROGRESS ════════════════════════════════════════════════════════
+Phase 1 (Qwen2.5-3B):    11 behavioral sweep on Colab (partial)
+                          11c recalibration DONE, operating points selected
 
-Phase 1 (Qwen2.5-1.5B):
-  11 (with 1.5B) → identify operating points
+═══ TODO ═══════════════════════════════════════════════════════════════
+Phase 2B.2 (Qwen2.5-3B): 12-23 at 4 operating points (if time)
 
-Phase 2B.1 (Qwen2.5-1.5B):
-  12-15 (with 1.5B) → compare with 0.5B findings
+Phase 1 (Gemma-3-1B-IT):
+  10b → 11 (behavioral sweep) → identify operating points
+Phase 2B.3 (Gemma-3-1B-IT):
+  12-20 (mechanistic suite) → cross-family validation
+  25 (SAE feature analysis) → unique Gemma contribution
 
-Phase 1 (Gemma-2-2B):
-  11 (with Gemma) → identify operating points
+Phase 1 (Pythia-410M):
+  10c → 11_pythia (few-shot behavioral sweep) → confirm PI > RI in completion model
+Phase 2B.4 (Pythia-410M):
+  12-20 (if behavioral confirms PI > RI) → cleanest mechanistic analysis (MHA, native TL)
+Phase 3.2 (Pythia-410M + 160M):
+  26 (training dynamics) → when does PI > RI emerge during training?
 
-Phase 2B.2 (Gemma-2-2B):
-  12-15 (with Gemma) + 16 (SAE) → cross-family validation
-
-Phase 3 (only if Phase 2/2B converges):
-  17 → 18 → theory framing
+Phase 3 (controls):
+  27 (SSM control) → Mamba/RWKV behavioral comparison
+  Theory framing → cite Wu et al., Ramsauer et al.
 ```
 
 ### Verification
 
 Each experiment script should:
-1. Save raw results as JSON in `results/`
+
+1. Save raw results as JSON in `results/{model_name}/{keys}k_{updates}u/`
 2. Print summary statistics to stdout
 3. Generate at least one diagnostic plot
-4. Log to `EXPERIMENT_LOG.md` with date, config, results, observations
+4. Log to `{MODEL}_EXPERIMENT_LOG.md` with date, config, results, observations
 
 Cross-model comparison verification:
-- Phase 1 complete when: all models have full behavioral grids
-- Phase 2 complete when: mechanistic findings (which heads, which layers, what bias) are consistent across ≥2 models
-- Phase 3 complete when: SSM control confirms attention-specificity
+
+- Phase 1 complete when: all 5 models have behavioral grids (grid size varies by context limit)
+- Phase 2 complete when: mechanistic findings consistent across ≥3 models (Qwen 0.5B + 1.5B + Gemma 3 1B)
+- Phase 3 complete when: training dynamics mapped (Pythia) AND SSM control confirms attention-specificity
 
 ### Paper Figures (Target)
 
 1. **Behavioral landscape**: Multi-panel grid showing RI/PI accuracy heatmaps across (keys × updates) for each model
-2. **Decay curves**: RI and PI accuracy vs updates, with CI bands, across model sizes
+2. **Decay curves**: RI and PI accuracy vs updates, with CI bands, across model sizes and families
 3. **Logit lens trajectories**: P(initial) and P(final) across layers, for different operating points
 4. **Attention head classification**: Scatter + heatmap showing retrieval heads with primacy bias
 5. **DLA decomposition**: Which heads/MLPs promote initial vs final value
 6. **Activation patching**: (layer × position) → accuracy recovery heatmaps for RI vs PI
 7. **Positional gradient**: P(v_i) across all N value positions — sharp cliff for RI, gradual rise for PI
 8. **PI mass distribution**: Where peak probability lands vs where it should land, across interference levels
-9. **Cross-model consistency**: Same mechanistic finding across Qwen-0.5B, Qwen-1.5B, Gemma-2B
+9. **Cross-model consistency**: Same mechanistic finding across Qwen-0.5B, Qwen-1.5B, Gemma-3-1B (3 models, 2 families)
 10. **SSM control**: Behavioral comparison showing different interference profile
+11. **SAE feature analysis** (NEW): Which Gemma Scope 2 features activate during PI failure vs success
+12. **Training dynamics** (NEW): PI > RI emergence across Pythia-410M training checkpoints
+13. **Instruction-tuned vs completion** (NEW): PI > RI comparison between IT models (Qwen, Gemma) and completion model (Pythia)
 
 ---
 
@@ -1027,3 +1178,91 @@ No question, just sentence completion. Bypasses query routing entirely — the m
 
 **Theory (writing, not code):**
 8. Hopfield framing: cite Ramsauer et al. + Wu et al., present empirical findings as mechanistic validation of theoretical primacy bias prediction
+
+---
+
+## Current Status (2026-02-22): Qwen 0.5B + 1.5B Complete, Expanding to Gemma 3 + Pythia
+
+### What's Done
+
+Ran 12 experiments × 4 operating points × 2 models = 96 experiment runs (all at 100 trials).
+
+**Models completed:** Qwen2.5-0.5B-Instruct (24L, 14H) and Qwen2.5-1.5B-Instruct (28L, 12H)
+**Model in progress:** Qwen2.5-3B-Instruct (behavioral sweep on Colab, recalibration done)
+**Models planned:** Gemma-3-1B-IT (cross-family + SAE), Pythia-410M + 160M (training dynamics + community anchor)
+
+**Data setup:** Single-token English words (2300 pool) + 46 semantic categories. Operating points regime-matched between models (1.5B reaches same regimes with fewer updates).
+
+### Solid Findings (not dependent on head classification)
+
+| # | Finding | Evidence | Status |
+|---|---------|----------|--------|
+| 1 | PI internal representation degrades with interference, RI stays strong | Logit lens: RI P(init) 0.56-0.99, PI P(final) 0.86→0.25 | Solid, both models |
+| 2 | Primacy is a sharp cliff (first position only) | v1/v0 ratio 0.000-0.104 across all points | Solid, both models |
+| 3 | Late-layer patching at query position recovers PI ~100% | Activation patching at L21+/L27+ | Solid, both models |
+| 4 | Only late-layer query patching works, early layers do nothing | Exp 22: early +0%, late +48-82% (0.5B); late +96% at Point C (1.5B) | Solid on 0.5B, partial on 1.5B |
+| 5 | Heads ignore the literal query word "first"/"last" | Attention to query word ≈ 0.003 in both conditions | Solid, both models |
+| 6 | Linear positional bias correction doesn't help | Exp 19: no sweet spot found | Solid, both models |
+| 7 | Circuit lives in last ⅓ of network | DLA: 88-91% of total DLA in final third of layers | Solid, both models |
+
+### The Head Classification Problem
+
+**Issue:** We used three different criteria across experiments and got different answers each time.
+
+- Exp 16 (attention-based, retr>0.1, pi_prim>0.6): 6 heads on 0.5B, 5 on 1.5B
+- Stricter filter (retr>0.3, pi_prim>0.7, DLA>0): 1 head on each (L16H3, L19H1)
+- DLA-based top-5: different heads again
+
+**This caused a false alarm:** Exp 18 forced all 5 attention-classified heads → PI improved on 0.5B (+18%) but WORSENED on 1.5B (-19%). We spent significant effort investigating "why is the mechanism different across models?" (theories about QK vs OV circuits, residual contamination, etc.)
+
+**Resolution:** Exp 24b forced ONLY the single strictly-classified head → both models improve +20%. The divergence was caused by forcing misclassified non-primacy heads that were actually helping PI. The mechanism IS the same on both models.
+
+**But the resolution is not satisfying.** We found the right answer by stacking filters until we got consistency. That's post-hoc. A reviewer asking "how did you identify primacy heads?" would see we tried multiple criteria.
+
+### Options Going Forward
+
+**Option A: Drop head-level claims from the paper.**
+- Frame the story around findings 1-7 (all solid, no head classification needed)
+- Narrative: "PI fails because the final value's representation degrades in late layers. Causal patching confirms the information exists but is inaccessible. The failure is architectural — caused by how causal attention accumulates positional bias."
+- Pros: Clean, well-supported, no attack surface on methodology
+- Cons: Less mechanistic depth, doesn't explain WHY specific heads behave this way
+
+**Option B: Do head classification properly using established methods.**
+- Use Wu et al. (2024) retrieval score (copy-paste frequency, threshold >0.1) adapted for our task
+- Or use Voita et al. (2019) criterion (>90% of max attention to fixed relative position)
+- Define a novel "primacy bias score" = E[attn to first value pos] - E[attn to last value pos] in PI, averaged over 200+ trials
+- Validate with shuffled position controls (separate position bias from content bias)
+- Pros: Stronger mechanistic claims, deeper story
+- Cons: Needs justification for any novel metric, more experiments, reviewer attack surface on thresholds
+
+**Option C: Use DLA as the primary metric (following Wang et al. 2022 IOI circuit).**
+- Classify heads by their causal contribution to logit(init) - logit(final)
+- No threshold needed — report continuous DLA values for all heads
+- Show distribution, identify natural clusters if they exist
+- The "primacy head" question becomes "which heads have positive PI DLA?" (promote init in PI condition)
+- Pros: Causal, continuous, no arbitrary threshold, follows established IOI methodology
+- Cons: DLA is per-trial noisy, need many trials for stable estimates
+
+**Current recommendation:** Option A or C. Option A is the safe path — we already have 7 solid findings. Option C adds depth using an established methodology without inventing new metrics. Option B is the strongest but highest risk/effort.
+
+### Remaining Work
+
+**Must do:**
+- Decide on Option A/B/C for head classification
+- Gemma-3-1B-IT: setup, behavioral sweep, mechanistic suite (Phase 2B.3)
+- Gemma-3-1B-IT: SAE feature analysis with Gemma Scope 2 (exp 25)
+- Pythia-410M: setup, behavioral sweep with few-shot format (Phase 2B.4)
+- Cross-model comparison analysis (Qwen 0.5B + 1.5B + Gemma 3 1B, minimum 3 models)
+- Paper-ready visualizations
+
+**Should do:**
+- Pythia training dynamics: sweep 154 checkpoints (Phase 3, Step 3.2)
+- Pythia-160M: same as 410M for size scaling within Pythia family
+- Qwen2.5-3B: finish behavioral sweep, mechanistic experiments if time
+- SSM control: Mamba/RWKV behavioral sweep (Phase 3, Step 3.1)
+- Pythia mechanistic probing (if behavioral confirms PI > RI — cleanest analysis due to MHA)
+
+**Nice to have:**
+- QK fine-tuning intervention (Step 2.11)
+- Prompt format experiments (Step 2.12)
+- Pythia SAE analysis (EleutherAI/sparsify pre-trained SAEs available)

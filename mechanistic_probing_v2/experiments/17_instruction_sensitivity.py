@@ -104,7 +104,7 @@ def main():
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
     value_to_tid = verify_single_token(tokenizer)
     value_pool = list(value_to_tid.keys())
-    categories = ["color", "animal", "material", "weather", "weapon"]
+    categories = ORIGINAL_CATEGORIES
     n_layers = info.n_layers
     n_heads = info.n_heads
 
@@ -339,8 +339,6 @@ def main():
             print(f"  → Attention to initial shifts: RI={ri_init:.4f}, PI={pi_init:.4f}")
 
     # Save
-    results_dir.mkdir(exist_ok=True)
-    model_short = args.model.split("/")[-1]
     save_data = {
         "model": args.model,
         "config": {"keys": args.keys, "updates": args.updates, "trials": args.trials},

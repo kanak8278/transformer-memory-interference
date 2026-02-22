@@ -239,7 +239,7 @@ def main():
     value_pool = list(value_to_tid.keys())
     print(f"Value pool: {len(value_pool)} single-token values")
 
-    categories = ["color", "animal", "material", "weather", "weapon"]
+    categories = ORIGINAL_CATEGORIES
 
     all_results = {
         "model": args.model,

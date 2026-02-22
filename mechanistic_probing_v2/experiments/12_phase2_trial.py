@@ -49,7 +49,7 @@ def build_single_token_trial(
     rng = random.Random(seed)
 
     if categories is None:
-        categories = [f"category_{i}" for i in range(num_keys)]
+        categories = ORIGINAL_CATEGORIES[:num_keys]
 
     total_values_needed = num_keys * num_updates
     if total_values_needed > len(value_pool):
@@ -235,7 +235,7 @@ def main():
     value_pool = list(value_to_tid.keys())
     print(f"\nVerified {len(value_pool)} single-token values")
 
-    categories = ["color", "animal", "material", "weather", "weapon"]
+    categories = ORIGINAL_CATEGORIES
 
     all_results = {
         "model": args.model,

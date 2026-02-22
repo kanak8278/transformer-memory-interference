@@ -15,10 +15,19 @@ All experiment scripts should use get_output_path() to construct paths.
 """
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 
 RESULTS_ROOT = Path(__file__).parent.parent / "results"
+
+# Default data setup for all mechanistic experiments.
+# Behavioral sweep (Colab) uses "synthetic" with different pool.
+DATA_SETUP = {
+    "data_setup": "single_token_english",
+    "value_pool_size": 2300,
+    "category_source": "ORIGINAL_CATEGORIES_46",
+}
 
 
 def model_short_name(model: str) -> str:
@@ -67,7 +76,22 @@ def load_head_identification(model: str, keys: int, updates: int) -> list[tuple[
 
 
 def save_results(data: dict, model: str, keys: int, updates: int, experiment: str) -> Path:
-    """Save results JSON and return the path."""
+    """Save results JSON with standard metadata and return the path.
+
+    Automatically injects data_setup, value_pool_size, category_source,
+    and timestamp into the saved data if not already present.
+    """
+    # Inject standard metadata if missing
+    if "data_setup" not in data and "config" not in data:
+        data.update(DATA_SETUP)
+        data["timestamp"] = datetime.now(timezone.utc).isoformat()
+    elif "config" in data:
+        for k, v in DATA_SETUP.items():
+            if k not in data["config"]:
+                data["config"][k] = v
+        if "timestamp" not in data["config"]:
+            data["config"]["timestamp"] = datetime.now(timezone.utc).isoformat()
+
     path = get_output_path(model, keys, updates, experiment)
     with open(path, "w") as f:
         json.dump(data, f, indent=2)

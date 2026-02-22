@@ -176,7 +176,7 @@ def main():
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
     value_to_tid = verify_single_token(tokenizer)
     value_pool = list(value_to_tid.keys())
-    categories = ["color", "animal", "material", "weather", "weapon"]
+    categories = ORIGINAL_CATEGORIES
 
     n_layers = info.n_layers
     n_heads = info.n_heads
