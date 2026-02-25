@@ -294,6 +294,54 @@ _To be filled after all 5 points are run for each experiment._
 
 ---
 
+## Exp 25a/25b/25c: Comprehensive Head Identification (2026-02-25)
+
+Ran 3 independent methods at Point B (1k, 5u), 100 PI trials.
+
+### 25a — Per-Head Causal Knockout (Gold Standard)
+
+Baseline PI: 69%, mean_ld=6.77
+
+| Rank | Head | Δld | KO accuracy |
+|------|------|-----|-------------|
+| 1 | L12H0 | +1.8 | 70% |
+| 2 | L11H3 | +1.6 | 74% |
+| 3 | L12H13 | +1.6 | 79% |
+| 4 | L19H8 | +1.5 | 72% |
+| 5 | L19H6 | +1.4 | 62% |
+
+Top retrieval: L8H3 (-10.1, KO→0%), L6H9 (-9.3, KO→1%), L4H12 (-8.1, KO→0%).
+
+**Key finding: NO single dominant primacy head.** Best head (L12H0) only shifts PI by +1.8 logits and +1% accuracy. The primacy bias is genuinely distributed across many weak heads on 0.5B.
+
+**Old L16H3 was wrong.** Ranks 13th (Δld=+0.6). Not a primacy head by causal evidence.
+
+### 25b — Attribution Patching
+
+Top retrieval: L20H7 (+2.1), L20H12 (+1.8), L16H7 (+1.3) — all late layer.
+Top primacy: L23H12 (-1.3), L20H9 (-0.9) — also late layer.
+
+**25b finds different heads than 25a.** Same pattern as Gemma: attribution patching misses early-layer indirect effects.
+
+### 25c — Observational Metrics
+
+Copy score is ALL ZERO — no head does copy-paste at this operating point (PI=69% means model mostly gets it right without retrieval heads doing copy-paste).
+
+Spearman correlations weak (most < 0.3). Methods disagree on what "matters."
+
+### Comparison to Old Exp 16 Classification
+
+| | Old (exp 16) | New (exp 25a) |
+|---|---|---|
+| "Smoking gun" | L16H3 (pi_primacy=0.992) | None — distributed |
+| Top head effect | Ablating 8 heads: gap 35%→5% | Best single head: +1.8 logits |
+| Head location | L15-L23 (late) | L3-L19 (spread) |
+| Mechanism | "Concentrated minority overrides majority" | **Distributed — no single head dominates** |
+
+The old exp 16 story about 8 primacy-locked heads was based on attention thresholds. The causal evidence (25a) shows the attention pattern didn't translate to causal impact. L16H3 has pi_primacy=0.992 (always attends to initial) but Δld=+0.6 (negligible causal effect on PI).
+
+---
+
 ## Paper Figures (Blocked on production runs)
 
 | # | Figure | Data needed | Status |

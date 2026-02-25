@@ -237,8 +237,10 @@ def main():
         primacy_heads = load_head_identification(args.model, args.keys, args.updates)
         print(f"  Loaded {len(primacy_heads)} primacy-biased heads")
     except FileNotFoundError:
-        primacy_heads = [(16, 3)]  # default
-        print(f"  head_identification not found for this operating point, using default: L16H3")
+        raise FileNotFoundError(
+            f"No head_identification results for {args.model} at {args.keys}k_{args.updates}u. "
+            f"Run exp 16 first."
+        )
 
     # For each primacy-biased head, analyze its attention pattern in RI vs PI
     # Focus on: does it attend to the "first"/"last" query word differently?

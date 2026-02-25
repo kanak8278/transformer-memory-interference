@@ -34,6 +34,43 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from core.model_loader import load_model
 from core.dataset import format_for_chat, ORIGINAL_CATEGORIES
 from core.single_token_values import verify_single_token
+from core.output import load_results
+from core.analysis_utils import compute_logit_diff, compute_recovery, aggregate_recovery
+
+
+def get_retrieval_onset_layer(model_name, keys, updates, n_layers, threshold=0.10):
+    """Find the layer where retrieval begins, using exp 15 activation patching data.
+
+    Retrieval onset = first layer where mean PI recovery exceeds threshold.
+    Falls back to 2/3 * n_layers if exp 15 data not available.
+    """
+    try:
+        data = load_results(model_name, keys, updates, "activation_patching")
+    except FileNotFoundError:
+        fallback = 2 * n_layers // 3
+        print(f"  WARNING: No activation_patching results found. Using fallback: L{fallback} (2/3 of {n_layers})")
+        return fallback
+
+    import numpy as np
+    pi_trials = [a for a in data["analyses"] if a["condition"] == "PI"]
+    if not pi_trials:
+        return 2 * n_layers // 3
+
+    layer_recovery = {}
+    for a in pi_trials:
+        for item in a["patching"]["resid_at_answer"]:
+            l = item["layer"]
+            layer_recovery.setdefault(l, []).append(item["recovery"])
+
+    for l in sorted(layer_recovery.keys()):
+        if np.mean(layer_recovery[l]) > threshold:
+            print(f"  Retrieval onset: L{l} ({l/n_layers*100:.0f}% through network, from exp 15)")
+            return l
+
+    # No layer exceeded threshold — use last layer
+    fallback = n_layers - 1
+    print(f"  WARNING: No layer exceeded {threshold:.0%} recovery. Using L{fallback}")
+    return fallback
 
 
 def build_matched_pair(num_keys, num_updates, condition, seed, value_pool, categories):
@@ -181,8 +218,10 @@ def main():
     categories = ORIGINAL_CATEGORIES
     n_layers = model.cfg.n_layers
 
-    # Layers to test
-    test_layers = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 23]
+    # Layers to test — dynamically spaced based on model depth
+    n_test = 13  # ~13 evenly spaced layers
+    step = max(1, n_layers // n_test)
+    test_layers = sorted(set(list(range(0, n_layers, step)) + [n_layers - 1]))
     components = ["resid_post", "attn_out", "mlp_out"]
 
     # Accumulate recovery scores: {condition: {component: {layer: [recoveries]}}}
@@ -195,6 +234,9 @@ def main():
         recovery_data[cond]["_baseline_correct"] = 0
         recovery_data[cond]["_clean_correct"] = 0
         recovery_data[cond]["_n"] = 0
+
+    # Determine early/late boundary from exp 15 data
+    onset_layer = get_retrieval_onset_layer(args.model, args.keys, args.updates, n_layers)
 
     print(f"\nRunning {args.trials} trials × 2 conditions × {len(test_layers)} layers × {len(components)} components...")
     t_start = time.time()
@@ -210,16 +252,23 @@ def main():
             exp_tid_bare = tokenizer.encode(expected, add_special_tokens=False)[0]
             expected_tids = list(set([t for t in [exp_tid_sp, exp_tid_bare] if t >= 0]))
 
+            # Incorrect token for logit_diff
+            wrong_value = corr_trial["final_value"] if condition == "RI" else corr_trial["initial_value"]
+            wrong_tid_sp = value_to_tid.get(wrong_value, -1)
+            wrong_tid_bare = tokenizer.encode(wrong_value, add_special_tokens=False)[0]
+            wrong_tids = list(set([t for t in [wrong_tid_sp, wrong_tid_bare] if t >= 0]))
+            if not wrong_tids:
+                wrong_tids = expected_tids
+
             # Run clean
             clean_fmt = format_for_chat(clean_trial["prompt"], tokenizer)
             clean_tokens = model.to_tokens(clean_fmt)
             with torch.no_grad():
                 clean_logits, clean_cache = model.run_with_cache(clean_tokens)
 
-            clean_probs = torch.softmax(clean_logits[0, -1], dim=-1)
-            clean_p = max(clean_probs[t].item() for t in expected_tids)
             clean_pred = tokenizer.decode([clean_logits[0, -1].argmax().item()]).strip()
             clean_correct = clean_pred.lower() == expected.lower()
+            clean_ld = compute_logit_diff(clean_logits[0, -1], expected_tids, wrong_tids)
 
             # Run corrupted
             corr_fmt = format_for_chat(corr_trial["prompt"], tokenizer)
@@ -227,10 +276,9 @@ def main():
             with torch.no_grad():
                 corr_logits = model(corr_tokens)
 
-            corr_probs = torch.softmax(corr_logits[0, -1], dim=-1)
-            baseline_p = max(corr_probs[t].item() for t in expected_tids)
             corr_pred = tokenizer.decode([corr_logits[0, -1].argmax().item()]).strip()
             corr_correct = corr_pred.lower() == expected.lower()
+            baseline_ld = compute_logit_diff(corr_logits[0, -1], expected_tids, wrong_tids)
 
             recovery_data[condition]["_baseline_correct"] += corr_correct
             recovery_data[condition]["_clean_correct"] += clean_correct
@@ -248,14 +296,8 @@ def main():
                         clean_query_pos, corr_query_pos,
                         layer, comp, corr_tokens.shape[1] - 1)
 
-                    patched_probs = torch.softmax(patched_logits[0, -1], dim=-1)
-                    patched_p = max(patched_probs[t].item() for t in expected_tids)
-
-                    denom = clean_p - baseline_p
-                    if abs(denom) < 1e-8:
-                        recovery = 0.0
-                    else:
-                        recovery = (patched_p - baseline_p) / denom
+                    patched_ld = compute_logit_diff(patched_logits[0, -1], expected_tids, wrong_tids)
+                    recovery = compute_recovery(patched_ld, baseline_ld, clean_ld)
 
                     recovery_data[condition][comp][layer].append(recovery)
 
@@ -280,16 +322,18 @@ def main():
         print(f"\n  {'Layer':>6}", end="")
         for comp in components:
             print(f"  {comp:>12}", end="")
-        print()
-        print(f"  {'-'*48}")
+        print("  filtered")
+        print(f"  {'-'*60}")
 
         for layer in test_layers:
             print(f"  L{layer:>4}", end="")
+            layer_filtered = 0
             for comp in components:
                 vals = recovery_data[condition][comp][layer]
-                mean_rec = np.mean(vals) if vals else 0
-                print(f"  {mean_rec:>+11.0%}", end="")
-            print()
+                agg = aggregate_recovery(vals)
+                layer_filtered += agg["n_filtered"]
+                print(f"  {agg['mean']:>+11.0%}", end="")
+            print(f"  {layer_filtered}" if layer_filtered > 0 else "")
 
         # Summary: which component matters most?
         print(f"\n  Average across all layers:")
@@ -297,36 +341,40 @@ def main():
             all_vals = []
             for layer in test_layers:
                 all_vals.extend(recovery_data[condition][comp][layer])
-            print(f"    {comp:<12}: {np.mean(all_vals):+.0%}")
+            agg = aggregate_recovery(all_vals)
+            filt_msg = f" ({agg['n_filtered']} filtered)" if agg["n_filtered"] > 0 else ""
+            print(f"    {comp:<12}: {agg['mean']:+.0%}{filt_msg}")
 
-        # Early vs late
-        early_layers = [l for l in test_layers if l <= 8]
-        late_layers = [l for l in test_layers if l >= 16]
+        # Early vs late — boundary from exp 15 retrieval onset
+        early_layers = [l for l in test_layers if l < onset_layer]
+        late_layers = [l for l in test_layers if l >= onset_layer]
         for comp in components:
             early_vals = [v for l in early_layers for v in recovery_data[condition][comp][l]]
             late_vals = [v for l in late_layers for v in recovery_data[condition][comp][l]]
-            if early_vals and late_vals:
-                print(f"    {comp} early (L0-8): {np.mean(early_vals):+.0%}  late (L16-23): {np.mean(late_vals):+.0%}")
+            early_agg = aggregate_recovery(early_vals)
+            late_agg = aggregate_recovery(late_vals)
+            if early_agg["n_valid"] > 0 and late_agg["n_valid"] > 0:
+                print(f"    {comp} early (pre-onset): {early_agg['mean']:+.0%}  late (post-onset): {late_agg['mean']:+.0%}")
 
     # ── Interpretation ──
     print(f"\n{'='*70}")
     print("INTERPRETATION")
     print(f"{'='*70}")
 
-    # Check PI specifically
-    pi_early_resid = [v for l in [0, 2, 4, 6, 8] for v in recovery_data["PI"]["resid_post"][l] if l in recovery_data["PI"]["resid_post"]]
-    pi_late_resid = [v for l in [16, 18, 20, 22, 23] for v in recovery_data["PI"]["resid_post"][l] if l in recovery_data["PI"]["resid_post"]]
-    pi_attn_all = [v for l in test_layers for v in recovery_data["PI"]["attn_out"][l]]
-    pi_mlp_all = [v for l in test_layers for v in recovery_data["PI"]["mlp_out"][l]]
+    # Check PI specifically (filter None values)
+    pi_early_resid = [v for l in test_layers if l < onset_layer for v in recovery_data["PI"]["resid_post"].get(l, []) if v is not None]
+    pi_late_resid = [v for l in test_layers if l >= onset_layer for v in recovery_data["PI"]["resid_post"].get(l, []) if v is not None]
+    pi_attn_all = [v for l in test_layers for v in recovery_data["PI"]["attn_out"][l] if v is not None]
+    pi_mlp_all = [v for l in test_layers for v in recovery_data["PI"]["mlp_out"][l] if v is not None]
 
     early_mean = np.mean(pi_early_resid) if pi_early_resid else 0
     late_mean = np.mean(pi_late_resid) if pi_late_resid else 0
     attn_mean = np.mean(pi_attn_all) if pi_attn_all else 0
     mlp_mean = np.mean(pi_mlp_all) if pi_mlp_all else 0
 
-    print(f"\n  PI condition:")
-    print(f"  Early resid patching (L0-8):  {early_mean:+.0%}")
-    print(f"  Late resid patching (L16-23): {late_mean:+.0%}")
+    print(f"\n  PI condition (onset at L{onset_layer}):")
+    print(f"  Early resid patching (L0-{onset_layer-1}):  {early_mean:+.0%}")
+    print(f"  Late resid patching (L{onset_layer}-{n_layers-1}): {late_mean:+.0%}")
     print(f"  Attn_out (all layers):        {attn_mean:+.0%}")
     print(f"  MLP_out (all layers):         {mlp_mean:+.0%}")
 
@@ -356,6 +404,7 @@ def main():
         "model": args.model,
         "config": {"keys": args.keys, "updates": args.updates, "trials": args.trials},
         "test_layers": test_layers,
+        "retrieval_onset_layer": onset_layer,
         "components": components,
         "recovery": {},
     }
@@ -366,9 +415,7 @@ def main():
         }
         for comp in components:
             save_data["recovery"][cond][comp] = {
-                str(l): {"mean": float(np.mean(recovery_data[cond][comp][l])),
-                         "std": float(np.std(recovery_data[cond][comp][l])),
-                         "n": len(recovery_data[cond][comp][l])}
+                str(l): aggregate_recovery(recovery_data[cond][comp][l])
                 for l in test_layers
             }
 

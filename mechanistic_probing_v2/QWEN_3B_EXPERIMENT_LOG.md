@@ -145,21 +145,41 @@ k=5  RI    63%    47%    40%    43%     30%     30%     53%
 
 | Exp | Name | Trials | Status A | Status B | Status C | Status D |
 |-----|------|--------|----------|----------|----------|----------|
-| 12 | Logit lens + attention + DLA | 100 | TODO | TODO | TODO | TODO |
-| 13 | Positional gradient | 100 | TODO | TODO | TODO | TODO |
-| 14 | PI mass distribution | 100 | TODO | TODO | TODO | TODO |
-| 15 | Activation patching | 200 | TODO | TODO | TODO | TODO |
-| 16 | Head identification + ablation | 100+200 | TODO | TODO | TODO | TODO |
-| 17 | Instruction sensitivity | 100 | TODO | TODO | TODO | TODO |
-| 18 | Forced attention | 100 | TODO | TODO | TODO | TODO |
-| 19 | Positional bias sweep | 100 | TODO | TODO | TODO | TODO |
-| 19b | Bias attention proof | 100 | TODO | TODO | TODO | TODO |
-| 20 | Minority override | 100 | TODO | TODO | TODO | TODO |
-| 21a | Logit lens under ablation | 100 | TODO | TODO | TODO | TODO |
-| 21b | DLA split by outcome | analysis | TODO | TODO | TODO | TODO |
-| 21c | Failure output classification | analysis | TODO | TODO | TODO | TODO |
-| 22 | Query patching granular | 200 | TODO | TODO | TODO | TODO |
-| 23 | Ablation + patching interaction | 200 | TODO | TODO | TODO | TODO |
+| 12 | Logit lens + attention + DLA | 100 | TODO | DONE | TODO | TODO |
+| 13 | Positional gradient | 100 | TODO | DONE | TODO | TODO |
+| 14 | PI mass distribution | 100 | TODO | DONE | TODO | TODO |
+| 15 | Activation patching | 100 | TODO | DONE | TODO | TODO |
+| 16 | Head identification + ablation | 100+20 | TODO | DONE | TODO | TODO |
+| 17 | Instruction sensitivity | 100 | TODO | DONE | TODO | TODO |
+| 18 | Forced attention | 100 | TODO | DONE | TODO | TODO |
+| 19 | Positional bias sweep | 100 | TODO | DONE | TODO | TODO |
+| 19b | Bias attention proof | 100 | TODO | DONE | TODO | TODO |
+| 20 | Minority override | 100 | TODO | DONE | TODO | TODO |
+| 21a | Logit lens under ablation | 100 | TODO | DONE | TODO | TODO |
+| 21b | DLA split by outcome | analysis | TODO | DONE | TODO | TODO |
+| 21c | Failure output classification | analysis | TODO | DONE | TODO | TODO |
+| 22 | Query patching granular | 100 | TODO | DONE | TODO | TODO |
+| 23 | Ablation + patching interaction | 100 | TODO | DONE | TODO | TODO |
+
+### Point B (1k, 15u) Results Summary
+
+| Exp | Key Finding | Matches 0.5B? |
+|-----|-------------|---------------|
+| 12 | RI P(init)=1.00, PI P(final)=0.28. RI representation perfect. | YES — same pattern, stronger RI |
+| 13 | v1/v0 = 0.000. Literally zero probability for v1. | YES — even sharper cliff |
+| 14 | PI peaks at v11.7/14 (rel=0.84). Only 24% at last. | YES — same diffuse peak |
+| 15 | Recovery at L32-33 (~100%) for both RI and PI. | YES — last ~4 layers |
+| 16 | KO all retrieval → 0%. KO primacy → no change. | YES — same pattern |
+| 17 | Heads ignore query word (attn ~0.01). | YES — identical |
+| 18 | **Force correct → PI 10%→57% (+47pp).** | YES — even stronger than 0.5B (+18pp) |
+| 19 | No sweet spot for positional bias. | YES |
+| 19b | Blind bias → 92% to non-value tokens. Oracle works. | YES |
+| 20 | Individual head knockouts ≈ 0% impact. | YES |
+| 21a | Ablation minimal effect on accuracy and representation. | YES |
+| 21b | PI failure from weaker recency, not stronger primacy. | YES — same finding |
+| 21c | Primacy intrusion rate: 3%. Mostly garbage/wrong value. | YES — 3% vs 0-5% on 0.5B |
+| 22 | Late-layer patching gives NEGATIVE recovery (-68%). | **DIFFERENT** — 0.5B showed +50% |
+| 23 | Ablation effect weak. Normal PI=4%, Ablated PI=5%. | YES — weak on both |
 
 ### Key questions for cross-model comparison
 

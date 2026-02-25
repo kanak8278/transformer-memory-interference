@@ -1084,6 +1084,99 @@ Both normal and ablated baselines show 0% PI accuracy (harder operating point th
 
 ---
 
+### Step 2.16: Copy-Suppression Hypothesis Test (TODO — CRITICAL, highest-payoff single experiment)
+
+**Script:** `experiments/28_copy_suppression_test.py` (NEW)
+
+**The puzzle this solves:** DLA shows recency heads win overwhelmingly (sum=-11.00 vs primacy sum=+0.83). Yet PI accuracy is only 55%, and ablating the 8 primacy heads closes the gap from 35%→5%. The primacy heads are causal (ablation proves it) but aren't winning through raw logit magnitude (DLA proves it). How?
+
+**Hypothesis (from McDougall et al., BlackboxNLP 2024, [arxiv:2310.04625](https://arxiv.org/abs/2310.04625)):** The primacy-biased heads are not promoting V1 (initial value). They are **suppressing V2** (final value). Copy-suppression heads have negative eigenvalues in their OV weight matrix — they flip the sign of what they read, effectively negating downstream predictions.
+
+If true, the mechanism is:
+1. Recency heads (majority) build up a V2 signal in the residual stream (DLA = -11.00 toward V2)
+2. Primacy heads (minority) attend to positions carrying V2-related information and write a **negation** of that signal back into the residual stream
+3. The V2 signal is cancelled. V1 wins by default (because causal masking has embedded V1 deeply in the residual stream from early layers, and nobody is suppressing V1)
+4. DLA sees weak positive from primacy heads because suppressing V2 ≠ promoting V1 in logit space — it shows up as a small indirect push toward V1
+
+This resolves every contradiction in the data:
+- DLA says recency wins → correct, before suppression
+- PI accuracy is 55% → V2 signal is partially cancelled by suppression
+- Ablating primacy heads improves PI → removing the suppression lets V2 through
+- Primacy heads have weak DLA → because suppression creates an indirect effect, not a direct V1 logit push
+
+**Three tests (in order of conclusiveness):**
+
+**Test 1: OV Eigenspectrum (static weight analysis, zero forward passes)**
+
+For each of the 65 retrieval heads (all operating points, both 0.5B and 1.5B):
+```
+W_OV = W_V[layer, head] @ W_O[layer, head]   # [d_head, d_head]
+eigenvalues = eigvals(W_OV).real
+dominant_sign = sign(eigenvalue with largest absolute value)
+negative_fraction = count(eigenvalues < 0) / total
+```
+
+Expected result if hypothesis is correct:
+- Primacy-biased heads (L16H3, L19H1): dominant eigenvalues are NEGATIVE
+- Recency-responsive heads: dominant eigenvalues are POSITIVE
+- Clear separation between the two groups
+
+**Test 2: Directional Suppression Score (static weight analysis)**
+
+For each head, project the OV circuit onto V2's unembedding direction:
+```
+v2_unembed = model.W_U[:, v2_token_id]   # [d_model]
+
+# Full OV projection: what does this head do to V2-like information?
+W_OV_full = model.W_V[layer, head] @ model.W_O[layer, head]
+
+# Suppression score: negative = head suppresses V2
+suppression_score = v2_unembed @ W_OV_full @ v2_unembed
+```
+
+Run across 100 trials (different V2 tokens each time) and average. Compare distributions for primacy-biased vs recency-responsive heads.
+
+Expected result: primacy heads have negative suppression scores, recency heads have positive.
+
+**Test 3: DLA Decomposed into V1-promotion vs V2-suppression (requires forward passes)**
+
+During 100 PI trials at each operating point, for each head compute:
+```
+head_output = cache["result", layer][:, -1, head, :]   # [d_model]
+
+dla_v1 = head_output @ model.W_U[:, v1_token_id]   # contribution to V1 logit
+dla_v2 = head_output @ model.W_U[:, v2_token_id]   # contribution to V2 logit
+```
+
+Standard DLA (logit_diff = dla_v1 - dla_v2) hides the mechanism. Decomposing reveals it:
+- Normal retrieval head helping PI: dla_v1 ≈ 0, dla_v2 >> 0 (promotes V2)
+- Copy-suppression head hurting PI: dla_v1 ≈ 0, dla_v2 << 0 (suppresses V2)
+- Direct V1 promoter: dla_v1 >> 0, dla_v2 ≈ 0 (promotes V1)
+
+If primacy heads show (dla_v1 ≈ 0, dla_v2 << 0) → copy-suppression confirmed. They're not promoting V1 at all — they're tearing down V2.
+
+**Visualization for paper:**
+1. Scatter: DLA_v1 vs DLA_v2 per head, colored by primacy classification. Copy-suppression heads appear in the bottom-left quadrant (low V1, negative V2).
+2. Eigenvalue distributions: violin plot comparing primacy vs recency heads.
+3. Suppression score histogram: primacy heads in negative territory, recency heads in positive.
+
+**Outcome matrix:**
+
+| OV eigenvalues | DLA_v2 of primacy heads | Interpretation |
+|---|---|---|
+| Negative dominant | Strongly negative | **Copy-suppression confirmed.** Full mechanism identified. Paper headline: "Primacy arises from active suppression of recent values, not retrieval of old ones." |
+| Negative dominant | Near zero | Partial — OV structure supports suppression but effect is weak in practice. Report as supporting evidence, not main claim. |
+| Positive dominant | Near zero or positive | **Copy-suppression rejected.** Primacy heads are weak V1 promoters, not V2 suppressors. Fall back to information-flow corruption (exp 23) or accept the mechanism is indirect/nonlinear. |
+| Mixed | Mixed | Inconclusive. Some heads may suppress, others promote. Report the heterogeneity. |
+
+**Models:** Run on both Qwen2.5-0.5B and 1.5B. Focus on the strictly-classified heads (L16H3, L19H1) plus the broader set of retrieval heads for context.
+
+**Dependencies:** None — Test 1 and 2 are pure weight analysis. Test 3 reuses the same forward passes as exp 12.
+
+**Effort:** 1 day (mostly analysis code + interpretation)
+
+---
+
 ### Step 2.14: Positional Recency Bias Sweep (COMPLETED — mixed result)
 
 **Script:** `experiments/19_positional_bias_sweep.py`
@@ -1245,9 +1338,77 @@ Ran 12 experiments × 4 operating points × 2 models = 96 experiment runs (all a
 
 **Current recommendation:** Option A or C. Option A is the safe path — we already have 7 solid findings. Option C adds depth using an established methodology without inventing new metrics. Option B is the strongest but highest risk/effort.
 
+### Known Issues (Must Resolve Before Final Results)
+
+#### Issue 1: Single-Token Value Pool Contamination
+
+**Problem:** Our "single-token" value pool (2,300 words) was verified with space-prefix tokenization (`" storm"` = 1 token). But during generation, the model outputs tokens WITHOUT space prefix (`"storm"` may be 1 or 2 tokens depending on the word). ~34% of words in the pool are multi-token when decoded without space prefix (e.g., `"grain"` → `["gr", "ain"]`).
+
+**Impact on accuracy:** ~25% of trials scored as "wrong" are actually correct — the model predicted the right first sub-token but we compared it to the full word. Reported accuracy ~46% is actually ~72%.
+
+**Impact on logit lens/DLA:** Logit lens checks P(space-prefixed token ID) at position -1. This is the CORRECT thing to check — the model's prediction logits at position -1 correspond to the first generated token, and for single-token words (with space prefix), that IS the answer token. But for multi-token words, P(space-prefixed ID) might be low even when the model is "trying" to produce that word via sub-tokens.
+
+**Impact on failure classification (exp 21c):** Many "garbage" and "initial_prefix" failures are actually correct answers with multi-token words. The primacy intrusion rate (3-5%) may be even lower.
+
+**Fix options:**
+
+Option A — Strict pool filter (RECOMMENDED):
+- Filter to 1,292 words that are single-token BOTH with and without space prefix
+- All evaluation and probing is correct by construction
+- Pool is large enough for all operating points
+- Requires re-running all experiments
+
+Option B — Fix evaluation only:
+- Generate full answer autoregressively (up to EOS)
+- Compare decoded full text to expected answer (string comparison)
+- Probing still at position -1 (correct for logit lens — this is where prediction happens)
+- Faster fix, no pool change, but multi-token words still have noisy logit lens signal
+
+Option C — Generate + locate answer token:
+- Generate full answer, tokenize it, find the answer token(s) in generated sequence
+- For probing: run model on (input + generated prefix) to get cache at the answer prediction position
+- Most general, handles any answer format
+- But significantly more complex pipeline, and for single-token answers it reduces to position -1 anyway
+
+**Current status:** Not resolved. All existing results (0.5B × 4 points, 3B × 1 point) have this issue. Directional findings (PI > RI, primacy cliff, late-layer patching) are valid but absolute accuracy numbers are wrong.
+
+**Recommendation:** Option A. It's the cleanest fix. 1,292 words is sufficient. Same tokenizer for 0.5B and 3B (verified). All experiments need re-running anyway if we change the pool.
+
+#### Issue 2: Answer Position Assumption
+
+**Problem:** All mechanistic experiments use `answer_position = -1` (last input token). This works because:
+1. The chat template adds `<|im_start|>assistant\n` at the end
+2. Position -1 is the `\n` after `assistant`
+3. `logits[0, -1, :]` predicts what comes AFTER this `\n` — which is the first generated token
+4. The system prompt ("Answer with ONLY the exact value") ensures the first generated token IS the answer
+
+**Verification:** Tested with autoregressive generation on 20 trials — model outputs just the value, no preamble. 18/20 outputs were exactly the expected word (or multi-token spelling of it). 0/20 had explanatory text before the answer.
+
+**Risk:** This assumption holds for Qwen2.5 instruction-tuned models with our system prompt. It may NOT hold for:
+- Non-instruction-tuned models (Pythia) — these need few-shot format, different answer position
+- Models that don't follow "answer with ONLY the value" instruction
+- Different prompt formats
+
+**Status:** Valid for current Qwen experiments. Must be re-verified for each new model family. Pythia will need a completely different approach (pattern completion, not question answering).
+
+#### Issue 3: Hardcoded Layer/Threshold Decisions
+
+**Fixed:**
+- Layer sampling in exp 22/23: now dynamic based on `model.cfg.n_layers`
+- Early/late layer boundary in exp 22/23: now derived from exp 15 retrieval onset layer (data-driven, per model)
+- Hardcoded layer reference in exp 20: now uses `max(layer)` from data
+- Fallback primacy heads in exp 17/18/19/21a: now raises error instead of using wrong heads
+
+**Still arbitrary (acceptable for now, document in paper):**
+- Head classification thresholds (exp 16): `RETRIEVAL_THRESHOLD=0.10`, `PRIMACY_HIGH=0.6`, `PRIMACY_LOW=0.4` — will be revisited when head classification method is decided (Option A/B/C)
+- Interpretation thresholds in exp 22 (recovery > 0.3), exp 18 (improvement > 0.1) — only affect printed interpretation, not saved data. A reviewer can re-interpret the numbers.
+- Lambda sweep values in exp 19 — log-spaced 0 to 10, capped because exp 19b showed λ=10 saturates attention to non-value tokens
+- Retrieval onset threshold (10% recovery) — could sweep 5-20% to show onset layer is stable
+
 ### Remaining Work
 
 **Must do:**
+- Resolve Issue 1 (value pool) — decide Option A/B/C, re-run affected experiments
 - Decide on Option A/B/C for head classification
 - Gemma-3-1B-IT: setup, behavioral sweep, mechanistic suite (Phase 2B.3)
 - Gemma-3-1B-IT: SAE feature analysis with Gemma Scope 2 (exp 25)

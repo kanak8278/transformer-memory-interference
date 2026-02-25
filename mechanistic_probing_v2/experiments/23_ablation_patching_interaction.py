@@ -33,6 +33,36 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from core.model_loader import load_model
 from core.dataset import format_for_chat, ORIGINAL_CATEGORIES
 from core.single_token_values import verify_single_token
+from core.output import load_results
+from core.analysis_utils import compute_logit_diff, compute_recovery, aggregate_recovery
+
+
+def get_retrieval_onset_layer(model_name, keys, updates, n_layers, threshold=0.10):
+    """Find the layer where retrieval begins, using exp 15 activation patching data."""
+    try:
+        data = load_results(model_name, keys, updates, "activation_patching")
+    except FileNotFoundError:
+        fallback = 2 * n_layers // 3
+        print(f"  WARNING: No activation_patching results. Using fallback: L{fallback}")
+        return fallback
+
+    import numpy as np
+    pi_trials = [a for a in data["analyses"] if a["condition"] == "PI"]
+    if not pi_trials:
+        return 2 * n_layers // 3
+
+    layer_recovery = {}
+    for a in pi_trials:
+        for item in a["patching"]["resid_at_answer"]:
+            l = item["layer"]
+            layer_recovery.setdefault(l, []).append(item["recovery"])
+
+    for l in sorted(layer_recovery.keys()):
+        if np.mean(layer_recovery[l]) > threshold:
+            print(f"  Retrieval onset: L{l} ({l/n_layers*100:.0f}% through network, from exp 15)")
+            return l
+
+    return n_layers - 1
 
 
 def build_matched_pair(num_keys, num_updates, condition, seed, value_pool, categories):
@@ -219,7 +249,13 @@ def main():
 
     ablation_hooks = make_ablation_hooks(primacy_heads)
 
-    test_layers = [0, 4, 8, 12, 16, 18, 20, 22, 23]
+    # Dynamically spaced based on model depth
+    n_test = 9
+    step = max(1, model.cfg.n_layers // n_test)
+    test_layers = sorted(set(list(range(0, model.cfg.n_layers, step)) + [model.cfg.n_layers - 1]))
+
+    # Early/late boundary from exp 15
+    onset_layer = get_retrieval_onset_layer(args.model, args.keys, args.updates, model.cfg.n_layers)
 
     # Modes: normal (no ablation), ablated (8 heads zeroed)
     modes = ["normal", "ablated"]
@@ -241,6 +277,14 @@ def main():
         exp_tid_bare = tokenizer.encode(expected, add_special_tokens=False)[0]
         expected_tids = list(set([t for t in [exp_tid_sp, exp_tid_bare] if t >= 0]))
 
+        # Incorrect token for logit_diff
+        wrong_value = corr_trial["initial_value"]  # PI condition: wrong = initial
+        wrong_tid_sp = value_to_tid.get(wrong_value, -1)
+        wrong_tid_bare = tokenizer.encode(wrong_value, add_special_tokens=False)[0]
+        wrong_tids = list(set([t for t in [wrong_tid_sp, wrong_tid_bare] if t >= 0]))
+        if not wrong_tids:
+            wrong_tids = expected_tids
+
         clean_fmt = format_for_chat(clean_trial["prompt"], tokenizer)
         corr_fmt = format_for_chat(corr_trial["prompt"], tokenizer)
         clean_tokens = model.to_tokens(clean_fmt)
@@ -255,8 +299,7 @@ def main():
             # Run clean with mode-specific hooks + cache
             clean_logits, clean_cache = run_with_hooks_and_cache(
                 model, clean_tokens, extra)
-            clean_probs = torch.softmax(clean_logits[0, -1], dim=-1)
-            clean_p = max(clean_probs[t].item() for t in expected_tids)
+            clean_ld = compute_logit_diff(clean_logits[0, -1], expected_tids, wrong_tids)
 
             # Run corrupted with mode-specific hooks (no patching yet)
             with torch.no_grad():
@@ -265,8 +308,7 @@ def main():
                 else:
                     corr_logits = model(corr_tokens)
 
-            corr_probs = torch.softmax(corr_logits[0, -1], dim=-1)
-            baseline_p = max(corr_probs[t].item() for t in expected_tids)
+            baseline_ld = compute_logit_diff(corr_logits[0, -1], expected_tids, wrong_tids)
             corr_pred = tokenizer.decode([corr_logits[0, -1].argmax().item()]).strip()
             corr_correct = corr_pred.lower() == expected.lower()
 
@@ -280,14 +322,8 @@ def main():
                     clean_query_pos, corr_query_pos,
                     layer, "resid_post", extra_hooks=extra)
 
-                patched_probs = torch.softmax(patched_logits[0, -1], dim=-1)
-                patched_p = max(patched_probs[t].item() for t in expected_tids)
-
-                denom = clean_p - baseline_p
-                if abs(denom) < 1e-8:
-                    rec = 0.0
-                else:
-                    rec = (patched_p - baseline_p) / denom
+                patched_ld = compute_logit_diff(patched_logits[0, -1], expected_tids, wrong_tids)
+                rec = compute_recovery(patched_ld, baseline_ld, clean_ld)
 
                 recovery[mode][layer].append(rec)
 
@@ -316,14 +352,20 @@ def main():
     print(f"  {'-'*45}")
 
     for layer in test_layers:
-        normal_mean = np.mean(recovery["normal"][layer])
-        ablated_mean = np.mean(recovery["ablated"][layer])
-        diff = ablated_mean - normal_mean
-        print(f"  L{layer:>4}  {normal_mean:>+9.0%}  {ablated_mean:>+9.0%}  {diff:>+9.0%}")
+        normal_agg = aggregate_recovery(recovery["normal"][layer])
+        ablated_agg = aggregate_recovery(recovery["ablated"][layer])
+        diff = ablated_agg["mean"] - normal_agg["mean"]
+        filt = normal_agg["n_filtered"] + ablated_agg["n_filtered"]
+        filt_msg = f"  ({filt} filtered)" if filt > 0 else ""
+        print(f"  L{layer:>4}  {normal_agg['mean']:>+9.0%}  {ablated_agg['mean']:>+9.0%}  {diff:>+9.0%}{filt_msg}")
 
     # Summary
-    normal_late = np.mean([v for l in [16, 18, 20, 22, 23] for v in recovery["normal"][l]])
-    ablated_late = np.mean([v for l in [16, 18, 20, 22, 23] for v in recovery["ablated"][l]])
+    # Late = post-onset (from exp 15 activation patching)
+    late_test = [l for l in test_layers if l >= onset_layer]
+    normal_late_agg = aggregate_recovery([v for l in late_test for v in recovery["normal"][l]])
+    ablated_late_agg = aggregate_recovery([v for l in late_test for v in recovery["ablated"][l]])
+    normal_late = normal_late_agg["mean"]
+    ablated_late = ablated_late_agg["mean"]
     normal_acc = accuracy["normal"]["correct"] / accuracy["normal"]["total"]
     ablated_acc = accuracy["ablated"]["correct"] / accuracy["ablated"]["total"]
 
@@ -362,8 +404,7 @@ def main():
         "primacy_heads": [{"layer": l, "head": h} for l, h in primacy_heads],
         "accuracy": {m: accuracy[m]["correct"] / accuracy[m]["total"] for m in modes},
         "recovery_by_layer": {
-            m: {str(l): {"mean": float(np.mean(recovery[m][l])),
-                         "std": float(np.std(recovery[m][l]))}
+            m: {str(l): aggregate_recovery(recovery[m][l])
                 for l in test_layers}
             for m in modes
         },

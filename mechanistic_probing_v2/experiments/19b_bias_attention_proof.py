@@ -194,6 +194,16 @@ def main():
     primacy_heads = load_head_identification(args.model, args.keys, args.updates)
     print(f"Tracking {len(primacy_heads)} primacy-biased heads")
 
+    if len(primacy_heads) == 0:
+        print("  WARNING: 0 primacy heads found. Skipping bias attention proof.")
+        print("  This happens at trivial operating points where no head shows primacy bias.")
+        from core.output import save_results
+        save_results(
+            {"model": args.model, "config": {"keys": args.keys, "updates": args.updates},
+             "skipped": True, "reason": "0 primacy heads found"},
+            args.model, args.keys, args.updates, "bias_attention_proof")
+        return
+
     modes = ["none", "blind", "oracle"]
     # Accumulate attention by role across trials, per mode
     # {mode: {(layer, head): {role: total_attention}}}

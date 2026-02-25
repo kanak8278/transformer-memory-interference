@@ -31,7 +31,24 @@ CONTEXT_LIMITS = {
     "HuggingFaceTB/SmolLM2-135M-Instruct": 8_192,
     "HuggingFaceTB/SmolLM2-360M-Instruct": 8_192,
     "HuggingFaceTB/SmolLM2-1.7B-Instruct": 8_192,
+    "EleutherAI/pythia-160m": 2_048,
+    "EleutherAI/pythia-160m-deduped": 2_048,
+    "EleutherAI/pythia-410m": 2_048,
 }
+
+# Models that are base (completion-only, no chat template)
+BASE_MODELS = {
+    "EleutherAI/pythia-160m",
+    "EleutherAI/pythia-160m-deduped",
+    "EleutherAI/pythia-410m",
+    "openai-community/gpt2",
+    "openai-community/gpt2-medium",
+}
+
+
+def is_base_model(model_name: str) -> bool:
+    """Check if model is a base (completion-only) model."""
+    return model_name in BASE_MODELS
 
 
 def get_device():

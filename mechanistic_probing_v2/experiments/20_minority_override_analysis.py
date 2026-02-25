@@ -129,6 +129,16 @@ def main():
         print(f"  L{l}H{h}  retrieval={info_h.get('mean_retrieval', 0):.3f}  pi_primacy={info_h.get('pi_primacy', 0):.3f}")
     print(f"Recency-responsive heads: {len(recency_heads)}")
 
+    if len(primacy_heads) == 0:
+        print("  WARNING: 0 primacy heads found. Skipping minority override analysis.")
+        print("  This happens when no head exceeds the primacy bias threshold at this operating point.")
+        from core.output import save_results
+        save_results(
+            {"model": args.model, "config": {"keys": args.keys, "updates": args.updates},
+             "skipped": True, "reason": "0 primacy heads found"},
+            args.model, args.keys, args.updates, "minority_override")
+        return
+
     n_layers = model.cfg.n_layers
     n_heads = model.cfg.n_heads
 
@@ -361,16 +371,19 @@ def main():
         print(f"  NOT CONFIRMED: W_OV norms are similar ({wov_ratio:.2f}x). Gain is not the mechanism.")
 
     print(f"\nH3 (Layer position):")
-    l23_impact = next((hi for hi in head_impacts if hi["layer"] == 23), None)
-    other_impacts = [hi for hi in head_impacts if hi["layer"] != 23]
-    if l23_impact and other_impacts:
-        l23_change = l23_impact["pi_change"]
-        other_mean = np.mean([hi["pi_change"] for hi in other_impacts])
-        if l23_change > other_mean + 0.05:
-            print(f"  CONFIRMED: L23H0 has outsized impact (PI {l23_change:+.0%}) vs others (mean {other_mean:+.0%}).")
-            print(f"  Being in the final layer gives it the 'last word' on the residual stream.")
-        else:
-            print(f"  NOT CONFIRMED: L23H0 impact ({l23_change:+.0%}) is similar to others ({other_mean:+.0%}).")
+    if head_impacts:
+        last_layer = max(hi["layer"] for hi in head_impacts)
+        last_layer_impact = next((hi for hi in head_impacts if hi["layer"] == last_layer), None)
+        other_impacts = [hi for hi in head_impacts if hi["layer"] != last_layer]
+        if last_layer_impact and other_impacts:
+            last_change = last_layer_impact["pi_change"]
+            other_mean = np.mean([hi["pi_change"] for hi in other_impacts])
+            last_head = f"L{last_layer}H{last_layer_impact['head']}"
+            if last_change > other_mean + 0.05:
+                print(f"  CONFIRMED: {last_head} has outsized impact (PI {last_change:+.0%}) vs others (mean {other_mean:+.0%}).")
+                print(f"  Being in the final layer gives it the 'last word' on the residual stream.")
+            else:
+                print(f"  NOT CONFIRMED: {last_head} impact ({last_change:+.0%}) is similar to others ({other_mean:+.0%}).")
 
     # ── Save ──
     save_data = {

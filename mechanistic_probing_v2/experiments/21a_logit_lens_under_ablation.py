@@ -79,9 +79,11 @@ def get_primacy_heads(model_name, keys, updates):
     try:
         return load_head_identification(model_name, keys, updates)
     except FileNotFoundError:
-        # Fallback: use the heads we consistently see
-        print("  WARNING: No head_identification results found, using default primacy heads")
-        return [(16, 3), (16, 9), (14, 13)]
+        raise FileNotFoundError(
+            f"No head_identification results for {model_name} at {keys}k_{updates}u. "
+            f"Run exp 16 first: uv run python experiments/16_head_identification.py "
+            f"--model {model_name} --keys {keys} --updates {updates}"
+        )
 
 
 def make_ablation_hooks(primacy_heads):

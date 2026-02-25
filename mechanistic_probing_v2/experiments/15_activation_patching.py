@@ -46,6 +46,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from core.model_loader import load_model
 from core.dataset import format_for_chat, ORIGINAL_CATEGORIES
 from core.single_token_values import verify_single_token
+from core.analysis_utils import compute_logit_diff, compute_recovery, aggregate_recovery
 
 
 def build_matched_pair(
@@ -164,6 +165,19 @@ def run_patching(model, tokenizer, clean_trial, corrupted_trial, value_to_tid):
     expected_tid_bare = tokenizer.encode(expected_value, add_special_tokens=False)[0]
     expected_tids = list(set([t for t in [expected_tid_sp, expected_tid_bare] if t >= 0]))
 
+    # Identify the incorrect token for logit_diff (initial for PI, final for RI)
+    condition = corrupted_trial["condition"]
+    if condition == "RI":
+        wrong_value = corrupted_trial["final_value"]
+    else:
+        wrong_value = corrupted_trial["initial_value"]
+    wrong_tid_sp = value_to_tid.get(wrong_value, -1)
+    wrong_tid_bare = tokenizer.encode(wrong_value, add_special_tokens=False)[0]
+    wrong_tids = list(set([t for t in [wrong_tid_sp, wrong_tid_bare] if t >= 0]))
+
+    if not wrong_tids:
+        wrong_tids = expected_tids  # fallback — recovery will be 0
+
     # ── Run clean ──
     clean_formatted = format_for_chat(clean_trial["prompt"], tokenizer)
     clean_tokens = model.to_tokens(clean_formatted)
@@ -187,16 +201,19 @@ def run_patching(model, tokenizer, clean_trial, corrupted_trial, value_to_tid):
     corr_pred = tokenizer.decode([corr_pred_tid]).strip()
     corr_correct = corr_pred.lower() == expected_value.lower()
 
-    # Baseline P(correct) in corrupted run
+    # Logit difference metric (Wang et al. 2022 IOI, Heimersheim & Nanda 2024)
+    # logit_diff = logit(correct) - logit(incorrect)
+    clean_ld = compute_logit_diff(clean_logits[0, -1], expected_tids, wrong_tids)
+    baseline_ld = compute_logit_diff(corr_logits[0, -1], expected_tids, wrong_tids)
+
+    # Also track P(correct) for display
     corr_probs = torch.softmax(corr_logits[0, -1], dim=-1)
     baseline_p = max(corr_probs[t].item() for t in expected_tids)
-
-    # Clean P(correct) = upper bound
     clean_probs = torch.softmax(clean_logits[0, -1], dim=-1)
     clean_p = max(clean_probs[t].item() for t in expected_tids)
 
-    print(f"    Clean: '{clean_pred}' P(correct)={clean_p:.4f} ({'OK' if clean_correct else 'WRONG'})")
-    print(f"    Corrupted: '{corr_pred}' P(correct)={baseline_p:.4f} ({'OK' if corr_correct else 'WRONG'})")
+    print(f"    Clean: '{clean_pred}' ld={clean_ld:.2f} P={clean_p:.4f} ({'OK' if clean_correct else 'WRONG'})")
+    print(f"    Corrupted: '{corr_pred}' ld={baseline_ld:.2f} P={baseline_p:.4f} ({'OK' if corr_correct else 'WRONG'})")
 
     # ── Find positions to patch ──
     init_tid = value_to_tid.get(corrupted_trial["initial_value"], -1)
@@ -270,10 +287,12 @@ def run_patching(model, tokenizer, clean_trial, corrupted_trial, value_to_tid):
         patched_pred = tokenizer.decode([patched_logits[0, -1].argmax().item()]).strip()
         recovered = patched_pred.lower() == expected_value.lower()
 
-        recovery = (patched_p - baseline_p) / (clean_p - baseline_p + 1e-8)
+        patched_ld = compute_logit_diff(patched_logits[0, -1], expected_tids, wrong_tids)
+        recovery = compute_recovery(patched_ld, baseline_ld, clean_ld)
         layer_recovery.append({
             "layer": layer,
             "p_correct": patched_p,
+            "logit_diff": patched_ld,
             "recovery": recovery,
             "predicted": patched_pred,
             "correct": recovered,
@@ -282,8 +301,9 @@ def run_patching(model, tokenizer, clean_trial, corrupted_trial, value_to_tid):
     patching_results["resid_at_answer"] = layer_recovery
 
     # Sweep 2: Patch at specific VALUE positions (initial, final, all) at the best layer
-    # Find the layer with highest recovery from sweep 1
-    best_layer = max(layer_recovery, key=lambda x: x["recovery"])["layer"]
+    # Find the layer with highest recovery from sweep 1 (skip None)
+    valid_layers = [x for x in layer_recovery if x["recovery"] is not None]
+    best_layer = max(valid_layers, key=lambda x: x["recovery"])["layer"] if valid_layers else n_layers - 1
 
     position_type_results = {}
     for pos_type, positions in [
@@ -331,11 +351,13 @@ def run_patching(model, tokenizer, clean_trial, corrupted_trial, value_to_tid):
 
         patched_probs = torch.softmax(patched_logits[0, -1], dim=-1)
         patched_p = max(patched_probs[t].item() for t in expected_tids)
-        recovery = (patched_p - baseline_p) / (clean_p - baseline_p + 1e-8)
+        patched_ld = compute_logit_diff(patched_logits[0, -1], expected_tids, wrong_tids)
+        recovery = compute_recovery(patched_ld, baseline_ld, clean_ld)
 
         position_type_results[pos_type] = {
             "positions": positions,
             "p_correct": patched_p,
+            "logit_diff": patched_ld,
             "recovery": recovery,
             "layer": best_layer,
         }
@@ -355,9 +377,11 @@ def run_patching(model, tokenizer, clean_trial, corrupted_trial, value_to_tid):
         "clean_pred": clean_pred,
         "clean_correct": clean_correct,
         "clean_p": clean_p,
+        "clean_logit_diff": clean_ld,
         "corrupted_pred": corr_pred,
         "corrupted_correct": corr_correct,
         "baseline_p": baseline_p,
+        "baseline_logit_diff": baseline_ld,
         "best_recovery_layer": best_layer,
         "patching": {
             "resid_at_answer": [
@@ -424,10 +448,12 @@ def main():
 
             # Print recovery curve summary
             resid_results = result["patching"]["resid_at_answer"]
-            recoveries = [r["recovery"] for r in resid_results]
+            valid_recoveries = [r["recovery"] for r in resid_results if r["recovery"] is not None]
             best_layer = result["best_recovery_layer"]
-            best_rec = max(recoveries)
-            print(f"    Best recovery: layer {best_layer}, recovery={best_rec:.2%}")
+            best_rec = max(valid_recoveries) if valid_recoveries else 0.0
+            n_filt = sum(1 for r in resid_results if r["recovery"] is None)
+            filt_msg = f" ({n_filt} layers filtered)" if n_filt > 0 else ""
+            print(f"    Best recovery: layer {best_layer}, recovery={best_rec:.2%}{filt_msg}")
 
             pos_results = result["patching"]["position_types"]
             for ptype, pdata in pos_results.items():
@@ -457,16 +483,19 @@ def main():
         avg_baseline_p = np.mean([r["baseline_p"] for r in cond_results])
         avg_clean_p = np.mean([r["clean_p"] for r in cond_results])
 
-        # Average recovery curve
+        # Aggregate recovery per layer, filtering degenerate trials
         n_layers = info.n_layers
-        avg_recovery = np.zeros(n_layers)
-        for r in cond_results:
-            for lr in r["patching"]["resid_at_answer"]:
-                avg_recovery[lr["layer"]] += lr["recovery"]
-        avg_recovery /= len(cond_results)
+        layer_agg = {}
+        for layer in range(n_layers):
+            raw = [lr["recovery"] for r in cond_results
+                   for lr in r["patching"]["resid_at_answer"]
+                   if lr["layer"] == layer]
+            layer_agg[layer] = aggregate_recovery(raw)
 
+        avg_recovery = np.array([layer_agg[l]["mean"] for l in range(n_layers)])
         best_avg_layer = int(np.argmax(avg_recovery))
         best_avg_rec = avg_recovery[best_avg_layer]
+        total_filtered = sum(layer_agg[l]["n_filtered"] for l in range(n_layers))
 
         print(f"\n{condition}:")
         print(f"  Clean accuracy: {n_clean_correct}/{len(cond_results)}, "
@@ -474,10 +503,14 @@ def main():
         print(f"  Corrupted accuracy: {n_corr_correct}/{len(cond_results)}, "
               f"avg P(correct)={avg_baseline_p:.4f}")
         print(f"  Best avg recovery: layer {best_avg_layer} ({best_avg_rec:.2%})")
+        if total_filtered > 0:
+            print(f"  Filtered {total_filtered} degenerate trials (|clean_ld - corrupted_ld| < 0.01)")
         print(f"  Recovery by layer (sampled):")
         for l in range(0, n_layers, max(1, n_layers // 8)):
+            agg = layer_agg[l]
             bar = "█" * int(avg_recovery[l] * 20) if avg_recovery[l] > 0 else ""
-            print(f"    L{l:>2}: {avg_recovery[l]:>7.2%} {bar}")
+            filt = f" ({agg['n_filtered']} filtered)" if agg["n_filtered"] > 0 else ""
+            print(f"    L{l:>2}: {avg_recovery[l]:>7.2%} {bar}{filt}")
 
 
 if __name__ == "__main__":

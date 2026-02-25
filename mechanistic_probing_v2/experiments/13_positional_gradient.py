@@ -337,12 +337,16 @@ def main():
         print(f"  Attn:     " + " ".join(f"{a:.4f}" for a in avg_attn_last))
 
         # Is it first-only or gradual?
-        if avg_probs_last[0] > 0.001:
-            ratio = avg_probs_last[1] / avg_probs_last[0] if avg_probs_last[0] > 0 else 0
+        if len(avg_probs_last) >= 2 and avg_probs_last[0] > 0.001:
+            ratio = avg_probs_last[1] / avg_probs_last[0]
             print(f"  v1/v0 prob ratio: {ratio:.3f} (0=sharp cliff, ~1=gradual)")
-        if avg_attn_last[0] > 0.001:
-            ratio = avg_attn_last[1] / avg_attn_last[0] if avg_attn_last[0] > 0 else 0
+        elif len(avg_probs_last) < 2:
+            print(f"  v1/v0 prob ratio: N/A (only {len(avg_probs_last)} value position)")
+        if len(avg_attn_last) >= 2 and avg_attn_last[0] > 0.001:
+            ratio = avg_attn_last[1] / avg_attn_last[0]
             print(f"  v1/v0 attn ratio: {ratio:.3f}")
+        elif len(avg_attn_last) < 2:
+            print(f"  v1/v0 attn ratio: N/A (only {len(avg_attn_last)} value position)")
 
 
 if __name__ == "__main__":

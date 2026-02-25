@@ -169,8 +169,10 @@ def main():
         primacy_heads = load_head_identification(args.model, args.keys, args.updates)
         print(f"Loaded {len(primacy_heads)} primacy-biased heads")
     except FileNotFoundError:
-        primacy_heads = [(16, 3)]
-        print("head_identification not found for this operating point, using default: L16H3")
+        raise FileNotFoundError(
+            f"No head_identification results for {args.model} at {args.keys}k_{args.updates}u. "
+            f"Run exp 16 first."
+        )
 
     for l, h in primacy_heads:
         print(f"  L{l}H{h}")

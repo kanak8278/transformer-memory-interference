@@ -277,6 +277,192 @@ def format_for_chat(prompt: str, tokenizer) -> str:
     return prompt
 
 
+# ── Completion-format prompts (for base models like Pythia) ──────────────────
+
+# Short category names for completion format (base models need concise keys)
+COMPLETION_CATEGORIES = [
+    "color", "fruit", "metal", "animal", "tool",
+    "shape", "drink", "stone", "plant", "fish",
+    "sport", "bird", "grain", "dance", "spice",
+]
+
+
+def build_completion_prompt(
+    sequence: list[dict],
+    condition: str,
+    test_category: str,
+    demo_categories_list: list[list[str]] = None,
+    demo_sequences_list: list[list[dict]] = None,
+) -> tuple[str, str]:
+    """Build a completion-format prompt with few-shot demonstrations.
+
+    Uses multiple demo blocks so base models (Pythia) reliably learn the
+    first/last retrieval pattern from context.
+
+    Args:
+        sequence: interleaved key-value pairs for the TEST section
+        condition: "RI" (recall first) or "PI" (recall last)
+        test_category: which category to query
+        demo_categories_list: list of category lists, one per demo block
+        demo_sequences_list: list of demo sequences, one per demo block
+
+    Returns:
+        (prompt_text, expected_answer)
+    """
+    query_word = "first" if condition == "RI" else "last"
+
+    # Find expected answer from test sequence
+    cat_values = [item["value"] for item in sequence if item["category"] == test_category]
+    expected = cat_values[0] if condition == "RI" else cat_values[-1]
+
+    # Build demo blocks
+    demo_text = ""
+    if demo_categories_list and demo_sequences_list:
+        for demo_cats, demo_seq in zip(demo_categories_list, demo_sequences_list):
+            demo_lines = [f"{it['category']}: {it['value']}" for it in demo_seq]
+            demo_text += "\n".join(demo_lines) + "\n"
+
+            for demo_cat in demo_cats:
+                demo_vals = [it["value"] for it in demo_seq if it["category"] == demo_cat]
+                if demo_vals:
+                    demo_text += f"The first value of {demo_cat} was: {demo_vals[0]}\n"
+                    demo_text += f"The last value of {demo_cat} was: {demo_vals[-1]}\n"
+
+            demo_text += "\n"
+
+    # Build test section
+    test_lines = [f"{it['category']}: {it['value']}" for it in sequence]
+    test_text = "\n".join(test_lines)
+
+    prompt = f"{demo_text}{test_text}\nThe {query_word} value of {test_category} was:"
+
+    return prompt, expected
+
+
+def generate_few_shot_demo(
+    num_keys: int,
+    num_updates: int,
+    seed: int,
+    value_pool: list[str],
+) -> tuple[list[str], list[dict]]:
+    """Generate TWO few-shot demonstration blocks using separate categories.
+
+    Two demo blocks are needed for base models (like Pythia) to reliably learn
+    the first/last retrieval pattern from context. One block is insufficient.
+
+    Uses hardcoded natural-word values for demos (more learnable for base models)
+    while test section uses random single-token words from the pool.
+
+    Returns (demo_categories_list, demo_sequences_list) — two blocks.
+    """
+    rng = random.Random(seed + 999_999)
+
+    # Hardcoded natural demo values (recognizable, single-token in most tokenizers)
+    # Two blocks of demo categories + values
+    DEMO_BLOCKS = [
+        {
+            "categories": ["color", "animal"],
+            "values": {
+                "color": ["red", "blue", "green", "pink", "white", "black", "gold", "brown", "gray", "orange"],
+                "animal": ["cat", "dog", "bear", "fish", "bird", "wolf", "deer", "fox", "rat", "cow"],
+            },
+        },
+        {
+            "categories": ["fruit", "metal"],
+            "values": {
+                "fruit": ["apple", "grape", "lemon", "peach", "plum", "cherry", "mango", "lime", "pear", "fig"],
+                "metal": ["gold", "iron", "steel", "copper", "tin", "lead", "zinc", "brass", "silver", "chrome"],
+            },
+        },
+    ]
+
+    all_demo_cats = []
+    all_demo_seqs = []
+
+    for block in DEMO_BLOCKS:
+        # Use up to num_keys categories from this block
+        cats = block["categories"][:min(num_keys, len(block["categories"]))]
+
+        values_per_cat = {}
+        for cat in cats:
+            available = block["values"][cat]
+            n = min(num_updates, len(available))
+            values_per_cat[cat] = available[:n]
+
+        demo_seq = build_interleaved_sequence(cats, values_per_cat, rng)
+        all_demo_cats.append(cats)
+        all_demo_seqs.append(demo_seq)
+
+    return all_demo_cats, all_demo_seqs
+
+
+def generate_completion_trial(
+    num_keys: int,
+    num_updates: int,
+    condition: str,
+    seed: int,
+    value_pool: list[str],
+    test_category_idx: int = 0,
+    categories: list[str] = None,
+) -> InterferenceTrial:
+    """Generate a trial with completion-format prompt (for base models).
+
+    Like generate_trial() but uses short categories, single-token values
+    from a provided pool, and prepends a few-shot demo.
+    """
+    rng = random.Random(seed)
+
+    if categories is None:
+        # Use completion-friendly short categories (skip first 5, reserved for demos)
+        available = COMPLETION_CATEGORIES[5:]
+        categories = rng.sample(available, min(num_keys, len(available)))
+    else:
+        categories = categories[:num_keys]
+
+    # Assign values from the single-token pool
+    total_needed = num_keys * num_updates
+    if total_needed > len(value_pool):
+        raise ValueError(f"Need {total_needed} values but pool has {len(value_pool)}")
+    selected = rng.sample(value_pool, total_needed)
+
+    values_per_cat = {}
+    idx = 0
+    for cat in categories:
+        values_per_cat[cat] = selected[idx:idx + num_updates]
+        idx += num_updates
+
+    test_category = categories[test_category_idx % len(categories)]
+
+    # Build interleaved test sequence
+    sequence = build_interleaved_sequence(categories, values_per_cat, rng)
+
+    # Generate few-shot demos (2 blocks)
+    demo_cats_list, demo_seqs_list = generate_few_shot_demo(num_keys, num_updates, seed, value_pool)
+
+    # Build completion prompt
+    prompt, expected = build_completion_prompt(
+        sequence, condition, test_category,
+        demo_categories_list=demo_cats_list,
+        demo_sequences_list=demo_seqs_list,
+    )
+
+    cat_values = [item["value"] for item in sequence if item["category"] == test_category]
+
+    return InterferenceTrial(
+        categories=categories,
+        test_category=test_category,
+        condition=condition,
+        num_keys=num_keys,
+        num_updates=num_updates,
+        prompt=prompt,
+        expected_answer=expected,
+        initial_value=cat_values[0],
+        final_value=cat_values[-1],
+        all_values=cat_values,
+        seed=seed,
+    )
+
+
 def preflight_context_check(
     num_keys: int,
     num_updates: int,
