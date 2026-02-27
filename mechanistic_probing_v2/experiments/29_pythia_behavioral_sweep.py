@@ -235,11 +235,13 @@ def run_sweep(model, tokenizer, model_name, value_pool, feasible_grid, trials_pe
 
 
 def _save_results(results, model_name, partial=False):
+    from datetime import datetime, timezone
     results_dir = Path(__file__).parent.parent / "results"
     results_dir.mkdir(exist_ok=True)
 
     model_short = model_name.split("/")[-1]
     suffix = "_partial" if partial else ""
+    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
 
     # Summary (no trials)
     summary = {k: v for k, v in results.items() if k != "cells"}
@@ -247,16 +249,26 @@ def _save_results(results, model_name, partial=False):
     for cell_key, cell_data in results["cells"].items():
         summary["cells"][cell_key] = {k: v for k, v in cell_data.items() if k != "trials"}
 
-    out_path = results_dir / f"behavioral_sweep_{model_short}{suffix}.json"
-    with open(out_path, "w") as f:
+    # Timestamped (archival)
+    ts_path = results_dir / f"behavioral_sweep_{model_short}{suffix}_{ts}.json"
+    with open(ts_path, "w") as f:
         json.dump(summary, f, indent=2)
 
-    # Full (with trials)
-    full_path = results_dir / f"behavioral_sweep_{model_short}_full{suffix}.json"
-    with open(full_path, "w") as f:
+    # Latest (stable name)
+    latest_path = results_dir / f"behavioral_sweep_{model_short}{suffix}.json"
+    with open(latest_path, "w") as f:
+        json.dump(summary, f, indent=2)
+
+    # Full (with trials) — timestamped + latest
+    full_ts = results_dir / f"behavioral_sweep_{model_short}_full{suffix}_{ts}.json"
+    with open(full_ts, "w") as f:
         json.dump(results, f, indent=2)
 
-    print(f"  -> Saved to {out_path}")
+    full_latest = results_dir / f"behavioral_sweep_{model_short}_full{suffix}.json"
+    with open(full_latest, "w") as f:
+        json.dump(results, f, indent=2)
+
+    print(f"  -> Saved to {ts_path}")
 
 
 def print_summary(results):

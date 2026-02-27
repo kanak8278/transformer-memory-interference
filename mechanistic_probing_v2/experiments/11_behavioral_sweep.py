@@ -295,13 +295,14 @@ def run_sweep(
 
 
 def _save_results(results, model_name, partial=False):
-    """Save results to JSON."""
+    """Save results to JSON with timestamp to avoid overwriting."""
+    from datetime import datetime, timezone
     results_dir = Path(__file__).parent.parent / "results"
     results_dir.mkdir(exist_ok=True)
 
     model_short = model_name.split("/")[-1]
     suffix = "_partial" if partial else ""
-    out_path = results_dir / f"behavioral_sweep_{model_short}{suffix}.json"
+    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
 
     # Strip individual trials for the summary file to keep it manageable
     summary = {k: v for k, v in results.items() if k != "cells"}
@@ -311,15 +312,26 @@ def _save_results(results, model_name, partial=False):
             k: v for k, v in cell_data.items() if k != "trials"
         }
 
-    with open(out_path, "w") as f:
+    # Timestamped (archival)
+    ts_path = results_dir / f"behavioral_sweep_{model_short}{suffix}_{ts}.json"
+    with open(ts_path, "w") as f:
         json.dump(summary, f, indent=2)
 
-    # Also save full data with trials (larger file)
-    full_path = results_dir / f"behavioral_sweep_{model_short}_full{suffix}.json"
-    with open(full_path, "w") as f:
+    # Latest (stable name for downstream code)
+    latest_path = results_dir / f"behavioral_sweep_{model_short}{suffix}.json"
+    with open(latest_path, "w") as f:
+        json.dump(summary, f, indent=2)
+
+    # Full data with trials
+    full_ts_path = results_dir / f"behavioral_sweep_{model_short}_full{suffix}_{ts}.json"
+    with open(full_ts_path, "w") as f:
         json.dump(results, f, indent=2)
 
-    print(f"  -> Saved to {out_path}")
+    full_latest = results_dir / f"behavioral_sweep_{model_short}_full{suffix}.json"
+    with open(full_latest, "w") as f:
+        json.dump(results, f, indent=2)
+
+    print(f"  -> Saved to {ts_path}")
 
 
 def print_summary(results):

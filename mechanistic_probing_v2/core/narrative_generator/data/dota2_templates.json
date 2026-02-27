@@ -1,0 +1,133 @@
+{
+    "header_templates": [
+        "Game {game_id} of the {tournament}: {team1} ({team1_heroes}) versus {team2} ({team2_heroes}). {team1} secured first pick with {first_pick}, while {team2} responded with {second_pick} to anchor their draft.",
+        "A {adjective} matchup in the {tournament} as {team1} drafts {team1_heroes} against {team2}'s {team2_heroes}. The analysts gave {favored_team} a slight edge heading into this one.",
+        "Match {game_id} in the {tournament} bracket. {team1} ({team1_heroes}) locks horns with {team2} ({team2_heroes}). Both sides opted for {draft_style} drafts, setting up a {expected_pace} game.",
+        "The {tournament} continues with {team1} fielding {team1_heroes} against {team2}'s lineup of {team2_heroes}. {team1}'s {pos1_hero} will be the focal point of their strategy.",
+        "{tournament}, Game {game_id}. On the Radiant side, {team1} with {team1_heroes}. Dire responds: {team2} running {team2_heroes}. The stage is set."
+    ],
+    "farming_templates": [
+        "By the {time}-minute mark, {hero}'s efficient farming in {location} had pushed {pron_pos} {attr_name} to {attr_value}.",
+        "{hero} continued to find farm in {location}, {pron_pos} {attr_name} sitting at {attr_value} at {time} minutes.",
+        "With {cs} creeps secured by {time} minutes, {hero}'s {attr_name} stood at {attr_value} — {comparison} for a {role} at this stage.",
+        "{location} was proving productive for {hero}, who had accumulated {attr_value} {attr_label} by the {time}-minute mark.",
+        "Uncontested farm in {location} let {hero} climb to {attr_value} {attr_label} at {time} minutes, a strong pace for {pron_pos} {role} role.",
+        "At {time} minutes, {hero} was quietly farming {location}. {pron_sub} {attr_name} had reached {attr_value}, keeping pace with the game plan.",
+        "The scoreboard at {time} minutes showed {hero} at {attr_value} {attr_label} after a productive stint in {location}.",
+        "Free farm in {location} translated to {attr_value} {attr_label} for {hero} at the {time}-minute mark, well within expectations for a {role}."
+    ],
+    "solo_kill_templates": [
+        "At {time}:{seconds}, {killer} found {victim} alone near {location} and {kill_verb} {pron_obj}. The {bounty}-gold bounty pushed {killer}'s {attr_name} to {killer_attr_value}. {victim}'s {attr_name} dropped to {victim_attr_value} with a {respawn}s respawn timer.",
+        "A rotation from {killer} caught {victim} off-guard at {location}. The kill brought {killer}'s {attr_name} to {killer_attr_value}. {victim} fell to {victim_attr_value} {attr_label}, facing {respawn} seconds dead.",
+        "{killer} {kill_verb} {victim} near {location} at {time} minutes, earning {bounty} gold for the takedown. {killer} now sat at {killer_attr_value} {attr_label} while {victim} dropped to {victim_attr_value}.",
+        "An aggressive play from {killer} at {location} resulted in {victim}'s death at {time}:{seconds}. {killer}'s {attr_name} climbed to {killer_attr_value}; {victim}'s fell to {victim_attr_value}.",
+        "{victim} was caught out of position near {location} and {killer} made {pron_obj} pay. Post-kill, {killer} moved to {killer_attr_value} {attr_label}, while {victim} sat at {victim_attr_value} awaiting respawn.",
+        "At the {time}-minute mark, {killer} {kill_verb} {victim} in {location}. The {bounty}-gold swing left {killer} at {killer_attr_value} {attr_label} and {victim} at {victim_attr_value}.",
+        "{killer} executed a clean kill on {victim} near {location} at {time}:{seconds}. {killer}'s {attr_name}: {killer_attr_value}. {victim}'s {attr_name}: {victim_attr_value}. Respawn in {respawn} seconds.",
+        "A pickoff near {location} — {killer} {kill_verb} {victim} at {time} minutes. With the bounty gold, {killer} reached {killer_attr_value} {attr_label}. {victim} dropped to {victim_attr_value}."
+    ],
+    "teamfight_templates": [
+        "A massive engagement broke out at {location} at the {time}-minute mark. {winning_team} came out ahead, trading {win_kills} for {loss_kills}. {mvp} was the standout with {mvp_kills} kills, climbing to {mvp_attr_value} {attr_label}. On the losing side, {worst}'s {attr_name} dropped to {worst_attr_value}.",
+        "Chaos erupted near {location} at {time} minutes. {fight_description}. When the dust settled, {mvp} emerged at {mvp_attr_value} {attr_label}, while {worst} fell to {worst_attr_value}.",
+        "A {size}-hero teamfight at {location} around the {time}-minute mark went {winning_team}'s way, {win_kills} to {loss_kills}. {mvp} hit {mvp_attr_value} {attr_label} after the engagement. {worst} was left at {worst_attr_value}.",
+        "{winning_team} forced a fight at {location} at {time} minutes and came out with {win_kills} kills to {loss_kills}. {mvp} reached {mvp_attr_value} {attr_label}. {worst} dropped to {worst_attr_value} after dying.",
+        "The teams clashed at {location} at {time} minutes. {winning_team} won the fight decisively — {win_kills} kills for {loss_kills}. Post-fight, {mvp} sat at {mvp_attr_value} {attr_label}. {worst} was down to {worst_attr_value}.",
+        "A pivotal teamfight at {location} ({time} min) saw {winning_team} take {win_kills} kills while conceding {loss_kills}. {mvp}'s {attr_name} surged to {mvp_attr_value}. Meanwhile, {worst} fell to {worst_attr_value}.",
+        "Fighting broke out near {location} at {time} minutes. {fight_description}. {mvp} came out on top at {mvp_attr_value} {attr_label}; {worst} was the biggest loser at {worst_attr_value}.",
+        "At {time} minutes, a full-scale engagement at {location}. {winning_team} took the fight {win_kills}-{loss_kills}. {mvp} climbed to {mvp_attr_value} {attr_label}. On the other side, {worst}'s {attr_name} sank to {worst_attr_value}."
+    ],
+    "item_purchase_templates": [
+        "{hero} completed {item} for {cost} gold at {time} minutes, leaving {pron_obj} with {remaining_gold} gold in reserve. {pron_pos} {attr_name} now stood at {attr_value}.",
+        "A trip to the shop saw {hero} pick up {item} at the {time}-minute mark. After spending {cost} gold, {pron_pos} {attr_name} sat at {attr_value}.",
+        "With {item} now in {pron_pos} inventory, {hero}'s {attr_name} reached {attr_value} at {time} minutes. The {cost}-gold purchase was a key timing.",
+        "{hero} secured {item} at {time} minutes, a critical pickup for the {role}. {pron_pos} {attr_name} moved to {attr_value} after the {cost}-gold investment.",
+        "At {time} minutes, {hero} finished {item} ({cost} gold). {pron_pos} {attr_name}: {attr_value}. This completed {pron_pos} {item_tier} item progression.",
+        "The {item} came online for {hero} at {time} minutes — {cost} gold well spent. {pron_pos} {attr_name} was now {attr_value}.",
+        "{hero} picked up {item} at the {time}-minute mark for {cost} gold, an important piece of the puzzle. {attr_name}: {attr_value}.",
+        "Backing to complete {item} ({cost} gold) at {time} minutes, {hero}'s {attr_name} adjusted to {attr_value}. {item_significance}."
+    ],
+    "tower_kill_templates": [
+        "{team} pushed down the {lane} tier {tier} tower at {time} minutes. The {tower_gold}-gold team bounty boosted everyone — notably {hero}, whose {attr_name} rose to {attr_value}.",
+        "The {lane} lane tier {tier} tower fell to {team} at the {time}-minute mark, distributing {tower_gold} gold to each player. {hero}'s {attr_name} climbed to {attr_value}.",
+        "At {time} minutes, {team} took the {lane} T{tier}. The team gold pushed {hero}'s {attr_name} to {attr_value}. Map control shifted accordingly.",
+        "{team} secured the {lane} tier {tier} tower at {time} minutes after a sustained push. {hero} hit {attr_value} {attr_label} from the {tower_gold}-gold injection.",
+        "The {lane} T{tier} crumbled under {team}'s pressure at {time} minutes. {tower_gold} gold per hero. {hero}'s {attr_name}: {attr_value}.",
+        "Objective-focused play from {team} netted the {lane} tier {tier} tower at the {time}-minute mark. {hero} benefited most, reaching {attr_value} {attr_label}.",
+        "At {time} minutes, the {lane} T{tier} fell. {team} pocketed {tower_gold} gold each. {hero}'s {attr_name} ticked up to {attr_value}.",
+        "{team}'s sustained siege paid off — {lane} tier {tier} tower down at {time} minutes. {hero} reached {attr_value} {attr_label} with the team bounty."
+    ],
+    "roshan_templates": [
+        "{team} secured Roshan at {time} minutes, with {carrier} claiming the Aegis. The bonus gold pushed {hero}'s {attr_name} to {attr_value}.",
+        "Roshan fell to {team} at the {time}-minute mark — their {nth} Roshan kill. {drops}. {hero}'s {attr_name} climbed to {attr_value}.",
+        "A clean Roshan take by {team} at {time} minutes. {carrier} grabbed the Aegis. The shared bounty brought {hero}'s {attr_name} to {attr_value}.",
+        "At {time} minutes, {team} snuck Roshan. {drops}. Post-Rosh, {hero} sat at {attr_value} {attr_label}.",
+        "{team} committed to the Roshan pit at {time} minutes and secured the kill. {carrier} took the Aegis. {hero}'s {attr_name} reached {attr_value}.",
+        "Roshan number {rosh_count} went to {team} at {time} minutes. {drops}. {hero} moved to {attr_value} {attr_label} from the bounty.",
+        "The Roshan pit was the site of {team}'s {nth} Rosh kill at {time} minutes. {hero}'s {attr_name} jumped to {attr_value}. {carrier} held the Aegis.",
+        "A quick Roshan by {team} at the {time}-minute mark. The gold distribution pushed {hero} to {attr_value} {attr_label}. {drops}."
+    ],
+    "level_up_templates": [
+        "{hero} hit {attr_value} at {time} minutes, unlocking {ability_note}.",
+        "A wave of experience pushed {hero} to {attr_value} at the {time}-minute mark.",
+        "{hero} reached {attr_value} at {time} minutes — {timing_assessment} for a {role}.",
+        "At {time} minutes, {hero} dinged {attr_value}. {ability_note}.",
+        "The experience from {xp_source} pushed {hero} to {attr_value} at {time} minutes.",
+        "{hero}'s level ticked up to {attr_value} at the {time}-minute mark, keeping pace with the {role} benchmark.",
+        "With {attr_value} now reached at {time} minutes, {hero} had {ability_note}.",
+        "{hero} leveled to {attr_value} at {time} minutes after clearing {xp_source}."
+    ],
+    "death_respawn_templates": [
+        "{hero} was {kill_verb} at {location} at {time} minutes. {pron_pos} {attr_name} dropped to {attr_value}. Respawn: {respawn}s.",
+        "A costly death for {hero} at {location} at {time} minutes — {pron_pos} {attr_name} fell to {attr_value}. {respawn} seconds off the map.",
+        "{hero} fell at {location} ({time} min), losing gold and dropping to {attr_value} {attr_label}. The {respawn}-second death timer was punishing.",
+        "At {time} minutes, {hero} died near {location}. {pron_pos} {attr_name} slid to {attr_value}. Back in {respawn} seconds.",
+        "{hero}'s death at {location} at the {time}-minute mark cost {gold_lost} gold. {attr_name}: {attr_value}. Respawn in {respawn}s.",
+        "Caught out at {location}, {hero} went down at {time} minutes. {pron_pos} {attr_name} dropped to {attr_value}. {respawn}s until return.",
+        "A {death_context} death for {hero} at {location} at {time} minutes. {attr_name} now: {attr_value}. Off the map for {respawn} seconds.",
+        "{hero} was eliminated near {location} at {time} minutes, {pron_pos} {attr_name} falling to {attr_value}. The team played 4v5 for {respawn} seconds."
+    ],
+    "barracks_kill_templates": [
+        "{team} destroyed the {lane} {rax_type} barracks at {time} minutes. Super creeps would now march down the {lane} lane. {hero}'s {attr_name} hit {attr_value}.",
+        "The {lane} {rax_type} barracks fell to {team} at {time} minutes. {hero} reached {attr_value} {attr_label} from the {rax_gold}-gold bounty.",
+        "At {time} minutes, {team} took the {lane} {rax_type} rax. {hero}'s {attr_name} moved to {attr_value}. The map pressure intensified.",
+        "{team} broke through the {lane} high ground at {time} minutes, destroying the {rax_type} barracks. {hero} sat at {attr_value} {attr_label}.",
+        "The {lane} {rax_type} barracks crumbled at {time} minutes. {team} now had super creeps in {lane}. {hero}'s {attr_name}: {attr_value}.",
+        "High ground breached — {team} razed the {lane} {rax_type} rax at {time} minutes. {hero} climbed to {attr_value} {attr_label}.",
+        "At the {time}-minute mark, {team} demolished the {lane} {rax_type} barracks. {rax_gold} gold distributed. {hero}'s {attr_name} reached {attr_value}.",
+        "{team}'s push paid off: {lane} {rax_type} barracks down at {time} minutes. {hero} hit {attr_value} {attr_label}. The mega creep threat loomed."
+    ],
+    "filler_templates": [
+        "{hero} had maxed out {ability} by this point, giving {pron_obj} strong {ability_type} presence.",
+        "Ward vision from {support} revealed enemy movements near {location}, giving {team} the information advantage.",
+        "The draft advantage was beginning to show — {team}'s {hero} was creating space across the map.",
+        "Both teams had committed their teleport scrolls, leaving the opposite side of the map exposed.",
+        "The gold graph showed {team} with a modest lead at this stage, though the lineup favored {other_team} in the late game.",
+        "{hero} rotated to {location} looking for a gank opportunity, but found nothing and returned to farming.",
+        "Smoke of Deceit was used by {team}, but the gank attempt was read and no kills came of it.",
+        "A power rune spawned at the {rune_spot} — {hero} grabbed the {rune_type} rune.",
+        "The {lane} lane equilibrium had shifted heavily toward {team}'s side after the recent engagement.",
+        "{hero} stacked the ancients for {teammate}, setting up a future farming opportunity."
+    ],
+    "segment_transition_templates": [
+        "As the game moved past the {time}-minute mark, the pace shifted toward {phase_description}.",
+        "The {old_phase} phase was over. At {time} minutes, {phase_description} began in earnest.",
+        "With the clock reading {time} minutes, the game transitioned into {phase_description}.",
+        "{time} minutes in and the game entered a new stage — {phase_description}.",
+        "The {old_phase} gave way to {phase_description} as the timer hit {time} minutes."
+    ],
+    "kill_verbs": [
+        "ganked",
+        "burst down",
+        "picked off",
+        "solo-killed",
+        "dove and killed",
+        "ambushed",
+        "deleted",
+        "caught and eliminated"
+    ],
+    "pronouns": {
+        "pron_sub": "they",
+        "pron_obj": "them",
+        "pron_pos": "their"
+    }
+}

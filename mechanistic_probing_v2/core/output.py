@@ -6,15 +6,18 @@ Folder structure:
         {model_short}/
             behavioral_sweep.json          # Phase 1 (no operating point)
             {keys}k_{updates}u/
-                logit_lens.json
+                logit_lens.json            # symlink → latest timestamped version
+                logit_lens_20260227_031500.json
                 head_identification.json
-                forced_attention.json
+                head_identification_20260227_041200.json
                 ...
 
 All experiment scripts should use get_output_path() to construct paths.
+Timestamped copies are saved alongside so re-runs never overwrite prior results.
 """
 
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -75,12 +78,22 @@ def load_head_identification(model: str, keys: int, updates: int) -> list[tuple[
     return [(h["layer"], h["head"]) for h in data["primacy_biased_heads"]]
 
 
+def _timestamp_str() -> str:
+    return datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+
+
 def save_results(data: dict, model: str, keys: int, updates: int, experiment: str) -> Path:
     """Save results JSON with standard metadata and return the path.
+
+    Saves TWO files:
+      1. {experiment}_{timestamp}.json  — timestamped, never overwritten
+      2. {experiment}.json              — always points to the latest run
 
     Automatically injects data_setup, value_pool_size, category_source,
     and timestamp into the saved data if not already present.
     """
+    ts = _timestamp_str()
+
     # Inject standard metadata if missing
     if "data_setup" not in data and "config" not in data:
         data.update(DATA_SETUP)
@@ -92,8 +105,18 @@ def save_results(data: dict, model: str, keys: int, updates: int, experiment: st
         if "timestamp" not in data["config"]:
             data["config"]["timestamp"] = datetime.now(timezone.utc).isoformat()
 
-    path = get_output_path(model, keys, updates, experiment)
-    with open(path, "w") as f:
+    out_dir = get_output_dir(model, keys, updates)
+
+    # 1. Timestamped file (archival — never overwritten)
+    ts_path = out_dir / f"{experiment}_{ts}.json"
+    with open(ts_path, "w") as f:
         json.dump(data, f, indent=2)
-    print(f"\nSaved to {path}")
-    return path
+
+    # 2. Latest file (stable name for downstream code to read)
+    latest_path = out_dir / f"{experiment}.json"
+    with open(latest_path, "w") as f:
+        json.dump(data, f, indent=2)
+
+    print(f"\nSaved to {ts_path}")
+    print(f"  (latest: {latest_path})")
+    return latest_path
