@@ -32,9 +32,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.model_loader import load_model
-from core.dataset_configs import format_for_chat, ORIGINAL_CATEGORIES
-from core.model_loader import verify_single_token
+from core.model_loader import load_model, verify_single_token
+from core.dataset_configs import (
+    format_for_chat, ORIGINAL_CATEGORIES,
+    get_value_pool, build_interleaved_sequence,
+)
 from core.output import save_results
 
 
@@ -73,20 +75,8 @@ def build_matched_pair(num_keys, num_updates, seed, value_pool):
     )
 
     # Corrupted: all updates, interleaved
-    corr_items = []
-    for cat in categories:
-        for val in values_per_cat[cat]:
-            corr_items.append({"category": cat, "value": val})
-
     rng3 = random.Random(seed + 2000)
-    rng3.shuffle(corr_items)
-    for _ in range(100):
-        ok = all(corr_items[i]["category"] != corr_items[i - 1]["category"]
-                 for i in range(1, len(corr_items)))
-        if ok:
-            break
-        rng3.shuffle(corr_items)
-
+    corr_items = build_interleaved_sequence(categories, values_per_cat, rng3)
     corr_stream = "\n".join(f"{it['category']}: {it['value']}" for it in corr_items)
     corr_prompt = (
         f"Read the following key-value stream. Each key gets updated multiple times.\n\n"
@@ -203,7 +193,8 @@ def main():
     print("=" * 70)
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
-    value_to_tid = verify_single_token(tokenizer)
+    candidate_pool = get_value_pool("ARBITRARY_SINGLE")
+    value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())
 
     n_layers = model.cfg.n_layers

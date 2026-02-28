@@ -4,13 +4,23 @@ Exp 21a: Logit lens under ablation.
 Does ablating primacy heads change the P(init)/P(final) trajectory?
 Runs logit lens in two modes:
   1. Normal — baseline P(init), P(final) per layer
-  2. With primacy heads ablated — does P(initial) drop at L16+?
+  2. With primacy heads ablated — does P(initial) drop?
 
-If ablating shifts the trajectory → causal evidence of information flow corruption.
+If ablating shifts the trajectory → causal evidence that these heads
+are responsible for boosting the initial value's representation.
+
+Heads come from exp 25a (per_head_knockout.json → top_primacy_heads).
+How to extract:
+    import json
+    d = json.load(open("results/{model}/{keys}k_{updates}u/per_head_knockout.json"))
+    primacy = d["top_primacy_heads"][:5]
+    --heads = " ".join(f"{h['layer']},{h['head']}" for h in primacy)
 
 Usage:
     cd mechanistic_probing_v2
-    uv run python experiments/21a_logit_lens_under_ablation.py [--keys 1 --updates 5 --trials 100]
+    python experiments/21a_logit_lens_under_ablation.py \\
+        --model Qwen/Qwen2.5-0.5B-Instruct --keys 1 --updates 5 --trials 50 \\
+        --heads "12,0 8,8 16,3"
 """
 
 import sys
@@ -24,12 +34,25 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.model_loader import load_model
-from core.dataset_configs import format_for_chat, ORIGINAL_CATEGORIES
-from core.model_loader import verify_single_token
+from core.model_loader import load_model, verify_single_token
+from core.dataset_configs import (
+    format_for_chat, ORIGINAL_CATEGORIES,
+    get_value_pool, build_interleaved_sequence, build_prompt,
+)
 from core.output import save_results
+
+
+def parse_heads(heads_str):
+    """Parse '14,2 8,3' into [(14,2), (8,3)]."""
+    heads = []
+    for h in heads_str.strip().split():
+        parts = h.split(",")
+        heads.append((int(parts[0]), int(parts[1])))
+    return heads
+
+
 def build_trial(num_keys, num_updates, condition, seed, value_pool, categories):
-    """Build a single trial."""
+    """Build a single trial using dataset_configs building blocks."""
     rng = random.Random(seed)
     cats = categories[:num_keys]
     total_needed = num_keys * num_updates
@@ -41,49 +64,14 @@ def build_trial(num_keys, num_updates, condition, seed, value_pool, categories):
         idx += num_updates
 
     test_cat = cats[seed % num_keys]
-    items = []
-    for cat in cats:
-        for val in values_per_cat[cat]:
-            items.append({"category": cat, "value": val})
-
-    rng.shuffle(items)
-    for _ in range(100):
-        ok = all(items[i]["category"] != items[i-1]["category"] for i in range(1, len(items)))
-        if ok:
-            break
-        rng.shuffle(items)
-
-    stream_lines = [f"{it['category']}: {it['value']}" for it in items]
-    stream_text = "\n".join(stream_lines)
-    query_word = "first" if condition == "RI" else "last"
-    cat_values = [it["value"] for it in items if it["category"] == test_cat]
-    expected = cat_values[0] if condition == "RI" else cat_values[-1]
-    initial_value = cat_values[0]
-    final_value = cat_values[-1]
-
-    prompt = (
-        f"Read the following key-value stream. Each key gets updated multiple times.\n\n"
-        f"{stream_text}\n\n"
-        f"What was the {query_word} value of {test_cat}?"
-    )
+    sequence = build_interleaved_sequence(cats, values_per_cat, rng)
+    prompt, expected = build_prompt(sequence, condition, test_cat)
+    cat_values = [it["value"] for it in sequence if it["category"] == test_cat]
 
     return {
         "prompt": prompt, "expected": expected, "condition": condition,
-        "initial_value": initial_value, "final_value": final_value,
+        "initial_value": cat_values[0], "final_value": cat_values[-1],
     }
-
-
-def get_primacy_heads(model_name, keys, updates):
-    """Load primacy heads from exp 16 results."""
-    from core.output import load_head_identification
-    try:
-        return load_head_identification(model_name, keys, updates)
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            f"No head_identification results for {model_name} at {keys}k_{updates}u. "
-            f"Run exp 16 first: uv run python experiments/16_head_identification.py "
-            f"--model {model_name} --keys {keys} --updates {updates}"
-        )
 
 
 def make_ablation_hooks(primacy_heads):
@@ -137,6 +125,8 @@ def main():
     parser.add_argument("--updates", type=int, default=5)
     parser.add_argument("--trials", type=int, default=100)
     parser.add_argument("--n-ctx", type=int, default=2048)
+    parser.add_argument("--heads", required=True,
+                        help="Primacy heads from exp 25a top_primacy_heads. E.g., '12,0 8,8'")
     args = parser.parse_args()
 
     print("=" * 70)
@@ -145,12 +135,13 @@ def main():
     print("=" * 70)
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
-    value_to_tid = verify_single_token(tokenizer)
+    candidate_pool = get_value_pool("ARBITRARY_SINGLE")
+    value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())
     categories = ORIGINAL_CATEGORIES
 
-    primacy_heads = get_primacy_heads(args.model, args.keys, args.updates)
-    print(f"Primacy heads to ablate: {primacy_heads}")
+    primacy_heads = parse_heads(args.heads)
+    print(f"Primacy heads to ablate (from exp 25a): {primacy_heads}")
     ablation_hooks = make_ablation_hooks(primacy_heads)
 
     modes = ["normal", "ablated"]

@@ -31,9 +31,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.model_loader import load_model
-from core.dataset_configs import format_for_chat, ORIGINAL_CATEGORIES
-from core.model_loader import verify_single_token
+from core.model_loader import load_model, verify_single_token
+from core.dataset_configs import (
+    format_for_chat, ORIGINAL_CATEGORIES, get_value_pool,
+)
 from core.output import load_results
 from core.analysis_utils import compute_logit_diff, compute_recovery, aggregate_recovery
 
@@ -213,7 +214,8 @@ def main():
     print("=" * 70)
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
-    value_to_tid = verify_single_token(tokenizer)
+    candidate_pool = get_value_pool("ARBITRARY_SINGLE")
+    value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())
     categories = ORIGINAL_CATEGORIES
     n_layers = model.cfg.n_layers

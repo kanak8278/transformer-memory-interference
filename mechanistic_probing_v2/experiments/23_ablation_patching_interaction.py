@@ -30,9 +30,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.model_loader import load_model
-from core.dataset_configs import format_for_chat, ORIGINAL_CATEGORIES
-from core.model_loader import verify_single_token
+from core.model_loader import load_model, verify_single_token
+from core.dataset_configs import (
+    format_for_chat, ORIGINAL_CATEGORIES, get_value_pool,
+)
 from core.output import load_results
 from core.analysis_utils import compute_logit_diff, compute_recovery, aggregate_recovery
 
@@ -230,6 +231,8 @@ def main():
     parser.add_argument("--updates", type=int, default=10)
     parser.add_argument("--keys", type=int, default=2)
     parser.add_argument("--n-ctx", type=int, default=2048)
+    parser.add_argument("--heads", required=True,
+                        help="Primacy heads from exp 25a top_primacy_heads. E.g., '12,0 8,8'")
     args = parser.parse_args()
 
     print("=" * 70)
@@ -238,14 +241,13 @@ def main():
     print("=" * 70)
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
-    value_to_tid = verify_single_token(tokenizer)
+    candidate_pool = get_value_pool("ARBITRARY_SINGLE")
+    value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())
     categories = ORIGINAL_CATEGORIES
 
-    # Load primacy heads
-    from core.output import load_head_identification
-    primacy_heads = load_head_identification(args.model, args.keys, args.updates)
-    print(f"Primacy heads to ablate: {primacy_heads}")
+    primacy_heads = [tuple(map(int, h.split(","))) for h in args.heads.strip().split()]
+    print(f"Primacy heads to ablate (from exp 25a): {primacy_heads}")
 
     ablation_hooks = make_ablation_hooks(primacy_heads)
 
