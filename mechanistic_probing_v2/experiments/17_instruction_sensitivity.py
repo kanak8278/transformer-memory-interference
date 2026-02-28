@@ -31,7 +31,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
 from core.dataset import format_for_chat, ORIGINAL_CATEGORIES
-from core.single_token_values import verify_single_token
+from core.model_loader import verify_single_token
 
 
 def build_matched_ri_pi(num_keys, num_updates, seed, value_pool, categories):

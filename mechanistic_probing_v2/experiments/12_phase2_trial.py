@@ -26,7 +26,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
 from core.dataset import format_for_chat, SYSTEM_PROMPT, ORIGINAL_CATEGORIES
-from core.single_token_values import get_single_token_pool, verify_single_token
+from core.model_loader import get_single_token_pool, verify_single_token
 from core.token_tracker import build_token_map, summarize_token_map
 from core.analysis_utils import (
     logit_lens_all_layers, logit_lens_to_dict,

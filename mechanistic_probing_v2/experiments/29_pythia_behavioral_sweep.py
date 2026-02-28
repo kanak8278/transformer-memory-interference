@@ -29,7 +29,7 @@ from core.model_loader import load_model_hf, get_context_limit
 from core.dataset import (
     generate_completion_trial, COMPLETION_CATEGORIES,
 )
-from core.single_token_values import verify_single_token
+from core.model_loader import verify_single_token
 
 
 # Smaller grid for 160M model with 2048 context

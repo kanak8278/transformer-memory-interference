@@ -18,7 +18,7 @@ import numpy as np
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from core.single_token_values import verify_single_token
+from core.model_loader import verify_single_token
 
 
 def classify_failure(trial, value_pool_set):
@@ -101,7 +101,7 @@ def main():
 
     # Load value pool for classification
     from core.model_loader import load_model
-    from core.single_token_values import get_single_token_pool
+    from core.model_loader import get_single_token_pool
     pool = get_single_token_pool()
     value_pool_set = set(w.lower() for w in pool)
 

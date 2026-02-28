@@ -37,7 +37,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
 from core.dataset import format_for_chat, ORIGINAL_CATEGORIES
-from core.single_token_values import verify_single_token
+from core.model_loader import verify_single_token
 from core.analysis_utils import compute_logit_diff
 from core.output import save_results
 

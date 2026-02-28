@@ -40,7 +40,7 @@ from core.dataset import (
     build_completion_prompt, build_interleaved_sequence,
     generate_few_shot_demo,
 )
-from core.single_token_values import verify_single_token
+from core.model_loader import verify_single_token
 from core.output import save_results
 
 

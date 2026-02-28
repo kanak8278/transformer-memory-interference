@@ -66,6 +66,12 @@ from mechanistic_probing_v2.core.dataset_configs import (
     generate_values_for_trial,
     VALID_DATASET_TYPES,
 )
+from mechanistic_probing_v2.core.model_loader import (
+    clear_accelerator_cache,
+    is_instruct_model,
+    model_short_name,
+    load_model_hf,
+)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -101,18 +107,6 @@ DEFAULT_CONFIG = {
     "resume": None,
 }
 
-# ── Models that use chat template. All others use completion format.
-INSTRUCT_MODELS = {
-    "Qwen/Qwen2.5-0.5B-Instruct",
-    "Qwen/Qwen2.5-1.5B-Instruct",
-    "Qwen/Qwen2.5-3B-Instruct",
-    "google/gemma-3-1b-it",
-    "google/gemma-2-2b-it",
-    "HuggingFaceTB/SmolLM2-135M-Instruct",
-    "HuggingFaceTB/SmolLM2-360M-Instruct",
-    "HuggingFaceTB/SmolLM2-1.7B-Instruct",
-}
-
 # ── Instruct models use a bigger grid (larger context windows)
 INSTRUCT_KEY_LEVELS = [2, 3, 5, 7, 10, 15, 20, 25, 30, 46]
 INSTRUCT_UPDATE_LEVELS = [1, 3, 5, 10, 20, 50, 100, 200]
@@ -123,40 +117,6 @@ SYSTEM_PROMPT = "Answer with ONLY the exact value. No explanation."
 # These use ARBITRARY_MULTI values regardless of --dataset, since they're
 # just teaching the model the task format, not part of the evaluation.
 DEMO_CATEGORIES = ["visual art", "tools", "landform", "musical instrument"]
-
-
-def is_instruct_model(model_name):
-    return model_name in INSTRUCT_MODELS
-
-
-def model_short_name(model_name):
-    return model_name.split("/")[-1]
-
-
-def detect_device(gpu_idx=None):
-    """Auto-detect best available device: cuda → mps → cpu.
-
-    Args:
-        gpu_idx: If set and CUDA available, use this GPU index.
-                 If None, auto-detect.
-
-    Returns:
-        (device_str, device_name) — e.g. ("cuda:0", "NVIDIA V100 16GB")
-    """
-    import torch
-
-    if torch.cuda.is_available():
-        if gpu_idx is not None:
-            os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_idx)
-        device = "cuda:0"
-        props = torch.cuda.get_device_properties(0)
-        name = f"{props.name}, {props.total_mem / 1e9:.1f} GB"
-        return device, name
-
-    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-        return "mps", "Apple Silicon MPS"
-
-    return "cpu", "CPU"
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -379,15 +339,6 @@ def bootstrap_ci(data, n_bootstrap=2000, ci=0.95):
     boot_means = [rng_np.choice(arr, size=len(arr), replace=True).mean() for _ in range(n_bootstrap)]
     alpha = (1 - ci) / 2
     return mean, np.percentile(boot_means, alpha * 100), np.percentile(boot_means, (1 - alpha) * 100)
-
-
-def clear_accelerator_cache(device):
-    """Clear accelerator memory cache if applicable."""
-    import torch
-    if "cuda" in str(device) and torch.cuda.is_available():
-        torch.cuda.empty_cache()
-    elif str(device) == "mps" and hasattr(torch, "mps"):
-        torch.mps.empty_cache()
 
 
 def run_batch(model, tokenizer, prompts, max_new_tokens=20, device="cuda"):
@@ -712,20 +663,13 @@ def print_summary(results):
 # ═══════════════════════════════════════════════════════════════════════════
 
 def main():
-    import torch
-
     args = parse_args()
 
-    # Auto-detect device (cuda → mps → cpu)
-    device, device_name = detect_device(gpu_idx=args.gpu)
-
-    # Detect model type
+    # Detect model type and dataset
     use_chat = is_instruct_model(args.model)
     m_short = model_short_name(args.model)
     fmt = "chat_template" if use_chat else "completion_few_shot"
     dataset_type = args.dataset
-
-    # Load dataset config
     ds_config = load_dataset_config(dataset_type)
 
     # Select grid based on model type
@@ -736,16 +680,22 @@ def main():
         kl = DEFAULT_CONFIG["key_levels"]
         ul = DEFAULT_CONFIG["update_levels"]
 
+    # Load model via core/model_loader (handles device detection, dtype, etc.)
+    model, tokenizer, info = load_model_hf(args.model, gpu_idx=args.gpu)
+    device = info.device
+    ctx_limit = info.n_ctx
+
     print("=" * 70)
     print(f"BEHAVIORAL SWEEP")
     print(f"  Model:    {args.model} ({m_short})")
     print(f"  Type:     {'Instruct (chat template)' if use_chat else 'Base (completion few-shot)'}")
     print(f"  Dataset:  {dataset_type} — {ds_config['name']}")
-    print(f"  Device:   {device} ({device_name})")
+    print(f"  Device:   {device} ({info.device_name})")
     print(f"  Trials:   {args.trials} per cell per condition")
     print(f"  Batch:    {args.batch_size}")
     print(f"  Grid:     {len(kl)} keys × {len(ul)} updates = {len(kl)*len(ul)} cells")
     print(f"  Format:   {fmt}")
+    print(f"  Context:  {ctx_limit}")
     print(f"  Save:     {args.save_dir}/{m_short}/")
     print("=" * 70)
 
@@ -757,38 +707,6 @@ def main():
         mx = get_max_updates(dataset_type, nk)
         if mx > 0:
             print(f"  {nk:>3} keys → max {mx} updates")
-
-    # Load model
-    print(f"\nLoading {args.model}...")
-    from transformers import AutoModelForCausalLM, AutoTokenizer
-
-    tokenizer = AutoTokenizer.from_pretrained(args.model)
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-
-    # float16 for instruct (larger models), float32 for base/Mamba
-    # MPS doesn't support float16 well for all ops, use float32
-    if device == "mps":
-        dtype = torch.float32
-    else:
-        dtype = torch.float16 if use_chat else torch.float32
-
-    if device in ("cpu", "mps"):
-        # MPS and CPU don't support device_map, load to CPU then move
-        model = AutoModelForCausalLM.from_pretrained(
-            args.model, torch_dtype=dtype,
-        ).to(device)
-    else:
-        model = AutoModelForCausalLM.from_pretrained(
-            args.model, torch_dtype=dtype, device_map=device,
-        )
-    model.eval()
-
-    n_params = sum(p.numel() for p in model.parameters())
-    print(f"  Loaded: {n_params:,} params, dtype={dtype}, device={device} ({device_name})")
-
-    ctx_limit = getattr(model.config, "max_position_embeddings", 2048)
-    print(f"  Context limit: {ctx_limit}")
 
     # Preflight: check both pool size AND context fit
     print(f"\nPreflight check (pool size + context)...")
