@@ -35,10 +35,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.model_loader import load_model
+from core.model_loader import load_model, verify_single_token
 from core.dataset_configs import format_for_chat, ORIGINAL_CATEGORIES
-from core.model_loader import verify_single_token
 from core.analysis_utils import compute_logit_diff
+from core.evaluation import bootstrap_ci
 from core.output import save_results
 
 
@@ -99,16 +99,6 @@ def get_tids(value, value_to_tid, tokenizer):
     tid_sp = value_to_tid.get(value, -1)
     tid_bare = tokenizer.encode(value, add_special_tokens=False)[0]
     return list(set([t for t in [tid_sp, tid_bare] if t >= 0]))
-
-
-def bootstrap_ci(data, n_bootstrap=2000, ci=0.95):
-    arr = np.array(data, dtype=float)
-    if len(arr) < 3:
-        return float(arr.mean()), 0.0, 1.0
-    rng = np.random.RandomState(42)
-    boot = [rng.choice(arr, size=len(arr), replace=True).mean() for _ in range(n_bootstrap)]
-    alpha = (1 - ci) / 2
-    return float(arr.mean()), float(np.percentile(boot, alpha * 100)), float(np.percentile(boot, (1 - alpha) * 100))
 
 
 def run_knockout_both_conditions(model, tokenizer, value_to_tid, value_pool,

@@ -30,47 +30,12 @@ from core.dataset_configs import (
     generate_completion_trial, COMPLETION_CATEGORIES,
 )
 from core.model_loader import verify_single_token
+from core.evaluation import classify_error, bootstrap_ci
 
 
 # Smaller grid for 160M model with 2048 context
 KEY_LEVELS_PYTHIA = [2, 3, 5, 7, 10]
 UPDATE_LEVELS_PYTHIA = [1, 2, 3, 5, 7, 10, 15, 20, 30]
-
-
-def classify_error(predicted, expected, initial_value, final_value, all_values, condition):
-    """Classify error type (same logic as experiment 11)."""
-    pred_lower = predicted.lower().strip()
-    exp_lower = expected.lower().strip()
-
-    if exp_lower in pred_lower or pred_lower.startswith(exp_lower):
-        return "correct"
-
-    init_lower = initial_value.lower()
-    final_lower = final_value.lower()
-
-    if condition == "PI" and (init_lower in pred_lower or pred_lower.startswith(init_lower)):
-        return "primacy_intrusion"
-    if condition == "RI" and (final_lower in pred_lower or pred_lower.startswith(final_lower)):
-        return "recency_intrusion"
-
-    for val in all_values:
-        if val.lower() != exp_lower and (val.lower() in pred_lower or pred_lower.startswith(val.lower())):
-            return "intermediate_intrusion"
-
-    return "garbage"
-
-
-def bootstrap_ci(data, n_bootstrap=2000, ci=0.95):
-    if not data:
-        return 0.0, 0.0, 0.0
-    arr = np.array(data, dtype=float)
-    mean = arr.mean()
-    if len(arr) < 3:
-        return mean, 0.0, 1.0
-    rng = np.random.RandomState(42)
-    boot_means = [rng.choice(arr, size=len(arr), replace=True).mean() for _ in range(n_bootstrap)]
-    alpha = (1 - ci) / 2
-    return mean, np.percentile(boot_means, alpha * 100), np.percentile(boot_means, (1 - alpha) * 100)
 
 
 def run_single_trial(model, tokenizer, trial, max_new_tokens=10):

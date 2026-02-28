@@ -31,73 +31,7 @@ from core.dataset_configs import (
     generate_trial, compute_feasible_grid, format_for_chat,
     KEY_LEVELS, UPDATE_LEVELS, ORIGINAL_CATEGORIES,
 )
-
-
-def classify_error(
-    predicted: str,
-    expected: str,
-    initial_value: str,
-    final_value: str,
-    all_values: list[str],
-    condition: str,
-) -> str:
-    """Classify error type.
-
-    Returns one of:
-        "correct" — predicted matches expected
-        "primacy_intrusion" — predicted the initial value when asking for last (PI error)
-        "recency_intrusion" — predicted the final value when asking for first (RI error)
-        "intermediate_intrusion" — predicted a middle value
-        "other_category" — predicted something that looks like a value from another category
-        "garbage" — predicted nonsense or refusal
-    """
-    pred_lower = predicted.lower().strip()
-    exp_lower = expected.lower().strip()
-
-    if exp_lower in pred_lower or pred_lower.startswith(exp_lower):
-        return "correct"
-
-    init_lower = initial_value.lower()
-    final_lower = final_value.lower()
-
-    if condition == "PI" and (init_lower in pred_lower or pred_lower.startswith(init_lower)):
-        return "primacy_intrusion"
-
-    if condition == "RI" and (final_lower in pred_lower or pred_lower.startswith(final_lower)):
-        return "recency_intrusion"
-
-    # Check if it's an intermediate value
-    for val in all_values:
-        if val.lower() != exp_lower and (val.lower() in pred_lower or pred_lower.startswith(val.lower())):
-            return "intermediate_intrusion"
-
-    return "garbage"
-
-
-def bootstrap_ci(data: list[bool], n_bootstrap: int = 2000, ci: float = 0.95) -> tuple[float, float, float]:
-    """Compute bootstrap confidence interval for accuracy.
-
-    Returns (mean, ci_lower, ci_upper).
-    """
-    if not data:
-        return 0.0, 0.0, 0.0
-
-    arr = np.array(data, dtype=float)
-    mean = arr.mean()
-
-    if len(arr) < 3:
-        return mean, 0.0, 1.0
-
-    rng = np.random.RandomState(42)
-    boot_means = []
-    for _ in range(n_bootstrap):
-        sample = rng.choice(arr, size=len(arr), replace=True)
-        boot_means.append(sample.mean())
-
-    alpha = (1 - ci) / 2
-    ci_lower = np.percentile(boot_means, alpha * 100)
-    ci_upper = np.percentile(boot_means, (1 - alpha) * 100)
-    return mean, ci_lower, ci_upper
+from core.evaluation import classify_error, bootstrap_ci
 
 
 def run_single_trial(model, tokenizer, trial, max_new_tokens=20, backend="huggingface"):

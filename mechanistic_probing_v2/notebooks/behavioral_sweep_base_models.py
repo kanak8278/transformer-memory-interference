@@ -72,6 +72,8 @@ from mechanistic_probing_v2.core.model_loader import (
     model_short_name,
     load_model_hf,
 )
+from mechanistic_probing_v2.core.inference import run_batch
+from mechanistic_probing_v2.core.evaluation import classify_error, bootstrap_ci
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -305,65 +307,6 @@ def generate_trial(dataset_type, num_keys, num_updates, condition, seed,
         "seed": seed,
         "dataset_type": dataset_type,
     }
-
-
-# ═══════════════════════════════════════════════════════════════════════════
-# INFERENCE AND EVALUATION
-# ═══════════════════════════════════════════════════════════════════════════
-
-def classify_error(predicted, expected, initial_value, final_value, all_values, condition):
-    pred_lower = predicted.lower().strip()
-    exp_lower = expected.lower().strip()
-    if exp_lower in pred_lower or pred_lower.startswith(exp_lower):
-        return "correct"
-    init_lower = initial_value.lower()
-    final_lower = final_value.lower()
-    if condition == "PI" and (init_lower in pred_lower or pred_lower.startswith(init_lower)):
-        return "primacy_intrusion"
-    if condition == "RI" and (final_lower in pred_lower or pred_lower.startswith(final_lower)):
-        return "recency_intrusion"
-    for val in all_values:
-        if val.lower() != exp_lower and (val.lower() in pred_lower or pred_lower.startswith(val.lower())):
-            return "intermediate_intrusion"
-    return "garbage"
-
-
-def bootstrap_ci(data, n_bootstrap=2000, ci=0.95):
-    if not data:
-        return 0.0, 0.0, 0.0
-    arr = np.array(data, dtype=float)
-    mean = arr.mean()
-    if len(arr) < 3:
-        return mean, 0.0, 1.0
-    rng_np = np.random.RandomState(42)
-    boot_means = [rng_np.choice(arr, size=len(arr), replace=True).mean() for _ in range(n_bootstrap)]
-    alpha = (1 - ci) / 2
-    return mean, np.percentile(boot_means, alpha * 100), np.percentile(boot_means, (1 - alpha) * 100)
-
-
-def run_batch(model, tokenizer, prompts, max_new_tokens=20, device="cuda"):
-    """Run a batch of prompts through the model. Returns list of generated strings."""
-    import torch
-
-    tokenizer.padding_side = "left"
-    inputs = tokenizer(prompts, return_tensors="pt", padding=True, truncation=True,
-                       max_length=2048)
-    inputs = {k: v.to(device) for k, v in inputs.items()}
-
-    with torch.no_grad():
-        gen_ids = model.generate(
-            **inputs, max_new_tokens=max_new_tokens,
-            do_sample=False, temperature=None, top_p=None,
-        )
-
-    answers = []
-    for i in range(len(prompts)):
-        prompt_len = inputs["attention_mask"][i].sum().item()
-        new_ids = gen_ids[i, prompt_len:]
-        answer = tokenizer.decode(new_ids, skip_special_tokens=True).strip().split("\n")[0].strip()
-        answers.append(answer)
-
-    return answers
 
 
 def preflight_context_check(dataset_type, num_keys, num_updates, tokenizer,
