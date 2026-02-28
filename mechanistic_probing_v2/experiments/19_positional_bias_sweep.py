@@ -1,7 +1,7 @@
 """
-Step 2.13: Positional recency bias sweep.
+Exp 19: Positional recency bias sweep.
 
-Add a linear recency bias to the 8 primacy-biased heads' pre-softmax
+Add a linear recency bias to causally-identified primacy heads' pre-softmax
 attention scores. Sweep λ to find whether there's a sweet spot where
 PI improves without destroying RI.
 
@@ -10,6 +10,14 @@ PI improves without destroying RI.
 Two modes:
   - blind:  bias applied to ALL positions (no oracle knowledge)
   - oracle: bias applied ONLY to value token positions
+
+Heads come from exp 25a (per_head_knockout.json → top_primacy_heads).
+How to extract:
+    import json
+    d = json.load(open("results/{model}/{keys}k_{updates}u/per_head_knockout.json"))
+    primacy = d["top_primacy_heads"][:5]
+    --heads = " ".join(f"{h['layer']},{h['head']}" for h in primacy)
+    # e.g. --heads "8,3 0,7 0,3"
 
 Usage:
     cd mechanistic_probing_v2
@@ -26,9 +34,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.model_loader import load_model
-from core.dataset_configs import format_for_chat, ORIGINAL_CATEGORIES
-from core.model_loader import verify_single_token
+from core.model_loader import load_model, verify_single_token
+from core.dataset_configs import (
+    format_for_chat, ORIGINAL_CATEGORIES,
+    get_value_pool, build_interleaved_sequence, build_prompt,
+)
 
 
 def build_trial(num_keys, num_updates, condition, seed, value_pool, categories):
@@ -43,29 +53,13 @@ def build_trial(num_keys, num_updates, condition, seed, value_pool, categories):
         idx += num_updates
 
     test_cat = cats[seed % num_keys]
-    items = []
-    for cat in cats:
-        for val in values_per_cat[cat]:
-            items.append({"category": cat, "value": val})
 
-    rng.shuffle(items)
-    for _ in range(100):
-        ok = all(items[i]["category"] != items[i-1]["category"] for i in range(1, len(items)))
-        if ok:
-            break
-        rng.shuffle(items)
-
-    stream = "\n".join(f"{it['category']}: {it['value']}" for it in items)
-    query_word = "first" if condition == "RI" else "last"
-    cat_values = [it["value"] for it in items if it["category"] == test_cat]
-    expected = cat_values[0] if condition == "RI" else cat_values[-1]
+    sequence = build_interleaved_sequence(cats, values_per_cat, rng)
+    prompt, expected = build_prompt(sequence, condition, test_cat)
+    cat_values = [it["value"] for it in sequence if it["category"] == test_cat]
 
     return {
-        "prompt": (
-            f"Read the following key-value stream. Each key gets updated multiple times.\n\n"
-            f"{stream}\n\n"
-            f"What was the {query_word} value of {test_cat}?"
-        ),
+        "prompt": prompt,
         "condition": condition, "expected": expected,
         "initial_value": cat_values[0], "final_value": cat_values[-1],
         "all_values": cat_values, "seed": seed,
@@ -150,6 +144,15 @@ def run_baseline(model, tokenizer, trial):
     return pred_text, correct
 
 
+def parse_heads(heads_str):
+    """Parse '14,2 8,3' into [(14,2), (8,3)]."""
+    heads = []
+    for h in heads_str.strip().split():
+        parts = h.split(",")
+        heads.append((int(parts[0]), int(parts[1])))
+    return heads
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
@@ -158,6 +161,8 @@ def main():
     parser.add_argument("--keys", type=int, default=2)
     parser.add_argument("--n-ctx", type=int, default=2048)
     parser.add_argument("--mode", default="blind", choices=["blind", "oracle"])
+    parser.add_argument("--heads", required=True,
+                        help="Primacy heads from exp 25a as 'layer,head' pairs. E.g., '14,2 8,3'")
     args = parser.parse_args()
 
     lambda_values = [0, 0.25, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 7.0, 10.0]
@@ -169,21 +174,13 @@ def main():
     print("=" * 70)
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
-    value_to_tid = verify_single_token(tokenizer)
+    candidate_pool = get_value_pool("ARBITRARY_SINGLE")
+    value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())
     categories = ORIGINAL_CATEGORIES
 
-    # Load primacy-biased heads
-    from core.output import load_head_identification
-    try:
-        primacy_heads = load_head_identification(args.model, args.keys, args.updates)
-        print(f"Loaded {len(primacy_heads)} primacy-biased heads")
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            f"No head_identification results for {args.model} at {args.keys}k_{args.updates}u. "
-            f"Run exp 16 first."
-        )
-
+    primacy_heads = parse_heads(args.heads)
+    print(f"Primacy heads (from exp 25a): {len(primacy_heads)}")
     for l, h in primacy_heads:
         print(f"  L{l}H{h}")
 

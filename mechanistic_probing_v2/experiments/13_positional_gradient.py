@@ -30,9 +30,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.model_loader import load_model
-from core.dataset_configs import format_for_chat, ORIGINAL_CATEGORIES
-from core.model_loader import verify_single_token
+from core.model_loader import load_model, verify_single_token
+from core.dataset_configs import (
+    format_for_chat, ORIGINAL_CATEGORIES,
+    get_value_pool, build_interleaved_sequence, build_prompt,
+)
 
 
 def build_trial(
@@ -43,7 +45,10 @@ def build_trial(
     value_pool: list[str],
     categories: list[str],
 ) -> dict:
-    """Build a trial. Returns dict with all value metadata."""
+    """Build a trial using dataset_configs building blocks.
+
+    value_pool must be pre-filtered with verify_single_token(tokenizer).
+    """
     rng = random.Random(seed)
 
     total_needed = num_keys * num_updates
@@ -59,40 +64,20 @@ def build_trial(
 
     test_cat = categories[seed % num_keys]
 
-    # Build interleaved sequence
-    items = []
-    for cat in categories[:num_keys]:
-        for ui, val in enumerate(values_per_cat[cat]):
-            items.append({"category": cat, "value": val, "update_idx": ui})
+    sequence = build_interleaved_sequence(categories[:num_keys], values_per_cat, rng)
+    prompt, _ = build_prompt(sequence, condition, test_cat)
 
-    rng.shuffle(items)
-    for _ in range(100):
-        ok = all(items[i]["category"] != items[i-1]["category"] for i in range(1, len(items)))
-        if ok:
-            break
-        rng.shuffle(items)
-
-    stream_lines = [f"{it['category']}: {it['value']}" for it in items]
-    stream_text = "\n".join(stream_lines)
-    query_word = "first" if condition == "RI" else "last"
-
-    cat_values = [it["value"] for it in items if it["category"] == test_cat]
-
-    prompt = (
-        f"Read the following key-value stream. Each key gets updated multiple times.\n\n"
-        f"{stream_text}\n\n"
-        f"What was the {query_word} value of {test_cat}?"
-    )
+    cat_values = [it["value"] for it in sequence if it["category"] == test_cat]
 
     return {
         "prompt": prompt,
         "condition": condition,
         "test_category": test_cat,
-        "all_values": cat_values,  # in order of appearance in prompt
+        "all_values": cat_values,
         "num_keys": num_keys,
         "num_updates": num_updates,
         "seed": seed,
-        "items": items,  # full sequence for position tracking
+        "items": sequence,
     }
 
 
@@ -235,9 +220,10 @@ def main():
     print("=" * 70)
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
-    value_to_tid = verify_single_token(tokenizer)
+    candidate_pool = get_value_pool("ARBITRARY_SINGLE")
+    value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())
-    print(f"Value pool: {len(value_pool)} single-token values")
+    print(f"Candidate pool: {len(candidate_pool)} words → verified {len(value_pool)} single-token for this model")
 
     categories = ORIGINAL_CATEGORIES
 

@@ -1,17 +1,27 @@
 """
-Step 2.14b: Prove WHY oracle bias works and blind bias doesn't.
+Exp 19b: Prove WHY oracle bias works and blind bias doesn't.
 
-Extract attention patterns of the 8 primacy-biased heads under:
+Extract attention patterns of causally-identified primacy heads under:
   - No bias (baseline)
-  - Blind bias at λ=10
-  - Oracle bias at λ=10
+  - Blind bias at λ=10 (applied to ALL positions)
+  - Oracle bias at λ=10 (applied ONLY to value positions)
 
-Show that blind bias shifts attention to query/instruction tokens,
-while oracle bias shifts attention to the final value.
+Shows that blind bias shifts attention to query/instruction tokens,
+while oracle bias correctly redirects attention to the final value.
+
+Heads come from exp 25a (per_head_knockout.json → top_primacy_heads).
+How to extract:
+    import json
+    d = json.load(open("results/{model}/{keys}k_{updates}u/per_head_knockout.json"))
+    primacy = d["top_primacy_heads"][:5]
+    --heads = " ".join(f"{h['layer']},{h['head']}" for h in primacy)
+    # e.g. --heads "8,3 0,7 0,3"
 
 Usage:
     cd mechanistic_probing_v2
-    uv run python experiments/19b_bias_attention_proof.py [--trials 20]
+    python experiments/19b_bias_attention_proof.py \\
+        --model Qwen/Qwen2.5-1.5B-Instruct --keys 1 --updates 3 --trials 20 \\
+        --heads "8,3 0,7 0,3" --lam 10.0
 """
 
 import sys
@@ -24,9 +34,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.model_loader import load_model
-from core.dataset_configs import format_for_chat, ORIGINAL_CATEGORIES
-from core.model_loader import verify_single_token
+from core.model_loader import load_model, verify_single_token
+from core.dataset_configs import (
+    format_for_chat, ORIGINAL_CATEGORIES,
+    get_value_pool, build_interleaved_sequence, build_prompt,
+)
 
 
 def build_trial(num_keys, num_updates, condition, seed, value_pool, categories):
@@ -41,29 +53,13 @@ def build_trial(num_keys, num_updates, condition, seed, value_pool, categories):
         idx += num_updates
 
     test_cat = cats[seed % num_keys]
-    items = []
-    for cat in cats:
-        for val in values_per_cat[cat]:
-            items.append({"category": cat, "value": val})
 
-    rng.shuffle(items)
-    for _ in range(100):
-        ok = all(items[i]["category"] != items[i-1]["category"] for i in range(1, len(items)))
-        if ok:
-            break
-        rng.shuffle(items)
-
-    stream = "\n".join(f"{it['category']}: {it['value']}" for it in items)
-    query_word = "first" if condition == "RI" else "last"
-    cat_values = [it["value"] for it in items if it["category"] == test_cat]
-    expected = cat_values[0] if condition == "RI" else cat_values[-1]
+    sequence = build_interleaved_sequence(cats, values_per_cat, rng)
+    prompt, expected = build_prompt(sequence, condition, test_cat)
+    cat_values = [it["value"] for it in sequence if it["category"] == test_cat]
 
     return {
-        "prompt": (
-            f"Read the following key-value stream. Each key gets updated multiple times.\n\n"
-            f"{stream}\n\n"
-            f"What was the {query_word} value of {test_cat}?"
-        ),
+        "prompt": prompt,
         "condition": condition, "expected": expected,
         "initial_value": cat_values[0], "final_value": cat_values[-1],
         "all_values": cat_values, "seed": seed,
@@ -169,6 +165,15 @@ def run_with_bias_and_extract(model, tokenizer, trial, value_to_tid,
     return correct, head_attention_by_role
 
 
+def parse_heads(heads_str):
+    """Parse '14,2 8,3' into [(14,2), (8,3)]."""
+    heads = []
+    for h in heads_str.strip().split():
+        parts = h.split(",")
+        heads.append((int(parts[0]), int(parts[1])))
+    return heads
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
@@ -177,6 +182,8 @@ def main():
     parser.add_argument("--keys", type=int, default=2)
     parser.add_argument("--n-ctx", type=int, default=2048)
     parser.add_argument("--lam", type=float, default=10.0)
+    parser.add_argument("--heads", required=True,
+                        help="Primacy heads from exp 25a as 'layer,head' pairs. E.g., '14,2 8,3'")
     args = parser.parse_args()
 
     print("=" * 70)
@@ -185,24 +192,13 @@ def main():
     print("=" * 70)
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
-    value_to_tid = verify_single_token(tokenizer)
+    candidate_pool = get_value_pool("ARBITRARY_SINGLE")
+    value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())
     categories = ORIGINAL_CATEGORIES
 
-    # Load primacy-biased heads
-    from core.output import load_head_identification
-    primacy_heads = load_head_identification(args.model, args.keys, args.updates)
-    print(f"Tracking {len(primacy_heads)} primacy-biased heads")
-
-    if len(primacy_heads) == 0:
-        print("  WARNING: 0 primacy heads found. Skipping bias attention proof.")
-        print("  This happens at trivial operating points where no head shows primacy bias.")
-        from core.output import save_results
-        save_results(
-            {"model": args.model, "config": {"keys": args.keys, "updates": args.updates},
-             "skipped": True, "reason": "0 primacy heads found"},
-            args.model, args.keys, args.updates, "bias_attention_proof")
-        return
+    primacy_heads = parse_heads(args.heads)
+    print(f"Tracking {len(primacy_heads)} primacy heads (from exp 25a)")
 
     modes = ["none", "blind", "oracle"]
     # Accumulate attention by role across trials, per mode

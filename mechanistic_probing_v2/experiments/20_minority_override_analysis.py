@@ -1,15 +1,36 @@
 """
-Step 2.13: Why does the minority (8 primacy-biased heads) override
-the majority (53 recency-responsive heads)?
+Exp 20: Why does the minority (primacy-biased heads) override
+the majority (recency-responsive heads)?
 
 Three hypotheses tested:
   H1: Disproportionate DLA magnitude — primacy heads push harder per head
   H2: OV circuit gain — primacy heads have larger W_OV norms
-  H3: Layer position — L23H0 gets the "last word"
+  H3: Layer position — primacy heads get the "last word" in later layers
 
-Usage:
-    cd mechanistic_probing_v2
-    uv run python experiments/20_minority_override_analysis.py [--trials 30]
+Inputs come from exp 25a (per_head_knockout.json):
+  --primacy-heads   : top_primacy_heads  (positive causal_effect = knocking out HELPS PI)
+  --recency-heads   : top_retrieval_heads (negative causal_effect = knocking out HURTS PI)
+  --causal-effects  : causal_effect values for each primacy head (in same order as --primacy-heads)
+
+How to extract from exp 25a results:
+    import json
+    d = json.load(open("results/{model}/{keys}k_{updates}u/per_head_knockout.json"))
+
+    # Primacy heads (help PI when knocked out):
+    primacy = d["top_primacy_heads"][:5]  # take top N
+    --primacy-heads  = " ".join(f"{h['layer']},{h['head']}" for h in primacy)
+    --causal-effects = " ".join(f"{h['causal_effect']:.3f}" for h in primacy)
+
+    # Recency heads (hurt PI when knocked out):
+    recency = d["top_retrieval_heads"][:10]  # take top N
+    --recency-heads  = " ".join(f"{h['layer']},{h['head']}" for h in recency)
+
+Example:
+    python experiments/20_minority_override_analysis.py \\
+        --model Qwen/Qwen2.5-1.5B-Instruct --keys 1 --updates 3 --trials 30 \\
+        --primacy-heads "8,3 0,7 0,3" \\
+        --recency-heads "12,5 16,2 22,1 8,9 3,4" \\
+        --causal-effects "8.3 2.1 1.7"
 """
 
 import sys
@@ -22,9 +43,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.model_loader import load_model
-from core.dataset_configs import format_for_chat, ORIGINAL_CATEGORIES
-from core.model_loader import verify_single_token
+from core.model_loader import load_model, verify_single_token
+from core.dataset_configs import (
+    format_for_chat, ORIGINAL_CATEGORIES,
+    get_value_pool, build_interleaved_sequence, build_prompt,
+)
 from core.analysis_utils import compute_dla
 
 
@@ -40,29 +63,13 @@ def build_trial(num_keys, num_updates, condition, seed, value_pool, categories):
         idx += num_updates
 
     test_cat = cats[seed % num_keys]
-    items = []
-    for cat in cats:
-        for val in values_per_cat[cat]:
-            items.append({"category": cat, "value": val})
 
-    rng.shuffle(items)
-    for _ in range(100):
-        ok = all(items[i]["category"] != items[i-1]["category"] for i in range(1, len(items)))
-        if ok:
-            break
-        rng.shuffle(items)
-
-    stream = "\n".join(f"{it['category']}: {it['value']}" for it in items)
-    query_word = "first" if condition == "RI" else "last"
-    cat_values = [it["value"] for it in items if it["category"] == test_cat]
-    expected = cat_values[0] if condition == "RI" else cat_values[-1]
+    sequence = build_interleaved_sequence(cats, values_per_cat, rng)
+    prompt, expected = build_prompt(sequence, condition, test_cat)
+    cat_values = [it["value"] for it in sequence if it["category"] == test_cat]
 
     return {
-        "prompt": (
-            f"Read the following key-value stream. Each key gets updated multiple times.\n\n"
-            f"{stream}\n\n"
-            f"What was the {query_word} value of {test_cat}?"
-        ),
+        "prompt": prompt,
         "condition": condition, "expected": expected,
         "initial_value": cat_values[0], "final_value": cat_values[-1],
         "all_values": cat_values, "seed": seed,
@@ -92,6 +99,15 @@ def run_with_knockout(model, tokenizer, trial, heads_to_knock):
     return pred_text, correct
 
 
+def parse_heads(heads_str):
+    """Parse '14,2 8,3' into [(14,2), (8,3)]."""
+    heads = []
+    for h in heads_str.strip().split():
+        parts = h.split(",")
+        heads.append((int(parts[0]), int(parts[1])))
+    return heads
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
@@ -99,6 +115,14 @@ def main():
     parser.add_argument("--updates", type=int, default=5)
     parser.add_argument("--keys", type=int, default=2)
     parser.add_argument("--n-ctx", type=int, default=2048)
+    parser.add_argument("--primacy-heads", required=True,
+                        help="Primacy heads from exp 25a top_primacy_heads. E.g., '12,0 8,8'")
+    parser.add_argument("--recency-heads", required=True,
+                        help="Recency heads from exp 25a top_retrieval_heads. E.g., '8,3 0,7'")
+    parser.add_argument("--causal-effects", default=None,
+                        help="Causal effect scores from exp 25a for each primacy head "
+                             "(space-separated floats, same order as --primacy-heads). "
+                             "E.g., '8.3 2.1 1.7'. If omitted, shown as N/A.")
     args = parser.parse_args()
 
     print("=" * 70)
@@ -107,37 +131,30 @@ def main():
     print("=" * 70)
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
-    value_to_tid = verify_single_token(tokenizer)
+    candidate_pool = get_value_pool("ARBITRARY_SINGLE")
+    value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())
     categories = ORIGINAL_CATEGORIES
 
-    # Load head classification
-    from core.output import load_results
-    head_data = load_results(args.model, args.keys, args.updates, "head_identification")
+    primacy_heads = parse_heads(args.primacy_heads)
+    recency_heads = parse_heads(args.recency_heads)
+    causal_effects = (
+        [float(x) for x in args.causal_effects.strip().split()]
+        if args.causal_effects else [None] * len(primacy_heads)
+    )
+    if len(causal_effects) != len(primacy_heads):
+        raise ValueError(
+            f"--causal-effects has {len(causal_effects)} values but "
+            f"--primacy-heads has {len(primacy_heads)} heads"
+        )
 
-    primacy_heads = [(h["layer"], h["head"]) for h in head_data["primacy_biased_heads"]]
-    recency_heads = [(h["layer"], h["head"]) for h in head_data["recency_responsive_heads"]]
-
-    # Also get retrieval head metadata for reference
-    retrieval_lookup = {}
-    for h in head_data["retrieval_heads"]:
-        retrieval_lookup[(h["layer"], h["head"])] = h
-
-    print(f"Primacy-biased heads: {len(primacy_heads)}")
-    for l, h in primacy_heads:
-        info_h = retrieval_lookup.get((l, h), {})
-        print(f"  L{l}H{h}  retrieval={info_h.get('mean_retrieval', 0):.3f}  pi_primacy={info_h.get('pi_primacy', 0):.3f}")
-    print(f"Recency-responsive heads: {len(recency_heads)}")
-
-    if len(primacy_heads) == 0:
-        print("  WARNING: 0 primacy heads found. Skipping minority override analysis.")
-        print("  This happens when no head exceeds the primacy bias threshold at this operating point.")
-        from core.output import save_results
-        save_results(
-            {"model": args.model, "config": {"keys": args.keys, "updates": args.updates},
-             "skipped": True, "reason": "0 primacy heads found"},
-            args.model, args.keys, args.updates, "minority_override")
-        return
+    print(f"Primacy heads (from exp 25a top_primacy_heads): {len(primacy_heads)}")
+    for (l, h), ce in zip(primacy_heads, causal_effects):
+        ce_str = f"  causal_effect={ce:+.3f}" if ce is not None else ""
+        print(f"  L{l}H{h}{ce_str}")
+    print(f"Recency heads (from exp 25a top_retrieval_heads): {len(recency_heads)}")
+    for l, h in recency_heads:
+        print(f"  L{l}H{h}")
 
     n_layers = model.cfg.n_layers
     n_heads = model.cfg.n_heads
@@ -277,11 +294,12 @@ def main():
 
     # Per-head breakdown for primacy heads
     print(f"\n  Per primacy head DLA (PI condition):")
-    print(f"  {'Head':<10} {'DLA(PI)':>10} {'DLA(RI)':>10} {'||W_OV||':>10} {'Retrieval':>10}")
+    print(f"  {'Head':<10} {'DLA(PI)':>10} {'DLA(RI)':>10} {'||W_OV||':>10} {'KO Effect':>10}")
     print(f"  {'-'*55}")
     for i, (l, h) in enumerate(primacy_heads):
-        info_h = retrieval_lookup.get((l, h), {})
-        print(f"  L{l}H{h:<5} {primacy_dla_pi[i]:>+10.2f} {primacy_dla_ri[i]:>+10.2f} {primacy_wov[i]:>10.2f} {info_h.get('mean_retrieval', 0):>10.3f}")
+        ce = causal_effects[i]
+        ce_str = f"{ce:>+10.3f}" if ce is not None else f"{'N/A':>10}"
+        print(f"  L{l}H{h:<5} {primacy_dla_pi[i]:>+10.2f} {primacy_dla_ri[i]:>+10.2f} {primacy_wov[i]:>10.2f} {ce_str}")
 
     # ═══════════════════════════════════════════════════════════════════
     # H3: Per-head ablation (layer position / causal impact)

@@ -40,9 +40,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.model_loader import load_model
-from core.dataset_configs import format_for_chat, ORIGINAL_CATEGORIES
-from core.model_loader import verify_single_token
+from core.model_loader import load_model, verify_single_token
+from core.dataset_configs import (
+    format_for_chat, ORIGINAL_CATEGORIES,
+    get_value_pool, build_interleaved_sequence, build_prompt,
+)
 from core.analysis_utils import compute_logit_diff
 from core.output import save_results
 
@@ -68,29 +70,13 @@ def build_trial(num_keys, num_updates, condition, seed, value_pool):
         idx += num_updates
 
     test_cat = categories[seed % num_keys]
-    items = []
-    for cat in categories:
-        for val in values_per_cat[cat]:
-            items.append({"category": cat, "value": val})
 
-    rng.shuffle(items)
-    for _ in range(100):
-        ok = all(items[i]["category"] != items[i - 1]["category"] for i in range(1, len(items)))
-        if ok:
-            break
-        rng.shuffle(items)
-
-    stream = "\n".join(f"{it['category']}: {it['value']}" for it in items)
-    query_word = "first" if condition == "RI" else "last"
-    cat_values = [it["value"] for it in items if it["category"] == test_cat]
-    expected = cat_values[0] if condition == "RI" else cat_values[-1]
+    sequence = build_interleaved_sequence(categories, values_per_cat, rng)
+    prompt, expected = build_prompt(sequence, condition, test_cat)
+    cat_values = [it["value"] for it in sequence if it["category"] == test_cat]
 
     return {
-        "prompt": (
-            f"Read the following key-value stream. Each key gets updated multiple times.\n\n"
-            f"{stream}\n\n"
-            f"What was the {query_word} value of {test_cat}?"
-        ),
+        "prompt": prompt,
         "condition": condition, "expected": expected,
         "initial_value": cat_values[0], "final_value": cat_values[-1],
     }
@@ -117,7 +103,8 @@ def main():
     print("=" * 70)
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
-    value_to_tid = verify_single_token(tokenizer)
+    candidate_pool = get_value_pool("ARBITRARY_SINGLE")
+    value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())
 
     configs = ["baseline", "knockout", "force_correct", "force_wrong"]
