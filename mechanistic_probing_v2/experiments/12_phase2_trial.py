@@ -24,9 +24,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.model_loader import load_model
-from core.dataset_configs import format_for_chat, SYSTEM_PROMPT, ORIGINAL_CATEGORIES
-from core.model_loader import get_single_token_pool, verify_single_token
+from core.model_loader import load_model, verify_single_token
+from core.dataset_configs import (
+    format_for_chat, SYSTEM_PROMPT, ORIGINAL_CATEGORIES,
+    get_value_pool, build_interleaved_sequence, build_prompt,
+)
 from core.token_tracker import build_token_map, summarize_token_map
 from core.analysis_utils import (
     logit_lens_all_layers, logit_lens_to_dict,
@@ -45,7 +47,11 @@ def build_single_token_trial(
     value_pool: list[str],
     categories: list[str] = None,
 ) -> dict:
-    """Build a trial using single-token values."""
+    """Build a trial using single-token values.
+
+    value_pool must be pre-filtered with verify_single_token(tokenizer)
+    so all values are exactly 1 token for the target model.
+    """
     rng = random.Random(seed)
 
     if categories is None:
@@ -65,46 +71,20 @@ def build_single_token_trial(
 
     test_cat = categories[seed % num_keys]
 
-    items = []
-    for cat in categories:
-        for ui, val in enumerate(values_per_cat[cat]):
-            items.append({"category": cat, "value": val, "update_idx": ui})
+    # Use dataset_configs building blocks for interleaving and prompt construction
+    sequence = build_interleaved_sequence(categories, values_per_cat, rng)
+    prompt, expected = build_prompt(sequence, condition, test_cat)
 
-    rng.shuffle(items)
-    for attempt in range(100):
-        ok = True
-        for i in range(1, len(items)):
-            if items[i]["category"] == items[i-1]["category"]:
-                ok = False
-                break
-        if ok:
-            break
-        rng.shuffle(items)
-
-    stream_lines = [f"{it['category']}: {it['value']}" for it in items]
-    stream_text = "\n".join(stream_lines)
-    query_word = "first" if condition == "RI" else "last"
-
-    cat_values = [it["value"] for it in items if it["category"] == test_cat]
-    expected = cat_values[0] if condition == "RI" else cat_values[-1]
-    initial_value = cat_values[0]
-    final_value = cat_values[-1]
-    intermediate_values = cat_values[1:-1] if len(cat_values) > 2 else []
-
-    prompt = (
-        f"Read the following key-value stream. Each key gets updated multiple times.\n\n"
-        f"{stream_text}\n\n"
-        f"What was the {query_word} value of {test_cat}?"
-    )
+    cat_values = [it["value"] for it in sequence if it["category"] == test_cat]
 
     return {
         "prompt": prompt,
         "expected": expected,
         "condition": condition,
         "test_category": test_cat,
-        "initial_value": initial_value,
-        "final_value": final_value,
-        "intermediate_values": intermediate_values,
+        "initial_value": cat_values[0],
+        "final_value": cat_values[-1],
+        "intermediate_values": cat_values[1:-1] if len(cat_values) > 2 else [],
         "all_values": cat_values,
         "num_keys": num_keys,
         "num_updates": num_updates,
@@ -231,9 +211,11 @@ def main():
 
     model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
 
-    value_to_tid = verify_single_token(tokenizer)
+    # Get candidate pool from dataset_configs, then filter to model-specific single-token words
+    candidate_pool = get_value_pool("ARBITRARY_SINGLE")
+    value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())
-    print(f"\nVerified {len(value_pool)} single-token values")
+    print(f"\nCandidate pool: {len(candidate_pool)} words → verified {len(value_pool)} single-token for this model")
 
     categories = ORIGINAL_CATEGORIES
 

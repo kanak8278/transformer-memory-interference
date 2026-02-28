@@ -107,16 +107,10 @@ def save_results(data: dict, model: str, keys: int, updates: int, experiment: st
 
     out_dir = get_output_dir(model, keys, updates)
 
-    # 1. Timestamped file (archival — never overwritten)
+    # Timestamped file only — never overwritten
     ts_path = out_dir / f"{experiment}_{ts}.json"
     with open(ts_path, "w") as f:
         json.dump(data, f, indent=2)
 
-    # 2. Latest file (stable name for downstream code to read)
-    latest_path = out_dir / f"{experiment}.json"
-    with open(latest_path, "w") as f:
-        json.dump(data, f, indent=2)
-
     print(f"\nSaved to {ts_path}")
-    print(f"  (latest: {latest_path})")
-    return latest_path
+    return ts_path
