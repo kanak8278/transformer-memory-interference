@@ -503,14 +503,9 @@ def generate_trial(
 ):
     """Generate a single interference trial.
 
-    This is the unified entry point. It:
-    1. Selects categories (filtering by pool size for semantic datasets)
-    2. Generates values via generate_values_for_trial
-    3. Builds an interleaved sequence (no consecutive same-category)
-    4. Constructs the prompt (chat or completion format)
-
     Args:
-        dataset_type: One of the four dataset types.
+        dataset_type: One of ARBITRARY_SINGLE, ARBITRARY_MULTI,
+                      SEMANTIC_SINGLE, SEMANTIC_MULTI.
         num_keys: Number of categories.
         num_updates: Number of value updates per category.
         condition: "RI" (recall first) or "PI" (recall last).
@@ -600,6 +595,296 @@ def generate_trial(
         seed=seed,
         dataset_type=dataset_type,
     )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# BACKWARD-COMPATIBLE API (for existing experiments)
+# These functions provide the same interface as the old dataset.py and
+# semantic_dataset.py so experiments can migrate with just an import change.
+# ═══════════════════════════════════════════════════════════════════════════
+
+def get_original_categories():
+    """Get the 46 original categories from the ACL paper.
+
+    Loaded from data/arbitrary_single.json (canonical source).
+    """
+    config = load_dataset_config("ARBITRARY_SINGLE")
+    return list(config["categories"])
+
+
+# Expose as a module-level constant for backward compatibility
+# (experiments do `from core.dataset_configs import ORIGINAL_CATEGORIES`)
+ORIGINAL_CATEGORIES = get_original_categories()
+
+
+def format_for_chat(prompt, tokenizer):
+    """Wrap a raw prompt in chat template if tokenizer supports it.
+
+    Backward-compatible with core.dataset.format_for_chat.
+    """
+    if hasattr(tokenizer, "apply_chat_template"):
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
+        ]
+        return tokenizer.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True
+        )
+    return prompt
+
+
+def build_interleaved_sequence(categories, values_per_cat, rng):
+    """Build a randomly interleaved sequence (no consecutive same-category).
+
+    Public wrapper around _shuffle_no_consecutive.
+
+    Args:
+        categories: List of category names.
+        values_per_cat: Dict mapping category → list of values.
+        rng: random.Random instance.
+
+    Returns:
+        List of dicts: [{"category": ..., "value": ..., "update_idx": ...}, ...]
+    """
+    items = []
+    for cat in categories:
+        for idx, val in enumerate(values_per_cat[cat]):
+            items.append({"category": cat, "value": val, "update_idx": idx})
+    return _shuffle_no_consecutive(items, rng)
+
+
+def build_prompt(sequence, condition, test_category):
+    """Build a raw prompt from an interleaved sequence.
+
+    Backward-compatible with core.dataset.build_prompt.
+
+    Returns:
+        (prompt_text, expected_answer)
+    """
+    stream_lines = [f"{item['category']}: {item['value']}" for item in sequence]
+    stream_text = "\n".join(stream_lines)
+    query_word = "first" if condition == "RI" else "last"
+
+    cat_values = [item["value"] for item in sequence if item["category"] == test_category]
+    expected = cat_values[0] if condition == "RI" else cat_values[-1]
+
+    prompt = (
+        f"Read the following key-value stream. "
+        f"Each key gets updated multiple times.\n\n"
+        f"{stream_text}\n\n"
+        f"What was the {query_word} value of {test_category}?"
+    )
+    return prompt, expected
+
+
+# ── Completion format helpers (for base models like Pythia) ───────────────
+
+COMPLETION_CATEGORIES = [
+    "color", "fruit", "metal", "animal", "tool",
+    "shape", "drink", "stone", "plant", "fish",
+    "sport", "bird", "grain", "dance", "spice",
+]
+
+
+def generate_few_shot_demo(num_keys, num_updates, seed, value_pool):
+    """Generate two few-shot demo blocks for base model completion format.
+
+    Returns (demo_categories_list, demo_sequences_list) — two blocks.
+    """
+    rng = random.Random(seed + 999_999)
+
+    DEMO_BLOCKS = [
+        {
+            "categories": ["color", "animal"],
+            "values": {
+                "color": ["red", "blue", "green", "pink", "white", "black", "gold", "brown", "gray", "orange"],
+                "animal": ["cat", "dog", "bear", "fish", "bird", "wolf", "deer", "fox", "rat", "cow"],
+            },
+        },
+        {
+            "categories": ["fruit", "metal"],
+            "values": {
+                "fruit": ["apple", "grape", "lemon", "peach", "plum", "cherry", "mango", "lime", "pear", "fig"],
+                "metal": ["gold", "iron", "steel", "copper", "tin", "lead", "zinc", "brass", "silver", "chrome"],
+            },
+        },
+    ]
+
+    all_demo_cats = []
+    all_demo_seqs = []
+
+    for block in DEMO_BLOCKS:
+        cats = block["categories"][:min(num_keys, len(block["categories"]))]
+        values_per_cat = {}
+        for cat in cats:
+            available = block["values"][cat]
+            n = min(num_updates, len(available))
+            values_per_cat[cat] = available[:n]
+
+        demo_seq = build_interleaved_sequence(cats, values_per_cat, rng)
+        all_demo_cats.append(cats)
+        all_demo_seqs.append(demo_seq)
+
+    return all_demo_cats, all_demo_seqs
+
+
+def build_completion_prompt(sequence, condition, test_category,
+                            demo_categories_list=None, demo_sequences_list=None):
+    """Build a completion-format prompt with optional few-shot demos.
+
+    For base models (Pythia) that need few-shot examples to learn the task.
+    """
+    query_word = "first" if condition == "RI" else "last"
+    cat_values = [item["value"] for item in sequence if item["category"] == test_category]
+    expected = cat_values[0] if condition == "RI" else cat_values[-1]
+
+    demo_text = ""
+    if demo_categories_list and demo_sequences_list:
+        for demo_cats, demo_seq in zip(demo_categories_list, demo_sequences_list):
+            demo_lines = [f"{it['category']}: {it['value']}" for it in demo_seq]
+            demo_text += "\n".join(demo_lines) + "\n"
+            for demo_cat in demo_cats:
+                demo_vals = [it["value"] for it in demo_seq if it["category"] == demo_cat]
+                if demo_vals:
+                    demo_text += f"The first value of {demo_cat} was: {demo_vals[0]}\n"
+                    demo_text += f"The last value of {demo_cat} was: {demo_vals[-1]}\n"
+            demo_text += "\n"
+
+    test_lines = [f"{it['category']}: {it['value']}" for it in sequence]
+    test_text = "\n".join(test_lines)
+    prompt = f"{demo_text}{test_text}\nThe {query_word} value of {test_category} was:"
+
+    return prompt, expected
+
+
+def generate_completion_trial(
+    num_keys, num_updates, condition, seed, value_pool,
+    test_category_idx=0, categories=None,
+):
+    """Generate a trial with completion-format prompt (for base models).
+
+    Uses short categories and single-token values from value_pool,
+    with few-shot demos prepended.
+    """
+    rng = random.Random(seed)
+
+    if categories is None:
+        available = COMPLETION_CATEGORIES[5:]  # skip first 5, reserved for demos
+        categories = rng.sample(available, min(num_keys, len(available)))
+    else:
+        categories = categories[:num_keys]
+
+    total_needed = num_keys * num_updates
+    if total_needed > len(value_pool):
+        raise ValueError(f"Need {total_needed} values but pool has {len(value_pool)}")
+    selected = rng.sample(value_pool, total_needed)
+
+    values_per_cat = {}
+    idx = 0
+    for cat in categories:
+        values_per_cat[cat] = selected[idx:idx + num_updates]
+        idx += num_updates
+
+    test_category = categories[test_category_idx % len(categories)]
+    sequence = build_interleaved_sequence(categories, values_per_cat, rng)
+
+    demo_cats_list, demo_seqs_list = generate_few_shot_demo(
+        num_keys, num_updates, seed, value_pool
+    )
+
+    prompt, expected = build_completion_prompt(
+        sequence, condition, test_category,
+        demo_categories_list=demo_cats_list,
+        demo_sequences_list=demo_seqs_list,
+    )
+
+    cat_values = [item["value"] for item in sequence if item["category"] == test_category]
+
+    return InterferenceTrial(
+        categories=categories,
+        test_category=test_category,
+        condition=condition,
+        num_keys=num_keys,
+        num_updates=num_updates,
+        prompt=prompt,
+        expected_answer=expected,
+        initial_value=cat_values[0],
+        final_value=cat_values[-1],
+        all_values=cat_values,
+        seed=seed,
+    )
+
+
+def compute_feasible_grid(key_levels, update_levels, tokenizer, context_limit,
+                          dataset_type="ARBITRARY_MULTI"):
+    """Pre-compute which grid cells are feasible (fit in context).
+
+    Returns dict mapping (num_keys, num_updates) → estimated_tokens.
+    """
+    feasible = {}
+    for nk in key_levels:
+        for nu in update_levels:
+            # Check pool size
+            eligible = get_eligible_categories(dataset_type, min_values=nu)
+            if len(eligible) < nk:
+                break
+            # Check context
+            trial = generate_trial(
+                dataset_type, nk, nu, "RI", seed=0,
+                use_chat_format=True, tokenizer=tokenizer,
+            )
+            n_tokens = len(tokenizer.encode(trial.prompt))
+            limit = int(context_limit * 0.90)
+            if n_tokens <= limit:
+                feasible[(nk, nu)] = n_tokens
+            else:
+                break
+    return feasible
+
+
+def preflight_context_check(num_keys, num_updates, tokenizer, context_limit,
+                            safety_margin=0.90, dataset_type="ARBITRARY_MULTI"):
+    """Check if a (num_keys, num_updates) cell fits within context."""
+    trial = generate_trial(
+        dataset_type, num_keys, num_updates, "RI", seed=0,
+        use_chat_format=True, tokenizer=tokenizer,
+    )
+    n_tokens = len(tokenizer.encode(trial.prompt))
+    limit = int(context_limit * safety_margin)
+    return n_tokens <= limit, n_tokens
+
+
+# ── Semantic dataset aliases (backward compat with semantic_dataset.py) ───
+
+def get_semantic_categories():
+    """Get categories available in SEMANTIC_SINGLE dataset."""
+    return get_eligible_categories("SEMANTIC_SINGLE", min_values=1)
+
+SEMANTIC_CATEGORIES = get_semantic_categories()
+
+
+def generate_semantic_trial(num_keys, num_updates, condition, seed,
+                            test_category_idx=0, categories=None):
+    """Generate a trial with SEMANTIC_SINGLE values.
+
+    Backward-compatible with core.semantic_dataset.generate_semantic_trial.
+    """
+    return generate_trial(
+        "SEMANTIC_SINGLE", num_keys, num_updates, condition, seed,
+        test_category_idx=test_category_idx,
+        categories=categories,
+        use_chat_format=False,
+    )
+
+
+# Grid definitions (default, can be overridden per experiment)
+KEY_LEVELS = [2, 3, 5, 7, 10, 15, 20, 25, 30, 35, 40, 46]
+UPDATE_LEVELS = [
+    1, 3, 5, 10, 15, 20,
+    30, 40, 50, 60,
+    80, 100, 120, 140, 160, 180,
+    200, 220, 240, 260, 280, 300,
+]
 
 
 # ═══════════════════════════════════════════════════════════════════════════

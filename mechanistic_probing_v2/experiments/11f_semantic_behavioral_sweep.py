@@ -28,11 +28,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model_hf, get_context_limit
-from core.semantic_dataset import (
+from core.dataset_configs import (
     generate_semantic_trial, compute_feasible_grid,
     KEY_LEVELS, UPDATE_LEVELS, SEMANTIC_CATEGORIES,
 )
-from core.dataset import format_for_chat
+from core.dataset_configs import format_for_chat
 
 # Grid that matches narrative dataset configs
 NARRATIVE_KEY_LEVELS = [2, 3, 5, 7, 10]
@@ -139,7 +139,8 @@ def main():
         update_levels = UPDATE_LEVELS
         print(f"Grid: full semantic ({len(KEY_LEVELS)} keys x {len(UPDATE_LEVELS)} updates)")
 
-    feasible = compute_feasible_grid(key_levels, update_levels, tokenizer, ctx_limit)
+    feasible = compute_feasible_grid(key_levels, update_levels, tokenizer, ctx_limit,
+                                     dataset_type="SEMANTIC_SINGLE")
     print(f"Feasible cells: {len(feasible)}")
 
     # Run sweep

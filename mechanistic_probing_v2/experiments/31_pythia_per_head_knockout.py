@@ -28,7 +28,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
-from core.dataset import generate_completion_trial
+from core.dataset_configs import generate_completion_trial
 from core.model_loader import verify_single_token
 from core.analysis_utils import compute_logit_diff
 from core.output import save_results

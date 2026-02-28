@@ -27,7 +27,7 @@ from dataclasses import asdict
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model_hf, get_context_limit
-from core.dataset import (
+from core.dataset_configs import (
     generate_trial, compute_feasible_grid, format_for_chat,
     KEY_LEVELS, UPDATE_LEVELS, ORIGINAL_CATEGORIES,
 )
@@ -222,6 +222,7 @@ def run_sweep(
                     test_cat_idx = trial_idx % min(nk, len(ORIGINAL_CATEGORIES))
 
                     trial = generate_trial(
+                        "ARBITRARY_MULTI",
                         num_keys=nk,
                         num_updates=nu,
                         condition=condition,

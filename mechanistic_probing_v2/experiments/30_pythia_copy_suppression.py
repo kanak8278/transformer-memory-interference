@@ -35,7 +35,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model
-from core.dataset import (
+from core.dataset_configs import (
     generate_completion_trial, COMPLETION_CATEGORIES,
     build_completion_prompt, build_interleaved_sequence,
     generate_few_shot_demo,

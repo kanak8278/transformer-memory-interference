@@ -1,7 +1,7 @@
 """Debug: print the exact prompt sent to the model for 2k, 10u."""
 import sys, random
 sys.path.insert(0, '.')
-from core.dataset import format_for_chat, SYSTEM_PROMPT, ORIGINAL_CATEGORIES
+from core.dataset_configs import format_for_chat, SYSTEM_PROMPT, ORIGINAL_CATEGORIES
 from core.model_loader import verify_single_token
 from core.model_loader import load_model
 

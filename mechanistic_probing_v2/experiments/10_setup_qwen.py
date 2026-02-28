@@ -17,7 +17,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.model_loader import load_model, get_context_limit
-from core.dataset import (
+from core.dataset_configs import (
     generate_trial, preflight_context_check, compute_feasible_grid,
     KEY_LEVELS, UPDATE_LEVELS,
 )
@@ -58,7 +58,7 @@ def main():
     print("\n" + "=" * 60)
     print("STEP 4: Generation test (simple interference)")
     print("=" * 60)
-    trial = generate_trial(num_keys=3, num_updates=3, condition="RI", seed=42)
+    trial = generate_trial("ARBITRARY_MULTI", num_keys=3, num_updates=3, condition="RI", seed=42)
     print(f"  Categories: {trial.categories}")
     print(f"  Test: {trial.test_category}")
     print(f"  Expected: {trial.expected_answer}")
@@ -126,7 +126,7 @@ def main():
     n_quick = 10
     for seed in range(n_quick):
         for cond in ["RI", "PI"]:
-            trial = generate_trial(num_keys=3, num_updates=3, condition=cond, seed=seed + 100)
+            trial = generate_trial("ARBITRARY_MULTI", num_keys=3, num_updates=3, condition=cond, seed=seed + 100)
             gen = model.generate(trial.prompt, max_new_tokens=15, temperature=0, verbose=False)
             gen_text = model.to_string(gen[0]) if hasattr(gen, 'shape') else gen
             answer = gen_text[len(trial.prompt):].strip().split("\n")[0].strip()
