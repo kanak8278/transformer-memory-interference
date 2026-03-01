@@ -249,6 +249,8 @@ def main():
     parser.add_argument("--sweep-trials", type=int, default=50, help="Trials for V2 full sweep")
     parser.add_argument("--targeted-trials", type=int, default=200, help="Trials for V3 targeted validation")
     parser.add_argument("--n-ctx", type=int, default=2048)
+    parser.add_argument("--gpu", type=int, default=None,
+                        help="Physical GPU index to use (e.g. 3 for the 4th GPU). Default: auto-detect.")
     args = parser.parse_args()
 
     primary_keys, primary_updates = parse_point(args.primary_point)
@@ -266,7 +268,7 @@ def main():
     print(f"  Targeted trials (V3): {args.targeted_trials}")
     print("=" * 70)
 
-    model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
+    model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx, gpu_idx=args.gpu)
     candidate_pool = get_value_pool("ARBITRARY_SINGLE")
     value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())

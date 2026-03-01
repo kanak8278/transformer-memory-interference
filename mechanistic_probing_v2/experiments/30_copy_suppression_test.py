@@ -374,11 +374,13 @@ def main():
     parser.add_argument("--updates", type=int, default=3)
     parser.add_argument("--trials", type=int, default=100)
     parser.add_argument("--n-ctx", type=int, default=2048)
+    parser.add_argument("--gpu", type=int, default=None,
+                        help="Physical GPU index to use (e.g. 3 for the 4th GPU). Default: auto-detect.")
     parser.add_argument("--heads", required=True,
                         help="Primacy heads from exp 25a top_primacy_heads. E.g., '5,2 8,6'")
     args = parser.parse_args()
 
-    model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
+    model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx, gpu_idx=args.gpu)
 
     is_gqa, n_kv_heads = detect_gqa(model)
     arch_str = f"GQA ({n_kv_heads} KV heads)" if is_gqa else "MHA"

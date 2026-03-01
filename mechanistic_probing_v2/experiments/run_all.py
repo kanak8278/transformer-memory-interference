@@ -180,7 +180,7 @@ def restore_model_loader(original_load):
 
 def run_experiment(exp_id, model_name, keys, updates, trials, n_ctx,
                    heads=None, primacy_heads=None, recency_heads=None,
-                   causal_effects=None):
+                   causal_effects=None, gpu=None):
     """Run a single experiment by importing its module and calling main()."""
     module_name = EXPERIMENT_MODULES[exp_id]
 
@@ -192,6 +192,11 @@ def run_experiment(exp_id, model_name, keys, updates, trials, n_ctx,
         "--trials", str(trials),
         "--n-ctx", str(n_ctx),
     ]
+
+    # Pass GPU selection if specified
+    if gpu is not None:
+        argv += ["--gpu", str(gpu)]
+
 
     # Add head arguments based on experiment type
     if exp_id in NEEDS_HEADS and heads:
@@ -251,6 +256,9 @@ def main():
                         help="Operating points as 'keys,updates' pairs. E.g., '2,3 1,5'")
     parser.add_argument("--trials", type=int, default=100)
     parser.add_argument("--n-ctx", type=int, default=2048)
+    parser.add_argument("--gpu", type=int, default=None,
+                        help="Physical GPU index (0-7). E.g., --gpu 3 uses the 4th GPU. "
+                             "Default: auto-detect.")
     parser.add_argument("--phase", type=int, default=0, choices=[0, 1, 2],
                         help="0=both phases, 1=phase1 only, 2=phase2 only")
     parser.add_argument("--heads", default=None,
@@ -304,7 +312,7 @@ def main():
 
     # Load model once
     t0 = time.time()
-    model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
+    model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx, gpu_idx=args.gpu)
     candidate_pool_size = len(verify_single_token(tokenizer))
     print(f"  {candidate_pool_size} single-token values verified")
     load_time = time.time() - t0
@@ -376,6 +384,7 @@ def main():
                     primacy_heads=point_primacy,
                     recency_heads=point_recency,
                     causal_effects=point_causal,
+                    gpu=args.gpu,
                 )
                 elapsed = time.time() - t_exp
                 status = "OK" if success else "FAILED"

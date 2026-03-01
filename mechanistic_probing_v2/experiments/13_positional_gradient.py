@@ -212,6 +212,8 @@ def main():
     parser.add_argument("--keys", type=int, default=2,
                         help="Number of categories")
     parser.add_argument("--n-ctx", type=int, default=2048)
+    parser.add_argument("--gpu", type=int, default=None,
+                        help="Physical GPU index to use (e.g. 3 for the 4th GPU). Default: auto-detect.")
     args = parser.parse_args()
 
     print("=" * 70)
@@ -219,7 +221,7 @@ def main():
     print(f"  keys={args.keys}, updates={args.updates}, trials={args.trials}")
     print("=" * 70)
 
-    model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx)
+    model, tokenizer, info = load_model(args.model, n_ctx=args.n_ctx, gpu_idx=args.gpu)
     candidate_pool = get_value_pool("ARBITRARY_SINGLE")
     value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
     value_pool = list(value_to_tid.keys())
