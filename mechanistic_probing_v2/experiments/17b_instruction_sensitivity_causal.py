@@ -139,7 +139,7 @@ def main():
                 inter_tids.add(tid)
 
         for cond, prompt in [("RI", pair["ri_prompt"]), ("PI", pair["pi_prompt"])]:
-            formatted = format_for_chat(prompt, tokenizer)
+            formatted = format_for_chat(prompt, tokenizer, model_name=args.model)
             tokens = model.to_tokens(formatted)
             token_ids = tokens[0].tolist()
             str_tokens = model.to_str_tokens(formatted)

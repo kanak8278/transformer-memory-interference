@@ -123,7 +123,7 @@ def main():
             init_tid = value_to_tid.get(trial["initial_value"], -1)
             final_tid = value_to_tid.get(trial["final_value"], -1)
 
-            formatted = format_for_chat(trial["prompt"], tokenizer)
+            formatted = format_for_chat(trial["prompt"], tokenizer, model_name=args.model)
             tokens = model.to_tokens(formatted)
             token_ids = tokens[0].tolist()
 
