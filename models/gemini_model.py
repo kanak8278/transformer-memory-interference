@@ -1,6 +1,12 @@
 """
 Gemini model interface for Google's Generative AI.
 Supports both Google AI Studio API and Vertex AI.
+
+Thinking mode is auto-enabled for gemini-2.5-pro.
+Override via config: {'thinking': True/False, 'thinking_budget': N}
+  thinking_budget = -1  → dynamic (model decides, default)
+  thinking_budget =  0  → disabled
+  thinking_budget =  N  → fixed N tokens for thinking
 """
 
 import os
@@ -8,6 +14,13 @@ import time
 from typing import Dict, Optional
 from .base_model import BaseModelInterface
 from . import config as model_config
+from .retry_utils import call_with_retry
+
+# Models that use thinking mode by default
+GEMINI_REASONING_MODELS = {'gemini-2.5-pro'}
+
+# -1 = dynamic budget (model decides how much thinking to use)
+GEMINI_THINKING_BUDGET = -1
 
 
 class GeminiModelInterface(BaseModelInterface):
@@ -37,6 +50,13 @@ class GeminiModelInterface(BaseModelInterface):
         self.max_retries = self.config.get('max_retries', 3)
         self.retry_delay = self.config.get('retry_delay', 30)
 
+        # Resolve whether to use thinking mode
+        self.use_thinking = self.config.get(
+            'thinking',
+            model_name in GEMINI_REASONING_MODELS
+        )
+        self.thinking_budget = self.config.get('thinking_budget', GEMINI_THINKING_BUDGET)
+
         # Get API model ID
         self.model_id = self._get_model_id(model_name)
 
@@ -63,7 +83,8 @@ class GeminiModelInterface(BaseModelInterface):
             genai.configure(api_key=api_key)
             self.model = genai.GenerativeModel(self.model_id)
             self.use_vertex = False
-            print(f"✓ Google AI initialized for {self.model_id}")
+            mode = "thinking" if self.use_thinking else "standard"
+            print(f"✓ Google AI initialized: {self.model_id} [{mode}]")
             self.available = True
 
         except ImportError as e:
@@ -131,73 +152,57 @@ class GeminiModelInterface(BaseModelInterface):
         if not self.available:
             return f"Mock response for {self.model_name}"
 
-        last_error = None
-        for attempt in range(self.max_retries):
-            try:
-                # Generate content
-                response = self.model.generate_content(
-                    prompt,
-                    generation_config={
-                        "max_output_tokens": self.max_tokens,
-                        "temperature": self.temperature,
-                    }
-                )
+        def _call():
+            gen_config = {
+                "max_output_tokens": self.max_tokens,
+                "temperature": self.temperature,
+            }
+            if self.use_thinking:
+                gen_config["thinking_config"] = {
+                    "thinking_budget": self.thinking_budget
+                }
 
-                # Extract text from response
-                if hasattr(response, 'text'):
-                    return response.text
-                elif hasattr(response, 'candidates') and response.candidates:
-                    return response.candidates[0].content.parts[0].text
-                else:
-                    print(f"⚠️  Unexpected response format: {response}")
-                    return ""
+            response = self.model.generate_content(prompt, generation_config=gen_config)
 
-            except Exception as e:
-                last_error = e
-                error_str = str(e)
+            if hasattr(response, 'text'):
+                text = response.text
+            elif hasattr(response, 'candidates') and response.candidates:
+                text = response.candidates[0].content.parts[0].text
+            else:
+                text = ""
 
-                # Store error
-                self.last_error = error_str
+            if hasattr(response, 'usage_metadata'):
+                um = response.usage_metadata
+                self.last_input_tokens  = getattr(um, 'prompt_token_count', None)
+                self.last_output_tokens = getattr(um, 'candidates_token_count', None)
+                self.last_total_tokens  = getattr(um, 'total_token_count', None)
 
-                # Check for rate limiting
-                if "429" in error_str or "quota" in error_str.lower() or "rate" in error_str.lower():
-                    if attempt < self.max_retries - 1:
-                        wait_time = self.retry_delay * (attempt + 1)
-                        print(f"⚠️  Rate limit hit. Waiting {wait_time}s before retry {attempt + 2}/{self.max_retries}...")
-                        time.sleep(wait_time)
-                        continue
-                    else:
-                        print(f"❌ Rate limit exceeded after {self.max_retries} attempts")
-                        return f"Error: Rate limit exceeded after {self.max_retries} retries"
+            return text
 
-                # Check for timeout
-                elif "timeout" in error_str.lower():
-                    if attempt < self.max_retries - 1:
-                        wait_time = 30
-                        print(f"⚠️  Request timed out. Retrying {attempt + 2}/{self.max_retries} after {wait_time}s...")
-                        time.sleep(wait_time)
-                        continue
-                    else:
-                        print(f"❌ Request timed out after {self.max_retries} attempts")
-                        return f"Error: Request timed out after {self.max_retries} retries"
-
-                # For other errors, don't retry
-                else:
-                    print(f"❌ Error calling {self.model_name}: {e}")
-                    return f"Error: {str(e)}"
-
-        # If we exhausted retries
-        print(f"❌ Failed after {self.max_retries} attempts: {last_error}")
-        return f"Error: {str(last_error)}"
+        try:
+            result = call_with_retry(
+                _call,
+                max_retries=self.max_retries,
+                base_delay=self.retry_delay,
+                label=self.model_name,
+            )
+            self.last_error = None
+            return result
+        except Exception as e:
+            self.last_error = str(e)
+            print(f"  ✗ {self.model_name} failed permanently: {str(e)[:80]}")
+            return f"Error: {str(e)}"
 
     def get_model_info(self) -> Dict:
         """Get Gemini model information"""
         info = super().get_model_info()
         provider = "Google Vertex AI" if getattr(self, 'use_vertex', False) else "Google AI Studio"
         info.update({
-            "provider": provider,
-            "model_id": self.model_id,
-            "family": "Gemini"
+            "provider":       provider,
+            "model_id":       self.model_id,
+            "family":         "Gemini",
+            "use_thinking":   self.use_thinking,
+            "thinking_budget": self.thinking_budget if self.use_thinking else None,
         })
         if getattr(self, 'use_vertex', False):
             info["project_id"] = getattr(self, 'project_id', 'unknown')

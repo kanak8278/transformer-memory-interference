@@ -8,6 +8,7 @@ import time
 from typing import Dict, Optional
 from .base_model import BaseModelInterface
 from . import config as model_config
+from .retry_utils import call_with_retry
 
 
 class OpenAIModelInterface(BaseModelInterface):
@@ -109,114 +110,51 @@ class OpenAIModelInterface(BaseModelInterface):
         if not self.available:
             return f"Mock response for {self.model_name}"
 
-        last_error = None
-        for attempt in range(self.max_retries):
-            try:
-                # Create chat completion with model-specific parameters using model_config helpers
-                if model_config.should_use_max_completion_tokens(self.model_id):
-                    # New models use max_completion_tokens instead of max_tokens
-                    call_params = {
-                        "model": self.model_id,
-                        "messages": [
-                            {"role": "user", "content": prompt}
-                        ],
-                        "max_completion_tokens": self.max_tokens
-                    }
+        def _call():
+            if model_config.should_use_max_completion_tokens(self.model_id):
+                call_params = {
+                    "model": self.model_id,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "max_completion_tokens": self.max_tokens,
+                }
+                if model_config.supports_reasoning_effort(self.model_id):
+                    reasoning_effort = self.config.get('reasoning_effort')
+                    if reasoning_effort:
+                        call_params["reasoning_effort"] = reasoning_effort
+                if model_config.supports_temperature(self.model_id):
+                    call_params["temperature"] = self.temperature
+                response = self.client.chat.completions.create(**call_params)
+            else:
+                response = self.client.chat.completions.create(
+                    model=self.model_id,
+                    messages=[{"role": "user", "content": prompt}],
+                    max_tokens=self.max_tokens,
+                    temperature=self.temperature,
+                )
 
-                    # Only o-series models support reasoning_effort
-                    if model_config.supports_reasoning_effort(self.model_id):
-                        reasoning_effort = self.config.get('reasoning_effort')
-                        if reasoning_effort:
-                            call_params["reasoning_effort"] = reasoning_effort  # "low", "medium", or "high"
+            if hasattr(response, 'usage') and response.usage:
+                usage = response.usage
+                self.last_input_tokens  = usage.prompt_tokens
+                self.last_output_tokens = usage.completion_tokens
+                self.last_total_tokens  = usage.total_tokens
+                self.last_was_truncated = usage.completion_tokens >= self.max_tokens
 
-                    # Add temperature if model supports it
-                    if model_config.supports_temperature(self.model_id):
-                        call_params["temperature"] = self.temperature
+            content = response.choices[0].message.content
+            return content or ""
 
-                    response = self.client.chat.completions.create(**call_params)
-                else:
-                    # Standard GPT models
-                    response = self.client.chat.completions.create(
-                        model=self.model_id,
-                        messages=[
-                            {"role": "user", "content": prompt}
-                        ],
-                        max_tokens=self.max_tokens,
-                        temperature=self.temperature
-                    )
-
-                # Log token usage and store in instance variables
-                if hasattr(response, 'usage') and response.usage:
-                    usage = response.usage
-                    input_tokens = usage.prompt_tokens
-                    output_tokens = usage.completion_tokens
-                    total_tokens = usage.total_tokens
-
-                    # Store in instance variables for experiment tracking
-                    self.last_input_tokens = input_tokens
-                    self.last_output_tokens = output_tokens
-                    self.last_total_tokens = total_tokens
-                    self.last_was_truncated = output_tokens >= self.max_tokens
-
-                    print(f"  Tokens: Input={input_tokens:,}, Output={output_tokens:,}, Total={total_tokens:,}")
-
-                    # Warn if output was truncated due to max_tokens
-                    if output_tokens >= self.max_tokens:
-                        print(f"  ⚠️  Output may be truncated (reached max_tokens={self.max_tokens})")
-
-                # Extract response content
-                content = response.choices[0].message.content
-
-                # Check if content is None or empty (can happen with truncation)
-                if content is None:
-                    print(f"  ⚠️  Response content is None!")
-                    print(f"  📋 Full response object: {response}")
-                    print(f"  📋 Choice finish_reason: {response.choices[0].finish_reason}")
-                    return ""
-                elif len(content.strip()) == 0:
-                    print(f"  ⚠️  Response content is empty!")
-                    print(f"  📋 Full response object: {response}")
-                    print(f"  📋 Choice finish_reason: {response.choices[0].finish_reason}")
-
-                return content
-
-            except Exception as e:
-                last_error = e
-                error_str = str(e)
-
-                # Store error in instance variable
-                self.last_error = error_str
-
-                # Check if it's a rate limit error (429)
-                if "429" in error_str or "Rate limit" in error_str:
-                    if attempt < self.max_retries - 1:
-                        wait_time = self.retry_delay * (attempt + 1)  # Exponential backoff
-                        print(f"⚠️  Rate limit hit. Waiting {wait_time}s before retry {attempt + 2}/{self.max_retries}...")
-                        time.sleep(wait_time)
-                        continue
-                    else:
-                        print(f"❌ Rate limit exceeded after {self.max_retries} attempts")
-                        return f"Error: Rate limit exceeded after {self.max_retries} retries"
-
-                # Check if it's a timeout
-                elif "timed out" in error_str.lower() or "timeout" in error_str.lower():
-                    if attempt < self.max_retries - 1:
-                        wait_time = 30
-                        print(f"⚠️  Request timed out. Retrying {attempt + 2}/{self.max_retries} after {wait_time}s...")
-                        time.sleep(wait_time)
-                        continue
-                    else:
-                        print(f"❌ Request timed out after {self.max_retries} attempts")
-                        return f"Error: Request timed out after {self.max_retries} retries"
-
-                # For other errors, don't retry
-                else:
-                    print(f"❌ Error calling {self.model_name}: {e}")
-                    return f"Error: {str(e)}"
-
-        # If we exhausted retries
-        print(f"❌ Failed after {self.max_retries} attempts: {last_error}")
-        return f"Error: {str(last_error)}"
+        try:
+            result = call_with_retry(
+                _call,
+                max_retries=self.max_retries,
+                base_delay=self.retry_delay,
+                label=self.model_name,
+            )
+            self.last_error = None
+            return result
+        except Exception as e:
+            self.last_error = str(e)
+            print(f"  ✗ {self.model_name} failed permanently: {str(e)[:80]}")
+            return f"Error: {str(e)}"
 
     def get_model_info(self) -> Dict:
         """Get OpenAI model information"""
