@@ -1,105 +1,187 @@
 """
-OpenAI model interface for GPT models.
-Supports both standard OpenAI API and Azure OpenAI endpoints.
+OpenAI model interface for GPT and o-series models.
+Supports standard OpenAI API, Azure OpenAI, and TR AI Platform Workspace.
+
+TR AI Platform Workspace auth (set TR_WORKSPACE_ID env var):
+  - Fetches short-lived credentials from TR token endpoint
+  - Auto-refreshes when < 5 minutes from expiry (recreates AzureOpenAI client)
+  - No other credentials needed — workspace_id is sufficient
 """
 
 import os
-import time
+from datetime import datetime, timezone
 from typing import Dict, Optional
 from .base_model import BaseModelInterface
 from . import config as model_config
 from .retry_utils import call_with_retry
 
+TR_OPENAI_TOKEN_URL = "https://aiplatform.gcs.int.thomsonreuters.com/v1/openai/token"
+TR_OPENAI_BASE_URL  = "https://eais2-use.int.thomsonreuters.com"
+
 
 class OpenAIModelInterface(BaseModelInterface):
-    """OpenAI model interface supporting both OpenAI API and Azure OpenAI"""
+    """OpenAI model interface supporting OpenAI API, Azure OpenAI, and TR Workspace"""
 
     def __init__(self, model_name: str, config: Optional[Dict] = None):
         """
         Initialize OpenAI model interface.
 
+        Auth priority (first match wins):
+          1. TR_WORKSPACE_ID env var / config['tr_workspace_id'] → TR AI Platform (AzureOpenAI)
+          2. AZURE_OPENAI_ENDPOINT + AZURE_OPENAI_API_KEY        → Standard Azure OpenAI
+          3. OPENAI_API_KEY                                       → Standard OpenAI
+
         Args:
-            model_name: Model name (gpt-4, gpt-4o, o1, etc.)
+            model_name: Model name (gpt-4.1, gpt-5, o3-mini, etc.)
             config: Optional configuration dictionary
-                Optional keys:
-                - api_key: OpenAI API key (or set OPENAI_API_KEY env var)
-                - azure_endpoint: Azure OpenAI endpoint (for Azure deployments)
-                - azure_api_key: Azure OpenAI API key (or set AZURE_OPENAI_API_KEY)
-                - api_version: API version for Azure (default: "2023-03-15-preview")
-                - use_azure: Force Azure OpenAI (default: auto-detect from env vars)
         """
         super().__init__(model_name, config)
 
-        # Override max_tokens using model_config helper
         if 'max_tokens' not in self.config:
             self.max_tokens = model_config.get_openai_max_tokens(model_name)
 
-        # Configuration from environment or config dict
         defaults = model_config.OPENAI_DEFAULTS
-        self.api_version = self.config.get('api_version', defaults['api_version'])
-        self.timeout = self.config.get('timeout', defaults['timeout'])
-        self.max_retries = self.config.get('max_retries', defaults['max_retries'])
-        self.retry_delay = self.config.get('retry_delay', defaults['retry_delay'])
+        self.api_version  = self.config.get('api_version',  defaults['api_version'])
+        self.timeout      = self.config.get('timeout',      defaults['timeout'])
+        self.max_retries  = self.config.get('max_retries',  defaults['max_retries'])
+        self.retry_delay  = self.config.get('retry_delay',  defaults['retry_delay'])
 
-        # Initialize OpenAI
         try:
             from openai import OpenAI, AzureOpenAI
+            self._OpenAI      = OpenAI
+            self._AzureOpenAI = AzureOpenAI
+        except ImportError:
+            print("⚠️  OpenAI library not available. Install with: pip install openai")
+            self.available = False
+            return
 
-            self.OpenAI = OpenAI
-            self.AzureOpenAI = AzureOpenAI
+        self.model_id = model_config.get_openai_model_id(model_name)
 
-            # Get API model ID using model_config
-            self.model_id = model_config.get_openai_model_id(model_name)
+        tr_workspace_id  = self.config.get('tr_workspace_id', os.getenv('TR_WORKSPACE_ID'))
+        azure_endpoint   = self.config.get('azure_endpoint',  os.getenv('AZURE_OPENAI_ENDPOINT'))
+        azure_api_key    = self.config.get('azure_api_key',   os.getenv('AZURE_OPENAI_API_KEY'))
+        openai_api_key   = self.config.get('api_key',         os.getenv('OPENAI_API_KEY'))
 
-            # Determine if using Azure or standard OpenAI
-            use_azure = self.config.get('use_azure', False)
-            azure_endpoint = self.config.get('azure_endpoint', os.getenv('AZURE_OPENAI_ENDPOINT'))
-            azure_api_key = self.config.get('azure_api_key', os.getenv('AZURE_OPENAI_API_KEY'))
-            openai_api_key = self.config.get('api_key', os.getenv('OPENAI_API_KEY'))
+        self._use_tr_workspace = False
 
-            if use_azure or (azure_endpoint and azure_api_key):
-                # Use Azure OpenAI
-                if not azure_endpoint or not azure_api_key:
-                    print(f"⚠️  Azure OpenAI requires AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_API_KEY")
-                    self.available = False
-                    return
-
-                self.client = self.AzureOpenAI(
-                    azure_endpoint=azure_endpoint,
-                    api_key=azure_api_key,
-                    api_version=self.api_version,
-                    timeout=self.timeout,
-                )
-                self.use_azure = True
-                print(f"✓ Azure OpenAI initialized for {self.model_id}")
-                self.available = True
-
-            elif openai_api_key:
-                # Use standard OpenAI API
-                self.client = self.OpenAI(
-                    api_key=openai_api_key,
-                    timeout=self.timeout,
-                )
-                self.use_azure = False
-                print(f"✓ OpenAI initialized for {self.model_id}")
-                self.available = True
-
-            else:
-                print(f"⚠️  No OpenAI API key found. Set OPENAI_API_KEY or AZURE_OPENAI_API_KEY")
-                self.available = False
-
-        except ImportError as e:
-            print(f"⚠️  OpenAI library not available: {e}")
-            print("Install with: pip install openai")
+        if tr_workspace_id:
+            self._init_tr_workspace(tr_workspace_id)
+        elif azure_endpoint and azure_api_key:
+            self._init_azure(azure_endpoint, azure_api_key)
+        elif openai_api_key:
+            self._init_openai(openai_api_key)
+        else:
+            print("⚠️  No OpenAI credentials found. Set TR_WORKSPACE_ID, OPENAI_API_KEY, or AZURE_OPENAI_* vars")
             self.available = False
 
+    # ------------------------------------------------------------------
+    # TR AI Platform Workspace auth
+    # ------------------------------------------------------------------
+
+    def _init_tr_workspace(self, workspace_id: str):
+        """Initialize using TR AI Platform Workspace (token-brokered Azure OpenAI)."""
+        self._tr_workspace_id = workspace_id
+        self._tr_expires      = None
+        self._use_tr_workspace = True
+        self.use_azure = True
+
+        try:
+            self._fetch_tr_token()
+            if self.config.get('verbose', True):
+                expiry = self._tr_expires.strftime('%H:%M UTC') if self._tr_expires else "no expiry"
+                print(f"✓ TR OpenAI initialized: {self.model_id} (token: {expiry})")
+            self.available = True
+        except Exception as e:
+            print(f"⚠️  TR workspace init failed: {e}")
+            self.available = False
+
+    def _fetch_tr_token(self):
+        """Fetch fresh TR credentials and recreate the AzureOpenAI client."""
+        import requests
+
+        payload = {"workspace_id": self._tr_workspace_id, "model_name": self.model_id}
+        resp = requests.post(TR_OPENAI_TOKEN_URL, json=payload, timeout=15)
+        resp.raise_for_status()
+        creds = resp.json()
+
+        if "openai_key" not in creds or "openai_endpoint" not in creds:
+            raise RuntimeError(f"TR OpenAI token fetch failed — response: {creds}")
+
+        # OpenAI endpoint tokens don't carry expires_on — treat as non-expiring
+        self._tr_expires = None
+
+        deployment_id    = creds["azure_deployment"]
+        llm_profile_key  = deployment_id.split("/")[0]
+
+        headers = {
+            "Authorization":           f"Bearer {creds['token']}",
+            "api-key":                 creds["openai_key"],
+            "Content-Type":            "application/json",
+            "x-tr-chat-profile-name":  "ai-platforms-chatprofile-prod",
+            "x-tr-userid":             self._tr_workspace_id,
+            "x-tr-llm-profile-key":    llm_profile_key,
+            "x-tr-user-sensitivity":   "true",
+            "x-tr-sessionid":          deployment_id,
+            "x-tr-asset-id":           self._tr_workspace_id,
+            "x-tr-authorization":      TR_OPENAI_BASE_URL,
+        }
+
+        # Recreate client with fresh credentials (headers are baked in at init)
+        self.client = self._AzureOpenAI(
+            azure_endpoint=creds["openai_endpoint"],
+            api_key=creds["openai_key"],
+            api_version=creds["openai_api_version"],
+            azure_deployment=deployment_id,
+            default_headers=headers,
+            timeout=self.timeout,
+        )
+
+    def _refresh_token_if_needed(self):
+        """Re-fetch TR token if expiring within 5 minutes (no-op if no expiry)."""
+        if self._tr_expires is None:
+            return  # OpenAI endpoint tokens don't expire
+        now = datetime.now(timezone.utc)
+        if (self._tr_expires - now).total_seconds() < 300:
+            self._fetch_tr_token()
+
+    # ------------------------------------------------------------------
+    # Standard auth paths
+    # ------------------------------------------------------------------
+
+    def _init_azure(self, endpoint: str, api_key: str):
+        """Initialize using standard Azure OpenAI."""
+        self.client = self._AzureOpenAI(
+            azure_endpoint=endpoint,
+            api_key=api_key,
+            api_version=self.api_version,
+            timeout=self.timeout,
+        )
+        self.use_azure = True
+        print(f"✓ Azure OpenAI initialized for {self.model_id}")
+        self.available = True
+
+    def _init_openai(self, api_key: str):
+        """Initialize using standard OpenAI API."""
+        self.client = self._OpenAI(
+            api_key=api_key,
+            timeout=self.timeout,
+        )
+        self.use_azure = False
+        print(f"✓ OpenAI initialized for {self.model_id}")
+        self.available = True
+
     def _get_model_id(self, model_name: str) -> str:
-        """Map friendly model names to OpenAI model IDs (delegates to config)"""
         return model_config.get_openai_model_id(model_name)
+
+    # ------------------------------------------------------------------
+    # Generate
+    # ------------------------------------------------------------------
 
     def generate(self, prompt: str) -> str:
         """
-        Generate response from OpenAI with retry logic for rate limits.
+        Generate response from OpenAI / Azure OpenAI.
+
+        For TR Workspace: auto-refreshes credentials if expiring within 5 minutes.
 
         Args:
             prompt: Input prompt string
@@ -111,11 +193,14 @@ class OpenAIModelInterface(BaseModelInterface):
             return f"Mock response for {self.model_name}"
 
         def _call():
+            if self._use_tr_workspace:
+                self._refresh_token_if_needed()
+
             if model_config.should_use_max_completion_tokens(self.model_id):
                 call_params = {
-                    "model": self.model_id,
-                    "messages": [{"role": "user", "content": prompt}],
-                    "max_completion_tokens": self.max_tokens,
+                    "model":                  self.model_id,
+                    "messages":               [{"role": "user", "content": prompt}],
+                    "max_completion_tokens":  self.max_tokens,
                 }
                 if model_config.supports_reasoning_effort(self.model_id):
                     reasoning_effort = self.config.get('reasoning_effort')
@@ -123,14 +208,15 @@ class OpenAIModelInterface(BaseModelInterface):
                         call_params["reasoning_effort"] = reasoning_effort
                 if model_config.supports_temperature(self.model_id):
                     call_params["temperature"] = self.temperature
-                response = self.client.chat.completions.create(**call_params)
             else:
-                response = self.client.chat.completions.create(
-                    model=self.model_id,
-                    messages=[{"role": "user", "content": prompt}],
-                    max_tokens=self.max_tokens,
-                    temperature=self.temperature,
-                )
+                call_params = {
+                    "model":       self.model_id,
+                    "messages":    [{"role": "user", "content": prompt}],
+                    "max_tokens":  self.max_tokens,
+                    "temperature": self.temperature,
+                }
+
+            response = self.client.chat.completions.create(**call_params)
 
             if hasattr(response, 'usage') and response.usage:
                 usage = response.usage
@@ -139,8 +225,7 @@ class OpenAIModelInterface(BaseModelInterface):
                 self.last_total_tokens  = usage.total_tokens
                 self.last_was_truncated = usage.completion_tokens >= self.max_tokens
 
-            content = response.choices[0].message.content
-            return content or ""
+            return response.choices[0].message.content or ""
 
         try:
             result = call_with_retry(
@@ -156,14 +241,22 @@ class OpenAIModelInterface(BaseModelInterface):
             print(f"  ✗ {self.model_name} failed permanently: {str(e)[:80]}")
             return f"Error: {str(e)}"
 
+    # ------------------------------------------------------------------
+    # Info
+    # ------------------------------------------------------------------
+
     def get_model_info(self) -> Dict:
-        """Get OpenAI model information"""
         info = super().get_model_info()
-        provider = "Azure OpenAI" if getattr(self, 'use_azure', False) else "OpenAI"
+        if self._use_tr_workspace:
+            provider = "TR AI Platform (Azure OpenAI)"
+        elif getattr(self, 'use_azure', False):
+            provider = "Azure OpenAI"
+        else:
+            provider = "OpenAI"
         info.update({
-            "provider": provider,
-            "model_id": self.model_id,
-            "family": "GPT",
-            "api_version": self.api_version
+            "provider":    provider,
+            "model_id":    self.model_id,
+            "family":      "GPT",
+            "api_version": self.api_version,
         })
         return info

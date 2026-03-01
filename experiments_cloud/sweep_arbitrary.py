@@ -36,7 +36,12 @@ import time
 import random
 import threading
 import argparse
+import warnings
 import numpy as np
+
+# Suppress google-cloud-aiplatform FutureWarnings about Python 3.10 EOL
+warnings.filterwarnings("ignore", category=FutureWarning, module="google")
+warnings.filterwarnings("ignore", category=UserWarning, module="vertexai")
 from pathlib import Path
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
