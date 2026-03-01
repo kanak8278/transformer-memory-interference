@@ -86,7 +86,7 @@ def find_value_positions(token_ids: list[int], value_tid: int) -> list[int]:
     return [i for i, t in enumerate(token_ids) if t == value_tid]
 
 
-def run_positional_analysis(model, tokenizer, trial: dict, value_to_tid: dict) -> dict:
+def run_positional_analysis(model, tokenizer, trial: dict, value_to_tid: dict, model_name: str = None) -> dict:
     """For each of the N values of the test category, track P(value) across layers
     and attention to that value's position."""
 
@@ -103,7 +103,7 @@ def run_positional_analysis(model, tokenizer, trial: dict, value_to_tid: dict) -
         value_tids_bare.append(bare_toks[0] if len(bare_toks) == 1 else -1)
 
     # Tokenize and run
-    formatted = format_for_chat(trial["prompt"], tokenizer)
+    formatted = format_for_chat(trial["prompt"], tokenizer, model_name=model_name)
     tokens = model.to_tokens(formatted)
     token_ids = tokens[0].tolist()
     seq_len = tokens.shape[1]
@@ -259,7 +259,7 @@ def main():
             print(f"    Values: {trial['all_values']}")
 
             t0 = time.time()
-            result = run_positional_analysis(model, tokenizer, trial, value_to_tid)
+            result = run_positional_analysis(model, tokenizer, trial, value_to_tid, model_name=args.model)
             elapsed = time.time() - t0
             result["elapsed_sec"] = round(elapsed, 1)
             all_results["analyses"].append(result)

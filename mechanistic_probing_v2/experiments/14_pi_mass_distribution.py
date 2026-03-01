@@ -58,7 +58,7 @@ def build_trial(num_keys, num_updates, condition, seed, value_pool, categories):
     }
 
 
-def run_analysis(model, tokenizer, trial, value_to_tid):
+def run_analysis(model, tokenizer, trial, value_to_tid, model_name=None):
     all_values = trial["all_values"]
     n_values = len(all_values)
 
@@ -71,7 +71,7 @@ def run_analysis(model, tokenizer, trial, value_to_tid):
         value_tids_sp.append(sp[0] if len(sp) == 1 else -1)
         value_tids_bare.append(bare[0] if len(bare) == 1 else -1)
 
-    formatted = format_for_chat(trial["prompt"], tokenizer)
+    formatted = format_for_chat(trial["prompt"], tokenizer, model_name=model_name)
     tokens = model.to_tokens(formatted)
     token_ids = tokens[0].tolist()
     seq_len = tokens.shape[1]
@@ -194,7 +194,7 @@ def main():
             seed = hash((condition, t_idx, args.updates, "pi_mass")) % (2**31)
             trial = build_trial(args.keys, n_updates, condition, seed, value_pool, categories)
 
-            result = run_analysis(model, tokenizer, trial, value_to_tid)
+            result = run_analysis(model, tokenizer, trial, value_to_tid, model_name=args.model)
             result["elapsed_sec"] = 0
             all_results["analyses"].append(result)
 

@@ -92,7 +92,7 @@ def build_single_token_trial(
     }
 
 
-def run_analysis(model, tokenizer, trial: dict, value_to_tid: dict) -> dict:
+def run_analysis(model, tokenizer, trial: dict, value_to_tid: dict, model_name: str = None) -> dict:
     """Run logit lens + attention + DLA on one trial."""
 
     init_tid = value_to_tid[trial["initial_value"]]
@@ -110,7 +110,7 @@ def run_analysis(model, tokenizer, trial: dict, value_to_tid: dict) -> dict:
     if init_tid == final_tid:
         print(f"    WARNING: init and final share same token ID!")
 
-    formatted = format_for_chat(trial["prompt"], tokenizer)
+    formatted = format_for_chat(trial["prompt"], tokenizer, model_name=model_name)
     tokens = model.to_tokens(formatted)
     token_ids = tokens[0].tolist()
     str_tokens = model.to_str_tokens(formatted)
@@ -247,7 +247,7 @@ def main():
             print(f"\n  Trial {t_idx+1}/{args.trials} (seed={seed})")
 
             t0 = time.time()
-            result = run_analysis(model, tokenizer, trial, value_to_tid)
+            result = run_analysis(model, tokenizer, trial, value_to_tid, model_name=args.model)
             result["elapsed_sec"] = round(time.time() - t0, 1)
             all_results["analyses"].append(result)
 
