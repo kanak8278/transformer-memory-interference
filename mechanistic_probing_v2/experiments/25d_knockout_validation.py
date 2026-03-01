@@ -87,7 +87,7 @@ def get_tids(value, value_to_tid, tokenizer):
 
 
 def run_knockout_both_conditions(model, tokenizer, value_to_tid, value_pool,
-                                  keys, updates, trials, heads_to_test):
+                                  model_name, keys, updates, trials, heads_to_test):
     """Run knockout on BOTH RI and PI for specified heads.
 
     Returns dict: {(layer,head): {"RI": {"baseline_acc", "ko_acc", "baseline_ld", "ko_ld"},
@@ -103,7 +103,7 @@ def run_knockout_both_conditions(model, tokenizer, value_to_tid, value_pool,
         for t_idx in range(trials):
             seed = hash((cond, t_idx, updates, keys, "25d")) % (2**31)
             trial = build_trial(keys, updates, cond, seed, value_pool)
-            formatted = format_for_chat(trial["prompt"], tokenizer, model_name=args.model)
+            formatted = format_for_chat(trial["prompt"], tokenizer, model_name=model_name)
             tokens = model.to_tokens(formatted)
 
             correct_tids = get_tids(trial["expected"], value_to_tid, tokenizer)
@@ -169,7 +169,7 @@ def run_knockout_both_conditions(model, tokenizer, value_to_tid, value_pool,
 
 
 def run_full_sweep(model, tokenizer, value_to_tid, value_pool,
-                    keys, updates, trials):
+                    keys, updates, trials, model_name=None):
     """Run knockout sweep of ALL heads on PI only. Returns causal_effect array."""
     n_layers = model.cfg.n_layers
     n_heads = model.cfg.n_heads
@@ -179,7 +179,7 @@ def run_full_sweep(model, tokenizer, value_to_tid, value_pool,
     for t_idx in range(trials):
         seed = hash(("PI", t_idx, updates, keys, "25d_sweep")) % (2**31)
         trial = build_trial(keys, updates, "PI", seed, value_pool)
-        formatted = format_for_chat(trial["prompt"], tokenizer, model_name=args.model)
+        formatted = format_for_chat(trial["prompt"], tokenizer, model_name=model_name)
         tokens = model.to_tokens(formatted)
         correct_tids = get_tids(trial["expected"], value_to_tid, tokenizer)
         wrong_tids = get_tids(trial["initial_value"], value_to_tid, tokenizer)
@@ -288,7 +288,7 @@ def main():
 
     t0 = time.time()
     v1_results, v1_baseline = run_knockout_both_conditions(
-        model, tokenizer, value_to_tid, value_pool,
+        model, tokenizer, value_to_tid, value_pool, args.model,
         primary_keys, primary_updates, args.targeted_trials, target_heads)
     v1_time = time.time() - t0
 
@@ -341,7 +341,7 @@ def main():
     t0 = time.time()
     v2_ce, v2_ko_acc, v2_bl_acc, v2_bl_ld = run_full_sweep(
         model, tokenizer, value_to_tid, value_pool,
-        secondary_keys, secondary_updates, args.sweep_trials)
+        secondary_keys, secondary_updates, args.sweep_trials, model_name=args.model)
     v2_time = time.time() - t0
 
     # Compare rankings between primary (from 25a results) and secondary

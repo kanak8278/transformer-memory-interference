@@ -464,22 +464,30 @@ def save_results(results, model_short, save_dir, partial=False):
     model_dir = Path(save_dir) / model_short
     model_dir.mkdir(parents=True, exist_ok=True)
 
-    suffix = "_partial" if partial else ""
-    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-
     summary = {k: v for k, v in results.items() if k != "cells"}
     summary["cells"] = {}
     for ck, cd in results["cells"].items():
         summary["cells"][ck] = {k: v for k, v in cd.items() if k != "trials"}
 
-    # Timestamped only — never overwritten
-    ts_path = model_dir / f"behavioral_sweep{suffix}_{ts}.json"
-    with open(ts_path, "w") as f:
-        json.dump(summary, f, indent=2)
-
-    full_path = model_dir / f"behavioral_sweep_full{suffix}_{ts}.json"
-    with open(full_path, "w") as f:
-        json.dump(results, f, indent=2)
+    if partial:
+        # Partial saves: fixed filename, always overwritten (no file explosion)
+        summary_path = model_dir / "behavioral_sweep_partial.json"
+        full_path = model_dir / "behavioral_sweep_full_partial.json"
+        with open(summary_path, "w") as f:
+            json.dump(summary, f, indent=2)
+        with open(full_path, "w") as f:
+            json.dump(results, f, indent=2)
+        print(f"  -> Checkpoint: {summary_path}")
+    else:
+        # Final save: timestamped, never overwritten
+        ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+        summary_path = model_dir / f"behavioral_sweep_{ts}.json"
+        full_path = model_dir / f"behavioral_sweep_full_{ts}.json"
+        with open(summary_path, "w") as f:
+            json.dump(summary, f, indent=2)
+        with open(full_path, "w") as f:
+            json.dump(results, f, indent=2)
+        print(f"  -> Saved to {summary_path}")
 
     print(f"  -> Saved to {ts_path}")
 

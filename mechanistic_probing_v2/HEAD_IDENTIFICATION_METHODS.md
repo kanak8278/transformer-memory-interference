@@ -251,6 +251,97 @@ Three-way validation of top 3 primacy heads (L8H3, L0H7, L0H3) on Qwen 1.5B:
 | All heads primacy-specific? | Yes (all 3) | **2/3 (L0H3 is PI-only)** | N/A |
 | CIs tight? | 86% [81-91%] | **91% [86-94%]** | N/A |
 
+---
+
+## Head Selection Protocol for Real Experiments (Paper-Quality Runs)
+
+### The Problem
+`run_all.py` uses top-5 heads from 25a by default. This is fine for exploration
+but insufficient for paper-quality claims. Different operating points, trial counts,
+and random seeds can shift the rankings. We need a principled selection criterion.
+
+### What the literature does (summary)
+
+| Paper | Method | Criterion |
+|-------|--------|-----------|
+| Wang et al. (IOI) | Visual + functional validation | No formal threshold — visual inspection then confirm function |
+| Wu et al. (Retrieval Heads) | Behavioral threshold | Copy score ≥ **0.1** (retrieves needle in 10%+ of trials) |
+| Conmy et al. (ACDC) | Swept threshold τ | No fixed value — report ROC curve across τ values |
+| Common practice | Top-K | Top 5–10 by effect size magnitude |
+
+None use a universal threshold. The field leans toward "top-K + functional validation."
+
+### Our Protocol (Two-Gate Criterion)
+
+**Gate 1: Top-N by magnitude at primary operating point**
+- Run 25a with 100+ trials at regime B operating point
+- Take top N heads by `|causal_effect|` (sorted descending)
+- N = 10 initially (generous); narrow down after Gate 2
+- Keep primacy (positive causal_effect) and recency (negative) separate
+
+**Gate 2: Stability across operating points**
+- Re-run 25a (or use 25d V2) at a second operating point (same regime)
+- Include only heads that appear in top-10 at BOTH points
+- If the same head ranks #1–3 at both points → high confidence primacy head
+- If ranking shifts significantly → head may be operating-point-specific noise
+
+**Gate 3 (optional, for paper): Statistical significance**
+- Run 25d V3 with 200 trials + bootstrap CIs on final selected heads
+- Confirm: knockout helps PI AND hurts RI (primacy-specific, not general loss)
+- Only then do they get cited in the paper
+
+### Selecting Heads for run_all.py (Practical Guide)
+
+**For exploration (any run):**
+```bash
+python experiments/run_all.py --model ... --points "2,3" --trials 50
+# Uses top-5 auto-extracted from 25a — good enough for seeing patterns
+```
+
+**For paper-quality (real results):**
+```bash
+# Step 1: Run 25a at multiple operating points with 100+ trials each
+python experiments/run_all.py --model ... --points "2,3 1,5" --trials 100 --exps "25a"
+
+# Step 2: Inspect rankings — find heads stable across BOTH points
+python3 -c "
+import json
+for pt in ['2k_3u', '1k_5u']:
+    d = json.load(open(f'results/ModelName/{pt}/per_head_knockout_*.json'))
+    print(pt, [(h['layer'], h['head'], h['causal_effect']) for h in d['top_primacy_heads'][:10]])
+"
+
+# Step 3: Manually select stable heads, pass to Phase 2
+python experiments/run_all.py --model ... --points "2,3" --trials 100 \
+    --phase 2 --heads "8,3 0,7 0,3"  # hardcoded from stability analysis
+```
+
+### Per-Model Validated Heads (Paper-Quality)
+
+The following heads have passed both gates (25a + 25d validation):
+
+| Model | Primary Point | Stable Primacy Heads | Causal Effect | Validated? |
+|-------|--------------|---------------------|---------------|-----------|
+| Gemma-3-1b-it | 2k,2u | **L14H2**, L4H1, L8H2 | +20.2, +8.1, +6.3 | ✓ 25d V1/V2/V3 |
+| Qwen2.5-1.5B-Instruct | 1k,3u | **L8H3**, L0H7, L0H3 | +8.3, +3.1, +2.4 | ✓ 25d V1/V2/V3 |
+| Qwen2.5-0.5B-Instruct | — | Distributed — no dominant head | — | Not run yet |
+| Pythia-410m | — | TBD — run 25a first | — | Not run yet |
+| Qwen2.5-3B-Instruct | — | TBD — run 25a first | — | Not run yet |
+
+**When running Phase 2 on Gemma or Qwen 1.5B, always use the validated heads above,
+not the auto-extracted top-5.** Use `--heads "14,2 4,1 8,2"` for Gemma,
+`--heads "8,3 0,7 0,3"` for Qwen 1.5B.
+
+### How Many Heads?
+
+Rule of thumb from our data:
+- **Concentrated model** (Gemma, Qwen 1.5B): 1–3 heads dominate. Use top-3.
+- **Distributed model** (Qwen 0.5B, Pythia): Effects spread across 10+ heads.
+  Use top-5 to top-10 for aggregate analysis. Hard to claim single "primacy circuit."
+- **Indicator**: if #1 head has Δld > 3× the #2 head → concentrated. Otherwise distributed.
+
+---
+
 ## References
 
 - Wang et al. 2022 "Interpretability in the Wild" (IOI circuit) — per-head patching protocol
