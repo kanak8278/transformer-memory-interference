@@ -89,10 +89,10 @@ def classify_positions(token_ids, value_to_tid, trial):
     return roles
 
 
-def run_with_bias_and_extract(model, tokenizer, trial, value_to_tid,
+def run_with_bias_and_extract(model, tokenizer, trial, value_to_tid, model_name,
                                heads_to_bias, lam, mode, primacy_heads):
     """Run trial with bias and extract attention patterns for primacy heads."""
-    formatted = format_for_chat(trial["prompt"], tokenizer)
+    formatted = format_for_chat(trial["prompt"], tokenizer, model_name=model_name)
     tokens = model.to_tokens(formatted)
     seq_len = tokens.shape[1]
     token_ids = tokens[0].tolist()
@@ -219,7 +219,7 @@ def main():
         for mode in modes:
             lam = args.lam if mode != "none" else 0.0
             correct, head_attn = run_with_bias_and_extract(
-                model, tokenizer, trial, value_to_tid,
+                model, tokenizer, trial, value_to_tid, args.model,
                 primacy_heads, lam, mode, primacy_heads)
 
             accuracy[mode]["correct"] += correct

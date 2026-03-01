@@ -103,7 +103,7 @@ def run_knockout_both_conditions(model, tokenizer, value_to_tid, value_pool,
         for t_idx in range(trials):
             seed = hash((cond, t_idx, updates, keys, "25d")) % (2**31)
             trial = build_trial(keys, updates, cond, seed, value_pool)
-            formatted = format_for_chat(trial["prompt"], tokenizer)
+            formatted = format_for_chat(trial["prompt"], tokenizer, model_name=args.model)
             tokens = model.to_tokens(formatted)
 
             correct_tids = get_tids(trial["expected"], value_to_tid, tokenizer)
@@ -179,7 +179,7 @@ def run_full_sweep(model, tokenizer, value_to_tid, value_pool,
     for t_idx in range(trials):
         seed = hash(("PI", t_idx, updates, keys, "25d_sweep")) % (2**31)
         trial = build_trial(keys, updates, "PI", seed, value_pool)
-        formatted = format_for_chat(trial["prompt"], tokenizer)
+        formatted = format_for_chat(trial["prompt"], tokenizer, model_name=args.model)
         tokens = model.to_tokens(formatted)
         correct_tids = get_tids(trial["expected"], value_to_tid, tokenizer)
         wrong_tids = get_tids(trial["initial_value"], value_to_tid, tokenizer)

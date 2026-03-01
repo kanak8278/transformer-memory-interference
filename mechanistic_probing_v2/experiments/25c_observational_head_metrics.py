@@ -70,7 +70,7 @@ def compute_all_metrics(model, tokenizer, trial, value_to_tid):
     init_tid = value_to_tid.get(init_val, -1)
     final_tid = value_to_tid.get(final_val, -1)
 
-    formatted = format_for_chat(trial["prompt"], tokenizer)
+    formatted = format_for_chat(trial["prompt"], tokenizer, model_name=args.model)
     tokens = model.to_tokens(formatted)
     token_ids = tokens[0].tolist()
 

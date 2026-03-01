@@ -498,10 +498,16 @@ def generate_trial(
     seed,
     test_category_idx=0,
     categories=None,
-    use_chat_format=True,
+    model_name=None,
+    use_chat_format=None,
     tokenizer=None,
 ):
     """Generate a single interference trial.
+
+    Prompt format is auto-detected from model_name:
+      - Instruct model  → chat template (format_for_chat)
+      - Base model      → few-shot completion format (build_completion_prompt)
+      - model_name=None → falls back to use_chat_format param (default True)
 
     Args:
         dataset_type: One of ARBITRARY_SINGLE, ARBITRARY_MULTI,
@@ -512,13 +518,24 @@ def generate_trial(
         seed: Random seed for full reproducibility.
         test_category_idx: Which category index to query (default 0).
         categories: Optional fixed category list. If None, auto-selected.
-        use_chat_format: If True, uses chat template. If False, raw prompt.
-        tokenizer: Required if use_chat_format=True and tokenizer has
-                   apply_chat_template.
+        model_name: HuggingFace model name for auto-detecting prompt format.
+                    If provided, overrides use_chat_format.
+        use_chat_format: Fallback if model_name is None. Default True.
+        tokenizer: Required for applying chat template.
 
     Returns:
         InterferenceTrial with prompt and all metadata.
     """
+    from .model_loader import is_instruct_model as _is_instruct
+
+    # Resolve prompt format
+    if model_name is not None:
+        use_chat = _is_instruct(model_name)
+    elif use_chat_format is not None:
+        use_chat = use_chat_format
+    else:
+        use_chat = True  # default: assume instruct
+
     _validate_dataset_type(dataset_type)
     rng = random.Random(seed)
 
@@ -551,35 +568,37 @@ def generate_trial(
     # Select test category
     test_category = categories[test_category_idx % len(categories)]
 
-    # Build prompt
-    stream_lines = [f"{item['category']}: {item['value']}" for item in sequence]
-    stream_text = "\n".join(stream_lines)
-    query_word = "first" if condition == "RI" else "last"
-
     cat_values = [
         item["value"] for item in sequence
         if item["category"] == test_category
     ]
     expected = cat_values[0] if condition == "RI" else cat_values[-1]
 
-    raw_prompt = (
-        f"Read the following key-value stream. "
-        f"Each key gets updated multiple times.\n\n"
-        f"{stream_text}\n\n"
-        f"What was the {query_word} value of {test_category}?"
-    )
-
-    # Apply chat template if requested
-    if use_chat_format and tokenizer and hasattr(tokenizer, "apply_chat_template"):
-        messages = [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": raw_prompt},
-        ]
-        prompt = tokenizer.apply_chat_template(
-            messages, tokenize=False, add_generation_prompt=True
+    # Build prompt based on model type
+    if use_chat:
+        # Instruct model: raw prompt + chat template
+        stream_lines = [f"{item['category']}: {item['value']}" for item in sequence]
+        stream_text = "\n".join(stream_lines)
+        query_word = "first" if condition == "RI" else "last"
+        raw_prompt = (
+            f"Read the following key-value stream. "
+            f"Each key gets updated multiple times.\n\n"
+            f"{stream_text}\n\n"
+            f"What was the {query_word} value of {test_category}?"
         )
+        if tokenizer and hasattr(tokenizer, "apply_chat_template"):
+            messages = [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": raw_prompt},
+            ]
+            prompt = tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
+        else:
+            prompt = raw_prompt
     else:
-        prompt = raw_prompt
+        # Base model: fixed few-shot demos + completion format
+        prompt, _ = build_completion_prompt(sequence, condition, test_category)
 
     return InterferenceTrial(
         categories=categories,
@@ -617,12 +636,23 @@ def get_original_categories():
 ORIGINAL_CATEGORIES = get_original_categories()
 
 
-def format_for_chat(prompt, tokenizer):
-    """Wrap a raw prompt in chat template if tokenizer supports it.
+def format_for_chat(prompt, tokenizer, model_name=None):
+    """Format a raw prompt appropriately for the model type.
+
+    Auto-detects from model_name:
+      - Instruct model → apply chat template (system prompt + user message)
+      - Base model     → prepend FIXED_COMPLETION_DEMOS (teaches task format)
+    Falls back to chat template if model_name not given.
 
     Backward-compatible with core.dataset.format_for_chat.
     """
-    if hasattr(tokenizer, "apply_chat_template"):
+    if model_name is not None:
+        from .model_loader import is_instruct_model
+        if not is_instruct_model(model_name):
+            # Base model: prepend fixed few-shot demos
+            return FIXED_COMPLETION_DEMOS + prompt
+
+    if tokenizer and hasattr(tokenizer, "apply_chat_template"):
         messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": prompt},
@@ -686,75 +716,53 @@ COMPLETION_CATEGORIES = [
 ]
 
 
-def generate_few_shot_demo(num_keys, num_updates, seed, value_pool):
-    """Generate two few-shot demo blocks for base model completion format.
-
-    Returns (demo_categories_list, demo_sequences_list) — two blocks.
-    """
-    rng = random.Random(seed + 999_999)
-
-    DEMO_BLOCKS = [
-        {
-            "categories": ["color", "animal"],
-            "values": {
-                "color": ["red", "blue", "green", "pink", "white", "black", "gold", "brown", "gray", "orange"],
-                "animal": ["cat", "dog", "bear", "fish", "bird", "wolf", "deer", "fox", "rat", "cow"],
-            },
-        },
-        {
-            "categories": ["fruit", "metal"],
-            "values": {
-                "fruit": ["apple", "grape", "lemon", "peach", "plum", "cherry", "mango", "lime", "pear", "fig"],
-                "metal": ["gold", "iron", "steel", "copper", "tin", "lead", "zinc", "brass", "silver", "chrome"],
-            },
-        },
-    ]
-
-    all_demo_cats = []
-    all_demo_seqs = []
-
-    for block in DEMO_BLOCKS:
-        cats = block["categories"][:min(num_keys, len(block["categories"]))]
-        values_per_cat = {}
-        for cat in cats:
-            available = block["values"][cat]
-            n = min(num_updates, len(available))
-            values_per_cat[cat] = available[:n]
-
-        demo_seq = build_interleaved_sequence(cats, values_per_cat, rng)
-        all_demo_cats.append(cats)
-        all_demo_seqs.append(demo_seq)
-
-    return all_demo_cats, all_demo_seqs
+# Fixed few-shot demo block for base models (Pythia, Mamba).
+# Always the same — teaches the KV stream format and first/last retrieval.
+# No need to adapt to num_keys/num_updates: the model just needs to see the pattern.
+FIXED_COMPLETION_DEMOS = (
+    "color: red\n"
+    "animal: cat\n"
+    "color: blue\n"
+    "animal: dog\n"
+    "color: green\n"
+    "The first value of color was: red\n"
+    "The last value of color was: green\n"
+    "The first value of animal was: cat\n"
+    "The last value of animal was: dog\n"
+    "\n"
+    "fruit: apple\n"
+    "metal: gold\n"
+    "fruit: grape\n"
+    "metal: iron\n"
+    "fruit: lemon\n"
+    "The first value of fruit was: apple\n"
+    "The last value of fruit was: lemon\n"
+    "The first value of metal was: gold\n"
+    "The last value of metal was: iron\n"
+    "\n"
+)
 
 
-def build_completion_prompt(sequence, condition, test_category,
-                            demo_categories_list=None, demo_sequences_list=None):
-    """Build a completion-format prompt with optional few-shot demos.
+def build_completion_prompt(sequence, condition, test_category):
+    """Build a completion-format prompt with fixed few-shot demos.
 
-    For base models (Pythia) that need few-shot examples to learn the task.
+    For base models (Pythia, Mamba) that need examples to learn the task format.
     """
     query_word = "first" if condition == "RI" else "last"
     cat_values = [item["value"] for item in sequence if item["category"] == test_category]
     expected = cat_values[0] if condition == "RI" else cat_values[-1]
 
-    demo_text = ""
-    if demo_categories_list and demo_sequences_list:
-        for demo_cats, demo_seq in zip(demo_categories_list, demo_sequences_list):
-            demo_lines = [f"{it['category']}: {it['value']}" for it in demo_seq]
-            demo_text += "\n".join(demo_lines) + "\n"
-            for demo_cat in demo_cats:
-                demo_vals = [it["value"] for it in demo_seq if it["category"] == demo_cat]
-                if demo_vals:
-                    demo_text += f"The first value of {demo_cat} was: {demo_vals[0]}\n"
-                    demo_text += f"The last value of {demo_cat} was: {demo_vals[-1]}\n"
-            demo_text += "\n"
-
     test_lines = [f"{it['category']}: {it['value']}" for it in sequence]
     test_text = "\n".join(test_lines)
-    prompt = f"{demo_text}{test_text}\nThe {query_word} value of {test_category} was:"
+    prompt = f"{FIXED_COMPLETION_DEMOS}{test_text}\nThe {query_word} value of {test_category} was:"
 
     return prompt, expected
+
+
+# Keep for backward compatibility — callers that pass demo_categories_list etc.
+def generate_few_shot_demo(*args, **kwargs):
+    """Deprecated. Use FIXED_COMPLETION_DEMOS directly."""
+    return None, None
 
 
 def generate_completion_trial(
@@ -788,15 +796,7 @@ def generate_completion_trial(
     test_category = categories[test_category_idx % len(categories)]
     sequence = build_interleaved_sequence(categories, values_per_cat, rng)
 
-    demo_cats_list, demo_seqs_list = generate_few_shot_demo(
-        num_keys, num_updates, seed, value_pool
-    )
-
-    prompt, expected = build_completion_prompt(
-        sequence, condition, test_category,
-        demo_categories_list=demo_cats_list,
-        demo_sequences_list=demo_seqs_list,
-    )
+    prompt, expected = build_completion_prompt(sequence, condition, test_category)
 
     cat_values = [item["value"] for item in sequence if item["category"] == test_category]
 

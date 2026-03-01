@@ -80,7 +80,7 @@ def find_value_positions(token_ids, value_to_tid, values):
     return positions
 
 
-def run_with_bias(model, tokenizer, trial, value_to_tid,
+def run_with_bias(model, tokenizer, trial, value_to_tid, model_name,
                   heads_to_bias, lam, mode="blind"):
     """Run trial with positional recency bias on specified heads.
 
@@ -88,7 +88,7 @@ def run_with_bias(model, tokenizer, trial, value_to_tid,
         lam: bias strength. score[j] += lam * (j / seq_len)
         mode: "blind" (bias all positions) or "oracle" (bias only value positions)
     """
-    formatted = format_for_chat(trial["prompt"], tokenizer)
+    formatted = format_for_chat(trial["prompt"], tokenizer, model_name=model_name)
     tokens = model.to_tokens(formatted)
     seq_len = tokens.shape[1]
     token_ids = tokens[0].tolist()
@@ -133,8 +133,8 @@ def run_with_bias(model, tokenizer, trial, value_to_tid,
     return pred_text, correct
 
 
-def run_baseline(model, tokenizer, trial):
-    formatted = format_for_chat(trial["prompt"], tokenizer)
+def run_baseline(model, tokenizer, trial, model_name):
+    formatted = format_for_chat(trial["prompt"], tokenizer, model_name=model_name)
     tokens = model.to_tokens(formatted)
     with torch.no_grad():
         logits = model(tokens)
@@ -200,10 +200,10 @@ def main():
 
             for lam in lambda_values:
                 if lam == 0:
-                    _, correct = run_baseline(model, tokenizer, trial)
+                    _, correct = run_baseline(model, tokenizer, trial, args.model)
                 else:
                     _, correct = run_with_bias(
-                        model, tokenizer, trial, value_to_tid,
+                        model, tokenizer, trial, value_to_tid, args.model,
                         primacy_heads, lam, mode=args.mode)
 
                 results[lam][condition]["correct"] += correct

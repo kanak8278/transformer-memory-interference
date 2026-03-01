@@ -76,9 +76,9 @@ def build_trial(num_keys, num_updates, condition, seed, value_pool, categories):
     }
 
 
-def run_with_knockout(model, tokenizer, trial, heads_to_knock):
+def run_with_knockout(model, tokenizer, trial, heads_to_knock, model_name):
     """Zero out specific heads and return accuracy."""
-    formatted = format_for_chat(trial["prompt"], tokenizer)
+    formatted = format_for_chat(trial["prompt"], tokenizer, model_name=model_name)
     tokens = model.to_tokens(formatted)
 
     hooks = []
@@ -228,7 +228,7 @@ def main():
             if init_tid < 0 or final_tid < 0 or init_tid == final_tid:
                 continue
 
-            formatted = format_for_chat(trial["prompt"], tokenizer)
+            formatted = format_for_chat(trial["prompt"], tokenizer, model_name=args.model)
             tokens = model.to_tokens(formatted)
 
             with torch.no_grad():
@@ -322,7 +322,7 @@ def main():
                                 value_pool, categories)
 
             # Baseline
-            formatted = format_for_chat(trial["prompt"], tokenizer)
+            formatted = format_for_chat(trial["prompt"], tokenizer, model_name=args.model)
             tokens = model.to_tokens(formatted)
             with torch.no_grad():
                 logits = model(tokens)
@@ -333,7 +333,7 @@ def main():
 
             # Knockout each primacy head individually
             for l, h in primacy_heads:
-                _, correct = run_with_knockout(model, tokenizer, trial, [(l, h)])
+                _, correct = run_with_knockout(model, tokenizer, trial, [(l, h)], args.model)
                 key = f"knockout_L{l}H{h}"
                 ablation_results[key][condition] += correct
                 ablation_results[key]["n"] += 1

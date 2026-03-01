@@ -72,6 +72,7 @@ from mechanistic_probing_v2.core.model_loader import (
     model_short_name,
     load_model_hf,
 )
+from mechanistic_probing_v2.core.dataset_configs import FIXED_COMPLETION_DEMOS, format_for_chat
 from mechanistic_probing_v2.core.inference import run_batch
 from mechanistic_probing_v2.core.evaluation import classify_error, bootstrap_ci
 
@@ -114,11 +115,6 @@ INSTRUCT_KEY_LEVELS = [2, 3, 5, 7, 10, 15, 20, 25, 30, 46]
 INSTRUCT_UPDATE_LEVELS = [1, 3, 5, 10, 20, 50, 100, 200]
 
 SYSTEM_PROMPT = "Answer with ONLY the exact value. No explanation."
-
-# ── Fixed demo categories for base model few-shot (disjoint from test)
-# These use ARBITRARY_MULTI values regardless of --dataset, since they're
-# just teaching the model the task format, not part of the evaluation.
-DEMO_CATEGORIES = ["visual art", "tools", "landform", "musical instrument"]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -192,77 +188,27 @@ def shuffle_no_consecutive(items, rng, max_attempts=100):
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# FEW-SHOT DEMOS (base models only)
-# ═══════════════════════════════════════════════════════════════════════════
-
-def build_few_shot_demos(num_keys, num_updates, rng):
-    """Build two demo blocks with solved first/last queries.
-
-    Uses DEMO_CATEGORIES with ARBITRARY_MULTI values (always synthetic).
-    Two blocks, 2 categories each.
-    """
-    from mechanistic_probing_v2.core.dataset_configs import get_value_pool
-
-    demo_text = ""
-    for block_idx in range(2):
-        cats = DEMO_CATEGORIES[block_idx * 2: block_idx * 2 + 2]
-        n_cats = min(num_keys, len(cats))
-        cats = cats[:n_cats]
-
-        values_per_cat = {}
-        for cat in cats:
-            pool = get_value_pool("ARBITRARY_MULTI", category=cat)
-            start = 400 + block_idx * 50
-            values_per_cat[cat] = pool[start:start + num_updates]
-
-        items = []
-        for cat in cats:
-            for val in values_per_cat[cat]:
-                items.append({"category": cat, "value": val})
-        items = shuffle_no_consecutive(items, rng)
-
-        demo_lines = [f"{it['category']}: {it['value']}" for it in items]
-        demo_text += "\n".join(demo_lines) + "\n"
-
-        for cat in cats:
-            cat_vals = [it["value"] for it in items if it["category"] == cat]
-            demo_text += f"The first value of {cat} was: {cat_vals[0]}\n"
-            demo_text += f"The last value of {cat} was: {cat_vals[-1]}\n"
-
-        demo_text += "\n"
-
-    return demo_text
-
-
-# ═══════════════════════════════════════════════════════════════════════════
 # TRIAL GENERATION
 # ═══════════════════════════════════════════════════════════════════════════
 
 def generate_trial(dataset_type, num_keys, num_updates, condition, seed,
                    use_chat_format=False, tokenizer=None):
-    """Generate a single trial using dataset_configs.
+    """Generate a single trial.
 
-    For base models (use_chat_format=False): completion format with few-shot demos.
-    For instruct models (use_chat_format=True): chat template with system prompt.
+    Prompt format auto-detected:
+      use_chat_format=True  → chat template (instruct models)
+      use_chat_format=False → FIXED_COMPLETION_DEMOS + raw prompt (base models)
     """
     rng = random.Random(seed)
 
-    # Get eligible categories for this dataset + update count
     eligible = get_eligible_categories(dataset_type, min_values=num_updates)
-
-    # For base models, exclude demo categories from test pool
-    if not use_chat_format:
-        eligible = [c for c in eligible if c not in DEMO_CATEGORIES]
-
     categories = rng.sample(eligible, min(num_keys, len(eligible)))
     test_category = categories[seed % num_keys]
 
-    # Generate values from dataset_configs
     values_per_cat = generate_values_for_trial(
         dataset_type, categories, num_updates, rng
     )
 
-    # Build interleaved sequence
     items = []
     for cat in categories:
         for val in values_per_cat[cat]:
@@ -274,12 +220,13 @@ def generate_trial(dataset_type, num_keys, num_updates, condition, seed,
     cat_values = [it["value"] for it in items if it["category"] == test_category]
     expected = cat_values[0] if condition == "RI" else cat_values[-1]
 
+    raw_prompt = (
+        f"Read the following key-value stream. Each key gets updated multiple times.\n\n"
+        f"{stream}\n\n"
+        f"What was the {query_word} value of {test_category}?"
+    )
+
     if use_chat_format:
-        raw_prompt = (
-            f"Read the following key-value stream. Each key gets updated multiple times.\n\n"
-            f"{stream}\n\n"
-            f"What was the {query_word} value of {test_category}?"
-        )
         if tokenizer and hasattr(tokenizer, "apply_chat_template"):
             messages = [
                 {"role": "system", "content": SYSTEM_PROMPT},
@@ -291,8 +238,7 @@ def generate_trial(dataset_type, num_keys, num_updates, condition, seed,
         else:
             prompt = raw_prompt
     else:
-        demo_text = build_few_shot_demos(num_keys, num_updates, rng)
-        prompt = f"{demo_text}{stream}\nThe {query_word} value of {test_category} was:"
+        prompt = f"{FIXED_COMPLETION_DEMOS}{stream}\nThe {query_word} value of {test_category} was:"
 
     return {
         "prompt": prompt,
@@ -326,8 +272,6 @@ def preflight_pool_check(dataset_type, num_keys, num_updates, use_chat_format=Fa
     that enough categories have sufficient pool size.
     """
     eligible = get_eligible_categories(dataset_type, min_values=num_updates)
-    if not use_chat_format:
-        eligible = [c for c in eligible if c not in DEMO_CATEGORIES]
     return len(eligible) >= num_keys, len(eligible)
 
 
@@ -357,7 +301,7 @@ def run_sweep(model, tokenizer, model_name, args, feasible_grid,
             "trials_per_cell": trials_per_cell,
             "dataset_type": dataset_type,
             "num_categories": len(ds_config["categories"]),
-            "demo_categories": [] if use_chat else DEMO_CATEGORIES,
+            "demo_format": "none" if use_chat else "fixed_completion_demos",
             "gpu": args.gpu,
             "device": str(device),
             "initial_batch_size": args.batch_size,

@@ -100,7 +100,7 @@ def main():
     # ── Precompute tokens and token IDs for each trial ──
     trial_data = []
     for trial in trials:
-        formatted = format_for_chat(trial["prompt"], tokenizer)
+        formatted = format_for_chat(trial["prompt"], tokenizer, model_name=args.model)
         tokens = model.to_tokens(formatted)
         correct_tids = get_token_ids(trial["expected"], value_to_tid, tokenizer)
         wrong_tids = get_token_ids(trial["initial_value"], value_to_tid, tokenizer)

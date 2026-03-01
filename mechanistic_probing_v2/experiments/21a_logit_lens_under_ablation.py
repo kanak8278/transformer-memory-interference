@@ -166,7 +166,7 @@ def main():
             init_tids = list(set([init_tid, init_bare]))
             final_tids = list(set([final_tid, final_bare]))
 
-            formatted = format_for_chat(trial["prompt"], tokenizer)
+            formatted = format_for_chat(trial["prompt"], tokenizer, model_name=args.model)
             tokens = model.to_tokens(formatted)
 
             for mode in modes:
