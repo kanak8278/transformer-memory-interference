@@ -461,7 +461,7 @@ def run_sweep(model, tokenizer, model_name, args, feasible_grid,
 # ═══════════════════════════════════════════════════════════════════════════
 
 def save_results(results, model_short, save_dir, partial=False):
-    model_dir = Path(save_dir) / model_short
+    model_dir = Path(save_dir) / model_short / "behavioral_sweep"
     model_dir.mkdir(parents=True, exist_ok=True)
 
     summary = {k: v for k, v in results.items() if k != "cells"}
@@ -488,8 +488,6 @@ def save_results(results, model_short, save_dir, partial=False):
         with open(full_path, "w") as f:
             json.dump(results, f, indent=2)
         print(f"  -> Saved to {summary_path}")
-
-    print(f"  -> Saved to {ts_path}")
 
 
 def print_summary(results):
@@ -589,7 +587,7 @@ def main():
     print(f"  Grid:     {len(kl)} keys × {len(ul)} updates = {len(kl)*len(ul)} cells")
     print(f"  Format:   {fmt}")
     print(f"  Context:  {ctx_limit}")
-    print(f"  Save:     {args.save_dir}/{m_short}/")
+    print(f"  Save:     {args.save_dir}/{m_short}/behavioral_sweep/")
     print("=" * 70)
 
     # Show dataset capacity
