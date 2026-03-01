@@ -57,7 +57,7 @@ def build_trial(num_keys, num_updates, condition, seed, value_pool):
     }
 
 
-def compute_all_metrics(model, tokenizer, trial, value_to_tid):
+def compute_all_metrics(model, tokenizer, trial, value_to_tid, model_name=None):
     """Run one trial, compute all 5 metrics for every head.
 
     Returns dict with arrays of shape [n_layers, n_heads] for each metric.
@@ -70,7 +70,7 @@ def compute_all_metrics(model, tokenizer, trial, value_to_tid):
     init_tid = value_to_tid.get(init_val, -1)
     final_tid = value_to_tid.get(final_val, -1)
 
-    formatted = format_for_chat(trial["prompt"], tokenizer, model_name=args.model)
+    formatted = format_for_chat(trial["prompt"], tokenizer, model_name=model_name)
     tokens = model.to_tokens(formatted)
     token_ids = tokens[0].tolist()
 
@@ -200,7 +200,7 @@ def main():
         for condition in ["RI", "PI"]:
             seed = hash((condition, t_idx, args.updates, args.keys, "25c")) % (2**31)
             trial = build_trial(args.keys, args.updates, condition, seed, value_pool)
-            metrics = compute_all_metrics(model, tokenizer, trial, value_to_tid)
+            metrics = compute_all_metrics(model, tokenizer, trial, value_to_tid, model_name=args.model)
 
             a = accum[condition]
             a["dla"] += metrics["dla"]
