@@ -22,12 +22,16 @@ def classify_error(predicted, expected, initial_value, final_value,
                    all_values, condition):
     """Classify a model's answer into an error category.
 
-    Error types:
+    Error types (outcome labels — describe WHAT the model output, not WHY):
       - correct: answer matches expected value
-      - primacy_intrusion (PI only): answer is the initial value instead of final
-      - recency_intrusion (RI only): answer is the final value instead of initial
-      - intermediate_intrusion: answer is some other value from the stream
-      - garbage: answer doesn't match any value in the stream
+      - primacy_intrusion (PI only): model output the initial value when asked for final
+      - recency_intrusion (RI only): model output the final value when asked for initial
+      - intermediate_intrusion: model output some intermediate value from the stream
+      - garbage: model output something not in the value stream at all
+
+    Note: "primacy_intrusion" and "recency_intrusion" are outcome classifications,
+    not mechanism claims. Whether primacy intrusion is caused by initial-value promotion
+    or final-value suppression is determined by mechanistic experiments (exp 12, 14, 21a).
 
     Args:
         predicted: Model's generated answer string.

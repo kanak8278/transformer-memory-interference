@@ -123,6 +123,9 @@ class HeadAttentionStats:
     attn_to_instruction: float # attention to instruction tokens
     retrieval_score: float     # total attention to any value position
     primacy_score: float       # attn_initial / (attn_initial + attn_final)
+                               # OBSERVATIONAL ONLY — high score means head looks at initial
+                               # positions more than final, but does NOT mean the head causes
+                               # PI failures. Use exp 25a causal knockout to establish causation.
 
 
 def extract_attention_stats(
