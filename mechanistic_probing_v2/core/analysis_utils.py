@@ -206,16 +206,42 @@ def attention_stats_to_arrays(
 
 
 # ── Direct Logit Attribution (DLA) ──────────────────────────────────────────
+#
+# FRAMING NOTE (updated 2026-03):
+# Original framing: DLA measured logit(init) - logit(final) per component,
+# treating the two tokens as competitors in the same trial. This assumed
+# "primacy promotion" as the mechanism — i.e. heads push init over final.
+#
+# Corrected framing: PI failure = model fails to retrieve the FINAL value.
+# Whether this is because (a) final is suppressed or (b) initial is promoted
+# is an empirical question answered by exp 14. DLA now computes BOTH projections
+# separately:
+#   - head_logit_final: how much does this component support final-value retrieval?
+#     (negative = component suppresses the final value — primary PI story)
+#   - head_logit_init: how much does this component support initial-value retrieval?
+#     (positive = component promotes initial value — secondary/corroborating story)
+#   - head_logit_diff: head_logit_init - head_logit_final (kept for backward compat
+#     and for exp 20 minority override analysis which uses the signed difference)
+#
+# Interpretation: compare head_logit_final on PI trials vs RI trials.
+# A head with high head_logit_init on RI but LOW head_logit_final on PI is the
+# asymmetry we care about — helps retrieval when answer is initial, hurts when final.
 
 @dataclass
 class DLAResult:
-    """Per-component contribution to logit difference."""
+    """Per-component contribution to logit difference and individual token logits."""
     # Per attention head: shape [n_layers, n_heads]
-    head_logit_diff: np.ndarray  # contribution to logit(initial) - logit(final)
+    head_logit_diff: np.ndarray   # logit(initial) - logit(final) [backward compat]
+    head_logit_init: np.ndarray   # component contribution to logit(initial)
+    head_logit_final: np.ndarray  # component contribution to logit(final)
     # Per MLP layer: shape [n_layers]
     mlp_logit_diff: np.ndarray
+    mlp_logit_init: np.ndarray
+    mlp_logit_final: np.ndarray
     # Embed contribution
     embed_logit_diff: float = 0.0
+    embed_logit_init: float = 0.0
+    embed_logit_final: float = 0.0
 
 
 def compute_dla(
@@ -227,11 +253,16 @@ def compute_dla(
 ) -> DLAResult:
     """Compute Direct Logit Attribution for each component.
 
-    For each attention head and MLP layer, computes:
-        component_output @ (W_U[:, initial_id] - W_U[:, final_id])
+    For each attention head and MLP layer, computes both:
+        component_output @ W_U[:, initial_id]   → head_logit_init
+        component_output @ W_U[:, final_id]     → head_logit_final
+        difference of the two                   → head_logit_diff
 
-    This gives each component's contribution to the logit difference
-    between initial and final value tokens.
+    Positive head_logit_final = component supports retrieval of the final value.
+    Negative head_logit_final = component suppresses the final value (PI failure mode).
+
+    The difference (head_logit_diff) is kept for backward compatibility and for
+    experiments that need the signed comparison (e.g. exp 20 minority override).
 
     Args:
         model: HookedTransformer
@@ -246,45 +277,62 @@ def compute_dla(
     n_layers = model.cfg.n_layers
     n_heads = model.cfg.n_heads
 
-    # Direction in logit space: initial - final
-    logit_dir = model.W_U[:, initial_token_id] - model.W_U[:, final_token_id]  # [d_model]
+    # Separate directions in logit space
+    dir_init  = model.W_U[:, initial_token_id]                               # [d_model]
+    dir_final = model.W_U[:, final_token_id]                                  # [d_model]
+    dir_diff  = dir_init - dir_final                                           # [d_model]
 
-    head_diff = np.zeros((n_layers, n_heads))
-    mlp_diff = np.zeros(n_layers)
+    head_diff  = np.zeros((n_layers, n_heads))
+    head_init  = np.zeros((n_layers, n_heads))
+    head_final = np.zeros((n_layers, n_heads))
+    mlp_diff   = np.zeros(n_layers)
+    mlp_init   = np.zeros(n_layers)
+    mlp_final  = np.zeros(n_layers)
 
     for layer in range(n_layers):
-        # Attention head outputs
-        # cache["z", layer] has shape [batch, seq, n_heads, d_head]
-        # We need to project through W_O to get per-head output in residual stream space
-        z = cache["z", layer][0, answer_position, :, :]  # [n_heads, d_head]
-        # W_O shape: [n_heads, d_head, d_model]
-        W_O = model.W_O[layer]  # [n_heads, d_head, d_model]
+        z   = cache["z", layer][0, answer_position, :, :]  # [n_heads, d_head]
+        W_O = model.W_O[layer]                              # [n_heads, d_head, d_model]
 
         for head in range(n_heads):
-            head_out = z[head] @ W_O[head]  # [d_model]
-            head_diff[layer, head] = (head_out @ logit_dir).item()
+            head_out = z[head] @ W_O[head]               # [d_model]
+            head_init[layer, head]  = (head_out @ dir_init).item()
+            head_final[layer, head] = (head_out @ dir_final).item()
+            head_diff[layer, head]  = head_init[layer, head] - head_final[layer, head]
 
-        # MLP output
         mlp_out = cache["mlp_out", layer][0, answer_position, :]  # [d_model]
-        mlp_diff[layer] = (mlp_out @ logit_dir).item()
+        mlp_init[layer]  = (mlp_out @ dir_init).item()
+        mlp_final[layer] = (mlp_out @ dir_final).item()
+        mlp_diff[layer]  = mlp_init[layer] - mlp_final[layer]
 
-    # Embedding contribution
-    embed_out = cache["embed"][0, answer_position, :]  # [d_model]
-    embed_diff = (embed_out @ logit_dir).item()
+    embed_out = cache["embed"][0, answer_position, :]
+    e_init  = (embed_out @ dir_init).item()
+    e_final = (embed_out @ dir_final).item()
 
     return DLAResult(
         head_logit_diff=head_diff,
+        head_logit_init=head_init,
+        head_logit_final=head_final,
         mlp_logit_diff=mlp_diff,
-        embed_logit_diff=embed_diff,
+        mlp_logit_init=mlp_init,
+        mlp_logit_final=mlp_final,
+        embed_logit_diff=e_init - e_final,
+        embed_logit_init=e_init,
+        embed_logit_final=e_final,
     )
 
 
 def dla_to_dict(result: DLAResult) -> dict:
     """Serialize DLA result."""
     return {
-        "head_logit_diff": result.head_logit_diff.tolist(),
-        "mlp_logit_diff": result.mlp_logit_diff.tolist(),
-        "embed_logit_diff": result.embed_logit_diff,
+        "head_logit_diff":  result.head_logit_diff.tolist(),
+        "head_logit_init":  result.head_logit_init.tolist(),
+        "head_logit_final": result.head_logit_final.tolist(),
+        "mlp_logit_diff":   result.mlp_logit_diff.tolist(),
+        "mlp_logit_init":   result.mlp_logit_init.tolist(),
+        "mlp_logit_final":  result.mlp_logit_final.tolist(),
+        "embed_logit_diff":  result.embed_logit_diff,
+        "embed_logit_init":  result.embed_logit_init,
+        "embed_logit_final": result.embed_logit_final,
     }
 
 

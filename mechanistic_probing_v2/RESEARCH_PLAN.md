@@ -1,12 +1,31 @@
 # Research Plan: Mechanistic Probing of PI > RI in Transformers (NeurIPS Expansion)
 
+---
+> **FRAMING NOTE (updated 2026-03):**
+> Earlier versions of this plan assumed "PI failure = model outputs the initial value (primacy
+> promotion)." This was the assumed mechanism, not an empirically established one.
+>
+> **Corrected framing:** PI failure = model **fails to retrieve the final value**. What it outputs
+> instead is measured empirically by exp 14 (PI mass distribution). Two distinct mechanisms are
+> possible and must be distinguished:
+> - **Suppression of final value** — some heads/MLPs actively reduce logit(final)
+> - **Promotion of initial value** — some heads/MLPs actively increase logit(init)
+>
+> These produce the same behavioral outcome (PI failure) but have different mechanistic stories.
+> DLA (exp 12) now computes both projections separately. Exp 21a distinguishes them under ablation.
+> Exp 14 determines which failure mode dominates empirically.
+>
+> Where this plan uses language like "primacy bias causes PI > RI" or "initial value dominates,"
+> treat those as hypotheses to be tested, not established findings.
+---
+
 ## Context
 
 ACL paper showed PI > RI across 39 models (Cohen's d=1.73) using 46 categories and up to 300+ interference levels. NeurIPS expansion needs to explain WHY mechanistically. Preliminary work on SmolLM2-135M confirmed the effect at small scale and showed (via logit lens) that the initial value dominates the residual stream at all layers.
 
 **Problem with current approach:** Single model (SmolLM2-135M), small sample sizes (25 trials), raw logit lens only, no causal evidence, GQA complicates head analysis, no cross-architecture validation.
 
-**Goal:** Build a rigorous mechanistic story across multiple model sizes and families, establishing that attention heads performing value retrieval exhibit systematic positional primacy bias that causes PI > RI.
+**Goal:** Build a rigorous mechanistic story across multiple model sizes and families, establishing which components are causally responsible for PI failure (final-value retrieval failing) — whether through suppression of the final value, promotion of the initial value, or both.
 
 ---
 
@@ -296,7 +315,7 @@ A head with low condition_sensitivity behaves the same regardless of whether the
 
 **Head classification (based on aggregated scores):**
 - **Retrieval heads**: mean_retrieval_score > threshold (heads that consistently attend to value tokens)
-- **Primacy-biased retrieval heads**: retrieval heads with primacy_score_PI > 0.6 (attend more to initial value EVEN when asked for last — this is the failure mode)
+- **Primacy-biased retrieval heads**: retrieval heads with primacy_score_PI > 0.6 (attend more to initial value even when asked for last — OBSERVATIONAL label only; whether this attention pattern causes PI failure is tested causally in exp 25a)
 - **Recency-biased retrieval heads**: retrieval heads with primacy_score_PI < 0.4 (correctly shift toward final in PI)
 - **Condition-sensitive heads**: condition_sensitivity > threshold (shift behavior between RI/PI — responsive to instruction)
 - **Non-retrieval heads**: low retrieval_score (attend to instruction, keys, or distribute broadly)

@@ -162,14 +162,17 @@ def run_analysis(model, tokenizer, trial: dict, value_to_tid: dict, model_name: 
         print(f"      L{l}H{h}: retr={retr[l,h]:.4f} primacy={prim[l,h]:.4f}")
 
     # ── DLA ──
+    # head_logit_final: how much does each head support retrieval of the final value?
+    # head_logit_init:  how much does each head support retrieval of the initial value?
+    # Compare these across RI vs PI trials — asymmetry is the signal.
     dla_result = compute_dla(model, cache, init_tid, final_tid, answer_position=-1)
-    hd = dla_result.head_logit_diff
-    flat_top5_dla = np.argsort(np.abs(hd).ravel())[-5:][::-1]
-    top_dla = np.unravel_index(flat_top5_dla, hd.shape)
-    print(f"    Top 5 heads by |DLA|:")
+    hf = dla_result.head_logit_final
+    flat_top5_dla = np.argsort(hf.ravel())[:5]   # most negative = most suppressive of final
+    top_dla = np.unravel_index(flat_top5_dla, hf.shape)
+    print(f"    Top 5 heads suppressing final-value retrieval (most negative head_logit_final):")
     for l, h in zip(top_dla[0], top_dla[1]):
-        print(f"      L{l}H{h}: logit_diff={hd[l,h]:+.4f}")
-    print(f"    MLP total: {dla_result.mlp_logit_diff.sum():+.4f}")
+        print(f"      L{l}H{h}: logit_final={hf[l,h]:+.4f}  logit_init={dla_result.head_logit_init[l,h]:+.4f}  diff={dla_result.head_logit_diff[l,h]:+.4f}")
+    print(f"    MLP logit_final total: {dla_result.mlp_logit_final.sum():+.4f}")
 
     del cache
     if torch.backends.mps.is_available():

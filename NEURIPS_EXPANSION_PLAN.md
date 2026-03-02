@@ -1,5 +1,23 @@
 # NeurIPS Expansion Plan: Transformers Remember First, Forget Last
 
+---
+> **FRAMING NOTE (updated 2026-03):**
+> This document was written assuming "PI failure = active primacy intrusion" — i.e. the initial
+> value actively competes with and beats the final value. This is one possible mechanism, not the
+> established one.
+>
+> **Corrected framing:** PI failure = model fails to retrieve the final value. The ACL error
+> taxonomy labels "primacy intrusion (56%)" as an OUTCOME (model output the first value when asked
+> for last), not a mechanism claim. Whether this is caused by initial-value promotion or final-value
+> suppression is determined by mechanistic experiments.
+>
+> Specific lines to reinterpret:
+> - "PI = active primacy intrusion (56%)" → outcome label, not mechanism
+> - "PI failures ↔ attention stuck on initial position" → hypothesis, not finding
+> - "initial value appears early and persists, blocking final value" → one possible mechanism
+> - "'consolidation heads' (promote initial value)" → rename to "PI-causal heads" until mechanism confirmed
+---
+
 ## Current State
 
 ACL submission — strong empirical paper with clean behavioral findings:
