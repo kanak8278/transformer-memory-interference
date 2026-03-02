@@ -24,6 +24,7 @@ def classify_error(predicted, expected, initial_value, final_value,
 
     Error types (outcome labels — describe WHAT the model output, not WHY):
       - correct: answer matches expected value
+      - empty: model generated nothing (empty string — typically OOM or generation failure)
       - primacy_intrusion (PI only): model output the initial value when asked for final
       - recency_intrusion (RI only): model output the final value when asked for initial
       - intermediate_intrusion: model output some intermediate value from the stream
@@ -46,6 +47,14 @@ def classify_error(predicted, expected, initial_value, final_value,
     """
     pred_lower = predicted.lower().strip()
     exp_lower = expected.lower().strip()
+
+    # OOM sentinel from run_batch_with_oom_fallback
+    if predicted == "__OOM__":
+        return "oom"
+
+    # Empty string = generation produced nothing (model issue, not OOM)
+    if pred_lower == "":
+        return "empty"
 
     if exp_lower in pred_lower or pred_lower.startswith(exp_lower):
         return "correct"

@@ -16,6 +16,10 @@ Usage:
 
 import torch
 
+# Sentinel value returned when generation fails due to OOM even at batch_size=1.
+# classify_error checks for this to distinguish OOM from empty generation.
+OOM_SENTINEL = "__OOM__"
+
 
 def run_batch(model, tokenizer, prompts, max_new_tokens=20, device="cuda",
               max_length=2048):
@@ -66,8 +70,8 @@ def run_batch_with_oom_fallback(model, tokenizer, prompts, max_new_tokens=20,
                                 device="cuda", max_length=2048):
     """Run a batch with automatic OOM recovery.
 
-    Tries the full batch first. On OOM, halves batch size until it works.
-    Returns (answers, effective_batch_size).
+    Tries the full batch first. On OOM, clears all GPU/MPS cache, halves
+    batch size, and retries from scratch. Returns (answers, effective_batch_size).
 
     Args:
         Same as run_batch.
@@ -76,6 +80,7 @@ def run_batch_with_oom_fallback(model, tokenizer, prompts, max_new_tokens=20,
         (answers, effective_batch_size) — answers is a list of strings,
         effective_batch_size is the size that worked (for sticky reduction).
     """
+    import gc
     from .model_loader import clear_accelerator_cache
 
     attempt_size = len(prompts)
@@ -93,15 +98,20 @@ def run_batch_with_oom_fallback(model, tokenizer, prompts, max_new_tokens=20,
 
         except RuntimeError as e:
             if "out of memory" in str(e).lower():
+                # Aggressively free memory: delete partial results, run GC,
+                # then clear accelerator cache before retrying
+                answers = []
+                gc.collect()
                 clear_accelerator_cache(device)
+
                 new_size = max(1, attempt_size // 2)
                 if new_size < attempt_size:
                     print(f"  OOM at batch_size={attempt_size}, "
-                          f"reducing to {new_size}")
+                          f"reducing to {new_size} (cache cleared)")
                     attempt_size = new_size
                 else:
-                    # Already at 1, give up
-                    print(f"  OOM even at batch_size=1, returning empty")
-                    return [""] * len(prompts), 1
+                    # Already at 1, give up — mark as OOM with sentinel
+                    print(f"  OOM even at batch_size=1, marking as OOM")
+                    return [OOM_SENTINEL] * len(prompts), 1
             else:
                 raise
