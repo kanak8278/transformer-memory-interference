@@ -126,7 +126,7 @@ def detect_device(gpu_idx=None):
             os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_idx)
         device = "cuda:0"
         props = torch.cuda.get_device_properties(0)
-        name = f"{props.name}, {props.total_mem / 1e9:.1f} GB"
+        name = f"{props.name}, {props.total_memory / 1e9:.1f} GB"
         return device, name
 
     if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
