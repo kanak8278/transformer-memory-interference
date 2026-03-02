@@ -138,33 +138,111 @@ Every trial records:
 Pick cells where PI accuracy is 10–40% (enough failures to analyze,
 not total collapse) with ≥5 updates.
 
-### Stage 2: Logit Lens Failure Analysis (adapted from V2 exp 14)
+### Stage 2: Full Value Logit Lens
 
-**Purpose:** At the operating points from Stage 1, run with TransformerLens cache and track
-P(v_i) for ALL values across layers — not just P(init) and P(final).
+**Purpose:** Track P(v_i) for ALL values across ALL layers using TransformerLens.
+This is the core mechanistic characterization — shows where in the network the model
+commits to the wrong value and what the competition landscape looks like.
 
-For each PI trial:
-- Track P(v_0), P(v_1), ..., P(v_{N-1}) at every layer
-- Find which value "wins" at each layer (who has highest P?)
-- Track when P(v_{N-1}) separates from P(v_{N-2}) — does it ever?
-- Also record the full-vocab argmax at each layer
+**Key difference from V2 exp 12:** V2 tracked only P(v_0) and P(v_{N-1}) — two values.
+Stage 2 tracks ALL N values. This is what reveals the near-last pattern in probability
+space and identifies the actual dominant competitor (which may not be v_{N-2}).
 
-This tells us:
-- At which layer does the model commit to the wrong near-last value?
-- Is there a layer where v_{N-1} briefly leads before being overtaken?
-- Does the "confusion zone" (v_{N-1} ≈ v_{N-2}) persist from the start or emerge?
+**What we run:**
+- TransformerLens `model.run_with_cache(tokens)` — one forward pass per trial
+- At every layer: project residual stream through W_U, get P(v_i) for all values
+- At last layer: also record global vocab argmax and total_value_prob
 
-### Stage 3: Mechanistic experiments (design AFTER Stage 2)
+**Operating points:** 3 per model, chosen from Stage 1 to vary update count:
 
-Only designed after Stage 1 + 2 confirm the pattern and give us clear hypotheses.
-Likely candidates from V2 that remain valid:
-- Exp 25a (head knockout) — still the right causal method
-- Exp 15/22 (patching) — still valid for "where does PI fail?"
-- Exp 18b (forced attention) — still valid for QK vs OV
-- Exp 30 (copy suppression) — now specifically V1-promotion vs V2-suppression
+| Point | Regime | Purpose |
+|-------|--------|---------|
+| Low N (e.g. 5 updates) | AB/B | Early failure — PI just starting to break |
+| Medium N (e.g. 15 updates) | B | Core data — PI clearly failing |
+| High N (e.g. 30 updates) | C | Saturation — does pattern hold at collapse? |
 
-BUT: metrics need updating. `logit_diff = logit(final) - logit(init)` should become
-`logit(v_{N-1}) - logit(v_{N-2})` if Stage 2 confirms v_{N-2} is the true competitor.
+Fix keys=5 across all points, vary only updates. This isolates the effect of N.
+Exact update levels adjusted per model based on Stage 1 regime map.
+
+**Trials:** 100 per condition (RI + PI) per operating point.
+
+**Budget:**
+```
+3 points × 2 conditions × 100 trials = 600 forward passes per model
+4 models × 600 = 2400 total
+At ~2-3 sec each (4B on GPU) ≈ 80-120 min total, parallelizable across GPUs
+```
+
+**What we save per trial:**
+```python
+{
+    "seed", "condition", "query_word",
+    "expected", "expected_idx", "expected_relative_pos",
+    "predicted", "correct", "error_type",
+
+    "all_values": ["ruby", "iron", ..., "coral"],       # N values
+    "value_probs_by_layer": [[P(v_0,L0), ...], ...],    # shape [N_values, N_layers]
+
+    "total_value_prob": 0.45,                  # sum P(v_i) at last layer
+    "global_argmax_token": "pearl",            # full vocab winner at last layer
+    "global_argmax_prob": 0.31,
+    "global_argmax_is_value": True,
+}
+```
+
+Storage: N_values × N_layers floats per trial = 10 × 36 = 360 floats ≈ 3KB.
+For 600 trials per model ≈ 2MB per model. Negligible.
+
+**Five analyses to run on the results:**
+
+**Analysis 1 — Last-layer value probability distribution:**
+Average P(v_i) at last layer across PI failures, plotted by position index.
+Confirms near-last error in probability space (not just string match).
+
+**Analysis 2 — Layer trajectory for top competing values:**
+For PI failures: plot P(v_{N-1}), P(dominant competitor), P(v_0) across layers.
+Reveals one of three patterns:
+  - (A) v_{N-1} never leads → "never found" — failure is in early representation
+  - (B) v_{N-1} leads mid-layers then gets overtaken → "late-layer corruption"
+  - (C) v_{N-1} and competitor are neck-and-neck → "never discriminated"
+
+**Analysis 3 — Crossover layer histogram:**
+For trials where v_{N-1} leads at some layer then loses: record the crossover layer.
+If crossover clusters at layer ~25, that's where Stage 3 causal experiments should focus.
+
+**Analysis 4 — Garbage threshold (total_value_prob vs predicted position):**
+Scatter plot to find data-driven threshold separating real retrieval from noise.
+Validates which trials are analyzable.
+
+**Analysis 5 — RI vs PI comparison:**
+Same trajectory plot for RI. P(v_0) should rise cleanly with no competition.
+The contrast — clean RI retrieval vs messy PI competition — is the core paper figure.
+
+**Paper figures from Stage 2:**
+
+| Figure | Analysis | Story |
+|--------|----------|-------|
+| Main Fig 1 | #5 | RI vs PI trajectories side by side |
+| Main Fig 2 | #1 | Value probability landscape, multi-model |
+| Main Fig 3 | #2 | Layer trajectory showing where v_{N-1} loses |
+| Appendix | #3 | Crossover layer histogram |
+| Appendix | #4 | Garbage threshold scatter |
+
+### Stage 3: Causal Mechanistic Experiments (design AFTER Stage 2)
+
+Only designed after Stage 2 confirms the pattern and identifies:
+- The dominant competitor (which v_i beats v_{N-1})
+- The crossover layer (where the failure happens)
+- Which of the three failure patterns (A/B/C) dominates
+
+Likely candidates from V2, with updated metrics:
+- Head knockout (V2 exp 25a) — still the right causal method, now measuring
+  effect on P(v_{N-1}) vs P(competitor) instead of P(init) vs P(final)
+- Activation patching (V2 exp 15/22) — focused on crossover layer region
+- Forced attention (V2 exp 18b) — tests QK vs OV at the identified heads
+
+The key metric update: `logit_diff` becomes `logit(v_{N-1}) - logit(v_competitor)`
+where `v_competitor` is identified empirically from Stage 2, not assumed to be v_0.
 
 ---
 
