@@ -699,12 +699,16 @@ def main():
     total_cells = len(feasible)
     cell_idx = 0
     sat = init_saturation(kl)
-    batch_size = args.batch_size
+    initial_batch_size = args.batch_size
 
     for nk in kl:
         for nu in ul:
             if (nk, nu) not in feasible:
                 continue
+
+            # Reset batch size for each cell — OOM reduction from a large cell
+            # shouldn't penalize smaller cells that follow
+            batch_size = initial_batch_size
 
             cell_key = f"{nk}_{nu}"
 
