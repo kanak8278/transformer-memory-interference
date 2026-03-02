@@ -48,8 +48,11 @@ def run_batch(model, tokenizer, prompts, max_new_tokens=20, device="cuda",
         )
 
     answers = []
+    # Use padded input length, not attention_mask sum — with left-padding,
+    # attention_mask.sum() gives real token count but slicing from that
+    # position leaks trailing prompt tokens for shorter prompts in the batch.
+    prompt_len = inputs["input_ids"].shape[1]
     for i in range(len(prompts)):
-        prompt_len = inputs["attention_mask"][i].sum().item()
         new_ids = gen_ids[i, prompt_len:]
         answer = tokenizer.decode(
             new_ids, skip_special_tokens=True
