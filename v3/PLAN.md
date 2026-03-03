@@ -40,6 +40,7 @@ positions are uniquely identifiable, late positions are mutually confusable.**
 (Wu et al., ICML 2025 — "On the Emergence of Position Bias in Transformers")
 
 In a multi-layer causal transformer:
+
 - Position 0 is attended by all subsequent positions at every layer
 - Across L layers, this compounds: early positions get exponentially more "paths"
   through the attention graph
@@ -149,6 +150,7 @@ Stage 2 tracks ALL N values. This is what reveals the near-last pattern in proba
 space and identifies the actual dominant competitor (which may not be v_{N-2}).
 
 **What we run:**
+
 - TransformerLens `model.run_with_cache(tokens)` — one forward pass per trial
 - At every layer: project residual stream through W_U, get P(v_i) for all values
 - At last layer: also record global vocab argmax and total_value_prob
@@ -167,6 +169,7 @@ Exact update levels adjusted per model based on Stage 1 regime map.
 **Trials:** 100 per condition (RI + PI) per operating point.
 
 **Budget:**
+
 ```
 3 points × 2 conditions × 100 trials = 600 forward passes per model
 4 models × 600 = 2400 total
@@ -174,6 +177,7 @@ At ~2-3 sec each (4B on GPU) ≈ 80-120 min total, parallelizable across GPUs
 ```
 
 **What we save per trial:**
+
 ```python
 {
     "seed", "condition", "query_word",
@@ -202,9 +206,10 @@ Confirms near-last error in probability space (not just string match).
 **Analysis 2 — Layer trajectory for top competing values:**
 For PI failures: plot P(v_{N-1}), P(dominant competitor), P(v_0) across layers.
 Reveals one of three patterns:
-  - (A) v_{N-1} never leads → "never found" — failure is in early representation
-  - (B) v_{N-1} leads mid-layers then gets overtaken → "late-layer corruption"
-  - (C) v_{N-1} and competitor are neck-and-neck → "never discriminated"
+
+- (A) v_{N-1} never leads → "never found" — failure is in early representation
+- (B) v_{N-1} leads mid-layers then gets overtaken → "late-layer corruption"
+- (C) v_{N-1} and competitor are neck-and-neck → "never discriminated"
 
 **Analysis 3 — Crossover layer histogram:**
 For trials where v_{N-1} leads at some layer then loses: record the crossover layer.
@@ -228,21 +233,201 @@ The contrast — clean RI retrieval vs messy PI competition — is the core pape
 | Appendix | #3 | Crossover layer histogram |
 | Appendix | #4 | Garbage threshold scatter |
 
-### Stage 3: Causal Mechanistic Experiments (design AFTER Stage 2)
+### Stage 2 → Stage 3 Transition: Questions to Answer Before Proceeding
 
-Only designed after Stage 2 confirms the pattern and identifies:
-- The dominant competitor (which v_i beats v_{N-1})
-- The crossover layer (where the failure happens)
-- Which of the three failure patterns (A/B/C) dominates
+After running Stage 2, answer these questions for each model. The answers become
+Stage 3's config. Do NOT skip this — the answers vary by model.
 
-Likely candidates from V2, with updated metrics:
-- Head knockout (V2 exp 25a) — still the right causal method, now measuring
-  effect on P(v_{N-1}) vs P(competitor) instead of P(init) vs P(final)
-- Activation patching (V2 exp 15/22) — focused on crossover layer region
-- Forced attention (V2 exp 18b) — tests QK vs OV at the identified heads
+**Q1: What is the failure pattern?**
+Look at layer trajectories for PI failures. Which pattern?
 
-The key metric update: `logit_diff` becomes `logit(v_{N-1}) - logit(v_competitor)`
-where `v_competitor` is identified empirically from Stage 2, not assumed to be v_0.
+- **(A) Never found:** P(v_last) is near-zero at ALL layers. The model never
+  located the last value in the residual stream. → Stage 3 should focus on
+  early/mid layers where the value should have been encoded.
+- **(B) Overtaken:** P(v_last) rises at mid layers, then gets suppressed in
+  late layers. Something actively destroys it. → Stage 3 should focus on the
+  critical layers where suppression happens.
+- **(C) Never discriminated:** P(v_last) and nearby values are neck-and-neck
+  throughout. The model can't tell them apart. → Stage 3 should focus on
+  what makes positional discrimination fail.
+
+**Q2: Where are the critical layers?**
+At which layers does P(v_last) change dramatically?
+
+- If pattern B: identify the "crossover layers" where P(v_last) drops
+- If pattern A: identify where P(v_0) rises (for RI comparison)
+- Record: `critical_layer_start`, `critical_layer_end`
+
+Example from Qwen 2.5-3B: layers 32-35 (last 4 of 36). P(v_last) goes from
+0.21 at L32 to 0.01 at L35.
+
+**Q3: Is there a single dominant competitor, or is probability diffuse?**
+At the final layer, look at P(v_i) distribution across PI failures:
+
+- **Concentrated:** One value (e.g. v_{N-2}) holds >50% of non-garbage mass.
+  → logit_diff between v_last and v_competitor is a good metric.
+- **Diffuse:** Probability spread across multiple values (e.g. v1=29%, v2=23%, v3=36%).
+  → logit_diff between two specific tokens is misleading. Use P(v_last) directly
+  as the metric — track what suppresses it, not what replaces it.
+
+Example from Qwen 2.5-3B at 10k_5u: v1=29%, v2=23%, v3=36% → **diffuse**.
+Example from Qwen3-4B at 3k_12u: v10=56% → **concentrated on v_{N-2}**.
+
+**Q4: What is the garbage threshold?**
+From the total_value_prob vs predicted_position scatter, at what threshold
+does the position signal emerge? Trials below this are noise.
+
+**Q5: What is P(v_last) suppression magnitude?**
+Compare P(v_last) at its peak layer vs the final layer. If the drop is small
+(<0.05), there may not be active suppression — just weak encoding. If the drop
+is large (>0.10), something in the critical layers is actively suppressing it.
+
+Example from Qwen 2.5-3B at 5k_3u: P(v_last) = 0.21 at L32 → 0.01 at L35.
+Drop = 0.20 — strong active suppression.
+
+**Summary table to fill per model:**
+
+```
+| Model | Pattern | Critical layers | Competitor | Diffuse? | Suppression |
+|-------|---------|----------------|------------|----------|-------------|
+| Qwen 2.5-3B | B (overtaken) | 32-35 | none (diffuse) | Yes | 0.21→0.01 |
+| Qwen3-4B | TBD | TBD | TBD | TBD | TBD |
+| ... | | | | | |
+```
+
+### Stage 3: Causal Mechanistic Experiments
+
+**Purpose:** Identify WHICH components (heads, MLPs) are responsible for
+P(v_last) suppression, and test whether intervening on them fixes PI.
+
+**Input:** Stage 2 results file + the answers to Q1-Q5 above.
+
+**The core metric depends on Q3:**
+
+- If concentrated competitor: `logit_diff = logit(v_last) - logit(v_competitor)`
+- If diffuse: `P(v_last)` directly — measured as `logit(v_last)` or its rank
+
+#### Head identification: two sources, union of both
+
+**Set A — Attribution patching (gradient-based, covers entire model):**
+
+Attribution patching (Neel Nanda; AtP* from DeepMind, 2024) uses 1 forward +
+1 backward pass to rank ALL heads at ALL layers by their gradient contribution
+to the metric (P(v_last) or logit_diff). No destruction of model computation —
+avoids the problem of early-layer knockout causing catastrophic cascading effects.
+
+References:
+- Nanda: "Attribution Patching: Activation Patching At Industrial Scale"
+- Kramar et al. 2024 (AtP*): fixes false negatives in basic attribution patching
+- Syed et al. 2024: "Attribution Patching Outperforms Automated Circuit Discovery"
+
+Cost: 1 forward + 1 backward per trial = 50 trials ≈ 5 min on GPU.
+Output: importance score for every (layer, head) pair → take top-K (e.g. K=20).
+
+**Set B — Stage 2 critical layer heads:**
+
+All heads in the layers where P(v_last) visibly drops (from Stage 2 Q2).
+Example: all 16 heads at layers 32-35 for Qwen 2.5-3B = 64 heads.
+
+**Why the union (A ∪ B):**
+
+- A head in Set A but NOT Set B (e.g. at layer 12): something early sets up the
+  suppression that becomes visible later. Attribution patching catches this because
+  it traces gradients through the full computation graph.
+- A head in Set B but NOT Set A (e.g. at layer 33): affects the trajectory but its
+  gradient contribution to P(v_last) is indirect. Still worth testing causally.
+- A head in both: convergent evidence — highest confidence target.
+
+In practice, most Set A heads will be in the critical layers. The few that differ
+are the most mechanistically interesting.
+
+#### Experiment 3A: Attribution patching (fast head ranking)
+
+For each PI trial:
+- Forward pass: compute P(v_last) at the final layer
+- Backward pass: compute gradient of P(v_last) w.r.t. each head's output
+- The gradient magnitude = that head's importance for P(v_last)
+
+Aggregate across trials → ranked list of heads.
+
+Cost: ~50 trials × (1 fwd + 1 bwd) ≈ 5-10 min on GPU.
+
+**Output:** `head_importance[layer, head]` — shape [n_layers, n_heads].
+Top-K heads = Set A.
+
+#### Experiment 3B: Targeted activation patching (causal validation)
+
+For each head in **Set A ∪ Set B**:
+- "Clean" run: RI trial where model correctly retrieves v_0
+- "Corrupted" run: PI trial where model fails
+- Patch: replace this head's output in the corrupted run with its clean-run value
+- Measure: does P(v_last) increase? Does PI accuracy recover?
+
+This causally validates attribution patching scores. A head with high attribution
+that also shows high patching recovery = confirmed causally important.
+
+Cost: |A ∪ B| × 50 trials ≈ 80 heads × 50 = 4,000 forward passes (~25 min).
+
+#### Experiment 3C: Logit lens under ablation (trajectory change)
+
+Using the top 5-10 confirmed heads from 3B:
+- Run full logit lens trajectory with these heads zeroed out
+- Compare P(v_last) trajectory: normal vs ablated
+- Key question: does ablation raise P(v_last) at the final layer?
+- Secondary: does it shift where P(v_last) peaks?
+
+If ablating heads at layer 33 raises P(v_last) from 0.01 → 0.15 at the final
+layer, those heads were directly responsible for the suppression seen in Stage 2.
+
+Cost: ~50 trials with full cache ≈ 15 min.
+
+#### Experiment 3D: Forced attention — only if Q3 = concentrated
+
+For confirmed heads from 3B:
+- Force them to attend to v_last's position in the sequence
+- If PI improves → QK routing problem (heads looking at wrong position)
+- If PI doesn't improve → OV problem (heads writing wrong thing regardless)
+
+Skip for diffuse models — no single correct attention target.
+
+Cost: ~50 trials × top-5 heads = 250 forward passes ≈ 5 min.
+
+#### Stage 3 output per model
+
+```python
+{
+    "model": "...",
+    "operating_point": (keys, updates),
+    "critical_layers_from_stage2": [32, 33, 34, 35],
+    "pattern": "B",
+
+    # Attribution patching: all heads ranked
+    "attribution_scores": {
+        "head_importance": [[...], ...],   # [n_layers, n_heads]
+        "top_20_heads": ["L33H5", "L34H2", "L12H8", ...],
+    },
+
+    # Targeted patching: causal validation for Set A ∪ B
+    "patching_results": {
+        "L33H5": {"delta_p_last": +0.08, "in_set_A": True, "in_set_B": True},
+        "L12H8": {"delta_p_last": +0.03, "in_set_A": True, "in_set_B": False},
+        "L34H0": {"delta_p_last": +0.01, "in_set_A": False, "in_set_B": True},
+        ...
+    },
+
+    # Ablation logit lens
+    "ablation_trajectory": {
+        "normal_p_last_final": 0.01,
+        "ablated_p_last_final": 0.15,
+        "heads_ablated": ["L33H5", "L34H2"],
+    },
+
+    # Convergence check: do Set A and Set B agree?
+    "convergence": {
+        "overlap_top20_A_with_B": 14,   # 14 of top-20 attribution heads are in critical layers
+        "top_patching_heads_in_A": 8,   # 8 of top-10 patching heads were in Set A
+    },
+}
 
 ---
 
