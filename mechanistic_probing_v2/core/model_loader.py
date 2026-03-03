@@ -177,11 +177,9 @@ def _select_dtype(device, model_name=None, force_dtype=None):
     if str(device) == "mps":
         return torch.float32
 
-    # CUDA: float16 for larger instruct models, float32 for base/small
+    # CUDA: float16 for all models (safe for inference, halves memory)
     if "cuda" in str(device):
-        if model_name and is_instruct_model(model_name):
-            return torch.float16
-        return torch.float32
+        return torch.float16
 
     # CPU: always float32
     return torch.float32
@@ -191,7 +189,7 @@ def _select_dtype(device, model_name=None, force_dtype=None):
 # TRANSFORMERLENS LOADING (mechanistic analysis)
 # ═══════════════════════════════════════════════════════════════════════════
 
-def load_model(model_name, device=None, n_ctx=8192, gpu_idx=None, **kwargs):
+def load_model(model_name, device=None, n_ctx=8192, gpu_idx=None, dtype=None, **kwargs):
     """Load model via TransformerLens (for mechanistic analysis).
 
     Args:
@@ -199,6 +197,8 @@ def load_model(model_name, device=None, n_ctx=8192, gpu_idx=None, **kwargs):
         device: Device string. If None, auto-detected.
         n_ctx: Context window size for TransformerLens buffer.
         gpu_idx: GPU index for CUDA_VISIBLE_DEVICES. Only used if device is None.
+        dtype: torch dtype (e.g. torch.float16). If None, auto-selected:
+               CUDA → float16, MPS → float32, CPU → float32.
         **kwargs: Extra args passed to HookedTransformer.from_pretrained
 
     Returns:
@@ -209,11 +209,14 @@ def load_model(model_name, device=None, n_ctx=8192, gpu_idx=None, **kwargs):
     else:
         device_name = str(device)
 
+    if dtype is None:
+        dtype = _select_dtype(device, model_name)
+
     from transformer_lens import HookedTransformer
 
-    print(f"Loading {model_name} via TransformerLens on {device} (n_ctx={n_ctx})...")
+    print(f"Loading {model_name} via TransformerLens on {device} (n_ctx={n_ctx}, dtype={dtype})...")
     model = HookedTransformer.from_pretrained(
-        model_name, device=device, n_ctx=n_ctx, **kwargs
+        model_name, device=device, n_ctx=n_ctx, dtype=dtype, **kwargs
     )
     model.eval()
 
