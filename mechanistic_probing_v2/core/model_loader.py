@@ -215,9 +215,19 @@ def load_model(model_name, device=None, n_ctx=8192, gpu_idx=None, dtype=None, **
     from transformer_lens import HookedTransformer
 
     print(f"Loading {model_name} via TransformerLens on {device} (n_ctx={n_ctx}, dtype={dtype})...")
-    model = HookedTransformer.from_pretrained(
-        model_name, device=device, n_ctx=n_ctx, dtype=dtype, **kwargs
-    )
+    try:
+        model = HookedTransformer.from_pretrained(
+            model_name, device=device, n_ctx=n_ctx, dtype=dtype, **kwargs
+        )
+    except TypeError as e:
+        if "n_ctx" in str(e):
+            # Some TransformerLens versions leak n_ctx to HuggingFace kwargs
+            print(f"  Retrying without n_ctx (TL version compat)...")
+            model = HookedTransformer.from_pretrained(
+                model_name, device=device, dtype=dtype, **kwargs
+            )
+        else:
+            raise
     model.eval()
 
     tokenizer = model.tokenizer
