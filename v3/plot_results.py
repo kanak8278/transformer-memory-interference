@@ -448,6 +448,187 @@ def plot_suppression(s2, model_short, fig_dir):
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# FIGURE 6: Crossover Layer Histogram (Stage 2) — where does v_last lose?
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def plot_crossover_histogram(s2, model_short, fig_dir):
+    points = s2["points"]
+    analyses = s2["analyses"]
+    n_layers = s2["n_layers"]
+
+    n_points = len(points)
+    fig, axes = plt.subplots(1, n_points, figsize=(5 * n_points, 5))
+    if n_points == 1:
+        axes = [axes]
+
+    for col, pt in enumerate(points):
+        ax = axes[col]
+        k, u = pt["keys"], pt["updates"]
+
+        pi_failures = [a for a in analyses
+                       if a["condition"] == "PI" and a["num_keys"] == k
+                       and a["num_updates"] == u
+                       and not a["correct"] and a["total_value_prob"] > 0.05]
+
+        if not pi_failures:
+            ax.text(0.5, 0.5, "No data", ha="center", va="center", transform=ax.transAxes)
+            continue
+
+        n_values = len(pi_failures[0]["all_values"])
+        correct_idx = n_values - 1
+
+        crossover_layers = []
+        never_led = 0
+        always_led = 0
+
+        for r in pi_failures:
+            vp = np.array(r["value_probs_by_layer"])
+            p_last = vp[correct_idx, :]
+            other = np.delete(vp, correct_idx, axis=0)
+            p_best_other = other.max(axis=0)
+
+            leading = p_last > p_best_other
+            if not leading.any():
+                never_led += 1
+                continue
+            if leading[-1]:
+                always_led += 1
+                continue
+            last_leading = np.where(leading)[0][-1]
+            crossover_layers.append(last_leading)
+
+        n = len(pi_failures)
+
+        # Histogram of crossover layers
+        if crossover_layers:
+            ax.hist(crossover_layers, bins=range(0, n_layers + 1), color="#FF5722",
+                    edgecolor="white", alpha=0.8)
+
+        # Annotate counts
+        text_parts = []
+        if never_led > 0:
+            text_parts.append(f"Never led: {never_led}/{n}")
+        if crossover_layers:
+            text_parts.append(f"Overtaken: {len(crossover_layers)}/{n}")
+            text_parts.append(f"Mean crossover: L{np.mean(crossover_layers):.1f}")
+        if always_led > 0:
+            text_parts.append(f"Always led: {always_led}/{n}")
+
+        ax.text(0.02, 0.98, "\n".join(text_parts), transform=ax.transAxes,
+                fontsize=9, verticalalignment="top",
+                bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.8))
+
+        ax.set_xlabel("Layer where v_last was overtaken")
+        ax.set_ylabel("Count")
+        ax.set_title(f"{k}k_{u}u ({n} PI failures)")
+        ax.set_xlim(0, n_layers)
+        ax.grid(True, alpha=0.3, axis="y")
+
+    fig.suptitle(f"Crossover Layer: Where P(v_last) Loses — {model_short}", fontsize=14, y=1.02)
+    plt.tight_layout()
+    path = fig_dir / "fig6_crossover_histogram.png"
+    plt.savefig(path)
+    plt.close()
+    print(f"  Saved: {path}")
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# FIGURE 7: Garbage Threshold — total_value_prob vs predicted position
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def plot_garbage_threshold(s2, model_short, fig_dir):
+    analyses = s2["analyses"]
+
+    all_pi_failures = [a for a in analyses
+                       if a["condition"] == "PI" and not a["correct"]]
+
+    if not all_pi_failures:
+        print("  No PI failures for garbage threshold plot")
+        return
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+
+    # Left: scatter of total_value_prob vs predicted_relative_pos
+    ax = axes[0]
+    tvp_has_pos = [(a["total_value_prob"], a["predicted_relative_pos"])
+                   for a in all_pi_failures if a["predicted_relative_pos"] is not None]
+    tvp_no_pos = [a["total_value_prob"] for a in all_pi_failures
+                  if a["predicted_relative_pos"] is None]
+
+    if tvp_has_pos:
+        x, y = zip(*tvp_has_pos)
+        ax.scatter(x, y, alpha=0.4, s=20, c="#2196F3", label=f"Matched value (n={len(tvp_has_pos)})")
+    if tvp_no_pos:
+        ax.scatter(tvp_no_pos, [-0.05] * len(tvp_no_pos), alpha=0.3, s=15,
+                   c="#9E9E9E", marker="x", label=f"Garbage/no match (n={len(tvp_no_pos)})")
+
+    ax.axhline(y=0.7, color="green", linestyle="--", alpha=0.5, label="near-last threshold (0.7)")
+    ax.axvline(x=0.05, color="red", linestyle="--", alpha=0.5, label="garbage threshold (0.05)")
+    ax.set_xlabel("total_value_prob (sum P(v_i) at last layer)")
+    ax.set_ylabel("predicted_relative_pos (0=first, 1=last)")
+    ax.set_title("Garbage Threshold: When Does Position Signal Emerge?")
+    ax.legend(fontsize=8)
+    ax.grid(True, alpha=0.3)
+    ax.set_xlim(-0.02, 1.02)
+    ax.set_ylim(-0.12, 1.05)
+
+    # Right: binned analysis — avg position by total_value_prob bucket
+    ax = axes[1]
+    bins = [(0, 0.01), (0.01, 0.05), (0.05, 0.10), (0.10, 0.20),
+            (0.20, 0.40), (0.40, 0.60), (0.60, 0.80), (0.80, 1.01)]
+
+    bin_labels = []
+    bin_positions = []
+    bin_counts = []
+    bin_garbage_rates = []
+
+    for lo, hi in bins:
+        subset = [a for a in all_pi_failures if lo <= a["total_value_prob"] < hi]
+        if not subset:
+            continue
+        has_pos = [a["predicted_relative_pos"] for a in subset
+                   if a["predicted_relative_pos"] is not None]
+        n_garbage = len(subset) - len(has_pos)
+        avg_pos = np.mean(has_pos) if has_pos else None
+
+        bin_labels.append(f"[{lo:.2f},{hi:.2f})")
+        bin_positions.append(avg_pos if avg_pos is not None else 0)
+        bin_counts.append(len(subset))
+        bin_garbage_rates.append(n_garbage / len(subset))
+
+    x_pos = range(len(bin_labels))
+
+    # Bar: avg predicted position
+    bars = ax.bar(x_pos, bin_positions, color="#2196F3", alpha=0.7, label="Avg predicted position")
+
+    # Overlay: garbage rate as red line
+    ax2 = ax.twinx()
+    ax2.plot(x_pos, bin_garbage_rates, "r-o", linewidth=2, markersize=6, label="Garbage rate")
+    ax2.set_ylabel("Garbage rate", color="red")
+    ax2.set_ylim(0, 1.1)
+    ax2.tick_params(axis="y", labelcolor="red")
+
+    ax.set_xticks(x_pos)
+    ax.set_xticklabels(bin_labels, rotation=45, fontsize=8)
+    ax.set_xlabel("total_value_prob bucket")
+    ax.set_ylabel("Avg predicted_relative_pos")
+    ax.set_title("Position Signal vs Value Probability")
+    ax.set_ylim(0, 1.05)
+
+    # Add count annotations
+    for i, (b, c) in enumerate(zip(bars, bin_counts)):
+        ax.text(b.get_x() + b.get_width() / 2, b.get_height() + 0.02,
+                f"n={c}", ha="center", fontsize=7)
+
+    fig.suptitle(f"Garbage Threshold Analysis — {model_short}", fontsize=14, y=1.02)
+    plt.tight_layout()
+    path = fig_dir / "fig7_garbage_threshold.png"
+    plt.savefig(path)
+    plt.close()
+    print(f"  Saved: {path}")
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # MAIN
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -479,6 +660,8 @@ def main():
         plot_layer_trajectories(s2, model_short, fig_dir)
         plot_last_layer_landscape(s2, model_short, fig_dir)
         plot_suppression(s2, model_short, fig_dir)
+        plot_crossover_histogram(s2, model_short, fig_dir)
+        plot_garbage_threshold(s2, model_short, fig_dir)
     except FileNotFoundError as e:
         print(f"  Stage 2: {e}")
 

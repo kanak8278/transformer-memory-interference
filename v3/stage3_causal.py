@@ -602,6 +602,20 @@ def get_save_dir(model_name):
     return Path(__file__).resolve().parent / "results" / m_short
 
 
+class NumpyEncoder(json.JSONEncoder):
+    """Handle numpy types that json.dump can't serialize."""
+    def default(self, obj):
+        if isinstance(obj, (np.integer,)):
+            return int(obj)
+        if isinstance(obj, (np.floating,)):
+            return float(obj)
+        if isinstance(obj, (np.bool_,)):
+            return bool(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super().default(obj)
+
+
 def save_results(results, model_name, partial=False):
     save_dir = get_save_dir(model_name)
     save_dir.mkdir(parents=True, exist_ok=True)
@@ -611,7 +625,7 @@ def save_results(results, model_name, partial=False):
         ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         path = save_dir / f"stage3_causal_{ts}.json"
     with open(path, "w") as f:
-        json.dump(results, f, indent=2)
+        json.dump(results, f, indent=2, cls=NumpyEncoder)
     label = "Checkpoint" if partial else "Saved"
     print(f"  -> {label}: {path}")
     return str(path)
