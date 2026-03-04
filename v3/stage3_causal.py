@@ -263,6 +263,7 @@ def run_attribution_patching(model, tokenizer, value_to_tid, value_pool,
         z_activations = {}
 
         def save_z_hook(activation, hook, layer):
+            activation.retain_grad()  # Keep gradients for non-leaf tensors
             z_activations[layer] = activation
             return activation
 
