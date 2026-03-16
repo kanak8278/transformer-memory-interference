@@ -1,0 +1,268 @@
+# V3 Work Log
+
+## 2026-03-17: Session Start — Full Repo Audit & Plan
+
+### Current State Assessment
+
+**What exists (v3 pipeline):**
+
+| Model | Stage 1 (Behavioral) | Stage 2 (Logit Lens) | Stage 3 (Causal) | Figures |
+|-------|----------------------|----------------------|-------------------|---------|
+| Qwen2.5-0.5B | Done (noisy, 80% garbage) | Done | — | — |
+| Qwen2.5-1.5B | Partial (9 cells only) | — | — | — |
+| Qwen2.5-3B | Done (100+ cells) | Done | Done (2 runs) | 7 figs |
+| Qwen3-4B | Partial | Done | — | — |
+
+**Key numbers at best Regime B points:**
+
+| Model | Keys | Updates | RI% | PI% | Gap |
+|-------|------|---------|-----|-----|-----|
+| Qwen2.5-0.5B | 10 | 20 | 20 | 0 | 20pp (garbage-dominated) |
+| Qwen2.5-1.5B | 3 | 10 | 30 | 10 | 20pp |
+| Qwen2.5-3B | 5 | 10 | 74 | 26 | 48pp |
+| Qwen3-4B | 5 | 10 | 92 | 76.5 | 15.5pp |
+
+**Mechanistic findings (Qwen2.5-3B only):**
+- Stage 2: P(v_last) peaks at layer 32 (0.207), suppressed to 0.013 at final layer
+- Dominant wrong value: idx=1 (penultimate), P=0.84 → concentrated competitor
+- Pattern: "Overtaken" — correct value found mid-layers then actively suppressed
+- Stage 3: Top patching heads L26H3 (+0.032), L27H3 (+0.024), L31H15 (+0.019)
+- Suppression heads are BEFORE critical layers → early setup of interference
+
+**Dataset variants:**
+- ARBITRARY_SINGLE: 2300 single-token words, 46 cats (used in v3)
+- SEMANTIC_SINGLE: 791 single-token values, 36 cats (used in v2)
+- SEMANTIC_MULTI: 2403 multi-token values, 46 cats (original ACL paper)
+- ARBITRARY_MULTI: synthetic prefix+number, 46 cats, 500/cat
+
+**API infrastructure:**
+- models/: wrappers for Claude, GPT, Gemini, Bedrock (60+ models)
+- experiments_cloud/: sweep_semantic.py, sweep_arbitrary.py
+- .env: ANTHROPIC_API_KEY, TR_WORKSPACE_ID, AWS_PASSWORD
+
+### Problems Identified
+
+1. **Qwen2.5-0.5B is useless** — 80% garbage, can't find clean regime B
+2. **Qwen2.5-1.5B barely started** — only 9 cells, no stage 2/3
+3. **Stage 3 effects are weak** — top head only +0.032 delta. Need to check if this is methodology or genuinely distributed
+4. **No cross-architecture validation** — all Qwen family so far
+5. **v3 uses ARBITRARY_SINGLE but original paper used SEMANTIC_MULTI** — need to verify findings transfer
+6. **No SSM/Mamba data** for architectural control prediction
+
+### Action Plan
+
+**Phase 1: Verify & Strengthen Existing Results (Today)**
+- [ ] Run quick sanity check: Qwen2.5-3B Stage 1 at key operating point (5_10) with more trials to get tighter CIs
+- [ ] Analyze Qwen2.5-3B Stage 3 results more deeply — are the weak effects a sign of distributed mechanism or methodology issue?
+- [ ] Start Qwen2.5-1.5B Stage 1 full sweep (background)
+
+**Phase 2: Cross-Model Mechanistic Evidence**
+- [ ] Qwen2.5-1.5B Stage 2 + 3
+- [ ] Pick a non-Qwen model: SmolLM2-135M or Gemma-3-1B for cross-architecture
+- [ ] Compare head locations, suppression patterns across models
+
+**Phase 3: API Behavioral Validation**
+- [ ] Run RI/PI sweep on 2-3 API models (Claude Haiku, GPT-4.1-mini) via experiments_cloud/
+- [ ] Confirm PI > RI pattern holds on ARBITRARY_SINGLE (not just SEMANTIC_MULTI from ACL paper)
+- [ ] Quick check: do error positions cluster at near-last on API models too?
+
+**Phase 4: Paper Figures & Narrative**
+- [ ] Generate consistent figure set across 3+ models
+- [ ] Write mechanistic results section draft
+
+---
+
+## Session Actions
+
+### Action 1: Deep Analysis of 3B Error Position Distribution
+
+**Goal:** Verify the v3 claim that "PI failures cluster at near-last positions (0.74-0.89)."
+
+**Method:** Extracted predicted_idx from all Stage 1 PI failures for Qwen2.5-3B across multiple operating points.
+
+**FINDING — The "recency imprecision" story is more nuanced than claimed:**
+
+The error distribution is N-dependent (N = number of updates per key):
+
+| Operating Point | N | Penultimate (idx=N-2) | Near-last (>0.75) | Spread Pattern |
+|---|---|---|---|---|
+| 2k_5u | 5 | 85% | 85% | Concentrated: strong off-by-one |
+| 3k_5u | 5 | 61% | 61% | Concentrated: penultimate dominant |
+| 5k_5u | 5 | 43% | 43% | Spreading: penultimate still mode |
+| 5k_10u | 10 | 19% | 34% | Diffuse: errors across all positions |
+| 5k_15u | 15 | 17% | 35% | Diffuse: nearly uniform with penult mode |
+| 10k_5u | 5 | 36% | 36% | Mixed: penultimate + mid-range |
+| 10k_10u | 10 | 10% | 25% | Very diffuse: errors everywhere |
+| 10k_20u | 20 | 10% | 19% | Very diffuse: early positions get more weight |
+
+**Interpretation — TWO mechanisms, not one:**
+
+1. **At low N (5 updates):** Strong penultimate bias. The model is genuinely trying to retrieve the last value but lands one position early. This IS the "recency imprecision" / positional encoding confusion story. Clean off-by-one error.
+
+2. **At high N (10-20 updates):** Errors become nearly uniform across positions. The model can't address ANY specific late position. This looks more like the Veličković softmax dispersion story — attention becomes too diffuse to discriminate positions at all.
+
+**What this means for the paper:** The narrative needs to be: "At moderate N, PI failure is off-by-one (recency imprecision). As N grows, the positional addressing breaks down completely (softmax dispersion). RI is robust to both because v_0 has a unique structural advantage (attention sink + iterative compounding)."
+
+This actually strengthens the paper — it connects our behavioral data to BOTH the RoPE discrimination theory AND the softmax dispersion theory, showing they operate at different scales.
+
+### Action 2: 3B Logit Lens Deep Dive
+
+**Findings from Stage 2 (5k_3u operating point, 25 analyzable PI failures):**
+
+**Layer trajectory for PI failures:**
+
+```
+Layer | P(v_last) | P(v_penult) | P(v_first)
+------|-----------|-------------|------------
+L0-30 | ~0.0000   | ~0.0000     | ~0.0000     (nothing represented)
+L31   | 0.0326    | 0.0022      | 0.0000      (values start appearing)
+L32   | 0.2073    | 0.5239      | 0.0009      (COMPETITION: penult already winning)
+L33   | 0.1192    | 0.7347      | 0.0403      (penult dominates, v_last suppressed)
+L34   | 0.0800    | 0.8285      | 0.0792      (v_first catches up)
+L35   | 0.0128    | 0.8413      | 0.0807      (final: penult wins decisively)
+```
+
+**Comparison with RI correct trials:**
+
+```
+Layer | P(v_first) for RI correct
+------|----------------------------
+L31   | 0.0316
+L32   | 0.5219
+L33   | 0.8610
+L34   | 0.9496
+L35   | 0.9975
+```
+
+**Key insight:** RI retrieval is clean — P(v_first) rises monotonically from L31 to 0.9975. PI retrieval is messy — P(v_last) peaks at 0.207 (L32) then gets crushed by P(v_penult) which reaches 0.84. The correct value (v_last) is FOUND at L32 but immediately loses competition.
+
+This is Pattern B ("Overtaken") from the v3 framework — the model does compute P(v_last) at L32, but it gets outcompeted by L33-35.
+
+**At 7k_5u (harder point):** Same pattern but weaker. P(v_last) peaks at 0.079 (L32), P(v_penult) reaches 0.41. The signal is weaker because more values compete.
+
+### Action 3: 3B Stage 3 Causal Results Analysis
+
+**3A Attribution Patching:** Top heads by gradient-based importance (n=69 valid trials):
+
+```
+L26H5: 30.4  L27H3: 26.3  L30H3: 26.1  L27H2: 24.7  L26H7: 24.5
+L26H0: 24.2  L26H6: 23.3  L29H0: 22.0  L24H3: 22.0  L24H1: 21.4
+```
+
+**Cluster: Layers 24-30 dominate.** These are the layers BEFORE the critical L31-35 window where values appear. Attribution says these heads shape the competition outcome.
+
+**3B Targeted Patching:** Restoring individual heads from clean run → delta P(v_last):
+
+```
+L26H3: +0.032 (pos_rate=64%, biggest effect)
+L27H3: +0.024 (pos_rate=39%)
+L31H15: +0.019 (pos_rate=34%)
+L33H9: +0.012 (pos_rate=56%)
+L29H4: +0.009 (pos_rate=53%)
+```
+
+**Effects are small** — restoring the top head only adds 3.2% probability to v_last. This is consistent with the mechanism being distributed (many heads contribute small effects) rather than concentrated (one "primacy head" does all the damage).
+
+**3C Ablation:** Ablating top 5 heads (L26H3, L27H3, L31H15, L33H9, L29H4):
+- Normal P(v_last) final: 0.308
+- Ablated P(v_last) final: 0.264
+- Delta: -0.044 (ablating these heads HURTS, doesn't help)
+
+**Wait — this is backwards.** If these heads contribute to v_last retrieval, ablating them should reduce P(v_last). And it does (0.308 → 0.264). But we expected them to be SUPPRESSION heads. This means the patching results show these heads HELP retrieve v_last, not suppress it. The attribution patching identified retrieval-promoting heads, not interference heads.
+
+**Problem:** Stage 3 may be identifying the wrong thing. The attribution is: "which heads, if restored from a clean baseline, most increase P(v_last)?" That finds retrieval heads. To find suppression heads, we need: "which heads, if ablated, most INCREASE P(v_last)?"
+
+**TODO:** Check stage3_causal.py methodology — is the patching direction correct?
+
+### Action 4: 0.5B and 1.5B Garbage Diagnosis (Running)
+
+**Root cause of garbage (confirmed from trial-level data):**
+
+Both 0.5B and 1.5B produce three types of garbage:
+1. `"assistant"` — role tag leakage from chat template (30-40% of garbage)
+2. `"value of X?"` / `"the first value of X?"` — parroting the question (20-30%)
+3. `"category: value"` — generating more stream entries (20-30%)
+
+This is an **instruction following failure**, not a memory retrieval failure. The model understands the task direction but can't format the output.
+
+**Diagnostic running:** Testing 4 prompt formats on 0.5B to find which reduces garbage:
+- v1: Original system + user
+- v2: Stronger system prompt
+- v3: Few-shot examples (2 demo Q&A pairs)
+- v4: Completion format (no chat template)
+
+**3B has <2% garbage** at same operating points → confirms this is model-size dependent.
+
+### Action 5: Prompt Fix Resolves Garbage Problem
+
+**Change:** Updated SYSTEM_PROMPT from `"Answer with ONLY the exact value. No explanation."` to `"You are a precise data extraction tool. Output ONLY a single word - the exact value requested. No other text, no explanation, no punctuation."`
+
+**Results on Qwen2.5-1.5B-Instruct (focused grid, 50 trials/cell):**
+
+Old prompt (20 trials/cell):
+- 3_5: RI=30% (garb=60%), PI=0% (garb=65%)
+- 3_10: RI=30% (garb=60%), PI=10% (garb=70%)
+
+New prompt (50 trials/cell):
+- 2_5: RI=100% (garb=0%), PI=56% (garb=0%)
+- 2_7: RI=100% (garb=0%), PI=46% (garb=0%)
+- 2_10: RI=100% (garb=0%), PI=54% (garb=2%)
+
+**Garbage dropped from 60-70% to 0-2%.** The model was always doing the retrieval — it just couldn't format the output. Clean PI > RI signal now visible.
+
+**0.5B diagnostic also confirmed:** v2 (stronger system prompt) reduced garbage from 27% to 15%, v3 (few-shot) to 15%. At 2-3 keys, garbage drops to 5%.
+
+**Decision:** Re-run all Stage 1 sweeps with new prompt. 3B data unaffected (already <2% garbage). Updated stage1_sweep.py, stage2_logit_lens.py, and stage3_causal.py system prompts for consistency.
+
+### Action 6: Stage 3 Methodology Analysis
+
+**Critical finding: The patching setup is RI→PI, not clean→corrupted.**
+
+3B Experiment details:
+- **3A (Attribution):** Gradient of logit(v_last) w.r.t. head z on PI failure trials. Finds heads with highest influence on P(v_last) — doesn't distinguish help vs suppress.
+- **3B (Targeted patching):** Patches head z from RI trial → PI trial (same seed, different query). Measures delta P(v_last). Positive delta = head is less helpful for PI than RI.
+- **3C (Ablation):** Removes top heads. P(v_last) drops from 0.308 → 0.264 = these heads HELP retrieval overall.
+
+**Interpretation:** These are not "suppression heads." They are retrieval heads that work slightly less effectively for late positions. The +0.032 max delta from patching means: this head's RI computation is 3.2pp better for v_last than its PI computation. The mechanism is **distributed and passive** — no single head actively suppresses v_last.
+
+**This supports the theoretical framework:** PI > RI is an architectural property (iterative attention + positional encoding), not a learned suppression circuit. You can't ablate a few heads to fix PI. The entire network collectively fails at late-position precision.
+
+### Action 5b: 1.5B Stage 1 Sweep Complete (New Prompt)
+
+**Full results (30 cells, focused grid: 3 key levels × 10 update levels, 50 trials/cell):**
+
+| Keys | 5u | 7u | 10u | 12u | 15u | 20u | 25u | 30u | 40u | 50u |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **2** RI | 100 | 100 | 100 | 96 | 100 | 98 | 100 | 98 | 98 | 92 |
+| **2** PI | 56 | 46 | 54 | 30 | 20 | 26 | 36 | 22 | 16 | 20 |
+| **3** RI | 98 | 98 | 100 | 100 | 100 | 98 | 92 | 94 | 92 | 92 |
+| **3** PI | 46 | 32 | 28 | 26 | 28 | 20 | 16 | 24 | 6 | 12 |
+| **5** RI | 92 | 88 | 96 | 90 | 92 | 84 | 82 | 92 | 82 | 88 |
+| **5** PI | 20 | 26 | 26 | 24 | 20 | 32 | 6 | 20 | 18 | 14 |
+
+**Key findings:**
+- RI accuracy: 82-100% across all configurations
+- PI accuracy: degrades from 56% → 6% as N grows
+- Gap ranges from 44% to 86%
+- Garbage: 0-6% RI, 0-10% PI (completely manageable)
+- Error positions: Same N-dependent pattern as 3B (penultimate dominates at low N, diffuses at high N)
+
+**Figures generated:** fig1_regime_map.png, fig2_failure_positions.png
+
+**Stage 2 operating points selected:**
+- 2,5 (PI=56%): Easy, few values, good for logit lens
+- 2,10 (PI=54%): More values, same difficulty
+- 3,10 (PI=28%): Harder, 10 values per key
+- 3,20 (PI=20%): Near-collapse, 20 values
+
+### Action 7: Existing 3B Figures Regenerated
+
+7 figures generated from existing data:
+1. **fig1_regime_map.png** — Heatmap showing RI, PI, gap across key×update grid
+2. **fig2_failure_positions.png** — Bar charts showing WHERE PI errors land (beautiful N-dependent progression)
+3. **fig3_layer_trajectories.png** — Per-layer P(v_i) for RI correct vs PI failures
+4. **fig4_last_layer_landscape.png** — Last-layer value probability comparison
+5. **fig5_suppression.png** — THE MONEY FIGURE: P(v_last) peaks then crashes vs P(v_first) rises cleanly
+6. **fig6_crossover_histogram.png** — Where in layers does v_last lose
+7. **fig7_garbage_threshold.png** — Garbage vs analyzable trials threshold
+

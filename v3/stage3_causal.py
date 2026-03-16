@@ -50,7 +50,11 @@ from mechanistic_probing_v2.core.dataset_configs import (
 from mechanistic_probing_v2.core.evaluation import classify_error
 
 DATASET_TYPE = "ARBITRARY_SINGLE"
-SYSTEM_PROMPT = "Answer with ONLY the exact value. No explanation."
+SYSTEM_PROMPT = (
+    "You are a precise data extraction tool. "
+    "Output ONLY a single word - the exact value requested. "
+    "No other text, no explanation, no punctuation."
+)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
