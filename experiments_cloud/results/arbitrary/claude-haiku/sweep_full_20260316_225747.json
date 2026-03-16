@@ -1,0 +1,3543 @@
+{
+  "model": "claude-haiku",
+  "dataset_type": "ARBITRARY_MULTI",
+  "config": {
+    "trials_per_cell": 10,
+    "workers": 40,
+    "key_levels": [
+      2,
+      5
+    ],
+    "update_levels": [
+      5,
+      10,
+      20
+    ],
+    "near_zero_thresh": 0.015,
+    "recovery_thresh": 0.06,
+    "sat_count": 3
+  },
+  "cells": {
+    "2_5": {
+      "num_keys": 2,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 3.9,
+      "n_trials": 10,
+      "n_observations": 10,
+      "stopped_early": false,
+      "max_trials": 10,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 10
+          }
+        },
+        "PI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 10
+          }
+        }
+      }
+    },
+    "2_10": {
+      "num_keys": 2,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 3.2,
+      "n_trials": 10,
+      "n_observations": 10,
+      "stopped_early": false,
+      "max_trials": 10,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 10
+          }
+        },
+        "PI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 10
+          }
+        }
+      }
+    },
+    "2_20": {
+      "num_keys": 2,
+      "num_updates": 20,
+      "regime": "A",
+      "elapsed_sec": 2.8,
+      "n_trials": 10,
+      "n_observations": 10,
+      "stopped_early": false,
+      "max_trials": 10,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 10
+          }
+        },
+        "PI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 10
+          }
+        }
+      }
+    },
+    "5_5": {
+      "num_keys": 5,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 3.0,
+      "n_trials": 10,
+      "n_observations": 10,
+      "stopped_early": false,
+      "max_trials": 10,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 10
+          }
+        },
+        "PI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 10
+          }
+        }
+      }
+    },
+    "5_10": {
+      "num_keys": 5,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 2.8,
+      "n_trials": 10,
+      "n_observations": 10,
+      "stopped_early": false,
+      "max_trials": 10,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 10
+          }
+        },
+        "PI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 10
+          }
+        }
+      }
+    },
+    "5_20": {
+      "num_keys": 5,
+      "num_updates": 20,
+      "regime": "A",
+      "elapsed_sec": 2.2,
+      "n_trials": 10,
+      "n_observations": 10,
+      "stopped_early": false,
+      "max_trials": 10,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 10
+          }
+        },
+        "PI": {
+          "accuracy": 0.9,
+          "ci_lower": 0.7,
+          "ci_upper": 1.0,
+          "n": 10,
+          "error_types": {
+            "correct": 9,
+            "intermediate_intrusion": 1
+          }
+        }
+      }
+    }
+  },
+  "start_time": "2026-03-16T22:57:30.088771+00:00",
+  "end_time": "2026-03-16T22:57:47.977339+00:00",
+  "trial_details": {
+    "2_5": {
+      "RI": [
+        {
+          "trial_idx": 9,
+          "seed": 790352965,
+          "condition": "RI",
+          "test_category": "musical instrument",
+          "categories_in_sequence": [
+            "musical instrument",
+            "stadium name"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Inst137",
+          "predicted": "Inst137",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 109,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 884978614,
+          "condition": "RI",
+          "test_category": "mineral type",
+          "categories_in_sequence": [
+            "mineral type",
+            "photography technique"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Mineral125",
+          "predicted": "Mineral125",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 109,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 1643111665,
+          "condition": "RI",
+          "test_category": "ancient civilization",
+          "categories_in_sequence": [
+            "ancient civilization",
+            "cartoon character"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Civ59",
+          "predicted": "Civ59",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 124,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 3,
+          "seed": 1791303482,
+          "condition": "RI",
+          "test_category": "mathematical concept",
+          "categories_in_sequence": [
+            "mathematical concept",
+            "hat style"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Math163",
+          "predicted": "Math163",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 104,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 6,
+          "seed": 1597338946,
+          "condition": "RI",
+          "test_category": "cloud formation",
+          "categories_in_sequence": [
+            "guitar type",
+            "cloud formation"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Cloud283",
+          "predicted": "Cloud283",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 104,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 70199184,
+          "condition": "RI",
+          "test_category": "ocean current",
+          "categories_in_sequence": [
+            "guitar type",
+            "ocean current"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Current444",
+          "predicted": "Current444",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 104,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 736786797,
+          "condition": "RI",
+          "test_category": "dinosaur genus",
+          "categories_in_sequence": [
+            "dinosaur genus",
+            "mathematical concept"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Dino75",
+          "predicted": "Dino75",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 120,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 1216732315,
+          "condition": "RI",
+          "test_category": "fabric",
+          "categories_in_sequence": [
+            "cheese variety",
+            "fabric"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Fab300",
+          "predicted": "Fab300",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 108,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 310407447,
+          "condition": "RI",
+          "test_category": "musical instrument",
+          "categories_in_sequence": [
+            "musical instrument",
+            "painting medium"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Inst494",
+          "predicted": "Inst494",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 109,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 24426465,
+          "condition": "RI",
+          "test_category": "cartoon character",
+          "categories_in_sequence": [
+            "cheese variety",
+            "cartoon character"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Toon435",
+          "predicted": "Toon435",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 119,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ],
+      "PI": [
+        {
+          "trial_idx": 9,
+          "seed": 790352965,
+          "condition": "PI",
+          "test_category": "musical instrument",
+          "categories_in_sequence": [
+            "musical instrument",
+            "stadium name"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Inst444",
+          "predicted": "Inst444",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 109,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 884978614,
+          "condition": "PI",
+          "test_category": "mineral type",
+          "categories_in_sequence": [
+            "mineral type",
+            "photography technique"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Mineral73",
+          "predicted": "Mineral73",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 109,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 1643111665,
+          "condition": "PI",
+          "test_category": "ancient civilization",
+          "categories_in_sequence": [
+            "ancient civilization",
+            "cartoon character"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Civ461",
+          "predicted": "Civ461",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 124,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 3,
+          "seed": 1791303482,
+          "condition": "PI",
+          "test_category": "mathematical concept",
+          "categories_in_sequence": [
+            "mathematical concept",
+            "hat style"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Math156",
+          "predicted": "Math156",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 104,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 6,
+          "seed": 1597338946,
+          "condition": "PI",
+          "test_category": "cloud formation",
+          "categories_in_sequence": [
+            "guitar type",
+            "cloud formation"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Cloud367",
+          "predicted": "Cloud367",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 104,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 70199184,
+          "condition": "PI",
+          "test_category": "ocean current",
+          "categories_in_sequence": [
+            "guitar type",
+            "ocean current"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Current172",
+          "predicted": "Current172",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 104,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 736786797,
+          "condition": "PI",
+          "test_category": "dinosaur genus",
+          "categories_in_sequence": [
+            "dinosaur genus",
+            "mathematical concept"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Dino185",
+          "predicted": "Dino185",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 120,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 1216732315,
+          "condition": "PI",
+          "test_category": "fabric",
+          "categories_in_sequence": [
+            "cheese variety",
+            "fabric"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Fab55",
+          "predicted": "Fab55",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 108,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 310407447,
+          "condition": "PI",
+          "test_category": "musical instrument",
+          "categories_in_sequence": [
+            "musical instrument",
+            "painting medium"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Inst220",
+          "predicted": "Inst220",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 109,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 24426465,
+          "condition": "PI",
+          "test_category": "cartoon character",
+          "categories_in_sequence": [
+            "cheese variety",
+            "cartoon character"
+          ],
+          "num_keys": 2,
+          "num_updates": 5,
+          "expected": "Toon320",
+          "predicted": "Toon320",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 119,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ]
+    },
+    "2_10": {
+      "RI": [
+        {
+          "trial_idx": 3,
+          "seed": 1058030201,
+          "condition": "RI",
+          "test_category": "culinary herb",
+          "categories_in_sequence": [
+            "culinary herb",
+            "landform"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Herb80",
+          "predicted": "Herb80",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 185,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 197478052,
+          "condition": "RI",
+          "test_category": "boat type",
+          "categories_in_sequence": [
+            "boat type",
+            "coffee variety"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Boat94",
+          "predicted": "Boat94",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 174,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 1964355069,
+          "condition": "RI",
+          "test_category": "volcano name",
+          "categories_in_sequence": [
+            "constellation",
+            "volcano name"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Volcano386",
+          "predicted": "Volcano386",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 164,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 1135226166,
+          "condition": "RI",
+          "test_category": "spice blend",
+          "categories_in_sequence": [
+            "spice blend",
+            "fabric"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Spice84",
+          "predicted": "Spice84",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 195,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 1470060078,
+          "condition": "RI",
+          "test_category": "martial art",
+          "categories_in_sequence": [
+            "martial art",
+            "wine variety"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Martial50",
+          "predicted": "Martial50",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 174,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 1537975719,
+          "condition": "RI",
+          "test_category": "cloud formation",
+          "categories_in_sequence": [
+            "painting medium",
+            "cloud formation"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Cloud493",
+          "predicted": "Cloud493",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 164,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 6,
+          "seed": 251044220,
+          "condition": "RI",
+          "test_category": "stadium name",
+          "categories_in_sequence": [
+            "stadium name",
+            "bridge type"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Stadium345",
+          "predicted": "Stadium345",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 164,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 631650851,
+          "condition": "RI",
+          "test_category": "ocean current",
+          "categories_in_sequence": [
+            "ocean current",
+            "landform"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Current232",
+          "predicted": "Current232",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 164,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 9,
+          "seed": 1492203000,
+          "condition": "RI",
+          "test_category": "cooking method",
+          "categories_in_sequence": [
+            "ocean current",
+            "cooking method"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Cook176",
+          "predicted": "Cook176",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 164,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 1918582350,
+          "condition": "RI",
+          "test_category": "coffee variety",
+          "categories_in_sequence": [
+            "volcano name",
+            "coffee variety"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Coffee55",
+          "predicted": "Coffee55",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 174,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ],
+      "PI": [
+        {
+          "trial_idx": 3,
+          "seed": 1058030201,
+          "condition": "PI",
+          "test_category": "culinary herb",
+          "categories_in_sequence": [
+            "culinary herb",
+            "landform"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Herb50",
+          "predicted": "Herb50",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 185,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 197478052,
+          "condition": "PI",
+          "test_category": "boat type",
+          "categories_in_sequence": [
+            "boat type",
+            "coffee variety"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Boat13",
+          "predicted": "Boat13",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 174,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 1964355069,
+          "condition": "PI",
+          "test_category": "volcano name",
+          "categories_in_sequence": [
+            "constellation",
+            "volcano name"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Volcano62",
+          "predicted": "Volcano62",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 164,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 1135226166,
+          "condition": "PI",
+          "test_category": "spice blend",
+          "categories_in_sequence": [
+            "spice blend",
+            "fabric"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Spice169",
+          "predicted": "Spice169",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 195,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 1470060078,
+          "condition": "PI",
+          "test_category": "martial art",
+          "categories_in_sequence": [
+            "martial art",
+            "wine variety"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Martial224",
+          "predicted": "Martial224",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 174,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 1537975719,
+          "condition": "PI",
+          "test_category": "cloud formation",
+          "categories_in_sequence": [
+            "painting medium",
+            "cloud formation"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Cloud71",
+          "predicted": "Cloud71",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 164,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 6,
+          "seed": 251044220,
+          "condition": "PI",
+          "test_category": "stadium name",
+          "categories_in_sequence": [
+            "stadium name",
+            "bridge type"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Stadium480",
+          "predicted": "Stadium480",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 164,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 631650851,
+          "condition": "PI",
+          "test_category": "ocean current",
+          "categories_in_sequence": [
+            "ocean current",
+            "landform"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Current49",
+          "predicted": "Current49",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 164,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 9,
+          "seed": 1492203000,
+          "condition": "PI",
+          "test_category": "cooking method",
+          "categories_in_sequence": [
+            "ocean current",
+            "cooking method"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Cook407",
+          "predicted": "Cook407",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 164,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 1918582350,
+          "condition": "PI",
+          "test_category": "coffee variety",
+          "categories_in_sequence": [
+            "volcano name",
+            "coffee variety"
+          ],
+          "num_keys": 2,
+          "num_updates": 10,
+          "expected": "Coffee316",
+          "predicted": "Coffee316",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 174,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ]
+    },
+    "2_20": {
+      "RI": [
+        {
+          "trial_idx": 3,
+          "seed": 851088571,
+          "condition": "RI",
+          "test_category": "dinosaur genus",
+          "categories_in_sequence": [
+            "culinary herb",
+            "dinosaur genus"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Dino184",
+          "predicted": "Dino184",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 385,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 9,
+          "seed": 1285261370,
+          "condition": "RI",
+          "test_category": "hat style",
+          "categories_in_sequence": [
+            "cheese variety",
+            "hat style"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Hat218",
+          "predicted": "Hat218",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 304,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 1342167796,
+          "condition": "RI",
+          "test_category": "ocean current",
+          "categories_in_sequence": [
+            "tools",
+            "ocean current"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Current187",
+          "predicted": "Current187",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 264,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 1711640720,
+          "condition": "RI",
+          "test_category": "guitar type",
+          "categories_in_sequence": [
+            "guitar type",
+            "pasta shape"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Guitar122",
+          "predicted": "Guitar122",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 304,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 2138020070,
+          "condition": "RI",
+          "test_category": "tools",
+          "categories_in_sequence": [
+            "tools",
+            "sword type"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Tool46",
+          "predicted": "Tool46",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 283,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 1757413439,
+          "condition": "RI",
+          "test_category": "tools",
+          "categories_in_sequence": [
+            "cooking method",
+            "tools"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Tool395",
+          "predicted": "Tool395",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 263,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 6,
+          "seed": 44102590,
+          "condition": "RI",
+          "test_category": "fruit variety",
+          "categories_in_sequence": [
+            "fruit variety",
+            "visual art"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Fruit220",
+          "predicted": "Fruit220",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 304,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 424709221,
+          "condition": "RI",
+          "test_category": "ocean current",
+          "categories_in_sequence": [
+            "cheese variety",
+            "ocean current"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Current13",
+          "predicted": "Current13",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 304,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 470481940,
+          "condition": "RI",
+          "test_category": "tools",
+          "categories_in_sequence": [
+            "tools",
+            "dinosaur genus"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Tool122",
+          "predicted": "Tool122",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 323,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 1331034089,
+          "condition": "RI",
+          "test_category": "ancient civilization",
+          "categories_in_sequence": [
+            "stadium name",
+            "ancient civilization"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Civ55",
+          "predicted": "Civ55",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 324,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ],
+      "PI": [
+        {
+          "trial_idx": 3,
+          "seed": 851088571,
+          "condition": "PI",
+          "test_category": "dinosaur genus",
+          "categories_in_sequence": [
+            "culinary herb",
+            "dinosaur genus"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Dino394",
+          "predicted": "Dino394",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 385,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 9,
+          "seed": 1285261370,
+          "condition": "PI",
+          "test_category": "hat style",
+          "categories_in_sequence": [
+            "cheese variety",
+            "hat style"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Hat274",
+          "predicted": "Hat274",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 304,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 1342167796,
+          "condition": "PI",
+          "test_category": "ocean current",
+          "categories_in_sequence": [
+            "tools",
+            "ocean current"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Current262",
+          "predicted": "Current262",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 264,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 1711640720,
+          "condition": "PI",
+          "test_category": "guitar type",
+          "categories_in_sequence": [
+            "guitar type",
+            "pasta shape"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Guitar244",
+          "predicted": "Guitar244",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 304,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 2138020070,
+          "condition": "PI",
+          "test_category": "tools",
+          "categories_in_sequence": [
+            "tools",
+            "sword type"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Tool217",
+          "predicted": "Tool217",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 283,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 1757413439,
+          "condition": "PI",
+          "test_category": "tools",
+          "categories_in_sequence": [
+            "cooking method",
+            "tools"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Tool178",
+          "predicted": "Tool178",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 263,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 6,
+          "seed": 44102590,
+          "condition": "PI",
+          "test_category": "fruit variety",
+          "categories_in_sequence": [
+            "fruit variety",
+            "visual art"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Fruit450",
+          "predicted": "Fruit450",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 304,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 424709221,
+          "condition": "PI",
+          "test_category": "ocean current",
+          "categories_in_sequence": [
+            "cheese variety",
+            "ocean current"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Current409",
+          "predicted": "Current409",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 304,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 470481940,
+          "condition": "PI",
+          "test_category": "tools",
+          "categories_in_sequence": [
+            "tools",
+            "dinosaur genus"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Tool449",
+          "predicted": "Tool449",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 323,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 1331034089,
+          "condition": "PI",
+          "test_category": "ancient civilization",
+          "categories_in_sequence": [
+            "stadium name",
+            "ancient civilization"
+          ],
+          "num_keys": 2,
+          "num_updates": 20,
+          "expected": "Civ412",
+          "predicted": "Civ412",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 324,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ]
+    },
+    "5_5": {
+      "RI": [
+        {
+          "trial_idx": 6,
+          "seed": 1821170788,
+          "condition": "RI",
+          "test_category": "bridge type",
+          "categories_in_sequence": [
+            "bridge type",
+            "volcano name",
+            "sea creature",
+            "constellation",
+            "bird species"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Bridge224",
+          "predicted": "Bridge224",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 194,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 280540141,
+          "condition": "RI",
+          "test_category": "gemstone",
+          "categories_in_sequence": [
+            "flower species",
+            "gemstone",
+            "hat style",
+            "surgical procedure",
+            "sea creature"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Gem459",
+          "predicted": "Gem459",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 214,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 100066490,
+          "condition": "RI",
+          "test_category": "cooking method",
+          "categories_in_sequence": [
+            "wine variety",
+            "fabric",
+            "fruit variety",
+            "flower species",
+            "cooking method"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Cook289",
+          "predicted": "Cook289",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 204,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 1993850990,
+          "condition": "RI",
+          "test_category": "wine variety",
+          "categories_in_sequence": [
+            "hat style",
+            "weather phenomenon",
+            "tree species",
+            "painting medium",
+            "wine variety"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Wine191",
+          "predicted": "Wine191",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 194,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 960618639,
+          "condition": "RI",
+          "test_category": "sword type",
+          "categories_in_sequence": [
+            "ocean current",
+            "sword type",
+            "weather phenomenon",
+            "cloud formation",
+            "stadium name"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Sword87",
+          "predicted": "Sword87",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 199,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 9,
+          "seed": 914845920,
+          "condition": "RI",
+          "test_category": "cartoon character",
+          "categories_in_sequence": [
+            "literary genre",
+            "sword type",
+            "cartoon character",
+            "photography technique",
+            "sea creature"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Toon86",
+          "predicted": "Toon86",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 209,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 706919491,
+          "condition": "RI",
+          "test_category": "spice blend",
+          "categories_in_sequence": [
+            "spice blend",
+            "tools",
+            "cartoon character",
+            "fabric",
+            "dance style"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Spice63",
+          "predicted": "Spice63",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 215,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 1486336876,
+          "condition": "RI",
+          "test_category": "ancient civilization",
+          "categories_in_sequence": [
+            "cooking method",
+            "hat style",
+            "ancient civilization",
+            "fabric",
+            "tree species"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Civ432",
+          "predicted": "Civ432",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 204,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 534239289,
+          "condition": "RI",
+          "test_category": "fabric",
+          "categories_in_sequence": [
+            "volcano name",
+            "fabric",
+            "wine variety",
+            "gemstone",
+            "tools"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Fab288",
+          "predicted": "Fab288",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 198,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 3,
+          "seed": 1567471640,
+          "condition": "RI",
+          "test_category": "mathematical concept",
+          "categories_in_sequence": [
+            "fruit variety",
+            "mathematical concept",
+            "pasta shape",
+            "ancient civilization",
+            "coffee variety"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Math240",
+          "predicted": "Math240",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 214,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ],
+      "PI": [
+        {
+          "trial_idx": 6,
+          "seed": 1821170788,
+          "condition": "PI",
+          "test_category": "bridge type",
+          "categories_in_sequence": [
+            "bridge type",
+            "volcano name",
+            "sea creature",
+            "constellation",
+            "bird species"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Bridge198",
+          "predicted": "Bridge198",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 194,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 280540141,
+          "condition": "PI",
+          "test_category": "gemstone",
+          "categories_in_sequence": [
+            "flower species",
+            "gemstone",
+            "hat style",
+            "surgical procedure",
+            "sea creature"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Gem155",
+          "predicted": "Gem155",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 214,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 100066490,
+          "condition": "PI",
+          "test_category": "cooking method",
+          "categories_in_sequence": [
+            "wine variety",
+            "fabric",
+            "fruit variety",
+            "flower species",
+            "cooking method"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Cook311",
+          "predicted": "Cook311",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 204,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 1993850990,
+          "condition": "PI",
+          "test_category": "wine variety",
+          "categories_in_sequence": [
+            "hat style",
+            "weather phenomenon",
+            "tree species",
+            "painting medium",
+            "wine variety"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Wine332",
+          "predicted": "Wine332",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 194,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 960618639,
+          "condition": "PI",
+          "test_category": "sword type",
+          "categories_in_sequence": [
+            "ocean current",
+            "sword type",
+            "weather phenomenon",
+            "cloud formation",
+            "stadium name"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Sword184",
+          "predicted": "Sword184",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 3,
+            "predicted_relative_pos": 0.75
+          },
+          "token_usage": {
+            "input_tokens": 199,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 9,
+          "seed": 914845920,
+          "condition": "PI",
+          "test_category": "cartoon character",
+          "categories_in_sequence": [
+            "literary genre",
+            "sword type",
+            "cartoon character",
+            "photography technique",
+            "sea creature"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Toon485",
+          "predicted": "Toon485",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 209,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 706919491,
+          "condition": "PI",
+          "test_category": "spice blend",
+          "categories_in_sequence": [
+            "spice blend",
+            "tools",
+            "cartoon character",
+            "fabric",
+            "dance style"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Spice326",
+          "predicted": "Spice326",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 215,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 1486336876,
+          "condition": "PI",
+          "test_category": "ancient civilization",
+          "categories_in_sequence": [
+            "cooking method",
+            "hat style",
+            "ancient civilization",
+            "fabric",
+            "tree species"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Civ93",
+          "predicted": "Civ93",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 204,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 534239289,
+          "condition": "PI",
+          "test_category": "fabric",
+          "categories_in_sequence": [
+            "volcano name",
+            "fabric",
+            "wine variety",
+            "gemstone",
+            "tools"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Fab131",
+          "predicted": "Fab131",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 198,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 3,
+          "seed": 1567471640,
+          "condition": "PI",
+          "test_category": "mathematical concept",
+          "categories_in_sequence": [
+            "fruit variety",
+            "mathematical concept",
+            "pasta shape",
+            "ancient civilization",
+            "coffee variety"
+          ],
+          "num_keys": 5,
+          "num_updates": 5,
+          "expected": "Math70",
+          "predicted": "Math70",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 214,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ]
+    },
+    "5_10": {
+      "RI": [
+        {
+          "trial_idx": 6,
+          "seed": 1717699973,
+          "condition": "RI",
+          "test_category": "coffee variety",
+          "categories_in_sequence": [
+            "bird species",
+            "coffee variety",
+            "cartoon character",
+            "constellation",
+            "telescope type"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Coffee292",
+          "predicted": "Coffee292",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 364,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 2097321805,
+          "condition": "RI",
+          "test_category": "cloud formation",
+          "categories_in_sequence": [
+            "literary genre",
+            "cloud formation",
+            "psychology term",
+            "landform",
+            "bird species"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Cloud111",
+          "predicted": "Cloud111",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 364,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 3,
+          "seed": 1670942455,
+          "condition": "RI",
+          "test_category": "boat type",
+          "categories_in_sequence": [
+            "hat style",
+            "pasta shape",
+            "dance style",
+            "photography technique",
+            "boat type"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Boat108",
+          "predicted": "Boat108",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 364,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 764617587,
+          "condition": "RI",
+          "test_category": "sword type",
+          "categories_in_sequence": [
+            "dinosaur genus",
+            "ancient civilization",
+            "photography technique",
+            "sword type",
+            "tools"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Sword59",
+          "predicted": "Sword59",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 394,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 430768474,
+          "condition": "RI",
+          "test_category": "musical instrument",
+          "categories_in_sequence": [
+            "coffee variety",
+            "visual art",
+            "musical instrument",
+            "painting medium",
+            "landform"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Inst160",
+          "predicted": "Inst160",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 354,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 9,
+          "seed": 1336108543,
+          "condition": "RI",
+          "test_category": "dinosaur genus",
+          "categories_in_sequence": [
+            "bird species",
+            "hat style",
+            "dinosaur genus",
+            "tools",
+            "cooking method"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Dino62",
+          "predicted": "Dino62",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 365,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 810390306,
+          "condition": "RI",
+          "test_category": "cartoon character",
+          "categories_in_sequence": [
+            "weather phenomenon",
+            "mineral type",
+            "hat style",
+            "cartoon character",
+            "coffee variety"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Toon172",
+          "predicted": "Toon172",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 374,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 2144079323,
+          "condition": "RI",
+          "test_category": "telescope type",
+          "categories_in_sequence": [
+            "volcano name",
+            "telescope type",
+            "surgical procedure",
+            "mineral type",
+            "stadium name"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Scope460",
+          "predicted": "Scope460",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 394,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 857147824,
+          "condition": "RI",
+          "test_category": "fabric",
+          "categories_in_sequence": [
+            "stadium name",
+            "fabric",
+            "dinosaur genus",
+            "guitar type",
+            "wine variety"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Fab24",
+          "predicted": "Fab24",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 373,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 1763472692,
+          "condition": "RI",
+          "test_category": "surgical procedure",
+          "categories_in_sequence": [
+            "photography technique",
+            "chemical element",
+            "volcano name",
+            "surgical procedure",
+            "stadium name"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Surg40",
+          "predicted": "Surg40",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 384,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ],
+      "PI": [
+        {
+          "trial_idx": 6,
+          "seed": 1717699973,
+          "condition": "PI",
+          "test_category": "coffee variety",
+          "categories_in_sequence": [
+            "bird species",
+            "coffee variety",
+            "cartoon character",
+            "constellation",
+            "telescope type"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Coffee393",
+          "predicted": "Coffee393",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 364,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 2097321805,
+          "condition": "PI",
+          "test_category": "cloud formation",
+          "categories_in_sequence": [
+            "literary genre",
+            "cloud formation",
+            "psychology term",
+            "landform",
+            "bird species"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Cloud424",
+          "predicted": "Cloud424",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 364,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 3,
+          "seed": 1670942455,
+          "condition": "PI",
+          "test_category": "boat type",
+          "categories_in_sequence": [
+            "hat style",
+            "pasta shape",
+            "dance style",
+            "photography technique",
+            "boat type"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Boat6",
+          "predicted": "Boat6",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 364,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 764617587,
+          "condition": "PI",
+          "test_category": "sword type",
+          "categories_in_sequence": [
+            "dinosaur genus",
+            "ancient civilization",
+            "photography technique",
+            "sword type",
+            "tools"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Sword252",
+          "predicted": "Sword252",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 394,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 430768474,
+          "condition": "PI",
+          "test_category": "musical instrument",
+          "categories_in_sequence": [
+            "coffee variety",
+            "visual art",
+            "musical instrument",
+            "painting medium",
+            "landform"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Inst483",
+          "predicted": "Inst483",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 354,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 9,
+          "seed": 1336108543,
+          "condition": "PI",
+          "test_category": "dinosaur genus",
+          "categories_in_sequence": [
+            "bird species",
+            "hat style",
+            "dinosaur genus",
+            "tools",
+            "cooking method"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Dino7",
+          "predicted": "Dino7",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 365,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 810390306,
+          "condition": "PI",
+          "test_category": "cartoon character",
+          "categories_in_sequence": [
+            "weather phenomenon",
+            "mineral type",
+            "hat style",
+            "cartoon character",
+            "coffee variety"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Toon467",
+          "predicted": "Toon467",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 374,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 2144079323,
+          "condition": "PI",
+          "test_category": "telescope type",
+          "categories_in_sequence": [
+            "volcano name",
+            "telescope type",
+            "surgical procedure",
+            "mineral type",
+            "stadium name"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Scope329",
+          "predicted": "Scope329",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 394,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 857147824,
+          "condition": "PI",
+          "test_category": "fabric",
+          "categories_in_sequence": [
+            "stadium name",
+            "fabric",
+            "dinosaur genus",
+            "guitar type",
+            "wine variety"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Fab175",
+          "predicted": "Fab175",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 373,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 1763472692,
+          "condition": "PI",
+          "test_category": "surgical procedure",
+          "categories_in_sequence": [
+            "photography technique",
+            "chemical element",
+            "volcano name",
+            "surgical procedure",
+            "stadium name"
+          ],
+          "num_keys": 5,
+          "num_updates": 10,
+          "expected": "Surg297",
+          "predicted": "Surg297",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 9,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 384,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ]
+    },
+    "5_20": {
+      "RI": [
+        {
+          "trial_idx": 9,
+          "seed": 1509093212,
+          "condition": "RI",
+          "test_category": "bridge type",
+          "categories_in_sequence": [
+            "martial art",
+            "bridge type",
+            "surgical procedure",
+            "architectural style",
+            "cloud formation"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Bridge150",
+          "predicted": "Bridge150",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 704,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 166238367,
+          "condition": "RI",
+          "test_category": "landform",
+          "categories_in_sequence": [
+            "coffee variety",
+            "wine variety",
+            "culinary herb",
+            "constellation",
+            "landform"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Land23",
+          "predicted": "Land23",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 664,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 648541063,
+          "condition": "RI",
+          "test_category": "bird species",
+          "categories_in_sequence": [
+            "mathematical concept",
+            "mineral type",
+            "constellation",
+            "culinary herb",
+            "bird species"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Bird289",
+          "predicted": "Bird289",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 684,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 1029147694,
+          "condition": "RI",
+          "test_category": "tools",
+          "categories_in_sequence": [
+            "stadium name",
+            "ancient civilization",
+            "tools",
+            "flower species",
+            "bridge type"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Tool63",
+          "predicted": "Tool63",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 683,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 214368264,
+          "condition": "RI",
+          "test_category": "volcano name",
+          "categories_in_sequence": [
+            "culinary herb",
+            "telescope type",
+            "volcano name",
+            "musical instrument",
+            "cartoon character"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Volcano43",
+          "predicted": "Volcano43",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 784,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 694313782,
+          "condition": "RI",
+          "test_category": "sword type",
+          "categories_in_sequence": [
+            "cloud formation",
+            "chemical element",
+            "weather phenomenon",
+            "tools",
+            "sword type"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Sword362",
+          "predicted": "Sword362",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 664,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 1455527044,
+          "condition": "RI",
+          "test_category": "cloud formation",
+          "categories_in_sequence": [
+            "telescope type",
+            "cloud formation",
+            "guitar type",
+            "programming language",
+            "ocean current"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Cloud35",
+          "predicted": "Cloud35",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 664,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 6,
+          "seed": 1978888103,
+          "condition": "RI",
+          "test_category": "mathematical concept",
+          "categories_in_sequence": [
+            "tree species",
+            "flower species",
+            "mathematical concept",
+            "musical instrument",
+            "stadium name"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Math227",
+          "predicted": "Math227",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 684,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 1935472562,
+          "condition": "RI",
+          "test_category": "guitar type",
+          "categories_in_sequence": [
+            "spice blend",
+            "cooking method",
+            "guitar type",
+            "gemstone",
+            "telescope type"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Guitar77",
+          "predicted": "Guitar77",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 744,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 3,
+          "seed": 1074920413,
+          "condition": "RI",
+          "test_category": "surgical procedure",
+          "categories_in_sequence": [
+            "bird species",
+            "dinosaur genus",
+            "cloud formation",
+            "surgical procedure",
+            "visual art"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Surg430",
+          "predicted": "Surg430",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 744,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ],
+      "PI": [
+        {
+          "trial_idx": 9,
+          "seed": 1509093212,
+          "condition": "PI",
+          "test_category": "bridge type",
+          "categories_in_sequence": [
+            "martial art",
+            "bridge type",
+            "surgical procedure",
+            "architectural style",
+            "cloud formation"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Bridge357",
+          "predicted": "Bridge357",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 704,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 0,
+          "seed": 166238367,
+          "condition": "PI",
+          "test_category": "landform",
+          "categories_in_sequence": [
+            "coffee variety",
+            "wine variety",
+            "culinary herb",
+            "constellation",
+            "landform"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Land6",
+          "predicted": "Land6",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 664,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 7,
+          "seed": 648541063,
+          "condition": "PI",
+          "test_category": "bird species",
+          "categories_in_sequence": [
+            "mathematical concept",
+            "mineral type",
+            "constellation",
+            "culinary herb",
+            "bird species"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Bird365",
+          "predicted": "Bird365",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 684,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 8,
+          "seed": 1029147694,
+          "condition": "PI",
+          "test_category": "tools",
+          "categories_in_sequence": [
+            "stadium name",
+            "ancient civilization",
+            "tools",
+            "flower species",
+            "bridge type"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Tool440",
+          "predicted": "Tool440",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 683,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 214368264,
+          "condition": "PI",
+          "test_category": "volcano name",
+          "categories_in_sequence": [
+            "culinary herb",
+            "telescope type",
+            "volcano name",
+            "musical instrument",
+            "cartoon character"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Volcano466",
+          "predicted": "Volcano466",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 784,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 694313782,
+          "condition": "PI",
+          "test_category": "sword type",
+          "categories_in_sequence": [
+            "cloud formation",
+            "chemical element",
+            "weather phenomenon",
+            "tools",
+            "sword type"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Sword291",
+          "predicted": "Sword291",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 664,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 4,
+          "seed": 1455527044,
+          "condition": "PI",
+          "test_category": "cloud formation",
+          "categories_in_sequence": [
+            "telescope type",
+            "cloud formation",
+            "guitar type",
+            "programming language",
+            "ocean current"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Cloud50",
+          "predicted": "Cloud384",
+          "correct": false,
+          "error_type": "intermediate_intrusion",
+          "error_detail": {
+            "predicted_idx": 18,
+            "predicted_relative_pos": 0.9474
+          },
+          "token_usage": {
+            "input_tokens": 664,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 6,
+          "seed": 1978888103,
+          "condition": "PI",
+          "test_category": "mathematical concept",
+          "categories_in_sequence": [
+            "tree species",
+            "flower species",
+            "mathematical concept",
+            "musical instrument",
+            "stadium name"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Math423",
+          "predicted": "Math423",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 684,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 5,
+          "seed": 1935472562,
+          "condition": "PI",
+          "test_category": "guitar type",
+          "categories_in_sequence": [
+            "spice blend",
+            "cooking method",
+            "guitar type",
+            "gemstone",
+            "telescope type"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Guitar332",
+          "predicted": "Guitar332",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 19,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 744,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 3,
+          "seed": 1074920413,
+          "condition": "PI",
+          "test_category": "surgical procedure",
+          "categories_in_sequence": [
+            "bird species",
+            "dinosaur genus",
+            "cloud formation",
+            "surgical procedure",
+            "visual art"
+          ],
+          "num_keys": 5,
+          "num_updates": 20,
+          "expected": "Surg131",
+          "predicted": "Surg131",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 5,
+            "predicted_relative_pos": 0.2632
+          },
+          "token_usage": {
+            "input_tokens": 744,
+            "output_tokens": 7,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ]
+    }
+  }
+}

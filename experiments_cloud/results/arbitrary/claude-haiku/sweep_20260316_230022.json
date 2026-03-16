@@ -1,0 +1,218 @@
+{
+  "model": "claude-haiku",
+  "dataset_type": "ARBITRARY_MULTI",
+  "config": {
+    "trials_per_cell": 20,
+    "workers": 40,
+    "key_levels": [
+      5,
+      10
+    ],
+    "update_levels": [
+      50,
+      100,
+      200
+    ],
+    "near_zero_thresh": 0.015,
+    "recovery_thresh": 0.06,
+    "sat_count": 3
+  },
+  "cells": {
+    "5_50": {
+      "num_keys": 5,
+      "num_updates": 50,
+      "regime": "A",
+      "elapsed_sec": 5.1,
+      "n_trials": 20,
+      "n_observations": 20,
+      "stopped_early": false,
+      "max_trials": 20,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 20,
+          "error_types": {
+            "correct": 20
+          }
+        },
+        "PI": {
+          "accuracy": 0.75,
+          "ci_lower": 0.55,
+          "ci_upper": 0.9012,
+          "n": 20,
+          "error_types": {
+            "correct": 15,
+            "intermediate_intrusion": 2,
+            "garbage": 3
+          }
+        }
+      }
+    },
+    "5_100": {
+      "num_keys": 5,
+      "num_updates": 100,
+      "regime": "A",
+      "elapsed_sec": 5.7,
+      "n_trials": 20,
+      "n_observations": 20,
+      "stopped_early": false,
+      "max_trials": 20,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 20,
+          "error_types": {
+            "correct": 20
+          }
+        },
+        "PI": {
+          "accuracy": 0.65,
+          "ci_lower": 0.45,
+          "ci_upper": 0.85,
+          "n": 20,
+          "error_types": {
+            "intermediate_intrusion": 5,
+            "correct": 13,
+            "garbage": 2
+          }
+        }
+      }
+    },
+    "5_200": {
+      "num_keys": 5,
+      "num_updates": 200,
+      "regime": "A",
+      "elapsed_sec": 6.0,
+      "n_trials": 20,
+      "n_observations": 20,
+      "stopped_early": false,
+      "max_trials": 20,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 20,
+          "error_types": {
+            "correct": 20
+          }
+        },
+        "PI": {
+          "accuracy": 0.7,
+          "ci_lower": 0.5,
+          "ci_upper": 0.9,
+          "n": 20,
+          "error_types": {
+            "correct": 14,
+            "garbage": 2,
+            "intermediate_intrusion": 4
+          }
+        }
+      }
+    },
+    "10_50": {
+      "num_keys": 10,
+      "num_updates": 50,
+      "regime": "B",
+      "elapsed_sec": 3.2,
+      "n_trials": 20,
+      "n_observations": 20,
+      "stopped_early": false,
+      "max_trials": 20,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 20,
+          "error_types": {
+            "correct": 20
+          }
+        },
+        "PI": {
+          "accuracy": 0.4,
+          "ci_lower": 0.2,
+          "ci_upper": 0.6,
+          "n": 20,
+          "error_types": {
+            "garbage": 6,
+            "correct": 8,
+            "intermediate_intrusion": 5,
+            "primacy_intrusion": 1
+          }
+        }
+      }
+    },
+    "10_100": {
+      "num_keys": 10,
+      "num_updates": 100,
+      "regime": "B",
+      "elapsed_sec": 6.6,
+      "n_trials": 20,
+      "n_observations": 20,
+      "stopped_early": false,
+      "max_trials": 20,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 20,
+          "error_types": {
+            "correct": 20
+          }
+        },
+        "PI": {
+          "accuracy": 0.1,
+          "ci_lower": 0.0,
+          "ci_upper": 0.25,
+          "n": 20,
+          "error_types": {
+            "garbage": 11,
+            "intermediate_intrusion": 7,
+            "correct": 2
+          }
+        }
+      }
+    },
+    "10_200": {
+      "num_keys": 10,
+      "num_updates": 200,
+      "regime": "B",
+      "elapsed_sec": 6.5,
+      "n_trials": 20,
+      "n_observations": 20,
+      "stopped_early": false,
+      "max_trials": 20,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 20,
+          "error_types": {
+            "correct": 20
+          }
+        },
+        "PI": {
+          "accuracy": 0.3,
+          "ci_lower": 0.1,
+          "ci_upper": 0.5,
+          "n": 20,
+          "error_types": {
+            "intermediate_intrusion": 10,
+            "correct": 6,
+            "garbage": 3,
+            "primacy_intrusion": 1
+          }
+        }
+      }
+    }
+  },
+  "start_time": "2026-03-16T22:59:49.097315+00:00",
+  "end_time": "2026-03-16T23:00:22.308370+00:00"
+}
