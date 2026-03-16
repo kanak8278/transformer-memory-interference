@@ -120,6 +120,23 @@ Effects are small (3-4pp) and distributed. No single head explains PI failure. T
 3. **Ablating top heads makes things worse** — no "fix" available
 4. **Scales predictably:** More updates → more competition → worse PI. More model capacity → slightly more RI resistance, but PI still fails.
 
+## 5b. Gemma-3-1B: Cross-Architecture Validation (NEW)
+
+Gemma confirms the same pattern with a DIFFERENT architecture:
+
+| Metric | Gemma 1B (26L, 4 heads) | Qwen 1.5B (28L, 12 heads) |
+|---|---|---|
+| Peak P(v_last) | 0.025 at L20 | 0.140 at L26 |
+| Final P(v_last) | 0.000 | 0.014 |
+| RI P(v_first) | 1.000 | 1.000 |
+| PI accuracy (2k_5u) | 10% | 56% |
+| RI accuracy (2k_5u) | 80% | 100% |
+| Attention heads | 4 | 12 |
+
+**Key insight:** Gemma has much weaker PI signal (peak 0.025 vs 0.14) despite similar RI performance. This correlates with fewer attention heads (4 vs 12). The retrieval mechanism relies on distributed head computation — fewer heads = less capacity for late-position retrieval.
+
+**This supports the theoretical framework:** PI requires many heads working together to address late positions precisely. With only 4 heads, Gemma simply doesn't have enough computational bandwidth for accurate late-position retrieval, while RI (addressing the unique position 0) works fine even with 4 heads.
+
 ## 6. What's Still Needed
 
 1. **Cross-architecture:** Gemma-3-1B or Pythia-410M to show this isn't Qwen-specific

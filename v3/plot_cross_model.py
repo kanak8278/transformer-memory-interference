@@ -136,6 +136,7 @@ def plot_logit_lens_comparison():
         ("Qwen2.5-0.5B-Instruct", "Qwen 0.5B", 24),
         ("Qwen2.5-1.5B-Instruct", "Qwen 1.5B", 28),
         ("Qwen2.5-3B-Instruct", "Qwen 3B", 36),
+        ("gemma-3-1b-it", "Gemma 1B", 26),
     ]
 
     fig, axes = plt.subplots(2, len(models), figsize=(5 * len(models), 8))
