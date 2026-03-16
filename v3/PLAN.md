@@ -317,6 +317,7 @@ to the metric (P(v_last) or logit_diff). No destruction of model computation —
 avoids the problem of early-layer knockout causing catastrophic cascading effects.
 
 References:
+
 - Nanda: "Attribution Patching: Activation Patching At Industrial Scale"
 - Kramar et al. 2024 (AtP*): fixes false negatives in basic attribution patching
 - Syed et al. 2024: "Attribution Patching Outperforms Automated Circuit Discovery"
@@ -344,6 +345,7 @@ are the most mechanistically interesting.
 #### Experiment 3A: Attribution patching (fast head ranking)
 
 For each PI trial:
+
 - Forward pass: compute P(v_last) at the final layer
 - Backward pass: compute gradient of P(v_last) w.r.t. each head's output
 - The gradient magnitude = that head's importance for P(v_last)
@@ -358,6 +360,7 @@ Top-K heads = Set A.
 #### Experiment 3B: Targeted activation patching (causal validation)
 
 For each head in **Set A ∪ Set B**:
+
 - "Clean" run: RI trial where model correctly retrieves v_0
 - "Corrupted" run: PI trial where model fails
 - Patch: replace this head's output in the corrupted run with its clean-run value
@@ -371,6 +374,7 @@ Cost: |A ∪ B| × 50 trials ≈ 80 heads × 50 = 4,000 forward passes (~25 min)
 #### Experiment 3C: Logit lens under ablation (trajectory change)
 
 Using the top 5-10 confirmed heads from 3B:
+
 - Run full logit lens trajectory with these heads zeroed out
 - Compare P(v_last) trajectory: normal vs ablated
 - Key question: does ablation raise P(v_last) at the final layer?
@@ -384,6 +388,7 @@ Cost: ~50 trials with full cache ≈ 15 min.
 #### Experiment 3D: Forced attention — only if Q3 = concentrated
 
 For confirmed heads from 3B:
+
 - Force them to attend to v_last's position in the sequence
 - If PI improves → QK routing problem (heads looking at wrong position)
 - If PI doesn't improve → OV problem (heads writing wrong thing regardless)
@@ -434,6 +439,7 @@ Cost: ~50 trials × top-5 heads = 250 forward passes ≈ 5 min.
 ## Results Structure
 
 ```
+
 v3/
 ├── PLAN.md                    # This file
 ├── observations/              # Running notes as we analyze
@@ -447,6 +453,7 @@ v3/
 ├── stage1_sweep.py            # Behavioral sweep (local models)
 ├── stage2_failure_analysis.py # Logit lens P(v_i) tracking
 └── ...                        # Stage 3 scripts added later
+
 ```
 
 ---
