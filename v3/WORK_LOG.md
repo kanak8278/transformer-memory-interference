@@ -319,6 +319,39 @@ All 7 figures generated for 1.5B:
 - fig5 (money figure) shows P(v_last) peak-then-crash vs P(v_first) clean rise
 - Stage 3 (causal experiments) now running in background
 
+### Action 11: 1.5B Stage 3 Complete — Cross-Model Causal Comparison
+
+**1.5B Stage 3 Results (operating point 2k_5u, 100 trials):**
+
+3A Attribution: Top heads at L16-22 (pre-critical, same relative depth as 3B)
+3B Targeted Patching (top 5):
+- L19H6: +0.038 (92% positive rate)
+- L17H3: +0.019 (89%)
+- L18H5: +0.013 (91%)
+- L18H1: +0.011 (82%)
+- L21H6: +0.010 (77%)
+
+3C Ablation: P(v_last) 0.130 → 0.107 (removing top heads HURTS, same as 3B)
+
+**Cross-model comparison table:**
+
+| Metric | 1.5B (28L) | 3B (36L) |
+|---|---|---|
+| Critical layers | L25-27 (89-96%) | L31-35 (86-97%) |
+| Attribution heads | L16-22 (57-79%) | L24-30 (67-83%) |
+| Top patching head | L19H6 (+0.038, 92%) | L26H3 (+0.032, 64%) |
+| Max delta | 0.038 | 0.032 |
+| Ablation delta | -0.023 | -0.044 |
+| Mechanism type | Distributed | Distributed |
+
+**Key finding:** Both models show the SAME mechanistic pattern:
+1. Attribution-important heads cluster at 60-80% depth (before value emergence)
+2. Patching effects are small and distributed (no single head causes PI failure)
+3. Ablating top heads REDUCES P(v_last) → heads help retrieval, not suppress it
+4. The mechanism is architectural (positional addressing weakness), not a learned circuit
+
+**1.5B shows slightly stronger per-head effects** (0.038 vs 0.032) and higher positive rates (92% vs 64%), suggesting less distributed mechanism at smaller scale. But the qualitative story is identical.
+
 ### Action 7: Existing 3B Figures Regenerated
 
 7 figures generated from existing data:
