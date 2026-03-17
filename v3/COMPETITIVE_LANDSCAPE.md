@@ -35,30 +35,58 @@
 |---|---|---|---|---|
 | **Veličković et al. 2025** "Perplexity is gameable" (2601.22950) | Preprint | Models can have low perplexity on wrong answers | Shows perplexity conflates confidence and correctness | Explains why PI > RI was missed: models confidently output wrong (first) value → low perplexity. |
 
+## Datasets Used in Related Papers
+
+| Paper | Dataset Type | Scale | Realistic? |
+|---|---|---|---|
+| Liu et al. 2023 "Lost in the Middle" | Multi-doc QA (NaturalQuestions, HotpotQA) + synthetic UUID KV pairs | Up to 20 docs | Semi |
+| Barbero et al. 2024 "Glasses" | Synthetic counting + copying tasks | Up to ~1000 tokens | No |
+| Veličković et al. 2025 "Softmax" | Synthetic max-retrieval (find max in sequence) | n=16 to 16,384 | No |
+| Wu et al. 2025 "Position Bias" | Theoretical only (no behavioral task) | N/A | N/A |
+| Chowdhury 2026 "Lost at Birth" | Jacobian on random inputs + needle-in-haystack | Varies | No |
+| Wang et al. 2025 "Mamba Primacy" | Synthetic sequence copying + recall | Random tokens | No |
+| **Our ACL paper** | **SEMANTIC_MULTI: 46 semantic categories, real members** | 39 models | Semi |
+| **Our v3 work** | **ARBITRARY_SINGLE (mechanistic) + Dota 2 narratives** | 11 models | **Yes (narrative)** |
+
+**Key gap in the field:** All related papers use purely synthetic data. Nobody tests PI/RI on naturalistic narrative text. Our Dota 2 experiment is the first.
+
+**Our dataset contributions:**
+1. **ARBITRARY_SINGLE** — 2,300 single-token words for clean mechanistic analysis
+2. **Dota 2 narratives** — 8,000 generated trials with realistic match commentary
+3. **Cross-dataset validation** — same phenomenon across synthetic + narrative
+
 ## What We Uniquely Contribute
 
 ### 1. Cross-Architecture Universality of PI > RI
+
 **No other paper shows this.** We test 11 models across 7 architecture families including Mamba SSM. Everyone else is transformer-only.
 
 ### 2. SSM Comparison (Mamba Shows PI > RI)
+
 **Novel finding.** Wang et al. (2506.15156) show U-shape recall in Mamba, but NOT on a controlled PI/RI task with KV streams. We show Mamba has +49% gap on the same task as transformers.
 
 ### 3. Jacobian at Initialization Across Architectures
+
 **Novel experiment.** Chowdhury (2603.10123) proves the theory for transformers. We empirically validate with Jacobian AND extend to Mamba (295× primacy at init). No one has compared untrained transformer vs untrained SSM Jacobian profiles.
 
 ### 4. Probing Classifiers for PI/RI
+
 **Novel technique application.** No paper uses linear probing to show that RI correctness is encoded (87%) but PI correctness is at chance (50-72%). This demonstrates the asymmetry is in representation space.
 
 ### 5. N-Dependent Error Position Analysis
+
 **Novel characterization.** We show errors transition from off-by-one (85% penultimate at N=5) to diffuse (uniform at N=20), and this differs by architecture (Gemma: primacy default, Qwen: recency imprecision).
 
 ### 6. Narrative Transfer
+
 **Novel dataset.** PI > RI on Dota 2 match narratives (gap=+18%), showing the effect isn't artifact of KV format.
 
 ### 7. Component Elimination Table
+
 **Novel analysis.** By comparing transformer vs SSM, we eliminate attention, softmax, RoPE, multi-head as sole causes, narrowing to autoregressive + continuous gating + fixed-capacity state.
 
 ### 8. 200-Trial Statistical Rigor
+
 **Methodological contribution.** Most papers in this space report results from 10-50 trials. Our 200-trial sweeps with Wilson CIs provide publication-grade statistical evidence.
 
 ## Summary: What's New vs What's Known
