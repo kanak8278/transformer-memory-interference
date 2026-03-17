@@ -10,9 +10,13 @@ This asymmetry (PI > RI) appears across 39+ models, 3+ architectures, and persis
 
 ## The Error Pattern (New V3 Finding)
 
-PI failures do NOT land on position 0 (primacy intrusion is rare: 2-5%).
+The error pattern depends on BOTH N (update count) AND architecture:
 
-Instead, the error distribution is N-dependent:
+**For Qwen models:** PI failures are primarily near-last (recency imprecision).
+**For Gemma:** PI failures show significant primacy intrusion (59% at positions 0-0.2).
+**For all models:** Primacy intrusion is secondary to the overall PI > RI gap.
+
+The error distribution within Qwen is N-dependent:
 
 | N (updates) | Where errors land | Interpretation |
 |---|---|---|
