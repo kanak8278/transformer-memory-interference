@@ -118,13 +118,15 @@ def main():
             sae_id = f"layer_{layer}_width_{SAE_WIDTH}_l0_{SAE_L0}"
             print(f"  Loading {sae_id}...")
             try:
-                sae, cfg_dict, sparsity = SAE.from_pretrained(
+                # sae-lens doesn't support 'mps:0', use 'cpu' then move
+                sae = SAE.from_pretrained(
                     release=SAE_RELEASE,
                     sae_id=sae_id,
+                    device="cpu",
                 )
                 sae = sae.to(device)
                 saes[layer] = sae
-                print(f"  Layer {layer}: {sae.cfg.d_sae} features, L0≈{sparsity:.1f}")
+                print(f"  Layer {layer}: {sae.cfg.d_sae} features loaded OK")
             except Exception as e:
                 print(f"  Layer {layer}: FAILED — {e}")
     except ImportError:
