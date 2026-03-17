@@ -99,17 +99,16 @@ def build_kv_stream(categories, values_per_cat, num_updates, style="control"):
         return stream + cue
 
     elif style == "combined":
-        # All three interventions combined
+        # Landmark + short round numbers (minimal overhead)
         lines = []
         items_per_round = len(categories)
+        round_num = 0
         for idx, it in enumerate(items):
-            lines.append(f"Update {idx + 1} — {it['category']}: {it['value']}")
+            lines.append(f"{it['category']}: {it['value']}")
             if (idx + 1) % items_per_round == 0 and idx + 1 < len(items):
-                lines.append("---")
-        stream = "\n".join(lines)
-        cue = ("\n\nIMPORTANT: Each category is updated multiple times above. "
-               "The MOST RECENT value (the highest Update number) is the current value.")
-        return stream + cue
+                round_num += 1
+                lines.append(f"--- round {round_num + 1} ---")
+        return "\n".join(lines)
 
     raise ValueError(f"Unknown style: {style}")
 
