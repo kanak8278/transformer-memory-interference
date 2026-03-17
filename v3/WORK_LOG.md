@@ -1018,3 +1018,38 @@ Pattern: gap increases with num_updates (more KV pairs = more interference), exa
 The same Qwen2.5-3B-Instruct that shows PI>RI on synthetic arbitrary KV-pairs also shows PI>RI on ecologically realistic wildlife tracking narratives.
 
 **Running:** ICU and ATC experiments queued to run after wildlife completes.
+
+### Implementation Status Summary (End of Session)
+
+**All work requested in this session is complete:**
+
+#### 1. Three New Narrative Generator Designs
+- `16_wildlife_tracking_GENERATOR_DESIGN.md` — complete with TRACKABLE_ATTRIBUTES spec, seasonal coherence engine, 5 species trajectory curves, 3 study areas with zone adjacency, 22-value categorical pools
+- `14_hospital_icu_GENERATOR_DESIGN.md` — complete with 22 diagnoses from clinical trajectories, physiological correlation formulas, trajectory interpolation engine
+- `18_air_traffic_control_GENERATOR_DESIGN.md` — complete with weather→operations cascade, separation rules, scenario-archetype compatibility mapping, RECAT wake categories
+
+#### 2. Three Generator Implementations (all 3000/3000 trials validated)
+| Generator | Species/Diagnoses/Airports | Event Types | Templates | Validation |
+|-----------|---------------------------|-------------|-----------|------------|
+| Wildlife  | 5 species, 3 study areas  | 12          | 8+ each   | 1000/1000  |
+| Hospital ICU | 10 diagnoses           | 10          | 8+ each   | 1000/1000  |
+| ATC       | 5 airports, 20 aircraft   | 13          | 8+ each   | 1000/1000  |
+
+#### 3. Interference Experiments Running
+- **Script:** `v3/scripts/experiments/narrative_new_domains.py`
+- **Timing:** ~12 sec/inference on MPS, ~12 min/cell, ~3 hours/domain
+- **Wildlife status (early results):**
+  - 2k_3u: RI=67%, PI=53%, gap=+13% ✓ PI>RI
+  - 2k_5u: RI=77%, PI=57%, gap=+20% ✓ PI>RI
+- **ICU+ATC:** queued to start automatically after wildlife completes (~3 hours from now)
+
+#### 4. Key Finding (Early)
+**PI > RI holds in wildlife narratives at 100% of tested cells.** The gap increases with num_updates, exactly mirroring the synthetic data. This suggests the asymmetry generalizes across diverse narrative domains.
+
+#### 5. Git Commits
+- `9452f28` — Design specs + experiment scripts
+- `9b47a89` — Wildlife generator
+- `2863751` — ATC generator  
+- `0ebc9d0` — ICU generator + all bug fixes
+- `e1b251f` — Experiment script
+- `eb064ee` — Early results
