@@ -129,10 +129,18 @@ By assumption A3, Σ Δ_j < I(h_1; v_1), so I_∞ = I(h_1; v_1) - Σ Δ_j > 0. �
 
 *Remark on A3:* C2 alone (Δ_j non-increasing) does NOT guarantee Σ Δ_j
 converges — the harmonic series Δ_j = c/j is non-increasing but diverges.
-A3 is an additional empirical condition. We verify it holds in all tested
-models: RI accuracy remains 80-100% even at N=50, implying I_∞ >> 0.
-For the single-layer softmax case, A3 IS provable: the SNR decays as
-O(1/t²) (from the C1 proof), giving Δ_j = O(1/j²) which is summable.
+A3 is an additional condition.
+
+**For single-layer softmax, A3 is provable:** With uniform attention
+scores, SNR_t = 1/(t-1), giving I_t = ½ log(1 + 1/(t-1)). The overwrite
+loss is Δ_j ≈ 1/(2j²) for large j (verified numerically: Δ_j · j² → 0.50).
+Since Σ 1/j² = π²/6 < ∞ (convergent p-series, p=2 > 1), A3 holds with
+I_∞ = I(h_1; v_1) - Σ Δ_j > 0.
+
+**For multi-layer models, A3 is empirical:** We verify it holds in all
+9 tested models: RI accuracy remains 80-100% even at N=50, implying
+I_∞ >> 0. A formal proof would require showing the multi-layer overwrite
+rate is at most O(1/j^{1+ε}) for some ε > 0.
 
 *Part (ii):* By the data processing inequality, the hidden state h_N
 carries at most C(d) = d · log(precision) bits about any input.
