@@ -30,7 +30,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
-_PROJECT_ROOT = _SCRIPT_DIR.parent
+_V3_DIR = _SCRIPT_DIR.parent.parent  # v3/
+_PROJECT_ROOT = _V3_DIR.parent       # repo root
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
@@ -240,7 +241,7 @@ def main():
         print()
 
     # Save
-    save_dir = _SCRIPT_DIR / "results" / "remedy"
+    save_dir = _V3_DIR / "results" / "remedy"
     save_dir.mkdir(parents=True, exist_ok=True)
     save_path = save_dir / f"remedy_{args.model}.json"
     output = {
