@@ -1,0 +1,176 @@
+{
+    "header_templates": [
+        "The {project_name} monitored {num_animals} GPS-collared {species_plural} in the {study_area} from {start_date} through {end_date}.",
+        "Field report: {project_name}. Study area: {study_area}. Target species: {species_plural}. Monitoring period: {start_date}–{end_date}. Sample: {num_animals} GPS-collared individuals.",
+        "This report summarizes {num_animals} radio-collared {species_plural} tracked by the {project_name} across {study_area} during {start_date} through {end_date}.",
+        "{project_name} — {study_area} field season {end_date}. {num_animals} individuals carrying functional GPS collars; data reported here.",
+        "The following relocation and event data were collected by the {project_name} for {num_animals} GPS-collared {species_plural} in {study_area}, {start_date} to {end_date}.",
+        "Study synopsis — {project_name}: {num_animals} {species_plural} fitted with GPS collars monitored in {study_area} between {start_date} and {end_date}.",
+        "Continuous-monitoring data from the {project_name}. {num_animals} GPS-collared {species_plural}, {study_area}, field season {start_date}–{end_date}.",
+        "{project_name} field log. Species: {species_plural}. Location: {study_area}. Active collars: {num_animals}. Reporting period: {start_date} to {end_date}."
+    ],
+    "relocation_field": [
+        "{date}: {animal_id} relocated to {zone}, {distance_km} km {direction} of {prev_zone}. {attr_label}: {attr_value}. {filler}",
+        "{date}: GPS fix for {animal_id} places {pron_obj} in {zone} ({distance_km} km {direction} of previous location at {prev_zone}). {attr_label}: {attr_value}.",
+        "{date}: Aerial relocation — {animal_id} detected in {zone}. Moved {distance_km} km {direction} from {prev_zone}. {attr_label} recorded at {attr_value}.",
+        "{date}: {animal_id} collar fix in {zone}. Displacement from last known position ({prev_zone}): {distance_km} km {direction}. {attr_label}: {attr_value}. {filler}",
+        "{date}: Weekly relocation of {animal_id}. Current zone: {zone} ({distance_km} km {direction} of {prev_zone}). {attr_label} at {attr_value}.",
+        "{date}: VHF/GPS telemetry placed {animal_id} in {zone}, {distance_km} km {direction} of {prev_zone}. Condition note — {attr_label}: {attr_value}. {filler}",
+        "{date}: Fixed-wing flight located {animal_id} in {zone}. Displacement from {prev_zone}: {distance_km} km {direction}. {attr_label}: {attr_value}.",
+        "{date}: {animal_id} confirmed in {zone} via GPS download. Last fix was {prev_zone} ({distance_km} km {direction}). {attr_label}: {attr_value}. {filler}"
+    ],
+    "relocation_narrative": [
+        "On {date}, {animal_id}'s collar placed {pron_obj} in the {zone}. {attr_label} recorded at {attr_value}. {filler}",
+        "The {date} flight put {animal_id} in {zone}, having traveled roughly {distance_km} km {direction} from {prev_zone}. Field staff noted {attr_label} of {attr_value}.",
+        "By {date}, {animal_id} had moved to {zone} from {prev_zone} — a shift of about {distance_km} km {direction}. {attr_label} was recorded at {attr_value}. {filler}",
+        "When staff located {animal_id} on {date}, {pron_sub} was in {zone}, some {distance_km} km {direction} of {prev_zone}. {attr_label}: {attr_value}.",
+        "{date} relocation found {animal_id} in {zone}. The animal had ranged {distance_km} km {direction} since the last fix at {prev_zone}. {attr_label} stood at {attr_value}. {filler}",
+        "A routine flight on {date} confirmed {animal_id} in {zone}. Movement of {distance_km} km {direction} from {prev_zone}. {attr_label} observed at {attr_value}.",
+        "Collar data for {date} showed {animal_id} operating out of {zone}, {distance_km} km {direction} of the previous fix at {prev_zone}. {attr_label}: {attr_value}. {filler}",
+        "On {date} the team's fixed-wing pass tracked {animal_id} to {zone}. Displacement from {prev_zone}: roughly {distance_km} km {direction}. {attr_label} measured at {attr_value}."
+    ],
+    "capture_workup_field": [
+        "{date}: {animal_id} captured at {zone} via {method}. {attr_label}: {attr_value}. Body condition: {bcs}/9. Battery: {battery}%.",
+        "{date}: Capture event — {animal_id} immobilized near {zone} ({method}). Measurements taken. {attr_label}: {attr_value}. BCS: {bcs}/9. Collar battery at {battery}%.",
+        "{date}: {animal_id} workup complete at {zone}. {method} used for capture. {attr_label}: {attr_value}. BCS {bcs}/9. Battery remaining: {battery}%.",
+        "{date}: {animal_id} recaptured in {zone} ({method}). Collar serviced. {attr_label}: {attr_value}. Body condition score: {bcs}/9. Battery: {battery}%.",
+        "{date}: Annual workup on {animal_id} at {zone}. Capture method: {method}. {attr_label}: {attr_value}. BCS {bcs}/9. GPS battery: {battery}%.",
+        "{date}: Immobilization event — {animal_id} at {zone} via {method}. Full biometric suite collected. {attr_label}: {attr_value}. Condition: {bcs}/9. Battery: {battery}%.",
+        "{date}: {animal_id} down for workup at {zone}. Method: {method}. Recorded {attr_label} of {attr_value}. BCS: {bcs}/9. Collar charge: {battery}%.",
+        "{date}: Field capture of {animal_id} near {zone} ({method}). Data: {attr_label} = {attr_value}, BCS {bcs}/9, battery {battery}%."
+    ],
+    "capture_workup_narrative": [
+        "The team caught up with {animal_id} on {date}, darting {pron_obj} near {zone}. On the scale: {attr_label} was {attr_value}. {filler}",
+        "A planned capture on {date} brought {animal_id} to hand near {zone}. Measurements confirmed {attr_label} at {attr_value}. Body condition scored {bcs}/9.",
+        "Staff immobilized {animal_id} near {zone} on {date} using {method}. {attr_label} came in at {attr_value}. Collar battery read {battery}%. {filler}",
+        "The {date} workup on {animal_id} went smoothly at {zone}. {attr_label} recorded at {attr_value}; body condition {bcs}/9. Animal recovered well post-release.",
+        "On {date}, {animal_id} was immobilized via {method} near {zone}. Field measurements: {attr_label} at {attr_value}, BCS {bcs}/9. {filler}",
+        "{animal_id} was captured and processed on {date} near {zone}. Key metric: {attr_label} of {attr_value}. Collar battery still at {battery}%.",
+        "Capture operations on {date} targeted {animal_id} in {zone}. The workup recorded {attr_label} at {attr_value} and a body condition score of {bcs}/9. {filler}",
+        "A {method} capture brought in {animal_id} near {zone} on {date}. {attr_label}: {attr_value}. BCS: {bcs}/9. Battery at {battery}%. Released in good condition."
+    ],
+    "kill_site_field": [
+        "{date}: Kill site at {zone}. {prey_species} carcass, estimated {prey_age}. {animal_id} detected within {radius_km} km. {attr_label}: {attr_value}.",
+        "{date}: Kill confirmed in {zone} — {prey_species}, approx. {prey_age}. {animal_id} cluster nearby ({radius_km} km radius). {attr_label}: {attr_value}.",
+        "{date}: Predation event at {zone}. Carcass: {prey_species}, {prey_age}. Attending individual: {animal_id}. {attr_label} recorded at {attr_value}.",
+        "{date}: GPS cluster investigation, {zone}. Kill found: {prey_species}, estimated {prey_age} old. {animal_id} within {radius_km} km. {attr_label}: {attr_value}.",
+        "{date}: Kill site investigation at {zone}. Prey: {prey_species} ({prey_age}). {animal_id} associated with site. {attr_label}: {attr_value}.",
+        "{date}: Aerial survey detected {animal_id} clustered at {zone}. Ground check confirmed {prey_species} kill ({prey_age}). {attr_label}: {attr_value}.",
+        "{date}: {prey_species} carcass documented at {zone}. Age estimate: {prey_age}. {animal_id} detected {radius_km} km from carcass. {attr_label}: {attr_value}.",
+        "{date}: Kill site logged at {zone}. {prey_species}, {prey_age} old. {animal_id} in attendance. {attr_label} at time of investigation: {attr_value}."
+    ],
+    "pack_interaction_field": [
+        "{date}: {animal_id_1} and {animal_id_2} detected within {dist_m} m at {zone}. {attr_label} for {animal_id_1}: {attr_value_1}.",
+        "{date}: Simultaneous GPS fixes for {animal_id_1} and {animal_id_2} at {zone}, {dist_m} m separation. {animal_id_1} {attr_label}: {attr_value_1}.",
+        "{date}: Social interaction documented — {animal_id_1} with {animal_id_2} in {zone} ({dist_m} m). {attr_label} ({animal_id_1}): {attr_value_1}.",
+        "{date}: Collar data shows {animal_id_1} and {animal_id_2} co-located in {zone}. Distance: {dist_m} m. {animal_id_1} {attr_label}: {attr_value_1}.",
+        "{date}: {animal_id_1} detected alongside {animal_id_2} in {zone} at {dist_m} m. Recorded {attr_label} for {animal_id_1}: {attr_value_1}.",
+        "{date}: Pack cohesion check — {animal_id_1} and {animal_id_2} within {dist_m} m at {zone}. {attr_label} for {animal_id_1} at {attr_value_1}.",
+        "{date}: {animal_id_1} and {animal_id_2} moving together in {zone} ({dist_m} m apart). {animal_id_1} {attr_label}: {attr_value_1}.",
+        "{date}: Proximity event in {zone}: {animal_id_1} within {dist_m} m of {animal_id_2}. {attr_label} for {animal_id_1}: {attr_value_1}."
+    ],
+    "dispersal_field": [
+        "{date}: {animal_id} has moved {distance_km} km from pack territory. {attr_label}: {attr_value}. Reclassified as disperser.",
+        "{date}: Dispersal threshold exceeded — {animal_id} now {distance_km} km from natal territory. {attr_label}: {attr_value}. Status updated to lone disperser.",
+        "{date}: {animal_id} confirmed dispersing; {distance_km} km from nearest pack territory. {attr_label}: {attr_value}.",
+        "{date}: Long-distance movement by {animal_id}: {distance_km} km from pack range. {attr_label}: {attr_value}. Disperser classification applied.",
+        "{date}: {animal_id} tracking indicates active dispersal ({distance_km} km traveled). {attr_label}: {attr_value}. No pack affiliation confirmed.",
+        "{date}: Dispersal event — {animal_id} has left pack territory, now {distance_km} km out. {attr_label}: {attr_value}.",
+        "{date}: GPS data shows {animal_id} {distance_km} km from established territory. {attr_label}: {attr_value}. Animal logged as disperser.",
+        "{date}: {animal_id} officially reclassified as disperser after moving {distance_km} km from pack range. {attr_label}: {attr_value}."
+    ],
+    "denning_field": [
+        "{date}: {animal_id} GPS points clustered within 100 m at {zone} for {days} days. Presumed denning. {attr_label}: {attr_value}.",
+        "{date}: Telemetry cluster analysis for {animal_id} at {zone} — {days} consecutive days of restricted movement. Den site suspected. {attr_label}: {attr_value}.",
+        "{date}: Denning behavior indicated for {animal_id}; GPS fixes tight within {zone} for {days} days. {attr_label}: {attr_value}.",
+        "{date}: {animal_id} has shown minimal movement from {zone} over the past {days} days. Den activity presumed. {attr_label}: {attr_value}.",
+        "{date}: {animal_id} cluster at {zone} spanning {days} days. Consistent with denning or pup-rearing. {attr_label}: {attr_value}.",
+        "{date}: Denning suspected — {animal_id} has not moved >100 m from {zone} in {days} days. {attr_label}: {attr_value}.",
+        "{date}: GPS cluster at {zone} for {animal_id} ({days} days). Field crew held off to minimize disturbance. {attr_label}: {attr_value}.",
+        "{date}: {animal_id} restricted to {zone} core area for {days} days. Denning or natal activity suspected. {attr_label}: {attr_value}."
+    ],
+    "mortality_field": [
+        "{date}: Mortality signal from {animal_id} at {zone}. {cause}. {attr_label} at last observation: {attr_value}.",
+        "{date}: {animal_id} collar transmitting mortality signal from {zone}. Cause: {cause}. Last recorded {attr_label}: {attr_value}.",
+        "{date}: Confirmed mortality — {animal_id} found at {zone}. {cause}. {attr_label} at final observation: {attr_value}.",
+        "{date}: Mortality alert for {animal_id} originating from {zone}. Ground investigation confirmed death. {cause}. Last {attr_label}: {attr_value}.",
+        "{date}: {animal_id} presumed dead; mortality mode active from {zone}. {cause}. {attr_label} at last live fix: {attr_value}.",
+        "{date}: Field team responded to mortality signal from {animal_id} near {zone}. {cause}. {attr_label} at final contact: {attr_value}.",
+        "{date}: Mortality event — {animal_id} at {zone}. {cause}. Final recorded {attr_label}: {attr_value}.",
+        "{date}: {animal_id} confirmed deceased at {zone}. {cause}. {attr_label} documented at last observation: {attr_value}."
+    ],
+    "health_change_field": [
+        "{date}: {animal_id} observed at {zone} showing {condition}. Body condition {bcs}/9. {attr_label}: {attr_value}.",
+        "{date}: Health assessment during relocation — {animal_id} at {zone} displaying {condition}. BCS {bcs}/9. {attr_label}: {attr_value}.",
+        "{date}: Field observation of {animal_id} in {zone}: {condition} noted. Body condition scored {bcs}/9. {attr_label}: {attr_value}.",
+        "{date}: {animal_id} flagged for health change at {zone}. Observed {condition}. BCS: {bcs}/9. {attr_label}: {attr_value}.",
+        "{date}: Visual health check on {animal_id} at {zone}. Condition: {condition}. Body condition score {bcs}/9. {attr_label}: {attr_value}.",
+        "{date}: Aerial observation noted {animal_id} in {zone} with {condition}. BCS estimated at {bcs}/9. {attr_label}: {attr_value}.",
+        "{date}: Health concern logged for {animal_id} at {zone} — {condition}. BCS {bcs}/9. {attr_label}: {attr_value}.",
+        "{date}: {animal_id} observed in {zone}. Health note: {condition}. Body condition {bcs}/9. {attr_label}: {attr_value}."
+    ],
+    "seasonal_shift_field": [
+        "{date}: Seasonal transition noted. {animal_id} has shifted to {seasonal_behavior}. {attr_label}: {attr_value}.",
+        "{date}: {animal_id} exhibiting seasonal behavioral shift — now {seasonal_behavior}. {attr_label}: {attr_value}.",
+        "{date}: Season change reflected in {animal_id}'s movement patterns. Current behavior: {seasonal_behavior}. {attr_label}: {attr_value}.",
+        "{date}: Phenological shift observed for {animal_id}: {seasonal_behavior}. {attr_label}: {attr_value}.",
+        "{date}: {animal_id} has transitioned to {seasonal_behavior} consistent with seasonal cues. {attr_label}: {attr_value}.",
+        "{date}: Seasonal movement noted — {animal_id} now {seasonal_behavior}. {attr_label}: {attr_value}.",
+        "{date}: {animal_id} showing expected seasonal shift to {seasonal_behavior}. {attr_label}: {attr_value}.",
+        "{date}: Behavioral transition for {animal_id}: {seasonal_behavior}. Seasonal timing consistent with historical records. {attr_label}: {attr_value}."
+    ],
+    "filler_templates": [
+        "Snow depth in {zone} measured {snow_cm} cm, {snow_desc} for this time of year.",
+        "Trail camera at {zone} recorded {camera_obs} over the past week.",
+        "The team noted {weather} during the survey, limiting visibility.",
+        "Elk numbers in {zone} appeared {prey_density}, approximately {elk_count} head visible.",
+        "Howl surveys on {date} detected a response from the direction of {zone}.",
+        "Vegetation in {zone} was transitioning, with browse lines evident at lower elevations.",
+        "Ungulate sign was {prey_density} across {zone}, suggesting adequate prey availability.",
+        "No pack activity was detected near {zone} during this reporting period.",
+        "The collar on {animal_id} was logging fixes every 4 hours during this window.",
+        "Temperatures in {zone} dropped sharply overnight, with conditions typical of late-season field work.",
+        "Scat sampling near {zone} indicated a recent predation event predating this relocation.",
+        "Road survey teams noted {prey_density} ungulate crossings near {zone} this week.",
+        "Aerial time over {zone} was limited by {weather}.",
+        "Flight crew reported {camera_obs} near {zone} during the morning pass.",
+        "Pack howl response rates have been {prey_density} in {zone} over the past two weeks."
+    ],
+    "filler_variable_pools": {
+        "snow_descriptions": [
+            "above average", "below average", "typical", "deep, limiting mobility", "patchy, easy travel"
+        ],
+        "camera_observations": [
+            "wolf activity on 3 nights",
+            "an uncollared wolf passing through",
+            "a group of 4-5 animals",
+            "no activity",
+            "a single animal on multiple nights",
+            "elk carcass visitation",
+            "bear activity",
+            "multiple uncollared individuals"
+        ],
+        "weather_descriptions": [
+            "overcast skies and light snow",
+            "clear conditions",
+            "heavy snowfall",
+            "rain and low clouds",
+            "fog limiting visibility to 200 m",
+            "cold clear morning",
+            "windy conditions"
+        ],
+        "prey_density_descriptions": [
+            "high", "moderate", "low", "very high", "sparse"
+        ],
+        "capture_methods": [
+            "leg snare", "aerial darting", "remote drug delivery", "culvert trap", "net gun"
+        ]
+    },
+    "season_transition_templates": [
+        "As the study entered {season}, behavioral patterns for {species_plural} in {study_area} began to shift.",
+        "The transition to {season} brought notable changes in movement and activity across {study_area}.",
+        "With {season} underway in {study_area}, relocation rates and event frequencies changed accordingly.",
+        "Field conditions in {study_area} shifted as {season} arrived, altering survey logistics.",
+        "The {season} monitoring window opened with fresh snow across {study_area} and increased movement activity."
+    ]
+}

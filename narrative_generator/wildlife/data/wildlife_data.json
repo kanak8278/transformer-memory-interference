@@ -1,0 +1,267 @@
+{
+    "study_areas": {
+        "northern_yellowstone": {
+            "name": "Northern Yellowstone",
+            "zones": [
+                "Lamar Valley", "Specimen Ridge", "Druid Peak", "Soda Butte Creek",
+                "Slough Creek", "Buffalo Plateau", "Hellroaring Creek", "Tower Junction",
+                "Cache Creek", "Washburn Range", "Pelican Valley", "Mirror Plateau",
+                "Gardiner Basin", "Yellowstone River North", "Cooke City Corridor"
+            ],
+            "zone_adjacency": {
+                "Lamar Valley": ["Specimen Ridge", "Druid Peak", "Soda Butte Creek", "Slough Creek"],
+                "Specimen Ridge": ["Lamar Valley", "Druid Peak", "Mirror Plateau"],
+                "Druid Peak": ["Lamar Valley", "Specimen Ridge", "Cache Creek"],
+                "Soda Butte Creek": ["Lamar Valley", "Cooke City Corridor"],
+                "Slough Creek": ["Lamar Valley", "Buffalo Plateau"],
+                "Buffalo Plateau": ["Slough Creek", "Hellroaring Creek"],
+                "Hellroaring Creek": ["Buffalo Plateau", "Tower Junction", "Yellowstone River North"],
+                "Tower Junction": ["Hellroaring Creek", "Washburn Range"],
+                "Cache Creek": ["Druid Peak", "Mirror Plateau"],
+                "Washburn Range": ["Tower Junction"],
+                "Pelican Valley": ["Mirror Plateau"],
+                "Mirror Plateau": ["Specimen Ridge", "Cache Creek", "Pelican Valley"],
+                "Gardiner Basin": ["Yellowstone River North"],
+                "Yellowstone River North": ["Hellroaring Creek", "Gardiner Basin"],
+                "Cooke City Corridor": ["Soda Butte Creek"]
+            }
+        },
+        "bitterroot_selway": {
+            "name": "Bitterroot-Selway Wilderness",
+            "zones": [
+                "Selway River corridor", "Moose Creek drainage", "Running Creek",
+                "Bear Creek basin", "Magruder Corridor", "Gospel Peak ridgeline",
+                "Elk Summit", "White Cap Creek", "Indian Creek meadows", "Tin Cup Creek",
+                "Salmon River breaks", "Big Fog Mountain", "Paradise flats", "Warm Springs Creek"
+            ],
+            "zone_adjacency": {
+                "Selway River corridor": ["Moose Creek drainage", "Running Creek", "White Cap Creek"],
+                "Moose Creek drainage": ["Selway River corridor", "Indian Creek meadows"],
+                "Running Creek": ["Selway River corridor", "Bear Creek basin"],
+                "Bear Creek basin": ["Running Creek", "Magruder Corridor"],
+                "Magruder Corridor": ["Bear Creek basin", "Gospel Peak ridgeline"],
+                "Gospel Peak ridgeline": ["Magruder Corridor", "Big Fog Mountain"],
+                "Elk Summit": ["White Cap Creek", "Tin Cup Creek"],
+                "White Cap Creek": ["Selway River corridor", "Elk Summit"],
+                "Indian Creek meadows": ["Moose Creek drainage", "Paradise flats"],
+                "Tin Cup Creek": ["Elk Summit", "Salmon River breaks"],
+                "Salmon River breaks": ["Tin Cup Creek"],
+                "Big Fog Mountain": ["Gospel Peak ridgeline"],
+                "Paradise flats": ["Indian Creek meadows", "Warm Springs Creek"],
+                "Warm Springs Creek": ["Paradise flats", "Selway River corridor"]
+            }
+        },
+        "isle_royale": {
+            "name": "Isle Royale",
+            "zones": [
+                "Windigo", "Feldtmann Ridge", "Siskiwit Bay", "Greenstone Ridge east",
+                "Greenstone Ridge west", "Chippewa Harbor", "Tobin Harbor", "Rock Harbor",
+                "Malone Bay", "Houghton Ridge", "Lake Richie area", "Minong Ridge"
+            ],
+            "zone_adjacency": {
+                "Windigo": ["Feldtmann Ridge", "Siskiwit Bay", "Greenstone Ridge west"],
+                "Feldtmann Ridge": ["Windigo", "Siskiwit Bay"],
+                "Siskiwit Bay": ["Windigo", "Feldtmann Ridge", "Malone Bay"],
+                "Greenstone Ridge east": ["Greenstone Ridge west", "Rock Harbor", "Tobin Harbor"],
+                "Greenstone Ridge west": ["Windigo", "Greenstone Ridge east", "Houghton Ridge"],
+                "Chippewa Harbor": ["Lake Richie area", "Malone Bay"],
+                "Tobin Harbor": ["Greenstone Ridge east", "Rock Harbor"],
+                "Rock Harbor": ["Greenstone Ridge east", "Tobin Harbor"],
+                "Malone Bay": ["Siskiwit Bay", "Chippewa Harbor"],
+                "Houghton Ridge": ["Greenstone Ridge west", "Minong Ridge"],
+                "Lake Richie area": ["Chippewa Harbor", "Greenstone Ridge west"],
+                "Minong Ridge": ["Houghton Ridge"]
+            }
+        }
+    },
+    "pack_names": [
+        "Ridgeline Pack", "Copper Creek Pack", "Lamar Canyon Pack", "Druid Peak Pack",
+        "Slough Creek Pack", "Hellroaring Pack", "Junction Butte Pack", "Wapiti Lake Pack",
+        "Mollies Pack", "8-Mile Pack", "Leopold Pack", "Prospect Peak Pack",
+        "Canyon Pack", "Bechler Pack", "Cougar Creek Pack", "Snake River Pack",
+        "Teton Pack", "Phantom Springs Pack", "Hoodoo Pack", "Beartooth Pack"
+    ],
+    "elk_herd_names": [
+        "Northern Yellowstone herd", "Madison-Firehole herd", "Gallatin herd",
+        "Gardiner Basin herd", "Pelican Valley herd", "Blacktail herd",
+        "Selway herd", "South Fork herd"
+    ],
+    "project_names": [
+        "Northern Range Wolf Project", "Greater Yellowstone Carnivore Study",
+        "Yellowstone Wolf Recovery Program", "Northern Rockies Wolf Monitoring",
+        "Selway-Bitterroot Wolf Assessment", "Isle Royale Wolf-Moose Project",
+        "Greater Yellowstone Grizzly Study"
+    ],
+    "wolf_names": [
+        "Scarface", "Old Blue", "Cinderella", "Big Blaze", "White Lady",
+        "Ghost", "Shadow", "Storm", "Canyon", "Silver", "Jet", "Copper",
+        "Raven", "Ember"
+    ],
+    "species_info": {
+        "gray_wolf": {
+            "code": "W",
+            "sex_codes": {"M": "WM", "F": "WF"},
+            "weight_range": {"M": [40, 65], "F": [32, 50]},
+            "social_unit": "pack",
+            "group_label": "pack",
+            "offspring_label": "pup",
+            "plural": "gray wolves",
+            "prey_species": ["elk", "white-tailed deer", "bison calf", "mule deer", "moose"],
+            "prey_ages": ["1-2 days", "3-5 days", "1 week", "2 weeks", "fresh (<24 hr)", "2-3 days old"],
+            "social_values": {
+                "with_group_small": "with 2-3 pack members",
+                "with_group_large": "with full pack (5-8 members)",
+                "alone": "alone, no pack members detected nearby",
+                "with_offspring": "with pups at rendezvous site"
+            },
+            "health_conditions": [
+                "normal gait and coat condition",
+                "slight limping on left foreleg",
+                "mange lesions on flanks",
+                "good body condition, alert",
+                "healing wound on right shoulder",
+                "thin but mobile, likely post-denning",
+                "excellent coat and alert posture"
+            ],
+            "seasonal_behaviors": {
+                "winter": ["following ungulate concentrations on winter range", "caching food caches across territory", "traveling extensively on crusted snow"],
+                "spring": ["pup-rearing near den site", "shifting to rendezvous site", "increased pup provisioning activity"],
+                "summer": ["ranging widely from rendezvous site", "teaching pups hunting behavior", "establishing territorial boundaries"],
+                "fall": ["following elk migration routes", "building fat reserves ahead of winter", "increased howling and territorial marking"]
+            }
+        },
+        "elk": {
+            "code": "E",
+            "sex_codes": {"M": "EM", "F": "EF"},
+            "weight_range": {"M": [270, 410], "F": [200, 265]},
+            "social_unit": "herd",
+            "group_label": "herd",
+            "offspring_label": "calf",
+            "plural": "elk",
+            "prey_species": [],
+            "prey_ages": [],
+            "social_values": {
+                "with_group_small": "with small herd (5-15 head)",
+                "with_group_large": "with large herd (50+ head)",
+                "alone": "alone, separated from herd",
+                "with_offspring": "with calf at heel"
+            },
+            "health_conditions": [
+                "normal gait and coat",
+                "limping on right rear",
+                "lean but mobile, post-rut",
+                "good body condition",
+                "excellent condition, nursing calf",
+                "moderate body condition, mild hair loss"
+            ],
+            "seasonal_behaviors": {
+                "winter": ["holding on low-elevation winter range", "using wind-blown ridges for forage", "congregating near thermal areas"],
+                "spring": ["migrating to higher elevations", "calving on traditional grounds", "seeking early-green forbs"],
+                "summer": ["on high-elevation summer range", "antler growth phase (bulls)", "calf growth and development"],
+                "fall": ["rutting activity (bulls)", "aggregating into large herds", "beginning migration to winter range"]
+            }
+        },
+        "grizzly_bear": {
+            "code": "G",
+            "sex_codes": {"M": "GM", "F": "GF"},
+            "weight_range": {"M": [180, 350], "F": [130, 200]},
+            "social_unit": "solitary",
+            "group_label": "none",
+            "offspring_label": "cub",
+            "plural": "grizzly bears",
+            "prey_species": ["elk calf", "bison calf", "cutthroat trout", "whitebark pine nuts", "army cutworm moths"],
+            "prey_ages": ["newborn", "1-2 weeks", "fresh kill", "cached", "scavenged"],
+            "social_values": {
+                "with_group_small": "with 1-2 cubs",
+                "with_group_large": "with yearling cubs",
+                "alone": "alone (solitary adult)",
+                "with_offspring": "with cubs of the year"
+            },
+            "health_conditions": [
+                "excellent pre-hibernation condition",
+                "good condition, nursing cubs",
+                "lean post-emergence",
+                "hyperphagia evident, actively foraging",
+                "moderate condition, typical for season",
+                "slight wound on left paw, non-limiting"
+            ],
+            "seasonal_behaviors": {
+                "winter": ["in winter den"],
+                "spring": ["emerging from den and foraging on early green-up", "seeking winter-killed ungulates", "digging for roots and tubers"],
+                "summer": ["on high-elevation insect aggregations", "fishing cutthroat spawning streams", "ranging widely for whitebark pine"],
+                "fall": ["hyperphagia — intensive foraging for fat reserves", "feeding on whitebark pine nuts and berries", "selecting den site"]
+            }
+        },
+        "mountain_lion": {
+            "code": "L",
+            "sex_codes": {"M": "LM", "F": "LF"},
+            "weight_range": {"M": [55, 95], "F": [30, 64]},
+            "social_unit": "solitary",
+            "group_label": "none",
+            "offspring_label": "kitten",
+            "plural": "mountain lions",
+            "prey_species": ["mule deer", "white-tailed deer", "elk calf", "bighorn sheep"],
+            "prey_ages": ["fresh (<12 hr)", "1 day old", "2-3 days old", "cached kill"],
+            "social_values": {
+                "with_group_small": "with 1-2 kittens",
+                "with_group_large": "with litter of kittens",
+                "alone": "alone (solitary, typical)",
+                "with_offspring": "with dependent kittens"
+            },
+            "health_conditions": [
+                "excellent body condition",
+                "good condition, nursing kittens",
+                "moderate condition, recent injury",
+                "lean but alert, searching for prey",
+                "normal gait and coat"
+            ],
+            "seasonal_behaviors": {
+                "winter": ["following deer migration to lower elevations", "using rocky terrain for stalking cover", "caching kills under snow"],
+                "spring": ["expanded territory patrol", "kittens learning to hunt", "returning to higher elevations"],
+                "summer": ["on high-elevation deer range", "intensive kitten rearing", "large home range use"],
+                "fall": ["following deer migration", "pre-winter territory establishment", "increased kill rate"]
+            }
+        },
+        "pronghorn": {
+            "code": "P",
+            "sex_codes": {"M": "PM", "F": "PF"},
+            "weight_range": {"M": [40, 65], "F": [35, 50]},
+            "social_unit": "herd",
+            "group_label": "band",
+            "offspring_label": "fawn",
+            "plural": "pronghorn",
+            "prey_species": [],
+            "prey_ages": [],
+            "social_values": {
+                "with_group_small": "with small band (5-15)",
+                "with_group_large": "with large herd (50+ animals)",
+                "alone": "alone, separated from band",
+                "with_offspring": "with fawn at heel"
+            },
+            "health_conditions": [
+                "excellent condition, prime animal",
+                "good condition, nursing fawn",
+                "lean post-rut (bucks)",
+                "moderate condition, mild hair loss",
+                "normal gait and alertness"
+            ],
+            "seasonal_behaviors": {
+                "winter": ["congregating on open winter range", "using wind-swept flats for forage access", "following migration corridor to lower elevation"],
+                "spring": ["migrating to summer range", "fawning in traditional areas", "band breaking into smaller groups"],
+                "summer": ["on high-quality summer forage", "fawn growth and development", "bachelor bands roaming widely"],
+                "fall": ["rutting activity (bucks)", "aggregating for migration", "beginning movement toward winter range"]
+            }
+        }
+    },
+    "directions": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
+    "cause_of_death": [
+        "Cause: intraspecific strife (suspected).",
+        "Cause: vehicle collision documented.",
+        "Cause: starvation/emaciation.",
+        "Cause: predator kill, species undetermined.",
+        "Cause: legal harvest outside park boundary.",
+        "Cause: unknown — no trauma evident.",
+        "Cause: gunshot wound.",
+        "Cause: suspected wolf depredation on livestock, followed by removal."
+    ]
+}
