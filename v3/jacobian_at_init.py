@@ -80,7 +80,7 @@ def compute_jacobian_norms(model, tokenizer, seq_len, n_samples, device):
         if embeddings.grad is not None:
             # Grad shape: [1, seq_len, d_model]
             # Norm per position: ||grad[0, pos, :]||
-            grad_norms = embeddings.grad[0].norm(dim=-1).detach().cpu().numpy()
+            grad_norms = embeddings.grad[0].float().norm(dim=-1).detach().cpu().numpy()
             all_norms[s] = grad_norms
         else:
             print(f"  No gradient for sample {s}")
