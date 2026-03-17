@@ -284,18 +284,19 @@ def load_model_hf(model_name, device=None, gpu_idx=None, dtype=None, **kwargs):
 
     print(f"Loading {model_name} via HuggingFace on {device} (dtype={selected_dtype})...")
 
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
     if str(device) in ("cpu", "mps"):
         # MPS and CPU don't support device_map, load then move
         model = AutoModelForCausalLM.from_pretrained(
-            model_name, torch_dtype=selected_dtype, **kwargs
+            model_name, torch_dtype=selected_dtype, trust_remote_code=True, **kwargs
         ).to(device)
     else:
         model = AutoModelForCausalLM.from_pretrained(
-            model_name, torch_dtype=selected_dtype, device_map=device, **kwargs
+            model_name, torch_dtype=selected_dtype, device_map=device,
+            trust_remote_code=True, **kwargs
         )
     model.eval()
 
