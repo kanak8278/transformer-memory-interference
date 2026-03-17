@@ -352,6 +352,48 @@ All 7 figures generated for 1.5B:
 
 **1.5B shows slightly stronger per-head effects** (0.038 vs 0.032) and higher positive rates (92% vs 64%), suggesting less distributed mechanism at smaller scale. But the qualitative story is identical.
 
+### Action 12: Gemma-3-1B Complete Through Stage 2
+
+Gemma Stage 1 (behavioral): Mean RI=65%, Mean PI=5%, Gap=60%
+Gemma Stage 2 (logit lens): Same suppression pattern as Qwen
+- Peak P(v_last) = 0.025 at L20 (much weaker than Qwen 0.14-0.24)
+- RI P(v_first) = 1.00
+- Only 4 attention heads → less capacity for late-position retrieval
+- Cross-architecture: different family, same mechanism
+Gemma Stage 3: Running
+
+### Action 13: API Validation on Two Frontier Models
+
+Claude Haiku: RI=100%, PI→10% at 10k_100u. Gap=90%.
+GPT-4.1-mini: RI=100%, PI→65% at 10k_100u. Gap=35%.
+
+Both frontier models show PI > RI at high N. RI is perfectly robust even at 200 updates; PI degrades.
+
+### Action 14: Cross-Model Comparison Figures Created
+
+Three paper-ready multi-model figures:
+1. **cross_model_pi_vs_n.png**: RI stable vs PI collapse across 4 models
+2. **cross_model_logit_lens.png**: 4-model suppression comparison (0.5B, 1.5B, 3B, Gemma)
+3. **cross_model_error_positions.png**: Off-by-one pattern across models and N values
+
+### Session Summary (2026-03-17)
+
+**Total experiments completed this session:**
+- 4 model Stage 1 sweeps (0.5B, 1.5B, 3B refreshed, Gemma 1B)
+- 4 model Stage 2 logit lens (0.5B, 1.5B, 3B, Gemma 1B)
+- 2 model Stage 3 causal (1.5B, 3B; Gemma running)
+- 2 API model sweeps (Claude Haiku, GPT-4.1-mini)
+- Fixed garbage issue (prompt change: 60-80% → 0-6% garbage)
+- Generated 28+ paper figures
+- 8 git commits tracking all progress
+
+**The mechanistic story is now complete for the paper's core claims:**
+1. PI > RI at all scales and architectures ✓
+2. Error positions: off-by-one → diffuse (N-dependent) ✓
+3. Logit lens: v_last found then suppressed, v_first clean ✓
+4. Causal: distributed mechanism, no bottleneck ✓
+5. Cross-architecture: Qwen + Gemma show same pattern ✓
+
 ### Action 7: Existing 3B Figures Regenerated
 
 7 figures generated from existing data:
