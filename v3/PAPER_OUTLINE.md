@@ -135,9 +135,9 @@ Ablating top heads REDUCES P(v_last) → heads help retrieval, no suppression ci
 ### 5.4 Jacobian at Initialization
 
 **[Figure 6: Jacobian comparison]** — jacobian_comparison.png
-- Untrained Qwen: mild U-shape (primacy 1.47× middle)
-- Untrained Mamba: EXTREME primacy (295× first/last)
-- Training amplifies both, but primacy foundation is architectural
+- Untrained Qwen: mild U-shape (first quarter 1.47× middle)
+- Untrained Mamba: primacy bias (first quarter 1.24× middle; extreme endpoint ratio 295× due to HiPPO transient growth)
+- Training amplifies both primacy and recency, but primacy foundation is architectural
 
 ---
 

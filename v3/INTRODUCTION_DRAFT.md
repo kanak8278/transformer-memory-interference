@@ -10,9 +10,9 @@ In this work, we present a cross-architecture mechanistic investigation of PI > 
 - The correct last value IS computed at intermediate layers (~90% depth) but is outcompeted in the final layers (Pattern B: "overtaken")
 - RI success is well-encoded in the residual stream (87% probe accuracy) while PI success is only weakly above chance (61%)
 - The mechanism is distributed — no single "interference head" can be ablated to fix PI
-- Primacy bias exists at initialization (1.47x in transformers, 295x in SSMs), confirming an architectural rather than learned origin
+- Primacy bias exists at initialization: Jacobian analysis of untrained models shows first-quarter influence 1.47× middle in transformers and 1.24× in SSMs (with extreme endpoint ratios up to 295× in Mamba due to HiPPO transient growth), confirming an architectural rather than learned origin
 
-**3. Quantitative characterization.** PI accuracy decays exponentially with the number of updates: PI(N) = a * exp(-b * N) + c, where the floor c varies from 0% to 44% depending on architecture. RI remains robust (80-100%) across all models and conditions. We identify three architecture-dependent error modes: recency imprecision (Qwen), primacy fallback (Gemma), and off-by-one lock (Pythia).
+**3. Quantitative characterization.** PI accuracy decays exponentially with the number of updates: PI(N) = a * exp(-b * N) + c, where the floor c varies from 0% to 44% depending on architecture. RI remains robust (80-100%) across all models and conditions. We observe three distinct architecture-dependent error patterns: recency imprecision in multi-head models (Qwen), primacy fallback in few-head models (Gemma), and off-by-one lock in base models (Pythia). These patterns were identified post-hoc from the data and should be treated as empirical observations, not a predictive taxonomy.
 
 **4. Component elimination.** Our cross-architecture comparison eliminates causal attention, softmax, RoPE, and multi-head attention as sole causes. The remaining candidate mechanisms — autoregressive left-to-right processing, continuous gating, and fixed-capacity state — are shared by all models exhibiting PI > RI. A preliminary bidirectional control (Flan-T5) shows no primacy bias, supporting autoregressive encoding as the key factor.
 

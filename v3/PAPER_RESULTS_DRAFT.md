@@ -48,18 +48,23 @@ where c is the model-dependent floor (asymptotic PI accuracy as N -> infinity).
 
 ### 4.3 Error Position Analysis
 
-PI errors show architecture-dependent failure modes:
+While PI > RI is universal, the distribution of PI errors varies across architectures. We observe three distinct patterns (identified post-hoc from the data, not pre-registered predictions):
 
-**Mode 1: Recency imprecision** (Qwen, 16 heads)
+**Pattern 1: Recency imprecision** (Qwen, 16 heads)
 - At low N (5): 73-98% of errors land on the penultimate value (off-by-one)
 - At high N (>=20): errors become diffuse (normalized entropy increases: 0.06 -> 0.77, r=0.85, p=0.008)
+- Interpretation: the model attempts late-position retrieval but can't discriminate v_{N-1} from v_{N-2}
 
-**Mode 2: Primacy fallback** (Gemma, 4 heads)
+**Pattern 2: Primacy fallback** (Gemma, 4 heads)
 - At all N: 59% of errors land on the first value (v_0)
 - Entropy decreases with N (r=-0.945, p<0.001)
+- Interpretation: with only 4 attention heads, the model defaults to the primacy-encoded value
 
-**Mode 3: Off-by-one lock** (Pythia, base model)
+**Pattern 3: Off-by-one lock** (Pythia, base model)
 - Penultimate fraction increases with N (0% -> 100%)
+- Interpretation: base model without instruction tuning converges on the penultimate position
+
+These patterns suggest that while the PI > RI direction is universal, the failure *mechanism* depends on architecture (head count, training). A formal model connecting architecture parameters to error mode remains an open question.
 
 ### 4.4 Transfer to Narrative Data
 
@@ -109,12 +114,12 @@ Ablating top heads HURTS retrieval. No suppression circuit. Distributed mechanis
 
 ### 5.4 Jacobian at Initialization
 
-| Model | Untrained | Pretrained |
-|---|---|---|
-| Qwen 1.5B | 1.47x first/middle (mild U-shape) | Both amplified |
-| Mamba 1.4B | 295x first/last (extreme primacy) | Recency learned |
+| Model | Untrained (quartile ratio) | Untrained (extreme) | Pretrained |
+|---|---|---|---|
+| Qwen 1.5B | First quarter 1.47× middle | Position 0 vs mid: 1.47× | Both primacy and recency amplified |
+| Mamba 1.4B | First quarter 1.24× middle | Position 0 vs position 49: 295× | Recency learned, primacy preserved |
 
-Primacy bias is ARCHITECTURAL -- present before any training data.
+The extreme ratio (295×) compares the two endpoints of the sequence; the quartile ratio (1.24×) is a more robust aggregate measure. Both confirm that primacy bias is ARCHITECTURAL — present before any training data. Mamba's extreme endpoint ratio reflects the non-normal transient growth of the HiPPO state transition matrix (see LEMMA_SSM_DECAY.md).
 
 ---
 
