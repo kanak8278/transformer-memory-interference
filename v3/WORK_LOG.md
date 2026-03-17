@@ -376,6 +376,38 @@ Three paper-ready multi-model figures:
 2. **cross_model_logit_lens.png**: 4-model suppression comparison (0.5B, 1.5B, 3B, Gemma)
 3. **cross_model_error_positions.png**: Off-by-one pattern across models and N values
 
+### Action 15: Chowdhury Dead Zone Validation — Nuanced Results
+
+Tested whether PI errors cluster in Chowdhury's predicted "dead zone" (factorial suppression region).
+
+**Aggregated error positions across ALL cells:**
+
+| Model | Mean pos | 0-0.2 | 0.2-0.4 | 0.4-0.6 | 0.6-0.8 | 0.8-1.0 |
+|---|---|---|---|---|---|---|
+| Qwen 0.5B | 0.47 | 30% | 14% | 15% | 18% | 23% |
+| Qwen 1.5B | 0.61 | 10% | 17% | 17% | 24% | 33% |
+| Qwen 3B | 0.48 | 22% | 20% | 22% | 16% | 20% |
+| Gemma 1B | 0.24 | **59%** | 19% | 8% | 6% | 7% |
+
+**Key corrections to the v3 PLAN.md narrative:**
+
+1. The "0.74-0.89 clustering" was based on specific low-N conditions, NOT aggregated data. When averaged across all N values, the distribution is more uniform.
+
+2. **Gemma shows PRIMACY intrusion** (59% errors at 0-0.2) — opposite of the "recency imprecision" claim. This means the error pattern depends on both N AND architecture.
+
+3. **Qwen 1.5B** does show near-last bias (33% at 0.8-1.0, 24% at 0.6-0.8) — consistent with recency imprecision at the specific N values tested.
+
+4. **Qwen 3B** is nearly uniform — at the high N values in its sweep, errors distribute broadly.
+
+**Revised story:** The error pattern has THREE regimes, not two:
+- Low N: Penultimate (off-by-one) for Qwen; primacy for Gemma
+- Medium N: Near-last (0.6-1.0) — recency imprecision
+- High N: Uniform — complete positional breakdown
+
+Gemma's primacy errors may be because it has only 4 heads — not enough capacity for the distributed retrieval that helps Qwen partially succeed at PI. With so few heads, the attention sink (primacy) dominates and the model defaults to the first binding.
+
+**This is actually a BETTER story for the paper:** Different architectures show different failure modes, but PI > RI is universal. The failure MECHANISM varies (recency imprecision vs primacy default), but the OUTCOME (PI > RI) is the same.
+
 ### Session Summary (2026-03-17)
 
 **Total experiments completed this session:**
