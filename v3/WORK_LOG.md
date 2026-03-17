@@ -638,6 +638,24 @@ RWKV-v6-Finch-1.6B requires bitsandbytes. Installed but environment caching caus
 **Fix:** Changed from kwargs (system_prompt, max_tokens) to inline prompt with system instructions.
 **Result:** Second run worked correctly.
 
+### Action 28: Gemma Probing + Theory Derivation
+
+Gemma probing: 96-98% condition discrimination. RI correctness 57-65% (lower than Qwen, fewer heads). PI not testable (95.5% failure rate).
+
+Cross-architecture probing summary:
+| Model | Condition disc. | RI correct probe | PI correct probe |
+|---|---|---|---|
+| Qwen 1.5B | 100% | 87% | 61% |
+| Qwen 3B | 99% | 81% | 61% |
+| Gemma 1B | 97% | 60% | N/A |
+
+Also wrote THEORETICAL_DERIVATION.md: three-force model explaining PI > RI across ALL architectures:
+1. Cumulative reinforcement (v_0 reinforced L times, v_{N-1} once)
+2. Softmax dispersion (1/n bound on attention per position)
+3. Positional discrimination (v_0 unique, v_{N-1} confusable)
+
+Extends to Mamba via selective gating (B_t may favor early tokens).
+
 ### Session Summary (2026-03-17)
 
 **Total experiments completed this session:**
