@@ -775,3 +775,106 @@ User flagged: 30-50 trials/cell is too small. Running Qwen-1.5B at key operating
 6. **fig6_crossover_histogram.png** — Where in layers does v_last lose
 7. **fig7_garbage_threshold.png** — Garbage vs analyzable trials threshold
 
+---
+
+## Session 2 (2026-03-17, continued)
+
+### Action 36: Systematic Quality Review of All Figures and Tables
+
+Reviewed all 7 figures and 5 tables. Issues found:
+- Fig 2 only showed 4 of 11 models → FIXED (now 9 models)
+- Fig 5 (probing) marked TODO but file existed → FIXED (marked Done)
+- No Wilson CIs shown → FIXED (added to cross_model_pi_vs_n.png)
+- Scaling law figure RI fits go >1.0 → FIXED (clipped)
+
+### Action 37: Q6 — Scaling Law Fit
+
+PI(N) = a*exp(-b*N) + c fits well for models with >=6 data points.
+- R²=0.64-0.98 (excluding 3-point overfits)
+- PI floor varies 0-44% by model
+- PI vs size at N=20: r=0.886, p=0.019 (6 models, p=0.057 after Bonferroni)
+- RI fits poorly with log decay (essentially flat for good models)
+
+Saved: fit_scaling_law.py, scaling_law_fitted.png, scaling_law_fits.json
+
+### Action 38: Q10 — Error Position Model
+
+Found THREE architecture-dependent failure modes:
+1. **Qwen** (16 heads): entropy increases with N (p=0.008) — recency imprecision → diffuse
+2. **Gemma** (4 heads): entropy DECREASES (p<0.001) — primacy fallback strengthens
+3. **Pythia** (base): penultimate fraction INCREASES — off-by-one lock
+
+Simple exponential fit failed (β→0 for most models). The pattern is architecture-specific, not universal.
+
+Saved: fit_error_positions.py, error_position_model.png, error_position_fits.json
+
+### Action 39: Q8 — Bidirectional Probe Redesign
+
+BERT MLM: 0% RI, 2% PI — can't do KV retrieval at all (outputs "introduced", "created" etc.)
+Flan-T5-base: RI=13%, PI=22%, gap=-9%. NO primacy bias. But 64-77% garbage.
+T5-large: stuck, killed.
+
+**Preliminary verdict:** Bidirectional encoder shows no PI > RI. Supports autoregressive encoding as the key factor. But evidence is weak (high garbage).
+
+### Action 40: Formal Bound Derivation
+
+Wrote FORMAL_BOUND.md with 3 propositions:
+1. Primacy advantage in transformers (multi-layer accumulation + softmax bound)
+2. Primacy in SSMs (HiPPO initialization + learned gating)
+3. Positional discrimination bound (RoPE compression for adjacent positions)
+
+Informal unified theorem: autoregressive + continuous gating + fixed-capacity → PI > RI.
+Not a formal proof — labelled honestly as informal.
+
+### Action 41: Cross-Model Figures Updated
+
+- cross_model_pi_vs_n.png: Now 9 models (was 4), with Wilson CI bands
+- cross_model_error_positions.png: Now 6 models (added Pythia, Mamba)
+- paper_main_figure.png: Panel (a) now shows 6 models including Mamba, StableLM, TinyLlama
+
+### Action 42: Paper Table Generated
+
+generate_paper_table.py produces:
+- Full behavioral table with Wilson CIs for all 9 models at N=5,10,20
+- LaTeX version ready for paper
+- Summary: 91% cells show PI > RI, mean gap +50.3%
+
+### Action 43: Honest Self-Review
+
+Identified 10 claims, audited each. Top 5 critical issues:
+1. Probing condition probe may detect query word (RESOLVED — correctness probes are within-condition)
+2. R²=1.0 from 3-point fit is meaningless (FIXED — noted in paper draft)
+3. Narrative transfer CIs overlap at 30 trials (NOT FIXED — need more trials)
+4. Bidirectional control too weak (PARTIALLY FIXED — T5-base shows no primacy, but high garbage)
+5. Formal bound is hand-wavy (ACKNOWLEDGED — labeled as informal)
+
+### Action 44: Competitive Landscape Analysis
+
+Deep dive into Chowdhury (2603.10123). Key differentiation:
+- They have STRONGER theory (closed-form influence density)
+- We have STRONGER empirical evidence (cross-architecture, mechanistic probing)
+- Our SSM result (Mamba PI > RI) shows their transformer-only theory is insufficient
+- Strategic positioning: we validate, extend, and behaviorally characterize what they theorize
+
+### Session 2 Status
+
+**Running in background:**
+- Mamba-1.4B 200-trial sweep (started, actively computing)
+
+**Completed this session:**
+- 6 new scripts (fit_scaling_law.py, fit_error_positions.py, generate_paper_table.py, bidirectional_probe_v2.py, encoder_decoder_test.py, FORMAL_BOUND.md)
+- 3 updated figures (cross_model_pi_vs_n, error_positions, paper_main_figure)
+- 2 new figures (scaling_law_fitted, error_position_model)
+- Complete paper results draft (PAPER_RESULTS_DRAFT.md)
+- Honest review document (HONEST_REVIEW_SESSION2.md)
+- Updated OPEN_QUESTIONS.md and NEURIPS_HONEST_ASSESSMENT.md
+- Bidirectional control experiments (BERT MLM, Flan-T5-base)
+
+**Remaining for paper submission:**
+1. 200-trial sweeps for: TinyLlama, StableLM (need GPU time)
+2. Mamba 200-trial sweep (running)
+3. Narrative experiment with 100+ trials (statistical significance)
+4. LaTeX paper writing
+5. Final figure polish (consistent style, proper fonts)
+6. Abstract + introduction drafting
+

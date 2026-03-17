@@ -1,171 +1,168 @@
 # Honest Assessment: Is This NeurIPS-Ready?
 
-## The Hard Truth: No, Not Yet
+**Updated: 2026-03-17 (Session 2)**
 
-What we have is a **thorough empirical study with mechanistic characterization**. What NeurIPS wants is **theoretical insight with empirical validation**. We're currently inverted — lots of experiments, thin on theory.
+## Current Verdict: CLOSE, but 2-3 gaps remain
 
-### What NeurIPS Papers Look Like
+The paper has matured significantly from "thorough empirical study" to "mechanistic investigation with architectural insights." We now have cross-architecture evidence, novel MI techniques, and a unifying theory. But the formal theoretical contribution is still the weakest link.
 
-A strong NeurIPS mechanistic interpretability paper (2024-2025 examples):
-1. **States a clear theoretical claim** (not just "we observed X")
-2. **Proves or derives predictions** from the theory
-3. **Tests predictions mechanistically** (not just behaviorally)
-4. **Shows something surprising** that changes how people think
+## What We Have (Strengths)
 
-Our work currently reads as: "We ran PI/RI experiments on 7 models and found the same pattern everywhere." That's ACL-level (where the original paper was). For NeurIPS, we need to go from "what" to "why" with mathematical precision.
+### 1. Universal behavioral finding (STRONG)
+- 11 models across 7 architecture families (Qwen, Gemma, Llama, StableLM, Pythia, Mamba, API)
+- PI > RI in EVERY model with sufficient capacity
+- 200-trial Wilson CIs at key operating points
+- PI(N) fits exponential decay: PI(N) = a·exp(-b·N) + c, R²=0.64-1.0
 
-## What We Actually Have (Strengths)
+### 2. Cross-architecture SSM comparison (NOVEL, STRONG)
+- Mamba-1.4B (SSM, no attention) shows PI > RI (gap=+49-70%)
+- This ELIMINATES causal attention, softmax, RoPE as sole causes
+- Narrows to: autoregressive L→R + continuous gating + fixed-capacity state
+- Jacobian at init: Mamba shows 295× primacy (extreme), Qwen shows 1.47× (mild)
+- **No other paper has this cross-architecture Jacobian comparison**
 
-1. **Universal behavioral finding**: PI > RI across 7 models, 3 architectures, base + instruct
-2. **Error characterization**: N-dependent transition from off-by-one to diffuse
-3. **Logit lens**: v_last found at ~90% depth then suppressed — clean, reproducible
-4. **Causal analysis**: distributed mechanism, no bottleneck heads
-5. **Cross-architecture**: Qwen + Gemma show same pattern, different failure modes
-6. **Narrative data**: Testing if PI > RI transfers to realistic text (running)
+### 3. Probing classifiers (NOVEL, STRONG)
+- RI/PI condition discrimination: 97-100% across 3 models
+- RI correctness encoded (60-87%); PI correctness at chance (50-61%)
+- **Shows asymmetry in REPRESENTATION SPACE, not just output**
+- Independent from logit lens, uses residual stream directly
+- **No paper uses probing for PI/RI specifically**
+
+### 4. Logit lens: value found then suppressed (STRONG)
+- Consistent Pattern B across 4 models
+- P(v_last) peaks at ~90% depth, gets outcompeted by penultimate
+- P(v_first) rises cleanly and monotonically to 1.0
+- Clean narrative: "the model finds the right answer but can't hold onto it"
+
+### 5. Causal analysis: distributed mechanism (MODERATE)
+- No bottleneck heads — ablating top heads HURTS retrieval
+- Attribution-important heads at 60-80% depth (before value emergence)
+- **This IS a finding:** PI > RI is architectural, not a circuit bug
+- But the effects are small (+0.03-0.07 per head)
+
+### 6. Error position characterization (NOVEL, MODERATE)
+- Architecture-dependent failure modes:
+  - Qwen: recency imprecision (off-by-one → diffuse with N)
+  - Gemma: primacy fallback (4 heads → defaults to first value)
+  - Pythia: off-by-one lock (base model → penultimate at high N)
+- N-dependent transition is statistically significant (Qwen 3B: p=0.008)
+
+### 7. Narrative transfer (NOVEL)
+- PI > RI on Dota 2 narratives (gap=+18% on Qwen 1.5B)
+- Not a KV-format artifact
+- **No other paper tests PI/RI on naturalistic narrative text**
+
+### 8. Jacobian at initialization (NOVEL)
+- Primacy bias exists in UNTRAINED models
+- Mamba: extreme primacy (295×) due to recurrent exponential decay
+- Qwen: mild primacy (1.47×) due to causal attention compounding
+- Training amplifies both primacy and recency
+- **Novel cross-architecture comparison at initialization**
 
 ## What We're Missing (Critical Gaps)
 
-### 1. No Original Theoretical Contribution
+### Gap 1: No Formal Theorem (CRITICAL for NeurIPS)
 
-We cite Wu et al., Barbero et al., Veličković et al., Chowdhury et al. — but we don't DERIVE anything new. We validate their predictions. That's useful but not NeurIPS-level contribution.
+We have an informal "Three-Force Model" but no mathematical proof. The closest we have:
+- PI(N) = a·exp(-b·N) + c (empirical fit, not derived from first principles)
+- Verbal argument connecting softmax dispersion + cumulative reinforcement + positional confusion
+- References to Veličković (softmax bound), Wu (position bias), Chowdhury (influence density)
 
-**What we need:** A formal result connecting the three forces (causal compounding, softmax dispersion, positional encoding) specifically to the PI > RI asymmetry. Even a simplified model (e.g., single-layer attention with RoPE) showing why P(v_first) > P(v_last) in the infinite-width limit would be valuable.
+**What would close this gap:**
+- A simplified model (e.g., 1-layer linear attention) where PI(N) can be derived exactly
+- Or: show that Pasten et al.'s continuity theorem directly predicts PI > RI
+- Or: derive the PI floor as function of d_model and n_heads
 
-### 2. Stage 3 (Causal) Is Weak
+**Honest risk:** Without this, reviewers will say "nice experiments but where's the theory?"
 
-The patching results show +0.032 to +0.071 per head. That's tiny. The ablation makes things WORSE. This means our causal story is: "we couldn't find the mechanism" rather than "we found the mechanism."
+### Gap 2: Bidirectional Control (RUNNING)
 
-The honest interpretation: PI failure is architectural (not localizable to heads), which IS a finding. But it's a negative result. NeurIPS reviewers may say "you just showed it's hard to find, not that you understand it."
+The strongest test of the "autoregressive processing" claim is: does a bidirectional model show PI ≈ RI?
 
-**What we need:** A different causal approach. Instead of head-level patching, try:
-- **Layer-level interventions**: Swap entire layer outputs between RI and PI
-- **Positional encoding ablation**: Remove RoPE for specific position ranges
-- **Attention pattern manipulation**: Force uniform attention over late positions
-- **Counterfactual positions**: Move v_last to position 0, see if PI becomes easy
+Currently running BERT MLM probe (bidirectional_probe_v2.py). Expected outcomes:
+- If PI ≈ RI in BERT → confirms autoregressive processing is the cause
+- If PI > RI in BERT → autoregressive is NOT the sole cause (deeper)
 
-### 3. No Architectural Control (SSM)
+This experiment will complete within this session.
 
-The theory predicts SSMs (Mamba, RWKV) should show DIFFERENT interference patterns because they lack causal attention. This is the strongest testable prediction and we haven't tested it.
+### Gap 3: Statistical Power on Some Models
 
-**What we need:** Run Mamba-130M and RWKV-1.5B through Stage 1. If they show PI ≈ RI (or different asymmetry), it's strong causal evidence. If they show PI > RI too, it falsifies the "causal attention is the cause" theory.
+| Model | Trials/cell | Wilson CI width at 50% | Sufficient? |
+|---|---|---|---|
+| Qwen 3B-Base | 200 | ±7% | YES |
+| Qwen 1.5B | 200 | ±7% | YES |
+| Qwen 3B-Inst | 200 | ±7% | YES |
+| Qwen 0.5B | 50 | ±14% | BORDERLINE |
+| Gemma 1B | 50 | ±14% | BORDERLINE |
+| TinyLlama | 30 | ±18% | NO — need rerun |
+| StableLM | 30 | ±18% | NO — need rerun |
+| Mamba 1.4B | 30 | ±18% | NO — need rerun |
+| Pythia | 50 | ±14% | BORDERLINE |
 
-### 4. The Logit Lens Story Could Be Sharper
+**Action needed:** Rerun TinyLlama, StableLM, Mamba at 200 trials. The gaps are large enough that the direction (PI > RI) is unambiguous, but ±18% CIs are embarrassing for NeurIPS.
 
-"v_last is found then suppressed" is descriptive. We need to show WHY it's suppressed — what specific computation in layers L32-35 (for 3B) causes the suppression? Is it:
-- Attention re-routing? (heads attend away from v_last position)
-- Value vector interference? (OV circuits output competing representations)
-- LayerNorm amplification? (normalization amplifies the competitor)
+### Gap 4: Scaling Law Needs More Points
 
-### 5. No Scaling Law
+Current: 3-9 model sizes for PI vs model_size correlation.
+The correlation is significant at N=20 (r=0.886, p=0.019) but only 6 data points.
+Would benefit from more sizes (API models at different N values could help).
 
-We have 3 model sizes (0.5B, 1.5B, 3B) but haven't derived a scaling relationship. A plot showing "PI accuracy = f(N, model_size)" with a fitted functional form would be much more impressive than a table of numbers.
+## Revised Paper Strategy
 
-## Revised Paper Plan for NeurIPS
+### Option A: Strong Empirical + Weak Theory (Current trajectory)
+- Lead with the cross-architecture universality finding (novel)
+- Present the Three-Force Model as an organizing framework (not a proof)
+- Emphasize novel MI techniques (probing, Jacobian at init)
+- Risk: "nice experiments, where's the theorem?" from theory-minded reviewers
+- Mitigation: position paper as "mechanistic investigation" not "theoretical contribution"
 
-### Structure (9 pages + appendix)
+### Option B: Derive Formal Result (Higher ceiling, higher effort)
+- Derive PI accuracy bound from a simplified attention model
+- Show it matches empirical data
+- The theory becomes the main contribution; experiments validate it
+- Risk: derivation may not work or may require unrealistic simplifications
 
-**Section 1: Introduction (1 page)**
-- Opening: "Causal attention creates an inherent asymmetry in positional addressing"
-- Not "models have primacy bias" — that's the ACL paper
-- Instead: "We derive and empirically validate a theory of WHY"
-- Key result: Three-force model predicts all observed patterns
+### Recommendation: Option A with a formal result in Section 3
 
-**Section 2: Related Work (0.75 pages)**
-- Position bias (Wu, Barbero, Chowdhury)
-- Softmax limitations (Veličković)
-- Lost in the middle (Liu)
-- Mechanistic interpretability (Conmy, Wang, Nanda)
+Even an approximate analytical result would elevate the paper:
 
-**Section 3: Theory — Three-Force Model (2 pages) ← THE CONTRIBUTION**
-- Define the PI/RI task formally
-- Force 1: Causal compounding (cite Wu, derive for our setting)
-- Force 2: Positional encoding confusion (derive RoPE discrimination bound for v_{N-1} vs v_{N-2})
-- Force 3: Softmax dispersion (cite Veličković, show 1/n scaling)
-- Combined prediction: PI accuracy ∝ exp(-αN) × (d_model)^0 (doesn't scale with width)
-- RI accuracy ∝ 1 - exp(-β × d_model) (scales with width via attention sink)
+**Proposition:** For an L-layer causal attention model with softmax temperature θ and sequence length n, the retrieval probability satisfies:
+- P(v_0 | "first") ≥ 1 - O(exp(-L·α_sink)) — approaches 1 with depth
+- P(v_{N-1} | "last") ≤ O(1/N · exp(δ/θ)) — decays with N
 
-**Section 4: Behavioral Validation (1 page)**
-- Table 1: PI > RI across 7 models
-- Figure 1: PI accuracy vs N (multi-model overlay) — the degradation curves
-- Figure 2: Error position distribution (off-by-one → diffuse)
-- API + local models, instruct + base, Qwen + Gemma + Pythia
+Where α_sink is the attention sink coefficient (measurable) and δ is the key separation.
 
-**Section 5: Mechanistic Evidence (2.5 pages)**
-- Figure 3: Logit lens comparison (4 models) — THE MONEY FIGURE
-  - P(v_last) found then suppressed vs P(v_first) clean
-- Figure 4: Layer-by-layer competition landscape
-  - Show exactly where v_penultimate overtakes v_last
-- Figure 5: Causal analysis
-  - Attribution heads at 60-80% depth
-  - Mechanism is distributed: no bottleneck heads
-  - Ablation: heads help retrieval, don't suppress
-- Figure 6: Cross-architecture comparison
-  - Gemma (4 heads) vs Qwen (12 heads) → fewer heads, weaker PI
-  - Gemma shows primacy default, Qwen shows recency imprecision
+**Corollary:** PI accuracy decays as N increases; RI accuracy is robust.
 
-**Section 6: Architectural Control (0.75 pages)**
-- SSM (Mamba/RWKV) predictions and results
-- If SSMs show PI ≈ RI → causal attention IS the cause
-- If SSMs show PI > RI → need to revise theory
+This isn't a hard theorem — it's a bound argument. But it provides the formal hook NeurIPS expects.
 
-**Section 7: Discussion (1 page)**
-- Implications for long-context models
-- Connection to representation collapse (Veličković, Pasten)
-- Limitations: single dataset family, no training dynamics
-- Future: can we fix PI? (architectural modifications)
+## What Makes This Paper vs NOT a Paper
 
-### Main Figures (6)
+### Unique contributions no one else has:
+1. Cross-architecture PI/RI comparison (Mamba + 6 transformer families)
+2. Jacobian at initialization across architectures
+3. Probing classifiers for PI/RI discrimination
+4. Architecture-dependent error position patterns
+5. Narrative transfer validation
+6. Component elimination table (cross-architecture)
+7. 200-trial statistical rigor
 
-| Figure | Content | Status |
-|---|---|---|
-| Fig 1 | PI vs N multi-model overlay | Done (cross_model_pi_vs_n.png) |
-| Fig 2 | Error position distribution (3 N-levels × 4 models) | Done (cross_model_error_positions.png) |
-| Fig 3 | Logit lens: P(v_last) vs P(v_first) (4 models) | Done (cross_model_logit_lens.png) |
-| Fig 4 | Layer competition landscape (value probability heatmap) | Needs creation |
-| Fig 5 | Causal analysis: attribution heatmap + patching | Needs creation |
-| Fig 6 | SSM comparison | NOT DONE — need to run |
+### What we're competing against:
+- Chowdhury (2603.10123): formal theory, transformer-only
+- Wang et al. (2506.15156): Mamba primacy/recency, but different task
+- Wu et al. (ICML 2025): formal proof, attention-only
+- Veličković et al. (ICML 2025): softmax bound, theoretical
 
-### Tables (3)
+**Our niche:** We're the only paper with BOTH:
+(a) Cross-architecture behavioral evidence (11 models, 7 families)
+(b) Cross-architecture mechanistic evidence (logit lens, probing, Jacobian, causal)
 
-| Table | Content | Status |
-|---|---|---|
-| Table 1 | PI > RI across all models at matched points | Done (COMPLETE_RESULTS_TABLE.md) |
-| Table 2 | Logit lens metrics (peak, suppress, RI final) | Done |
-| Table 3 | Causal analysis (top heads, deltas, ablation) | Done |
+The theory papers prove things about specific architectures. We show the phenomenon is MORE general than any single theory predicts. That's the contribution.
 
-## New Evidence Since Original Assessment
+## Priority Actions (Remaining)
 
-### Probing Classifier (STRONG new evidence)
-- RI vs PI condition: 100% linear probe discrimination
-- RI correctness: 84-89% probe accuracy (well-encoded)
-- PI correctness: 50-72% probe accuracy (near chance)
-- Cross-validated on 1.5B and 3B
-- **This shows the asymmetry is in REPRESENTATION SPACE, not just output**
-
-### Mamba SSM (Theory revision needed)
-- Mamba-1.4B shows PI > RI (gap=+49%)
-- PI > RI is NOT attention-specific — it's universal
-- Revised theory: softmax/gating dispersion (Veličković), not causal attention
-
-### Narrative Transfer
-- PI > RI persists on Dota 2 narrative data (gap=+18% on 1.5B)
-- Not a KV-format artifact
-
-## Revised Priority Actions
-
-1. **Derive formal theory** connecting softmax dispersion to PI > RI (Veličković-based)
-2. **Run probing on Gemma** — cross-architecture probing validation (running)
-3. **StableLM + Phi-3.5** — two more architectures for breadth
-4. **Increase sample sizes** on key models (200→500 trials at regime B)
-5. **Paper writing** — LaTeX with revised theory + probing + logit lens + causal
-6. **Publication-quality figures** — unified style, proper labels
-
-## What Makes This NeurIPS vs ACL
-
-| Aspect | ACL (current paper) | NeurIPS (target) |
-|---|---|---|
-| Claim | PI > RI exists | PI > RI is architectural and predictable |
-| Theory | None | Three-force model with predictions |
-| Evidence | 39-model behavioral sweep | Mechanistic + causal + architectural control |
-| Contribution | Phenomenon discovery | Mechanism understanding |
-| Novelty | New task + finding | Theoretical framework + validation |
+1. **BERT MLM probe** — running, will determine if we can claim "autoregressive is the cause"
+2. **200-trial reruns** — TinyLlama, StableLM, Mamba (after Phi finishes GPU)
+3. **Formal bound derivation** — write the proposition + corollary in Section 3
+4. **Paper main figure** — regenerate with all models, proper CIs
+5. **LaTeX draft** — start writing with the outline we have

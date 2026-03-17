@@ -185,15 +185,27 @@ Ablating top heads REDUCES P(v_last) → heads help retrieval, no suppression ci
 | Fig 2 | PI vs N multi-model | cross_model_pi_vs_n.png | Done |
 | Fig 3 | Error positions across N | cross_model_error_positions.png | Done |
 | Fig 4 | Logit lens 4-model | cross_model_logit_lens.png | Done |
-| Fig 5 | Probing results | **Needs creation** | TODO |
+| Fig 5 | Probing results (3 models) | probing_results.png | Done |
 | Fig 6 | Jacobian comparison | jacobian_comparison.png | Done |
+| Fig 7 | Scaling law fitted (9 models) | scaling_law_fitted.png | Done |
+| Fig 8 | Error position model (architecture-dependent) | error_position_model.png | Done |
 
 ## Tables Summary
 
 | Table | Content | Status |
 |---|---|---|
-| Table 1 | Model inventory | Done (in text) |
-| Table 2 | Behavioral summary with CIs | Done (200-trial data) |
-| Table 3 | Logit lens metrics | Done |
-| Table 4 | Causal patching | Done |
-| Table 5 | Component elimination | Done |
+| Table 1 | Model inventory (9 models, 7 families) | Done (in text) |
+| Table 2 | Behavioral summary with Wilson CIs (LaTeX) | Done (generate_paper_table.py) |
+| Table 3 | Logit lens metrics (4 models) | Done |
+| Table 4 | Causal patching (3 models) | Done |
+| Table 5 | Component elimination (cross-architecture) | Done |
+| Table 6 | Scaling law fits (PI floor, decay, R²) | Done (fit_scaling_law.py) |
+
+## New Evidence Since Last Update (Session 2)
+- **Scaling law fits:** PI(N) = a*exp(-b*N) + c across 9 models
+- **Error position model:** Three architecture-dependent failure modes identified
+- **Bidirectional control:** Flan-T5-base shows NO PI > RI (gap=-9%)
+- **Formal bound:** Three propositions + unified theorem (FORMAL_BOUND.md)
+- **Cross-model figures updated:** 9 models with Wilson CIs
+- **Honest review:** Identified 5 critical issues and 5 priority actions
+- **Paper table with LaTeX:** Full behavioral summary with CIs

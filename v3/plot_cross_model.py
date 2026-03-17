@@ -62,62 +62,125 @@ def load_stage2(model_short):
 # FIGURE A: PI Accuracy vs N (updates) — multi-model overlay
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def plot_pi_vs_n():
-    """Plot PI and RI accuracy vs N for multiple models at fixed key count."""
-    models = [
-        ("Qwen2.5-0.5B-Instruct", "Qwen 0.5B", "#e41a1c"),
-        ("Qwen2.5-1.5B-Instruct", "Qwen 1.5B", "#377eb8"),
-        ("Qwen2.5-3B-Instruct", "Qwen 3B", "#4daf4a"),
-        ("gemma-3-1b-it", "Gemma 1B", "#984ea3"),
-    ]
+def wilson_ci(k, n, z=1.96):
+    """Wilson score 95% CI."""
+    if n == 0:
+        return 0, 0, 0
+    p = k / n
+    denom = 1 + z**2 / n
+    center = (p + z**2 / (2 * n)) / denom
+    halfwidth = z * np.sqrt(p * (1 - p) / n + z**2 / (4 * n**2)) / denom
+    return p, max(0, center - halfwidth), min(1, center + halfwidth)
 
-    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-    for model_short, label, color in models:
-        s1 = load_stage1(model_short)
-        if s1 is None:
-            continue
+def extract_2key_data(s1):
+    """Extract 2-key RI/PI data from stage1 results (handles multiple formats)."""
+    ri_data, pi_data = {}, {}
 
-        cells = s1["cells"]
+    # Try trial_details format first (most reliable)
+    td = s1.get("trial_details", {})
+    if td:
+        for cell_key, cell_trials in td.items():
+            if not isinstance(cell_trials, dict):
+                continue
+            parts = cell_key.split("_")
+            nk, nu = int(parts[0]), int(parts[1])
+            if nk != 2:
+                continue
+            for cond in ("RI", "PI"):
+                trials = cell_trials.get(cond, [])
+                if not trials:
+                    continue
+                n_correct = sum(1 for t in trials if t.get("correct"))
+                n_total = len(trials)
+                acc, lo, hi = wilson_ci(n_correct, n_total)
+                target = ri_data if cond == "RI" else pi_data
+                target[nu] = {"acc": acc, "lo": lo, "hi": hi, "n": n_total}
+        return ri_data, pi_data
 
-        # Extract 2-key data
-        ri_data, pi_data = {}, {}
+    # Try cells format
+    cells = s1.get("cells", {})
+    if cells:
         for ck, cell in cells.items():
             nk, nu = int(ck.split("_")[0]), int(ck.split("_")[1])
             if nk != 2:
                 continue
-            ri_data[nu] = cell["stats"]["RI"]["accuracy"]
-            pi_data[nu] = cell["stats"]["PI"]["accuracy"]
+            stats = cell.get("stats", {})
+            for cond in ("RI", "PI"):
+                cond_stats = stats.get(cond, {})
+                acc = cond_stats.get("accuracy", 0)
+                n = cond_stats.get("n", cell.get("n_trials", 50))
+                k_correct = int(acc * n)
+                _, lo, hi = wilson_ci(k_correct, n)
+                target = ri_data if cond == "RI" else pi_data
+                target[nu] = {"acc": acc, "lo": lo, "hi": hi, "n": n}
+
+    return ri_data, pi_data
+
+
+def plot_pi_vs_n():
+    """Plot PI and RI accuracy vs N for ALL models at fixed key count."""
+    models = [
+        # Transformers (instruct)
+        ("Qwen2.5-0.5B-Instruct", "Qwen 0.5B", "#e41a1c", "o", "-"),
+        ("Qwen2.5-1.5B-Instruct", "Qwen 1.5B", "#377eb8", "o", "-"),
+        ("Qwen2.5-3B-Instruct", "Qwen 3B-Inst", "#4daf4a", "o", "-"),
+        ("gemma-3-1b-it", "Gemma 1B", "#984ea3", "D", "-"),
+        ("TinyLlama-1.1B-Chat-v1.0", "TinyLlama 1.1B", "#ff7f00", "^", "-"),
+        ("stablelm-2-1_6b-chat", "StableLM 1.6B", "#a65628", "v", "-"),
+        # Transformers (base)
+        ("Qwen2.5-3B ", "Qwen 3B-Base", "#4daf4a", "s", "--"),
+        ("pythia-410m", "Pythia 410M", "#f781bf", "s", "--"),
+        # SSMs
+        ("mamba-1.4b-hf", "Mamba 1.4B", "#e41a1c", "P", ":"),
+    ]
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+
+    for model_short, label, color, marker, linestyle in models:
+        s1 = load_stage1(model_short)
+        if s1 is None:
+            continue
+
+        ri_data, pi_data = extract_2key_data(s1)
 
         if not ri_data:
             continue
 
         updates = sorted(ri_data.keys())
-        ri_vals = [ri_data[u] for u in updates]
-        pi_vals = [pi_data[u] for u in updates]
+        ri_vals = [ri_data[u]["acc"] for u in updates]
+        ri_lo = [ri_data[u]["lo"] for u in updates]
+        ri_hi = [ri_data[u]["hi"] for u in updates]
+        pi_vals = [pi_data.get(u, {}).get("acc", 0) for u in updates]
+        pi_lo = [pi_data.get(u, {}).get("lo", 0) for u in updates]
+        pi_hi = [pi_data.get(u, {}).get("hi", 0) for u in updates]
 
-        axes[0].plot(updates, ri_vals, color=color, linewidth=2, marker="o",
-                     markersize=4, label=label, alpha=0.8)
-        axes[1].plot(updates, pi_vals, color=color, linewidth=2, marker="s",
-                     markersize=4, label=label, alpha=0.8)
+        axes[0].plot(updates, ri_vals, color=color, linewidth=1.8, marker=marker,
+                     markersize=5, label=label, alpha=0.85, linestyle=linestyle)
+        axes[0].fill_between(updates, ri_lo, ri_hi, color=color, alpha=0.1)
 
-    axes[0].set_title("RI Accuracy (ask for first)")
-    axes[0].set_xlabel("Updates per key (N)")
-    axes[0].set_ylabel("Accuracy")
-    axes[0].legend(fontsize=9)
+        axes[1].plot(updates, pi_vals, color=color, linewidth=1.8, marker=marker,
+                     markersize=5, label=label, alpha=0.85, linestyle=linestyle)
+        axes[1].fill_between(updates, pi_lo, pi_hi, color=color, alpha=0.1)
+
+    axes[0].set_title("RI Accuracy (retrieve first value)", fontsize=13, fontweight="bold")
+    axes[0].set_xlabel("Updates per key (N)", fontsize=11)
+    axes[0].set_ylabel("Accuracy", fontsize=11)
+    axes[0].legend(fontsize=7.5, loc="lower left", ncol=2)
     axes[0].set_ylim(-0.05, 1.05)
     axes[0].grid(True, alpha=0.3)
     axes[0].axhline(y=0.5, color="gray", linestyle="--", alpha=0.3)
 
-    axes[1].set_title("PI Accuracy (ask for last)")
-    axes[1].set_xlabel("Updates per key (N)")
-    axes[1].set_ylabel("Accuracy")
-    axes[1].legend(fontsize=9)
+    axes[1].set_title("PI Accuracy (retrieve last value)", fontsize=13, fontweight="bold")
+    axes[1].set_xlabel("Updates per key (N)", fontsize=11)
+    axes[1].set_ylabel("Accuracy", fontsize=11)
+    axes[1].legend(fontsize=7.5, loc="upper right", ncol=2)
     axes[1].set_ylim(-0.05, 1.05)
     axes[1].grid(True, alpha=0.3)
     axes[1].axhline(y=0.5, color="gray", linestyle="--", alpha=0.3)
 
-    fig.suptitle("PI > RI Across Model Sizes and Architectures (2 keys)", fontsize=14, y=1.02)
+    fig.suptitle("PI > RI Across 9 Models, 7 Architecture Families (2 keys)",
+                 fontsize=14, fontweight="bold", y=1.02)
     plt.tight_layout()
     path = FIGURES_DIR / "cross_model_pi_vs_n.png"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -243,8 +306,10 @@ def plot_error_positions_comparison():
     models = [
         ("Qwen2.5-0.5B-Instruct", "Qwen 0.5B"),
         ("Qwen2.5-1.5B-Instruct", "Qwen 1.5B"),
-        ("Qwen2.5-3B-Instruct", "Qwen 3B"),
+        ("Qwen2.5-3B-Instruct", "Qwen 3B-Inst"),
         ("gemma-3-1b-it", "Gemma 1B"),
+        ("pythia-410m", "Pythia 410M"),
+        ("mamba-1.4b-hf", "Mamba 1.4B"),
     ]
 
     # Show at N=5 (low) and first available higher N
@@ -254,7 +319,7 @@ def plot_error_positions_comparison():
     ]
 
     fig, axes = plt.subplots(len(target_configs), len(models),
-                             figsize=(4 * len(models), 4 * len(target_configs)))
+                             figsize=(3.5 * len(models), 3.5 * len(target_configs)))
 
     for row, (target_k, target_u, config_label) in enumerate(target_configs):
         for col, (model_short, model_label) in enumerate(models):

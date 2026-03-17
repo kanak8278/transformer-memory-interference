@@ -59,29 +59,48 @@ def main():
         ("Qwen2.5-3B-Instruct", "Qwen 3B", "#4daf4a", "s"),
         ("gemma-3-1b-it", "Gemma 1B", "#984ea3", "^"),
         ("mamba-1.4b-hf", "Mamba 1.4B", "#e41a1c", "D"),
+        ("stablelm-2-1_6b-chat", "StableLM 1.6B", "#a65628", "v"),
+        ("TinyLlama-1.1B-Chat-v1.0", "TinyLlama 1.1B", "#ff7f00", "P"),
     ]
 
     for model_short, label, color, marker in models:
         s1 = load_stage1(model_short)
         if s1 is None:
             continue
-        cells = s1["cells"]
 
-        # Extract 2-key data for RI and PI
+        # Extract 2-key data (handles both formats)
+        td = s1.get("trial_details", {})
         ri_data, pi_data = {}, {}
-        for ck, cell in cells.items():
-            nk, nu = int(ck.split("_")[0]), int(ck.split("_")[1])
-            if nk != 2:
-                continue
-            ri_data[nu] = cell["stats"]["RI"]["accuracy"]
-            pi_data[nu] = cell["stats"]["PI"]["accuracy"]
+        if td:
+            for cell_key, cell_trials in td.items():
+                if not isinstance(cell_trials, dict):
+                    continue
+                parts = cell_key.split("_")
+                nk, nu = int(parts[0]), int(parts[1])
+                if nk != 2:
+                    continue
+                for cond in ("RI", "PI"):
+                    trials = cell_trials.get(cond, [])
+                    if not trials:
+                        continue
+                    acc = sum(1 for t in trials if t.get("correct")) / len(trials)
+                    target = ri_data if cond == "RI" else pi_data
+                    target[nu] = acc
+        else:
+            cells = s1.get("cells", {})
+            for ck, cell in cells.items():
+                nk, nu = int(ck.split("_")[0]), int(ck.split("_")[1])
+                if nk != 2:
+                    continue
+                ri_data[nu] = cell["stats"]["RI"]["accuracy"]
+                pi_data[nu] = cell["stats"]["PI"]["accuracy"]
 
         if not pi_data:
             continue
         updates = sorted(pi_data.keys())
         ax.plot(updates, [pi_data[u] for u in updates], color=color, linewidth=2,
                 marker=marker, markersize=5, label=f"{label} (PI)", alpha=0.8)
-        ax.plot(updates, [ri_data[u] for u in updates], color=color, linewidth=1,
+        ax.plot(updates, [ri_data.get(u, 0) for u in updates], color=color, linewidth=1,
                 linestyle="--", alpha=0.4)
 
     ax.set_xlabel("Updates per key (N)")
