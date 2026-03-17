@@ -36,7 +36,7 @@
         "Cleared {callsign} to {attr_value} at {time}Z. Prior clearance was {prev_value}. {separation_note}",
         "At {time}Z, {callsign} crossed {fix} at {prev_value} then cleared to maintain {attr_value}. {context}",
         "{callsign} altitude assignment updated to {attr_value} at {time}Z from {prev_value}. {separation_note}",
-        "{time}Z — {callsign} ({aircraft_type}) issued amended clearance: maintain {attr_value}. Was {prev_value}. {context}",
+        "{time}Z \u2014 {callsign} ({aircraft_type}) issued amended clearance: maintain {attr_value}. Was {prev_value}. {context}",
         "Pilot of {callsign} acknowledged descent to {attr_value} at {time}Z. Previous clearance: {prev_value}."
     ],
     "speed_transcript": [
@@ -46,7 +46,7 @@
         "'{callsign}, increase speed to {attr_value} knots.' '{attr_value} knots, {callsign}.'",
         "'{callsign}, reduce to final approach speed, then {attr_value} knots by {fix}.' 'Wilco, {attr_value} by {fix}, {callsign}.'",
         "'{callsign}, best forward speed until {fix}, then reduce to {attr_value} knots.' 'Best speed then {attr_value} at {fix}, {callsign}.'",
-        "'{callsign}, no speed restriction.' '{callsign}, roger, no restriction.'",
+        "'{callsign}, no speed restriction, current speed {attr_value} knots.' '{callsign}, roger, no restriction.'",
         "'{callsign}, maintain {attr_value} knots or greater.' '{attr_value} knots or greater, {callsign}.'"
     ],
     "speed_log": [
@@ -63,9 +63,9 @@
         "'{callsign}, fly heading {attr_value}.' 'Heading {attr_value}, {callsign}.'",
         "'{callsign}, turn {direction} heading {attr_value}, vectors ILS runway {rwy}.' '{direction} heading {attr_value}, {callsign}.'",
         "'{callsign}, turn {direction} heading {attr_value} for spacing.' 'Heading {attr_value}, {callsign}.'",
-        "'{callsign}, fly present heading, then when able direct {fix}.' 'Present heading then direct {fix}, {callsign}.'",
+        "'{callsign}, fly present heading {attr_value}, then when able direct {fix}.' 'Present heading {attr_value} then direct {fix}, {callsign}.'",
         "'{callsign}, stop turn, maintain heading {attr_value}.' 'Maintaining {attr_value}, {callsign}.'",
-        "'{callsign}, resume own navigation, proceed direct {fix}.' 'Direct {fix}, {callsign}.'",
+        "'{callsign}, resume own navigation, current heading {attr_value}, proceed direct {fix}.' 'Direct {fix}, {callsign}.'",
         "'{callsign}, turn {direction} heading {attr_value}, descend and maintain {alt}.' '{direction} {attr_value}, out of {alt}, {callsign}.'",
         "'{callsign}, immediate turn {direction} heading {attr_value}, traffic.' 'Turning {direction} {attr_value}, {callsign}.'"
     ],
@@ -95,7 +95,7 @@
         "{time}Z: {callsign} cleared {approach_type} approach runway {rwy}. {separation_note}",
         "Approach clearance issued to {callsign} at {time}Z: {approach_type} runway {rwy} from {dist} miles.",
         "{callsign} ({aircraft_type}) given approach clearance at {time}Z, {dist} DME, runway {rwy}.",
-        "{time}Z — {callsign} cleared for the approach runway {rwy}. {context}",
+        "{time}Z \u2014 {callsign} cleared for the approach runway {rwy}. {context}",
         "{callsign} acknowledged approach clearance at {time}Z: {approach_type} runway {rwy}.",
         "At {time}Z, {dist}-mile final, {callsign} cleared {approach_type} approach runway {rwy}."
     ],
@@ -213,7 +213,32 @@
         "Visual approach reported by {callsign} at {dist} DME.",
         "PIREP from {callsign}: {ride} at {current_alt}, reported {time}Z."
     ],
-    "ride_reports": ["smooth", "light chop", "moderate turbulence", "light turbulence", "severe chop reported", "smooth above FL340"],
-    "coordination_notes": ["coordinated for climb to FL350", "approved descent", "handoff confirmed", "traffic advised"],
-    "clock_positions": ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"]
+    "ride_reports": [
+        "smooth",
+        "light chop",
+        "moderate turbulence",
+        "light turbulence",
+        "severe chop reported",
+        "smooth above FL340"
+    ],
+    "coordination_notes": [
+        "coordinated for climb to FL350",
+        "approved descent",
+        "handoff confirmed",
+        "traffic advised"
+    ],
+    "clock_positions": [
+        "12",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+    ]
 }

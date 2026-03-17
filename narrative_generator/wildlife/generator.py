@@ -102,12 +102,21 @@ EVENT_WEIGHTS = {
 
 # Safe tracked attributes (ones that appear explicitly in narrative text and change)
 SAFE_TRACKED_ATTRIBUTES = [
-    "weight_kg",
-    "body_condition_score",
-    "location_zone",
-    "collar_battery_pct",
-    "daily_movement_km",
-    "elevation_m",
+    "weight_kg",       # changes every observation, wide range, high interference quality
+    "location_zone",   # changes every relocation, large categorical pool
+    "daily_movement_km",  # changes every observation, numeric
+    "activity_state",  # large categorical pool (22 values)
+    "health_status",   # large categorical pool (20 values)
+    "habitat_type",    # large categorical pool (22 values)
+]
+
+# Extended attributes for larger num_updates (7+) where slow-changing attributes
+# have time to produce multiple distinct values
+EXTENDED_TRACKED_ATTRIBUTES = SAFE_TRACKED_ATTRIBUTES + [
+    "body_condition_score",   # slow-changing (1-9 scale), needs 5+ events to show variance
+    "elevation_m",            # moderate change rate, fine for 5+ updates
+    "collar_battery_pct",     # slowly decreasing only — good for demonstrating PI but
+                              # not RI since first=highest always. Use only with 7+ updates.
 ]
 
 # Monthly weight trajectories: {month: (lo, hi)} by species/sex key
@@ -333,12 +342,23 @@ class WildlifeTrialGenerator(NarrativeTrialGenerator):
         valid_species = self.SPECIES_STUDY_AREA_COMPAT.get(study_area_key,
                                                             list(self.species_info.keys()))
         species = rng.choice(valid_species)
-        tracked_attribute = rng.choice(SAFE_TRACKED_ATTRIBUTES)
+        # Use extended pool only for larger num_updates where slow attrs can diverge
+        attr_pool = EXTENDED_TRACKED_ATTRIBUTES if num_updates >= 7 else SAFE_TRACKED_ATTRIBUTES
+        tracked_attribute = rng.choice(attr_pool)
         filler_budget = rng.choice(["minimal", "light", "medium", "heavy"])
         voice = rng.choice(["field", "narrative"])
         queried_animal_idx = rng.randint(0, num_keys - 1)
-        start_month = rng.randint(1, 12)
+        # Grizzly bears are hibernating Nov-Mar; exclude winter start months to
+        # ensure enough diverse events can be generated
+        if species == "grizzly_bear":
+            valid_months = [4, 5, 6, 7, 8, 9, 10]  # active season only
+        else:
+            valid_months = list(range(1, 13))
+        start_month = rng.choice(valid_months)
         study_duration_days = rng.choice([60, 90, 120, 180, 240, 365])
+        # For grizzly, ensure study doesn't run into hibernation at the start
+        if species == "grizzly_bear" and num_updates < 10:
+            study_duration_days = min(study_duration_days, 120)  # short study in active season
 
         return WildlifeTrialConfig(
             num_keys=num_keys,
@@ -595,6 +615,34 @@ class WildlifeTrialGenerator(NarrativeTrialGenerator):
         elev_lo, elev_hi = ELEVATION_BY_SEASON.get(an.species, {}).get(season, (1500, 2200))
         an.elevation_m = rng.randint(elev_lo, elev_hi)
 
+        # Update activity_state — moving animals change activity
+        sp_info = self.species_info.get(an.species, {})
+        activity_options = sp_info.get("seasonal_behaviors", {}).get(season, [])
+        if activity_options and rng.random() < 0.7:  # 70% chance of activity change on movement
+            an.activity_state = rng.choice(activity_options)
+
+        # Update habitat_type based on new zone's typical habitat
+        zone_habitat_map = {
+            "alpine meadow": "alpine meadow (above treeline)",
+            "ridge": "subalpine meadow (near treeline)",
+            "mountain": "spruce-fir forest (dense canopy)",
+            "valley": "open grassland (valley floor)",
+            "riparian": "riparian cottonwood gallery",
+            "drainage": "lodgepole pine forest (dense)",
+            "plateau": "subalpine meadow (near treeline)",
+            "basin": "sagebrush-grassland mosaic",
+            "meadow": "subalpine meadow (near treeline)",
+            "corridor": "lodgepole pine forest (open/burned)",
+            "pass": "alpine meadow (above treeline)",
+            "bay": "wetland/marsh (sedge meadow)",
+        }
+        # Infer habitat from zone name keywords
+        zone_lower = new_zone.lower()
+        for keyword, habitat in zone_habitat_map.items():
+            if keyword in zone_lower:
+                an.habitat_type = habitat
+                break
+
         distance_km = round(rng.uniform(2.0, 18.0), 1)
         direction = rng.choice(self.directions)
 
@@ -605,10 +653,37 @@ class WildlifeTrialGenerator(NarrativeTrialGenerator):
 
         new_val_str = an.format_attribute(attr_name)
 
-        # Ensure value changed if it's weight or movement
+        # Ensure value changed for rapidly-changing attributes
         if str(new_val_str) == str(old_val_str) and attr_name in ("weight_kg", "daily_movement_km"):
             an.weight_kg = round(an.weight_kg + rng.choice([-0.8, 0.8, 1.0, -1.2]), 1)
             new_val_str = an.format_attribute(attr_name)
+
+        # For categorical attributes, force a change if still same
+        if str(new_val_str) == str(old_val_str) and attr_name == "activity_state" and activity_options:
+            different = [a for a in activity_options if a != old_val_str]
+            if different:
+                an.activity_state = rng.choice(different)
+                new_val_str = an.format_attribute(attr_name)
+
+        if str(new_val_str) == str(old_val_str) and attr_name == "habitat_type":
+            habitat_pool = [
+                "alpine meadow (above treeline)", "subalpine meadow (near treeline)",
+                "lodgepole pine forest (dense)", "spruce-fir forest (dense canopy)",
+                "sagebrush-grassland mosaic", "open grassland (valley floor)",
+                "riparian cottonwood gallery", "dense willow thicket (riparian)"
+            ]
+            different = [h for h in habitat_pool if h != old_val_str]
+            if different:
+                an.habitat_type = rng.choice(different)
+                new_val_str = an.format_attribute(attr_name)
+
+        if str(new_val_str) == str(old_val_str) and attr_name == "health_status":
+            sp_info_local = self.species_info.get(an.species, {})
+            conditions = sp_info_local.get("health_conditions", [])
+            different = [h for h in conditions if h != old_val_str]
+            if different:
+                an.health_status = rng.choice(different)
+                new_val_str = an.format_attribute(attr_name)
 
         event_data = {
             "date": date_str,
@@ -922,8 +997,9 @@ class WildlifeTrialGenerator(NarrativeTrialGenerator):
             "attr_value": an.format_attribute(attr_name),
         }
 
+        # Mortality template includes {attr_value} — record the last known value
         state_changes = [
-            (collar_id, attr_name, old_val_str, an.format_attribute(attr_name), False),
+            (collar_id, attr_name, old_val_str, an.format_attribute(attr_name), True),
         ]
         return event_data, state_changes
 
@@ -1496,6 +1572,29 @@ class WildlifeTrialGenerator(NarrativeTrialGenerator):
                     "data": event_data,
                 })
 
+        # Step 8b: Ensure ALL entities have at least 1 value in entity_tracking
+        # (entities with 0 values are invisible in the narrative — unacceptable)
+        for cid, _ in collar_pairs:
+            key = f"{cid} / {tracked[cid]}"
+            if key in entity_tracking and len(entity_tracking[key]) == 0:
+                an = animal_states[cid]
+                if not an.alive:
+                    continue
+                # Force a relocation event that will update the entity
+                self._advance_day(an, 3, config.start_month)
+                event_data, state_changes = self._handle_relocation(
+                    cid, animal_states, study_area_key, config.start_month, rng, tracked)
+                # Force: always record the value even if same as previous
+                for cid_sc, attr, old_val, new_val, mentioned in state_changes:
+                    if cid_sc == cid:
+                        entity_tracking[key] = [new_val]  # forced first mention
+                        mention_counts[cid] = max(mention_counts[cid], 1)
+                event_log.append({
+                    "type": "relocation_observation",
+                    "day": an.study_day,
+                    "data": event_data,
+                })
+
         # Step 9: Render narrative
         narrative_parts = []
 
@@ -1541,6 +1640,19 @@ class WildlifeTrialGenerator(NarrativeTrialGenerator):
             templates_list = self._get_templates_for_event(event["type"], config.voice)
             template = rng.choice(templates_list)
             rendered = self.render_template(template, event["data"])
+
+            # Replace wolf-specific social terminology with species-appropriate terms
+            sp_info = self.species_info.get(config.species, {})
+            group_label = sp_info.get("group_label", "group")
+            offspring_label = sp_info.get("offspring_label", "young")
+            if group_label != "pack":
+                rendered = rendered.replace("pack territory", f"{group_label} territory")
+                rendered = rendered.replace("pack range", f"{group_label} range")
+                rendered = rendered.replace("pack affiliation", f"{group_label} affiliation")
+                rendered = rendered.replace("pack activity", f"{group_label} activity")
+                rendered = rendered.replace("from pack", f"from {group_label}")
+                rendered = rendered.replace(" pack ", f" {group_label} ")
+
             narrative_parts.append(rendered)
 
             # Maybe insert filler

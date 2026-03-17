@@ -88,7 +88,9 @@ def generate_trial(seed, condition):
     from mechanistic_probing_v2.core.model_loader import is_instruct_model
     use_chat = is_instruct_model(MODEL_NAME)
     if use_chat:
-        prompt = format_for_chat(raw, None, model_name=MODEL_NAME, system_prompt=SYSTEM_PROMPT)
+        # Prepend system prompt to raw before formatting
+        full_raw = f"{SYSTEM_PROMPT}\n\n{raw}"
+        prompt = format_for_chat(full_raw, None, model_name=MODEL_NAME)
     else:
         prompt = f"{FIXED_COMPLETION_DEMOS}{stream}\nThe {query_word} value of {test_cat} was:"
 
@@ -242,8 +244,9 @@ def main():
         print(f"\n  Layer {layer} (n_features={n_features}):")
         print(f"    Mean active features: RI={np.mean([len(t['features'][layer]['active_indices']) for t in ri_trials]):.1f}, "
               f"PI={np.mean([len(t['features'][layer]['active_indices']) for t in pi_trials]):.1f}")
+        ri_top_diffs = [float(ri_pi_diff[i]) for i in top_ri_pref[:5]]
         print(f"    Top RI-preferring features: {top_ri_pref[:5].tolist()}")
-        print(f"      (mean act diff: {ri_pi_diff[top_ri_pref[:5]]:.4f})")
+        print(f"      (mean act diffs: {[f'{x:.4f}' for x in ri_top_diffs]})")
         print(f"    Top PI-preferring features: {top_pi_pref[:5].tolist()}")
         if len(top_correct_pref) > 0:
             print(f"    Top PI-correct enabling features: {top_correct_pref[:5].tolist()}")

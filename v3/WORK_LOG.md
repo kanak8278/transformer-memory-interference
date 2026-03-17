@@ -966,3 +966,38 @@ Scripts prepared:
 4. If PI > RI holds: add to paper as Section 5 "Narrative Transfer"
 5. If PI > RI does NOT hold: understand why — is it the richer context, the variable value format, or the longer narratives?
 
+
+### Implementation Complete
+
+**All three generators passing 3000/3000 validation trials (0 errors).**
+
+#### Wildlife Tracking Generator (`narrative_generator/wildlife/`)
+- 5 species with monthly trajectory curves
+- 3 study areas (Yellowstone, Bitterroot-Selway, Isle Royale) with zone adjacency
+- 12 event types, 8+ templates each
+- Bugs fixed:
+  - Pack interaction secondary animal tracked but not mentioned → mentioned=False
+  - Categorical forced-divergence fallback added (location_zone, activity, habitat, health)
+  - Isle Royale compatibility (wolves only, moose prey)
+  - Grizzly winter restriction (active season only for studies)
+  - Relocation handler now updates activity_state and habitat_type
+  - Mortality event uses mentioned=True (records last known value)
+
+#### Hospital ICU Generator (`narrative_generator/icu/`)
+- 10 diagnoses with trajectory-driven state (improving/worsening curves)
+- Physiological correlations (fever→tachycardia, hypotension→tachycardia)
+- 10 event types, 8+ templates each
+- Bug fixed: "Dr. Dr." double title from physician name format
+
+#### Air Traffic Control Generator (`narrative_generator/atc/`)
+- 5 airports with STAR/SID pools, runway configs
+- 20 aircraft types with RECAT wake categories
+- 13 event types, 8+ templates each, both transcript and sector log voices
+- Bugs fixed:
+  - Duplicate altitude_assignment key in en_route weights
+  - Landing clearance set mentioned=False for speed (templates don't render speed)
+  - Force-pass loop now uses correct event_type per handler
+  - speed_transcript[6] "no speed restriction" added attr_value
+  - heading_transcript[3,5] templates added attr_value
+  - Scenario defaults dict fills 15+ template variables across all event types
+

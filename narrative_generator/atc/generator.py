@@ -805,9 +805,10 @@ class ATCTrialGenerator(NarrativeTrialGenerator):
             "attr_label": "speed (knots)",
         }
 
-        mentioned = (attr_name == "speed_kias")
+        # Landing clearance templates don't explicitly render the speed value
+        # so mark as not-mentioned to avoid entity_tracking mismatch
         state_changes = [
-            (callsign, attr_name, old_val, new_val, mentioned),
+            (callsign, attr_name, old_val, new_val, False),
         ]
         return event_data, state_changes
 
@@ -1588,19 +1589,22 @@ class ATCTrialGenerator(NarrativeTrialGenerator):
             for cs in under_mentioned:
                 ac_states[cs].on_ground = False
                 if tracked[cs] == "altitude_ft":
+                    force_event_type = "altitude_assignment"
                     event_data, state_changes = self._handle_altitude_assignment(
                         cs, ac_states, sim_time, rng, config, tracked, airport_code)
                 elif tracked[cs] == "speed_kias":
+                    force_event_type = "speed_assignment"
                     event_data, state_changes = self._handle_speed_assignment(
                         cs, ac_states, sim_time, rng, config, tracked, airport_code)
                 else:
+                    force_event_type = "heading_assignment"
                     event_data, state_changes = self._handle_heading_assignment(
                         cs, ac_states, sim_time, rng, config, tracked, airport_code)
 
                 for hn, attr, old_val, new_val, mentioned in state_changes:
                     full_state_log.append({
                         "time": round(sim_time, 1),
-                        "event": "altitude_assignment",
+                        "event": force_event_type,
                         "entity": hn,
                         "attribute": attr,
                         "old_value": str(old_val),
@@ -1614,7 +1618,7 @@ class ATCTrialGenerator(NarrativeTrialGenerator):
                                 entity_tracking[key].append(str(new_val))
                                 mention_counts[hn] += 1
                 event_log.append({
-                    "type": "altitude_assignment",
+                    "type": force_event_type,
                     "time": round(sim_time, 1),
                     "data": event_data,
                 })

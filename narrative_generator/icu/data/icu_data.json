@@ -1,0 +1,358 @@
+{
+    "hospitals": [
+        "University Medical Center",
+        "St. Mary's Hospital",
+        "Memorial Regional",
+        "Riverside General",
+        "County Medical Center",
+        "Valley Presbyterian",
+        "Metropolitan Hospital",
+        "Sacred Heart Medical Center"
+    ],
+    "icu_types": {
+        "micu": "Medical ICU",
+        "sicu": "Surgical ICU",
+        "ccu": "Cardiac Care Unit",
+        "nicu_neuro": "Neuro ICU",
+        "mixed": "Mixed Medical-Surgical ICU"
+    },
+    "patient_names": {
+        "female": [
+            "Mrs. Chen", "Ms. Okafor", "Mrs. Patel", "Ms. Johansson", "Mrs. Washington",
+            "Ms. Nakamura", "Mrs. Torres", "Ms. Al-Rashid", "Mrs. Kim", "Ms. Petrov",
+            "Mrs. Gutierrez", "Ms. Lindstrom", "Mrs. Yamamoto", "Ms. Adeyemi", "Mrs. Santos",
+            "Ms. Mueller", "Mrs. Park", "Ms. Thakur", "Mrs. Campbell", "Ms. Liu",
+            "Mrs. Martinez", "Ms. Johnson", "Mrs. Pham", "Ms. Kowalski", "Mrs. Brennan",
+            "Ms. Hernandez", "Mrs. Nguyen", "Ms. Robinson", "Mrs. Ivanova", "Ms. Osei"
+        ],
+        "male": [
+            "Mr. Chen", "Mr. Okafor", "Mr. Patel", "Mr. Johansson", "Mr. Washington",
+            "Mr. Nakamura", "Mr. Torres", "Mr. Al-Rashid", "Mr. Kim", "Mr. Petrov",
+            "Mr. Gutierrez", "Mr. Lindstrom", "Mr. Yamamoto", "Mr. Adeyemi", "Mr. Santos",
+            "Mr. Mueller", "Mr. Park", "Mr. Thakur", "Mr. Campbell", "Mr. Liu",
+            "Mr. Martinez", "Mr. Johnson", "Mr. Pham", "Mr. Kowalski", "Mr. Brennan",
+            "Mr. Hernandez", "Mr. Nguyen", "Mr. Robinson", "Mr. Petrov", "Mr. Osei"
+        ]
+    },
+    "staff_names": {
+        "attendings": [
+            "Dr. Mehta", "Dr. Johansson", "Dr. Washington", "Dr. Nakamura", "Dr. Torres",
+            "Dr. Al-Farsi", "Dr. Petrov", "Dr. Okafor", "Dr. Lindstrom", "Dr. Gutierrez",
+            "Dr. Yamamoto", "Dr. Brennan"
+        ],
+        "residents": [
+            "Dr. Park (PGY-2)", "Dr. Santos (PGY-3)", "Dr. Mueller (PGY-1)",
+            "Dr. Adeyemi (PGY-2)", "Dr. Huang (PGY-3)"
+        ],
+        "nurses": [
+            "RN Martinez", "RN Johnson", "RN Pham", "RN Okafor", "RN Kowalski",
+            "RN Washington", "RN Kim", "RN Brennan", "RN Thakur", "RN Campbell"
+        ]
+    },
+    "shift_times": {
+        "day": "07:00",
+        "night": "19:00",
+        "noc": "23:00"
+    },
+    "weather_options": [
+        "Cloudy morning outside.",
+        "Bright morning, unusually warm for the season.",
+        "Rain overnight, clearing by noon.",
+        "Overcast, 48F.",
+        "Clear skies this morning."
+    ],
+    "diagnoses": {
+        "sepsis": {
+            "full_name": "Sepsis / Septic Shock",
+            "icu_types": ["micu", "mixed"],
+            "trajectory_improving": {
+                "hr": [125, 118, 110, 102, 95, 88, 82],
+                "sbp": [82, 90, 98, 105, 110, 118, 122],
+                "map": [55, 62, 68, 72, 75, 80, 82],
+                "temperature_c": [39.2, 39.0, 38.5, 38.0, 37.5, 37.2, 37.0],
+                "lactate": [6.2, 4.8, 3.2, 2.4, 1.8, 1.2, 0.9],
+                "wbc": [22, 20, 18, 15, 12, 10, 8],
+                "creatinine": [2.8, 2.5, 2.3, 2.0, 1.6, 1.3, 1.1],
+                "norepinephrine_dose": [0.20, 0.15, 0.08, 0.03, 0.0, 0.0, 0.0]
+            },
+            "trajectory_worsening": {
+                "hr": [128, 135, 140, 145, 148, 152, 155],
+                "sbp": [78, 72, 68, 65, 60, 55, 50],
+                "map": [52, 48, 45, 42, 39, 36, 32],
+                "temperature_c": [39.5, 40.1, 40.3, 39.8, 40.2, 40.5, 39.2],
+                "lactate": [4.5, 6.8, 9.2, 12.5, 14.8, 16.2, 18.1],
+                "wbc": [22, 26, 30, 15, 8, 4, 2],
+                "creatinine": [2.0, 2.8, 3.5, 4.5, 5.8, 7.2, 9.0],
+                "norepinephrine_dose": [0.15, 0.30, 0.50, 0.80, 1.2, 1.8, 2.5]
+            },
+            "initial_vitals": {
+                "hr": [100, 135], "sbp": [75, 100], "map": [50, 70],
+                "temperature_c": [38.5, 40.2], "spo2": [88, 96], "respiratory_rate": [22, 35]
+            },
+            "key_labs": ["lactate", "wbc", "creatinine", "procalcitonin"],
+            "typical_medications": ["norepinephrine", "vancomycin", "piperacillin-tazobactam"],
+            "vent_probability": 0.4
+        },
+        "dka": {
+            "full_name": "Diabetic Ketoacidosis",
+            "icu_types": ["micu", "mixed"],
+            "trajectory_improving": {
+                "glucose": [650, 450, 280, 200, 165, 145, 135],
+                "ph": [7.12, 7.20, 7.28, 7.34, 7.37, 7.39, 7.40],
+                "potassium": [5.8, 5.0, 4.2, 3.8, 3.6, 3.9, 4.1],
+                "hr": [120, 112, 102, 94, 88, 84, 80],
+                "hco3": [8, 12, 16, 20, 22, 24, 24],
+                "anion_gap": [28, 22, 16, 12, 10, 10, 10]
+            },
+            "trajectory_worsening": {
+                "glucose": [650, 700, 750, 820, 900, 1050, 1200],
+                "ph": [7.12, 7.05, 6.98, 6.92, 6.85, 6.80, 6.75],
+                "potassium": [5.8, 3.0, 2.5, 2.2, 2.0, 1.8, 1.6],
+                "hr": [120, 130, 140, 148, 152, 158, 162],
+                "hco3": [8, 6, 4, 3, 2, 2, 1],
+                "anion_gap": [28, 32, 36, 40, 44, 48, 52]
+            },
+            "initial_vitals": {
+                "hr": [100, 130], "sbp": [90, 130],
+                "temperature_c": [36.8, 38.5], "respiratory_rate": [28, 40]
+            },
+            "key_labs": ["glucose", "potassium", "ph", "hco3"],
+            "typical_medications": ["insulin_drip", "IV_fluids", "potassium_replacement"],
+            "vent_probability": 0.1
+        },
+        "ards": {
+            "full_name": "Acute Respiratory Distress Syndrome",
+            "icu_types": ["micu", "mixed"],
+            "trajectory_improving": {
+                "fio2": [90, 80, 70, 60, 50, 40, 35],
+                "peep": [14, 12, 10, 8, 6, 5, 5],
+                "spo2": [88, 90, 91, 92, 93, 94, 95],
+                "pf_ratio": [100, 120, 140, 165, 185, 210, 240],
+                "hr": [118, 112, 106, 100, 95, 90, 85]
+            },
+            "trajectory_worsening": {
+                "fio2": [90, 95, 100, 100, 100, 100, 100],
+                "peep": [14, 16, 18, 20, 22, 22, 24],
+                "spo2": [88, 85, 82, 80, 78, 75, 72],
+                "pf_ratio": [100, 85, 70, 58, 45, 38, 32],
+                "hr": [118, 124, 132, 138, 144, 150, 155]
+            },
+            "initial_vitals": {
+                "hr": [100, 125], "spo2": [85, 94], "respiratory_rate": [24, 38]
+            },
+            "key_labs": ["fio2", "peep", "spo2"],
+            "typical_medications": ["propofol", "fentanyl", "cisatracurium"],
+            "vent_probability": 1.0
+        },
+        "gi_bleed": {
+            "full_name": "Upper GI Bleed",
+            "icu_types": ["micu", "mixed"],
+            "trajectory_improving": {
+                "hemoglobin": [6.8, 8.1, 8.0, 7.9, 8.2, 8.4, 8.5],
+                "hr": [118, 108, 98, 90, 84, 80, 76],
+                "sbp": [88, 100, 110, 118, 122, 126, 128],
+                "map": [58, 67, 74, 80, 82, 84, 85]
+            },
+            "trajectory_worsening": {
+                "hemoglobin": [7.2, 6.0, 4.8, 3.9, 3.2, 2.8, 2.4],
+                "hr": [112, 125, 138, 148, 156, 162, 168],
+                "sbp": [92, 80, 68, 58, 48, 40, 32],
+                "map": [60, 52, 44, 36, 28, 22, 16]
+            },
+            "initial_vitals": {"hr": [95, 130], "sbp": [80, 110]},
+            "key_labs": ["hemoglobin", "hematocrit"],
+            "typical_medications": ["pantoprazole_drip", "octreotide", "blood_transfusion"],
+            "vent_probability": 0.15
+        },
+        "aki": {
+            "full_name": "Acute Kidney Injury",
+            "icu_types": ["micu", "sicu", "mixed"],
+            "trajectory_improving": {
+                "creatinine": [3.8, 3.5, 3.0, 2.5, 2.0, 1.6, 1.3],
+                "potassium": [5.8, 5.5, 5.2, 4.8, 4.5, 4.2, 4.0],
+                "urine_output": [12, 18, 25, 35, 45, 55, 65],
+                "bun": [62, 58, 52, 44, 36, 28, 22]
+            },
+            "trajectory_worsening": {
+                "creatinine": [2.5, 3.2, 4.0, 5.2, 6.5, 8.0, 10.2],
+                "potassium": [5.5, 5.8, 6.1, 6.4, 6.8, 7.2, 7.8],
+                "urine_output": [20, 14, 8, 4, 2, 1, 0],
+                "bun": [45, 55, 68, 82, 98, 118, 142]
+            },
+            "initial_vitals": {"hr": [80, 100], "sbp": [120, 160]},
+            "key_labs": ["creatinine", "potassium", "bun", "urine_output"],
+            "typical_medications": ["IV_fluids", "furosemide", "kayexalate"],
+            "vent_probability": 0.1
+        },
+        "copd_exacerbation": {
+            "full_name": "COPD Exacerbation",
+            "icu_types": ["micu", "mixed"],
+            "trajectory_improving": {
+                "paco2": [75, 68, 60, 55, 50, 48, 46],
+                "ph": [7.28, 7.32, 7.36, 7.38, 7.39, 7.40, 7.40],
+                "spo2": [86, 88, 90, 91, 91, 92, 92],
+                "hr": [108, 102, 96, 90, 86, 82, 78]
+            },
+            "trajectory_worsening": {
+                "paco2": [75, 82, 90, 98, 108, 118, 130],
+                "ph": [7.28, 7.22, 7.16, 7.10, 7.04, 6.98, 6.92],
+                "spo2": [86, 84, 82, 80, 78, 75, 72],
+                "hr": [108, 115, 122, 130, 138, 145, 152]
+            },
+            "initial_vitals": {
+                "hr": [95, 120], "spo2": [84, 92], "respiratory_rate": [22, 32]
+            },
+            "key_labs": ["paco2", "ph", "spo2"],
+            "typical_medications": ["ipratropium", "albuterol", "methylprednisolone", "azithromycin"],
+            "vent_probability": 0.35
+        },
+        "stemi": {
+            "full_name": "ST-Elevation Myocardial Infarction",
+            "icu_types": ["ccu", "mixed"],
+            "trajectory_improving": {
+                "troponin": [2.5, 8.5, 15.2, 18.0, 14.0, 9.5, 5.2],
+                "hr": [95, 88, 82, 78, 74, 72, 70],
+                "sbp": [140, 135, 130, 128, 126, 124, 122],
+                "bnp": [180, 320, 450, 420, 380, 320, 260]
+            },
+            "trajectory_worsening": {
+                "troponin": [2.5, 10.2, 22.5, 35.8, 48.2, 55.0, 58.0],
+                "hr": [95, 110, 125, 138, 148, 155, 162],
+                "sbp": [140, 120, 100, 85, 72, 60, 48],
+                "bnp": [180, 450, 850, 1200, 1650, 2100, 2600]
+            },
+            "initial_vitals": {"hr": [60, 110], "sbp": [90, 170]},
+            "key_labs": ["troponin", "bnp", "ck_mb"],
+            "typical_medications": ["aspirin", "heparin", "metoprolol", "lisinopril"],
+            "vent_probability": 0.2
+        },
+        "hemorrhagic_stroke": {
+            "full_name": "Hemorrhagic Stroke / ICH",
+            "icu_types": ["nicu_neuro", "mixed"],
+            "trajectory_improving": {
+                "sbp": [195, 175, 160, 152, 148, 144, 140],
+                "gcs": [10, 11, 12, 12, 13, 13, 14],
+                "map": [128, 115, 108, 102, 98, 95, 92]
+            },
+            "trajectory_worsening": {
+                "sbp": [195, 205, 215, 225, 232, 238, 240],
+                "gcs": [10, 9, 8, 7, 6, 5, 4],
+                "map": [128, 135, 140, 148, 155, 162, 168]
+            },
+            "initial_vitals": {"hr": [60, 90], "sbp": [165, 220]},
+            "key_labs": ["gcs", "inr"],
+            "typical_medications": ["nicardipine", "mannitol", "levetiracetam"],
+            "vent_probability": 0.45
+        },
+        "pancreatitis": {
+            "full_name": "Acute Pancreatitis",
+            "icu_types": ["micu", "sicu", "mixed"],
+            "trajectory_improving": {
+                "lipase": [2800, 2200, 1600, 1100, 700, 400, 180],
+                "wbc": [18, 16, 14, 12, 10, 9, 8],
+                "temperature_c": [38.8, 38.5, 38.0, 37.6, 37.3, 37.1, 37.0],
+                "hr": [110, 104, 98, 92, 86, 82, 78]
+            },
+            "trajectory_worsening": {
+                "lipase": [2800, 3500, 4200, 5000, 5800, 6200, 6500],
+                "wbc": [18, 22, 26, 28, 24, 18, 10],
+                "temperature_c": [38.8, 39.2, 39.8, 40.2, 40.5, 40.8, 41.0],
+                "hr": [110, 118, 126, 134, 142, 150, 158]
+            },
+            "initial_vitals": {"hr": [100, 125], "temperature_c": [38.0, 39.5]},
+            "key_labs": ["lipase", "wbc", "amylase", "creatinine"],
+            "typical_medications": ["IV_fluids", "morphine", "NPO_status"],
+            "vent_probability": 0.2
+        },
+        "post_cardiac_surgery": {
+            "full_name": "Post-Cardiac Surgery (CABG/Valve)",
+            "icu_types": ["sicu", "ccu", "mixed"],
+            "trajectory_improving": {
+                "troponin": [8.5, 12.0, 15.0, 12.5, 9.0, 5.5, 2.8],
+                "hemoglobin": [10.5, 10.2, 9.8, 9.5, 9.8, 10.0, 10.2],
+                "hr": [82, 80, 78, 76, 74, 72, 70],
+                "chest_tube_output": [85, 70, 50, 35, 20, 10, 5]
+            },
+            "trajectory_worsening": {
+                "troponin": [8.5, 18.0, 28.0, 38.0, 45.0, 50.0, 52.0],
+                "hemoglobin": [10.5, 9.5, 8.2, 7.0, 5.8, 4.8, 4.0],
+                "hr": [82, 92, 102, 115, 128, 140, 152],
+                "chest_tube_output": [85, 180, 280, 350, 420, 480, 520]
+            },
+            "initial_vitals": {"hr": [70, 100], "sbp": [95, 140]},
+            "key_labs": ["troponin", "hemoglobin", "potassium"],
+            "typical_medications": ["norepinephrine", "vasopressin", "furosemide", "heparin"],
+            "vent_probability": 0.9
+        }
+    },
+    "attr_labels": {
+        "heart_rate": "heart rate",
+        "systolic_bp": "systolic BP",
+        "diastolic_bp": "diastolic BP",
+        "map": "MAP",
+        "respiratory_rate": "respiratory rate",
+        "spo2": "SpO2",
+        "temperature_c": "temperature",
+        "potassium": "potassium",
+        "sodium": "sodium",
+        "creatinine": "creatinine",
+        "lactate": "lactate",
+        "hemoglobin": "hemoglobin",
+        "wbc": "WBC",
+        "platelets": "platelets",
+        "glucose": "glucose",
+        "troponin": "troponin",
+        "inr": "INR",
+        "bilirubin": "bilirubin",
+        "gcs": "GCS",
+        "rass": "RASS",
+        "norepinephrine_dose": "norepinephrine dose",
+        "fio2": "FiO2",
+        "peep": "PEEP",
+        "urine_output_ml_hr": "urine output",
+        "ph": "pH",
+        "hco3": "bicarbonate",
+        "paco2": "PaCO2",
+        "bnp": "BNP",
+        "lipase": "lipase",
+        "pf_ratio": "P/F ratio",
+        "anion_gap": "anion gap",
+        "bun": "BUN",
+        "chest_tube_output": "chest tube output"
+    },
+    "attr_units": {
+        "heart_rate": "bpm",
+        "systolic_bp": "mmHg",
+        "diastolic_bp": "mmHg",
+        "map": "mmHg",
+        "respiratory_rate": "breaths/min",
+        "spo2": "%",
+        "temperature_c": "C",
+        "potassium": "mEq/L",
+        "sodium": "mEq/L",
+        "creatinine": "mg/dL",
+        "lactate": "mmol/L",
+        "hemoglobin": "g/dL",
+        "wbc": "K/uL",
+        "platelets": "K/uL",
+        "glucose": "mg/dL",
+        "troponin": "ng/mL",
+        "inr": "",
+        "bilirubin": "mg/dL",
+        "gcs": "",
+        "rass": "",
+        "norepinephrine_dose": "mcg/kg/min",
+        "fio2": "%",
+        "peep": "cmH2O",
+        "urine_output_ml_hr": "mL/hr",
+        "ph": "",
+        "hco3": "mEq/L",
+        "paco2": "mmHg",
+        "bnp": "pg/mL",
+        "lipase": "U/L",
+        "pf_ratio": "",
+        "anion_gap": "mEq/L",
+        "bun": "mg/dL",
+        "chest_tube_output": "mL/hr"
+    }
+}

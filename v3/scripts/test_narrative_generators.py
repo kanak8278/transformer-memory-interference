@@ -106,11 +106,16 @@ def validate_trial(trial: dict, domain: str) -> list:
 
     if "entity_tracking" in trial:
         et = trial["entity_tracking"]
-        # 5. Entity tracking has at least 2 distinct values per queried entity
+        # 5. Queried entity must have at least 2 distinct values (needed for RI != PI)
+        # Non-queried entities may have 1 value (they're background context)
+        queried_entity = trial.get("questions", {}).get("RI", {}).get("target_entity", "")
+        queried_attr = trial.get("questions", {}).get("RI", {}).get("target_attribute", "")
+        queried_key = f"{queried_entity} / {queried_attr}"
         for key, values in et.items():
             if len(values) < 1:
                 errors.append(f"entity_tracking['{key}'] has no values")
-            if len(values) < 2:
+            # Only require 2+ values for the QUERIED entity
+            if key == queried_key and len(values) < 2:
                 errors.append(f"entity_tracking['{key}'] has only 1 value — no interference")
 
     if "narrative" in trial:

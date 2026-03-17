@@ -1,0 +1,259 @@
+{
+    "header_templates": [
+        "Medical ICU, {hospital}. {date}, {time}. {num_patients} patients currently on service under Dr. {attending}.",
+        "{unit_name}, {hospital}. {date}. Attending: Dr. {attending}. {weather}.",
+        "{unit_name} — {hospital}. {date}, {time}. Overnight call: Dr. {attending}. {num_patients} active beds.",
+        "Shift report, {unit_name} at {hospital}. {date}. Dr. {attending} taking over. {num_patients} patients.",
+        "{hospital}, {unit_name}. {time} handoff. {num_patients} patients on census. Attending: Dr. {attending}.",
+        "{unit_name} census for {date}. {hospital}. On service: Dr. {attending}. {num_patients} beds occupied.",
+        "Morning rounds, {unit_name}, {hospital}. {date}. Attending: Dr. {attending}. {num_patients} patients to discuss.",
+        "{hospital} — {unit_name}. {date}, {time}. Dr. {attending} on call. {num_patients} patients currently admitted."
+    ],
+    "vitals_handoff": [
+        "Bed {bed}: {patient_name}, {age}yo {sex}, {diagnosis}. {attr_label}: {attr_value}. HR {hr}, BP {sbp}/{dbp}, MAP {map}, temp {temp}C, SpO2 {spo2}%. {note}",
+        "{patient_name} — Bed {bed}, {age}yo {sex}. Dx: {diagnosis}. Vitals: {attr_label} {attr_value}, HR {hr}, BP {sbp}/{dbp}, MAP {map}. {note}",
+        "Bed {bed}, {patient_name} ({age}yo {sex}): {diagnosis}. Current {attr_label} is {attr_value}. HR {hr}, MAP {map}, temp {temp}C. {note}",
+        "{patient_name}, Bed {bed}. {age}yo {sex} with {diagnosis}. {attr_label}: {attr_value}. BP {sbp}/{dbp}, MAP {map}, SpO2 {spo2}%. {note}",
+        "Handoff — Bed {bed}: {patient_name}, {age}yo {sex}, admitted with {diagnosis}. {attr_label} currently {attr_value}. HR {hr}, BP {sbp}/{dbp}. {note}",
+        "Bed {bed} ({patient_name}, {age}yo {sex}, {diagnosis}): {attr_label} = {attr_value}. MAP {map}, temp {temp}C, SpO2 {spo2}%. {note}",
+        "{patient_name}, Bed {bed} — {age}yo {sex}, {diagnosis}. Latest {attr_label}: {attr_value}. HR {hr}, BP {sbp}/{dbp}, MAP {map}. {note}",
+        "Bed {bed}: {patient_name} ({age}yo {sex}, {diagnosis}). {attr_label} at {attr_value}. Vitals otherwise: HR {hr}, MAP {map}, SpO2 {spo2}%. {note}"
+    ],
+    "vitals_progress": [
+        "At the {time} assessment, {patient_name}'s {attr_label} was {attr_value}. Blood pressure {sbp}/{dbp}, MAP {map}. Temperature {temp}C. {clinical_note}",
+        "{patient_name}'s {time} vitals: {attr_label} {attr_value}, BP {sbp}/{dbp}, MAP {map}, SpO2 {spo2}%. {clinical_note}",
+        "On nursing check at {time}, {patient_name} had {attr_label} of {attr_value}. BP {sbp}/{dbp}, MAP {map}, temp {temp}C. {clinical_note}",
+        "Vitals at {time} for {patient_name}: {attr_label} = {attr_value}. BP {sbp}/{dbp}, MAP {map}, SpO2 {spo2}%. {clinical_note}",
+        "{patient_name}'s {attr_label} measured {attr_value} at {time}. BP {sbp}/{dbp}, MAP {map}, temperature {temp}C. {clinical_note}",
+        "At {time}, {patient_name}: {attr_label} {attr_value}, BP {sbp}/{dbp}, MAP {map}. SpO2 {spo2}%. {clinical_note}",
+        "The {time} vital signs check for {patient_name} showed {attr_label} at {attr_value}. MAP {map}, temp {temp}C. {clinical_note}",
+        "Nursing documented {patient_name}'s {attr_label} as {attr_value} at {time}. BP {sbp}/{dbp}, MAP {map}, SpO2 {spo2}%. {clinical_note}"
+    ],
+    "lab_result_handoff": [
+        "{patient_name} — {attr_label} returned at {attr_value}. {lab_trend}.",
+        "Labs back for {patient_name}: {attr_label} = {attr_value}. {lab_trend}.",
+        "{patient_name}'s {attr_label} came back at {attr_value}. {lab_trend}.",
+        "{attr_label} for {patient_name}: {attr_value}. {lab_trend}.",
+        "Lab result — {patient_name}: {attr_label} {attr_value}. {lab_trend}.",
+        "{patient_name}: {attr_label} resulted at {attr_value}. {lab_trend}.",
+        "New result for {patient_name} — {attr_label} now {attr_value}. {lab_trend}.",
+        "{patient_name}'s latest {attr_label}: {attr_value}. {lab_trend}."
+    ],
+    "lab_result_progress": [
+        "The {time} labs for {patient_name} showed {attr_label} at {attr_value} {units}, {comparison}. {clinical_significance}",
+        "{patient_name}'s {time} panel came back: {attr_label} {attr_value} {units}. {comparison}. {clinical_significance}",
+        "Labs drawn at {time} for {patient_name}: {attr_label} = {attr_value} {units}, {comparison}. {clinical_significance}",
+        "At {time}, {patient_name}'s {attr_label} resulted at {attr_value} {units}. {comparison}. {clinical_significance}",
+        "Morning labs for {patient_name}: {attr_label} {attr_value} {units}. {comparison}. {clinical_significance}",
+        "{patient_name}'s {attr_label} from the {time} draw: {attr_value} {units}. {comparison}. {clinical_significance}",
+        "The {time} lab result for {patient_name} — {attr_label}: {attr_value} {units}, {comparison}. {clinical_significance}",
+        "Lab update for {patient_name} at {time}: {attr_label} {attr_value} {units}. {comparison}. {clinical_significance}"
+    ],
+    "medication_change": [
+        "Dr. {physician} adjusted {patient_name}'s {medication} {direction} to {new_dose} {units}. {attr_label} response: {attr_value}.",
+        "{patient_name}'s {medication} was titrated {direction} to {new_dose} {units} by Dr. {physician}. {attr_label}: {attr_value}.",
+        "Dr. {physician} increased {patient_name}'s {medication} to {new_dose} {units}. Current {attr_label}: {attr_value}.",
+        "{patient_name} — {medication} dose {direction} to {new_dose} {units} per Dr. {physician}. {attr_label} now {attr_value}.",
+        "Medication change for {patient_name}: {medication} adjusted to {new_dose} {units}. {attr_label}: {attr_value}.",
+        "Per Dr. {physician}, {patient_name}'s {medication} titrated to {new_dose} {units}. {attr_label} = {attr_value}.",
+        "{patient_name}: {medication} {direction} to {new_dose} {units} by Dr. {physician}. {attr_label} response: {attr_value}.",
+        "Dr. {physician} ordered {patient_name}'s {medication} at {new_dose} {units}. {attr_label} at time of change: {attr_value}."
+    ],
+    "ventilator_change": [
+        "Respiratory therapy weaned {patient_name}'s FiO2 from {old_fio2}% to {new_fio2}%. {attr_label}: {attr_value}.",
+        "{patient_name}'s ventilator settings adjusted — FiO2 {old_fio2}% → {new_fio2}%, PEEP {peep} cmH2O. {attr_label}: {attr_value}.",
+        "Vent settings updated for {patient_name}: FiO2 down to {new_fio2}% from {old_fio2}%. Current {attr_label}: {attr_value}.",
+        "RT weaned {patient_name} to FiO2 {new_fio2}% (from {old_fio2}%). {attr_label} = {attr_value}.",
+        "{patient_name} tolerating ventilator wean — FiO2 now {new_fio2}% (was {old_fio2}%). {attr_label}: {attr_value}.",
+        "Ventilator change for {patient_name}: FiO2 {old_fio2}% to {new_fio2}%, PEEP {peep}. {attr_label}: {attr_value}.",
+        "RT adjusted {patient_name}'s FiO2 to {new_fio2}% from {old_fio2}%. {attr_label} at {attr_value}.",
+        "{patient_name} — FiO2 weaned from {old_fio2}% to {new_fio2}% by respiratory therapy. {attr_label}: {attr_value}."
+    ],
+    "clinical_deterioration": [
+        "At {time}, {patient_name}'s monitor alarmed — {attr_label} had jumped to {attr_value}. {clinical_response}",
+        "{patient_name} deteriorated at {time}: {attr_label} now {attr_value}. {clinical_response}",
+        "Rapid change in {patient_name}'s status at {time} — {attr_label} worsened to {attr_value}. {clinical_response}",
+        "Alert at {time}: {patient_name}'s {attr_label} critically elevated at {attr_value}. {clinical_response}",
+        "At {time}, nursing noted acute change — {patient_name}'s {attr_label} at {attr_value}. {clinical_response}",
+        "{patient_name} became acutely ill at {time}. {attr_label}: {attr_value}. {clinical_response}",
+        "Deterioration event for {patient_name} at {time}: {attr_label} = {attr_value}. {clinical_response}",
+        "At {time}, {patient_name}'s condition worsened — {attr_label} now {attr_value}. {clinical_response}"
+    ],
+    "clinical_improvement": [
+        "{patient_name} reached a key milestone at {time}: {attr_label} improved to {attr_value}. {milestone_note}",
+        "Improvement noted for {patient_name} at {time} — {attr_label} now {attr_value}. {milestone_note}",
+        "Positive trend for {patient_name}: {attr_label} down to {attr_value} at {time}. {milestone_note}",
+        "At {time}, {patient_name}'s {attr_label} improved to {attr_value}. {milestone_note}",
+        "Good news at {time} — {patient_name}'s {attr_label} reached {attr_value}. {milestone_note}",
+        "{patient_name} showing clinical improvement at {time}: {attr_label} = {attr_value}. {milestone_note}",
+        "At {time}, {patient_name}'s {attr_label} responded favorably, now {attr_value}. {milestone_note}",
+        "Improvement at {time} for {patient_name}: {attr_label} trended to {attr_value}. {milestone_note}"
+    ],
+    "shift_handoff_summary": [
+        "Bed {bed}, {patient_name}, {age}yo, {diagnosis}, ICU day {icu_day}. Overnight: {overnight_summary}. Current {attr_label}: {attr_value}. Plan: {plan}",
+        "{patient_name} (Bed {bed}): {age}yo, {diagnosis}, day {icu_day} in the ICU. {overnight_summary}. {attr_label} = {attr_value}. Plan: {plan}",
+        "Handoff — Bed {bed}: {patient_name}, {age}yo, {diagnosis}. ICU day {icu_day}. {overnight_summary}. {attr_label} currently {attr_value}. Plan: {plan}",
+        "Bed {bed}: {patient_name}, {age}yo with {diagnosis}, ICU day {icu_day}. Events: {overnight_summary}. {attr_label}: {attr_value}. Plan: {plan}",
+        "{patient_name} — Bed {bed}, {age}yo, {diagnosis}, day {icu_day}. {overnight_summary}. {attr_label} at {attr_value}. Plan: {plan}",
+        "Summary for Bed {bed} ({patient_name}, {age}yo, {diagnosis}): day {icu_day}. {overnight_summary}. {attr_label} = {attr_value}. Plan: {plan}",
+        "Shift summary — {patient_name}, Bed {bed}: {age}yo, {diagnosis}, ICU day {icu_day}. {overnight_summary}. {attr_label}: {attr_value}. Plan: {plan}",
+        "Bed {bed}, {patient_name} ({age}yo, {diagnosis}, day {icu_day} ICU): {overnight_summary}. {attr_label} = {attr_value}. Plan: {plan}"
+    ],
+    "filler_templates": [
+        "Foley output over the past {hours} hours: {urine_ml} mL — {urine_assessment}.",
+        "Chest X-ray from this morning showed {cxr_finding}.",
+        "Family was at bedside. {family_note}.",
+        "DVT prophylaxis with {prophylaxis} continued.",
+        "Blood cultures from {culture_date} resulted as {culture_result}.",
+        "Nursing repositioned {patient_name} for pressure injury prevention.",
+        "PT/OT evaluated {patient_name} — mobility assessment pending.",
+        "Pain score documented as {pain_score}/10. {pain_management}.",
+        "Nutrition: {patient_name} on {nutrition_route}. Goal calories {calorie_goal} kcal/day.",
+        "Skin intact without new breakdown per nursing assessment.",
+        "Pharmacy reviewed {patient_name}'s medication list for interactions.",
+        "Social work consulted for discharge planning discussion.",
+        "Chaplaincy visited at family's request.",
+        "Central line site assessed — no erythema or discharge noted.",
+        "Morning glucose {glucose_val} mg/dL — {insulin_note}.",
+        "Overnight, {patient_name} required {overnight_interventions}.",
+        "Code status confirmed: {code_status}.",
+        "Telemetry showed {telemetry_finding} — no intervention required.",
+        "Bowel sounds active in all four quadrants.",
+        "Head of bed kept at 30-45 degrees for aspiration precautions.",
+        "Oral care performed per VAP bundle protocol.",
+        "Sedation holiday planned for tomorrow morning.",
+        "Restraints in place for safety — reassessed every shift.",
+        "Glucose target {glucose_target} mg/dL per insulin drip protocol.",
+        "Intake and output for the past 24 hours: {intake_ml} mL in, {output_ml} mL out — {balance_note}.",
+        "The palliative care team was consulted for goals of care discussion.",
+        "Echocardiogram ordered for further cardiac evaluation."
+    ],
+    "filler_variable_pools": {
+        "cxr_findings": [
+            "bilateral infiltrates, consistent with prior imaging",
+            "improved aeration compared to yesterday",
+            "persistent left lower lobe opacity",
+            "clear fields bilaterally",
+            "no acute cardiopulmonary process",
+            "new right pleural effusion",
+            "worsening bilateral infiltrates"
+        ],
+        "family_notes": [
+            "updated on current status and plan",
+            "expressed understanding of the goals of care",
+            "no new concerns voiced",
+            "requested a meeting with the attending physician",
+            "asked about prognosis and timeline for recovery"
+        ],
+        "urine_assessments": [
+            "adequate for now",
+            "below target — consider fluid challenge",
+            "excellent response to diuresis",
+            "concerning for AKI",
+            "improving from yesterday's output"
+        ],
+        "lab_trends": [
+            "up from prior",
+            "down from prior",
+            "stable",
+            "trending in the right direction",
+            "worsening from yesterday",
+            "significantly improved",
+            "within normal limits now"
+        ],
+        "clinical_notes": [
+            "the team continued current management",
+            "no urgent interventions needed at this time",
+            "plans to reassess at morning rounds",
+            "discussed with attending",
+            "monitored closely"
+        ],
+        "clinical_responses": [
+            "the team was called to bedside immediately",
+            "vasopressors were started",
+            "a fluid bolus was ordered",
+            "the attending was paged",
+            "the rapid response team was activated"
+        ],
+        "prophylaxis_options": ["subcutaneous heparin", "enoxaparin", "sequential compression devices"],
+        "culture_results": [
+            "no growth at 24 hours",
+            "MSSA in 2/2 bottles",
+            "Gram-negative rods, sensitivities pending",
+            "no growth to date",
+            "coagulase-negative Staph — likely contaminant",
+            "Klebsiella pneumoniae, pansensitive",
+            "MRSA, vancomycin MIC 1.0"
+        ],
+        "pain_managements": [
+            "acetaminophen continued",
+            "low-dose opioid as needed",
+            "fentanyl drip titrated",
+            "non-pharmacologic measures in place"
+        ],
+        "nutrition_routes": [
+            "enteral feeds via NG tube",
+            "oral diet as tolerated",
+            "TPN via central line",
+            "soft diet with aspiration precautions"
+        ],
+        "overnight_interventions": [
+            "one fluid bolus for MAP <65",
+            "repositioning every 2 hours",
+            "PRN antiemetic for nausea",
+            "supplemental oxygen adjustment",
+            "no interventions overnight"
+        ],
+        "code_statuses": ["full code", "DNR/DNI", "DNR, intubate if reversible", "comfort measures only"],
+        "telemetry_findings": [
+            "sinus tachycardia",
+            "normal sinus rhythm",
+            "occasional PVCs",
+            "sinus bradycardia with rate in the 50s",
+            "atrial fibrillation with rate-controlled response"
+        ],
+        "milestone_notes": [
+            "vasopressors were discontinued",
+            "the team discussed weaning ventilatory support",
+            "transfer to step-down considered",
+            "diet advanced to clears",
+            "patient was extubated successfully"
+        ],
+        "overnight_summaries": [
+            "stable overnight, no acute events",
+            "required two fluid boluses for hypotension",
+            "one episode of acute desaturation, resolved with suctioning",
+            "afebrile, hemodynamically stable",
+            "hypotensive episode at 0200, vasopressors increased",
+            "anxiety agitation required PRN lorazepam",
+            "uneventful overnight course"
+        ],
+        "plan_options": [
+            "continue current antibiotics, reassess culture data",
+            "wean vasopressors as tolerated, target MAP >65",
+            "continue insulin drip, glucose checks q2h",
+            "diuresis for fluid overload, goal negative 1L",
+            "repeat labs in AM, renal consult if creatinine worsens",
+            "consider extubation trial tomorrow if criteria met",
+            "palliative care to revisit goals of care",
+            "monitor closely, no acute changes to management"
+        ],
+        "comparisons": [
+            "up from prior",
+            "improved from yesterday",
+            "slightly worse than baseline",
+            "unchanged from prior draw",
+            "trending toward normal",
+            "critically elevated",
+            "approaching goal range"
+        ],
+        "clinical_significances": [
+            "the team continued to monitor closely",
+            "dose adjustment ordered",
+            "nephrology notified",
+            "no immediate intervention required",
+            "repeat level in 6 hours",
+            "discussed at morning rounds"
+        ]
+    }
+}
