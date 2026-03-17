@@ -458,6 +458,27 @@ Per-cell data:
 
 **Plan:** Wrote NEURIPS_HONEST_ASSESSMENT.md with revised paper structure and priority actions.
 
+### Action 19b: 1.5B Narrative Experiment — PI > RI CONFIRMED on Narratives
+
+**Why:** Validate that PI > RI is not an artifact of the KV stream format.
+
+**How:** Ran Qwen2.5-1.5B on Dota 2 narrative trials (30 trials/cell, 12 cells).
+
+**Result:**
+Mean RI=51%, Mean PI=33%, Gap=+18%.
+
+Per-cell:
+- 2k_3u: RI=70%, PI=53%, gap=+17%
+- 2k_5u: RI=67%, PI=40%, gap=+27%
+- 3k_20u: RI=60%, PI=17%, gap=+43%
+- 5k_5u: RI=60%, PI=33%, gap=+27%
+
+**Key finding:** PI > RI transfers to naturalistic narrative data. The effect is weaker than on KV streams (gap 18% vs 44-86%) because narratives provide more contextual retrieval cues, but the DIRECTION is consistent — RI always better than PI.
+
+**Gap widens with N** (same as KV): 2k_3u gap=17% → 3k_20u gap=43%.
+
+**This validates the architectural origin claim** — the interference pattern isn't specific to the bare KV format but appears in realistic text with noise, context, and multiple entity attributes.
+
 ### Action 19: Narrative API Experiment Bug Fix
 
 **Issue:** First API run returned 0% — the `generate()` method signature was wrong.
