@@ -408,6 +408,62 @@ Gemma's primacy errors may be because it has only 4 heads — not enough capacit
 
 **This is actually a BETTER story for the paper:** Different architectures show different failure modes, but PI > RI is universal. The failure MECHANISM varies (recency imprecision vs primacy default), but the OUTCOME (PI > RI) is the same.
 
+### Action 16: Narrative Experiment on Claude Haiku (API)
+
+**Why:** Test if PI > RI transfers from KV streams to naturalistic text (Dota 2 match narratives).
+
+**How:** Used existing 8000 pre-generated Dota narrative trials. Each trial has a match commentary with tracked entity attributes (gold), plus RI ("first mentioned") and PI ("most recent update") questions.
+
+**Result (Claude Haiku, 20 trials/cell, 12 cells):**
+Mean RI=91%, Mean PI=93%, Gap=-3%. NO significant PI > RI asymmetry.
+
+**Interpretation (revised per user feedback):** Haiku is too powerful for these N values (3-20 updates in narratives). On KV streams, Haiku only showed PI > RI at N=50-200. The narrative experiment needs either higher N or a smaller model.
+
+**User correction:** "It's just a much bigger size model. If you crank up the key and pairs then it should show." — Correct. Need to match the difficulty level.
+
+### Action 17: Mamba-130M SSM Control (CRITICAL)
+
+**Why:** The theory predicts SSMs (no causal attention) should show DIFFERENT interference patterns. This is the strongest architectural control test.
+
+**How:** Loaded Mamba-130M via HuggingFace (sequential fallback, no CUDA kernels needed). Ran Stage 1 with focused grid.
+
+**Result (8 cells so far):**
+Mean RI=1%, Mean PI=13%, Gap=-12%. PI CONSISTENTLY BETTER than RI.
+
+Per-cell data:
+- 2k_5u: RI=4%, PI=20%, gap=-16%
+- 3k_5u: RI=2%, PI=24%, gap=-22%
+- Every cell: gap is NEGATIVE (PI > RI reversed)
+
+**BUT: Massive garbage (60-94%).** Mamba-130M is a tiny base model — it can't follow instructions at all. The numbers are noisy and we can't make strong claims.
+
+**What this means for the paper:**
+- The DIRECTION is reversed (PI better than RI for SSM) — suggestive
+- But garbage is too high to be conclusive
+- Need a bigger SSM model (Mamba-2.8B, or Falcon Mamba 7B) or instruction-tuned SSM
+- Or: use the SSM as base model + compare with transformer base model (Pythia) of similar size
+
+**Action needed:** Find an instruct-tuned SSM or a larger Mamba model.
+
+### Action 18: NeurIPS Honest Assessment Written
+
+**Why:** User challenged whether we're NeurIPS-ready. Answer: no, not yet.
+
+**Key gaps identified:**
+1. No original theoretical contribution (we validate others' theories)
+2. Stage 3 causal effects are weak (+0.03-0.07 deltas)
+3. No SSM control with clean data (Mamba too small/garbage)
+4. Need formal PI accuracy prediction (scaling law)
+5. Need better causal experiments (layer-level, positional encoding ablation)
+
+**Plan:** Wrote NEURIPS_HONEST_ASSESSMENT.md with revised paper structure and priority actions.
+
+### Action 19: Narrative API Experiment Bug Fix
+
+**Issue:** First API run returned 0% — the `generate()` method signature was wrong.
+**Fix:** Changed from kwargs (system_prompt, max_tokens) to inline prompt with system instructions.
+**Result:** Second run worked correctly.
+
 ### Session Summary (2026-03-17)
 
 **Total experiments completed this session:**

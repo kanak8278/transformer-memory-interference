@@ -1,0 +1,5853 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "dataset": "dota2_gold_same",
+  "config": {
+    "key_levels": [
+      2,
+      3,
+      5
+    ],
+    "update_levels": [
+      3,
+      5,
+      10,
+      20
+    ],
+    "trials_per_cell": 30
+  },
+  "results": {
+    "2k_3u": {
+      "RI": [
+        {
+          "correct": true,
+          "expected": "2328",
+          "predicted": "2328",
+          "extracted": "2328",
+          "n_tokens": 484,
+          "trial_id": "dota2_200200"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 336,
+          "trial_id": "dota2_200201"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 487,
+          "trial_id": "dota2_200202"
+        },
+        {
+          "correct": true,
+          "expected": "1211",
+          "predicted": "1211",
+          "extracted": "1211",
+          "n_tokens": 440,
+          "trial_id": "dota2_200203"
+        },
+        {
+          "correct": true,
+          "expected": "509",
+          "predicted": "509",
+          "extracted": "509",
+          "n_tokens": 431,
+          "trial_id": "dota2_200204"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 490,
+          "trial_id": "dota2_200205"
+        },
+        {
+          "correct": true,
+          "expected": "1132",
+          "predicted": "1132",
+          "extracted": "1132",
+          "n_tokens": 495,
+          "trial_id": "dota2_200206"
+        },
+        {
+          "correct": true,
+          "expected": "1770",
+          "predicted": "1770",
+          "extracted": "1770",
+          "n_tokens": 339,
+          "trial_id": "dota2_200207"
+        },
+        {
+          "correct": false,
+          "expected": "878",
+          "predicted": "595",
+          "extracted": "595",
+          "n_tokens": 288,
+          "trial_id": "dota2_200208"
+        },
+        {
+          "correct": true,
+          "expected": "435",
+          "predicted": "435",
+          "extracted": "435",
+          "n_tokens": 294,
+          "trial_id": "dota2_200209"
+        },
+        {
+          "correct": false,
+          "expected": "1065",
+          "predicted": "1382",
+          "extracted": "1382",
+          "n_tokens": 358,
+          "trial_id": "dota2_200210"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "120",
+          "extracted": "120",
+          "n_tokens": 408,
+          "trial_id": "dota2_200211"
+        },
+        {
+          "correct": true,
+          "expected": "1896",
+          "predicted": "1896",
+          "extracted": "1896",
+          "n_tokens": 351,
+          "trial_id": "dota2_200212"
+        },
+        {
+          "correct": true,
+          "expected": "503",
+          "predicted": "503",
+          "extracted": "503",
+          "n_tokens": 427,
+          "trial_id": "dota2_200213"
+        },
+        {
+          "correct": true,
+          "expected": "2424",
+          "predicted": "2424",
+          "extracted": "2424",
+          "n_tokens": 299,
+          "trial_id": "dota2_200214"
+        },
+        {
+          "correct": true,
+          "expected": "2281",
+          "predicted": "2281",
+          "extracted": "2281",
+          "n_tokens": 350,
+          "trial_id": "dota2_200215"
+        },
+        {
+          "correct": false,
+          "expected": "2893",
+          "predicted": "3900",
+          "extracted": "3900",
+          "n_tokens": 439,
+          "trial_id": "dota2_200216"
+        },
+        {
+          "correct": true,
+          "expected": "1363",
+          "predicted": "1363",
+          "extracted": "1363",
+          "n_tokens": 358,
+          "trial_id": "dota2_200217"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1078",
+          "extracted": "1078",
+          "n_tokens": 466,
+          "trial_id": "dota2_200218"
+        },
+        {
+          "correct": true,
+          "expected": "737",
+          "predicted": "737",
+          "extracted": "737",
+          "n_tokens": 368,
+          "trial_id": "dota2_200219"
+        },
+        {
+          "correct": false,
+          "expected": "1243",
+          "predicted": "122",
+          "extracted": "122",
+          "n_tokens": 360,
+          "trial_id": "dota2_200220"
+        },
+        {
+          "correct": true,
+          "expected": "601",
+          "predicted": "601",
+          "extracted": "601",
+          "n_tokens": 262,
+          "trial_id": "dota2_200221"
+        },
+        {
+          "correct": true,
+          "expected": "2749",
+          "predicted": "2749",
+          "extracted": "2749",
+          "n_tokens": 458,
+          "trial_id": "dota2_200222"
+        },
+        {
+          "correct": true,
+          "expected": "1440",
+          "predicted": "1440",
+          "extracted": "1440",
+          "n_tokens": 312,
+          "trial_id": "dota2_200223"
+        },
+        {
+          "correct": false,
+          "expected": "1796",
+          "predicted": "1183",
+          "extracted": "1183",
+          "n_tokens": 409,
+          "trial_id": "dota2_200224"
+        },
+        {
+          "correct": true,
+          "expected": "1609",
+          "predicted": "1609",
+          "extracted": "1609",
+          "n_tokens": 434,
+          "trial_id": "dota2_200225"
+        },
+        {
+          "correct": false,
+          "expected": "752",
+          "predicted": "618",
+          "extracted": "618",
+          "n_tokens": 275,
+          "trial_id": "dota2_200226"
+        },
+        {
+          "correct": true,
+          "expected": "997",
+          "predicted": "997",
+          "extracted": "997",
+          "n_tokens": 319,
+          "trial_id": "dota2_200227"
+        },
+        {
+          "correct": true,
+          "expected": "2017",
+          "predicted": "2017",
+          "extracted": "2017",
+          "n_tokens": 412,
+          "trial_id": "dota2_200228"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "505",
+          "extracted": "505",
+          "n_tokens": 334,
+          "trial_id": "dota2_200229"
+        }
+      ],
+      "PI": [
+        {
+          "correct": false,
+          "expected": "204",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 485,
+          "trial_id": "dota2_200200"
+        },
+        {
+          "correct": false,
+          "expected": "740",
+          "predicted": "4650",
+          "extracted": "4650",
+          "n_tokens": 330,
+          "trial_id": "dota2_200201"
+        },
+        {
+          "correct": false,
+          "expected": "150",
+          "predicted": "448",
+          "extracted": "448",
+          "n_tokens": 489,
+          "trial_id": "dota2_200202"
+        },
+        {
+          "correct": true,
+          "expected": "736",
+          "predicted": "736",
+          "extracted": "736",
+          "n_tokens": 436,
+          "trial_id": "dota2_200203"
+        },
+        {
+          "correct": false,
+          "expected": "699",
+          "predicted": "599",
+          "extracted": "599",
+          "n_tokens": 431,
+          "trial_id": "dota2_200204"
+        },
+        {
+          "correct": true,
+          "expected": "252",
+          "predicted": "252",
+          "extracted": "252",
+          "n_tokens": 487,
+          "trial_id": "dota2_200205"
+        },
+        {
+          "correct": true,
+          "expected": "2648",
+          "predicted": "2648",
+          "extracted": "2648",
+          "n_tokens": 491,
+          "trial_id": "dota2_200206"
+        },
+        {
+          "correct": true,
+          "expected": "2453",
+          "predicted": "2453",
+          "extracted": "2453",
+          "n_tokens": 338,
+          "trial_id": "dota2_200207"
+        },
+        {
+          "correct": false,
+          "expected": "420",
+          "predicted": "595",
+          "extracted": "595",
+          "n_tokens": 289,
+          "trial_id": "dota2_200208"
+        },
+        {
+          "correct": true,
+          "expected": "921",
+          "predicted": "921",
+          "extracted": "921",
+          "n_tokens": 290,
+          "trial_id": "dota2_200209"
+        },
+        {
+          "correct": false,
+          "expected": "1939",
+          "predicted": "2099",
+          "extracted": "2099",
+          "n_tokens": 359,
+          "trial_id": "dota2_200210"
+        },
+        {
+          "correct": false,
+          "expected": "497",
+          "predicted": "120",
+          "extracted": "120",
+          "n_tokens": 405,
+          "trial_id": "dota2_200211"
+        },
+        {
+          "correct": true,
+          "expected": "2054",
+          "predicted": "2054",
+          "extracted": "2054",
+          "n_tokens": 346,
+          "trial_id": "dota2_200212"
+        },
+        {
+          "correct": true,
+          "expected": "891",
+          "predicted": "891",
+          "extracted": "891",
+          "n_tokens": 429,
+          "trial_id": "dota2_200213"
+        },
+        {
+          "correct": true,
+          "expected": "2726",
+          "predicted": "2726",
+          "extracted": "2726",
+          "n_tokens": 300,
+          "trial_id": "dota2_200214"
+        },
+        {
+          "correct": true,
+          "expected": "103",
+          "predicted": "103",
+          "extracted": "103",
+          "n_tokens": 347,
+          "trial_id": "dota2_200215"
+        },
+        {
+          "correct": true,
+          "expected": "3431",
+          "predicted": "3431",
+          "extracted": "3431",
+          "n_tokens": 433,
+          "trial_id": "dota2_200216"
+        },
+        {
+          "correct": false,
+          "expected": "180",
+          "predicted": "1800",
+          "extracted": "1800",
+          "n_tokens": 354,
+          "trial_id": "dota2_200217"
+        },
+        {
+          "correct": false,
+          "expected": "275",
+          "predicted": "5200",
+          "extracted": "5200",
+          "n_tokens": 467,
+          "trial_id": "dota2_200218"
+        },
+        {
+          "correct": false,
+          "expected": "843",
+          "predicted": "737",
+          "extracted": "737",
+          "n_tokens": 368,
+          "trial_id": "dota2_200219"
+        },
+        {
+          "correct": true,
+          "expected": "1597",
+          "predicted": "1597",
+          "extracted": "1597",
+          "n_tokens": 358,
+          "trial_id": "dota2_200220"
+        },
+        {
+          "correct": true,
+          "expected": "651",
+          "predicted": "651",
+          "extracted": "651",
+          "n_tokens": 258,
+          "trial_id": "dota2_200221"
+        },
+        {
+          "correct": true,
+          "expected": "2941",
+          "predicted": "2941",
+          "extracted": "2941",
+          "n_tokens": 454,
+          "trial_id": "dota2_200222"
+        },
+        {
+          "correct": true,
+          "expected": "2261",
+          "predicted": "2261",
+          "extracted": "2261",
+          "n_tokens": 312,
+          "trial_id": "dota2_200223"
+        },
+        {
+          "correct": true,
+          "expected": "1183",
+          "predicted": "1183",
+          "extracted": "1183",
+          "n_tokens": 403,
+          "trial_id": "dota2_200224"
+        },
+        {
+          "correct": true,
+          "expected": "2763",
+          "predicted": "2763",
+          "extracted": "2763",
+          "n_tokens": 431,
+          "trial_id": "dota2_200225"
+        },
+        {
+          "correct": false,
+          "expected": "979",
+          "predicted": "618",
+          "extracted": "618",
+          "n_tokens": 275,
+          "trial_id": "dota2_200226"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "997",
+          "extracted": "997",
+          "n_tokens": 317,
+          "trial_id": "dota2_200227"
+        },
+        {
+          "correct": false,
+          "expected": "273",
+          "predicted": "3900",
+          "extracted": "3900",
+          "n_tokens": 413,
+          "trial_id": "dota2_200228"
+        },
+        {
+          "correct": false,
+          "expected": "171",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 330,
+          "trial_id": "dota2_200229"
+        }
+      ]
+    },
+    "2k_5u": {
+      "RI": [
+        {
+          "correct": false,
+          "expected": "990",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 926,
+          "trial_id": "dota2_200400"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 612,
+          "trial_id": "dota2_200401"
+        },
+        {
+          "correct": true,
+          "expected": "852",
+          "predicted": "852",
+          "extracted": "852",
+          "n_tokens": 456,
+          "trial_id": "dota2_200402"
+        },
+        {
+          "correct": true,
+          "expected": "287",
+          "predicted": "287",
+          "extracted": "287",
+          "n_tokens": 598,
+          "trial_id": "dota2_200403"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 484,
+          "trial_id": "dota2_200404"
+        },
+        {
+          "correct": true,
+          "expected": "1185",
+          "predicted": "1185",
+          "extracted": "1185",
+          "n_tokens": 601,
+          "trial_id": "dota2_200405"
+        },
+        {
+          "correct": false,
+          "expected": "641",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 608,
+          "trial_id": "dota2_200406"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "4650",
+          "extracted": "4650",
+          "n_tokens": 674,
+          "trial_id": "dota2_200407"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 825,
+          "trial_id": "dota2_200408"
+        },
+        {
+          "correct": false,
+          "expected": "1333",
+          "predicted": "1198",
+          "extracted": "1198",
+          "n_tokens": 494,
+          "trial_id": "dota2_200409"
+        },
+        {
+          "correct": true,
+          "expected": "1420",
+          "predicted": "1420",
+          "extracted": "1420",
+          "n_tokens": 606,
+          "trial_id": "dota2_200410"
+        },
+        {
+          "correct": true,
+          "expected": "832",
+          "predicted": "832",
+          "extracted": "832",
+          "n_tokens": 527,
+          "trial_id": "dota2_200411"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "189",
+          "extracted": "189",
+          "n_tokens": 460,
+          "trial_id": "dota2_200412"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 864,
+          "trial_id": "dota2_200413"
+        },
+        {
+          "correct": false,
+          "expected": "758",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 465,
+          "trial_id": "dota2_200414"
+        },
+        {
+          "correct": true,
+          "expected": "495",
+          "predicted": "495",
+          "extracted": "495",
+          "n_tokens": 1091,
+          "trial_id": "dota2_200415"
+        },
+        {
+          "correct": true,
+          "expected": "502",
+          "predicted": "502",
+          "extracted": "502",
+          "n_tokens": 820,
+          "trial_id": "dota2_200416"
+        },
+        {
+          "correct": false,
+          "expected": "1762",
+          "predicted": "120",
+          "extracted": "120",
+          "n_tokens": 582,
+          "trial_id": "dota2_200417"
+        },
+        {
+          "correct": true,
+          "expected": "1140",
+          "predicted": "1140",
+          "extracted": "1140",
+          "n_tokens": 493,
+          "trial_id": "dota2_200418"
+        },
+        {
+          "correct": false,
+          "expected": "1302",
+          "predicted": "378",
+          "extracted": "378",
+          "n_tokens": 541,
+          "trial_id": "dota2_200419"
+        },
+        {
+          "correct": false,
+          "expected": "752",
+          "predicted": "1848",
+          "extracted": "1848",
+          "n_tokens": 515,
+          "trial_id": "dota2_200420"
+        },
+        {
+          "correct": true,
+          "expected": "1896",
+          "predicted": "1896",
+          "extracted": "1896",
+          "n_tokens": 546,
+          "trial_id": "dota2_200421"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 487,
+          "trial_id": "dota2_200422"
+        },
+        {
+          "correct": true,
+          "expected": "2758",
+          "predicted": "2758",
+          "extracted": "2758",
+          "n_tokens": 516,
+          "trial_id": "dota2_200423"
+        },
+        {
+          "correct": true,
+          "expected": "844",
+          "predicted": "844",
+          "extracted": "844",
+          "n_tokens": 907,
+          "trial_id": "dota2_200424"
+        },
+        {
+          "correct": true,
+          "expected": "2077",
+          "predicted": "2077",
+          "extracted": "2077",
+          "n_tokens": 453,
+          "trial_id": "dota2_200425"
+        },
+        {
+          "correct": true,
+          "expected": "825",
+          "predicted": "825",
+          "extracted": "825",
+          "n_tokens": 434,
+          "trial_id": "dota2_200426"
+        },
+        {
+          "correct": true,
+          "expected": "774",
+          "predicted": "774",
+          "extracted": "774",
+          "n_tokens": 768,
+          "trial_id": "dota2_200427"
+        },
+        {
+          "correct": true,
+          "expected": "750",
+          "predicted": "750",
+          "extracted": "750",
+          "n_tokens": 493,
+          "trial_id": "dota2_200428"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1178",
+          "extracted": "1178",
+          "n_tokens": 504,
+          "trial_id": "dota2_200429"
+        }
+      ],
+      "PI": [
+        {
+          "correct": false,
+          "expected": "811",
+          "predicted": "465",
+          "extracted": "465",
+          "n_tokens": 924,
+          "trial_id": "dota2_200400"
+        },
+        {
+          "correct": false,
+          "expected": "516",
+          "predicted": "236",
+          "extracted": "236",
+          "n_tokens": 609,
+          "trial_id": "dota2_200401"
+        },
+        {
+          "correct": false,
+          "expected": "1864",
+          "predicted": "1971",
+          "extracted": "1971",
+          "n_tokens": 450,
+          "trial_id": "dota2_200402"
+        },
+        {
+          "correct": true,
+          "expected": "434",
+          "predicted": "434",
+          "extracted": "434",
+          "n_tokens": 596,
+          "trial_id": "dota2_200403"
+        },
+        {
+          "correct": false,
+          "expected": "282",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 483,
+          "trial_id": "dota2_200404"
+        },
+        {
+          "correct": false,
+          "expected": "232",
+          "predicted": "365",
+          "extracted": "365",
+          "n_tokens": 598,
+          "trial_id": "dota2_200405"
+        },
+        {
+          "correct": false,
+          "expected": "2113",
+          "predicted": "1220",
+          "extracted": "1220",
+          "n_tokens": 605,
+          "trial_id": "dota2_200406"
+        },
+        {
+          "correct": true,
+          "expected": "295",
+          "predicted": "295",
+          "extracted": "295",
+          "n_tokens": 673,
+          "trial_id": "dota2_200407"
+        },
+        {
+          "correct": false,
+          "expected": "1286",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 820,
+          "trial_id": "dota2_200408"
+        },
+        {
+          "correct": false,
+          "expected": "569",
+          "predicted": "958",
+          "extracted": "958",
+          "n_tokens": 492,
+          "trial_id": "dota2_200409"
+        },
+        {
+          "correct": true,
+          "expected": "4537",
+          "predicted": "4537",
+          "extracted": "4537",
+          "n_tokens": 601,
+          "trial_id": "dota2_200410"
+        },
+        {
+          "correct": true,
+          "expected": "1537",
+          "predicted": "1537",
+          "extracted": "1537",
+          "n_tokens": 524,
+          "trial_id": "dota2_200411"
+        },
+        {
+          "correct": true,
+          "expected": "1594",
+          "predicted": "1594",
+          "extracted": "1594",
+          "n_tokens": 456,
+          "trial_id": "dota2_200412"
+        },
+        {
+          "correct": false,
+          "expected": "283",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 863,
+          "trial_id": "dota2_200413"
+        },
+        {
+          "correct": false,
+          "expected": "14",
+          "predicted": "200",
+          "extracted": "200",
+          "n_tokens": 466,
+          "trial_id": "dota2_200414"
+        },
+        {
+          "correct": true,
+          "expected": "2080",
+          "predicted": "2080",
+          "extracted": "2080",
+          "n_tokens": 1088,
+          "trial_id": "dota2_200415"
+        },
+        {
+          "correct": true,
+          "expected": "22",
+          "predicted": "22",
+          "extracted": "22",
+          "n_tokens": 818,
+          "trial_id": "dota2_200416"
+        },
+        {
+          "correct": false,
+          "expected": "76",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 584,
+          "trial_id": "dota2_200417"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "315",
+          "extracted": "315",
+          "n_tokens": 495,
+          "trial_id": "dota2_200418"
+        },
+        {
+          "correct": false,
+          "expected": "820",
+          "predicted": "5675",
+          "extracted": "5675",
+          "n_tokens": 538,
+          "trial_id": "dota2_200419"
+        },
+        {
+          "correct": true,
+          "expected": "2373",
+          "predicted": "2373",
+          "extracted": "2373",
+          "n_tokens": 512,
+          "trial_id": "dota2_200420"
+        },
+        {
+          "correct": false,
+          "expected": "2977",
+          "predicted": "2898",
+          "extracted": "2898",
+          "n_tokens": 547,
+          "trial_id": "dota2_200421"
+        },
+        {
+          "correct": true,
+          "expected": "2601",
+          "predicted": "2601",
+          "extracted": "2601",
+          "n_tokens": 481,
+          "trial_id": "dota2_200422"
+        },
+        {
+          "correct": false,
+          "expected": "3163",
+          "predicted": "3002",
+          "extracted": "3002",
+          "n_tokens": 516,
+          "trial_id": "dota2_200423"
+        },
+        {
+          "correct": false,
+          "expected": "1146",
+          "predicted": "800",
+          "extracted": "800",
+          "n_tokens": 903,
+          "trial_id": "dota2_200424"
+        },
+        {
+          "correct": true,
+          "expected": "3695",
+          "predicted": "3695",
+          "extracted": "3695",
+          "n_tokens": 453,
+          "trial_id": "dota2_200425"
+        },
+        {
+          "correct": false,
+          "expected": "849",
+          "predicted": "3900",
+          "extracted": "3900",
+          "n_tokens": 436,
+          "trial_id": "dota2_200426"
+        },
+        {
+          "correct": true,
+          "expected": "1995",
+          "predicted": "1995",
+          "extracted": "1995",
+          "n_tokens": 765,
+          "trial_id": "dota2_200427"
+        },
+        {
+          "correct": false,
+          "expected": "765",
+          "predicted": "905",
+          "extracted": "905",
+          "n_tokens": 488,
+          "trial_id": "dota2_200428"
+        },
+        {
+          "correct": true,
+          "expected": "2886",
+          "predicted": "2886",
+          "extracted": "2886",
+          "n_tokens": 504,
+          "trial_id": "dota2_200429"
+        }
+      ]
+    },
+    "2k_10u": {
+      "RI": [
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "778",
+          "extracted": "778",
+          "n_tokens": 1149,
+          "trial_id": "dota2_200600"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "547",
+          "extracted": "547",
+          "n_tokens": 859,
+          "trial_id": "dota2_200601"
+        },
+        {
+          "correct": true,
+          "expected": "2390",
+          "predicted": "2390",
+          "extracted": "2390",
+          "n_tokens": 1024,
+          "trial_id": "dota2_200602"
+        },
+        {
+          "correct": false,
+          "expected": "1908",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1009,
+          "trial_id": "dota2_200603"
+        },
+        {
+          "correct": false,
+          "expected": "1224",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 921,
+          "trial_id": "dota2_200604"
+        },
+        {
+          "correct": true,
+          "expected": "1922",
+          "predicted": "1922",
+          "extracted": "1922",
+          "n_tokens": 956,
+          "trial_id": "dota2_200605"
+        },
+        {
+          "correct": false,
+          "expected": "1812",
+          "predicted": "1072",
+          "extracted": "1072",
+          "n_tokens": 945,
+          "trial_id": "dota2_200606"
+        },
+        {
+          "correct": true,
+          "expected": "461",
+          "predicted": "461",
+          "extracted": "461",
+          "n_tokens": 771,
+          "trial_id": "dota2_200607"
+        },
+        {
+          "correct": true,
+          "expected": "537",
+          "predicted": "537",
+          "extracted": "537",
+          "n_tokens": 907,
+          "trial_id": "dota2_200608"
+        },
+        {
+          "correct": false,
+          "expected": "1209",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1009,
+          "trial_id": "dota2_200609"
+        },
+        {
+          "correct": true,
+          "expected": "2487",
+          "predicted": "2487",
+          "extracted": "2487",
+          "n_tokens": 996,
+          "trial_id": "dota2_200610"
+        },
+        {
+          "correct": true,
+          "expected": "1252",
+          "predicted": "1252",
+          "extracted": "1252",
+          "n_tokens": 1316,
+          "trial_id": "dota2_200611"
+        },
+        {
+          "correct": false,
+          "expected": "1657",
+          "predicted": "2962",
+          "extracted": "2962",
+          "n_tokens": 1175,
+          "trial_id": "dota2_200612"
+        },
+        {
+          "correct": true,
+          "expected": "1836",
+          "predicted": "1836",
+          "extracted": "1836",
+          "n_tokens": 1241,
+          "trial_id": "dota2_200613"
+        },
+        {
+          "correct": true,
+          "expected": "1525",
+          "predicted": "1525",
+          "extracted": "1525",
+          "n_tokens": 929,
+          "trial_id": "dota2_200614"
+        },
+        {
+          "correct": false,
+          "expected": "1607",
+          "predicted": "2212",
+          "extracted": "2212",
+          "n_tokens": 850,
+          "trial_id": "dota2_200615"
+        },
+        {
+          "correct": true,
+          "expected": "440",
+          "predicted": "440",
+          "extracted": "440",
+          "n_tokens": 811,
+          "trial_id": "dota2_200616"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "451",
+          "extracted": "451",
+          "n_tokens": 1091,
+          "trial_id": "dota2_200617"
+        },
+        {
+          "correct": false,
+          "expected": "626",
+          "predicted": "1110",
+          "extracted": "1110",
+          "n_tokens": 979,
+          "trial_id": "dota2_200618"
+        },
+        {
+          "correct": false,
+          "expected": "2895",
+          "predicted": "3015",
+          "extracted": "3015",
+          "n_tokens": 973,
+          "trial_id": "dota2_200619"
+        },
+        {
+          "correct": true,
+          "expected": "621",
+          "predicted": "621",
+          "extracted": "621",
+          "n_tokens": 772,
+          "trial_id": "dota2_200620"
+        },
+        {
+          "correct": true,
+          "expected": "954",
+          "predicted": "954",
+          "extracted": "954",
+          "n_tokens": 1324,
+          "trial_id": "dota2_200621"
+        },
+        {
+          "correct": true,
+          "expected": "1103",
+          "predicted": "1103",
+          "extracted": "1103",
+          "n_tokens": 844,
+          "trial_id": "dota2_200622"
+        },
+        {
+          "correct": true,
+          "expected": "2235",
+          "predicted": "2235",
+          "extracted": "2235",
+          "n_tokens": 970,
+          "trial_id": "dota2_200623"
+        },
+        {
+          "correct": false,
+          "expected": "977",
+          "predicted": "1555",
+          "extracted": "1555",
+          "n_tokens": 799,
+          "trial_id": "dota2_200624"
+        },
+        {
+          "correct": false,
+          "expected": "523",
+          "predicted": "729",
+          "extracted": "729",
+          "n_tokens": 894,
+          "trial_id": "dota2_200625"
+        },
+        {
+          "correct": false,
+          "expected": "1560",
+          "predicted": "2704",
+          "extracted": "2704",
+          "n_tokens": 911,
+          "trial_id": "dota2_200626"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "3900",
+          "extracted": "3900",
+          "n_tokens": 694,
+          "trial_id": "dota2_200627"
+        },
+        {
+          "correct": false,
+          "expected": "711",
+          "predicted": "505",
+          "extracted": "505",
+          "n_tokens": 926,
+          "trial_id": "dota2_200628"
+        },
+        {
+          "correct": true,
+          "expected": "1546",
+          "predicted": "1546",
+          "extracted": "1546",
+          "n_tokens": 1170,
+          "trial_id": "dota2_200629"
+        }
+      ],
+      "PI": [
+        {
+          "correct": false,
+          "expected": "526",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1149,
+          "trial_id": "dota2_200600"
+        },
+        {
+          "correct": false,
+          "expected": "1333",
+          "predicted": "721",
+          "extracted": "721",
+          "n_tokens": 855,
+          "trial_id": "dota2_200601"
+        },
+        {
+          "correct": false,
+          "expected": "1060",
+          "predicted": "364",
+          "extracted": "364",
+          "n_tokens": 1026,
+          "trial_id": "dota2_200602"
+        },
+        {
+          "correct": true,
+          "expected": "1268",
+          "predicted": "1268",
+          "extracted": "1268",
+          "n_tokens": 1006,
+          "trial_id": "dota2_200603"
+        },
+        {
+          "correct": false,
+          "expected": "533",
+          "predicted": "2083",
+          "extracted": "2083",
+          "n_tokens": 921,
+          "trial_id": "dota2_200604"
+        },
+        {
+          "correct": false,
+          "expected": "418",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 953,
+          "trial_id": "dota2_200605"
+        },
+        {
+          "correct": false,
+          "expected": "3031",
+          "predicted": "1096",
+          "extracted": "1096",
+          "n_tokens": 946,
+          "trial_id": "dota2_200606"
+        },
+        {
+          "correct": false,
+          "expected": "1749",
+          "predicted": "1629",
+          "extracted": "1629",
+          "n_tokens": 765,
+          "trial_id": "dota2_200607"
+        },
+        {
+          "correct": true,
+          "expected": "1028",
+          "predicted": "1028",
+          "extracted": "1028",
+          "n_tokens": 909,
+          "trial_id": "dota2_200608"
+        },
+        {
+          "correct": true,
+          "expected": "467",
+          "predicted": "467",
+          "extracted": "467",
+          "n_tokens": 1006,
+          "trial_id": "dota2_200609"
+        },
+        {
+          "correct": false,
+          "expected": "5405",
+          "predicted": "4956",
+          "extracted": "4956",
+          "n_tokens": 990,
+          "trial_id": "dota2_200610"
+        },
+        {
+          "correct": false,
+          "expected": "756",
+          "predicted": "387",
+          "extracted": "387",
+          "n_tokens": 1318,
+          "trial_id": "dota2_200611"
+        },
+        {
+          "correct": false,
+          "expected": "4521",
+          "predicted": "3160",
+          "extracted": "3160",
+          "n_tokens": 1176,
+          "trial_id": "dota2_200612"
+        },
+        {
+          "correct": false,
+          "expected": "129",
+          "predicted": "2411",
+          "extracted": "2411",
+          "n_tokens": 1241,
+          "trial_id": "dota2_200613"
+        },
+        {
+          "correct": true,
+          "expected": "4679",
+          "predicted": "4679",
+          "extracted": "4679",
+          "n_tokens": 925,
+          "trial_id": "dota2_200614"
+        },
+        {
+          "correct": false,
+          "expected": "200",
+          "predicted": "2380",
+          "extracted": "2380",
+          "n_tokens": 851,
+          "trial_id": "dota2_200615"
+        },
+        {
+          "correct": false,
+          "expected": "56",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 807,
+          "trial_id": "dota2_200616"
+        },
+        {
+          "correct": false,
+          "expected": "2969",
+          "predicted": "48",
+          "extracted": "48",
+          "n_tokens": 1088,
+          "trial_id": "dota2_200617"
+        },
+        {
+          "correct": true,
+          "expected": "2111",
+          "predicted": "2111",
+          "extracted": "2111",
+          "n_tokens": 976,
+          "trial_id": "dota2_200618"
+        },
+        {
+          "correct": false,
+          "expected": "1576",
+          "predicted": "33",
+          "extracted": "33",
+          "n_tokens": 968,
+          "trial_id": "dota2_200619"
+        },
+        {
+          "correct": true,
+          "expected": "556",
+          "predicted": "556",
+          "extracted": "556",
+          "n_tokens": 773,
+          "trial_id": "dota2_200620"
+        },
+        {
+          "correct": true,
+          "expected": "1548",
+          "predicted": "1548",
+          "extracted": "1548",
+          "n_tokens": 1323,
+          "trial_id": "dota2_200621"
+        },
+        {
+          "correct": false,
+          "expected": "2499",
+          "predicted": "4050",
+          "extracted": "4050",
+          "n_tokens": 839,
+          "trial_id": "dota2_200622"
+        },
+        {
+          "correct": false,
+          "expected": "577",
+          "predicted": "3113",
+          "extracted": "3113",
+          "n_tokens": 971,
+          "trial_id": "dota2_200623"
+        },
+        {
+          "correct": false,
+          "expected": "2474",
+          "predicted": "1592",
+          "extracted": "1592",
+          "n_tokens": 797,
+          "trial_id": "dota2_200624"
+        },
+        {
+          "correct": true,
+          "expected": "2012",
+          "predicted": "2012",
+          "extracted": "2012",
+          "n_tokens": 895,
+          "trial_id": "dota2_200625"
+        },
+        {
+          "correct": true,
+          "expected": "5725",
+          "predicted": "5725",
+          "extracted": "5725",
+          "n_tokens": 905,
+          "trial_id": "dota2_200626"
+        },
+        {
+          "correct": false,
+          "expected": "113",
+          "predicted": "392",
+          "extracted": "392",
+          "n_tokens": 693,
+          "trial_id": "dota2_200627"
+        },
+        {
+          "correct": false,
+          "expected": "968",
+          "predicted": "461",
+          "extracted": "461",
+          "n_tokens": 923,
+          "trial_id": "dota2_200628"
+        },
+        {
+          "correct": true,
+          "expected": "885",
+          "predicted": "885",
+          "extracted": "885",
+          "n_tokens": 1172,
+          "trial_id": "dota2_200629"
+        }
+      ]
+    },
+    "2k_20u": {
+      "RI": [
+        {
+          "correct": false,
+          "expected": "1348",
+          "predicted": "2124",
+          "extracted": "2124",
+          "n_tokens": 1567,
+          "trial_id": "dota2_200800"
+        },
+        {
+          "correct": false,
+          "expected": "1368",
+          "predicted": "1400",
+          "extracted": "1400",
+          "n_tokens": 1707,
+          "trial_id": "dota2_200801"
+        },
+        {
+          "correct": false,
+          "expected": "936",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1538,
+          "trial_id": "dota2_200802"
+        },
+        {
+          "correct": false,
+          "expected": "1920",
+          "predicted": "1787",
+          "extracted": "1787",
+          "n_tokens": 1982,
+          "trial_id": "dota2_200803"
+        },
+        {
+          "correct": true,
+          "expected": "480",
+          "predicted": "480",
+          "extracted": "480",
+          "n_tokens": 1429,
+          "trial_id": "dota2_200804"
+        },
+        {
+          "correct": true,
+          "expected": "978",
+          "predicted": "978",
+          "extracted": "978",
+          "n_tokens": 1550,
+          "trial_id": "dota2_200805"
+        },
+        {
+          "correct": false,
+          "expected": "542",
+          "predicted": "1454",
+          "extracted": "1454",
+          "n_tokens": 1766,
+          "trial_id": "dota2_200806"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "159",
+          "extracted": "159",
+          "n_tokens": 1676,
+          "trial_id": "dota2_200807"
+        },
+        {
+          "correct": true,
+          "expected": "1000",
+          "predicted": "1000",
+          "extracted": "1000",
+          "n_tokens": 1449,
+          "trial_id": "dota2_200808"
+        },
+        {
+          "correct": false,
+          "expected": "417",
+          "predicted": "1195",
+          "extracted": "1195",
+          "n_tokens": 2165,
+          "trial_id": "dota2_200809"
+        },
+        {
+          "correct": false,
+          "expected": "1442",
+          "predicted": "1287",
+          "extracted": "1287",
+          "n_tokens": 2231,
+          "trial_id": "dota2_200810"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1674,
+          "trial_id": "dota2_200811"
+        },
+        {
+          "correct": true,
+          "expected": "550",
+          "predicted": "550",
+          "extracted": "550",
+          "n_tokens": 1672,
+          "trial_id": "dota2_200812"
+        },
+        {
+          "correct": true,
+          "expected": "1504",
+          "predicted": "1504",
+          "extracted": "1504",
+          "n_tokens": 1737,
+          "trial_id": "dota2_200813"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "491",
+          "extracted": "491",
+          "n_tokens": 1615,
+          "trial_id": "dota2_200814"
+        },
+        {
+          "correct": false,
+          "expected": "1106",
+          "predicted": "2156",
+          "extracted": "2156",
+          "n_tokens": 2289,
+          "trial_id": "dota2_200815"
+        },
+        {
+          "correct": false,
+          "expected": "1365",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2372,
+          "trial_id": "dota2_200816"
+        },
+        {
+          "correct": true,
+          "expected": "1414",
+          "predicted": "1414",
+          "extracted": "1414",
+          "n_tokens": 2209,
+          "trial_id": "dota2_200817"
+        },
+        {
+          "correct": true,
+          "expected": "1046",
+          "predicted": "1046",
+          "extracted": "1046",
+          "n_tokens": 1556,
+          "trial_id": "dota2_200818"
+        },
+        {
+          "correct": false,
+          "expected": "492",
+          "predicted": "1701",
+          "extracted": "1701",
+          "n_tokens": 1923,
+          "trial_id": "dota2_200819"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2606,
+          "trial_id": "dota2_200820"
+        },
+        {
+          "correct": false,
+          "expected": "1692",
+          "predicted": "1428",
+          "extracted": "1428",
+          "n_tokens": 2573,
+          "trial_id": "dota2_200821"
+        },
+        {
+          "correct": true,
+          "expected": "1512",
+          "predicted": "1512",
+          "extracted": "1512",
+          "n_tokens": 1524,
+          "trial_id": "dota2_200822"
+        },
+        {
+          "correct": true,
+          "expected": "1335",
+          "predicted": "1335",
+          "extracted": "1335",
+          "n_tokens": 1836,
+          "trial_id": "dota2_200823"
+        },
+        {
+          "correct": true,
+          "expected": "750",
+          "predicted": "750",
+          "extracted": "750",
+          "n_tokens": 2145,
+          "trial_id": "dota2_200824"
+        },
+        {
+          "correct": false,
+          "expected": "918",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2629,
+          "trial_id": "dota2_200825"
+        },
+        {
+          "correct": true,
+          "expected": "500",
+          "predicted": "500",
+          "extracted": "500",
+          "n_tokens": 1631,
+          "trial_id": "dota2_200826"
+        },
+        {
+          "correct": false,
+          "expected": "403",
+          "predicted": "2498",
+          "extracted": "2498",
+          "n_tokens": 1492,
+          "trial_id": "dota2_200827"
+        },
+        {
+          "correct": true,
+          "expected": "894",
+          "predicted": "894",
+          "extracted": "894",
+          "n_tokens": 1662,
+          "trial_id": "dota2_200828"
+        },
+        {
+          "correct": true,
+          "expected": "1626",
+          "predicted": "1626",
+          "extracted": "1626",
+          "n_tokens": 1873,
+          "trial_id": "dota2_200829"
+        }
+      ],
+      "PI": [
+        {
+          "correct": false,
+          "expected": "773",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1566,
+          "trial_id": "dota2_200800"
+        },
+        {
+          "correct": false,
+          "expected": "1293",
+          "predicted": "2477",
+          "extracted": "2477",
+          "n_tokens": 1703,
+          "trial_id": "dota2_200801"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1538,
+          "trial_id": "dota2_200802"
+        },
+        {
+          "correct": false,
+          "expected": "2252",
+          "predicted": "1343",
+          "extracted": "1343",
+          "n_tokens": 1977,
+          "trial_id": "dota2_200803"
+        },
+        {
+          "correct": true,
+          "expected": "3311",
+          "predicted": "3311",
+          "extracted": "3311",
+          "n_tokens": 1424,
+          "trial_id": "dota2_200804"
+        },
+        {
+          "correct": true,
+          "expected": "1769",
+          "predicted": "1769",
+          "extracted": "1769",
+          "n_tokens": 1546,
+          "trial_id": "dota2_200805"
+        },
+        {
+          "correct": false,
+          "expected": "180",
+          "predicted": "17",
+          "extracted": "17",
+          "n_tokens": 1767,
+          "trial_id": "dota2_200806"
+        },
+        {
+          "correct": false,
+          "expected": "319",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1676,
+          "trial_id": "dota2_200807"
+        },
+        {
+          "correct": true,
+          "expected": "4961",
+          "predicted": "4961",
+          "extracted": "4961",
+          "n_tokens": 1446,
+          "trial_id": "dota2_200808"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1601",
+          "extracted": "1601",
+          "n_tokens": 2162,
+          "trial_id": "dota2_200809"
+        },
+        {
+          "correct": false,
+          "expected": "3992",
+          "predicted": "4745",
+          "extracted": "4745",
+          "n_tokens": 2232,
+          "trial_id": "dota2_200810"
+        },
+        {
+          "correct": false,
+          "expected": "851",
+          "predicted": "3230",
+          "extracted": "3230",
+          "n_tokens": 1672,
+          "trial_id": "dota2_200811"
+        },
+        {
+          "correct": false,
+          "expected": "2605",
+          "predicted": "1607",
+          "extracted": "1607",
+          "n_tokens": 1669,
+          "trial_id": "dota2_200812"
+        },
+        {
+          "correct": false,
+          "expected": "1877",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1733,
+          "trial_id": "dota2_200813"
+        },
+        {
+          "correct": false,
+          "expected": "61",
+          "predicted": "2602",
+          "extracted": "2602",
+          "n_tokens": 1610,
+          "trial_id": "dota2_200814"
+        },
+        {
+          "correct": true,
+          "expected": "4776",
+          "predicted": "4776",
+          "extracted": "4776",
+          "n_tokens": 2283,
+          "trial_id": "dota2_200815"
+        },
+        {
+          "correct": false,
+          "expected": "1974",
+          "predicted": "190",
+          "extracted": "190",
+          "n_tokens": 2372,
+          "trial_id": "dota2_200816"
+        },
+        {
+          "correct": false,
+          "expected": "546",
+          "predicted": "625",
+          "extracted": "625",
+          "n_tokens": 2210,
+          "trial_id": "dota2_200817"
+        },
+        {
+          "correct": false,
+          "expected": "2181",
+          "predicted": "2688",
+          "extracted": "2688",
+          "n_tokens": 1555,
+          "trial_id": "dota2_200818"
+        },
+        {
+          "correct": true,
+          "expected": "4724",
+          "predicted": "4724",
+          "extracted": "4724",
+          "n_tokens": 1924,
+          "trial_id": "dota2_200819"
+        },
+        {
+          "correct": false,
+          "expected": "6206",
+          "predicted": "5251",
+          "extracted": "5251",
+          "n_tokens": 2601,
+          "trial_id": "dota2_200820"
+        },
+        {
+          "correct": false,
+          "expected": "762",
+          "predicted": "361",
+          "extracted": "361",
+          "n_tokens": 2570,
+          "trial_id": "dota2_200821"
+        },
+        {
+          "correct": false,
+          "expected": "500",
+          "predicted": "300",
+          "extracted": "300",
+          "n_tokens": 1518,
+          "trial_id": "dota2_200822"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "2829",
+          "extracted": "2829",
+          "n_tokens": 1836,
+          "trial_id": "dota2_200823"
+        },
+        {
+          "correct": true,
+          "expected": "1285",
+          "predicted": "1285",
+          "extracted": "1285",
+          "n_tokens": 2147,
+          "trial_id": "dota2_200824"
+        },
+        {
+          "correct": false,
+          "expected": "847",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2624,
+          "trial_id": "dota2_200825"
+        },
+        {
+          "correct": true,
+          "expected": "2546",
+          "predicted": "2546",
+          "extracted": "2546",
+          "n_tokens": 1626,
+          "trial_id": "dota2_200826"
+        },
+        {
+          "correct": true,
+          "expected": "4752",
+          "predicted": "4752",
+          "extracted": "4752",
+          "n_tokens": 1486,
+          "trial_id": "dota2_200827"
+        },
+        {
+          "correct": false,
+          "expected": "241",
+          "predicted": "61",
+          "extracted": "61",
+          "n_tokens": 1663,
+          "trial_id": "dota2_200828"
+        },
+        {
+          "correct": false,
+          "expected": "5068",
+          "predicted": "4101",
+          "extracted": "4101",
+          "n_tokens": 1872,
+          "trial_id": "dota2_200829"
+        }
+      ]
+    },
+    "3k_3u": {
+      "RI": [
+        {
+          "correct": false,
+          "expected": "996",
+          "predicted": "1396",
+          "extracted": "1396",
+          "n_tokens": 351,
+          "trial_id": "dota2_201800"
+        },
+        {
+          "correct": false,
+          "expected": "875",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 471,
+          "trial_id": "dota2_201801"
+        },
+        {
+          "correct": true,
+          "expected": "1639",
+          "predicted": "1639",
+          "extracted": "1639",
+          "n_tokens": 668,
+          "trial_id": "dota2_201802"
+        },
+        {
+          "correct": true,
+          "expected": "2345",
+          "predicted": "2345",
+          "extracted": "2345",
+          "n_tokens": 399,
+          "trial_id": "dota2_201803"
+        },
+        {
+          "correct": true,
+          "expected": "1192",
+          "predicted": "1192",
+          "extracted": "1192",
+          "n_tokens": 483,
+          "trial_id": "dota2_201804"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 543,
+          "trial_id": "dota2_201805"
+        },
+        {
+          "correct": true,
+          "expected": "832",
+          "predicted": "832",
+          "extracted": "832",
+          "n_tokens": 382,
+          "trial_id": "dota2_201806"
+        },
+        {
+          "correct": true,
+          "expected": "1284",
+          "predicted": "1284",
+          "extracted": "1284",
+          "n_tokens": 444,
+          "trial_id": "dota2_201807"
+        },
+        {
+          "correct": true,
+          "expected": "955",
+          "predicted": "955",
+          "extracted": "955",
+          "n_tokens": 518,
+          "trial_id": "dota2_201808"
+        },
+        {
+          "correct": false,
+          "expected": "780",
+          "predicted": "1038",
+          "extracted": "1038",
+          "n_tokens": 495,
+          "trial_id": "dota2_201809"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "4200",
+          "extracted": "4200",
+          "n_tokens": 536,
+          "trial_id": "dota2_201810"
+        },
+        {
+          "correct": true,
+          "expected": "1800",
+          "predicted": "1800",
+          "extracted": "1800",
+          "n_tokens": 896,
+          "trial_id": "dota2_201811"
+        },
+        {
+          "correct": true,
+          "expected": "543",
+          "predicted": "543",
+          "extracted": "543",
+          "n_tokens": 458,
+          "trial_id": "dota2_201812"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 762,
+          "trial_id": "dota2_201813"
+        },
+        {
+          "correct": false,
+          "expected": "1196",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 548,
+          "trial_id": "dota2_201814"
+        },
+        {
+          "correct": true,
+          "expected": "626",
+          "predicted": "626",
+          "extracted": "626",
+          "n_tokens": 411,
+          "trial_id": "dota2_201815"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 467,
+          "trial_id": "dota2_201816"
+        },
+        {
+          "correct": true,
+          "expected": "1154",
+          "predicted": "1154",
+          "extracted": "1154",
+          "n_tokens": 700,
+          "trial_id": "dota2_201817"
+        },
+        {
+          "correct": false,
+          "expected": "1560",
+          "predicted": "1400",
+          "extracted": "1400",
+          "n_tokens": 472,
+          "trial_id": "dota2_201818"
+        },
+        {
+          "correct": false,
+          "expected": "1339",
+          "predicted": "1091",
+          "extracted": "1091",
+          "n_tokens": 473,
+          "trial_id": "dota2_201819"
+        },
+        {
+          "correct": false,
+          "expected": "1440",
+          "predicted": "2250",
+          "extracted": "2250",
+          "n_tokens": 462,
+          "trial_id": "dota2_201820"
+        },
+        {
+          "correct": false,
+          "expected": "1800",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 558,
+          "trial_id": "dota2_201821"
+        },
+        {
+          "correct": true,
+          "expected": "770",
+          "predicted": "770",
+          "extracted": "770",
+          "n_tokens": 462,
+          "trial_id": "dota2_201822"
+        },
+        {
+          "correct": true,
+          "expected": "1149",
+          "predicted": "1149",
+          "extracted": "1149",
+          "n_tokens": 388,
+          "trial_id": "dota2_201823"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 743,
+          "trial_id": "dota2_201824"
+        },
+        {
+          "correct": false,
+          "expected": "1044",
+          "predicted": "1224",
+          "extracted": "1224",
+          "n_tokens": 610,
+          "trial_id": "dota2_201825"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "62",
+          "extracted": "62",
+          "n_tokens": 546,
+          "trial_id": "dota2_201826"
+        },
+        {
+          "correct": true,
+          "expected": "1680",
+          "predicted": "1680",
+          "extracted": "1680",
+          "n_tokens": 558,
+          "trial_id": "dota2_201827"
+        },
+        {
+          "correct": true,
+          "expected": "1500",
+          "predicted": "1500",
+          "extracted": "1500",
+          "n_tokens": 467,
+          "trial_id": "dota2_201828"
+        },
+        {
+          "correct": true,
+          "expected": "1265",
+          "predicted": "1265",
+          "extracted": "1265",
+          "n_tokens": 487,
+          "trial_id": "dota2_201829"
+        }
+      ],
+      "PI": [
+        {
+          "correct": true,
+          "expected": "1215",
+          "predicted": "1215",
+          "extracted": "1215",
+          "n_tokens": 351,
+          "trial_id": "dota2_201800"
+        },
+        {
+          "correct": true,
+          "expected": "968",
+          "predicted": "968",
+          "extracted": "968",
+          "n_tokens": 471,
+          "trial_id": "dota2_201801"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "4650",
+          "extracted": "4650",
+          "n_tokens": 670,
+          "trial_id": "dota2_201802"
+        },
+        {
+          "correct": true,
+          "expected": "2896",
+          "predicted": "2896",
+          "extracted": "2896",
+          "n_tokens": 394,
+          "trial_id": "dota2_201803"
+        },
+        {
+          "correct": true,
+          "expected": "1538",
+          "predicted": "1538",
+          "extracted": "1538",
+          "n_tokens": 484,
+          "trial_id": "dota2_201804"
+        },
+        {
+          "correct": false,
+          "expected": "467",
+          "predicted": "567",
+          "extracted": "567",
+          "n_tokens": 544,
+          "trial_id": "dota2_201805"
+        },
+        {
+          "correct": false,
+          "expected": "2362",
+          "predicted": "1470",
+          "extracted": "1470",
+          "n_tokens": 377,
+          "trial_id": "dota2_201806"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 440,
+          "trial_id": "dota2_201807"
+        },
+        {
+          "correct": false,
+          "expected": "1079",
+          "predicted": "930",
+          "extracted": "930",
+          "n_tokens": 514,
+          "trial_id": "dota2_201808"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1038",
+          "extracted": "1038",
+          "n_tokens": 494,
+          "trial_id": "dota2_201809"
+        },
+        {
+          "correct": true,
+          "expected": "546",
+          "predicted": "546",
+          "extracted": "546",
+          "n_tokens": 532,
+          "trial_id": "dota2_201810"
+        },
+        {
+          "correct": true,
+          "expected": "400",
+          "predicted": "400",
+          "extracted": "400",
+          "n_tokens": 895,
+          "trial_id": "dota2_201811"
+        },
+        {
+          "correct": false,
+          "expected": "2233",
+          "predicted": "1343",
+          "extracted": "1343",
+          "n_tokens": 452,
+          "trial_id": "dota2_201812"
+        },
+        {
+          "correct": true,
+          "expected": "270",
+          "predicted": "270",
+          "extracted": "270",
+          "n_tokens": 757,
+          "trial_id": "dota2_201813"
+        },
+        {
+          "correct": false,
+          "expected": "595",
+          "predicted": "1196",
+          "extracted": "1196",
+          "n_tokens": 548,
+          "trial_id": "dota2_201814"
+        },
+        {
+          "correct": true,
+          "expected": "160",
+          "predicted": "160",
+          "extracted": "160",
+          "n_tokens": 412,
+          "trial_id": "dota2_201815"
+        },
+        {
+          "correct": false,
+          "expected": "1177",
+          "predicted": "548",
+          "extracted": "548",
+          "n_tokens": 465,
+          "trial_id": "dota2_201816"
+        },
+        {
+          "correct": false,
+          "expected": "1830",
+          "predicted": "1547",
+          "extracted": "1547",
+          "n_tokens": 700,
+          "trial_id": "dota2_201817"
+        },
+        {
+          "correct": true,
+          "expected": "1415",
+          "predicted": "1415",
+          "extracted": "1415",
+          "n_tokens": 474,
+          "trial_id": "dota2_201818"
+        },
+        {
+          "correct": true,
+          "expected": "2477",
+          "predicted": "2477",
+          "extracted": "2477",
+          "n_tokens": 473,
+          "trial_id": "dota2_201819"
+        },
+        {
+          "correct": true,
+          "expected": "2250",
+          "predicted": "2250",
+          "extracted": "2250",
+          "n_tokens": 462,
+          "trial_id": "dota2_201820"
+        },
+        {
+          "correct": true,
+          "expected": "400",
+          "predicted": "400",
+          "extracted": "400",
+          "n_tokens": 555,
+          "trial_id": "dota2_201821"
+        },
+        {
+          "correct": false,
+          "expected": "1211",
+          "predicted": "770",
+          "extracted": "770",
+          "n_tokens": 456,
+          "trial_id": "dota2_201822"
+        },
+        {
+          "correct": false,
+          "expected": "2291",
+          "predicted": "1149",
+          "extracted": "1149",
+          "n_tokens": 390,
+          "trial_id": "dota2_201823"
+        },
+        {
+          "correct": false,
+          "expected": "203",
+          "predicted": "1035",
+          "extracted": "1035",
+          "n_tokens": 742,
+          "trial_id": "dota2_201824"
+        },
+        {
+          "correct": false,
+          "expected": "931",
+          "predicted": "1224",
+          "extracted": "1224",
+          "n_tokens": 605,
+          "trial_id": "dota2_201825"
+        },
+        {
+          "correct": true,
+          "expected": "509",
+          "predicted": "509",
+          "extracted": "509",
+          "n_tokens": 547,
+          "trial_id": "dota2_201826"
+        },
+        {
+          "correct": false,
+          "expected": "658",
+          "predicted": "2058",
+          "extracted": "2058",
+          "n_tokens": 552,
+          "trial_id": "dota2_201827"
+        },
+        {
+          "correct": true,
+          "expected": "1738",
+          "predicted": "1738",
+          "extracted": "1738",
+          "n_tokens": 461,
+          "trial_id": "dota2_201828"
+        },
+        {
+          "correct": false,
+          "expected": "848",
+          "predicted": "1400",
+          "extracted": "1400",
+          "n_tokens": 483,
+          "trial_id": "dota2_201829"
+        }
+      ]
+    },
+    "3k_5u": {
+      "RI": [
+        {
+          "correct": false,
+          "expected": "800",
+          "predicted": "1543",
+          "extracted": "1543",
+          "n_tokens": 1093,
+          "trial_id": "dota2_202000"
+        },
+        {
+          "correct": false,
+          "expected": "1752",
+          "predicted": "234",
+          "extracted": "234",
+          "n_tokens": 1200,
+          "trial_id": "dota2_202001"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "817",
+          "extracted": "817",
+          "n_tokens": 916,
+          "trial_id": "dota2_202002"
+        },
+        {
+          "correct": false,
+          "expected": "1635",
+          "predicted": "1475",
+          "extracted": "1475",
+          "n_tokens": 764,
+          "trial_id": "dota2_202003"
+        },
+        {
+          "correct": true,
+          "expected": "1153",
+          "predicted": "1153",
+          "extracted": "1153",
+          "n_tokens": 639,
+          "trial_id": "dota2_202004"
+        },
+        {
+          "correct": true,
+          "expected": "1608",
+          "predicted": "1608",
+          "extracted": "1608",
+          "n_tokens": 1079,
+          "trial_id": "dota2_202005"
+        },
+        {
+          "correct": false,
+          "expected": "1570",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1251,
+          "trial_id": "dota2_202006"
+        },
+        {
+          "correct": true,
+          "expected": "2494",
+          "predicted": "2494",
+          "extracted": "2494",
+          "n_tokens": 751,
+          "trial_id": "dota2_202007"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1377,
+          "trial_id": "dota2_202008"
+        },
+        {
+          "correct": false,
+          "expected": "1644",
+          "predicted": "1846",
+          "extracted": "1846",
+          "n_tokens": 921,
+          "trial_id": "dota2_202009"
+        },
+        {
+          "correct": false,
+          "expected": "943",
+          "predicted": "1143",
+          "extracted": "1143",
+          "n_tokens": 1183,
+          "trial_id": "dota2_202010"
+        },
+        {
+          "correct": true,
+          "expected": "1165",
+          "predicted": "1165",
+          "extracted": "1165",
+          "n_tokens": 677,
+          "trial_id": "dota2_202011"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1680",
+          "extracted": "1680",
+          "n_tokens": 772,
+          "trial_id": "dota2_202012"
+        },
+        {
+          "correct": true,
+          "expected": "1625",
+          "predicted": "1625",
+          "extracted": "1625",
+          "n_tokens": 802,
+          "trial_id": "dota2_202013"
+        },
+        {
+          "correct": false,
+          "expected": "1133",
+          "predicted": "847",
+          "extracted": "847",
+          "n_tokens": 658,
+          "trial_id": "dota2_202014"
+        },
+        {
+          "correct": false,
+          "expected": "1027",
+          "predicted": "450",
+          "extracted": "450",
+          "n_tokens": 742,
+          "trial_id": "dota2_202015"
+        },
+        {
+          "correct": false,
+          "expected": "792",
+          "predicted": "1559",
+          "extracted": "1559",
+          "n_tokens": 958,
+          "trial_id": "dota2_202016"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "107",
+          "extracted": "107",
+          "n_tokens": 713,
+          "trial_id": "dota2_202017"
+        },
+        {
+          "correct": false,
+          "expected": "672",
+          "predicted": "343",
+          "extracted": "343",
+          "n_tokens": 697,
+          "trial_id": "dota2_202018"
+        },
+        {
+          "correct": false,
+          "expected": "1940",
+          "predicted": "1882",
+          "extracted": "1882",
+          "n_tokens": 773,
+          "trial_id": "dota2_202019"
+        },
+        {
+          "correct": false,
+          "expected": "1236",
+          "predicted": "761",
+          "extracted": "761",
+          "n_tokens": 654,
+          "trial_id": "dota2_202020"
+        },
+        {
+          "correct": true,
+          "expected": "2220",
+          "predicted": "2220",
+          "extracted": "2220",
+          "n_tokens": 764,
+          "trial_id": "dota2_202021"
+        },
+        {
+          "correct": true,
+          "expected": "2298",
+          "predicted": "2298",
+          "extracted": "2298",
+          "n_tokens": 803,
+          "trial_id": "dota2_202022"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "6800",
+          "extracted": "6800",
+          "n_tokens": 1099,
+          "trial_id": "dota2_202023"
+        },
+        {
+          "correct": false,
+          "expected": "770",
+          "predicted": "1400",
+          "extracted": "1400",
+          "n_tokens": 734,
+          "trial_id": "dota2_202024"
+        },
+        {
+          "correct": true,
+          "expected": "978",
+          "predicted": "978",
+          "extracted": "978",
+          "n_tokens": 871,
+          "trial_id": "dota2_202025"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "171.0",
+          "extracted": "0",
+          "n_tokens": 915,
+          "trial_id": "dota2_202026"
+        },
+        {
+          "correct": true,
+          "expected": "1610",
+          "predicted": "1610",
+          "extracted": "1610",
+          "n_tokens": 766,
+          "trial_id": "dota2_202027"
+        },
+        {
+          "correct": false,
+          "expected": "1125",
+          "predicted": "1633",
+          "extracted": "1633",
+          "n_tokens": 875,
+          "trial_id": "dota2_202028"
+        },
+        {
+          "correct": true,
+          "expected": "444",
+          "predicted": "444",
+          "extracted": "444",
+          "n_tokens": 687,
+          "trial_id": "dota2_202029"
+        }
+      ],
+      "PI": [
+        {
+          "correct": false,
+          "expected": "359",
+          "predicted": "159",
+          "extracted": "159",
+          "n_tokens": 1095,
+          "trial_id": "dota2_202000"
+        },
+        {
+          "correct": false,
+          "expected": "916",
+          "predicted": "642",
+          "extracted": "642",
+          "n_tokens": 1198,
+          "trial_id": "dota2_202001"
+        },
+        {
+          "correct": false,
+          "expected": "174",
+          "predicted": "2113",
+          "extracted": "2113",
+          "n_tokens": 917,
+          "trial_id": "dota2_202002"
+        },
+        {
+          "correct": false,
+          "expected": "201",
+          "predicted": "20",
+          "extracted": "20",
+          "n_tokens": 760,
+          "trial_id": "dota2_202003"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1946",
+          "extracted": "1946",
+          "n_tokens": 634,
+          "trial_id": "dota2_202004"
+        },
+        {
+          "correct": false,
+          "expected": "2875",
+          "predicted": "822",
+          "extracted": "822",
+          "n_tokens": 1077,
+          "trial_id": "dota2_202005"
+        },
+        {
+          "correct": false,
+          "expected": "180",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1252,
+          "trial_id": "dota2_202006"
+        },
+        {
+          "correct": false,
+          "expected": "3371",
+          "predicted": "2302",
+          "extracted": "2302",
+          "n_tokens": 751,
+          "trial_id": "dota2_202007"
+        },
+        {
+          "correct": true,
+          "expected": "609",
+          "predicted": "609",
+          "extracted": "609",
+          "n_tokens": 1377,
+          "trial_id": "dota2_202008"
+        },
+        {
+          "correct": false,
+          "expected": "3117",
+          "predicted": "2346",
+          "extracted": "2346",
+          "n_tokens": 919,
+          "trial_id": "dota2_202009"
+        },
+        {
+          "correct": true,
+          "expected": "1844",
+          "predicted": "1844",
+          "extracted": "1844",
+          "n_tokens": 1180,
+          "trial_id": "dota2_202010"
+        },
+        {
+          "correct": true,
+          "expected": "2094",
+          "predicted": "2094",
+          "extracted": "2094",
+          "n_tokens": 671,
+          "trial_id": "dota2_202011"
+        },
+        {
+          "correct": false,
+          "expected": "798",
+          "predicted": "2376",
+          "extracted": "2376",
+          "n_tokens": 767,
+          "trial_id": "dota2_202012"
+        },
+        {
+          "correct": false,
+          "expected": "180",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 798,
+          "trial_id": "dota2_202013"
+        },
+        {
+          "correct": true,
+          "expected": "571",
+          "predicted": "571",
+          "extracted": "571",
+          "n_tokens": 659,
+          "trial_id": "dota2_202014"
+        },
+        {
+          "correct": false,
+          "expected": "989",
+          "predicted": "1188",
+          "extracted": "1188",
+          "n_tokens": 736,
+          "trial_id": "dota2_202015"
+        },
+        {
+          "correct": true,
+          "expected": "774",
+          "predicted": "774",
+          "extracted": "774",
+          "n_tokens": 956,
+          "trial_id": "dota2_202016"
+        },
+        {
+          "correct": false,
+          "expected": "138",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 708,
+          "trial_id": "dota2_202017"
+        },
+        {
+          "correct": true,
+          "expected": "1425",
+          "predicted": "1425",
+          "extracted": "1425",
+          "n_tokens": 694,
+          "trial_id": "dota2_202018"
+        },
+        {
+          "correct": true,
+          "expected": "422",
+          "predicted": "422",
+          "extracted": "422",
+          "n_tokens": 771,
+          "trial_id": "dota2_202019"
+        },
+        {
+          "correct": true,
+          "expected": "3273",
+          "predicted": "3273",
+          "extracted": "3273",
+          "n_tokens": 652,
+          "trial_id": "dota2_202020"
+        },
+        {
+          "correct": false,
+          "expected": "3584",
+          "predicted": "2450",
+          "extracted": "2450",
+          "n_tokens": 760,
+          "trial_id": "dota2_202021"
+        },
+        {
+          "correct": false,
+          "expected": "1693",
+          "predicted": "775",
+          "extracted": "775",
+          "n_tokens": 799,
+          "trial_id": "dota2_202022"
+        },
+        {
+          "correct": false,
+          "expected": "1568",
+          "predicted": "648",
+          "extracted": "648",
+          "n_tokens": 1098,
+          "trial_id": "dota2_202023"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "490",
+          "extracted": "490",
+          "n_tokens": 731,
+          "trial_id": "dota2_202024"
+        },
+        {
+          "correct": true,
+          "expected": "549",
+          "predicted": "549",
+          "extracted": "549",
+          "n_tokens": 865,
+          "trial_id": "dota2_202025"
+        },
+        {
+          "correct": false,
+          "expected": "772",
+          "predicted": "1797",
+          "extracted": "1797",
+          "n_tokens": 913,
+          "trial_id": "dota2_202026"
+        },
+        {
+          "correct": true,
+          "expected": "342",
+          "predicted": "342",
+          "extracted": "342",
+          "n_tokens": 767,
+          "trial_id": "dota2_202027"
+        },
+        {
+          "correct": false,
+          "expected": "3065",
+          "predicted": "1813",
+          "extracted": "1813",
+          "n_tokens": 875,
+          "trial_id": "dota2_202028"
+        },
+        {
+          "correct": false,
+          "expected": "862",
+          "predicted": "837",
+          "extracted": "837",
+          "n_tokens": 688,
+          "trial_id": "dota2_202029"
+        }
+      ]
+    },
+    "3k_10u": {
+      "RI": [
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "3900",
+          "extracted": "3900",
+          "n_tokens": 1050,
+          "trial_id": "dota2_202200"
+        },
+        {
+          "correct": false,
+          "expected": "1326",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1832,
+          "trial_id": "dota2_202201"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1270,
+          "trial_id": "dota2_202202"
+        },
+        {
+          "correct": true,
+          "expected": "1360",
+          "predicted": "1360",
+          "extracted": "1360",
+          "n_tokens": 1171,
+          "trial_id": "dota2_202203"
+        },
+        {
+          "correct": false,
+          "expected": "511",
+          "predicted": "970",
+          "extracted": "970",
+          "n_tokens": 2019,
+          "trial_id": "dota2_202204"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "245",
+          "extracted": "245",
+          "n_tokens": 1300,
+          "trial_id": "dota2_202205"
+        },
+        {
+          "correct": false,
+          "expected": "2381",
+          "predicted": "2946",
+          "extracted": "2946",
+          "n_tokens": 1879,
+          "trial_id": "dota2_202206"
+        },
+        {
+          "correct": false,
+          "expected": "1370",
+          "predicted": "1400 gold",
+          "extracted": "1400",
+          "n_tokens": 1186,
+          "trial_id": "dota2_202207"
+        },
+        {
+          "correct": true,
+          "expected": "1227",
+          "predicted": "1227",
+          "extracted": "1227",
+          "n_tokens": 1067,
+          "trial_id": "dota2_202208"
+        },
+        {
+          "correct": true,
+          "expected": "1654",
+          "predicted": "1654",
+          "extracted": "1654",
+          "n_tokens": 1267,
+          "trial_id": "dota2_202209"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "559",
+          "extracted": "559",
+          "n_tokens": 1136,
+          "trial_id": "dota2_202210"
+        },
+        {
+          "correct": false,
+          "expected": "960",
+          "predicted": "1194",
+          "extracted": "1194",
+          "n_tokens": 2207,
+          "trial_id": "dota2_202211"
+        },
+        {
+          "correct": false,
+          "expected": "1328",
+          "predicted": "1177",
+          "extracted": "1177",
+          "n_tokens": 1246,
+          "trial_id": "dota2_202212"
+        },
+        {
+          "correct": true,
+          "expected": "2395",
+          "predicted": "2395",
+          "extracted": "2395",
+          "n_tokens": 1318,
+          "trial_id": "dota2_202213"
+        },
+        {
+          "correct": true,
+          "expected": "1480",
+          "predicted": "1480",
+          "extracted": "1480",
+          "n_tokens": 1460,
+          "trial_id": "dota2_202214"
+        },
+        {
+          "correct": true,
+          "expected": "453",
+          "predicted": "453",
+          "extracted": "453",
+          "n_tokens": 1278,
+          "trial_id": "dota2_202215"
+        },
+        {
+          "correct": true,
+          "expected": "517",
+          "predicted": "517",
+          "extracted": "517",
+          "n_tokens": 1121,
+          "trial_id": "dota2_202216"
+        },
+        {
+          "correct": true,
+          "expected": "1243",
+          "predicted": "1243",
+          "extracted": "1243",
+          "n_tokens": 1356,
+          "trial_id": "dota2_202217"
+        },
+        {
+          "correct": false,
+          "expected": "2144",
+          "predicted": "1853",
+          "extracted": "1853",
+          "n_tokens": 1570,
+          "trial_id": "dota2_202218"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "273",
+          "extracted": "273",
+          "n_tokens": 1272,
+          "trial_id": "dota2_202219"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1400",
+          "extracted": "1400",
+          "n_tokens": 1488,
+          "trial_id": "dota2_202220"
+        },
+        {
+          "correct": false,
+          "expected": "1526",
+          "predicted": "1464",
+          "extracted": "1464",
+          "n_tokens": 1405,
+          "trial_id": "dota2_202221"
+        },
+        {
+          "correct": false,
+          "expected": "721",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1848,
+          "trial_id": "dota2_202222"
+        },
+        {
+          "correct": true,
+          "expected": "542",
+          "predicted": "542",
+          "extracted": "542",
+          "n_tokens": 1525,
+          "trial_id": "dota2_202223"
+        },
+        {
+          "correct": true,
+          "expected": "968",
+          "predicted": "968",
+          "extracted": "968",
+          "n_tokens": 1272,
+          "trial_id": "dota2_202224"
+        },
+        {
+          "correct": false,
+          "expected": "655",
+          "predicted": "834",
+          "extracted": "834",
+          "n_tokens": 1197,
+          "trial_id": "dota2_202225"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1472,
+          "trial_id": "dota2_202226"
+        },
+        {
+          "correct": false,
+          "expected": "357",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1870,
+          "trial_id": "dota2_202227"
+        },
+        {
+          "correct": false,
+          "expected": "2242",
+          "predicted": "1981",
+          "extracted": "1981",
+          "n_tokens": 1559,
+          "trial_id": "dota2_202228"
+        },
+        {
+          "correct": false,
+          "expected": "1840",
+          "predicted": "1432",
+          "extracted": "1432",
+          "n_tokens": 1084,
+          "trial_id": "dota2_202229"
+        }
+      ],
+      "PI": [
+        {
+          "correct": false,
+          "expected": "599",
+          "predicted": "2454",
+          "extracted": "2454",
+          "n_tokens": 1044,
+          "trial_id": "dota2_202200"
+        },
+        {
+          "correct": false,
+          "expected": "366",
+          "predicted": "5570",
+          "extracted": "5570",
+          "n_tokens": 1826,
+          "trial_id": "dota2_202201"
+        },
+        {
+          "correct": true,
+          "expected": "1988",
+          "predicted": "1988",
+          "extracted": "1988",
+          "n_tokens": 1270,
+          "trial_id": "dota2_202202"
+        },
+        {
+          "correct": false,
+          "expected": "512",
+          "predicted": "757",
+          "extracted": "757",
+          "n_tokens": 1173,
+          "trial_id": "dota2_202203"
+        },
+        {
+          "correct": false,
+          "expected": "185",
+          "predicted": "1972",
+          "extracted": "1972",
+          "n_tokens": 2017,
+          "trial_id": "dota2_202204"
+        },
+        {
+          "correct": false,
+          "expected": "464",
+          "predicted": "1322",
+          "extracted": "1322",
+          "n_tokens": 1302,
+          "trial_id": "dota2_202205"
+        },
+        {
+          "correct": false,
+          "expected": "770",
+          "predicted": "4650",
+          "extracted": "4650",
+          "n_tokens": 1879,
+          "trial_id": "dota2_202206"
+        },
+        {
+          "correct": false,
+          "expected": "1645",
+          "predicted": "2968",
+          "extracted": "2968",
+          "n_tokens": 1188,
+          "trial_id": "dota2_202207"
+        },
+        {
+          "correct": false,
+          "expected": "1016",
+          "predicted": "1196",
+          "extracted": "1196",
+          "n_tokens": 1063,
+          "trial_id": "dota2_202208"
+        },
+        {
+          "correct": false,
+          "expected": "1164",
+          "predicted": "757",
+          "extracted": "757",
+          "n_tokens": 1268,
+          "trial_id": "dota2_202209"
+        },
+        {
+          "correct": false,
+          "expected": "877",
+          "predicted": "316",
+          "extracted": "316",
+          "n_tokens": 1138,
+          "trial_id": "dota2_202210"
+        },
+        {
+          "correct": false,
+          "expected": "3189",
+          "predicted": "2270",
+          "extracted": "2270",
+          "n_tokens": 2201,
+          "trial_id": "dota2_202211"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1457",
+          "extracted": "1457",
+          "n_tokens": 1242,
+          "trial_id": "dota2_202212"
+        },
+        {
+          "correct": false,
+          "expected": "1401",
+          "predicted": "692",
+          "extracted": "692",
+          "n_tokens": 1320,
+          "trial_id": "dota2_202213"
+        },
+        {
+          "correct": false,
+          "expected": "861",
+          "predicted": "3058",
+          "extracted": "3058",
+          "n_tokens": 1455,
+          "trial_id": "dota2_202214"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "499",
+          "extracted": "499",
+          "n_tokens": 1272,
+          "trial_id": "dota2_202215"
+        },
+        {
+          "correct": false,
+          "expected": "1535",
+          "predicted": "1885",
+          "extracted": "1885",
+          "n_tokens": 1120,
+          "trial_id": "dota2_202216"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1516",
+          "extracted": "1516",
+          "n_tokens": 1352,
+          "trial_id": "dota2_202217"
+        },
+        {
+          "correct": false,
+          "expected": "2980",
+          "predicted": "1853",
+          "extracted": "1853",
+          "n_tokens": 1570,
+          "trial_id": "dota2_202218"
+        },
+        {
+          "correct": false,
+          "expected": "2572",
+          "predicted": "2706",
+          "extracted": "2706",
+          "n_tokens": 1269,
+          "trial_id": "dota2_202219"
+        },
+        {
+          "correct": true,
+          "expected": "219",
+          "predicted": "219",
+          "extracted": "219",
+          "n_tokens": 1488,
+          "trial_id": "dota2_202220"
+        },
+        {
+          "correct": true,
+          "expected": "1796",
+          "predicted": "1796",
+          "extracted": "1796",
+          "n_tokens": 1403,
+          "trial_id": "dota2_202221"
+        },
+        {
+          "correct": true,
+          "expected": "1235",
+          "predicted": "1235",
+          "extracted": "1235",
+          "n_tokens": 1844,
+          "trial_id": "dota2_202222"
+        },
+        {
+          "correct": false,
+          "expected": "1817",
+          "predicted": "1580",
+          "extracted": "1580",
+          "n_tokens": 1526,
+          "trial_id": "dota2_202223"
+        },
+        {
+          "correct": false,
+          "expected": "3695",
+          "predicted": "2584",
+          "extracted": "2584",
+          "n_tokens": 1267,
+          "trial_id": "dota2_202224"
+        },
+        {
+          "correct": false,
+          "expected": "250",
+          "predicted": "354",
+          "extracted": "354",
+          "n_tokens": 1191,
+          "trial_id": "dota2_202225"
+        },
+        {
+          "correct": false,
+          "expected": "1755",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1474,
+          "trial_id": "dota2_202226"
+        },
+        {
+          "correct": false,
+          "expected": "616",
+          "predicted": "386",
+          "extracted": "386",
+          "n_tokens": 1868,
+          "trial_id": "dota2_202227"
+        },
+        {
+          "correct": false,
+          "expected": "644",
+          "predicted": "3820",
+          "extracted": "3820",
+          "n_tokens": 1555,
+          "trial_id": "dota2_202228"
+        },
+        {
+          "correct": false,
+          "expected": "2116",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1080,
+          "trial_id": "dota2_202229"
+        }
+      ]
+    },
+    "3k_20u": {
+      "RI": [
+        {
+          "correct": false,
+          "expected": "990",
+          "predicted": "1340",
+          "extracted": "1340",
+          "n_tokens": 2969,
+          "trial_id": "dota2_202400"
+        },
+        {
+          "correct": false,
+          "expected": "1825",
+          "predicted": "1743",
+          "extracted": "1743",
+          "n_tokens": 2315,
+          "trial_id": "dota2_202401"
+        },
+        {
+          "correct": true,
+          "expected": "2245",
+          "predicted": "2245",
+          "extracted": "2245",
+          "n_tokens": 2386,
+          "trial_id": "dota2_202402"
+        },
+        {
+          "correct": true,
+          "expected": "800",
+          "predicted": "800",
+          "extracted": "800",
+          "n_tokens": 2173,
+          "trial_id": "dota2_202403"
+        },
+        {
+          "correct": true,
+          "expected": "1107",
+          "predicted": "1107",
+          "extracted": "1107",
+          "n_tokens": 2484,
+          "trial_id": "dota2_202404"
+        },
+        {
+          "correct": true,
+          "expected": "1052",
+          "predicted": "1052",
+          "extracted": "1052",
+          "n_tokens": 2113,
+          "trial_id": "dota2_202405"
+        },
+        {
+          "correct": true,
+          "expected": "468",
+          "predicted": "468",
+          "extracted": "468",
+          "n_tokens": 2441,
+          "trial_id": "dota2_202406"
+        },
+        {
+          "correct": false,
+          "expected": "1053",
+          "predicted": "1400",
+          "extracted": "1400",
+          "n_tokens": 2176,
+          "trial_id": "dota2_202407"
+        },
+        {
+          "correct": false,
+          "expected": "1608",
+          "predicted": "1312",
+          "extracted": "1312",
+          "n_tokens": 2402,
+          "trial_id": "dota2_202408"
+        },
+        {
+          "correct": false,
+          "expected": "1370",
+          "predicted": "1799",
+          "extracted": "1799",
+          "n_tokens": 2179,
+          "trial_id": "dota2_202409"
+        },
+        {
+          "correct": false,
+          "expected": "428",
+          "predicted": "1138",
+          "extracted": "1138",
+          "n_tokens": 2787,
+          "trial_id": "dota2_202410"
+        },
+        {
+          "correct": true,
+          "expected": "1247",
+          "predicted": "1247",
+          "extracted": "1247",
+          "n_tokens": 3218,
+          "trial_id": "dota2_202411"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "180",
+          "extracted": "180",
+          "n_tokens": 2023,
+          "trial_id": "dota2_202412"
+        },
+        {
+          "correct": true,
+          "expected": "422",
+          "predicted": "422",
+          "extracted": "422",
+          "n_tokens": 3329,
+          "trial_id": "dota2_202413"
+        },
+        {
+          "correct": true,
+          "expected": "1165",
+          "predicted": "1165",
+          "extracted": "1165",
+          "n_tokens": 2159,
+          "trial_id": "dota2_202414"
+        },
+        {
+          "correct": true,
+          "expected": "1520",
+          "predicted": "1520",
+          "extracted": "1520",
+          "n_tokens": 2051,
+          "trial_id": "dota2_202415"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 3822,
+          "trial_id": "dota2_202416"
+        },
+        {
+          "correct": true,
+          "expected": "2480",
+          "predicted": "2480",
+          "extracted": "2480",
+          "n_tokens": 2213,
+          "trial_id": "dota2_202417"
+        },
+        {
+          "correct": true,
+          "expected": "1448",
+          "predicted": "1448",
+          "extracted": "1448",
+          "n_tokens": 2235,
+          "trial_id": "dota2_202418"
+        },
+        {
+          "correct": true,
+          "expected": "544",
+          "predicted": "544",
+          "extracted": "544",
+          "n_tokens": 3749,
+          "trial_id": "dota2_202419"
+        },
+        {
+          "correct": true,
+          "expected": "1824",
+          "predicted": "1824",
+          "extracted": "1824",
+          "n_tokens": 2923,
+          "trial_id": "dota2_202420"
+        },
+        {
+          "correct": false,
+          "expected": "1758",
+          "predicted": "677",
+          "extracted": "677",
+          "n_tokens": 2186,
+          "trial_id": "dota2_202421"
+        },
+        {
+          "correct": false,
+          "expected": "810",
+          "predicted": "2299",
+          "extracted": "2299",
+          "n_tokens": 3359,
+          "trial_id": "dota2_202422"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2274,
+          "trial_id": "dota2_202423"
+        },
+        {
+          "correct": true,
+          "expected": "1518",
+          "predicted": "1518",
+          "extracted": "1518",
+          "n_tokens": 2410,
+          "trial_id": "dota2_202424"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 3536,
+          "trial_id": "dota2_202425"
+        },
+        {
+          "correct": false,
+          "expected": "973",
+          "predicted": "1400",
+          "extracted": "1400",
+          "n_tokens": 3072,
+          "trial_id": "dota2_202426"
+        },
+        {
+          "correct": true,
+          "expected": "1140",
+          "predicted": "1140",
+          "extracted": "1140",
+          "n_tokens": 2415,
+          "trial_id": "dota2_202427"
+        },
+        {
+          "correct": false,
+          "expected": "844",
+          "predicted": "1911",
+          "extracted": "1911",
+          "n_tokens": 3356,
+          "trial_id": "dota2_202428"
+        },
+        {
+          "correct": false,
+          "expected": "750",
+          "predicted": "1510",
+          "extracted": "1510",
+          "n_tokens": 2189,
+          "trial_id": "dota2_202429"
+        }
+      ],
+      "PI": [
+        {
+          "correct": false,
+          "expected": "4456",
+          "predicted": "2488",
+          "extracted": "2488",
+          "n_tokens": 2964,
+          "trial_id": "dota2_202400"
+        },
+        {
+          "correct": true,
+          "expected": "3485",
+          "predicted": "3485",
+          "extracted": "3485",
+          "n_tokens": 2315,
+          "trial_id": "dota2_202401"
+        },
+        {
+          "correct": false,
+          "expected": "1538",
+          "predicted": "5192",
+          "extracted": "5192",
+          "n_tokens": 2387,
+          "trial_id": "dota2_202402"
+        },
+        {
+          "correct": false,
+          "expected": "6093",
+          "predicted": "6058",
+          "extracted": "6058",
+          "n_tokens": 2172,
+          "trial_id": "dota2_202403"
+        },
+        {
+          "correct": false,
+          "expected": "5243",
+          "predicted": "1765",
+          "extracted": "1765",
+          "n_tokens": 2485,
+          "trial_id": "dota2_202404"
+        },
+        {
+          "correct": false,
+          "expected": "349",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2109,
+          "trial_id": "dota2_202405"
+        },
+        {
+          "correct": false,
+          "expected": "1402",
+          "predicted": "242",
+          "extracted": "242",
+          "n_tokens": 2443,
+          "trial_id": "dota2_202406"
+        },
+        {
+          "correct": false,
+          "expected": "2415",
+          "predicted": "3683",
+          "extracted": "3683",
+          "n_tokens": 2170,
+          "trial_id": "dota2_202407"
+        },
+        {
+          "correct": false,
+          "expected": "396",
+          "predicted": "1312",
+          "extracted": "1312",
+          "n_tokens": 2396,
+          "trial_id": "dota2_202408"
+        },
+        {
+          "correct": false,
+          "expected": "4429",
+          "predicted": "3773",
+          "extracted": "3773",
+          "n_tokens": 2178,
+          "trial_id": "dota2_202409"
+        },
+        {
+          "correct": false,
+          "expected": "2911",
+          "predicted": "418",
+          "extracted": "418",
+          "n_tokens": 2786,
+          "trial_id": "dota2_202410"
+        },
+        {
+          "correct": true,
+          "expected": "4096",
+          "predicted": "4096",
+          "extracted": "4096",
+          "n_tokens": 3215,
+          "trial_id": "dota2_202411"
+        },
+        {
+          "correct": false,
+          "expected": "374",
+          "predicted": "1608",
+          "extracted": "1608",
+          "n_tokens": 2017,
+          "trial_id": "dota2_202412"
+        },
+        {
+          "correct": false,
+          "expected": "368",
+          "predicted": "627",
+          "extracted": "627",
+          "n_tokens": 3328,
+          "trial_id": "dota2_202413"
+        },
+        {
+          "correct": false,
+          "expected": "574",
+          "predicted": "4351",
+          "extracted": "4351",
+          "n_tokens": 2155,
+          "trial_id": "dota2_202414"
+        },
+        {
+          "correct": false,
+          "expected": "200",
+          "predicted": "4191",
+          "extracted": "4191",
+          "n_tokens": 2047,
+          "trial_id": "dota2_202415"
+        },
+        {
+          "correct": false,
+          "expected": "1009",
+          "predicted": "519",
+          "extracted": "519",
+          "n_tokens": 3823,
+          "trial_id": "dota2_202416"
+        },
+        {
+          "correct": false,
+          "expected": "4536",
+          "predicted": "4726",
+          "extracted": "4726",
+          "n_tokens": 2212,
+          "trial_id": "dota2_202417"
+        },
+        {
+          "correct": false,
+          "expected": "3373",
+          "predicted": "2823",
+          "extracted": "2823",
+          "n_tokens": 2234,
+          "trial_id": "dota2_202418"
+        },
+        {
+          "correct": true,
+          "expected": "1462",
+          "predicted": "1462",
+          "extracted": "1462",
+          "n_tokens": 3749,
+          "trial_id": "dota2_202419"
+        },
+        {
+          "correct": false,
+          "expected": "3561",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2924,
+          "trial_id": "dota2_202420"
+        },
+        {
+          "correct": true,
+          "expected": "1633",
+          "predicted": "1633",
+          "extracted": "1633",
+          "n_tokens": 2187,
+          "trial_id": "dota2_202421"
+        },
+        {
+          "correct": false,
+          "expected": "4762",
+          "predicted": "4516",
+          "extracted": "4516",
+          "n_tokens": 3361,
+          "trial_id": "dota2_202422"
+        },
+        {
+          "correct": false,
+          "expected": "928",
+          "predicted": "1788",
+          "extracted": "1788",
+          "n_tokens": 2276,
+          "trial_id": "dota2_202423"
+        },
+        {
+          "correct": false,
+          "expected": "21",
+          "predicted": "1547",
+          "extracted": "1547",
+          "n_tokens": 2406,
+          "trial_id": "dota2_202424"
+        },
+        {
+          "correct": false,
+          "expected": "406",
+          "predicted": "5200",
+          "extracted": "5200",
+          "n_tokens": 3536,
+          "trial_id": "dota2_202425"
+        },
+        {
+          "correct": false,
+          "expected": "200",
+          "predicted": "2005",
+          "extracted": "2005",
+          "n_tokens": 3069,
+          "trial_id": "dota2_202426"
+        },
+        {
+          "correct": false,
+          "expected": "827",
+          "predicted": "1470",
+          "extracted": "1470",
+          "n_tokens": 2415,
+          "trial_id": "dota2_202427"
+        },
+        {
+          "correct": false,
+          "expected": "528",
+          "predicted": "5675",
+          "extracted": "5675",
+          "n_tokens": 3357,
+          "trial_id": "dota2_202428"
+        },
+        {
+          "correct": true,
+          "expected": "4920",
+          "predicted": "4920",
+          "extracted": "4920",
+          "n_tokens": 2185,
+          "trial_id": "dota2_202429"
+        }
+      ]
+    },
+    "5k_3u": {
+      "RI": [
+        {
+          "correct": true,
+          "expected": "374",
+          "predicted": "374",
+          "extracted": "374",
+          "n_tokens": 697,
+          "trial_id": "dota2_203400"
+        },
+        {
+          "correct": false,
+          "expected": "797",
+          "predicted": "1800",
+          "extracted": "1800",
+          "n_tokens": 737,
+          "trial_id": "dota2_203401"
+        },
+        {
+          "correct": true,
+          "expected": "1195",
+          "predicted": "1195",
+          "extracted": "1195",
+          "n_tokens": 843,
+          "trial_id": "dota2_203402"
+        },
+        {
+          "correct": false,
+          "expected": "960",
+          "predicted": "1503",
+          "extracted": "1503",
+          "n_tokens": 749,
+          "trial_id": "dota2_203403"
+        },
+        {
+          "correct": true,
+          "expected": "1545",
+          "predicted": "1545",
+          "extracted": "1545",
+          "n_tokens": 766,
+          "trial_id": "dota2_203404"
+        },
+        {
+          "correct": true,
+          "expected": "736",
+          "predicted": "736",
+          "extracted": "736",
+          "n_tokens": 944,
+          "trial_id": "dota2_203405"
+        },
+        {
+          "correct": true,
+          "expected": "2045",
+          "predicted": "2045",
+          "extracted": "2045",
+          "n_tokens": 656,
+          "trial_id": "dota2_203406"
+        },
+        {
+          "correct": false,
+          "expected": "473",
+          "predicted": "176",
+          "extracted": "176",
+          "n_tokens": 913,
+          "trial_id": "dota2_203407"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "400",
+          "extracted": "400",
+          "n_tokens": 1050,
+          "trial_id": "dota2_203408"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "753",
+          "extracted": "753",
+          "n_tokens": 1020,
+          "trial_id": "dota2_203409"
+        },
+        {
+          "correct": true,
+          "expected": "883",
+          "predicted": "883",
+          "extracted": "883",
+          "n_tokens": 913,
+          "trial_id": "dota2_203410"
+        },
+        {
+          "correct": true,
+          "expected": "812",
+          "predicted": "812",
+          "extracted": "812",
+          "n_tokens": 727,
+          "trial_id": "dota2_203411"
+        },
+        {
+          "correct": false,
+          "expected": "1081",
+          "predicted": "1281",
+          "extracted": "1281",
+          "n_tokens": 859,
+          "trial_id": "dota2_203412"
+        },
+        {
+          "correct": true,
+          "expected": "1893",
+          "predicted": "1893",
+          "extracted": "1893",
+          "n_tokens": 801,
+          "trial_id": "dota2_203413"
+        },
+        {
+          "correct": true,
+          "expected": "426",
+          "predicted": "426",
+          "extracted": "426",
+          "n_tokens": 660,
+          "trial_id": "dota2_203414"
+        },
+        {
+          "correct": false,
+          "expected": "1367",
+          "predicted": "1262",
+          "extracted": "1262",
+          "n_tokens": 617,
+          "trial_id": "dota2_203415"
+        },
+        {
+          "correct": true,
+          "expected": "2448",
+          "predicted": "2448",
+          "extracted": "2448",
+          "n_tokens": 1091,
+          "trial_id": "dota2_203416"
+        },
+        {
+          "correct": false,
+          "expected": "892",
+          "predicted": "525",
+          "extracted": "525",
+          "n_tokens": 757,
+          "trial_id": "dota2_203417"
+        },
+        {
+          "correct": false,
+          "expected": "1640",
+          "predicted": "240",
+          "extracted": "240",
+          "n_tokens": 781,
+          "trial_id": "dota2_203418"
+        },
+        {
+          "correct": true,
+          "expected": "1575",
+          "predicted": "1575",
+          "extracted": "1575",
+          "n_tokens": 636,
+          "trial_id": "dota2_203419"
+        },
+        {
+          "correct": false,
+          "expected": "1678",
+          "predicted": "1502",
+          "extracted": "1502",
+          "n_tokens": 883,
+          "trial_id": "dota2_203420"
+        },
+        {
+          "correct": false,
+          "expected": "1280",
+          "predicted": "108",
+          "extracted": "108",
+          "n_tokens": 659,
+          "trial_id": "dota2_203421"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "880",
+          "extracted": "880",
+          "n_tokens": 928,
+          "trial_id": "dota2_203422"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 806,
+          "trial_id": "dota2_203423"
+        },
+        {
+          "correct": false,
+          "expected": "301",
+          "predicted": "2034",
+          "extracted": "2034",
+          "n_tokens": 674,
+          "trial_id": "dota2_203424"
+        },
+        {
+          "correct": true,
+          "expected": "454",
+          "predicted": "454",
+          "extracted": "454",
+          "n_tokens": 753,
+          "trial_id": "dota2_203425"
+        },
+        {
+          "correct": true,
+          "expected": "785",
+          "predicted": "785",
+          "extracted": "785",
+          "n_tokens": 658,
+          "trial_id": "dota2_203426"
+        },
+        {
+          "correct": true,
+          "expected": "1413",
+          "predicted": "1413",
+          "extracted": "1413",
+          "n_tokens": 842,
+          "trial_id": "dota2_203427"
+        },
+        {
+          "correct": false,
+          "expected": "247",
+          "predicted": "431",
+          "extracted": "431",
+          "n_tokens": 853,
+          "trial_id": "dota2_203428"
+        },
+        {
+          "correct": true,
+          "expected": "2023",
+          "predicted": "2023",
+          "extracted": "2023",
+          "n_tokens": 802,
+          "trial_id": "dota2_203429"
+        }
+      ],
+      "PI": [
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "374",
+          "extracted": "374",
+          "n_tokens": 691,
+          "trial_id": "dota2_203400"
+        },
+        {
+          "correct": false,
+          "expected": "1207",
+          "predicted": "797",
+          "extracted": "797",
+          "n_tokens": 739,
+          "trial_id": "dota2_203401"
+        },
+        {
+          "correct": true,
+          "expected": "1974",
+          "predicted": "1974",
+          "extracted": "1974",
+          "n_tokens": 839,
+          "trial_id": "dota2_203402"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1503",
+          "extracted": "1503",
+          "n_tokens": 746,
+          "trial_id": "dota2_203403"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "2116",
+          "extracted": "2116",
+          "n_tokens": 761,
+          "trial_id": "dota2_203404"
+        },
+        {
+          "correct": true,
+          "expected": "1819",
+          "predicted": "1819",
+          "extracted": "1819",
+          "n_tokens": 945,
+          "trial_id": "dota2_203405"
+        },
+        {
+          "correct": true,
+          "expected": "3579",
+          "predicted": "3579",
+          "extracted": "3579",
+          "n_tokens": 656,
+          "trial_id": "dota2_203406"
+        },
+        {
+          "correct": true,
+          "expected": "676",
+          "predicted": "676",
+          "extracted": "676",
+          "n_tokens": 909,
+          "trial_id": "dota2_203407"
+        },
+        {
+          "correct": true,
+          "expected": "213",
+          "predicted": "213",
+          "extracted": "213",
+          "n_tokens": 1044,
+          "trial_id": "dota2_203408"
+        },
+        {
+          "correct": false,
+          "expected": "753",
+          "predicted": "1557",
+          "extracted": "1557",
+          "n_tokens": 1014,
+          "trial_id": "dota2_203409"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 912,
+          "trial_id": "dota2_203410"
+        },
+        {
+          "correct": false,
+          "expected": "1967",
+          "predicted": "812",
+          "extracted": "812",
+          "n_tokens": 723,
+          "trial_id": "dota2_203411"
+        },
+        {
+          "correct": true,
+          "expected": "1144",
+          "predicted": "1144",
+          "extracted": "1144",
+          "n_tokens": 857,
+          "trial_id": "dota2_203412"
+        },
+        {
+          "correct": true,
+          "expected": "2273",
+          "predicted": "2273",
+          "extracted": "2273",
+          "n_tokens": 803,
+          "trial_id": "dota2_203413"
+        },
+        {
+          "correct": true,
+          "expected": "1497",
+          "predicted": "1497",
+          "extracted": "1497",
+          "n_tokens": 662,
+          "trial_id": "dota2_203414"
+        },
+        {
+          "correct": true,
+          "expected": "1262",
+          "predicted": "1262",
+          "extracted": "1262",
+          "n_tokens": 618,
+          "trial_id": "dota2_203415"
+        },
+        {
+          "correct": true,
+          "expected": "3299",
+          "predicted": "3299",
+          "extracted": "3299",
+          "n_tokens": 1085,
+          "trial_id": "dota2_203416"
+        },
+        {
+          "correct": false,
+          "expected": "795",
+          "predicted": "525",
+          "extracted": "525",
+          "n_tokens": 759,
+          "trial_id": "dota2_203417"
+        },
+        {
+          "correct": false,
+          "expected": "935",
+          "predicted": "240",
+          "extracted": "240",
+          "n_tokens": 783,
+          "trial_id": "dota2_203418"
+        },
+        {
+          "correct": true,
+          "expected": "3655",
+          "predicted": "3655",
+          "extracted": "3655",
+          "n_tokens": 631,
+          "trial_id": "dota2_203419"
+        },
+        {
+          "correct": false,
+          "expected": "150",
+          "predicted": "28",
+          "extracted": "28",
+          "n_tokens": 882,
+          "trial_id": "dota2_203420"
+        },
+        {
+          "correct": true,
+          "expected": "1427",
+          "predicted": "1427",
+          "extracted": "1427",
+          "n_tokens": 657,
+          "trial_id": "dota2_203421"
+        },
+        {
+          "correct": false,
+          "expected": "107",
+          "predicted": "5450",
+          "extracted": "5450",
+          "n_tokens": 923,
+          "trial_id": "dota2_203422"
+        },
+        {
+          "correct": true,
+          "expected": "509",
+          "predicted": "509",
+          "extracted": "509",
+          "n_tokens": 806,
+          "trial_id": "dota2_203423"
+        },
+        {
+          "correct": true,
+          "expected": "884",
+          "predicted": "884",
+          "extracted": "884",
+          "n_tokens": 670,
+          "trial_id": "dota2_203424"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "454",
+          "extracted": "454",
+          "n_tokens": 749,
+          "trial_id": "dota2_203425"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "785",
+          "extracted": "785",
+          "n_tokens": 658,
+          "trial_id": "dota2_203426"
+        },
+        {
+          "correct": false,
+          "expected": "300",
+          "predicted": "180",
+          "extracted": "180",
+          "n_tokens": 842,
+          "trial_id": "dota2_203427"
+        },
+        {
+          "correct": true,
+          "expected": "431",
+          "predicted": "431",
+          "extracted": "431",
+          "n_tokens": 851,
+          "trial_id": "dota2_203428"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "2023",
+          "extracted": "2023",
+          "n_tokens": 800,
+          "trial_id": "dota2_203429"
+        }
+      ]
+    },
+    "5k_5u": {
+      "RI": [
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "2129",
+          "extracted": "2129",
+          "n_tokens": 815,
+          "trial_id": "dota2_203600"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "750",
+          "extracted": "750",
+          "n_tokens": 1057,
+          "trial_id": "dota2_203601"
+        },
+        {
+          "correct": true,
+          "expected": "814",
+          "predicted": "814",
+          "extracted": "814",
+          "n_tokens": 1016,
+          "trial_id": "dota2_203602"
+        },
+        {
+          "correct": true,
+          "expected": "1778",
+          "predicted": "1778",
+          "extracted": "1778",
+          "n_tokens": 1311,
+          "trial_id": "dota2_203603"
+        },
+        {
+          "correct": true,
+          "expected": "1875",
+          "predicted": "1875",
+          "extracted": "1875",
+          "n_tokens": 1043,
+          "trial_id": "dota2_203604"
+        },
+        {
+          "correct": false,
+          "expected": "750",
+          "predicted": "969",
+          "extracted": "969",
+          "n_tokens": 887,
+          "trial_id": "dota2_203605"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1649,
+          "trial_id": "dota2_203606"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1219,
+          "trial_id": "dota2_203607"
+        },
+        {
+          "correct": true,
+          "expected": "1834",
+          "predicted": "1834",
+          "extracted": "1834",
+          "n_tokens": 1133,
+          "trial_id": "dota2_203608"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1108,
+          "trial_id": "dota2_203609"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "506",
+          "extracted": "506",
+          "n_tokens": 1110,
+          "trial_id": "dota2_203610"
+        },
+        {
+          "correct": true,
+          "expected": "1163",
+          "predicted": "1163",
+          "extracted": "1163",
+          "n_tokens": 1163,
+          "trial_id": "dota2_203611"
+        },
+        {
+          "correct": true,
+          "expected": "877",
+          "predicted": "877",
+          "extracted": "877",
+          "n_tokens": 1130,
+          "trial_id": "dota2_203612"
+        },
+        {
+          "correct": true,
+          "expected": "1398",
+          "predicted": "1398",
+          "extracted": "1398",
+          "n_tokens": 1480,
+          "trial_id": "dota2_203613"
+        },
+        {
+          "correct": true,
+          "expected": "611",
+          "predicted": "611 gold",
+          "extracted": "611",
+          "n_tokens": 1510,
+          "trial_id": "dota2_203614"
+        },
+        {
+          "correct": false,
+          "expected": "2176",
+          "predicted": "667",
+          "extracted": "667",
+          "n_tokens": 1021,
+          "trial_id": "dota2_203615"
+        },
+        {
+          "correct": false,
+          "expected": "1322",
+          "predicted": "1051",
+          "extracted": "1051",
+          "n_tokens": 1159,
+          "trial_id": "dota2_203616"
+        },
+        {
+          "correct": false,
+          "expected": "1582",
+          "predicted": "914",
+          "extracted": "914",
+          "n_tokens": 950,
+          "trial_id": "dota2_203617"
+        },
+        {
+          "correct": true,
+          "expected": "900",
+          "predicted": "900",
+          "extracted": "900",
+          "n_tokens": 1352,
+          "trial_id": "dota2_203618"
+        },
+        {
+          "correct": true,
+          "expected": "137",
+          "predicted": "137",
+          "extracted": "137",
+          "n_tokens": 1306,
+          "trial_id": "dota2_203619"
+        },
+        {
+          "correct": false,
+          "expected": "984",
+          "predicted": "1390",
+          "extracted": "1390",
+          "n_tokens": 1253,
+          "trial_id": "dota2_203620"
+        },
+        {
+          "correct": true,
+          "expected": "1168",
+          "predicted": "1168",
+          "extracted": "1168",
+          "n_tokens": 1353,
+          "trial_id": "dota2_203621"
+        },
+        {
+          "correct": false,
+          "expected": "412",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1028,
+          "trial_id": "dota2_203622"
+        },
+        {
+          "correct": false,
+          "expected": "1142",
+          "predicted": "1044",
+          "extracted": "1044",
+          "n_tokens": 1081,
+          "trial_id": "dota2_203623"
+        },
+        {
+          "correct": false,
+          "expected": "2014",
+          "predicted": "192",
+          "extracted": "192",
+          "n_tokens": 1203,
+          "trial_id": "dota2_203624"
+        },
+        {
+          "correct": true,
+          "expected": "1105",
+          "predicted": "1105",
+          "extracted": "1105",
+          "n_tokens": 1907,
+          "trial_id": "dota2_203625"
+        },
+        {
+          "correct": true,
+          "expected": "2177",
+          "predicted": "2177",
+          "extracted": "2177",
+          "n_tokens": 1367,
+          "trial_id": "dota2_203626"
+        },
+        {
+          "correct": true,
+          "expected": "720",
+          "predicted": "720",
+          "extracted": "720",
+          "n_tokens": 1412,
+          "trial_id": "dota2_203627"
+        },
+        {
+          "correct": false,
+          "expected": "1323",
+          "predicted": "1443",
+          "extracted": "1443",
+          "n_tokens": 1082,
+          "trial_id": "dota2_203628"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1055,
+          "trial_id": "dota2_203629"
+        }
+      ],
+      "PI": [
+        {
+          "correct": false,
+          "expected": "1738",
+          "predicted": "356",
+          "extracted": "356",
+          "n_tokens": 817,
+          "trial_id": "dota2_203600"
+        },
+        {
+          "correct": false,
+          "expected": "768",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1055,
+          "trial_id": "dota2_203601"
+        },
+        {
+          "correct": false,
+          "expected": "2388",
+          "predicted": "1535",
+          "extracted": "1535",
+          "n_tokens": 1011,
+          "trial_id": "dota2_203602"
+        },
+        {
+          "correct": true,
+          "expected": "939",
+          "predicted": "939",
+          "extracted": "939",
+          "n_tokens": 1306,
+          "trial_id": "dota2_203603"
+        },
+        {
+          "correct": false,
+          "expected": "1665",
+          "predicted": "3065",
+          "extracted": "3065",
+          "n_tokens": 1037,
+          "trial_id": "dota2_203604"
+        },
+        {
+          "correct": false,
+          "expected": "1287",
+          "predicted": "969",
+          "extracted": "969",
+          "n_tokens": 883,
+          "trial_id": "dota2_203605"
+        },
+        {
+          "correct": false,
+          "expected": "136",
+          "predicted": "277",
+          "extracted": "277",
+          "n_tokens": 1649,
+          "trial_id": "dota2_203606"
+        },
+        {
+          "correct": true,
+          "expected": "356",
+          "predicted": "356",
+          "extracted": "356",
+          "n_tokens": 1216,
+          "trial_id": "dota2_203607"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "2238",
+          "extracted": "2238",
+          "n_tokens": 1133,
+          "trial_id": "dota2_203608"
+        },
+        {
+          "correct": false,
+          "expected": "960",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1103,
+          "trial_id": "dota2_203609"
+        },
+        {
+          "correct": false,
+          "expected": "188",
+          "predicted": "583",
+          "extracted": "583",
+          "n_tokens": 1108,
+          "trial_id": "dota2_203610"
+        },
+        {
+          "correct": true,
+          "expected": "1926",
+          "predicted": "1926",
+          "extracted": "1926",
+          "n_tokens": 1164,
+          "trial_id": "dota2_203611"
+        },
+        {
+          "correct": false,
+          "expected": "357",
+          "predicted": "1129",
+          "extracted": "1129",
+          "n_tokens": 1130,
+          "trial_id": "dota2_203612"
+        },
+        {
+          "correct": true,
+          "expected": "3950",
+          "predicted": "3950",
+          "extracted": "3950",
+          "n_tokens": 1481,
+          "trial_id": "dota2_203613"
+        },
+        {
+          "correct": false,
+          "expected": "1004",
+          "predicted": "611",
+          "extracted": "611",
+          "n_tokens": 1506,
+          "trial_id": "dota2_203614"
+        },
+        {
+          "correct": false,
+          "expected": "4086",
+          "predicted": "2547",
+          "extracted": "2547",
+          "n_tokens": 1018,
+          "trial_id": "dota2_203615"
+        },
+        {
+          "correct": true,
+          "expected": "1165",
+          "predicted": "1165",
+          "extracted": "1165",
+          "n_tokens": 1155,
+          "trial_id": "dota2_203616"
+        },
+        {
+          "correct": true,
+          "expected": "1502",
+          "predicted": "1502",
+          "extracted": "1502",
+          "n_tokens": 951,
+          "trial_id": "dota2_203617"
+        },
+        {
+          "correct": true,
+          "expected": "2562",
+          "predicted": "2562",
+          "extracted": "2562",
+          "n_tokens": 1350,
+          "trial_id": "dota2_203618"
+        },
+        {
+          "correct": false,
+          "expected": "175",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1304,
+          "trial_id": "dota2_203619"
+        },
+        {
+          "correct": false,
+          "expected": "3342",
+          "predicted": "2366",
+          "extracted": "2366",
+          "n_tokens": 1251,
+          "trial_id": "dota2_203620"
+        },
+        {
+          "correct": true,
+          "expected": "1120",
+          "predicted": "1120",
+          "extracted": "1120",
+          "n_tokens": 1352,
+          "trial_id": "dota2_203621"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1022,
+          "trial_id": "dota2_203622"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1409",
+          "extracted": "1409",
+          "n_tokens": 1080,
+          "trial_id": "dota2_203623"
+        },
+        {
+          "correct": false,
+          "expected": "4965",
+          "predicted": "3981",
+          "extracted": "3981",
+          "n_tokens": 1202,
+          "trial_id": "dota2_203624"
+        },
+        {
+          "correct": false,
+          "expected": "203",
+          "predicted": "441",
+          "extracted": "441",
+          "n_tokens": 1902,
+          "trial_id": "dota2_203625"
+        },
+        {
+          "correct": false,
+          "expected": "2440",
+          "predicted": "1817",
+          "extracted": "1817",
+          "n_tokens": 1363,
+          "trial_id": "dota2_203626"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 1408,
+          "trial_id": "dota2_203627"
+        },
+        {
+          "correct": false,
+          "expected": "3835",
+          "predicted": "3022",
+          "extracted": "3022",
+          "n_tokens": 1077,
+          "trial_id": "dota2_203628"
+        },
+        {
+          "correct": false,
+          "expected": "315",
+          "predicted": "1769",
+          "extracted": "1769",
+          "n_tokens": 1049,
+          "trial_id": "dota2_203629"
+        }
+      ]
+    },
+    "5k_10u": {
+      "RI": [
+        {
+          "correct": false,
+          "expected": "521",
+          "predicted": "1356",
+          "extracted": "1356",
+          "n_tokens": 2303,
+          "trial_id": "dota2_203800"
+        },
+        {
+          "correct": true,
+          "expected": "1376",
+          "predicted": "1376",
+          "extracted": "1376",
+          "n_tokens": 3257,
+          "trial_id": "dota2_203801"
+        },
+        {
+          "correct": true,
+          "expected": "560",
+          "predicted": "560",
+          "extracted": "560",
+          "n_tokens": 1815,
+          "trial_id": "dota2_203802"
+        },
+        {
+          "correct": false,
+          "expected": "780",
+          "predicted": "894",
+          "extracted": "894",
+          "n_tokens": 2613,
+          "trial_id": "dota2_203803"
+        },
+        {
+          "correct": false,
+          "expected": "960",
+          "predicted": "1660",
+          "extracted": "1660",
+          "n_tokens": 1916,
+          "trial_id": "dota2_203804"
+        },
+        {
+          "correct": false,
+          "expected": "1537",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2530,
+          "trial_id": "dota2_203805"
+        },
+        {
+          "correct": false,
+          "expected": "617",
+          "predicted": "1369",
+          "extracted": "1369",
+          "n_tokens": 2619,
+          "trial_id": "dota2_203806"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1029",
+          "extracted": "1029",
+          "n_tokens": 2921,
+          "trial_id": "dota2_203807"
+        },
+        {
+          "correct": false,
+          "expected": "1896",
+          "predicted": "2222",
+          "extracted": "2222",
+          "n_tokens": 1978,
+          "trial_id": "dota2_203808"
+        },
+        {
+          "correct": false,
+          "expected": "1139",
+          "predicted": "2520",
+          "extracted": "2520",
+          "n_tokens": 2869,
+          "trial_id": "dota2_203809"
+        },
+        {
+          "correct": true,
+          "expected": "1024",
+          "predicted": "1024",
+          "extracted": "1024",
+          "n_tokens": 1871,
+          "trial_id": "dota2_203810"
+        },
+        {
+          "correct": false,
+          "expected": "1143",
+          "predicted": "988",
+          "extracted": "988",
+          "n_tokens": 2295,
+          "trial_id": "dota2_203811"
+        },
+        {
+          "correct": true,
+          "expected": "119",
+          "predicted": "119",
+          "extracted": "119",
+          "n_tokens": 2004,
+          "trial_id": "dota2_203812"
+        },
+        {
+          "correct": false,
+          "expected": "2205",
+          "predicted": "1335",
+          "extracted": "1335",
+          "n_tokens": 1791,
+          "trial_id": "dota2_203813"
+        },
+        {
+          "correct": true,
+          "expected": "1402",
+          "predicted": "1402",
+          "extracted": "1402",
+          "n_tokens": 1875,
+          "trial_id": "dota2_203814"
+        },
+        {
+          "correct": false,
+          "expected": "1276",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2137,
+          "trial_id": "dota2_203815"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1280",
+          "extracted": "1280",
+          "n_tokens": 2142,
+          "trial_id": "dota2_203816"
+        },
+        {
+          "correct": false,
+          "expected": "1343",
+          "predicted": "2187",
+          "extracted": "2187",
+          "n_tokens": 2757,
+          "trial_id": "dota2_203817"
+        },
+        {
+          "correct": false,
+          "expected": "1678",
+          "predicted": "1400",
+          "extracted": "1400",
+          "n_tokens": 2708,
+          "trial_id": "dota2_203818"
+        },
+        {
+          "correct": false,
+          "expected": "1275",
+          "predicted": "1027",
+          "extracted": "1027",
+          "n_tokens": 2795,
+          "trial_id": "dota2_203819"
+        },
+        {
+          "correct": true,
+          "expected": "884",
+          "predicted": "884",
+          "extracted": "884",
+          "n_tokens": 1927,
+          "trial_id": "dota2_203820"
+        },
+        {
+          "correct": false,
+          "expected": "884",
+          "predicted": "1732",
+          "extracted": "1732",
+          "n_tokens": 1882,
+          "trial_id": "dota2_203821"
+        },
+        {
+          "correct": true,
+          "expected": "2075",
+          "predicted": "2075",
+          "extracted": "2075",
+          "n_tokens": 1990,
+          "trial_id": "dota2_203822"
+        },
+        {
+          "correct": true,
+          "expected": "1439",
+          "predicted": "1439",
+          "extracted": "1439",
+          "n_tokens": 3194,
+          "trial_id": "dota2_203823"
+        },
+        {
+          "correct": true,
+          "expected": "976",
+          "predicted": "976",
+          "extracted": "976",
+          "n_tokens": 1947,
+          "trial_id": "dota2_203824"
+        },
+        {
+          "correct": false,
+          "expected": "835",
+          "predicted": "3233",
+          "extracted": "3233",
+          "n_tokens": 2034,
+          "trial_id": "dota2_203825"
+        },
+        {
+          "correct": false,
+          "expected": "1372",
+          "predicted": "820",
+          "extracted": "820",
+          "n_tokens": 1794,
+          "trial_id": "dota2_203826"
+        },
+        {
+          "correct": true,
+          "expected": "1516",
+          "predicted": "1516",
+          "extracted": "1516",
+          "n_tokens": 1989,
+          "trial_id": "dota2_203827"
+        },
+        {
+          "correct": false,
+          "expected": "794",
+          "predicted": "917",
+          "extracted": "917",
+          "n_tokens": 1804,
+          "trial_id": "dota2_203828"
+        },
+        {
+          "correct": true,
+          "expected": "2274",
+          "predicted": "2274",
+          "extracted": "2274",
+          "n_tokens": 2042,
+          "trial_id": "dota2_203829"
+        }
+      ],
+      "PI": [
+        {
+          "correct": true,
+          "expected": "2851",
+          "predicted": "2851",
+          "extracted": "2851",
+          "n_tokens": 2303,
+          "trial_id": "dota2_203800"
+        },
+        {
+          "correct": true,
+          "expected": "2123",
+          "predicted": "2123",
+          "extracted": "2123",
+          "n_tokens": 3256,
+          "trial_id": "dota2_203801"
+        },
+        {
+          "correct": false,
+          "expected": "1160",
+          "predicted": "1331",
+          "extracted": "1331",
+          "n_tokens": 1816,
+          "trial_id": "dota2_203802"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "2495",
+          "extracted": "2495",
+          "n_tokens": 2611,
+          "trial_id": "dota2_203803"
+        },
+        {
+          "correct": false,
+          "expected": "643",
+          "predicted": "1207",
+          "extracted": "1207",
+          "n_tokens": 1915,
+          "trial_id": "dota2_203804"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "399",
+          "extracted": "399",
+          "n_tokens": 2527,
+          "trial_id": "dota2_203805"
+        },
+        {
+          "correct": true,
+          "expected": "3928",
+          "predicted": "3928",
+          "extracted": "3928",
+          "n_tokens": 2619,
+          "trial_id": "dota2_203806"
+        },
+        {
+          "correct": true,
+          "expected": "186",
+          "predicted": "186",
+          "extracted": "186",
+          "n_tokens": 2920,
+          "trial_id": "dota2_203807"
+        },
+        {
+          "correct": true,
+          "expected": "3388",
+          "predicted": "3388",
+          "extracted": "3388",
+          "n_tokens": 1973,
+          "trial_id": "dota2_203808"
+        },
+        {
+          "correct": true,
+          "expected": "3084",
+          "predicted": "3084",
+          "extracted": "3084",
+          "n_tokens": 2863,
+          "trial_id": "dota2_203809"
+        },
+        {
+          "correct": false,
+          "expected": "2637",
+          "predicted": "3420",
+          "extracted": "3420",
+          "n_tokens": 1866,
+          "trial_id": "dota2_203810"
+        },
+        {
+          "correct": false,
+          "expected": "1354",
+          "predicted": "1467",
+          "extracted": "1467",
+          "n_tokens": 2289,
+          "trial_id": "dota2_203811"
+        },
+        {
+          "correct": false,
+          "expected": "112",
+          "predicted": "1801",
+          "extracted": "1801",
+          "n_tokens": 2004,
+          "trial_id": "dota2_203812"
+        },
+        {
+          "correct": false,
+          "expected": "2286",
+          "predicted": "1335",
+          "extracted": "1335",
+          "n_tokens": 1792,
+          "trial_id": "dota2_203813"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "200",
+          "extracted": "200",
+          "n_tokens": 1873,
+          "trial_id": "dota2_203814"
+        },
+        {
+          "correct": false,
+          "expected": "604",
+          "predicted": "190",
+          "extracted": "190",
+          "n_tokens": 2137,
+          "trial_id": "dota2_203815"
+        },
+        {
+          "correct": false,
+          "expected": "696",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2137,
+          "trial_id": "dota2_203816"
+        },
+        {
+          "correct": false,
+          "expected": "3085",
+          "predicted": "2910",
+          "extracted": "2910",
+          "n_tokens": 2755,
+          "trial_id": "dota2_203817"
+        },
+        {
+          "correct": false,
+          "expected": "750",
+          "predicted": "1259",
+          "extracted": "1259",
+          "n_tokens": 2704,
+          "trial_id": "dota2_203818"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1016",
+          "extracted": "1016",
+          "n_tokens": 2790,
+          "trial_id": "dota2_203819"
+        },
+        {
+          "correct": false,
+          "expected": "1211",
+          "predicted": "1480",
+          "extracted": "1480",
+          "n_tokens": 1929,
+          "trial_id": "dota2_203820"
+        },
+        {
+          "correct": false,
+          "expected": "1143",
+          "predicted": "1709",
+          "extracted": "1709",
+          "n_tokens": 1883,
+          "trial_id": "dota2_203821"
+        },
+        {
+          "correct": true,
+          "expected": "2427",
+          "predicted": "2427",
+          "extracted": "2427",
+          "n_tokens": 1992,
+          "trial_id": "dota2_203822"
+        },
+        {
+          "correct": true,
+          "expected": "915",
+          "predicted": "915",
+          "extracted": "915",
+          "n_tokens": 3194,
+          "trial_id": "dota2_203823"
+        },
+        {
+          "correct": false,
+          "expected": "120",
+          "predicted": "976",
+          "extracted": "976",
+          "n_tokens": 1947,
+          "trial_id": "dota2_203824"
+        },
+        {
+          "correct": false,
+          "expected": "3478",
+          "predicted": "2575",
+          "extracted": "2575",
+          "n_tokens": 2032,
+          "trial_id": "dota2_203825"
+        },
+        {
+          "correct": false,
+          "expected": "2777",
+          "predicted": "1585",
+          "extracted": "1585",
+          "n_tokens": 1789,
+          "trial_id": "dota2_203826"
+        },
+        {
+          "correct": false,
+          "expected": "842",
+          "predicted": "2453",
+          "extracted": "2453",
+          "n_tokens": 1985,
+          "trial_id": "dota2_203827"
+        },
+        {
+          "correct": false,
+          "expected": "270",
+          "predicted": "930",
+          "extracted": "930",
+          "n_tokens": 1799,
+          "trial_id": "dota2_203828"
+        },
+        {
+          "correct": false,
+          "expected": "1958",
+          "predicted": "2274",
+          "extracted": "2274",
+          "n_tokens": 2036,
+          "trial_id": "dota2_203829"
+        }
+      ]
+    },
+    "5k_20u": {
+      "RI": [
+        {
+          "correct": false,
+          "expected": "537",
+          "predicted": "509",
+          "extracted": "509",
+          "n_tokens": 4133,
+          "trial_id": "dota2_204000"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "2142",
+          "extracted": "2142",
+          "n_tokens": 4244,
+          "trial_id": "dota2_204001"
+        },
+        {
+          "correct": true,
+          "expected": "1750",
+          "predicted": "1750",
+          "extracted": "1750",
+          "n_tokens": 2714,
+          "trial_id": "dota2_204002"
+        },
+        {
+          "correct": false,
+          "expected": "820",
+          "predicted": "1480",
+          "extracted": "1480",
+          "n_tokens": 3804,
+          "trial_id": "dota2_204003"
+        },
+        {
+          "correct": false,
+          "expected": "1077",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 3737,
+          "trial_id": "dota2_204004"
+        },
+        {
+          "correct": false,
+          "expected": "1107",
+          "predicted": "2016",
+          "extracted": "2016",
+          "n_tokens": 2584,
+          "trial_id": "dota2_204005"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1122",
+          "extracted": "1122",
+          "n_tokens": 3580,
+          "trial_id": "dota2_204006"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 3149,
+          "trial_id": "dota2_204007"
+        },
+        {
+          "correct": false,
+          "expected": "1230",
+          "predicted": "1637",
+          "extracted": "1637",
+          "n_tokens": 2193,
+          "trial_id": "dota2_204008"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2774,
+          "trial_id": "dota2_204009"
+        },
+        {
+          "correct": false,
+          "expected": "860",
+          "predicted": "1374",
+          "extracted": "1374",
+          "n_tokens": 2282,
+          "trial_id": "dota2_204010"
+        },
+        {
+          "correct": false,
+          "expected": "1119",
+          "predicted": "969",
+          "extracted": "969",
+          "n_tokens": 3599,
+          "trial_id": "dota2_204011"
+        },
+        {
+          "correct": false,
+          "expected": "1384",
+          "predicted": "1403",
+          "extracted": "1403",
+          "n_tokens": 3769,
+          "trial_id": "dota2_204012"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "737",
+          "extracted": "737",
+          "n_tokens": 2498,
+          "trial_id": "dota2_204013"
+        },
+        {
+          "correct": true,
+          "expected": "1377",
+          "predicted": "1377",
+          "extracted": "1377",
+          "n_tokens": 2934,
+          "trial_id": "dota2_204014"
+        },
+        {
+          "correct": false,
+          "expected": "816",
+          "predicted": "335",
+          "extracted": "335",
+          "n_tokens": 3113,
+          "trial_id": "dota2_204015"
+        },
+        {
+          "correct": false,
+          "expected": "924",
+          "predicted": "2149",
+          "extracted": "2149",
+          "n_tokens": 3064,
+          "trial_id": "dota2_204016"
+        },
+        {
+          "correct": false,
+          "expected": "1750",
+          "predicted": "1966",
+          "extracted": "1966",
+          "n_tokens": 2797,
+          "trial_id": "dota2_204017"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "196",
+          "extracted": "196",
+          "n_tokens": 2700,
+          "trial_id": "dota2_204018"
+        },
+        {
+          "correct": true,
+          "expected": "1536",
+          "predicted": "1536",
+          "extracted": "1536",
+          "n_tokens": 3116,
+          "trial_id": "dota2_204019"
+        },
+        {
+          "correct": false,
+          "expected": "448",
+          "predicted": "1114",
+          "extracted": "1114",
+          "n_tokens": 2610,
+          "trial_id": "dota2_204020"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1480",
+          "extracted": "1480",
+          "n_tokens": 3094,
+          "trial_id": "dota2_204021"
+        },
+        {
+          "correct": false,
+          "expected": "861",
+          "predicted": "1302",
+          "extracted": "1302",
+          "n_tokens": 3404,
+          "trial_id": "dota2_204022"
+        },
+        {
+          "correct": false,
+          "expected": "1146",
+          "predicted": "2274",
+          "extracted": "2274",
+          "n_tokens": 2737,
+          "trial_id": "dota2_204023"
+        },
+        {
+          "correct": false,
+          "expected": "1146",
+          "predicted": "3904",
+          "extracted": "3904",
+          "n_tokens": 4549,
+          "trial_id": "dota2_204024"
+        },
+        {
+          "correct": false,
+          "expected": "1461",
+          "predicted": "3500",
+          "extracted": "3500",
+          "n_tokens": 2922,
+          "trial_id": "dota2_204025"
+        },
+        {
+          "correct": true,
+          "expected": "1229",
+          "predicted": "1229",
+          "extracted": "1229",
+          "n_tokens": 2330,
+          "trial_id": "dota2_204026"
+        },
+        {
+          "correct": false,
+          "expected": "780",
+          "predicted": "796",
+          "extracted": "796",
+          "n_tokens": 3269,
+          "trial_id": "dota2_204027"
+        },
+        {
+          "correct": true,
+          "expected": "1119",
+          "predicted": "1119",
+          "extracted": "1119",
+          "n_tokens": 2394,
+          "trial_id": "dota2_204028"
+        },
+        {
+          "correct": false,
+          "expected": "1482",
+          "predicted": "1602",
+          "extracted": "1602",
+          "n_tokens": 2293,
+          "trial_id": "dota2_204029"
+        }
+      ],
+      "PI": [
+        {
+          "correct": false,
+          "expected": "2853",
+          "predicted": "1449",
+          "extracted": "1449",
+          "n_tokens": 4133,
+          "trial_id": "dota2_204000"
+        },
+        {
+          "correct": false,
+          "expected": "6093",
+          "predicted": "4258",
+          "extracted": "4258",
+          "n_tokens": 4245,
+          "trial_id": "dota2_204001"
+        },
+        {
+          "correct": false,
+          "expected": "459",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 2709,
+          "trial_id": "dota2_204002"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1915",
+          "extracted": "1915",
+          "n_tokens": 3804,
+          "trial_id": "dota2_204003"
+        },
+        {
+          "correct": false,
+          "expected": "4121",
+          "predicted": "3741",
+          "extracted": "3741",
+          "n_tokens": 3731,
+          "trial_id": "dota2_204004"
+        },
+        {
+          "correct": false,
+          "expected": "3885",
+          "predicted": "2016",
+          "extracted": "2016",
+          "n_tokens": 2579,
+          "trial_id": "dota2_204005"
+        },
+        {
+          "correct": false,
+          "expected": "2430",
+          "predicted": "6800",
+          "extracted": "6800",
+          "n_tokens": 3581,
+          "trial_id": "dota2_204006"
+        },
+        {
+          "correct": false,
+          "expected": "1033",
+          "predicted": "3355",
+          "extracted": "3355",
+          "n_tokens": 3144,
+          "trial_id": "dota2_204007"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "318",
+          "extracted": "318",
+          "n_tokens": 2191,
+          "trial_id": "dota2_204008"
+        },
+        {
+          "correct": true,
+          "expected": "622",
+          "predicted": "622",
+          "extracted": "622",
+          "n_tokens": 2776,
+          "trial_id": "dota2_204009"
+        },
+        {
+          "correct": false,
+          "expected": "5880",
+          "predicted": "5783",
+          "extracted": "5783",
+          "n_tokens": 2283,
+          "trial_id": "dota2_204010"
+        },
+        {
+          "correct": false,
+          "expected": "3141",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 3597,
+          "trial_id": "dota2_204011"
+        },
+        {
+          "correct": false,
+          "expected": "1091",
+          "predicted": "178",
+          "extracted": "178",
+          "n_tokens": 3769,
+          "trial_id": "dota2_204012"
+        },
+        {
+          "correct": true,
+          "expected": "1598",
+          "predicted": "1598",
+          "extracted": "1598",
+          "n_tokens": 2495,
+          "trial_id": "dota2_204013"
+        },
+        {
+          "correct": false,
+          "expected": "2080",
+          "predicted": "1905",
+          "extracted": "1905",
+          "n_tokens": 2929,
+          "trial_id": "dota2_204014"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "167",
+          "extracted": "167",
+          "n_tokens": 3112,
+          "trial_id": "dota2_204015"
+        },
+        {
+          "correct": true,
+          "expected": "0",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 3058,
+          "trial_id": "dota2_204016"
+        },
+        {
+          "correct": false,
+          "expected": "2034",
+          "predicted": "1924",
+          "extracted": "1924",
+          "n_tokens": 2793,
+          "trial_id": "dota2_204017"
+        },
+        {
+          "correct": false,
+          "expected": "2460",
+          "predicted": "1900",
+          "extracted": "1900",
+          "n_tokens": 2695,
+          "trial_id": "dota2_204018"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1380",
+          "extracted": "1380",
+          "n_tokens": 3115,
+          "trial_id": "dota2_204019"
+        },
+        {
+          "correct": false,
+          "expected": "4848",
+          "predicted": "4394",
+          "extracted": "4394",
+          "n_tokens": 2609,
+          "trial_id": "dota2_204020"
+        },
+        {
+          "correct": false,
+          "expected": "1320",
+          "predicted": "0",
+          "extracted": "0",
+          "n_tokens": 3095,
+          "trial_id": "dota2_204021"
+        },
+        {
+          "correct": false,
+          "expected": "639",
+          "predicted": "3710",
+          "extracted": "3710",
+          "n_tokens": 3401,
+          "trial_id": "dota2_204022"
+        },
+        {
+          "correct": false,
+          "expected": "3474",
+          "predicted": "4330",
+          "extracted": "4330",
+          "n_tokens": 2737,
+          "trial_id": "dota2_204023"
+        },
+        {
+          "correct": false,
+          "expected": "5718",
+          "predicted": "4252",
+          "extracted": "4252",
+          "n_tokens": 4545,
+          "trial_id": "dota2_204024"
+        },
+        {
+          "correct": true,
+          "expected": "5043",
+          "predicted": "5043",
+          "extracted": "5043",
+          "n_tokens": 2918,
+          "trial_id": "dota2_204025"
+        },
+        {
+          "correct": false,
+          "expected": "1190",
+          "predicted": "2186",
+          "extracted": "2186",
+          "n_tokens": 2325,
+          "trial_id": "dota2_204026"
+        },
+        {
+          "correct": false,
+          "expected": "0",
+          "predicted": "1882",
+          "extracted": "1882",
+          "n_tokens": 3267,
+          "trial_id": "dota2_204027"
+        },
+        {
+          "correct": false,
+          "expected": "3117",
+          "predicted": "2937",
+          "extracted": "2937",
+          "n_tokens": 2392,
+          "trial_id": "dota2_204028"
+        },
+        {
+          "correct": false,
+          "expected": "772",
+          "predicted": "886",
+          "extracted": "886",
+          "n_tokens": 2293,
+          "trial_id": "dota2_204029"
+        }
+      ]
+    }
+  },
+  "elapsed_sec": 1399.8471958637238
+}
