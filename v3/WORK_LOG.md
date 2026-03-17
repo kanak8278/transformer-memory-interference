@@ -553,6 +553,32 @@ Per-cell:
 
 **Target:** At least 6 transformer architectures + 2 non-transformer (Mamba + RWKV) for the architecture comparison claim.
 
+### Action 23: Scaling Analysis — PI vs Model Size
+
+**Why:** User requested fitting PI accuracy = f(N, model_size).
+
+**Result at 2 keys, varying N for Qwen family:**
+
+| N | 0.5B RI/PI | 1.5B RI/PI | 3B RI/PI |
+|---|---|---|---|
+| 5 | 82/34 | 100/56 | 79/59 |
+| 10 | 66/28 | 100/54 | 76/42 |
+| 20 | 72/14 | 98/26 | 76/20 |
+| 50 | 70/16 | 92/20 | 85/14 |
+
+**Observations:**
+1. RI: Increases with model size (0.5B→1.5B especially), stays high
+2. PI: Weakly increases with model size at low N, converges at high N (~15-20%)
+3. Both RI and PI degrade with N, but RI degrades slower
+4. At high N (50), PI converges to ~15-20% regardless of size — softmax dispersion limit
+
+**Cross-architecture at 2k_5u:**
+8 models tested, gap ranges from +20% to +83%. Architecture matters but direction is universal.
+
+### Action 24: RWKV Installation Issues
+
+RWKV-v6-Finch-1.6B requires bitsandbytes. Installed but environment caching caused it to not be detected. Retrying with fresh activation.
+
 ### Action 19: Narrative API Experiment Bug Fix
 
 **Issue:** First API run returned 0% — the `generate()` method signature was wrong.
