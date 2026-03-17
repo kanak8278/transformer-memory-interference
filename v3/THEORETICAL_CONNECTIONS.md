@@ -26,6 +26,24 @@ This decomposes into three zones:
 
 **PI doesn't scale:** The 1/n softmax dispersion (Veličković) affects the recency delta equally regardless of d_model.
 
+## The "Glasses" Paper — Over-Squashing (Barbero et al., NeurIPS 2024)
+
+**"Transformers Need Glasses! Information Over-Squashing in Language Tasks"**
+arXiv: 2406.04267
+
+**Theorem 5.1:** The sensitivity of the final token to input token i is bounded by:
+||∂y_n/∂v_i^(0)|| ≤ C × Σ (weighted attention paths from i to n across L layers)
+
+Earlier tokens have exponentially more paths → more sensitivity preserved.
+
+**Key experimental result:** Gemini 1.5 fails at ~300 tokens when copying the FINAL element. This is EXACTLY our PI failure — the model can't retrieve the last element because over-squashing causes it to lose sensitivity to late positions.
+
+**U-shape finding:** LLMs show better retrieval at beginning (architectural path advantage) and end (learned recency from next-token prediction), worst in the middle. This matches our Jacobian results.
+
+**Solutions proposed:** Landmark tokens, separators to prevent representational collapse. These could potentially reduce PI failure in our setting.
+
+**HOWEVER:** Over-squashing is transformer-specific (relies on attention paths). Our Mamba finding (PI > RI without attention) means over-squashing alone doesn't explain the full phenomenon. It's one CONTRIBUTING mechanism in transformers.
+
 ## Supporting Papers
 
 ### Wu et al. (ICML 2025) — "On the Emergence of Position Bias in Transformers"
