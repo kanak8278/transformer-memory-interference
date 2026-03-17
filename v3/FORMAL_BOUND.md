@@ -176,11 +176,13 @@ layer's attention at the query position "re-reads" the sequence,
 reproducing the single-layer dilution. The residual connection preserves
 but cannot increase v_i's information.
 
-*C2 holds because:* Chowdhury's primacy tail grows as (ln(1/x))^{L-1},
-meaning the influence of early positions is super-logarithmically
-reinforced. This creates a "hardening" effect — once v_1 has been
-reinforced through L layers, each additional value has diminishing
-power to displace it.
+*C2 is DERIVED from Chowdhury's influence density* (see LEMMA_C2_FROM_CHOWDHURY.md):
+Chowdhury's ρ_H(x) = Σ c_k (ln(1/x))^{k-1} is a positive sum of
+strictly decreasing functions, hence strictly decreasing on (0,1).
+Since attention weights are proportional to ρ_H, and overwrite loss
+is increasing in both signal and competitor strength, earlier positions
+(higher ρ) experience larger overwrite than later positions (lower ρ).
+Verified numerically for H ∈ {4,12,28,36}, α ∈ {0.3,0.5,0.7}.
 
 **Prediction:** R_first(N) should be robust to N and scale with L
 (more layers = more reinforcement). R_last(N) should decay as the
