@@ -1,0 +1,4707 @@
+{
+  "model": "claude-haiku",
+  "config": {
+    "num_keys": 10,
+    "update_levels": [
+      50,
+      100,
+      200
+    ],
+    "trials": 30,
+    "styles": [
+      "control",
+      "numbered",
+      "landmark",
+      "recency_cue",
+      "combined"
+    ]
+  },
+  "results": {
+    "10k_50u": {
+      "control": {
+        "ri_accuracy": 1.0,
+        "pi_accuracy": 0.8666666666666667,
+        "gap": 0.1333333333333333,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Mineral292",
+              "predicted": "mineral292"
+            },
+            {
+              "correct": true,
+              "expected": "Toon413",
+              "predicted": "toon413"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium82",
+              "predicted": "stadium82"
+            },
+            {
+              "correct": true,
+              "expected": "Style438",
+              "predicted": "style438"
+            },
+            {
+              "correct": true,
+              "expected": "Land188",
+              "predicted": "land188"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese331",
+              "predicted": "cheese331"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar319",
+              "predicted": "guitar319"
+            },
+            {
+              "correct": true,
+              "expected": "Bird58",
+              "predicted": "bird58"
+            },
+            {
+              "correct": true,
+              "expected": "Cook362",
+              "predicted": "cook362"
+            },
+            {
+              "correct": true,
+              "expected": "Tool361",
+              "predicted": "tool361"
+            },
+            {
+              "correct": true,
+              "expected": "Scope146",
+              "predicted": "scope146"
+            },
+            {
+              "correct": true,
+              "expected": "Land393",
+              "predicted": "land393"
+            },
+            {
+              "correct": true,
+              "expected": "Medium5",
+              "predicted": "medium5"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee44",
+              "predicted": "coffee44"
+            },
+            {
+              "correct": true,
+              "expected": "Sword347",
+              "predicted": "sword347"
+            },
+            {
+              "correct": true,
+              "expected": "Psych261",
+              "predicted": "psych261"
+            },
+            {
+              "correct": true,
+              "expected": "Photo458",
+              "predicted": "photo458"
+            },
+            {
+              "correct": true,
+              "expected": "Bird83",
+              "predicted": "bird83"
+            },
+            {
+              "correct": true,
+              "expected": "Weather437",
+              "predicted": "weather437"
+            },
+            {
+              "correct": true,
+              "expected": "Tool183",
+              "predicted": "tool183"
+            },
+            {
+              "correct": true,
+              "expected": "Bird95",
+              "predicted": "bird95"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee419",
+              "predicted": "coffee419"
+            },
+            {
+              "correct": true,
+              "expected": "Scope27",
+              "predicted": "scope27"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud375",
+              "predicted": "cloud375"
+            },
+            {
+              "correct": true,
+              "expected": "Game180",
+              "predicted": "game180"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral208",
+              "predicted": "mineral208"
+            },
+            {
+              "correct": true,
+              "expected": "Genre175",
+              "predicted": "genre175"
+            },
+            {
+              "correct": true,
+              "expected": "Tree427",
+              "predicted": "tree427"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit104",
+              "predicted": "fruit104"
+            },
+            {
+              "correct": true,
+              "expected": "Hat353",
+              "predicted": "hat353"
+            }
+          ],
+          "PI": [
+            {
+              "correct": true,
+              "expected": "Mineral309",
+              "predicted": "mineral309"
+            },
+            {
+              "correct": true,
+              "expected": "Toon421",
+              "predicted": "toon421"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium498",
+              "predicted": "stadium498"
+            },
+            {
+              "correct": true,
+              "expected": "Style56",
+              "predicted": "style56"
+            },
+            {
+              "correct": true,
+              "expected": "Land232",
+              "predicted": "land232"
+            },
+            {
+              "correct": false,
+              "expected": "Cheese449",
+              "predicted": "cheese34"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar369",
+              "predicted": "guitar369"
+            },
+            {
+              "correct": true,
+              "expected": "Bird488",
+              "predicted": "bird488"
+            },
+            {
+              "correct": true,
+              "expected": "Cook36",
+              "predicted": "cook36"
+            },
+            {
+              "correct": true,
+              "expected": "Tool132",
+              "predicted": "tool132"
+            },
+            {
+              "correct": true,
+              "expected": "Scope2",
+              "predicted": "scope2"
+            },
+            {
+              "correct": true,
+              "expected": "Land208",
+              "predicted": "land208"
+            },
+            {
+              "correct": true,
+              "expected": "Medium350",
+              "predicted": "medium350"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee313",
+              "predicted": "coffee313"
+            },
+            {
+              "correct": false,
+              "expected": "Sword88",
+              "predicted": "sword158"
+            },
+            {
+              "correct": true,
+              "expected": "Psych93",
+              "predicted": "psych93"
+            },
+            {
+              "correct": true,
+              "expected": "Photo478",
+              "predicted": "photo478"
+            },
+            {
+              "correct": true,
+              "expected": "Bird49",
+              "predicted": "bird49"
+            },
+            {
+              "correct": true,
+              "expected": "Weather331",
+              "predicted": "weather331"
+            },
+            {
+              "correct": true,
+              "expected": "Tool342",
+              "predicted": "tool342"
+            },
+            {
+              "correct": true,
+              "expected": "Bird144",
+              "predicted": "bird144"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee240",
+              "predicted": "coffee240"
+            },
+            {
+              "correct": false,
+              "expected": "Scope179",
+              "predicted": "scope192"
+            },
+            {
+              "correct": false,
+              "expected": "Cloud454",
+              "predicted": "cloud86"
+            },
+            {
+              "correct": true,
+              "expected": "Game9",
+              "predicted": "game9"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral264",
+              "predicted": "mineral264"
+            },
+            {
+              "correct": true,
+              "expected": "Genre107",
+              "predicted": "genre107"
+            },
+            {
+              "correct": true,
+              "expected": "Tree107",
+              "predicted": "tree107"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit338",
+              "predicted": "fruit338"
+            },
+            {
+              "correct": true,
+              "expected": "Hat162",
+              "predicted": "hat162"
+            }
+          ]
+        }
+      },
+      "numbered": {
+        "ri_accuracy": 1.0,
+        "pi_accuracy": 0.9666666666666667,
+        "gap": 0.033333333333333326,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Style164",
+              "predicted": "style164"
+            },
+            {
+              "correct": true,
+              "expected": "Style134",
+              "predicted": "style134"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar145",
+              "predicted": "guitar145"
+            },
+            {
+              "correct": true,
+              "expected": "Psych498",
+              "predicted": "psych498"
+            },
+            {
+              "correct": true,
+              "expected": "Tool397",
+              "predicted": "tool397"
+            },
+            {
+              "correct": true,
+              "expected": "Style262",
+              "predicted": "style262"
+            },
+            {
+              "correct": true,
+              "expected": "Flower371",
+              "predicted": "flower371"
+            },
+            {
+              "correct": true,
+              "expected": "Dino443",
+              "predicted": "dino443"
+            },
+            {
+              "correct": true,
+              "expected": "Gem317",
+              "predicted": "gem317"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee458",
+              "predicted": "coffee458"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral224",
+              "predicted": "mineral224"
+            },
+            {
+              "correct": true,
+              "expected": "Cook83",
+              "predicted": "cook83"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee70",
+              "predicted": "coffee70"
+            },
+            {
+              "correct": true,
+              "expected": "Art250",
+              "predicted": "art250"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral296",
+              "predicted": "mineral296"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud66",
+              "predicted": "cloud66"
+            },
+            {
+              "correct": true,
+              "expected": "Game36",
+              "predicted": "game36"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta240",
+              "predicted": "pasta240"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese49",
+              "predicted": "cheese49"
+            },
+            {
+              "correct": true,
+              "expected": "Current286",
+              "predicted": "current286"
+            },
+            {
+              "correct": true,
+              "expected": "Medium253",
+              "predicted": "medium253"
+            },
+            {
+              "correct": true,
+              "expected": "Tree88",
+              "predicted": "tree88"
+            },
+            {
+              "correct": true,
+              "expected": "Wine391",
+              "predicted": "wine391"
+            },
+            {
+              "correct": true,
+              "expected": "Tree171",
+              "predicted": "tree171"
+            },
+            {
+              "correct": true,
+              "expected": "Inst493",
+              "predicted": "inst493"
+            },
+            {
+              "correct": true,
+              "expected": "Game431",
+              "predicted": "game431"
+            },
+            {
+              "correct": true,
+              "expected": "Art60",
+              "predicted": "art60"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano288",
+              "predicted": "volcano288"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium497",
+              "predicted": "stadium497"
+            },
+            {
+              "correct": true,
+              "expected": "Sword178",
+              "predicted": "sword178"
+            }
+          ],
+          "PI": [
+            {
+              "correct": true,
+              "expected": "Style286",
+              "predicted": "style286"
+            },
+            {
+              "correct": true,
+              "expected": "Style326",
+              "predicted": "style326"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar16",
+              "predicted": "guitar16"
+            },
+            {
+              "correct": true,
+              "expected": "Psych345",
+              "predicted": "psych345"
+            },
+            {
+              "correct": true,
+              "expected": "Tool327",
+              "predicted": "tool327"
+            },
+            {
+              "correct": true,
+              "expected": "Style385",
+              "predicted": "style385"
+            },
+            {
+              "correct": true,
+              "expected": "Flower264",
+              "predicted": "flower264"
+            },
+            {
+              "correct": true,
+              "expected": "Dino136",
+              "predicted": "dino136"
+            },
+            {
+              "correct": true,
+              "expected": "Gem200",
+              "predicted": "gem200"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee13",
+              "predicted": "coffee13"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral338",
+              "predicted": "mineral338"
+            },
+            {
+              "correct": true,
+              "expected": "Cook343",
+              "predicted": "cook343"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee22",
+              "predicted": "coffee22"
+            },
+            {
+              "correct": true,
+              "expected": "Art42",
+              "predicted": "art42"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral284",
+              "predicted": "mineral284"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud65",
+              "predicted": "cloud65"
+            },
+            {
+              "correct": true,
+              "expected": "Game274",
+              "predicted": "game274"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta156",
+              "predicted": "pasta156"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese322",
+              "predicted": "cheese322"
+            },
+            {
+              "correct": true,
+              "expected": "Current337",
+              "predicted": "current337"
+            },
+            {
+              "correct": true,
+              "expected": "Medium337",
+              "predicted": "medium337"
+            },
+            {
+              "correct": true,
+              "expected": "Tree352",
+              "predicted": "tree352"
+            },
+            {
+              "correct": true,
+              "expected": "Wine186",
+              "predicted": "wine186"
+            },
+            {
+              "correct": true,
+              "expected": "Tree360",
+              "predicted": "tree360"
+            },
+            {
+              "correct": true,
+              "expected": "Inst203",
+              "predicted": "inst203"
+            },
+            {
+              "correct": true,
+              "expected": "Game380",
+              "predicted": "game380"
+            },
+            {
+              "correct": true,
+              "expected": "Art478",
+              "predicted": "art478"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano230",
+              "predicted": "volcano230"
+            },
+            {
+              "correct": false,
+              "expected": "Stadium171",
+              "predicted": "stadium415"
+            },
+            {
+              "correct": true,
+              "expected": "Sword189",
+              "predicted": "sword189"
+            }
+          ]
+        }
+      },
+      "landmark": {
+        "ri_accuracy": 1.0,
+        "pi_accuracy": 1.0,
+        "gap": 0.0,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Guitar326",
+              "predicted": "guitar326"
+            },
+            {
+              "correct": true,
+              "expected": "Land242",
+              "predicted": "land242"
+            },
+            {
+              "correct": true,
+              "expected": "Current419",
+              "predicted": "current419"
+            },
+            {
+              "correct": true,
+              "expected": "Psych241",
+              "predicted": "psych241"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium343",
+              "predicted": "stadium343"
+            },
+            {
+              "correct": true,
+              "expected": "Bird7",
+              "predicted": "bird7"
+            },
+            {
+              "correct": true,
+              "expected": "Game426",
+              "predicted": "game426"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese177",
+              "predicted": "cheese177"
+            },
+            {
+              "correct": true,
+              "expected": "Civ263",
+              "predicted": "civ263"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit301",
+              "predicted": "fruit301"
+            },
+            {
+              "correct": true,
+              "expected": "Martial285",
+              "predicted": "martial285"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta117",
+              "predicted": "pasta117"
+            },
+            {
+              "correct": true,
+              "expected": "Art59",
+              "predicted": "art59"
+            },
+            {
+              "correct": true,
+              "expected": "Wine473",
+              "predicted": "wine473"
+            },
+            {
+              "correct": true,
+              "expected": "Gem52",
+              "predicted": "gem52"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese360",
+              "predicted": "cheese360"
+            },
+            {
+              "correct": true,
+              "expected": "Elem229",
+              "predicted": "elem229"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud69",
+              "predicted": "cloud69"
+            },
+            {
+              "correct": true,
+              "expected": "Herb286",
+              "predicted": "herb286"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese168",
+              "predicted": "cheese168"
+            },
+            {
+              "correct": true,
+              "expected": "Tool120",
+              "predicted": "tool120"
+            },
+            {
+              "correct": true,
+              "expected": "Genre11",
+              "predicted": "genre11"
+            },
+            {
+              "correct": true,
+              "expected": "Dino406",
+              "predicted": "dino406"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar79",
+              "predicted": "guitar79"
+            },
+            {
+              "correct": true,
+              "expected": "Fab58",
+              "predicted": "fab58"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar94",
+              "predicted": "guitar94"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano156",
+              "predicted": "volcano156"
+            },
+            {
+              "correct": true,
+              "expected": "Genre259",
+              "predicted": "genre259"
+            },
+            {
+              "correct": true,
+              "expected": "Land210",
+              "predicted": "land210"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium171",
+              "predicted": "stadium171"
+            }
+          ],
+          "PI": [
+            {
+              "correct": true,
+              "expected": "Guitar410",
+              "predicted": "guitar410"
+            },
+            {
+              "correct": true,
+              "expected": "Land175",
+              "predicted": "land175"
+            },
+            {
+              "correct": true,
+              "expected": "Current45",
+              "predicted": "current45"
+            },
+            {
+              "correct": true,
+              "expected": "Psych485",
+              "predicted": "psych485"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium70",
+              "predicted": "stadium70"
+            },
+            {
+              "correct": true,
+              "expected": "Bird259",
+              "predicted": "bird259"
+            },
+            {
+              "correct": true,
+              "expected": "Game262",
+              "predicted": "game262"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese453",
+              "predicted": "cheese453"
+            },
+            {
+              "correct": true,
+              "expected": "Civ14",
+              "predicted": "civ14"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit20",
+              "predicted": "fruit20"
+            },
+            {
+              "correct": true,
+              "expected": "Martial83",
+              "predicted": "martial83"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta78",
+              "predicted": "pasta78"
+            },
+            {
+              "correct": true,
+              "expected": "Art150",
+              "predicted": "art150"
+            },
+            {
+              "correct": true,
+              "expected": "Wine297",
+              "predicted": "wine297"
+            },
+            {
+              "correct": true,
+              "expected": "Gem335",
+              "predicted": "gem335"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese106",
+              "predicted": "cheese106"
+            },
+            {
+              "correct": true,
+              "expected": "Elem453",
+              "predicted": "elem453"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud486",
+              "predicted": "cloud486"
+            },
+            {
+              "correct": true,
+              "expected": "Herb81",
+              "predicted": "herb81"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese437",
+              "predicted": "cheese437"
+            },
+            {
+              "correct": true,
+              "expected": "Tool405",
+              "predicted": "tool405"
+            },
+            {
+              "correct": true,
+              "expected": "Genre212",
+              "predicted": "genre212"
+            },
+            {
+              "correct": true,
+              "expected": "Dino333",
+              "predicted": "dino333"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar305",
+              "predicted": "guitar305"
+            },
+            {
+              "correct": true,
+              "expected": "Fab383",
+              "predicted": "fab383"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar352",
+              "predicted": "guitar352"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano320",
+              "predicted": "volcano320"
+            },
+            {
+              "correct": true,
+              "expected": "Genre273",
+              "predicted": "genre273"
+            },
+            {
+              "correct": true,
+              "expected": "Land52",
+              "predicted": "land52"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium254",
+              "predicted": "stadium254"
+            }
+          ]
+        }
+      },
+      "recency_cue": {
+        "ri_accuracy": 1.0,
+        "pi_accuracy": 0.9666666666666667,
+        "gap": 0.033333333333333326,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Game236",
+              "predicted": "game236"
+            },
+            {
+              "correct": true,
+              "expected": "Civ436",
+              "predicted": "civ436"
+            },
+            {
+              "correct": true,
+              "expected": "Art153",
+              "predicted": "art153"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral383",
+              "predicted": "mineral383"
+            },
+            {
+              "correct": true,
+              "expected": "Spice124",
+              "predicted": "spice124"
+            },
+            {
+              "correct": true,
+              "expected": "Land26",
+              "predicted": "land26"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit104",
+              "predicted": "fruit104"
+            },
+            {
+              "correct": true,
+              "expected": "Flower39",
+              "predicted": "flower39"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit121",
+              "predicted": "fruit121"
+            },
+            {
+              "correct": true,
+              "expected": "Weather157",
+              "predicted": "weather157"
+            },
+            {
+              "correct": true,
+              "expected": "Herb150",
+              "predicted": "herb150"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge246",
+              "predicted": "bridge246"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar439",
+              "predicted": "guitar439"
+            },
+            {
+              "correct": true,
+              "expected": "Scope24",
+              "predicted": "scope24"
+            },
+            {
+              "correct": true,
+              "expected": "Scope180",
+              "predicted": "scope180"
+            },
+            {
+              "correct": true,
+              "expected": "Flower239",
+              "predicted": "flower239"
+            },
+            {
+              "correct": true,
+              "expected": "Star84",
+              "predicted": "star84"
+            },
+            {
+              "correct": true,
+              "expected": "Style90",
+              "predicted": "style90"
+            },
+            {
+              "correct": true,
+              "expected": "Herb229",
+              "predicted": "herb229"
+            },
+            {
+              "correct": true,
+              "expected": "Style250",
+              "predicted": "style250"
+            },
+            {
+              "correct": true,
+              "expected": "Dance183",
+              "predicted": "dance183"
+            },
+            {
+              "correct": true,
+              "expected": "Sea371",
+              "predicted": "sea371"
+            },
+            {
+              "correct": true,
+              "expected": "Photo39",
+              "predicted": "photo39"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral117",
+              "predicted": "mineral117"
+            },
+            {
+              "correct": true,
+              "expected": "Flower22",
+              "predicted": "flower22"
+            },
+            {
+              "correct": true,
+              "expected": "Hat97",
+              "predicted": "hat97"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano354",
+              "predicted": "volcano354"
+            },
+            {
+              "correct": true,
+              "expected": "Land416",
+              "predicted": "land416"
+            },
+            {
+              "correct": true,
+              "expected": "Tool211",
+              "predicted": "tool211"
+            },
+            {
+              "correct": true,
+              "expected": "Tree111",
+              "predicted": "tree111"
+            }
+          ],
+          "PI": [
+            {
+              "correct": false,
+              "expected": "Game19",
+              "predicted": "game424"
+            },
+            {
+              "correct": true,
+              "expected": "Civ32",
+              "predicted": "civ32"
+            },
+            {
+              "correct": true,
+              "expected": "Art308",
+              "predicted": "art308"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral485",
+              "predicted": "mineral485"
+            },
+            {
+              "correct": true,
+              "expected": "Spice258",
+              "predicted": "spice258"
+            },
+            {
+              "correct": true,
+              "expected": "Land106",
+              "predicted": "land106"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit211",
+              "predicted": "fruit211"
+            },
+            {
+              "correct": true,
+              "expected": "Flower383",
+              "predicted": "flower383"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit154",
+              "predicted": "fruit154"
+            },
+            {
+              "correct": true,
+              "expected": "Weather261",
+              "predicted": "weather261"
+            },
+            {
+              "correct": true,
+              "expected": "Herb441",
+              "predicted": "herb441"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge118",
+              "predicted": "bridge118"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar313",
+              "predicted": "guitar313"
+            },
+            {
+              "correct": true,
+              "expected": "Scope50",
+              "predicted": "scope50"
+            },
+            {
+              "correct": true,
+              "expected": "Scope128",
+              "predicted": "scope128"
+            },
+            {
+              "correct": true,
+              "expected": "Flower241",
+              "predicted": "flower241"
+            },
+            {
+              "correct": true,
+              "expected": "Star253",
+              "predicted": "star253"
+            },
+            {
+              "correct": true,
+              "expected": "Style269",
+              "predicted": "style269"
+            },
+            {
+              "correct": true,
+              "expected": "Herb313",
+              "predicted": "herb313"
+            },
+            {
+              "correct": true,
+              "expected": "Style230",
+              "predicted": "style230"
+            },
+            {
+              "correct": true,
+              "expected": "Dance497",
+              "predicted": "dance497"
+            },
+            {
+              "correct": true,
+              "expected": "Sea118",
+              "predicted": "sea118"
+            },
+            {
+              "correct": true,
+              "expected": "Photo311",
+              "predicted": "photo311"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral373",
+              "predicted": "mineral373"
+            },
+            {
+              "correct": true,
+              "expected": "Flower346",
+              "predicted": "flower346"
+            },
+            {
+              "correct": true,
+              "expected": "Hat468",
+              "predicted": "hat468"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano489",
+              "predicted": "volcano489"
+            },
+            {
+              "correct": true,
+              "expected": "Land271",
+              "predicted": "land271"
+            },
+            {
+              "correct": true,
+              "expected": "Tool263",
+              "predicted": "tool263"
+            },
+            {
+              "correct": true,
+              "expected": "Tree418",
+              "predicted": "tree418"
+            }
+          ]
+        }
+      },
+      "combined": {
+        "ri_accuracy": 1.0,
+        "pi_accuracy": 0.9,
+        "gap": 0.09999999999999998,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Toon14",
+              "predicted": "toon14"
+            },
+            {
+              "correct": true,
+              "expected": "Lang252",
+              "predicted": "lang252"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium224",
+              "predicted": "stadium224"
+            },
+            {
+              "correct": true,
+              "expected": "Tool272",
+              "predicted": "tool272"
+            },
+            {
+              "correct": true,
+              "expected": "Elem412",
+              "predicted": "elem412"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium324",
+              "predicted": "stadium324"
+            },
+            {
+              "correct": true,
+              "expected": "Photo428",
+              "predicted": "photo428"
+            },
+            {
+              "correct": true,
+              "expected": "Tool251",
+              "predicted": "tool251"
+            },
+            {
+              "correct": true,
+              "expected": "Civ471",
+              "predicted": "civ471"
+            },
+            {
+              "correct": true,
+              "expected": "Tool237",
+              "predicted": "tool237"
+            },
+            {
+              "correct": true,
+              "expected": "Math402",
+              "predicted": "math402"
+            },
+            {
+              "correct": true,
+              "expected": "Hat86",
+              "predicted": "hat86"
+            },
+            {
+              "correct": true,
+              "expected": "Scope255",
+              "predicted": "scope255"
+            },
+            {
+              "correct": true,
+              "expected": "Sword107",
+              "predicted": "sword107"
+            },
+            {
+              "correct": true,
+              "expected": "Style406",
+              "predicted": "style406"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral102",
+              "predicted": "mineral102"
+            },
+            {
+              "correct": true,
+              "expected": "Dino189",
+              "predicted": "dino189"
+            },
+            {
+              "correct": true,
+              "expected": "Inst163",
+              "predicted": "inst163"
+            },
+            {
+              "correct": true,
+              "expected": "Elem334",
+              "predicted": "elem334"
+            },
+            {
+              "correct": true,
+              "expected": "Fab171",
+              "predicted": "fab171"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano19",
+              "predicted": "volcano19"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge369",
+              "predicted": "bridge369"
+            },
+            {
+              "correct": true,
+              "expected": "Math384",
+              "predicted": "math384"
+            },
+            {
+              "correct": true,
+              "expected": "Land351",
+              "predicted": "land351"
+            },
+            {
+              "correct": true,
+              "expected": "Style19",
+              "predicted": "style19"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar342",
+              "predicted": "guitar342"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge230",
+              "predicted": "bridge230"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud394",
+              "predicted": "cloud394"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta240",
+              "predicted": "pasta240"
+            },
+            {
+              "correct": true,
+              "expected": "Martial150",
+              "predicted": "martial150"
+            }
+          ],
+          "PI": [
+            {
+              "correct": true,
+              "expected": "Toon289",
+              "predicted": "toon289"
+            },
+            {
+              "correct": true,
+              "expected": "Lang385",
+              "predicted": "lang385"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium219",
+              "predicted": "stadium219"
+            },
+            {
+              "correct": false,
+              "expected": "Tool54",
+              "predicted": "tool426"
+            },
+            {
+              "correct": true,
+              "expected": "Elem89",
+              "predicted": "elem89"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium115",
+              "predicted": "stadium115"
+            },
+            {
+              "correct": true,
+              "expected": "Photo224",
+              "predicted": "photo224"
+            },
+            {
+              "correct": true,
+              "expected": "Tool258",
+              "predicted": "tool258"
+            },
+            {
+              "correct": true,
+              "expected": "Civ62",
+              "predicted": "civ62"
+            },
+            {
+              "correct": true,
+              "expected": "Tool428",
+              "predicted": "tool428"
+            },
+            {
+              "correct": true,
+              "expected": "Math207",
+              "predicted": "math207"
+            },
+            {
+              "correct": false,
+              "expected": "Hat377",
+              "predicted": "hat319"
+            },
+            {
+              "correct": true,
+              "expected": "Scope467",
+              "predicted": "scope467"
+            },
+            {
+              "correct": true,
+              "expected": "Sword208",
+              "predicted": "sword208"
+            },
+            {
+              "correct": true,
+              "expected": "Style453",
+              "predicted": "style453"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral32",
+              "predicted": "mineral32"
+            },
+            {
+              "correct": true,
+              "expected": "Dino311",
+              "predicted": "dino311"
+            },
+            {
+              "correct": true,
+              "expected": "Inst335",
+              "predicted": "inst335"
+            },
+            {
+              "correct": true,
+              "expected": "Elem484",
+              "predicted": "elem484"
+            },
+            {
+              "correct": true,
+              "expected": "Fab41",
+              "predicted": "fab41"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano300",
+              "predicted": "volcano300"
+            },
+            {
+              "correct": false,
+              "expected": "Bridge56",
+              "predicted": "bridge359"
+            },
+            {
+              "correct": true,
+              "expected": "Math130",
+              "predicted": "math130"
+            },
+            {
+              "correct": true,
+              "expected": "Land463",
+              "predicted": "land463"
+            },
+            {
+              "correct": true,
+              "expected": "Style292",
+              "predicted": "style292"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar260",
+              "predicted": "guitar260"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge110",
+              "predicted": "bridge110"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud122",
+              "predicted": "cloud122"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta394",
+              "predicted": "pasta394"
+            },
+            {
+              "correct": true,
+              "expected": "Martial73",
+              "predicted": "martial73"
+            }
+          ]
+        }
+      }
+    },
+    "10k_100u": {
+      "control": {
+        "ri_accuracy": 1.0,
+        "pi_accuracy": 0.7,
+        "gap": 0.30000000000000004,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Cheese228",
+              "predicted": "cheese228"
+            },
+            {
+              "correct": true,
+              "expected": "Sea371",
+              "predicted": "sea371"
+            },
+            {
+              "correct": true,
+              "expected": "Bird83",
+              "predicted": "bird83"
+            },
+            {
+              "correct": true,
+              "expected": "Lang346",
+              "predicted": "lang346"
+            },
+            {
+              "correct": true,
+              "expected": "Sea389",
+              "predicted": "sea389"
+            },
+            {
+              "correct": true,
+              "expected": "Star132",
+              "predicted": "star132"
+            },
+            {
+              "correct": true,
+              "expected": "Dino264",
+              "predicted": "dino264"
+            },
+            {
+              "correct": true,
+              "expected": "Inst44",
+              "predicted": "inst44"
+            },
+            {
+              "correct": true,
+              "expected": "Fab76",
+              "predicted": "fab76"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar425",
+              "predicted": "guitar425"
+            },
+            {
+              "correct": true,
+              "expected": "Dino14",
+              "predicted": "dino14"
+            },
+            {
+              "correct": true,
+              "expected": "Boat448",
+              "predicted": "boat448"
+            },
+            {
+              "correct": true,
+              "expected": "Martial84",
+              "predicted": "martial84"
+            },
+            {
+              "correct": true,
+              "expected": "Art249",
+              "predicted": "art249"
+            },
+            {
+              "correct": true,
+              "expected": "Flower288",
+              "predicted": "flower288"
+            },
+            {
+              "correct": true,
+              "expected": "Spice474",
+              "predicted": "spice474"
+            },
+            {
+              "correct": true,
+              "expected": "Math481",
+              "predicted": "math481"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese206",
+              "predicted": "cheese206"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano114",
+              "predicted": "volcano114"
+            },
+            {
+              "correct": true,
+              "expected": "Hat156",
+              "predicted": "hat156"
+            },
+            {
+              "correct": true,
+              "expected": "Star452",
+              "predicted": "star452"
+            },
+            {
+              "correct": true,
+              "expected": "Tool85",
+              "predicted": "tool85"
+            },
+            {
+              "correct": true,
+              "expected": "Photo323",
+              "predicted": "photo323"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano143",
+              "predicted": "volcano143"
+            },
+            {
+              "correct": true,
+              "expected": "Dino437",
+              "predicted": "dino437"
+            },
+            {
+              "correct": true,
+              "expected": "Tool226",
+              "predicted": "tool226"
+            },
+            {
+              "correct": true,
+              "expected": "Game14",
+              "predicted": "game14"
+            },
+            {
+              "correct": true,
+              "expected": "Dino238",
+              "predicted": "dino238"
+            },
+            {
+              "correct": true,
+              "expected": "Current399",
+              "predicted": "current399"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar44",
+              "predicted": "guitar44"
+            }
+          ],
+          "PI": [
+            {
+              "correct": true,
+              "expected": "Cheese107",
+              "predicted": "cheese107"
+            },
+            {
+              "correct": false,
+              "expected": "Sea32",
+              "predicted": "sea435"
+            },
+            {
+              "correct": false,
+              "expected": "Bird27",
+              "predicted": "bird335"
+            },
+            {
+              "correct": true,
+              "expected": "Lang171",
+              "predicted": "lang171"
+            },
+            {
+              "correct": true,
+              "expected": "Sea375",
+              "predicted": "sea375"
+            },
+            {
+              "correct": true,
+              "expected": "Star268",
+              "predicted": "star268"
+            },
+            {
+              "correct": true,
+              "expected": "Dino489",
+              "predicted": "dino489"
+            },
+            {
+              "correct": true,
+              "expected": "Inst206",
+              "predicted": "inst206"
+            },
+            {
+              "correct": false,
+              "expected": "Fab361",
+              "predicted": "fab100"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar399",
+              "predicted": "guitar399"
+            },
+            {
+              "correct": true,
+              "expected": "Dino218",
+              "predicted": "dino218"
+            },
+            {
+              "correct": false,
+              "expected": "Boat42",
+              "predicted": "boat443"
+            },
+            {
+              "correct": true,
+              "expected": "Martial448",
+              "predicted": "martial448"
+            },
+            {
+              "correct": false,
+              "expected": "Art79",
+              "predicted": "art413"
+            },
+            {
+              "correct": false,
+              "expected": "Flower178",
+              "predicted": "flower185"
+            },
+            {
+              "correct": true,
+              "expected": "Spice25",
+              "predicted": "spice25"
+            },
+            {
+              "correct": true,
+              "expected": "Math87",
+              "predicted": "math87"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese368",
+              "predicted": "cheese368"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano258",
+              "predicted": "volcano258"
+            },
+            {
+              "correct": true,
+              "expected": "Hat226",
+              "predicted": "hat226"
+            },
+            {
+              "correct": true,
+              "expected": "Star282",
+              "predicted": "star282"
+            },
+            {
+              "correct": false,
+              "expected": "Tool6",
+              "predicted": "tool486"
+            },
+            {
+              "correct": true,
+              "expected": "Photo374",
+              "predicted": "photo374"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano333",
+              "predicted": "volcano333"
+            },
+            {
+              "correct": false,
+              "expected": "Dino273",
+              "predicted": "dino126"
+            },
+            {
+              "correct": true,
+              "expected": "Tool186",
+              "predicted": "tool186"
+            },
+            {
+              "correct": true,
+              "expected": "Game143",
+              "predicted": "game143"
+            },
+            {
+              "correct": true,
+              "expected": "Dino87",
+              "predicted": "dino87"
+            },
+            {
+              "correct": false,
+              "expected": "Current17",
+              "predicted": "current374"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar4",
+              "predicted": "guitar477"
+            }
+          ]
+        }
+      },
+      "numbered": {
+        "ri_accuracy": 1.0,
+        "pi_accuracy": 0.8,
+        "gap": 0.19999999999999996,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Genre267",
+              "predicted": "genre267"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral81",
+              "predicted": "mineral81"
+            },
+            {
+              "correct": true,
+              "expected": "Weather314",
+              "predicted": "weather314"
+            },
+            {
+              "correct": true,
+              "expected": "Land65",
+              "predicted": "land65"
+            },
+            {
+              "correct": true,
+              "expected": "Math210",
+              "predicted": "math210"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge421",
+              "predicted": "bridge421"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar399",
+              "predicted": "guitar399"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta98",
+              "predicted": "pasta98"
+            },
+            {
+              "correct": true,
+              "expected": "Weather397",
+              "predicted": "weather397"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee292",
+              "predicted": "coffee292"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar282",
+              "predicted": "guitar282"
+            },
+            {
+              "correct": true,
+              "expected": "Current79",
+              "predicted": "current79"
+            },
+            {
+              "correct": true,
+              "expected": "Spice462",
+              "predicted": "spice462"
+            },
+            {
+              "correct": true,
+              "expected": "Sword361",
+              "predicted": "sword361"
+            },
+            {
+              "correct": true,
+              "expected": "Scope225",
+              "predicted": "scope225"
+            },
+            {
+              "correct": true,
+              "expected": "Land289",
+              "predicted": "land289"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium424",
+              "predicted": "stadium424"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud228",
+              "predicted": "cloud228"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral23",
+              "predicted": "mineral23"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar85",
+              "predicted": "guitar85"
+            },
+            {
+              "correct": true,
+              "expected": "Psych262",
+              "predicted": "psych262"
+            },
+            {
+              "correct": true,
+              "expected": "Dance12",
+              "predicted": "dance12"
+            },
+            {
+              "correct": true,
+              "expected": "Herb264",
+              "predicted": "herb264"
+            },
+            {
+              "correct": true,
+              "expected": "Herb334",
+              "predicted": "herb334"
+            },
+            {
+              "correct": true,
+              "expected": "Spice316",
+              "predicted": "spice316"
+            },
+            {
+              "correct": true,
+              "expected": "Psych173",
+              "predicted": "psych173"
+            },
+            {
+              "correct": true,
+              "expected": "Fab37",
+              "predicted": "fab37"
+            },
+            {
+              "correct": true,
+              "expected": "Dino71",
+              "predicted": "dino71"
+            },
+            {
+              "correct": true,
+              "expected": "Current263",
+              "predicted": "current263"
+            },
+            {
+              "correct": true,
+              "expected": "Boat48",
+              "predicted": "boat48"
+            }
+          ],
+          "PI": [
+            {
+              "correct": true,
+              "expected": "Genre123",
+              "predicted": "genre123"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral388",
+              "predicted": "mineral388"
+            },
+            {
+              "correct": true,
+              "expected": "Weather85",
+              "predicted": "weather85"
+            },
+            {
+              "correct": true,
+              "expected": "Land1",
+              "predicted": "land1"
+            },
+            {
+              "correct": true,
+              "expected": "Math495",
+              "predicted": "math495"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge20",
+              "predicted": "bridge20"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar185",
+              "predicted": "guitar185"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta452",
+              "predicted": "pasta452"
+            },
+            {
+              "correct": false,
+              "expected": "Weather413",
+              "predicted": "weather193"
+            },
+            {
+              "correct": false,
+              "expected": "Coffee418",
+              "predicted": "coffee313"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar177",
+              "predicted": "guitar177"
+            },
+            {
+              "correct": true,
+              "expected": "Current282",
+              "predicted": "current282"
+            },
+            {
+              "correct": true,
+              "expected": "Spice351",
+              "predicted": "spice351"
+            },
+            {
+              "correct": true,
+              "expected": "Sword150",
+              "predicted": "sword150"
+            },
+            {
+              "correct": true,
+              "expected": "Scope459",
+              "predicted": "scope459"
+            },
+            {
+              "correct": true,
+              "expected": "Land429",
+              "predicted": "land429"
+            },
+            {
+              "correct": false,
+              "expected": "Stadium37",
+              "predicted": "stadium334"
+            },
+            {
+              "correct": false,
+              "expected": "Cloud129",
+              "predicted": "cloud279"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral52",
+              "predicted": "mineral52"
+            },
+            {
+              "correct": false,
+              "expected": "Guitar276",
+              "predicted": "guitar486"
+            },
+            {
+              "correct": true,
+              "expected": "Psych343",
+              "predicted": "psych343"
+            },
+            {
+              "correct": true,
+              "expected": "Dance426",
+              "predicted": "dance426"
+            },
+            {
+              "correct": true,
+              "expected": "Herb283",
+              "predicted": "herb283"
+            },
+            {
+              "correct": true,
+              "expected": "Herb231",
+              "predicted": "herb231"
+            },
+            {
+              "correct": false,
+              "expected": "Spice67",
+              "predicted": "spice467"
+            },
+            {
+              "correct": true,
+              "expected": "Psych464",
+              "predicted": "psych464"
+            },
+            {
+              "correct": true,
+              "expected": "Fab439",
+              "predicted": "fab439"
+            },
+            {
+              "correct": true,
+              "expected": "Dino328",
+              "predicted": "dino328"
+            },
+            {
+              "correct": true,
+              "expected": "Current425",
+              "predicted": "current425"
+            },
+            {
+              "correct": true,
+              "expected": "Boat304",
+              "predicted": "boat304"
+            }
+          ]
+        }
+      },
+      "landmark": {
+        "ri_accuracy": 1.0,
+        "pi_accuracy": 0.9333333333333333,
+        "gap": 0.06666666666666665,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Cook442",
+              "predicted": "cook442"
+            },
+            {
+              "correct": true,
+              "expected": "Land225",
+              "predicted": "land225"
+            },
+            {
+              "correct": true,
+              "expected": "Style216",
+              "predicted": "style216"
+            },
+            {
+              "correct": true,
+              "expected": "Genre135",
+              "predicted": "genre135"
+            },
+            {
+              "correct": true,
+              "expected": "Game20",
+              "predicted": "game20"
+            },
+            {
+              "correct": true,
+              "expected": "Art293",
+              "predicted": "art293"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese201",
+              "predicted": "cheese201"
+            },
+            {
+              "correct": true,
+              "expected": "Star387",
+              "predicted": "star387"
+            },
+            {
+              "correct": true,
+              "expected": "Surg223",
+              "predicted": "surg223"
+            },
+            {
+              "correct": true,
+              "expected": "Land387",
+              "predicted": "land387"
+            },
+            {
+              "correct": true,
+              "expected": "Land341",
+              "predicted": "land341"
+            },
+            {
+              "correct": true,
+              "expected": "Elem3",
+              "predicted": "elem3"
+            },
+            {
+              "correct": true,
+              "expected": "Scope367",
+              "predicted": "scope367"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge188",
+              "predicted": "bridge188"
+            },
+            {
+              "correct": true,
+              "expected": "Bird239",
+              "predicted": "bird239"
+            },
+            {
+              "correct": true,
+              "expected": "Hat71",
+              "predicted": "hat71"
+            },
+            {
+              "correct": true,
+              "expected": "Dance327",
+              "predicted": "dance327"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta367",
+              "predicted": "pasta367"
+            },
+            {
+              "correct": true,
+              "expected": "Math336",
+              "predicted": "math336"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium390",
+              "predicted": "stadium390"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano144",
+              "predicted": "volcano144"
+            },
+            {
+              "correct": true,
+              "expected": "Inst229",
+              "predicted": "inst229"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium413",
+              "predicted": "stadium413"
+            },
+            {
+              "correct": true,
+              "expected": "Inst320",
+              "predicted": "inst320"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud165",
+              "predicted": "cloud165"
+            },
+            {
+              "correct": true,
+              "expected": "Sea26",
+              "predicted": "sea26"
+            },
+            {
+              "correct": true,
+              "expected": "Wine269",
+              "predicted": "wine269"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar123",
+              "predicted": "guitar123"
+            },
+            {
+              "correct": true,
+              "expected": "Spice225",
+              "predicted": "spice225"
+            },
+            {
+              "correct": true,
+              "expected": "Toon48",
+              "predicted": "toon48"
+            }
+          ],
+          "PI": [
+            {
+              "correct": true,
+              "expected": "Cook178",
+              "predicted": "cook178"
+            },
+            {
+              "correct": true,
+              "expected": "Land397",
+              "predicted": "land397"
+            },
+            {
+              "correct": true,
+              "expected": "Style482",
+              "predicted": "style482"
+            },
+            {
+              "correct": true,
+              "expected": "Genre85",
+              "predicted": "genre85"
+            },
+            {
+              "correct": true,
+              "expected": "Game150",
+              "predicted": "game150"
+            },
+            {
+              "correct": false,
+              "expected": "Art154",
+              "predicted": "art127"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese309",
+              "predicted": "cheese309"
+            },
+            {
+              "correct": false,
+              "expected": "Star156",
+              "predicted": "star213"
+            },
+            {
+              "correct": true,
+              "expected": "Surg281",
+              "predicted": "surg281"
+            },
+            {
+              "correct": true,
+              "expected": "Land167",
+              "predicted": "land167"
+            },
+            {
+              "correct": true,
+              "expected": "Land473",
+              "predicted": "land473"
+            },
+            {
+              "correct": true,
+              "expected": "Elem357",
+              "predicted": "elem357"
+            },
+            {
+              "correct": true,
+              "expected": "Scope482",
+              "predicted": "scope482"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge387",
+              "predicted": "bridge387"
+            },
+            {
+              "correct": true,
+              "expected": "Bird170",
+              "predicted": "bird170"
+            },
+            {
+              "correct": true,
+              "expected": "Hat33",
+              "predicted": "hat33"
+            },
+            {
+              "correct": true,
+              "expected": "Dance493",
+              "predicted": "dance493"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta49",
+              "predicted": "pasta49"
+            },
+            {
+              "correct": true,
+              "expected": "Math269",
+              "predicted": "math269"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium258",
+              "predicted": "stadium258"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano265",
+              "predicted": "volcano265"
+            },
+            {
+              "correct": true,
+              "expected": "Inst135",
+              "predicted": "inst135"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium287",
+              "predicted": "stadium287"
+            },
+            {
+              "correct": true,
+              "expected": "Inst301",
+              "predicted": "inst301"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud398",
+              "predicted": "cloud398"
+            },
+            {
+              "correct": true,
+              "expected": "Sea106",
+              "predicted": "sea106"
+            },
+            {
+              "correct": true,
+              "expected": "Wine360",
+              "predicted": "wine360"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar231",
+              "predicted": "guitar231"
+            },
+            {
+              "correct": true,
+              "expected": "Spice216",
+              "predicted": "spice216"
+            },
+            {
+              "correct": true,
+              "expected": "Toon459",
+              "predicted": "toon459"
+            }
+          ]
+        }
+      },
+      "recency_cue": {
+        "ri_accuracy": 1.0,
+        "pi_accuracy": 0.6666666666666666,
+        "gap": 0.33333333333333337,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Fab213",
+              "predicted": "fab213"
+            },
+            {
+              "correct": true,
+              "expected": "Fab410",
+              "predicted": "fab410"
+            },
+            {
+              "correct": true,
+              "expected": "Martial334",
+              "predicted": "martial334"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud365",
+              "predicted": "cloud365"
+            },
+            {
+              "correct": true,
+              "expected": "Herb174",
+              "predicted": "herb174"
+            },
+            {
+              "correct": true,
+              "expected": "Tree405",
+              "predicted": "tree405"
+            },
+            {
+              "correct": true,
+              "expected": "Hat339",
+              "predicted": "hat339"
+            },
+            {
+              "correct": true,
+              "expected": "Current382",
+              "predicted": "current382"
+            },
+            {
+              "correct": true,
+              "expected": "Boat294",
+              "predicted": "boat294"
+            },
+            {
+              "correct": true,
+              "expected": "Surg63",
+              "predicted": "surg63"
+            },
+            {
+              "correct": true,
+              "expected": "Cook361",
+              "predicted": "cook361"
+            },
+            {
+              "correct": true,
+              "expected": "Hat483",
+              "predicted": "hat483"
+            },
+            {
+              "correct": true,
+              "expected": "Weather430",
+              "predicted": "weather430"
+            },
+            {
+              "correct": true,
+              "expected": "Style372",
+              "predicted": "style372"
+            },
+            {
+              "correct": true,
+              "expected": "Genre421",
+              "predicted": "genre421"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee85",
+              "predicted": "coffee85"
+            },
+            {
+              "correct": true,
+              "expected": "Inst138",
+              "predicted": "inst138"
+            },
+            {
+              "correct": true,
+              "expected": "Star35",
+              "predicted": "star35"
+            },
+            {
+              "correct": true,
+              "expected": "Psych206",
+              "predicted": "psych206"
+            },
+            {
+              "correct": true,
+              "expected": "Boat108",
+              "predicted": "boat108"
+            },
+            {
+              "correct": true,
+              "expected": "Spice125",
+              "predicted": "spice125"
+            },
+            {
+              "correct": true,
+              "expected": "Inst159",
+              "predicted": "inst159"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge236",
+              "predicted": "bridge236"
+            },
+            {
+              "correct": true,
+              "expected": "Tool122",
+              "predicted": "tool122"
+            },
+            {
+              "correct": true,
+              "expected": "Spice342",
+              "predicted": "spice342"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium412",
+              "predicted": "stadium412"
+            },
+            {
+              "correct": true,
+              "expected": "Tree375",
+              "predicted": "tree375"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese171",
+              "predicted": "cheese171"
+            },
+            {
+              "correct": true,
+              "expected": "Dance332",
+              "predicted": "dance332"
+            },
+            {
+              "correct": true,
+              "expected": "Tree135",
+              "predicted": "tree135"
+            }
+          ],
+          "PI": [
+            {
+              "correct": true,
+              "expected": "Fab280",
+              "predicted": "fab280"
+            },
+            {
+              "correct": true,
+              "expected": "Fab166",
+              "predicted": "fab166"
+            },
+            {
+              "correct": true,
+              "expected": "Martial55",
+              "predicted": "martial55"
+            },
+            {
+              "correct": false,
+              "expected": "Cloud395",
+              "predicted": "cloud498"
+            },
+            {
+              "correct": true,
+              "expected": "Herb93",
+              "predicted": "herb93"
+            },
+            {
+              "correct": true,
+              "expected": "Tree6",
+              "predicted": "tree6"
+            },
+            {
+              "correct": false,
+              "expected": "Hat296",
+              "predicted": "hat498"
+            },
+            {
+              "correct": false,
+              "expected": "Current244",
+              "predicted": "current106"
+            },
+            {
+              "correct": true,
+              "expected": "Boat185",
+              "predicted": "boat185"
+            },
+            {
+              "correct": false,
+              "expected": "Surg14",
+              "predicted": "surg37"
+            },
+            {
+              "correct": true,
+              "expected": "Cook171",
+              "predicted": "cook171"
+            },
+            {
+              "correct": true,
+              "expected": "Hat442",
+              "predicted": "hat442"
+            },
+            {
+              "correct": false,
+              "expected": "Weather325",
+              "predicted": "weather233"
+            },
+            {
+              "correct": false,
+              "expected": "Style431",
+              "predicted": "style142"
+            },
+            {
+              "correct": false,
+              "expected": "Genre125",
+              "predicted": "genre386"
+            },
+            {
+              "correct": false,
+              "expected": "Coffee442",
+              "predicted": "coffee331"
+            },
+            {
+              "correct": true,
+              "expected": "Inst1",
+              "predicted": "inst1"
+            },
+            {
+              "correct": true,
+              "expected": "Star126",
+              "predicted": "star126"
+            },
+            {
+              "correct": true,
+              "expected": "Psych373",
+              "predicted": "psych373"
+            },
+            {
+              "correct": false,
+              "expected": "Boat86",
+              "predicted": "boat337"
+            },
+            {
+              "correct": false,
+              "expected": "Spice402",
+              "predicted": "spice457"
+            },
+            {
+              "correct": true,
+              "expected": "Inst335",
+              "predicted": "inst335"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge371",
+              "predicted": "bridge371"
+            },
+            {
+              "correct": true,
+              "expected": "Tool258",
+              "predicted": "tool258"
+            },
+            {
+              "correct": true,
+              "expected": "Spice317",
+              "predicted": "spice317"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium57",
+              "predicted": "stadium57"
+            },
+            {
+              "correct": true,
+              "expected": "Tree265",
+              "predicted": "tree265"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese99",
+              "predicted": "cheese99"
+            },
+            {
+              "correct": true,
+              "expected": "Dance429",
+              "predicted": "dance429"
+            },
+            {
+              "correct": true,
+              "expected": "Tree134",
+              "predicted": "tree134"
+            }
+          ]
+        }
+      },
+      "combined": {
+        "ri_accuracy": 0.9666666666666667,
+        "pi_accuracy": 0.6,
+        "gap": 0.3666666666666667,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Weather24",
+              "predicted": "weather24"
+            },
+            {
+              "correct": true,
+              "expected": "Dance336",
+              "predicted": "dance336"
+            },
+            {
+              "correct": true,
+              "expected": "Dance243",
+              "predicted": "dance243"
+            },
+            {
+              "correct": true,
+              "expected": "Style480",
+              "predicted": "style480"
+            },
+            {
+              "correct": true,
+              "expected": "Art381",
+              "predicted": "art381"
+            },
+            {
+              "correct": true,
+              "expected": "Flower187",
+              "predicted": "flower187"
+            },
+            {
+              "correct": true,
+              "expected": "Game339",
+              "predicted": "game339"
+            },
+            {
+              "correct": true,
+              "expected": "Tree446",
+              "predicted": "tree446"
+            },
+            {
+              "correct": true,
+              "expected": "Civ158",
+              "predicted": "civ158"
+            },
+            {
+              "correct": true,
+              "expected": "Medium455",
+              "predicted": "medium455"
+            },
+            {
+              "correct": true,
+              "expected": "Sea57",
+              "predicted": "sea57"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar38",
+              "predicted": "guitar38"
+            },
+            {
+              "correct": true,
+              "expected": "Surg111",
+              "predicted": "surg111"
+            },
+            {
+              "correct": true,
+              "expected": "Tree37",
+              "predicted": "tree37"
+            },
+            {
+              "correct": true,
+              "expected": "Toon198",
+              "predicted": "toon198"
+            },
+            {
+              "correct": true,
+              "expected": "Toon50",
+              "predicted": "toon50"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium299",
+              "predicted": "stadium299"
+            },
+            {
+              "correct": true,
+              "expected": "Sword82",
+              "predicted": "sword82"
+            },
+            {
+              "correct": true,
+              "expected": "Boat263",
+              "predicted": "boat263"
+            },
+            {
+              "correct": true,
+              "expected": "Cook36",
+              "predicted": "cook36"
+            },
+            {
+              "correct": true,
+              "expected": "Sword92",
+              "predicted": "sword92"
+            },
+            {
+              "correct": true,
+              "expected": "Scope432",
+              "predicted": "scope432"
+            },
+            {
+              "correct": true,
+              "expected": "Flower144",
+              "predicted": "flower144"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit389",
+              "predicted": "fruit389"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium389",
+              "predicted": "stadium389"
+            },
+            {
+              "correct": true,
+              "expected": "Lang227",
+              "predicted": "lang227"
+            },
+            {
+              "correct": true,
+              "expected": "Gem104",
+              "predicted": "gem104"
+            },
+            {
+              "correct": true,
+              "expected": "Boat171",
+              "predicted": "boat171"
+            },
+            {
+              "correct": true,
+              "expected": "Land292",
+              "predicted": "land292"
+            },
+            {
+              "correct": false,
+              "expected": "Boat157",
+              "predicted": "boat45"
+            }
+          ],
+          "PI": [
+            {
+              "correct": false,
+              "expected": "Weather391",
+              "predicted": "weather459"
+            },
+            {
+              "correct": false,
+              "expected": "Dance121",
+              "predicted": "dance227"
+            },
+            {
+              "correct": true,
+              "expected": "Dance308",
+              "predicted": "dance308"
+            },
+            {
+              "correct": false,
+              "expected": "Style25",
+              "predicted": "style497"
+            },
+            {
+              "correct": true,
+              "expected": "Art498",
+              "predicted": "art498"
+            },
+            {
+              "correct": true,
+              "expected": "Flower385",
+              "predicted": "flower385"
+            },
+            {
+              "correct": false,
+              "expected": "Game363",
+              "predicted": "game298"
+            },
+            {
+              "correct": false,
+              "expected": "Tree80",
+              "predicted": "tree499"
+            },
+            {
+              "correct": true,
+              "expected": "Civ396",
+              "predicted": "civ396"
+            },
+            {
+              "correct": false,
+              "expected": "Medium176",
+              "predicted": "medium56"
+            },
+            {
+              "correct": false,
+              "expected": "Sea181",
+              "predicted": "sea325"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar332",
+              "predicted": "guitar332"
+            },
+            {
+              "correct": true,
+              "expected": "Surg119",
+              "predicted": "surg119"
+            },
+            {
+              "correct": true,
+              "expected": "Tree448",
+              "predicted": "tree448"
+            },
+            {
+              "correct": false,
+              "expected": "Toon467",
+              "predicted": "toon277"
+            },
+            {
+              "correct": false,
+              "expected": "Toon481",
+              "predicted": "toon262"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium295",
+              "predicted": "stadium295"
+            },
+            {
+              "correct": true,
+              "expected": "Sword313",
+              "predicted": "sword313"
+            },
+            {
+              "correct": true,
+              "expected": "Boat383",
+              "predicted": "boat383"
+            },
+            {
+              "correct": true,
+              "expected": "Cook186",
+              "predicted": "cook186"
+            },
+            {
+              "correct": false,
+              "expected": "Sword393",
+              "predicted": "sword354"
+            },
+            {
+              "correct": false,
+              "expected": "Scope304",
+              "predicted": "scope166"
+            },
+            {
+              "correct": false,
+              "expected": "Flower192",
+              "predicted": "flower227"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit158",
+              "predicted": "fruit158"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium397",
+              "predicted": "stadium397"
+            },
+            {
+              "correct": true,
+              "expected": "Lang117",
+              "predicted": "lang117"
+            },
+            {
+              "correct": true,
+              "expected": "Gem436",
+              "predicted": "gem436"
+            },
+            {
+              "correct": true,
+              "expected": "Boat373",
+              "predicted": "boat373"
+            },
+            {
+              "correct": true,
+              "expected": "Land277",
+              "predicted": "land277"
+            },
+            {
+              "correct": true,
+              "expected": "Boat141",
+              "predicted": "boat141"
+            }
+          ]
+        }
+      }
+    },
+    "10k_200u": {
+      "control": {
+        "ri_accuracy": 0.9666666666666667,
+        "pi_accuracy": 0.6666666666666666,
+        "gap": 0.30000000000000004,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Style281",
+              "predicted": "style281"
+            },
+            {
+              "correct": true,
+              "expected": "Sea79",
+              "predicted": "sea79"
+            },
+            {
+              "correct": true,
+              "expected": "Photo55",
+              "predicted": "photo55"
+            },
+            {
+              "correct": true,
+              "expected": "Toon445",
+              "predicted": "toon445"
+            },
+            {
+              "correct": true,
+              "expected": "Cook58",
+              "predicted": "cook58"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit309",
+              "predicted": "fruit309"
+            },
+            {
+              "correct": true,
+              "expected": "Sword67",
+              "predicted": "sword67"
+            },
+            {
+              "correct": true,
+              "expected": "Genre355",
+              "predicted": "genre355"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral52",
+              "predicted": "mineral52"
+            },
+            {
+              "correct": true,
+              "expected": "Photo426",
+              "predicted": "photo426"
+            },
+            {
+              "correct": true,
+              "expected": "Sword476",
+              "predicted": "sword476"
+            },
+            {
+              "correct": true,
+              "expected": "Scope194",
+              "predicted": "scope194"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud444",
+              "predicted": "cloud444"
+            },
+            {
+              "correct": true,
+              "expected": "Fab7",
+              "predicted": "fab7"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese483",
+              "predicted": "cheese483"
+            },
+            {
+              "correct": true,
+              "expected": "Game300",
+              "predicted": "game300"
+            },
+            {
+              "correct": true,
+              "expected": "Psych286",
+              "predicted": "psych286"
+            },
+            {
+              "correct": true,
+              "expected": "Medium373",
+              "predicted": "medium373"
+            },
+            {
+              "correct": true,
+              "expected": "Bird455",
+              "predicted": "bird455"
+            },
+            {
+              "correct": true,
+              "expected": "Tool198",
+              "predicted": "tool198"
+            },
+            {
+              "correct": true,
+              "expected": "Wine380",
+              "predicted": "wine380"
+            },
+            {
+              "correct": false,
+              "expected": "Tree80",
+              "predicted": "tree90"
+            },
+            {
+              "correct": true,
+              "expected": "Herb453",
+              "predicted": "herb453"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano37",
+              "predicted": "volcano37"
+            },
+            {
+              "correct": true,
+              "expected": "Cook264",
+              "predicted": "cook264"
+            },
+            {
+              "correct": true,
+              "expected": "Sea282",
+              "predicted": "sea282"
+            },
+            {
+              "correct": true,
+              "expected": "Surg174",
+              "predicted": "surg174"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud396",
+              "predicted": "cloud396"
+            },
+            {
+              "correct": true,
+              "expected": "Land87",
+              "predicted": "land87"
+            },
+            {
+              "correct": true,
+              "expected": "Sword265",
+              "predicted": "sword265"
+            }
+          ],
+          "PI": [
+            {
+              "correct": false,
+              "expected": "Style139",
+              "predicted": "style467"
+            },
+            {
+              "correct": false,
+              "expected": "Sea478",
+              "predicted": "sea486"
+            },
+            {
+              "correct": false,
+              "expected": "Photo19",
+              "predicted": "photo428"
+            },
+            {
+              "correct": false,
+              "expected": "Toon83",
+              "predicted": "toon178"
+            },
+            {
+              "correct": true,
+              "expected": "Cook281",
+              "predicted": "cook281"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit88",
+              "predicted": "fruit88"
+            },
+            {
+              "correct": false,
+              "expected": "Sword64",
+              "predicted": "sword301"
+            },
+            {
+              "correct": false,
+              "expected": "Genre444",
+              "predicted": "genre137"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral285",
+              "predicted": "mineral285"
+            },
+            {
+              "correct": true,
+              "expected": "Photo175",
+              "predicted": "photo175"
+            },
+            {
+              "correct": true,
+              "expected": "Sword465",
+              "predicted": "sword465"
+            },
+            {
+              "correct": true,
+              "expected": "Scope51",
+              "predicted": "scope51"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud392",
+              "predicted": "cloud392"
+            },
+            {
+              "correct": true,
+              "expected": "Fab391",
+              "predicted": "fab391"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese404",
+              "predicted": "cheese404"
+            },
+            {
+              "correct": true,
+              "expected": "Game402",
+              "predicted": "game402"
+            },
+            {
+              "correct": true,
+              "expected": "Psych346",
+              "predicted": "psych346"
+            },
+            {
+              "correct": true,
+              "expected": "Medium403",
+              "predicted": "medium403"
+            },
+            {
+              "correct": true,
+              "expected": "Bird101",
+              "predicted": "bird101"
+            },
+            {
+              "correct": false,
+              "expected": "Tool89",
+              "predicted": "tool204"
+            },
+            {
+              "correct": true,
+              "expected": "Wine68",
+              "predicted": "wine68"
+            },
+            {
+              "correct": false,
+              "expected": "Tree351",
+              "predicted": "tree319"
+            },
+            {
+              "correct": true,
+              "expected": "Herb78",
+              "predicted": "herb78"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano255",
+              "predicted": "volcano255"
+            },
+            {
+              "correct": true,
+              "expected": "Cook18",
+              "predicted": "cook18"
+            },
+            {
+              "correct": false,
+              "expected": "Sea108",
+              "predicted": "sea482"
+            },
+            {
+              "correct": true,
+              "expected": "Surg106",
+              "predicted": "surg106"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud361",
+              "predicted": "cloud361"
+            },
+            {
+              "correct": false,
+              "expected": "Land52",
+              "predicted": "land291"
+            },
+            {
+              "correct": true,
+              "expected": "Sword495",
+              "predicted": "sword495"
+            }
+          ]
+        }
+      },
+      "numbered": {
+        "ri_accuracy": 1.0,
+        "pi_accuracy": 0.7333333333333333,
+        "gap": 0.2666666666666667,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Sea190",
+              "predicted": "sea190"
+            },
+            {
+              "correct": true,
+              "expected": "Math313",
+              "predicted": "math313"
+            },
+            {
+              "correct": true,
+              "expected": "Martial19",
+              "predicted": "martial19"
+            },
+            {
+              "correct": true,
+              "expected": "Martial438",
+              "predicted": "martial438"
+            },
+            {
+              "correct": true,
+              "expected": "Game182",
+              "predicted": "game182"
+            },
+            {
+              "correct": true,
+              "expected": "Scope351",
+              "predicted": "scope351"
+            },
+            {
+              "correct": true,
+              "expected": "Surg321",
+              "predicted": "surg321"
+            },
+            {
+              "correct": true,
+              "expected": "Style364",
+              "predicted": "style364"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit36",
+              "predicted": "fruit36"
+            },
+            {
+              "correct": true,
+              "expected": "Flower42",
+              "predicted": "flower42"
+            },
+            {
+              "correct": true,
+              "expected": "Elem472",
+              "predicted": "elem472"
+            },
+            {
+              "correct": true,
+              "expected": "Martial142",
+              "predicted": "martial142"
+            },
+            {
+              "correct": true,
+              "expected": "Game471",
+              "predicted": "game471"
+            },
+            {
+              "correct": true,
+              "expected": "Land285",
+              "predicted": "land285"
+            },
+            {
+              "correct": true,
+              "expected": "Cloud39",
+              "predicted": "cloud39"
+            },
+            {
+              "correct": true,
+              "expected": "Style59",
+              "predicted": "style59"
+            },
+            {
+              "correct": true,
+              "expected": "Sea19",
+              "predicted": "sea19"
+            },
+            {
+              "correct": true,
+              "expected": "Inst299",
+              "predicted": "inst299"
+            },
+            {
+              "correct": true,
+              "expected": "Genre365",
+              "predicted": "genre365"
+            },
+            {
+              "correct": true,
+              "expected": "Tree276",
+              "predicted": "tree276"
+            },
+            {
+              "correct": true,
+              "expected": "Hat172",
+              "predicted": "hat172"
+            },
+            {
+              "correct": true,
+              "expected": "Hat81",
+              "predicted": "hat81"
+            },
+            {
+              "correct": true,
+              "expected": "Art218",
+              "predicted": "art218"
+            },
+            {
+              "correct": true,
+              "expected": "Style382",
+              "predicted": "style382"
+            },
+            {
+              "correct": true,
+              "expected": "Cheese445",
+              "predicted": "cheese445"
+            },
+            {
+              "correct": true,
+              "expected": "Weather292",
+              "predicted": "weather292"
+            },
+            {
+              "correct": true,
+              "expected": "Fab406",
+              "predicted": "fab406"
+            },
+            {
+              "correct": true,
+              "expected": "Flower496",
+              "predicted": "flower496"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano390",
+              "predicted": "volcano390"
+            },
+            {
+              "correct": true,
+              "expected": "Math282",
+              "predicted": "math282"
+            }
+          ],
+          "PI": [
+            {
+              "correct": false,
+              "expected": "Sea109",
+              "predicted": "sea335"
+            },
+            {
+              "correct": true,
+              "expected": "Math354",
+              "predicted": "math354"
+            },
+            {
+              "correct": true,
+              "expected": "Martial460",
+              "predicted": "martial460"
+            },
+            {
+              "correct": true,
+              "expected": "Martial9",
+              "predicted": "martial9"
+            },
+            {
+              "correct": false,
+              "expected": "Game427",
+              "predicted": "game123"
+            },
+            {
+              "correct": true,
+              "expected": "Scope477",
+              "predicted": "scope477"
+            },
+            {
+              "correct": true,
+              "expected": "Surg288",
+              "predicted": "surg288"
+            },
+            {
+              "correct": true,
+              "expected": "Style314",
+              "predicted": "style314"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit208",
+              "predicted": "fruit208"
+            },
+            {
+              "correct": true,
+              "expected": "Flower84",
+              "predicted": "flower84"
+            },
+            {
+              "correct": true,
+              "expected": "Elem352",
+              "predicted": "elem352"
+            },
+            {
+              "correct": true,
+              "expected": "Martial317",
+              "predicted": "martial317"
+            },
+            {
+              "correct": true,
+              "expected": "Game214",
+              "predicted": "game214"
+            },
+            {
+              "correct": false,
+              "expected": "Land423",
+              "predicted": "land123"
+            },
+            {
+              "correct": false,
+              "expected": "Cloud221",
+              "predicted": "cloud80"
+            },
+            {
+              "correct": true,
+              "expected": "Style484",
+              "predicted": "style484"
+            },
+            {
+              "correct": true,
+              "expected": "Sea28",
+              "predicted": "sea28"
+            },
+            {
+              "correct": true,
+              "expected": "Inst32",
+              "predicted": "inst32"
+            },
+            {
+              "correct": true,
+              "expected": "Genre14",
+              "predicted": "genre14"
+            },
+            {
+              "correct": false,
+              "expected": "Tree351",
+              "predicted": "tree500"
+            },
+            {
+              "correct": true,
+              "expected": "Hat132",
+              "predicted": "hat132"
+            },
+            {
+              "correct": true,
+              "expected": "Hat50",
+              "predicted": "hat50"
+            },
+            {
+              "correct": true,
+              "expected": "Art302",
+              "predicted": "art302"
+            },
+            {
+              "correct": true,
+              "expected": "Style314",
+              "predicted": "style314"
+            },
+            {
+              "correct": false,
+              "expected": "Cheese397",
+              "predicted": "cheese410"
+            },
+            {
+              "correct": false,
+              "expected": "Weather424",
+              "predicted": "weather497"
+            },
+            {
+              "correct": true,
+              "expected": "Fab262",
+              "predicted": "fab262"
+            },
+            {
+              "correct": true,
+              "expected": "Flower278",
+              "predicted": "flower278"
+            },
+            {
+              "correct": false,
+              "expected": "Volcano41",
+              "predicted": "volcano248"
+            },
+            {
+              "correct": true,
+              "expected": "Math136",
+              "predicted": "math136"
+            }
+          ]
+        }
+      },
+      "landmark": {
+        "ri_accuracy": 0.9666666666666667,
+        "pi_accuracy": 0.8,
+        "gap": 0.16666666666666663,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Bridge97",
+              "predicted": "bridge97"
+            },
+            {
+              "correct": true,
+              "expected": "Photo440",
+              "predicted": "photo440"
+            },
+            {
+              "correct": true,
+              "expected": "Martial70",
+              "predicted": "martial70"
+            },
+            {
+              "correct": true,
+              "expected": "Weather80",
+              "predicted": "weather80"
+            },
+            {
+              "correct": true,
+              "expected": "Math266",
+              "predicted": "math266"
+            },
+            {
+              "correct": true,
+              "expected": "Style390",
+              "predicted": "style390"
+            },
+            {
+              "correct": true,
+              "expected": "Style8",
+              "predicted": "style8"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit496",
+              "predicted": "fruit496"
+            },
+            {
+              "correct": true,
+              "expected": "Dino198",
+              "predicted": "dino198"
+            },
+            {
+              "correct": true,
+              "expected": "Gem255",
+              "predicted": "gem255"
+            },
+            {
+              "correct": false,
+              "expected": "Pasta215",
+              "predicted": "pasta1"
+            },
+            {
+              "correct": true,
+              "expected": "Lang117",
+              "predicted": "lang117"
+            },
+            {
+              "correct": true,
+              "expected": "Herb375",
+              "predicted": "herb375"
+            },
+            {
+              "correct": true,
+              "expected": "Sword93",
+              "predicted": "sword93"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium374",
+              "predicted": "stadium374"
+            },
+            {
+              "correct": true,
+              "expected": "Civ326",
+              "predicted": "civ326"
+            },
+            {
+              "correct": true,
+              "expected": "Scope464",
+              "predicted": "scope464"
+            },
+            {
+              "correct": true,
+              "expected": "Surg399",
+              "predicted": "surg399"
+            },
+            {
+              "correct": true,
+              "expected": "Tree224",
+              "predicted": "tree224"
+            },
+            {
+              "correct": true,
+              "expected": "Game148",
+              "predicted": "game148"
+            },
+            {
+              "correct": true,
+              "expected": "Math38",
+              "predicted": "math38"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano256",
+              "predicted": "volcano256"
+            },
+            {
+              "correct": true,
+              "expected": "Civ221",
+              "predicted": "civ221"
+            },
+            {
+              "correct": true,
+              "expected": "Current146",
+              "predicted": "current146"
+            },
+            {
+              "correct": true,
+              "expected": "Tool232",
+              "predicted": "tool232"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit361",
+              "predicted": "fruit361"
+            },
+            {
+              "correct": true,
+              "expected": "Wine338",
+              "predicted": "wine338"
+            },
+            {
+              "correct": true,
+              "expected": "Math103",
+              "predicted": "math103"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar113",
+              "predicted": "guitar113"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral178",
+              "predicted": "mineral178"
+            }
+          ],
+          "PI": [
+            {
+              "correct": true,
+              "expected": "Bridge131",
+              "predicted": "bridge131"
+            },
+            {
+              "correct": false,
+              "expected": "Photo116",
+              "predicted": "photo438"
+            },
+            {
+              "correct": true,
+              "expected": "Martial402",
+              "predicted": "martial402"
+            },
+            {
+              "correct": false,
+              "expected": "Weather190",
+              "predicted": "weather470"
+            },
+            {
+              "correct": true,
+              "expected": "Math476",
+              "predicted": "math476"
+            },
+            {
+              "correct": true,
+              "expected": "Style89",
+              "predicted": "style89"
+            },
+            {
+              "correct": true,
+              "expected": "Style264",
+              "predicted": "style264"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit386",
+              "predicted": "fruit386"
+            },
+            {
+              "correct": true,
+              "expected": "Dino300",
+              "predicted": "dino300"
+            },
+            {
+              "correct": true,
+              "expected": "Gem461",
+              "predicted": "gem461"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta44",
+              "predicted": "pasta44"
+            },
+            {
+              "correct": true,
+              "expected": "Lang417",
+              "predicted": "lang417"
+            },
+            {
+              "correct": true,
+              "expected": "Herb65",
+              "predicted": "herb65"
+            },
+            {
+              "correct": true,
+              "expected": "Sword215",
+              "predicted": "sword215"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium197",
+              "predicted": "stadium197"
+            },
+            {
+              "correct": true,
+              "expected": "Civ392",
+              "predicted": "civ392"
+            },
+            {
+              "correct": false,
+              "expected": "Scope89",
+              "predicted": "scope367"
+            },
+            {
+              "correct": true,
+              "expected": "Surg227",
+              "predicted": "surg227"
+            },
+            {
+              "correct": false,
+              "expected": "Tree152",
+              "predicted": "tree161"
+            },
+            {
+              "correct": true,
+              "expected": "Game443",
+              "predicted": "game443"
+            },
+            {
+              "correct": true,
+              "expected": "Math205",
+              "predicted": "math205"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano328",
+              "predicted": "volcano328"
+            },
+            {
+              "correct": true,
+              "expected": "Civ380",
+              "predicted": "civ380"
+            },
+            {
+              "correct": false,
+              "expected": "Current90",
+              "predicted": "current89"
+            },
+            {
+              "correct": true,
+              "expected": "Tool314",
+              "predicted": "tool314"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit307",
+              "predicted": "fruit307"
+            },
+            {
+              "correct": false,
+              "expected": "Wine462",
+              "predicted": "wine418"
+            },
+            {
+              "correct": true,
+              "expected": "Math155",
+              "predicted": "math155"
+            },
+            {
+              "correct": true,
+              "expected": "Guitar72",
+              "predicted": "guitar72"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral462",
+              "predicted": "mineral462"
+            }
+          ]
+        }
+      },
+      "recency_cue": {
+        "ri_accuracy": 0.9333333333333333,
+        "pi_accuracy": 0.7666666666666667,
+        "gap": 0.16666666666666663,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Bird205",
+              "predicted": "bird205"
+            },
+            {
+              "correct": true,
+              "expected": "Weather395",
+              "predicted": "weather395"
+            },
+            {
+              "correct": true,
+              "expected": "Spice172",
+              "predicted": "spice172"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano347",
+              "predicted": "volcano347"
+            },
+            {
+              "correct": true,
+              "expected": "Bird107",
+              "predicted": "bird107"
+            },
+            {
+              "correct": true,
+              "expected": "Tool373",
+              "predicted": "tool373"
+            },
+            {
+              "correct": false,
+              "expected": "Dino76",
+              "predicted": "dino344"
+            },
+            {
+              "correct": true,
+              "expected": "Inst318",
+              "predicted": "inst318"
+            },
+            {
+              "correct": true,
+              "expected": "Inst486",
+              "predicted": "inst486"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano207",
+              "predicted": "volcano207"
+            },
+            {
+              "correct": true,
+              "expected": "Art165",
+              "predicted": "art165"
+            },
+            {
+              "correct": true,
+              "expected": "Lang345",
+              "predicted": "lang345"
+            },
+            {
+              "correct": true,
+              "expected": "Dance299",
+              "predicted": "dance299"
+            },
+            {
+              "correct": true,
+              "expected": "Art287",
+              "predicted": "art287"
+            },
+            {
+              "correct": true,
+              "expected": "Elem376",
+              "predicted": "elem376"
+            },
+            {
+              "correct": false,
+              "expected": "Photo238",
+              "predicted": "photo309"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee52",
+              "predicted": "coffee52"
+            },
+            {
+              "correct": true,
+              "expected": "Cook342",
+              "predicted": "cook342"
+            },
+            {
+              "correct": true,
+              "expected": "Gem443",
+              "predicted": "gem443"
+            },
+            {
+              "correct": true,
+              "expected": "Current390",
+              "predicted": "current390"
+            },
+            {
+              "correct": true,
+              "expected": "Martial300",
+              "predicted": "martial300"
+            },
+            {
+              "correct": true,
+              "expected": "Bird361",
+              "predicted": "bird361"
+            },
+            {
+              "correct": true,
+              "expected": "Fab494",
+              "predicted": "fab494"
+            },
+            {
+              "correct": true,
+              "expected": "Scope329",
+              "predicted": "scope329"
+            },
+            {
+              "correct": true,
+              "expected": "Tool329",
+              "predicted": "tool329"
+            },
+            {
+              "correct": true,
+              "expected": "Tool6",
+              "predicted": "tool6"
+            },
+            {
+              "correct": true,
+              "expected": "Flower162",
+              "predicted": "flower162"
+            },
+            {
+              "correct": true,
+              "expected": "Art408",
+              "predicted": "art408"
+            },
+            {
+              "correct": true,
+              "expected": "Martial372",
+              "predicted": "martial372"
+            },
+            {
+              "correct": true,
+              "expected": "Inst305",
+              "predicted": "inst305"
+            }
+          ],
+          "PI": [
+            {
+              "correct": false,
+              "expected": "Bird21",
+              "predicted": "bird273"
+            },
+            {
+              "correct": false,
+              "expected": "Weather234",
+              "predicted": "weather1"
+            },
+            {
+              "correct": true,
+              "expected": "Spice362",
+              "predicted": "spice362"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano261",
+              "predicted": "volcano261"
+            },
+            {
+              "correct": false,
+              "expected": "Bird7",
+              "predicted": "bird338"
+            },
+            {
+              "correct": false,
+              "expected": "Tool233",
+              "predicted": "tool385"
+            },
+            {
+              "correct": true,
+              "expected": "Dino246",
+              "predicted": "dino246"
+            },
+            {
+              "correct": true,
+              "expected": "Inst445",
+              "predicted": "inst445"
+            },
+            {
+              "correct": true,
+              "expected": "Inst128",
+              "predicted": "inst128"
+            },
+            {
+              "correct": true,
+              "expected": "Volcano79",
+              "predicted": "volcano79"
+            },
+            {
+              "correct": true,
+              "expected": "Art34",
+              "predicted": "art34"
+            },
+            {
+              "correct": true,
+              "expected": "Lang213",
+              "predicted": "lang213"
+            },
+            {
+              "correct": true,
+              "expected": "Dance29",
+              "predicted": "dance29"
+            },
+            {
+              "correct": true,
+              "expected": "Art488",
+              "predicted": "art488"
+            },
+            {
+              "correct": false,
+              "expected": "Elem382",
+              "predicted": "elem347"
+            },
+            {
+              "correct": false,
+              "expected": "Photo395",
+              "predicted": "photo365"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee267",
+              "predicted": "coffee267"
+            },
+            {
+              "correct": true,
+              "expected": "Cook48",
+              "predicted": "cook48"
+            },
+            {
+              "correct": true,
+              "expected": "Gem363",
+              "predicted": "gem363"
+            },
+            {
+              "correct": true,
+              "expected": "Current422",
+              "predicted": "current422"
+            },
+            {
+              "correct": true,
+              "expected": "Martial78",
+              "predicted": "martial78"
+            },
+            {
+              "correct": true,
+              "expected": "Bird489",
+              "predicted": "bird489"
+            },
+            {
+              "correct": true,
+              "expected": "Fab244",
+              "predicted": "fab244"
+            },
+            {
+              "correct": true,
+              "expected": "Scope241",
+              "predicted": "scope241"
+            },
+            {
+              "correct": true,
+              "expected": "Tool85",
+              "predicted": "tool85"
+            },
+            {
+              "correct": true,
+              "expected": "Tool302",
+              "predicted": "tool302"
+            },
+            {
+              "correct": true,
+              "expected": "Flower133",
+              "predicted": "flower133"
+            },
+            {
+              "correct": false,
+              "expected": "Art105",
+              "predicted": "art476"
+            },
+            {
+              "correct": true,
+              "expected": "Martial422",
+              "predicted": "martial422"
+            },
+            {
+              "correct": true,
+              "expected": "Inst188",
+              "predicted": "inst188"
+            }
+          ]
+        }
+      },
+      "combined": {
+        "ri_accuracy": 0.8333333333333334,
+        "pi_accuracy": 0.4,
+        "gap": 0.43333333333333335,
+        "n_trials": 30,
+        "trials": {
+          "RI": [
+            {
+              "correct": true,
+              "expected": "Wine249",
+              "predicted": "wine249"
+            },
+            {
+              "correct": true,
+              "expected": "Tree497",
+              "predicted": "tree497"
+            },
+            {
+              "correct": true,
+              "expected": "Weather405",
+              "predicted": "weather405"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium482",
+              "predicted": "stadium482"
+            },
+            {
+              "correct": true,
+              "expected": "Medium441",
+              "predicted": "medium441"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge100",
+              "predicted": "bridge100"
+            },
+            {
+              "correct": true,
+              "expected": "Civ256",
+              "predicted": "civ256"
+            },
+            {
+              "correct": true,
+              "expected": "Star340",
+              "predicted": "star340"
+            },
+            {
+              "correct": true,
+              "expected": "Flower66",
+              "predicted": "flower66"
+            },
+            {
+              "correct": true,
+              "expected": "Game129",
+              "predicted": "game129"
+            },
+            {
+              "correct": false,
+              "expected": "Dance202",
+              "predicted": "dance2"
+            },
+            {
+              "correct": true,
+              "expected": "Art391",
+              "predicted": "art391"
+            },
+            {
+              "correct": true,
+              "expected": "Flower10",
+              "predicted": "flower10"
+            },
+            {
+              "correct": true,
+              "expected": "Hat271",
+              "predicted": "hat271"
+            },
+            {
+              "correct": true,
+              "expected": "Sword74",
+              "predicted": "sword74"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta84",
+              "predicted": "pasta84"
+            },
+            {
+              "correct": true,
+              "expected": "Hat163",
+              "predicted": "hat163"
+            },
+            {
+              "correct": true,
+              "expected": "Tool339",
+              "predicted": "tool339"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit28",
+              "predicted": "fruit28"
+            },
+            {
+              "correct": true,
+              "expected": "Fab193",
+              "predicted": "fab193"
+            },
+            {
+              "correct": false,
+              "expected": "Mineral130",
+              "predicted": "mineral1"
+            },
+            {
+              "correct": true,
+              "expected": "Sea62",
+              "predicted": "sea62"
+            },
+            {
+              "correct": false,
+              "expected": "Bird450",
+              "predicted": "bird1"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge13",
+              "predicted": "bridge13"
+            },
+            {
+              "correct": true,
+              "expected": "Cook469",
+              "predicted": "cook469"
+            },
+            {
+              "correct": true,
+              "expected": "Coffee191",
+              "predicted": "coffee191"
+            },
+            {
+              "correct": false,
+              "expected": "Weather133",
+              "predicted": "weather1"
+            },
+            {
+              "correct": true,
+              "expected": "Lang475",
+              "predicted": "lang475"
+            },
+            {
+              "correct": false,
+              "expected": "Cook353",
+              "predicted": "cook404"
+            },
+            {
+              "correct": true,
+              "expected": "Fab158",
+              "predicted": "fab158"
+            }
+          ],
+          "PI": [
+            {
+              "correct": false,
+              "expected": "Wine203",
+              "predicted": "wine157"
+            },
+            {
+              "correct": false,
+              "expected": "Tree422",
+              "predicted": "tree178"
+            },
+            {
+              "correct": false,
+              "expected": "Weather47",
+              "predicted": "weather244"
+            },
+            {
+              "correct": true,
+              "expected": "Stadium312",
+              "predicted": "stadium312"
+            },
+            {
+              "correct": false,
+              "expected": "Medium349",
+              "predicted": "medium434"
+            },
+            {
+              "correct": true,
+              "expected": "Bridge153",
+              "predicted": "bridge153"
+            },
+            {
+              "correct": true,
+              "expected": "Civ138",
+              "predicted": "civ138"
+            },
+            {
+              "correct": false,
+              "expected": "Star34",
+              "predicted": "star27"
+            },
+            {
+              "correct": true,
+              "expected": "Flower456",
+              "predicted": "flower456"
+            },
+            {
+              "correct": false,
+              "expected": "Game75",
+              "predicted": "game345"
+            },
+            {
+              "correct": false,
+              "expected": "Dance141",
+              "predicted": "dance491"
+            },
+            {
+              "correct": true,
+              "expected": "Art476",
+              "predicted": "art476"
+            },
+            {
+              "correct": false,
+              "expected": "Flower80",
+              "predicted": "flower455"
+            },
+            {
+              "correct": false,
+              "expected": "Hat124",
+              "predicted": "hat168"
+            },
+            {
+              "correct": true,
+              "expected": "Sword130",
+              "predicted": "sword130"
+            },
+            {
+              "correct": true,
+              "expected": "Pasta446",
+              "predicted": "pasta446"
+            },
+            {
+              "correct": false,
+              "expected": "Hat356",
+              "predicted": "hat357"
+            },
+            {
+              "correct": true,
+              "expected": "Tool362",
+              "predicted": "tool362"
+            },
+            {
+              "correct": true,
+              "expected": "Fruit89",
+              "predicted": "fruit89"
+            },
+            {
+              "correct": true,
+              "expected": "Fab169",
+              "predicted": "fab169"
+            },
+            {
+              "correct": true,
+              "expected": "Mineral472",
+              "predicted": "mineral472"
+            },
+            {
+              "correct": false,
+              "expected": "Sea22",
+              "predicted": "sea500"
+            },
+            {
+              "correct": true,
+              "expected": "Bird111",
+              "predicted": "bird111"
+            },
+            {
+              "correct": false,
+              "expected": "Bridge253",
+              "predicted": "bridge319"
+            },
+            {
+              "correct": false,
+              "expected": "Cook295",
+              "predicted": "cook428"
+            },
+            {
+              "correct": false,
+              "expected": "Coffee160",
+              "predicted": "coffee397"
+            },
+            {
+              "correct": false,
+              "expected": "Weather305",
+              "predicted": "weather431"
+            },
+            {
+              "correct": false,
+              "expected": "Lang444",
+              "predicted": "lang106"
+            },
+            {
+              "correct": false,
+              "expected": "Cook168",
+              "predicted": "cook487"
+            },
+            {
+              "correct": false,
+              "expected": "Fab379",
+              "predicted": "fab52"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
