@@ -734,6 +734,18 @@ Priority techniques (in order of impact/effort ratio):
 
 This is a genuinely novel finding: different architectures have different DEGREES of primacy bias at initialization, but ALL autoregressive models converge toward primacy > recency behavior for retrieval tasks.
 
+### Action 33: BERT Bidirectional Probe (Inconclusive)
+
+Ran BERT probe to test if bidirectional models show less RI/PI discrimination. Result: 89% avg, 100% at final layer. BUT this likely detects the query word "first"/"last", not value encoding asymmetry. Probe design needs revision to test the right thing. Filed as inconclusive.
+
+### Action 34: StableLM-2-1.6B Confirms PI > RI
+
+StableLM: RI=90-100%, PI=10-27%, gap=67-87%. 6th transformer architecture confirming the pattern. Very clean data (5-10% garbage).
+
+### Action 35: 200-Trial Sweep Running for Statistical Rigor
+
+User flagged: 30-50 trials/cell is too small. Running Qwen-1.5B at key operating points (2k/3k × 5u/10u/20u) with 200 trials/cell for Wilson CI ≤ ±7%.
+
 ### Session Summary (2026-03-17)
 
 **Total experiments completed this session:**
