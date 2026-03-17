@@ -133,14 +133,32 @@ We have 3 model sizes (0.5B, 1.5B, 3B) but haven't derived a scaling relationshi
 | Table 2 | Logit lens metrics (peak, suppress, RI final) | Done |
 | Table 3 | Causal analysis (top heads, deltas, ablation) | Done |
 
-## Priority Actions (Ordered by Impact)
+## New Evidence Since Original Assessment
 
-1. **Run SSM experiments** (Mamba-130M) — highest theoretical leverage
-2. **Derive formal PI accuracy prediction** — the theoretical contribution
-3. **Create Fig 4 and Fig 5** — publication-quality figures
-4. **Narrative experiment results** — transfers to realistic data
-5. **Write the theory section** — the core of the NeurIPS contribution
-6. **LaTeX paper draft** — put it all together
+### Probing Classifier (STRONG new evidence)
+- RI vs PI condition: 100% linear probe discrimination
+- RI correctness: 84-89% probe accuracy (well-encoded)
+- PI correctness: 50-72% probe accuracy (near chance)
+- Cross-validated on 1.5B and 3B
+- **This shows the asymmetry is in REPRESENTATION SPACE, not just output**
+
+### Mamba SSM (Theory revision needed)
+- Mamba-1.4B shows PI > RI (gap=+49%)
+- PI > RI is NOT attention-specific — it's universal
+- Revised theory: softmax/gating dispersion (Veličković), not causal attention
+
+### Narrative Transfer
+- PI > RI persists on Dota 2 narrative data (gap=+18% on 1.5B)
+- Not a KV-format artifact
+
+## Revised Priority Actions
+
+1. **Derive formal theory** connecting softmax dispersion to PI > RI (Veličković-based)
+2. **Run probing on Gemma** — cross-architecture probing validation (running)
+3. **StableLM + Phi-3.5** — two more architectures for breadth
+4. **Increase sample sizes** on key models (200→500 trials at regime B)
+5. **Paper writing** — LaTeX with revised theory + probing + logit lens + causal
+6. **Publication-quality figures** — unified style, proper labels
 
 ## What Makes This NeurIPS vs ACL
 
