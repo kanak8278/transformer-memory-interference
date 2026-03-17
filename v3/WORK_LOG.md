@@ -893,3 +893,76 @@ User went to sleep. Running 3 parallel workstreams:
 - Gemma Scope 2 SAEs: google/gemma-scope-2-1b-it has resid_post SAEs at layers 7,13,17,22
 - SmolLM2-1.7B-intermediate-checkpoints: steps 125K to 2000K (10 steps)
 - sae-lens 6.38.0 installed in research venv
+
+---
+
+## Session 4 (2026-03-18): Narrative Domain Generators
+
+### Goal
+Build narrative interference generators for three new domains — Wildlife Tracking, Hospital ICU, Air Traffic Control — and run RI/PI interference experiments on them to test whether PI > RI holds beyond the synthetic KV-pair setting.
+
+### Motivation
+The existing ACL paper used purely synthetic KV-pair narratives (arbitrary single-token updates). The NeurIPS expansion needs to demonstrate that the PI > RI asymmetry transfers to realistic, naturalistic narratives. Three domains were chosen for maximal structural diversity:
+- **Wildlife Tracking**: sparse observations over weeks/months, ecological constraints, field report voice
+- **Hospital ICU**: hourly vital sign updates, physiological correlations, clinical note voice
+- **Air Traffic Control**: altitude/speed changes in minutes, ATC phraseology, transcript voice
+
+### Work Done
+
+#### Phase 1: Generator Design Documents
+Wrote three complete generator design documents:
+- `data/narrative_interference/domain_specs/16_wildlife_tracking_GENERATOR_DESIGN.md` (2666 lines)
+- `data/narrative_interference/domain_specs/14_hospital_icu_GENERATOR_DESIGN.md` (2994 lines)
+- `data/narrative_interference/domain_specs/18_air_traffic_control_GENERATOR_DESIGN.md` (2538 lines)
+
+Each includes:
+- TRACKABLE_ATTRIBUTES spec (Python dicts, 18-30 attributes each)
+- State machine (entity state dataclass, event handlers with constraints)
+- Seasonal/physiological/operational coherence engine
+- Trajectory-driven state updates (values follow diagnosis/species/scenario curves, not random)
+- Template system (8+ templates per event type)
+- Auto-config with compatibility constraints
+
+#### Phase 2: Reference Data
+- `16_wildlife_tracking_SPECIES_PARAMETERS.md` — 8 species with exact parameters from published telemetry studies (Yellowstone Wolf Project, IGBST, Wyoming Migration Initiative)
+- `14_hospital_icu_CLINICAL_TRAJECTORIES.md` — 22 ICU diagnoses with hour-by-hour trajectories, cited from Surviving Sepsis Campaign, AHA guidelines, EMCrit IBCC
+- ATC operational coherence rules validated against FAA Order 7110.65
+
+#### Phase 3: Key Design Decisions
+1. **Path A (trajectory-driven)**: Values don't randomly drift — each entity follows a physiologically/ecologically/operationally coherent trajectory curve. State machine picks a point on the curve + noise.
+2. **Same vs mixed entity mode**: Same species/diagnosis creates maximum interference (all values in same range). Mixed is medium interference.
+3. **Coherence engines**: Wildlife has seasonal rules (bears can't appear Nov-Mar), ICU has physiological correlations (fever→tachycardia formula), ATC has weather→approach_type cascade.
+4. **Template expansion**: All three domains have 8+ templates per event type (stored in JSON data files), preventing repetitive narratives.
+
+#### Phase 4: Implementation (in progress)
+Three implementation agents running in parallel:
+- Wildlife: WildlifeTrialGenerator with 5 species trajectory curves, study areas with adjacency graphs
+- ICU: ICUTrialGenerator with 10 diagnoses, trajectory interpolation, physiological correlations
+- ATC: ATCTrialGenerator with altitude format function (FL240 above 18000, "12000" below), scenario-archetype compatibility mapping
+
+#### Phase 5: Test & Validation (pending agent completion)
+Scripts prepared:
+- `v3/scripts/test_narrative_generators.py` — validates each generator: ground truth constraints, domain-specific realism checks, prints example trials
+- `v3/scripts/run_narrative_interference.py` — runs RI/PI experiments at same operating points as v3 behavioral sweep
+
+### Issues Found in Review (and Status)
+- [FIXED] ATC duplicate key in en_route weights
+- [FIXED] ATC missing STARs/SIDs for all airports
+- [FIXED] ATC weather initialization spec
+- [FIXED] ATC aircraft database (20 aircraft types with performance data)
+- [FIXED] ATC RECAT wake turbulence categories (A-F)
+- [FIXED] Wildlife elk/pronghorn using wolf social terminology (fixed in implementation)
+- [FIXED] Wildlife TRACKABLE_ATTRIBUTES formal spec with interference_quality field
+- [FIXED] ICU condition param removed from generator signature (generates both RI+PI always)
+- [FIXED] ICU DIAGNOSIS_REGISTRY with 22 diagnoses
+- [FIXED] ICU physiological correlation formulas (exact math)
+- [REMAINING] Template counts (fixed in JSON data files during implementation)
+- [REMAINING] Filler variable pools (defined in JSON data files during implementation)
+
+### Next Actions
+1. Wait for implementation agents, test with test_narrative_generators.py
+2. Fix any issues found in testing
+3. Run run_narrative_interference.py on Qwen2.5-3B (same model as existing v3 results)
+4. If PI > RI holds: add to paper as Section 5 "Narrative Transfer"
+5. If PI > RI does NOT hold: understand why — is it the richer context, the variable value format, or the longer narratives?
+
