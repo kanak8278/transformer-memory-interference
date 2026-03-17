@@ -68,9 +68,11 @@ These patterns suggest that while the PI > RI direction is universal, the failur
 
 ### 4.4 Transfer to Narrative Data
 
-PI > RI transfers to Dota 2 match narratives (Qwen 1.5B):
-- Mean RI=51%, Mean PI=33%, Gap=+18%
-- Gap widens with N: 2k_3u gap=+17% -> 3k_20u gap=+43%
+PI > RI transfers to Dota 2 match narratives (Qwen 1.5B, 150 trials/cell, 12 cells):
+- Mean RI=54%, Mean PI=35%, Gap=+19%
+- All 12 cells show RI ≥ PI (gap +9% to +33%)
+- Gap widens with N: 2k_3u gap=+17% -> 3k_20u gap=+33%
+- At 150 trials, key cells have non-overlapping Wilson CIs (e.g., 3k_20u: RI=55%[47-63] vs PI=22%[16-30])
 
 ---
 

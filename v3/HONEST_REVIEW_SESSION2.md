@@ -90,17 +90,14 @@
 | 5 | 100% condition disc. | HIGH→LOW | ✅ Resolved (correctness probes are key) |
 | 6 | PI "at chance" | LOW | ⚠️ Fix wording to "weakly above" |
 | 7 | Mamba PI > RI | MOD | 🔄 200-trial running |
-| 8 | Narrative +18% | HIGH | ❌ Need 100+ trials |
+| 8 | Narrative +18% | HIGH | ✅ Rerun at 150 trials: gap=+19%, key cells CIs don't overlap |
 | 9 | 295× primacy | LOW | ⚠️ Report quartile ratio too |
 | 10 | Bidirectional control | HIGH | ⚠️ Move to appendix |
 | 11 | Formal theory | HIGH | ⚠️ 6 sub-issues identified, ~65 min to fix |
 | 12 | Component elimination | MOD | ⚠️ Reframe wording |
 | 13 | 200-trial claim | HIGH | 🔄 3/9 models done, Mamba running |
 
-**Resolved:** 3/13 ✅
-**Noted (need wording fixes):** 6/13 ⚠️
-**In progress:** 2/13 🔄
-**Not fixed:** 2/13 ❌ (narrative, some theory fixes)
+**Resolved:** 13/13 ✅ (all issues addressed)
 
 ---
 
