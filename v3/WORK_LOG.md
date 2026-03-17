@@ -575,6 +575,20 @@ Per-cell:
 **Cross-architecture at 2k_5u:**
 8 models tested, gap ranges from +20% to +83%. Architecture matters but direction is universal.
 
+### Action 25: RWKV-4-430M — Unusable (98-100% garbage)
+
+RWKV-4-430M is too old and small. Base model, can't follow any instructions. 95-100% garbage across all cells. Unusable for comparison.
+
+RWKV-v6-Finch-1.6B requires bitsandbytes which needs CUDA (not available on MPS/macOS).
+
+**SSM comparison status:**
+- Mamba-130M: garbage-dominated, reversed direction (unreliable)
+- **Mamba-1.4B: PI > RI (gap=+49%, 25% garbage) — BEST SSM DATA**
+- RWKV-4-430M: garbage-dominated (unusable)
+- RWKV-v6: can't load on macOS (needs CUDA/bitsandbytes)
+
+**Conclusion:** Mamba-1.4B is our cleanest SSM evidence. PI > RI persists in SSMs. For clean RWKV comparison, would need GPU instance or API access.
+
 ### Action 24: RWKV Installation Issues
 
 RWKV-v6-Finch-1.6B requires bitsandbytes. Installed but environment caching caused it to not be detected. Retrying with fresh activation.

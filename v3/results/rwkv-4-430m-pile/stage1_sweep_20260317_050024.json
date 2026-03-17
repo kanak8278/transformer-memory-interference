@@ -1,0 +1,241 @@
+{
+  "model": "RWKV/rwkv-4-430m-pile",
+  "dataset_type": "ARBITRARY_SINGLE",
+  "prompt_format": "completion_few_shot",
+  "min_updates": 5,
+  "config": {
+    "key_levels": [
+      2,
+      3
+    ],
+    "update_levels": [
+      5,
+      7,
+      10
+    ],
+    "trials_per_cell": 30,
+    "max_new_tokens": 30,
+    "batch_size": 8,
+    "gpu": null,
+    "device": "mps"
+  },
+  "start_time": "2026-03-17T04:59:01.609572+00:00",
+  "end_time": "2026-03-17T05:00:24.071739+00:00",
+  "cells": {
+    "2_5": {
+      "num_keys": 2,
+      "num_updates": 5,
+      "stats": {
+        "RI": {
+          "accuracy": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "n": 30,
+          "error_types": {
+            "garbage": 29,
+            "intermediate_intrusion": 1
+          },
+          "n_failures": 30,
+          "n_garbage": 29,
+          "failure_avg_relative_pos": 0.25
+        },
+        "PI": {
+          "accuracy": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "n": 30,
+          "error_types": {
+            "garbage": 30
+          },
+          "n_failures": 30,
+          "n_garbage": 30,
+          "failure_avg_relative_pos": null
+        }
+      },
+      "regime": "A",
+      "n_trials": 30,
+      "max_trials": 30,
+      "stopped_early": false,
+      "elapsed_sec": 12.7
+    },
+    "2_7": {
+      "num_keys": 2,
+      "num_updates": 7,
+      "stats": {
+        "RI": {
+          "accuracy": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "n": 30,
+          "error_types": {
+            "garbage": 30
+          },
+          "n_failures": 30,
+          "n_garbage": 30,
+          "failure_avg_relative_pos": null
+        },
+        "PI": {
+          "accuracy": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "n": 30,
+          "error_types": {
+            "garbage": 30
+          },
+          "n_failures": 30,
+          "n_garbage": 30,
+          "failure_avg_relative_pos": null
+        }
+      },
+      "regime": "A",
+      "n_trials": 30,
+      "max_trials": 30,
+      "stopped_early": false,
+      "elapsed_sec": 13.1
+    },
+    "2_10": {
+      "num_keys": 2,
+      "num_updates": 10,
+      "stats": {
+        "RI": {
+          "accuracy": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "n": 30,
+          "error_types": {
+            "garbage": 30
+          },
+          "n_failures": 30,
+          "n_garbage": 30,
+          "failure_avg_relative_pos": null
+        },
+        "PI": {
+          "accuracy": 0.0333,
+          "ci_lower": 0.0,
+          "ci_upper": 0.1,
+          "n": 30,
+          "error_types": {
+            "garbage": 27,
+            "intermediate_intrusion": 2,
+            "correct": 1
+          },
+          "n_failures": 29,
+          "n_garbage": 27,
+          "failure_avg_relative_pos": 0.4445
+        }
+      },
+      "regime": "D",
+      "n_trials": 30,
+      "max_trials": 30,
+      "stopped_early": false,
+      "elapsed_sec": 13.9
+    },
+    "3_5": {
+      "num_keys": 3,
+      "num_updates": 5,
+      "stats": {
+        "RI": {
+          "accuracy": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "n": 30,
+          "error_types": {
+            "garbage": 30
+          },
+          "n_failures": 30,
+          "n_garbage": 30,
+          "failure_avg_relative_pos": null
+        },
+        "PI": {
+          "accuracy": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "n": 30,
+          "error_types": {
+            "garbage": 29,
+            "intermediate_intrusion": 1
+          },
+          "n_failures": 30,
+          "n_garbage": 29,
+          "failure_avg_relative_pos": 0.75
+        }
+      },
+      "regime": "A",
+      "n_trials": 30,
+      "max_trials": 30,
+      "stopped_early": false,
+      "elapsed_sec": 13.2
+    },
+    "3_7": {
+      "num_keys": 3,
+      "num_updates": 7,
+      "stats": {
+        "RI": {
+          "accuracy": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "n": 30,
+          "error_types": {
+            "garbage": 30
+          },
+          "n_failures": 30,
+          "n_garbage": 30,
+          "failure_avg_relative_pos": null
+        },
+        "PI": {
+          "accuracy": 0.0333,
+          "ci_lower": 0.0,
+          "ci_upper": 0.1,
+          "n": 30,
+          "error_types": {
+            "garbage": 29,
+            "correct": 1
+          },
+          "n_failures": 29,
+          "n_garbage": 29,
+          "failure_avg_relative_pos": null
+        }
+      },
+      "regime": "D",
+      "n_trials": 30,
+      "max_trials": 30,
+      "stopped_early": false,
+      "elapsed_sec": 14.1
+    },
+    "3_10": {
+      "num_keys": 3,
+      "num_updates": 10,
+      "stats": {
+        "RI": {
+          "accuracy": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "n": 30,
+          "error_types": {
+            "garbage": 30
+          },
+          "n_failures": 30,
+          "n_garbage": 30,
+          "failure_avg_relative_pos": null
+        },
+        "PI": {
+          "accuracy": 0.0,
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "n": 30,
+          "error_types": {
+            "garbage": 30
+          },
+          "n_failures": 30,
+          "n_garbage": 30,
+          "failure_avg_relative_pos": null
+        }
+      },
+      "regime": "A",
+      "n_trials": 30,
+      "max_trials": 30,
+      "stopped_early": false,
+      "elapsed_sec": 15.3
+    }
+  }
+}
