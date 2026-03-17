@@ -63,7 +63,12 @@ eigenvector matrix.
 | 4 | 0.976 | Near-preservation |
 | 16 | 0.994 | Near-preservation |
 | 64 | 2.609 | Amplification (primacy) |
-| 256 | 6.07 × 10^12 | Extreme amplification |
+
+*Note:* At d=256, the first-order discretization (I + Δ·A) produces
+numerical blowup (||A^49|| ≈ 10^12) due to the poor approximation of
+exp(Δ·A) for large negative eigenvalues. Real Mamba implementations
+use ZOH or bilinear discretization which avoids this. We restrict our
+formal analysis to d ≤ 64 where the first-order approximation is valid.
 
 The non-normality of A_HiPPO causes the operator norm to grow even
 though all eigenvalues are inside the unit circle. This is the

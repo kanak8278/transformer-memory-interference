@@ -8,7 +8,7 @@
 
 ### 4.1 PI > RI is Universal Across Architectures
 
-We evaluate 9 models across 7 architecture families on the KV retrieval task at 2 keys with varying N (updates per key). Results are shown in Table 2 and Figure 2.
+We evaluate 9 models across 2 broad architecture classes — 5 transformer variants (Qwen GQA, Gemma MHA, TinyLlama, StableLM, Pythia GPT-NeoX) and 1 state-space model (Mamba) — plus 2 API models (Claude Haiku, GPT-4.1-mini) on a different dataset. Results are shown in Table 2 and Figure 2.
 
 **Key findings:**
 - PI > RI appears in **91% of cells** (51/56) across all tested conditions
@@ -95,7 +95,7 @@ For RI: P(v_first) rises monotonically to 0.92-1.00 with no competition.
 | RI correct vs incorrect | **87%** | **81%** | **60%** |
 | PI correct vs incorrect | 61% | 61% | N/A |
 
-Key: PI correctness is at chance (50-61%) -- the model doesn't "know" it will fail.
+Key: PI correctness is weakly above chance (50-61%, barely exceeding random) -- the model doesn't "know" it will fail.
 
 ### 5.3 Causal Analysis: Distributed Mechanism
 
@@ -129,9 +129,11 @@ Primacy bias is ARCHITECTURAL -- present before any training data.
 | Fixed-capacity state | Yes | Yes | NOT eliminated |
 | Continuous gating | Yes | Yes | NOT eliminated |
 
-**Bidirectional control (preliminary):**
-- Flan-T5-base (bidirectional encoder + autoregressive decoder): RI=13%, PI=22%, gap=-9%. No primacy bias.
-- Supports: autoregressive ENCODING causes the asymmetry.
+The remaining three candidate mechanisms are shared by all models exhibiting PI > RI. This narrows the search space but does not prove these are individually necessary — a model possessing all three could potentially avoid PI > RI through specific training.
+
+**Bidirectional control (preliminary, appendix):**
+- Flan-T5-base (bidirectional encoder + autoregressive decoder): RI=13%, PI=22%, gap=-9%.
+- No primacy bias observed, but result is inconclusive due to high garbage rate (64-77%) and overlapping confidence intervals. We include this as preliminary evidence suggesting autoregressive encoding may be a factor, but emphasize it does not constitute proof.
 
 ---
 
