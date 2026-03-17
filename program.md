@@ -60,4 +60,11 @@ Assume that after user has given you green light, user has went to sleep and you
  You should see that there are several versions of dataset and we need to really stay clear of the multi-token, single token, narrative etc, etc. Also if there is any           
   confusion in some older numbers, you should run quick experiments, never long quick experiments and see the numbers. Also you have access to all the bedrock models and other   
   models from anthropic, gemini and gpt. scripts/ So if you need to run non-mechanisitic experiments like RI, PI numbers then you should run through them if there is equivalent  
-  model available, as they will be quick vs doing the mdoel on our local. Also if possible wherever use the most optimized way to runt the model, mlx         
+  model available, as they will be quick vs doing the mdoel on our local. Also if possible wherever use the most optimized way to runt the model, mlx. Also we need to start  with the clear plan of what we want to achieve what is already there and what we will run, start from smallest of the models. Again you are free to update delete, re-write, create do anything you want but all you actions and logics and interpretation and output everything should be noted to a file as logs so that anyone can go through it to understand your actions. 
+
+
+  ❯ Try to do most optimal use of the time, when running long experiments then always run it in backgriund so that in the meanwhile you can explore other papers, work on         
+  implementations and testing if possible. Also you can use the https://nnsight.net/ library as well to run anything if transformerlens doesn't support or have any issue.
+
+
+  ❯ Next thing is don't use the paper's or older runs which are out of v2 and v3 folders to quote, because they might not be exactly correct and you need to validate them 

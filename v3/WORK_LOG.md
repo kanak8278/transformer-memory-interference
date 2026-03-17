@@ -878,3 +878,18 @@ Deep dive into Chowdhury (2603.10123). Key differentiation:
 5. Final figure polish (consistent style, proper fonts)
 6. Abstract + introduction drafting
 
+
+---
+
+## Session 3 (2026-03-18): Autonomous Session
+
+### Plan
+User went to sleep. Running 3 parallel workstreams:
+1. Gemma Scope SAE analysis (layers 7,13,17,22 of gemma-3-1b-it)
+2. SmolLM2-1.7B training dynamics (10 checkpoints)
+3. Remedy + logit lens on local Qwen 1.5B
+
+### Key facts
+- Gemma Scope 2 SAEs: google/gemma-scope-2-1b-it has resid_post SAEs at layers 7,13,17,22
+- SmolLM2-1.7B-intermediate-checkpoints: steps 125K to 2000K (10 steps)
+- sae-lens 6.38.0 installed in research venv

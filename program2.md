@@ -1,0 +1,3 @@
+1. First thing is can we get scores for gemma, because there is gemma-scope that exists. Use the latest model and proper sized model around 3B size if possible because that is big enough model to show the results.
+2. No training dynamics (when does PI > RI emerge?) -- Take smollm's intermediate checkpoints and complete this.
+3. All mechanistic evidence ≤3B -- Once the first three are done, then run on the larger models, from the same family. 
