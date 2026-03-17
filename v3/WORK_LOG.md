@@ -1001,3 +1001,20 @@ Scripts prepared:
   - heading_transcript[3,5] templates added attr_value
   - Scenario defaults dict fills 15+ template variables across all event types
 
+
+### Early Experiment Results (Wildlife Tracking)
+
+Running Qwen2.5-3B-Instruct on Wildlife Tracking narratives, 30 trials/cell.
+
+**PI > RI confirmed in narrative domain 1 (Wildlife):**
+
+| Cell | RI | PI | Gap | PI>RI? |
+|------|----|----|-----|--------|
+| 2k_3u | 67% | 53% | +13% | YES |
+| 2k_5u | 77% | 57% | +20% | YES |
+
+Pattern: gap increases with num_updates (more KV pairs = more interference), exactly mirroring the synthetic data results.
+
+The same Qwen2.5-3B-Instruct that shows PI>RI on synthetic arbitrary KV-pairs also shows PI>RI on ecologically realistic wildlife tracking narratives.
+
+**Running:** ICU and ATC experiments queued to run after wildlife completes.
