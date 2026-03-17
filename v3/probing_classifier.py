@@ -157,58 +157,106 @@ def collect_representations(model, tokenizer, value_pool, model_name,
 def train_probes(data, n_layers):
     """Train probing classifiers at each layer.
 
-    Task: Given residual stream at layer L, predict which value index (0..N-1)
-    the model will output.
+    Binary probe approach: combine RI and PI data, predict whether the
+    residual stream encodes v_first (0) or v_last (N-1).
 
-    Returns accuracy per layer per condition.
+    Labels:
+    - RI trials: label=0 (v_first is expected/encoded)
+    - PI trials: label=1 (v_last is expected/should be encoded)
+
+    If the probe can distinguish RI from PI representations at a given layer,
+    the model has formed condition-specific representations there.
+
+    Also: separate per-condition accuracy probes (correct vs incorrect).
     """
-    results = {"RI": {}, "PI": {}}
+    results = {}
+
+    # ── Approach 1: Binary RI vs PI discrimination ──
+    # Can we tell from the residual stream whether this is an RI or PI trial?
+    print("\n  Binary probe: RI vs PI condition discrimination")
+
+    all_ri = data["RI"]
+    all_pi = data["PI"]
+    n = min(len(all_ri), len(all_pi))
+
+    X_all = {L: [] for L in range(n_layers)}
+    y_condition = []  # 0=RI, 1=PI
+
+    for trial in all_ri[:n]:
+        for L in range(n_layers):
+            X_all[L].append(trial["reps"][L])
+        y_condition.append(0)
+    for trial in all_pi[:n]:
+        for L in range(n_layers):
+            X_all[L].append(trial["reps"][L])
+        y_condition.append(1)
+
+    y_condition = np.array(y_condition)
+
+    condition_probe = {}
+    for L in range(n_layers):
+        X = np.array(X_all[L])
+        try:
+            clf = LogisticRegression(max_iter=500, C=0.1, solver="lbfgs")
+            scores = cross_val_score(clf, X, y_condition, cv=5, scoring="accuracy")
+            acc = scores.mean()
+        except Exception:
+            acc = 0.5
+            scores = np.array([0.5])
+
+        condition_probe[L] = {"accuracy": float(acc), "std": float(scores.std())}
+
+        if L >= n_layers - 6 or L % 5 == 0:
+            print(f"    L{L:2d}: {acc:.0%} ±{scores.std():.0%}")
+
+    results["condition_probe"] = condition_probe
+
+    # ── Approach 2: Correct vs incorrect within each condition ──
+    print("\n  Binary probe: correct vs incorrect (per condition)")
 
     for condition in ["RI", "PI"]:
         trials = data[condition]
-        if len(trials) < 20:
-            print(f"  {condition}: too few trials ({len(trials)})")
+        correct_trials = [t for t in trials if t["correct"]]
+        incorrect_trials = [t for t in trials if not t["correct"]]
+
+        nc = min(len(correct_trials), len(incorrect_trials))
+        if nc < 10:
+            print(f"    {condition}: not enough balanced data (correct={len(correct_trials)}, incorrect={len(incorrect_trials)})")
+            results[f"{condition}_correct_probe"] = {}
             continue
 
-        n_values = trials[0]["n_values"]
-
-        # Create labels: expected_idx for correct trials, pred_value_idx for all
         X_all = {L: [] for L in range(n_layers)}
-        y_expected = []  # ground truth position
-        y_predicted = []  # what model actually outputs
+        y_correct = []
 
-        for trial in trials:
+        for t in correct_trials[:nc]:
             for L in range(n_layers):
-                X_all[L].append(trial["reps"][L])
-            y_expected.append(trial["expected_idx"])
-            y_predicted.append(trial["pred_value_idx"] if trial["pred_value_idx"] is not None else -1)
+                X_all[L].append(t["reps"][L])
+            y_correct.append(1)
+        for t in incorrect_trials[:nc]:
+            for L in range(n_layers):
+                X_all[L].append(t["reps"][L])
+            y_correct.append(0)
 
-        y_expected = np.array(y_expected)
+        y_correct = np.array(y_correct)
 
-        # Train probe at each layer: predict expected_idx
-        print(f"\n  {condition} probing ({len(trials)} trials, {n_values} classes):")
+        correct_probe = {}
+        print(f"\n    {condition} (n={nc} per class):")
         for L in range(n_layers):
             X = np.array(X_all[L])
-
-            # Only use trials with valid predictions for the "predicted" probe
-            # For the "expected" probe, use all trials
             try:
-                clf = LogisticRegression(max_iter=1000, C=1.0, solver="lbfgs",
-                                        multi_class="multinomial")
-                scores = cross_val_score(clf, X, y_expected, cv=5, scoring="accuracy")
+                clf = LogisticRegression(max_iter=500, C=0.1, solver="lbfgs")
+                scores = cross_val_score(clf, X, y_correct, cv=min(5, nc), scoring="accuracy")
                 acc = scores.mean()
-                scores = np.array([0.0])
             except Exception:
-                acc = 0.0
-                scores = np.array([0.0])
+                acc = 0.5
+                scores = np.array([0.5])
 
-            results[condition][L] = {
-                "accuracy": float(acc),
-                "std": float(scores.std()),
-            }
+            correct_probe[L] = {"accuracy": float(acc), "std": float(scores.std())}
 
             if L >= n_layers - 6 or L % 5 == 0:
-                print(f"    L{L:2d}: {acc:.0%} ±{scores.std():.0%}")
+                print(f"      L{L:2d}: {acc:.0%}")
+
+        results[f"{condition}_correct_probe"] = correct_probe
 
     return results
 
@@ -241,12 +289,21 @@ def main():
     print(f"  Point: {num_keys}k_{num_updates}u, {args.trials} trials")
     print(f"{'='*60}")
 
-    print("\nLast 6 layers comparison:")
-    print(f"  {'Layer':>6}  {'RI probe':>10}  {'PI probe':>10}  {'Gap':>8}")
+    # Condition discrimination probe
+    cond_probe = probe_results.get("condition_probe", {})
+    print("\nCondition discrimination (RI vs PI) — last 6 layers:")
     for L in range(max(0, n_layers - 6), n_layers):
-        ri_acc = probe_results["RI"].get(L, {}).get("accuracy", 0)
-        pi_acc = probe_results["PI"].get(L, {}).get("accuracy", 0)
-        print(f"  L{L:>4}  {ri_acc:>9.0%}  {pi_acc:>9.0%}  {ri_acc-pi_acc:>+7.0%}")
+        acc = cond_probe.get(L, {}).get("accuracy", 0.5)
+        print(f"  L{L:>4}: {acc:.0%}")
+
+    # Correct vs incorrect probes
+    for condition in ["RI", "PI"]:
+        probe = probe_results.get(f"{condition}_correct_probe", {})
+        if probe:
+            print(f"\n{condition} correct vs incorrect — last 6 layers:")
+            for L in range(max(0, n_layers - 6), n_layers):
+                acc = probe.get(L, {}).get("accuracy", 0.5)
+                print(f"  L{L:>4}: {acc:.0%}")
 
     print(f"\n  Elapsed: {elapsed:.1f}s")
 
