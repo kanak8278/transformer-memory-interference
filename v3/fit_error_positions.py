@@ -74,11 +74,11 @@ def load_error_positions():
     return all_errors
 
 
-def compute_concentration(positions, n_bins=5):
+def compute_concentration(positions, n_bins=5, n_updates=None):
     """Compute concentration metrics for error position distribution.
 
     Returns:
-        penult_frac: fraction of errors at penultimate position (rel_pos > 0.7)
+        penult_frac: fraction of errors at penultimate position
         entropy_norm: normalized entropy (0=concentrated, 1=uniform)
         mean_pos: mean relative position
     """
@@ -95,8 +95,13 @@ def compute_concentration(positions, n_bins=5):
     ent = entropy(hist_norm + 1e-10)
     entropy_norm = ent / max_entropy
 
-    # Penultimate fraction (top 20% of positions)
-    penult_frac = np.mean(pos > 0.8)
+    # Penultimate fraction: use actual penultimate position relative to N
+    # At N updates, penultimate is at (N-2)/(N-1) relative position
+    if n_updates and n_updates > 2:
+        penult_rel = (n_updates - 2) / (n_updates - 1)
+        penult_frac = np.mean(np.abs(pos - penult_rel) < 0.01 + 1.0 / (n_updates - 1))
+    else:
+        penult_frac = np.mean(pos > 0.7)
 
     return {
         "penult_frac": float(penult_frac),

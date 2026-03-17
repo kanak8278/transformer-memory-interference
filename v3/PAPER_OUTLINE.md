@@ -115,11 +115,11 @@ PI > RI transfers to Dota 2 match narratives (gap=+18% on Qwen 1.5B), confirming
 ### 5.2 Probing: Asymmetry in Representation Space
 
 **[Figure 5: Probing classifier results]** — new figure needed
-- Condition probe (RI vs PI): 96-100% across all models
-- RI correctness probe: 76-89% (well-encoded)
-- PI correctness probe: 50-72% (near chance)
+- Condition probe (RI vs PI): 97-100% across 3 models (expected — different questions produce different representations)
+- RI correctness probe: 60-87% (well-encoded)
+- PI correctness probe: 50-61% (weakly above chance)
 
-**Key insight:** The model's representation ENCODES whether RI will succeed but has NO signal for PI success. The asymmetry is deep in representation space.
+**Key insight:** The model's representation ENCODES whether RI will succeed (87%) but PI correctness is only weakly above chance (61%). These are within-condition comparisons (same query word), so query word detection cannot explain the difference.
 
 ### 5.3 Causal Analysis: Distributed Mechanism
 
@@ -153,7 +153,7 @@ Ablating top heads REDUCES P(v_last) → heads help retrieval, no suppression ci
 | Fixed-capacity state | Yes | Yes | NOT eliminated |
 | Continuous gating | Yes | Yes | NOT eliminated |
 
-**Unified mechanism:** Sequential processing + continuous gating + fixed-capacity state makes overwrite harder than first-write.
+**Candidate mechanisms (not proven necessary, but shared by all models showing PI > RI):** Sequential processing + continuous gating + fixed-capacity state. The elimination narrows the search space but does not prove these three are individually necessary.
 
 ---
 
