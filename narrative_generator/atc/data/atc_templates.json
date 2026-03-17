@@ -1,0 +1,219 @@
+{
+    "header_transcript": [
+        "{facility}, {position}. {date}, {time}Z. ATIS {atis_letter}: wind {wind}, visibility {vis}, ceiling {ceiling}. Landing runway {rwy}.",
+        "This is {facility_abbr} {position} sector. {date}, {time} Zulu. Active ATIS {atis_letter}.",
+        "{facility_abbr} {position}, {date}. Zero {time} Zulu. ATIS information {atis_letter} current. Runway {rwy} in use.",
+        "{position} sector open, {facility}. {date}, time {time}Z. ATIS {atis_letter}, ceiling {ceiling}, visibility {vis}.",
+        "{facility} {position}. {date} {time}Z. ATIS information {atis_letter}. Active runway {rwy}, wind {wind}.",
+        "{facility_abbr} {position} sector, {date}. Zulu time {time}. ATIS {atis_letter} in effect. Expect runway {rwy}.",
+        "Sector log open: {facility}, {position}, {date}. Time {time}Z. ATIS {atis_letter}: wind {wind}, vis {vis}.",
+        "{position} sector, {facility_abbr}. {date} {time}Z. Information {atis_letter}. Runway {rwy}. Ceiling {ceiling}."
+    ],
+    "header_log": [
+        "Sector log, {facility}, {position} sector. {date}, {start_time}-{end_time}Z. Weather: {weather_summary}. Runway: {rwy}.",
+        "{facility} {position} sector operational summary. {date}, {start_time} to {end_time} Zulu. Active runway {rwy}. Conditions: {weather_summary}.",
+        "Log entry: {facility_abbr} {position}. {date}. Sector active {start_time}-{end_time}Z. ATIS {atis_letter}: {weather_summary}.",
+        "{position} sector, {facility}. Shift log {date}. {start_time}Z open to {end_time}Z close. Runway {rwy}. Weather: {weather_summary}.",
+        "{facility} {position}. {date}. Operations {start_time}-{end_time}Z. Conditions: {weather_summary}. Landing runway {rwy}.",
+        "Sector summary: {facility_abbr} {position}, {date}. Active {start_time}Z to {end_time}Z. Runway {rwy} in use throughout. {weather_summary}.",
+        "{facility} traffic log, {position} sector, {date}. Zulu times {start_time}-{end_time}. Weather: {weather_summary}. Primary runway: {rwy}.",
+        "Operational log {date}: {facility} {position} sector. {start_time}-{end_time}Z. ATIS {atis_letter}, {weather_summary}."
+    ],
+    "altitude_transcript": [
+        "'{callsign}, descend and maintain {attr_value}.' '{attr_value}, {callsign}.'",
+        "'{callsign}, climb and maintain {attr_value}.' 'Climb and maintain {attr_value}, {callsign}.'",
+        "'{callsign}, cross {fix} at and maintain {attr_value}.' 'Cross {fix} at {attr_value}, {callsign}.'",
+        "'{callsign}, maintain {attr_value}, expect lower in {eta} miles.' '{attr_value}, wilco, {callsign}.'",
+        "'{callsign}, descend pilot's discretion, maintain {attr_value}.' 'Pilot's discretion to {attr_value}, {callsign}.'",
+        "'{callsign}, traffic permitting, descend and maintain {attr_value}.' 'Descending to {attr_value}, {callsign}.'",
+        "'{callsign}, altitude your discretion until leaving {fix}, then descend and maintain {attr_value}.' 'Roger, {attr_value} after {fix}, {callsign}.'",
+        "'{callsign}, expedite descent and maintain {attr_value}, traffic {dist} miles behind you.' 'Expediting to {attr_value}, {callsign}.'"
+    ],
+    "altitude_log": [
+        "At {time}Z, {callsign} ({aircraft_type}) was cleared to descend to {attr_value} from {prev_value}. {separation_note}",
+        "{callsign} received altitude clearance to {attr_value} at {time}Z, previously at {prev_value}. {context}",
+        "{time}Z: {callsign} ({aircraft_type}) given climb clearance to {attr_value}. Previously maintaining {prev_value}.",
+        "Cleared {callsign} to {attr_value} at {time}Z. Prior clearance was {prev_value}. {separation_note}",
+        "At {time}Z, {callsign} crossed {fix} at {prev_value} then cleared to maintain {attr_value}. {context}",
+        "{callsign} altitude assignment updated to {attr_value} at {time}Z from {prev_value}. {separation_note}",
+        "{time}Z — {callsign} ({aircraft_type}) issued amended clearance: maintain {attr_value}. Was {prev_value}. {context}",
+        "Pilot of {callsign} acknowledged descent to {attr_value} at {time}Z. Previous clearance: {prev_value}."
+    ],
+    "speed_transcript": [
+        "'{callsign}, reduce speed to {attr_value} knots.' '{attr_value} knots, {callsign}.'",
+        "'{callsign}, maintain {attr_value} knots to {fix}.' 'Maintain {attr_value} to {fix}, {callsign}.'",
+        "'{callsign}, say airspeed.' '{callsign}, indicating {attr_value} knots.'",
+        "'{callsign}, increase speed to {attr_value} knots.' '{attr_value} knots, {callsign}.'",
+        "'{callsign}, reduce to final approach speed, then {attr_value} knots by {fix}.' 'Wilco, {attr_value} by {fix}, {callsign}.'",
+        "'{callsign}, best forward speed until {fix}, then reduce to {attr_value} knots.' 'Best speed then {attr_value} at {fix}, {callsign}.'",
+        "'{callsign}, no speed restriction.' '{callsign}, roger, no restriction.'",
+        "'{callsign}, maintain {attr_value} knots or greater.' '{attr_value} knots or greater, {callsign}.'"
+    ],
+    "speed_log": [
+        "At {time}Z, {callsign} was given a speed reduction to {attr_value} knots for spacing behind {preceding}.",
+        "{callsign} reported {attr_value} knots indicated at {time}Z, {dist} miles from the field.",
+        "{time}Z: {callsign} ({aircraft_type}) assigned {attr_value} knots to the marker. Previously unrestricted.",
+        "Speed restriction of {attr_value} knots issued to {callsign} at {time}Z. {separation_note}",
+        "{callsign} given {attr_value} knot speed assignment at {time}Z for interval behind {preceding}.",
+        "At {time}Z, {callsign} maintained {attr_value} knots at {dist} DME as assigned.",
+        "{time}Z: speed restriction lifted for {callsign}; cleared for {attr_value} knots to {fix}.",
+        "Speed advisory to {callsign} at {time}Z: maintain {attr_value} knots due {separation_note}."
+    ],
+    "heading_transcript": [
+        "'{callsign}, fly heading {attr_value}.' 'Heading {attr_value}, {callsign}.'",
+        "'{callsign}, turn {direction} heading {attr_value}, vectors ILS runway {rwy}.' '{direction} heading {attr_value}, {callsign}.'",
+        "'{callsign}, turn {direction} heading {attr_value} for spacing.' 'Heading {attr_value}, {callsign}.'",
+        "'{callsign}, fly present heading, then when able direct {fix}.' 'Present heading then direct {fix}, {callsign}.'",
+        "'{callsign}, stop turn, maintain heading {attr_value}.' 'Maintaining {attr_value}, {callsign}.'",
+        "'{callsign}, resume own navigation, proceed direct {fix}.' 'Direct {fix}, {callsign}.'",
+        "'{callsign}, turn {direction} heading {attr_value}, descend and maintain {alt}.' '{direction} {attr_value}, out of {alt}, {callsign}.'",
+        "'{callsign}, immediate turn {direction} heading {attr_value}, traffic.' 'Turning {direction} {attr_value}, {callsign}.'"
+    ],
+    "heading_log": [
+        "At {time}Z, {callsign} was vectored to heading {attr_value} for {reason}.",
+        "{callsign} turned to heading {attr_value} at {time}Z on ATC instruction.",
+        "{time}Z: {callsign} issued heading {attr_value} for sequencing into {rwy}.",
+        "Heading assignment {attr_value} issued to {callsign} at {time}Z. {reason}",
+        "{callsign} on assigned heading {attr_value} at {time}Z, {dist} miles from {fix}.",
+        "{time}Z: {callsign} ({aircraft_type}) turned to {attr_value} for {reason}.",
+        "At {time}Z, {callsign} given heading {attr_value} to establish on the localizer for runway {rwy}.",
+        "{callsign} acknowledged heading {attr_value} at {time}Z. {separation_note}"
+    ],
+    "approach_clearance_transcript": [
+        "'{callsign}, {dist} miles from {fix}, cleared {approach_type} runway {rwy} approach.' 'Cleared {approach_type} {rwy}, {callsign}.'",
+        "'{callsign}, cleared visual approach runway {rwy}, traffic a {preceding_type} on a {preceding_dist}-mile final.' 'Cleared visual {rwy}, traffic in sight, {callsign}.'",
+        "'{callsign}, turn left heading {hdg}, maintain {alt} until established, cleared ILS runway {rwy} approach.' 'Left {hdg}, {alt} till established, cleared ILS {rwy}, {callsign}.'",
+        "'{callsign}, {dist} from the outer marker, cleared ILS runway {rwy} approach, maintain {alt} until established on the glide slope.' 'Cleared ILS {rwy}, {callsign}.'",
+        "'{callsign}, cleared RNAV runway {rwy} approach.' 'Cleared RNAV {rwy}, {callsign}.'",
+        "'{callsign}, {dist} miles from {fix}, cleared for the approach, runway {rwy}.' 'Cleared approach runway {rwy}, {callsign}.'",
+        "'{callsign}, proceed direct {fix}, cleared ILS runway {rwy} approach, cross {fix} at or above {alt}.' 'Direct {fix}, cleared ILS {rwy}, {callsign}.'",
+        "'{callsign}, you are {dist} from the airport, plan the visual approach runway {rwy}.' 'Wilco, runway {rwy}, {callsign}.'"
+    ],
+    "approach_clearance_log": [
+        "At {time}Z, {callsign} ({aircraft_type}) cleared for the {approach_type} approach runway {rwy} at {dist} DME.",
+        "{callsign} issued approach clearance, runway {rwy}, at {time}Z from {dist} miles.",
+        "{time}Z: {callsign} cleared {approach_type} approach runway {rwy}. {separation_note}",
+        "Approach clearance issued to {callsign} at {time}Z: {approach_type} runway {rwy} from {dist} miles.",
+        "{callsign} ({aircraft_type}) given approach clearance at {time}Z, {dist} DME, runway {rwy}.",
+        "{time}Z — {callsign} cleared for the approach runway {rwy}. {context}",
+        "{callsign} acknowledged approach clearance at {time}Z: {approach_type} runway {rwy}.",
+        "At {time}Z, {dist}-mile final, {callsign} cleared {approach_type} approach runway {rwy}."
+    ],
+    "landing_clearance_transcript": [
+        "'{callsign}, runway {rwy}, cleared to land, wind {wind}.' '{callsign}, cleared to land runway {rwy}.'",
+        "'{callsign}, number {seq} following a {preceding_type} {preceding_dist}-mile final, runway {rwy}, cleared to land.' 'Cleared to land {rwy}, {callsign}.'",
+        "'{callsign}, cleared to land runway {rwy}, caution wake turbulence.' 'Cleared to land, {callsign}.'",
+        "'{callsign}, runway {rwy}, cleared to land. Previous arrival vacated.' '{callsign}, cleared to land {rwy}.'",
+        "'{callsign}, wind {wind}, runway {rwy}, cleared to land.' 'Cleared to land {rwy}, {callsign}.'",
+        "'{callsign}, behind the landing {preceding_type}, number {seq} runway {rwy}, cleared to land, caution wake turbulence.' 'Cleared to land, {callsign}.'",
+        "'{callsign}, check gear down, runway {rwy}, cleared to land.' 'Gear down, cleared to land {rwy}, {callsign}.'",
+        "'{callsign}, cleared to land runway {rwy}, runway {rwy} clear.' 'Cleared to land, {callsign}.'"
+    ],
+    "go_around_transcript": [
+        "'{callsign}, go around.' '{callsign}, going around.'",
+        "'{callsign}, go around, traffic on the runway.' 'Going around, {callsign}.'",
+        "'{callsign}, go around, make left traffic runway {rwy}.' 'Going around, left traffic, {callsign}.'",
+        "'{callsign}, go around, climb and maintain {alt}.' 'Going around, climbing {alt}, {callsign}.'",
+        "'{callsign}, break off approach, traffic.' 'Breaking off, {callsign}.'",
+        "'{callsign}, go around, fly runway heading, climb and maintain {alt}.' 'Going around, runway heading, {alt}, {callsign}.'",
+        "'{callsign}, go around, fly present heading, climb and maintain {alt}.' 'Going around, {callsign}.'",
+        "'{callsign}, cancel approach clearance, climb and maintain {alt}, turn right heading {hdg}.' 'Canceling approach, {alt}, right {hdg}, {callsign}.'"
+    ],
+    "hold_instruction_transcript": [
+        "'{callsign}, hold at {fix} as published, expect further clearance {efc}Z.' 'Holding at {fix}, EFC {efc}Z, {callsign}.'",
+        "'{callsign}, hold at {fix}, {direction} turns, {leg_min}-minute legs, expect further clearance {efc}Z.' 'Holding {fix}, {direction} turns, {leg_min}-minute legs, EFC {efc}Z, {callsign}.'",
+        "'{callsign}, due traffic, expect {delay} minute delay, holding at {fix}.' 'Holding {fix}, {delay} minutes, {callsign}.'",
+        "'{callsign}, hold as published over {fix}, expect approach clearance at {efc}Z.' 'Holding {fix}, {callsign}.'",
+        "'{callsign}, hold at {fix}, right turns, expect further clearance at {efc}Z.' 'Holding {fix}, right turns, EFC {efc}Z, {callsign}.'",
+        "'{callsign}, expect {delay} additional minutes in holding due traffic. Current EFC {efc}Z.' 'Wilco, EFC {efc}Z, {callsign}.'",
+        "'{callsign}, cross {fix} at {alt}, hold on the {direction} side, {leg_min}-minute legs.' 'Cross {fix} at {alt}, holding, {callsign}.'",
+        "'{callsign}, cleared out of holding, descend and maintain {alt}, proceed direct {fix}.' 'Out of holding, {alt}, direct {fix}, {callsign}.'"
+    ],
+    "hold_instruction_log": [
+        "At {time}Z, {callsign} issued holding instruction at {fix}. EFC {efc}Z. Delay estimate {delay} minutes.",
+        "{callsign} entered holding at {fix} at {time}Z. EFC {efc}Z. {reason}",
+        "{time}Z: {callsign} ({aircraft_type}) directed to hold at {fix} due {reason}. Estimated {delay}-minute delay.",
+        "Holding clearance issued to {callsign} at {time}Z. Fix: {fix}. EFC: {efc}Z.",
+        "At {time}Z, {callsign} holding at {fix}. Stack building: {stack_count} aircraft. EFC {efc}Z.",
+        "{callsign} released from holding at {time}Z after {delay}-minute delay. Cleared to {alt}.",
+        "{time}Z: {callsign} holding {fix}, {delay}-minute expected delay due traffic. {separation_note}",
+        "Holding initiated for {callsign} at {fix} at {time}Z. EFC {efc}Z. {reason}"
+    ],
+    "traffic_advisory_transcript": [
+        "'{callsign}, traffic, {clock} o'clock, {dist} miles, {traffic_alt}, {aircraft_type}, opposite direction.' '{callsign}, looking, negative contact.'",
+        "'{callsign}, traffic alert, {dist} miles {dir}, altitude unknown, type unknown.' '{callsign}, looking.'",
+        "'{callsign}, traffic, {clock} o'clock, {dist} miles, {traffic_alt}.' '{callsign}, traffic in sight.'",
+        "'{callsign}, traffic, {dist} miles ahead, same altitude, {aircraft_type}.' '{callsign}, we have the traffic.'",
+        "'{callsign}, additional traffic, {clock} o'clock, {dist} miles, {traffic_alt}, {aircraft_type}.' 'Looking, {callsign}.'",
+        "'{callsign}, TCAS traffic, {clock} o'clock, {dist} miles, {traffic_alt}.' '{callsign}, traffic in sight.'",
+        "'{callsign}, converging traffic, {clock} o'clock, {dist} miles, same altitude.' '{callsign}, looking, no contact.'",
+        "'{callsign}, traffic no longer a factor.' '{callsign}, roger.'"
+    ],
+    "frequency_change_transcript": [
+        "'{callsign}, contact {facility} approach on {freq}.' '{freq}, good day, {callsign}.'",
+        "'{callsign}, frequency change approved.' '{callsign}, changing.'",
+        "'{callsign}, contact tower on {freq}.' '{freq}, {callsign}.'",
+        "'{callsign}, contact {facility} center on {freq}.' '{freq}, so long, {callsign}.'",
+        "'{callsign}, {facility} approach, {freq}, have a good flight.' '{freq}, thanks, {callsign}.'",
+        "'{callsign}, radar service terminated, squawk VFR, frequency change approved.' 'Wilco, {callsign}.'",
+        "'{callsign}, contact ground on {freq} when clear of {rwy}.' '{freq} off {rwy}, {callsign}.'",
+        "'{callsign}, over to {facility} on {freq}.' '{freq}, {callsign}.'"
+    ],
+    "weather_update_transcript": [
+        "'{callsign}, weather at {airport}: ceiling {ceiling} overcast, visibility {vis}, wind {wind}, altimeter {altimeter}.' '{callsign}, roger.'",
+        "'{callsign}, special weather observation: ceiling now {ceiling}, visibility {vis}.' '{callsign}, copy.'",
+        "'{callsign}, advise you ceiling is now {ceiling} broken, visibility {vis}.' '{callsign}, noted.'",
+        "'{callsign}, attention, field weather has deteriorated. Ceiling {ceiling}, visibility {vis}.' '{callsign}, copy, {vis}.'",
+        "'{callsign}, current ATIS information {atis_letter}. Ceiling {ceiling} broken, visibility {vis}, wind {wind}.' '{callsign}, have information {atis_letter}.'",
+        "'{callsign}, windshear alert, {dir} side runway {rwy}, {magnitude} knot windshear.' '{callsign}, wilco.'",
+        "'{callsign}, PIREP, {callsign2} reported {ride} at {alt}.' '{callsign}, thanks for the advisory.'",
+        "'{callsign}, field below minimums. Nearest alternate {alternate}.' '{callsign}, copy, proceeding alternate.'"
+    ],
+    "emergency_transcript": [
+        "'{callsign}, declare your emergency.' '{callsign} declaring emergency, {emergency_type}.'",
+        "'{callsign} declares emergency, souls on board {souls}, fuel {fuel} hours.' 'Roger {callsign}, emergency services standing by runway {rwy}.'",
+        "'{callsign}, say nature of emergency.' '{callsign}, {emergency_type}, requesting immediate landing.'",
+        "'{callsign}, all traffic, emergency aircraft inbound, runway {rwy}.' '{callsign}, roger, runway {rwy}.'",
+        "'{callsign}, emergency declared, cleared direct {airport}, descend and maintain {alt}.' '{callsign}, emergency, direct {airport}, {alt}.'",
+        "'{callsign}, minimum fuel declared. Runway {rwy}, cleared to land, priority handling.' '{callsign}, minimum fuel, cleared to land.'",
+        "'{callsign}, say fuel remaining.' '{callsign}, fuel state critical, {fuel} minutes.'",
+        "'{callsign}, squawk 7700.' '{callsign}, squawking 7700, declaring emergency, {emergency_type}.'"
+    ],
+    "filler_transcript": [
+        "'{callsign}, ident.' '{callsign}, radar contact, {dist} miles {dir} of {fix}.'",
+        "'{callsign}, say altitude.' '{callsign}, level {current_alt}.'",
+        "'{callsign}, report {fix} in sight.' 'Looking, {callsign}.'",
+        "'{callsign}, verify squawk {squawk}.' '{callsign}, squawking {squawk}.'",
+        "'{callsign}, say request.' '{callsign}, requesting direct {fix} when able.'",
+        "'{callsign}, altimeter {altimeter}.' '{callsign}, setting {altimeter}.'",
+        "'{callsign}, say type aircraft.' '{callsign}, type {aircraft_type}.'",
+        "'{callsign}, confirm you have information {atis_letter}.' '{callsign}, affirmative, information {atis_letter}.'",
+        "'{callsign}, contact {facility} on {freq}, good evening.' '{freq}, thanks, {callsign}.'",
+        "'{callsign}, report airport in sight.' '{callsign}, airport in sight.'",
+        "'{callsign}, say souls on board and fuel.' '{callsign}, {souls} souls, fuel {fuel} hours.'",
+        "'{callsign}, position report please.' '{callsign}, over {fix}, {current_alt}, estimating {next_fix}.'",
+        "'{callsign}, say intentions.' '{callsign}, requesting ILS {rwy} approach.'",
+        "'{callsign}, number {seq} for the runway.' '{callsign}, number {seq}, thank you.'",
+        "'{callsign}, roger, standby.' '{callsign}, standing by.'"
+    ],
+    "filler_log": [
+        "Coordination with {sector}: {callsign}'s handoff confirmed.",
+        "ATIS updated to information {atis_letter} at {time}Z.",
+        "Pilot of {callsign} reported {ride} at {current_alt}.",
+        "Spacing between {c1} and {c2}: {dist} nm, adequate.",
+        "Traffic count at {time}Z: {traffic_count} aircraft in sector.",
+        "Radar contact lost briefly on {callsign} at {time}Z, reacquired {dist} miles {dir} of {fix}.",
+        "{callsign} requested amended routing via {fix} for weather avoidance.",
+        "Sector handoff to {sector}: {callsign} at {current_alt}, squawk {squawk}.",
+        "Strip bay updated: {callsign} revised ETA {time}Z.",
+        "Minimum fuel advisory received from {callsign} at {time}Z, {dist} miles out.",
+        "Wake turbulence separation maintained between {c1} and {c2}: {dist} nm.",
+        "{callsign} filed amended flight plan at {time}Z, new routing via {fix}.",
+        "Stand-by slot allocated to {callsign} at {time}Z.",
+        "Visual approach reported by {callsign} at {dist} DME.",
+        "PIREP from {callsign}: {ride} at {current_alt}, reported {time}Z."
+    ],
+    "ride_reports": ["smooth", "light chop", "moderate turbulence", "light turbulence", "severe chop reported", "smooth above FL340"],
+    "coordination_notes": ["coordinated for climb to FL350", "approved descent", "handoff confirmed", "traffic advised"],
+    "clock_positions": ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"]
+}

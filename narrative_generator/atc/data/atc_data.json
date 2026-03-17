@@ -1,0 +1,146 @@
+{
+    "airports": {
+        "ORD": {
+            "name": "Chicago O'Hare",
+            "icao": "KORD",
+            "elevation": 672,
+            "tracon": "C90",
+            "center": "ZAU",
+            "runways_landing_west": ["27L", "28C", "28R"],
+            "runways_landing_east": ["10L", "10C", "10R"],
+            "stars": ["BENKY3", "ENDEE4", "GIPPER4", "KRENA2", "PANGG4", "ROYKO1"],
+            "sids": ["DUPAGE7", "EARLS1", "OHARE8", "PETTY7", "ACITO3"]
+        },
+        "ATL": {
+            "name": "Hartsfield-Jackson Atlanta",
+            "icao": "KATL",
+            "elevation": 1026,
+            "tracon": "A80",
+            "center": "ZTL",
+            "runways_landing_west": ["26L", "27L", "28"],
+            "runways_landing_east": ["8R", "9R", "10"],
+            "stars": ["PECHY3", "ERLIN3", "FLCON4", "HONIE3", "CUTTN4"],
+            "sids": ["DOUGK5", "JAAVL2", "SUNNY1", "THNDR4"]
+        },
+        "LAX": {
+            "name": "Los Angeles International",
+            "icao": "KLAX",
+            "elevation": 126,
+            "tracon": "SCT",
+            "center": "ZLA",
+            "runways_landing_west": ["24R", "25L"],
+            "runways_landing_east": ["6L", "7R"],
+            "stars": ["SADDE6", "IRNMN2", "RIKKN1", "SEAVU5", "ARTIC4"],
+            "sids": ["CASTA5", "HOLTZ8", "OSHNN4", "PNDAS3"]
+        },
+        "JFK": {
+            "name": "John F. Kennedy International",
+            "icao": "KJFK",
+            "elevation": 13,
+            "tracon": "N90",
+            "center": "ZNY",
+            "runways_landing_south": ["13L", "13R"],
+            "runways_landing_north": ["31L", "31R"],
+            "stars": ["CAMRN5", "GLDPL3", "PHLBO2", "BIGGY4", "LENDY7"],
+            "sids": ["DEEZZ5", "GREKI1", "SKORR4", "ROBUC3", "YNKEE5"]
+        },
+        "DFW": {
+            "name": "Dallas/Fort Worth International",
+            "icao": "KDFW",
+            "elevation": 607,
+            "tracon": "D10",
+            "center": "ZFW",
+            "runways_landing_south": ["18R", "17C", "17R", "13R"],
+            "runways_landing_north": ["35L", "36R", "35C", "31R"],
+            "stars": ["BGMON3", "HIIIP3", "LOWGN5", "PODDE4", "RIIVR2"],
+            "sids": ["LYNNS3", "JASNN2", "RNDRZ4", "TYKE5"]
+        }
+    },
+    "waypoints": ["MERIT", "BOSTN", "GRAVY", "DIXIE", "JIMME", "SPICY", "BRGRS", "KRENA", "PANGG", "BENKY", "ENDEE", "TOMSN", "LEEVY", "WNDSR", "COMET", "BLAZE", "DRAKK", "FENLY", "GORDN", "HETTY"],
+    "airlines": {
+        "AAL": {"radio": "American", "fleet": ["A319", "A320", "A321", "B738", "B789", "B752"]},
+        "DAL": {"radio": "Delta", "fleet": ["A320", "A321", "B738", "B739", "A339", "B763"]},
+        "UAL": {"radio": "United", "fleet": ["A319", "A320", "B738", "B39M", "B789", "B77W", "B752"]},
+        "SWA": {"radio": "Southwest", "fleet": ["B737", "B738", "B38M"]},
+        "JBU": {"radio": "JetBlue", "fleet": ["A320", "A321", "A20N", "A21N"]},
+        "ASA": {"radio": "Alaska", "fleet": ["B738", "B739", "B39M"]},
+        "SKW": {"radio": "SkyWest", "fleet": ["CRJ9", "E75L"]},
+        "RPA": {"radio": "Brickyard", "fleet": ["E170", "E75L"]},
+        "FDX": {"radio": "FedEx", "fleet": ["B763", "B772", "MD11"]},
+        "UPS": {"radio": "UPS", "fleet": ["B748", "B763", "B753"]},
+        "BAW": {"radio": "Speedbird", "fleet": ["B772", "B789"]},
+        "DLH": {"radio": "Lufthansa", "fleet": ["A346", "B748", "A359"]},
+        "UAE": {"radio": "Emirates", "fleet": ["A388", "B77W"]}
+    },
+    "aircraft_wake": {
+        "A319": "E", "A320": "E", "A20N": "E", "A321": "E", "A21N": "D",
+        "B737": "E", "B738": "E", "B38M": "E", "B739": "D", "B39M": "D",
+        "B752": "D", "B753": "D",
+        "B763": "C", "B772": "C", "B77W": "B", "B789": "C",
+        "A339": "C", "A346": "B", "A359": "C",
+        "B748": "B", "MD11": "B",
+        "A388": "A",
+        "CRJ9": "F", "E75L": "F", "E170": "F"
+    },
+    "aircraft_performance": {
+        "B738": {"max_fl": 410, "cruise_mach": 0.785, "approach_kias": 138, "vref": 135},
+        "A320": {"max_fl": 398, "cruise_mach": 0.780, "approach_kias": 137, "vref": 132},
+        "B789": {"max_fl": 431, "cruise_mach": 0.850, "approach_kias": 143, "vref": 140},
+        "B77W": {"max_fl": 431, "cruise_mach": 0.840, "approach_kias": 152, "vref": 148},
+        "A388": {"max_fl": 431, "cruise_mach": 0.850, "approach_kias": 152, "vref": 148},
+        "CRJ9": {"max_fl": 410, "cruise_mach": 0.780, "approach_kias": 136, "vref": 132},
+        "E75L": {"max_fl": 410, "cruise_mach": 0.780, "approach_kias": 130, "vref": 126},
+        "A319": {"max_fl": 390, "cruise_mach": 0.780, "approach_kias": 133, "vref": 130},
+        "A321": {"max_fl": 398, "cruise_mach": 0.780, "approach_kias": 141, "vref": 138},
+        "A20N": {"max_fl": 398, "cruise_mach": 0.780, "approach_kias": 137, "vref": 132},
+        "A21N": {"max_fl": 398, "cruise_mach": 0.780, "approach_kias": 141, "vref": 138},
+        "B737": {"max_fl": 410, "cruise_mach": 0.785, "approach_kias": 135, "vref": 132},
+        "B38M": {"max_fl": 410, "cruise_mach": 0.790, "approach_kias": 138, "vref": 135},
+        "B739": {"max_fl": 410, "cruise_mach": 0.789, "approach_kias": 140, "vref": 137},
+        "B39M": {"max_fl": 410, "cruise_mach": 0.789, "approach_kias": 140, "vref": 137},
+        "B752": {"max_fl": 420, "cruise_mach": 0.800, "approach_kias": 145, "vref": 141},
+        "B753": {"max_fl": 420, "cruise_mach": 0.800, "approach_kias": 148, "vref": 144},
+        "B763": {"max_fl": 430, "cruise_mach": 0.820, "approach_kias": 150, "vref": 145},
+        "B772": {"max_fl": 430, "cruise_mach": 0.840, "approach_kias": 150, "vref": 146},
+        "B748": {"max_fl": 436, "cruise_mach": 0.855, "approach_kias": 158, "vref": 153},
+        "A339": {"max_fl": 410, "cruise_mach": 0.860, "approach_kias": 148, "vref": 144},
+        "A346": {"max_fl": 430, "cruise_mach": 0.860, "approach_kias": 150, "vref": 146},
+        "A359": {"max_fl": 430, "cruise_mach": 0.853, "approach_kias": 145, "vref": 141},
+        "MD11": {"max_fl": 430, "cruise_mach": 0.845, "approach_kias": 155, "vref": 150},
+        "E170": {"max_fl": 410, "cruise_mach": 0.780, "approach_kias": 128, "vref": 124}
+    },
+    "positions": {
+        "tracon": ["Final", "Feeder", "Departure", "North", "South", "East", "West", "Satellite"],
+        "artcc": ["Sector 47", "Sector 52", "Sector 18", "Sector 33", "High East", "High West", "Low Altitude", "Super High"]
+    },
+    "atis_letters": ["Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel", "India", "Juliet", "Kilo", "Lima", "Mike", "November", "Oscar", "Papa"],
+    "approach_types": ["ILS", "RNAV", "VOR", "ILS or LOC", "RNAV (GPS)", "LDA", "Visual"],
+    "emergency_types": [
+        "engine failure",
+        "hydraulic failure",
+        "pressurization loss",
+        "fuel emergency",
+        "medical emergency on board",
+        "electrical failure",
+        "bird strike with engine damage",
+        "smoke in cockpit",
+        "landing gear malfunction"
+    ],
+    "weather_conditions": {
+        "vmc": {
+            "ceiling": ["SKC", "FEW010", "SCT015", "FEW030", "SCT025", "CLR"],
+            "vis": ["10", "10", "9", "7", "10", "10"],
+            "wind": ["calm", "090/05", "270/10", "180/08", "360/12", "260/15"]
+        },
+        "imc": {
+            "ceiling": ["OVC006", "OVC004", "BKN008", "OVC010", "BKN006", "OVC003"],
+            "vis": ["1/2", "1", "2", "3", "1/4", "1/2"],
+            "wind": ["130/18G28", "270/22", "190/15G25", "090/12", "300/20G30", "040/14"]
+        },
+        "marginal": {
+            "ceiling": ["BKN012", "OVC015", "BKN010", "SCT008", "BKN014", "OVC018"],
+            "vis": ["4", "5", "3", "4", "6", "5"],
+            "wind": ["250/14", "310/16", "080/12", "200/10", "150/08", "270/18"]
+        }
+    }
+}
