@@ -479,6 +479,80 @@ Per-cell:
 
 **This validates the architectural origin claim** — the interference pattern isn't specific to the bare KV format but appears in realistic text with noise, context, and multiple entity attributes.
 
+### Action 20: User Feedback — Critical Issues Raised
+
+**User challenges (summarized):**
+1. "2 architectures is not sufficient for 'different failure modes' claim" — CORRECT
+2. "Try more architectures — diffusion, RNN, not just 2-3" — NEED MORE
+3. "Run Qwen3.5 models (latest)" — TODO (may need HF/transformers update)
+4. "Derive scaling law f(N, model_size)" — TODO
+5. "Explore more MI techniques" — TODO (user shared actionable-interpretability-guide)
+6. "Sample sizes may be too small" — NEED TO CHECK
+7. "You should never stop, keep finding issues and improving"
+
+**Self-critique — What I've been doing wrong:**
+1. Running lots of experiments without enough reflection on whether they're the RIGHT experiments
+2. Not questioning sample sizes (50 trials/cell may be too few for reliable CIs)
+3. Not exploring alternative MI techniques beyond logit lens + activation patching
+4. Not checking if findings are statistically significant (no p-values, no effect size calculations)
+5. Moving too fast on breadth (7 models) instead of depth (one model done really well)
+
+**Sample size concern:**
+- Stage 1: 50 trials/cell → Wilson CI ±14% at 50% accuracy. That's WIDE.
+- Stage 2: 100 trials → but only 25-50 PI failures are analyzable (after garbage filter)
+- Stage 3: 100 trials → only 64-96 valid for patching (varies)
+- Need: minimum 200 trials/cell for <7% CI, ideally 500 for <5%
+
+**MI techniques to explore (from user's links):**
+1. **Probing classifiers** — train linear probes on residual stream to detect "which value is stored"
+2. **Logit attribution** — decompose final logit into per-component (head, MLP) contributions
+3. **Causal scrubbing** — more rigorous than single-head patching
+4. **Feature visualization** — what features activate differently for RI vs PI
+5. **Sparse autoencoders (SAEs)** — find interpretable features in residual stream
+6. **Path patching** — trace the full circuit from input to output
+7. **Induction head analysis** — are there specific induction heads for KV retrieval?
+
+### Action 22: CRITICAL — Mamba-1.4B Shows PI > RI (Theory Revision Needed)
+
+**Finding:** Mamba-1.4B (SSM, no attention) shows PI > RI with gap=+49%.
+- RI=62%, PI=13%, clean data (10-40% garbage)
+- 6 cells all show positive gap
+- This CONTRADICTS the "causal attention causes PI > RI" theory
+
+**Mamba-130M showed reversed pattern (PI > RI), but that was garbage-dominated (60-94%).** The 1.4B with cleaner data shows the SAME direction as transformers.
+
+**Implication:** PI > RI is NOT specific to causal attention. It may be caused by:
+1. **Softmax dispersion** (Veličković) — which affects BOTH transformers and SSMs (Mamba uses softmax-like gating)
+2. **Autoregressive generation** — the sequential nature of token generation creates positional bias regardless of architecture
+3. **Training data bias** — all models trained on similar internet text that has primacy patterns
+
+**User insight:** "Maybe this limitation is due to Softmax as Petar has found and not architectural" — this is likely correct. Mamba's selective state mechanism uses sigmoid/softmax-like gating, which would show similar dispersion effects.
+
+**Theory needs revision:** From "causal attention causes PI > RI" to "sequential processing with softmax-like gating creates PI > RI across architectures." This is actually a STRONGER claim — it's more fundamental than just attention.
+
+**What to test next:**
+1. Even larger Mamba (2.8B) or Falcon-Mamba-7B-instruct for clean comparison
+2. RWKV (different gating mechanism — uses exp() not softmax)
+3. A model with attention but WITHOUT softmax (e.g., linear attention)
+4. Vary temperature/top-k to test if softmax sharpness affects the asymmetry
+
+### Action 21: Architecture Expansion Plan
+
+**Current architectures (4 + 1 SSM):**
+1. Qwen2.5 (GQA + SwiGLU + RoPE) — 3 sizes
+2. Gemma-3 (MHA + GeGLU + RoPE) — 1 size
+3. Pythia (MHA + GELU + Rotary) — 1 size (base only)
+4. Mamba (SSM) — 2 sizes (both base, very noisy)
+
+**Planned additions:**
+5. TinyLlama-1.1B-Chat (Llama arch, instruct)
+6. StableLM-2-1.6B-Chat (different training)
+7. RWKV-v6-Finch-1.6B (linear attention)
+8. Phi-3.5-mini (3.8B, different tokenizer)
+9. Qwen3.5 (latest generation) — needs investigation
+
+**Target:** At least 6 transformer architectures + 2 non-transformer (Mamba + RWKV) for the architecture comparison claim.
+
 ### Action 19: Narrative API Experiment Bug Fix
 
 **Issue:** First API run returned 0% — the `generate()` method signature was wrong.
