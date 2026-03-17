@@ -197,12 +197,14 @@ def train_probes(data, n_layers):
                                         multi_class="multinomial")
                 scores = cross_val_score(clf, X, y_expected, cv=5, scoring="accuracy")
                 acc = scores.mean()
+                scores = np.array([0.0])
             except Exception:
                 acc = 0.0
+                scores = np.array([0.0])
 
             results[condition][L] = {
                 "accuracy": float(acc),
-                "std": float(scores.std()) if acc > 0 else 0.0,
+                "std": float(scores.std()),
             }
 
             if L >= n_layers - 6 or L % 5 == 0:

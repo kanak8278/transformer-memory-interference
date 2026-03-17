@@ -589,6 +589,21 @@ RWKV-v6-Finch-1.6B requires bitsandbytes which needs CUDA (not available on MPS/
 
 **Conclusion:** Mamba-1.4B is our cleanest SSM evidence. PI > RI persists in SSMs. For clean RWKV comparison, would need GPU instance or API access.
 
+### Action 26: Probing Classifier Experiment (New MI Technique)
+
+**Why:** Need stronger mechanistic evidence beyond logit lens. Linear probes on residual stream tell us which value position the model ENCODES at each layer, independent of the unembedding matrix.
+
+**How:** Train 5-class logistic regression at each layer on residual stream at answer position. Labels = expected value index (0..4 for 5 updates).
+
+**First run behavioral:** RI=63%, PI=9% at 2k_5u (100 trials). Consistent with Stage 1.
+
+**Status:** Fixed minor bug in probe training, rerunning.
+
+**Expected result:**
+- RI: probe accuracy high at late layers (correct position 0 encoded)
+- PI: probe accuracy low at late layers (position N-1 NOT encoded, or wrong position encoded)
+- This would show the asymmetry EXISTS in representation space, not just in output probabilities
+
 ### Action 24: RWKV Installation Issues
 
 RWKV-v6-Finch-1.6B requires bitsandbytes. Installed but environment caching caused it to not be detected. Retrying with fresh activation.
