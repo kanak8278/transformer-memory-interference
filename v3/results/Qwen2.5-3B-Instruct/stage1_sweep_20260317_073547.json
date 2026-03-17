@@ -1,0 +1,264 @@
+{
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "dataset_type": "ARBITRARY_SINGLE",
+  "prompt_format": "chat_template",
+  "min_updates": 5,
+  "config": {
+    "key_levels": [
+      2,
+      5
+    ],
+    "update_levels": [
+      5,
+      10,
+      20
+    ],
+    "trials_per_cell": 200,
+    "max_new_tokens": 30,
+    "batch_size": 8,
+    "gpu": null,
+    "device": "mps"
+  },
+  "start_time": "2026-03-17T07:11:54.583671+00:00",
+  "end_time": "2026-03-17T07:35:47.181693+00:00",
+  "cells": {
+    "2_5": {
+      "num_keys": 2,
+      "num_updates": 5,
+      "stats": {
+        "RI": {
+          "accuracy": 0.84,
+          "ci_lower": 0.79,
+          "ci_upper": 0.89,
+          "n": 200,
+          "error_types": {
+            "correct": 168,
+            "recency_intrusion": 2,
+            "intermediate_intrusion": 29,
+            "garbage": 1
+          },
+          "n_failures": 32,
+          "n_garbage": 1,
+          "failure_avg_relative_pos": 0.3548
+        },
+        "PI": {
+          "accuracy": 0.73,
+          "ci_lower": 0.665,
+          "ci_upper": 0.79,
+          "n": 200,
+          "error_types": {
+            "intermediate_intrusion": 54,
+            "correct": 146
+          },
+          "n_failures": 54,
+          "n_garbage": 0,
+          "failure_avg_relative_pos": 0.7454
+        }
+      },
+      "regime": "AB",
+      "n_trials": 200,
+      "max_trials": 200,
+      "stopped_early": false,
+      "elapsed_sec": 99.7
+    },
+    "2_10": {
+      "num_keys": 2,
+      "num_updates": 10,
+      "stats": {
+        "RI": {
+          "accuracy": 0.795,
+          "ci_lower": 0.74,
+          "ci_upper": 0.845,
+          "n": 200,
+          "error_types": {
+            "intermediate_intrusion": 38,
+            "correct": 159,
+            "garbage": 2,
+            "recency_intrusion": 1
+          },
+          "n_failures": 41,
+          "n_garbage": 2,
+          "failure_avg_relative_pos": 0.151
+        },
+        "PI": {
+          "accuracy": 0.54,
+          "ci_lower": 0.47,
+          "ci_upper": 0.61,
+          "n": 200,
+          "error_types": {
+            "intermediate_intrusion": 90,
+            "correct": 108,
+            "garbage": 2
+          },
+          "n_failures": 92,
+          "n_garbage": 2,
+          "failure_avg_relative_pos": 0.8346
+        }
+      },
+      "regime": "C",
+      "n_trials": 200,
+      "max_trials": 200,
+      "stopped_early": false,
+      "elapsed_sec": 150.3
+    },
+    "2_20": {
+      "num_keys": 2,
+      "num_updates": 20,
+      "stats": {
+        "RI": {
+          "accuracy": 0.885,
+          "ci_lower": 0.84,
+          "ci_upper": 0.9251,
+          "n": 200,
+          "error_types": {
+            "correct": 177,
+            "intermediate_intrusion": 21,
+            "garbage": 2
+          },
+          "n_failures": 23,
+          "n_garbage": 2,
+          "failure_avg_relative_pos": 0.1228
+        },
+        "PI": {
+          "accuracy": 0.455,
+          "ci_lower": 0.3849,
+          "ci_upper": 0.52,
+          "n": 200,
+          "error_types": {
+            "intermediate_intrusion": 102,
+            "correct": 91,
+            "garbage": 7
+          },
+          "n_failures": 109,
+          "n_garbage": 7,
+          "failure_avg_relative_pos": 0.806
+        }
+      },
+      "regime": "C",
+      "n_trials": 200,
+      "max_trials": 200,
+      "stopped_early": false,
+      "elapsed_sec": 242.6
+    },
+    "5_5": {
+      "num_keys": 5,
+      "num_updates": 5,
+      "stats": {
+        "RI": {
+          "accuracy": 0.785,
+          "ci_lower": 0.725,
+          "ci_upper": 0.84,
+          "n": 200,
+          "error_types": {
+            "correct": 157,
+            "recency_intrusion": 5,
+            "intermediate_intrusion": 36,
+            "garbage": 2
+          },
+          "n_failures": 43,
+          "n_garbage": 2,
+          "failure_avg_relative_pos": 0.5183
+        },
+        "PI": {
+          "accuracy": 0.715,
+          "ci_lower": 0.655,
+          "ci_upper": 0.78,
+          "n": 200,
+          "error_types": {
+            "correct": 143,
+            "intermediate_intrusion": 54,
+            "garbage": 3
+          },
+          "n_failures": 57,
+          "n_garbage": 3,
+          "failure_avg_relative_pos": 0.6528
+        }
+      },
+      "regime": "AB",
+      "n_trials": 200,
+      "max_trials": 200,
+      "stopped_early": false,
+      "elapsed_sec": 156.1
+    },
+    "5_10": {
+      "num_keys": 5,
+      "num_updates": 10,
+      "stats": {
+        "RI": {
+          "accuracy": 0.795,
+          "ci_lower": 0.74,
+          "ci_upper": 0.845,
+          "n": 200,
+          "error_types": {
+            "correct": 159,
+            "recency_intrusion": 2,
+            "intermediate_intrusion": 37,
+            "garbage": 2
+          },
+          "n_failures": 41,
+          "n_garbage": 2,
+          "failure_avg_relative_pos": 0.3504
+        },
+        "PI": {
+          "accuracy": 0.53,
+          "ci_lower": 0.46,
+          "ci_upper": 0.6,
+          "n": 200,
+          "error_types": {
+            "intermediate_intrusion": 93,
+            "correct": 106,
+            "garbage": 1
+          },
+          "n_failures": 94,
+          "n_garbage": 1,
+          "failure_avg_relative_pos": 0.7348
+        }
+      },
+      "regime": "C",
+      "n_trials": 200,
+      "max_trials": 200,
+      "stopped_early": false,
+      "elapsed_sec": 270.7
+    },
+    "5_20": {
+      "num_keys": 5,
+      "num_updates": 20,
+      "stats": {
+        "RI": {
+          "accuracy": 0.735,
+          "ci_lower": 0.675,
+          "ci_upper": 0.795,
+          "n": 200,
+          "error_types": {
+            "correct": 147,
+            "intermediate_intrusion": 49,
+            "recency_intrusion": 2,
+            "garbage": 2
+          },
+          "n_failures": 53,
+          "n_garbage": 2,
+          "failure_avg_relative_pos": 0.2797
+        },
+        "PI": {
+          "accuracy": 0.485,
+          "ci_lower": 0.415,
+          "ci_upper": 0.555,
+          "n": 200,
+          "error_types": {
+            "intermediate_intrusion": 93,
+            "correct": 97,
+            "garbage": 10
+          },
+          "n_failures": 103,
+          "n_garbage": 10,
+          "failure_avg_relative_pos": 0.6667
+        }
+      },
+      "regime": "C",
+      "n_trials": 200,
+      "max_trials": 200,
+      "stopped_early": false,
+      "elapsed_sec": 512.7
+    }
+  }
+}
