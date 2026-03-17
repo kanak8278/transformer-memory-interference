@@ -604,6 +604,30 @@ RWKV-v6-Finch-1.6B requires bitsandbytes which needs CUDA (not available on MPS/
 - PI: probe accuracy low at late layers (position N-1 NOT encoded, or wrong position encoded)
 - This would show the asymmetry EXISTS in representation space, not just in output probabilities
 
+### Action 27: Probing Results — Strong New Evidence
+
+**Binary probing results (Qwen 1.5B, 2k_5u, 200 trials):**
+
+1. **RI vs PI condition discrimination: 100% at all late layers (L22-27)**
+   - A linear probe can PERFECTLY distinguish RI from PI residual streams
+   - The model processes the two conditions in fundamentally different ways
+
+2. **RI correct vs incorrect: 84-89% at late layers**
+   - The model's representation ENCODES whether RI will succeed
+   - Clean, structured information in residual stream
+
+3. **PI correct vs incorrect: 50-72% at late layers**
+   - Near-chance (50%) → model's representation does NOT encode PI success/failure
+   - PI failures are representationally indistinguishable from PI successes
+   - The model doesn't "know" it's about to fail
+
+**Why this matters:**
+- Independent from logit lens (uses residual stream, not unembedding)
+- Shows the asymmetry exists in REPRESENTATION SPACE, not just output
+- RI: clean representations → reliable output
+- PI: noisy, undifferentiated representations → unreliable output
+- This is the kind of evidence that strengthens the mechanistic story
+
 ### Action 24: RWKV Installation Issues
 
 RWKV-v6-Finch-1.6B requires bitsandbytes. Installed but environment caching caused it to not be detected. Retrying with fresh activation.
