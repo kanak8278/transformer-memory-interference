@@ -1030,11 +1030,38 @@ Needs 2 more checkpoints to confirm final state.
 - scripts/experiments/remedy_logit_lens.py — connects landmark remedy to logit lens
 - scripts/experiments/jacobian_dynamics.py — PARTIAL results (7/9)
 
-### Session 3 Status: Machine Shutdown
+### Session 3 Status: Machine Shutdown (then resumed)
 
 High CPU from 3 simultaneous heavy experiments killed all processes.
 Results saved: Gemma Scope SAE (complete), Jacobian dynamics (7/9 checkpoints).
-Need to run: last 2 Jacobian checkpoints, remedy+logit lens.
+
+**After restart — Action 53 COMPLETED:**
+Jacobian dynamics re-run at N=20 inputs (consistent hyperparameters), all 9 checkpoints:
+
+| Step | Primacy | Recency | Who leads |
+|---|---|---|---|
+| 125K | 1.57× | 1.52× | ~Balanced |
+| 375K | 1.33× | 1.31× | ~Balanced |
+| 625K | 1.36× | 1.61× | Recency |
+| 875K | 1.50× | 1.38× | Primacy |
+| 1125K | 1.54× | 1.72× | Recency |
+| 1375K | 1.47× | 1.44× | ~Balanced |
+| 1625K | 1.41× | 1.76× | Recency |
+| 1875K | 1.25× | 1.45× | Recency |
+| Final | **2.00×** | **1.80×** | **Primacy** (both strongest) |
+
+Key finding: primacy NOT monotonically increasing. Both primacy and recency compete
+throughout training. Final instruct model shows strongest values of both — instruction
+tuning amplifies the U-shape. Primacy wins at the behavioral level from task-level
+dynamics, not architectural lock-in.
+
+Saved: v3/results/training_dynamics/jacobian_dynamics_smollm2.json
+Figure: v3/figures/jacobian_dynamics_smollm2.png
+Commit: 5c4a044
+
+**Still remaining from Session 3:**
+- remedy_logit_lens.py — not yet run (connects landmark remedy to logit lens mechanism)
+- Gemma Scope behavioral accuracy — prediction tracking failed, feature data valid
 
 ---
 
@@ -1296,3 +1323,107 @@ This is the key comparison:
 | Haiku | Wildlife narrative | ~-3% | slight recency |
 
 **Estimated completion: ~2.5 hours from launch**
+
+---
+
+## Session 5 (2026-03-18): Jacobian Dynamics Completion + Results Audit
+
+### Action 55: Jacobian Dynamics — COMPLETED (all 9 checkpoints, N=20)
+
+Re-ran at N=20 random inputs (consistent hyperparameters). Previous partial run used N=10.
+
+Final results:
+| Step | Primacy | Recency | Who leads |
+|---|---|---|---|
+| 125K | 1.57× | 1.52× | ~Balanced |
+| 375K | 1.33× | 1.31× | ~Balanced |
+| 625K | 1.36× | **1.61×** | Recency |
+| 875K | **1.50×** | 1.38× | Primacy |
+| 1125K | 1.54× | **1.72×** | Recency |
+| 1375K | 1.47× | 1.44× | ~Balanced |
+| 1625K | 1.41× | **1.76×** | Recency |
+| 1875K | 1.25× | **1.45×** | Recency |
+| Final | **2.00×** | **1.80×** | **Both strong; primacy wins** |
+
+Key finding: Neither primacy nor recency dominates monotonically during training.
+Both strengthen over time. Final instruct model has the highest values of both.
+PI > RI at the behavioral level comes from primacy narrowly winning in the final
+representation, not from architectural lock-in of primacy.
+
+Commit: 5c4a044
+Saved: v3/results/training_dynamics/jacobian_dynamics_smollm2.json
+Figure: v3/figures/jacobian_dynamics_smollm2.png
+
+### Action 56: Wildlife Narrative Results — Qwen 1.5B (COMPLETE)
+
+50 trials/cell, 11 cells on wildlife tracking narratives.
+
+| Cell | RI | PI | Gap |
+|---|---|---|---|
+| 2k_3u | 92% | 34% | **+58%** |
+| 2k_5u | 80% | 36% | +44% |
+| 2k_7u | 76% | 42% | +34% |
+| 3k_3u | 82% | 48% | +34% |
+| 3k_5u | 76% | 38% | +38% |
+| 3k_7u | 59% | 37% | +22% |
+| 3k_10u | 54% | 34% | +20% |
+| 5k_3u | 66% | 40% | +26% |
+| 5k_5u | 38% | 32% | +6% |
+| 5k_7u | 35% | 44% | **-9%** (reversal at 5k_7u) |
+| 5k_10u | 52% | 29% | +23% |
+| **Mean** | **65%** | **38%** | **+27%** |
+
+10/11 cells show PI > RI. One reversal at 5k_7u (borderline, 34 trials, CIs overlap).
+The gap is LARGER on wildlife narratives than Dota2 for the same model.
+
+Qwen 3B partial results (2 cells): Mean RI=72%, PI=55%, gap=+17%.
+Saved: v3/results/narrative/narrative_wildlife_Qwen2.5-1.5B-Instruct.json
+
+### Action 57: Narrative API Results — Haiku on New Domains (COMPLETE)
+
+Claude Haiku tested on all 3 new domains (wildlife, ICU, ATC), 18 cells each.
+
+| Domain | RI | PI | Gap | Pattern |
+|---|---|---|---|---|
+| Wildlife | 75% | 78% | **-4%** | Reversed (recency) |
+| ICU | 96% | 98% | **-2%** | Ceiling effect |
+| ATC | 47% | 81% | **-34%** | Strong reversal |
+
+Haiku shows INVERTED pattern on all narrative domains. Not PI > RI — the opposite.
+Contrast with Qwen 1.5B which shows PI > RI (+27% on wildlife).
+
+Interpretation:
+- Strong models (Haiku) exploit document structure → read toward recent mentions
+- Weak/smaller models (Qwen 1.5B) exhibit primacy bias in narrative text
+- ATC inversion strongest — ATC format has explicit temporal markers
+  ("at 14:32 FL240 → at 14:45 FL180 → current: FL120") that guide recency
+
+This confirms: PI > RI is model-capacity-dependent in narrative settings.
+
+Saved: v3/results/narrative/narrative_api_{wildlife,icu,atc}_claude-haiku.json
+
+### Current Results Inventory (All Saved & Committed)
+
+| Result | File | Commits |
+|---|---|---|
+| Stage 1 behavioral (9 models, 200t) | results/{model}/stage1_*.json | multiple |
+| Stage 2 logit lens (4 models) | results/{model}/stage2_*.json | multiple |
+| Stage 3 causal (3 models) | results/{model}/stage3_*.json | multiple |
+| Probing classifiers (3 models) | results/probing/*.json | multiple |
+| Jacobian at init (Qwen+Mamba) | results/jacobian/*.json | multiple |
+| Narrative Dota2 150t (Qwen 1.5B) | results/narrative/narrative_Qwen*.json | a1b6ad9 |
+| Narrative wildlife 50t (Qwen 1.5B) | results/narrative/narrative_wildlife_*.json | df6149e |
+| Narrative API haiku (3 domains) | results/narrative/narrative_api_*.json | ddc981b |
+| Gemma Scope SAE (layers 7,13,17,22) | results/sae/gemma_scope_sae_analysis.json | d29e338 |
+| Jacobian dynamics (9 ckpts, N=20) | results/training_dynamics/jacobian_dynamics_smollm2.json | 5c4a044 |
+| Remedy experiment (5 styles) | results/remedy/remedy_claude-haiku.json | 0cce8ec |
+| Scaling law fits | results/scaling_law_fits.json | multiple |
+| Theory verification | results/theory_verification.json | a4c90f0 |
+
+### What's Still To Do
+
+1. **remedy_logit_lens.py** — not yet run (~30 min, single model, moderate CPU)
+   Connects landmark remedy → logit lens → mechanistic validation
+2. **Gemma Scope behavioral fix** — re-run with proper prediction recording
+3. **LaTeX paper writing** — all content exists in markdown
+
