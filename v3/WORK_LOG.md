@@ -1218,3 +1218,57 @@ not frontier models. Haiku/GPT-4.1-mini are in the "resistant" regime where the 
 format gives them enough context cues to overcome primacy bias.
 
 **Saved:** v3/results/narrative/narrative_claude-haiku_large_grid.json
+
+### Hard Grid Results — Claude Haiku (2026-03-18)
+
+**Config:** claude-haiku, 150 trials/cell, keys=[10,12], updates=[15,20,30,40,50]
+
+#### Wildlife (hard grid: 10-12 entities, 15-50 updates)
+| Cell | RI | PI | Gap |
+|------|----|----|-----|
+| 10k_15u | 78% | 80% | -2% |
+| 10k_20u | 69% | 80% | -11% |
+| 10k_30u | 65% | 65% | 0% |
+| 10k_40u | 58% | 62% | -4% |
+| 10k_50u | 58% | 56% | +2% |
+| 12k_40u | 51% | 61% | -10% |
+| 12k_50u | 45% | 50% | -5% |
+
+Mean gap: -3.7%. Accuracy drops overall at high N — model struggles with 12 entities × 50 updates.
+Pattern: PI slightly easier in most cells (recency advantage), with random noise near zero.
+
+#### ICU (hard grid)
+Near ceiling throughout. RI=95-99%, PI=95-99%. Mean gap: -1.6%.
+ICU narrative format is too explicit — labeled values ("BUN = 53") trivialize extraction
+regardless of how many entities or updates are added.
+
+#### ATC (hard grid) — KEY FINDING
+| Cell | RI | PI | Gap |
+|------|----|----|-----|
+| 10k_15u | 39% | 81% | -42% |
+| 10k_20u | 41% | 80% | -39% |
+| 10k_30u | 45% | 85% | -41% |
+| 10k_40u | 46% | 85% | -39% |
+| 10k_50u | 46% | 81% | -35% |
+| 12k_50u | 41% | 83% | -42% |
+
+Mean gap: **-33.9%**. ALL 10 cells show RI < PI. Zero cells show PI>RI.
+
+**Why ATC reverses:**
+1. Transcript format ends with most recent exchanges — PI answers (last value) are
+   physically proximate to the end of the text and the question.
+2. ATC heading/speed values (35, 299, 245) are small integers that appear as substrings
+   throughout transcripts (altitudes "3500", frequencies "124.35", runway "35L").
+   The model can't reliably identify which occurrence was the FIRST assignment.
+3. RI extraction requires identifying the very first mention of a value for a specific
+   callsign — much harder in a dense transcript.
+
+**Paper interpretation:**
+The PI>RI effect from synthetic KV pairs is driven by structural position in the sequence.
+In naturalistic text, that structure is replaced by document-level recency bias:
+- Strong models show INVERTED pattern in narrative (RI < PI) because they exploit
+  document structure (reading toward the end) rather than sequential scanning
+- This is domain-specific: ATC transcripts have the strongest inversion, ICU is neutral,
+  wildlife is weakly negative
+- The KV-pair finding is specific to that format; narrative formats create different biases
+
