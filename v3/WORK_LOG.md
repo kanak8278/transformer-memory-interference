@@ -1272,3 +1272,27 @@ In naturalistic text, that structure is replaced by document-level recency bias:
   wildlife is weakly negative
 - The KV-pair finding is specific to that format; narrative formats create different biases
 
+
+### Qwen2.5-1.5B on New Domains — Running (2026-03-18)
+
+**Config:** Qwen/Qwen2.5-1.5B-Instruct, local MPS inference, 50 trials/cell, targeted grid
+(8 cells: 2k_10u, 2k_20u, 3k_5u, 3k_10u, 3k_20u, 5k_5u, 5k_10u, 5k_20u)
+
+**Early wildlife results:**
+- 2k_3u: RI=92%, PI=34%, gap=**+58%** PI>RI ✓ (Dota2 equivalent was only +11%)
+- 2k_5u: RI=80%, PI=40%, gap=+40% PI>RI ✓ (partial, 30 trials)
+
+The gap is LARGER on wildlife narratives than on Dota 2 KV pairs for the same model.
+This suggests naturalistic text does NOT weaken the primacy bias for Qwen 1.5B — if
+anything it strengthens it. The model appears to anchor on early mentions in long
+narratives, struggling more with PI than it does in compact KV sequences.
+
+This is the key comparison:
+| Model | Domain | 2k_3u gap | Pattern |
+|-------|--------|-----------|---------|
+| Qwen 1.5B | Dota2 KV | +11% | PI>RI |
+| Qwen 1.5B | Wildlife narrative | +58% | PI>RI (stronger!) |
+| Haiku | Dota2 KV | ~0% | no effect |
+| Haiku | Wildlife narrative | ~-3% | slight recency |
+
+**Estimated completion: ~2.5 hours from launch**
