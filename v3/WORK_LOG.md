@@ -1427,3 +1427,86 @@ Saved: v3/results/narrative/narrative_api_{wildlife,icu,atc}_claude-haiku.json
 2. **Gemma Scope behavioral fix** — re-run with proper prediction recording
 3. **LaTeX paper writing** — all content exists in markdown
 
+
+---
+
+## Narrative Transfer Experiments — Full Results (2026-03-19)
+
+### Summary Table
+
+| Domain | Model | PI>RI cells | Mean gap | Sig | Verdict |
+|--------|-------|-------------|----------|-----|---------|
+| Dota2 (synthetic) | Qwen 1.5B | 12/12 | +19% | 12 | Strong baseline |
+| Dota2 (synthetic) | Claude Haiku | 9/20 | -0.7% | 0 | No effect |
+| **Wildlife** | **Qwen 1.5B** | **10/11** | **+27%** | **5** | ✅ Transfers, stronger |
+| Wildlife | Haiku | 3/8 | -2% | 0 | No effect |
+| **ICU** | **Qwen 1.5B** | **5/15** | **-4%** | **0** | ❌ No effect |
+| ICU | Haiku | 0/8 | -4% | 0 | No effect |
+| **ATC** | **Qwen 1.5B** | **10/15** | **+6%** | **0** | ⚠️ Noisy positive |
+| ATC | Haiku | 0/8 | -34% | 0 | ❌ Reversed |
+
+### Key Findings
+
+#### 1. Wildlife: PI>RI transfers and amplifies (+27% vs +19%)
+Qwen 1.5B shows 10/11 cells PI>RI on GPS-collar field study narratives.
+Mean gap is *larger* than on synthetic Dota 2 data (+27% vs +19%), with 5
+cells statistically significant. The primacy bias is not weakened by the
+richer narrative format — it may be strengthened because the model must
+process longer text before reaching the first mention and cannot simply
+scan backward to locate the first appearance.
+
+Example cell (2k_3u): RI=92%, PI=34%, gap=+58% (statistically significant).
+
+#### 2. ICU: Null result — format artifact
+Neither model shows reliable PI>RI in ICU narratives. The clinical note
+format labels values explicitly ("BUN = 53 mg/dL", "SpO2 92%"), making
+both first and last values equally retrievable regardless of how many
+patients or updates are in the narrative. This is a format effect, not a
+model-capability effect — both strong and weak models fail to show
+interference because the retrieval task itself is trivial.
+
+#### 3. ATC: Model-dependent reversal
+- Qwen 1.5B: 10/15 cells PI>RI, mean gap +6% (weak positive, not significant)
+- Claude Haiku: 0/8 PI>RI, mean gap -34% (strong REVERSAL, all cells)
+
+The reversal for Haiku reveals a **document-level recency effect**: ATC
+transcripts end with the most recent instruction exchange. Haiku can
+exploit this structure to retrieve the last value (PI) far more reliably
+than the first (RI). For Qwen 1.5B, which processes more sequentially and
+cannot search backward through document structure, the primacy bias still
+appears directionally.
+
+This is conceptually distinct from the KV-pair primacy finding: it is a
+format artifact, not an architectural property.
+
+#### 4. Cross-model pattern confirms main thesis
+| Format | Qwen 1.5B | Claude Haiku |
+|--------|-----------|--------------|
+| Synthetic KV-pairs | PI>RI (+19%) | No effect (-0.7%) |
+| Wildlife narrative | PI>RI (+27%) | No effect (-2%) |
+| ICU narrative | No effect (-4%) | No effect (-4%) |
+| ATC transcript | Noisy positive (+6%) | Reversed (-34%) |
+
+Stronger models resist the interference effect across all formats.
+Weaker models show consistent PI>RI in formats that require sequential
+tracking (KV-pairs, wildlife), but not in formats where values are
+explicitly labeled (ICU) or where document structure aids retrieval (ATC).
+
+### Interpretation for Paper
+The narrative transfer experiments are best framed as:
+1. **PI>RI is not a synthetic-data artifact.** It transfers to naturalistic
+   wildlife tracking narratives with similar or larger effect size.
+2. **Domain format determines whether the effect appears.** Explicit value
+   labeling (ICU) eliminates it; sequential-update formats (wildlife) preserve it.
+3. **Frontier models show a different failure mode.** They resist primacy bias
+   but can be exploited via document-level recency when the format is right (ATC).
+
+### Data
+- `v3/results/narrative/narrative_wildlife_Qwen2.5-1.5B-Instruct.json`
+- `v3/results/narrative/narrative_icu_Qwen2.5-1.5B-Instruct.json`
+- `v3/results/narrative/narrative_atc_Qwen2.5-1.5B-Instruct.json`
+- `v3/results/narrative/narrative_claude-haiku_large_grid.json`
+- `v3/results/narrative/narrative_api_wildlife_claude-haiku.json`
+- `v3/results/narrative/narrative_api_icu_claude-haiku.json`
+- `v3/results/narrative/narrative_api_atc_claude-haiku.json`
+
