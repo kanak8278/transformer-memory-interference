@@ -1195,3 +1195,26 @@ The same Qwen2.5-3B-Instruct that shows PI>RI on synthetic arbitrary KV-pairs al
 - `0ebc9d0` — ICU generator + all bug fixes
 - `e1b251f` — Experiment script
 - `eb064ee` — Early results
+
+### Dota2 Narrative — Claude Haiku Large Grid (2026-03-18)
+
+**Config:** claude-haiku, 150 trials/cell, keys=[3,5,7,10], updates=[10,20,30,40,50]
+**Result: No reliable PI>RI pattern.** 9/20 cells PI>RI (45%, coin flip). Mean gap: -0.7%. Mean |gap|: 2.9%. Zero cells statistically significant.
+
+**Interpretation:**
+Claude Haiku is strong enough to extract both first and last values from Dota 2 narratives
+near-perfectly across all operating points tested. The interference effect disappears.
+
+Compare to Qwen 1.5B on same dataset:
+- Qwen 1.5B: 12/12 PI>RI, mean gap +19% (all significant)
+- Claude Haiku: 9/20 PI>RI, mean gap -0.7% (none significant)
+
+This confirms the inverse relationship between model strength and interference magnitude
+from the original paper. The narrative format makes retrieval easier, accelerating the
+disappearance of the effect for stronger models.
+
+**Implication:** Narrative transfer experiments for the paper should use Qwen 1.5B or 3B,
+not frontier models. Haiku/GPT-4.1-mini are in the "resistant" regime where the narrative
+format gives them enough context cues to overcome primacy bias.
+
+**Saved:** v3/results/narrative/narrative_claude-haiku_large_grid.json
