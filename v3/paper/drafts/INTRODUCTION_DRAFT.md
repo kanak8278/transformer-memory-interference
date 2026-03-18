@@ -1,6 +1,6 @@
 # Section 1: Introduction (Draft)
 
-When a language model processes a key-value stream where values are updated N times, it faces a fundamental retrieval challenge: given a query for the first or last value, can it correctly resolve the temporal ordering? Our prior work (Chowdhury, 2026a) demonstrated across 39 models that retrieval of the first value (retroactive interference resistance, RI) consistently dominates retrieval of the last value (proactive interference resistance, PI) — a phenomenon we term PI > RI. But *why* does this happen, and is it specific to the transformer architecture?
+When a language model processes a key-value stream where values are updated N times, it faces a fundamental retrieval challenge: given a query for the first or last value, can it correctly resolve the temporal ordering? Other prior work (Chowdhury, 2026a) demonstrated across 39 models that retrieval of the first value (retroactive interference resistance, RI) consistently dominates retrieval of the last value (proactive interference resistance, PI) — a phenomenon we term PI > RI. But *why* does this happen, and is it specific to the transformer architecture?
 
 In this work, we present a cross-architecture mechanistic investigation of PI > RI. Our key contributions:
 
