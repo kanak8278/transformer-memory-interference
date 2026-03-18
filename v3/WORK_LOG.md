@@ -894,6 +894,148 @@ User went to sleep. Running 3 parallel workstreams:
 - SmolLM2-1.7B-intermediate-checkpoints: steps 125K to 2000K (10 steps)
 - sae-lens 6.38.0 installed in research venv
 
+### Action 45: Theory Formalization (All 3 Strengthening Items)
+
+**C1 Proven for single-layer softmax (LEMMA_C1_PROOF.md):**
+- SNR algebra shows SNR_{t+1} < SNR_t when new value added
+- Verified: 0 failures in 10,000 random configs
+- Key: all weights shrink by r ∈ (0,1), new noise term added → SNR strictly decreases
+
+**C2 Derived from Chowdhury (LEMMA_C2_FROM_CHOWDHURY.md):**
+- ρ_H(x) = Σ c_k (ln(1/x))^{k-1} is strictly decreasing → C2 follows
+- Verified: 12 configurations (H=4-36, α=0.3-0.7), all monotone
+
+**A3 (summable overwrite) proven for single-layer:**
+- Δ_j ≈ 1/(2j²) → Σ Δ_j = π²/12 < ∞ (p-series, p=2>1)
+- I_∞ = I(h_1;v_1) - Σ Δ_j > 0 is provable, not just empirical
+
+**SSM lemma (LEMMA_SSM_DECAY.md):**
+- HiPPO non-normality causes transient growth: ||A^49|| = 2.61 for d=64
+- Explains Mamba's 295× primacy at initialization
+- d=256 dropped (first-order discretization unstable)
+
+Created verify_theory.py: reproducible suite, all pass.
+
+### Action 46: Full Senior Review + 13-Claim Audit
+
+SENIOR_REVIEW_FULL.md and SENIOR_REVIEW_THEORY.md written.
+13 claims audited. All resolved:
+- 5 theory gaps fixed (C1 multi-layer downgraded to conjecture, SSM proof restricted)
+- 6 wording issues fixed across paper drafts ("7 families" → correct, "at chance" → "weakly above", etc.)
+- Bidirectional control moved to appendix
+- Component elimination reframed as "narrows" not "proves"
+
+### Action 47: 200-Trial Sweeps (All Critical Models)
+
+| Model | Previous | After |
+|---|---|---|
+| Mamba 1.4B | 30 trials | **200 trials** (gap +20-63%) |
+| TinyLlama 1.1B | 30 trials | **200 trials** (gap +90%) |
+| StableLM 1.6B | 30 trials | **200 trials** (gap +82%) |
+
+6/9 models now at 200 trials with Wilson CI ≤ ±7%.
+
+### Action 48: Narrative 150-Trial Rerun
+
+All 12 cells at 150 trials/cell on Qwen 1.5B, Dota2 narratives.
+- Mean RI=54%, PI=35%, Gap=+19%
+- 6/12 cells have non-overlapping CIs (was 0/12 at 30 trials)
+- Issue #8 (narrative CIs overlap) resolved
+
+### Action 49: Remedy Experiment
+
+Tested 5 prompt-level interventions on Claude Haiku at 10 keys:
+- Control: PI=70-87%
+- Landmark (---): PI=80-100% (+13-23pp) ← BEST
+- Numbered updates: PI=73-97% (+7-10pp)
+- Recency cue: mixed (-3 to +10pp)
+- Old combined (verbose): HURT (-10pp) — token overhead caused capacity saturation
+
+**Fixed combined** (lightweight: landmark + short round numbers):
+- 10k_100u: Control PI=73% → New combined PI=**100%** (gap eliminated)
+- 10k_200u: Control PI=67% → New combined PI=**100%** (gap eliminated)
+- Root cause of old failure: "Update 1 —" prefixes added ~3300 tokens, pushing over context limit
+
+Key finding: landmark separators prevent over-mixing (Force 2). Token-efficient.
+
+### Action 50: Folder Reorganization
+
+v3/ root cleaned up from 50+ files to organized structure:
+- scripts/experiments/ — all experiment scripts
+- scripts/analysis/ — fitting, verification, table generation
+- scripts/plotting/ — figure generation
+- paper/drafts/ — abstract, intro, results, outline, checklist
+- paper/theory/ — FORMAL_BOUND.md, all LEMMA_*.md
+- paper/reviews/ — senior reviews, honest assessments
+- docs/ — analysis documents, open questions
+
+### Action 51: Bottlenecks vs Field Review
+
+BOTTLENECKS_VS_FIELD.md written with 7 gaps vs top MI papers:
+1. No circuit (field expects named components) — edge attribution needed
+2. No SAE analysis (field moved to features in 2025) — Gemma Scope available!
+3. No training dynamics (when does PI > RI emerge?) — SmolLM2-1.7B checkpoints
+4. All mechanistic evidence ≤3B — need large model logit lens
+5. Remedy on different model than mechanism — need remedy+logit lens on Qwen 1.5B
+6. No downstream task connection
+7. Multi-layer C1 proof gap
+
+### Action 52: Gemma Scope SAE Analysis (COMPLETE)
+
+Used google/gemma-scope-2-1b-it SAEs (65k features, layers 7,13,17,22) on gemma-3-1b-it.
+Ran 100 trials per condition (RI/PI), 2k_5u.
+
+**Results:**
+- Layer 7: RI=48.9 active features, PI=46.0 (+6%)
+- Layer 13: RI=58.9, PI=64.8 (reversed — PI activates more at mid-depth)
+- Layer 17: RI=58.4, PI=55.0
+- Layer 22 (final): RI=45.2, PI=38.4 (**RI activates 18% more in late layers**)
+
+Top RI-preferring features at Layer 22: [10793, 2292, 725, 2190, 1652] (diff > 150)
+Top PI-preferring features: [9507, 2484, 4997]
+
+Interpretation: Late layers engage richer feature structure for RI than PI.
+Mid-depth reversal (Layer 13) aligns with logit lens finding that v_last IS found at
+~90% depth then suppressed — mid-depth PI is trying, final layers it fails.
+
+Saved: results/sae/gemma_scope_sae_analysis.json
+
+### Action 53: Jacobian Dynamics — SmolLM2-1.7B (PARTIAL, 7/9 checkpoints)
+
+Machine shut down due to high CPU before completion.
+
+**Partial results (steps 125K → 1625K):**
+
+| Step | Primacy | Recency |
+|---|---|---|
+| 125K | 1.42× | **1.74×** (recency > primacy early) |
+| 375K | 1.49× | **1.58×** |
+| 625K | 1.53× | **1.56×** (nearly equal) |
+| 875K | 1.39× | **1.59×** |
+| 1125K | **1.74×** | 1.58× (primacy crosses over!) |
+| 1375K | 1.41× | **1.32×** |
+| 1625K | 1.64× | **1.92×** (recency surges again) |
+| 1875K | *killed* | — |
+| Final | *killed* | — |
+
+**Emerging finding:** Pattern is NOT monotone. Early training → recency bias.
+Mid-training → primacy peaks. Late → oscillation. Suggests PI > RI is not simply
+architectural OR learned — it's a dynamic competition throughout training.
+Needs 2 more checkpoints to confirm final state.
+
+### Action 54: Scripts Written But NOT Yet Run
+
+- scripts/experiments/training_dynamics.py — behavioral PI/RI sweep across checkpoints
+  (NOT useful for base checkpoints: step-125K has 78% garbage)
+- scripts/experiments/remedy_logit_lens.py — connects landmark remedy to logit lens
+- scripts/experiments/jacobian_dynamics.py — PARTIAL results (7/9)
+
+### Session 3 Status: Machine Shutdown
+
+High CPU from 3 simultaneous heavy experiments killed all processes.
+Results saved: Gemma Scope SAE (complete), Jacobian dynamics (7/9 checkpoints).
+Need to run: last 2 Jacobian checkpoints, remedy+logit lens.
+
 ---
 
 ## Session 4 (2026-03-18): Narrative Domain Generators
