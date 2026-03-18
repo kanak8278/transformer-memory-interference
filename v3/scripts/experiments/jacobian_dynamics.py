@@ -40,7 +40,7 @@ CHECKPOINTS = [
 ]
 
 SEQ_LEN = 50
-N_RANDOM_INPUTS = 10
+N_RANDOM_INPUTS = 20  # 20 samples for tighter estimates (~±0.1x uncertainty on ratios)
 
 
 def compute_jacobian_influence(model, tokenizer, seq_len=50, n_inputs=10):
