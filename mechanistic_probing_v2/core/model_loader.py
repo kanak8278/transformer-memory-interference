@@ -50,30 +50,48 @@ class ModelInfo:
 
 # Known context limits (actual max_position_embeddings).
 CONTEXT_LIMITS = {
+    # Qwen 2.5
     "Qwen/Qwen2.5-0.5B-Instruct": 32_768,
     "Qwen/Qwen2.5-1.5B-Instruct": 32_768,
-    "Qwen/Qwen2.5-3B-Instruct": 32_768,
-    "Qwen/Qwen2.5-7B-Instruct": 32_768,
-    "google/gemma-3-1b-it": 8_192,
+    "Qwen/Qwen2.5-3B-Instruct":   32_768,
+    "Qwen/Qwen2.5-7B-Instruct":   32_768,
+    # Gemma 3 (all sizes)
+    "google/gemma-3-270m-it": 32_768,
+    "google/gemma-3-1b-it":   8_192,
+    "google/gemma-3-4b-it":   131_072,
+    "google/gemma-3-12b-it":  131_072,
+    "google/gemma-3-27b-it":  131_072,
+    # Gemma 2
     "google/gemma-2-2b-it": 8_192,
+    # SmolLM2
     "HuggingFaceTB/SmolLM2-135M-Instruct": 8_192,
     "HuggingFaceTB/SmolLM2-360M-Instruct": 8_192,
     "HuggingFaceTB/SmolLM2-1.7B-Instruct": 8_192,
-    "EleutherAI/pythia-160m": 2_048,
+    # Pythia
+    "EleutherAI/pythia-160m":         2_048,
     "EleutherAI/pythia-160m-deduped": 2_048,
-    "EleutherAI/pythia-410m": 2_048,
-    "state-spaces/mamba-370m-hf": 2_048,
+    "EleutherAI/pythia-410m":         2_048,
+    # Mamba
+    "state-spaces/mamba-370m-hf":  2_048,
     "state-spaces/mamba2-370m-hf": 2_048,
 }
 
 # Instruction-tuned models (use chat template).
 INSTRUCT_MODELS = {
+    # Qwen 2.5
     "Qwen/Qwen2.5-0.5B-Instruct",
     "Qwen/Qwen2.5-1.5B-Instruct",
     "Qwen/Qwen2.5-3B-Instruct",
     "Qwen/Qwen2.5-7B-Instruct",
+    # Gemma 3 (all -it variants)
+    "google/gemma-3-270m-it",
     "google/gemma-3-1b-it",
+    "google/gemma-3-4b-it",
+    "google/gemma-3-12b-it",
+    "google/gemma-3-27b-it",
+    # Gemma 2
     "google/gemma-2-2b-it",
+    # SmolLM2
     "HuggingFaceTB/SmolLM2-135M-Instruct",
     "HuggingFaceTB/SmolLM2-360M-Instruct",
     "HuggingFaceTB/SmolLM2-1.7B-Instruct",
@@ -92,8 +110,13 @@ BASE_MODELS = {
 
 
 def is_instruct_model(model_name):
-    """Check if model uses chat template (instruct) or completion format (base)."""
-    return model_name in INSTRUCT_MODELS
+    """Check if model uses chat template (instruct) or completion format (base).
+    Falls back to name heuristic for unknown models."""
+    if model_name in INSTRUCT_MODELS:
+        return True
+    # Heuristic: -it, -Instruct, -chat, -Chat suffixes indicate instruct models
+    lower = model_name.lower()
+    return any(lower.endswith(s) for s in ["-it", "-instruct", "-chat"])
 
 
 def is_base_model(model_name):
