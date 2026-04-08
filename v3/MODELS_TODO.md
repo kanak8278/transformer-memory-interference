@@ -56,16 +56,43 @@ These models have <100 trials per cell. Direction is clear but CIs are wide (±1
 
 ---
 
-### Priority 3 — New models (not yet tested)
+### Priority 3 — Gemma size series (to match our Qwen series)
 
-These would strengthen the cross-architecture claim:
+We have Qwen at 0.5B, 1.5B, 3B. We should have Gemma at comparable sizes.
+All Gemma 3 sizes have Gemma Scope 2 SAEs — meaning we can do SAE analysis across
+the full Gemma scaling series, unique in the MI literature.
 
-| Model | Arch | Params | Why useful | Effort |
+**Models to add (all MPS-feasible, all have SAEs):**
+
+| Model | Params | SAE | Status | Run |
 |---|---|---|---|---|
-| **Falcon-Mamba-7B-Instruct** | SSM (Mamba) | 7B | Larger, instruction-tuned SSM — would give clean SSM data | High (API or large GPU) |
-| **Qwen2.5-7B-Instruct** | Transformer | 7B | Extends size range upward | Medium |
-| **Mistral-7B-Instruct** | Transformer | 7B | Different architecture family | Medium |
-| **Phi-3.5-mini** | Transformer | 3.8B | Microsoft architecture | Medium |
+| google/gemma-3-270m-it | 270M | ✅ gemma-scope-2-270m-it | ❌ Not run | Needed |
+| google/gemma-3-1b-it | 1B | ✅ gemma-scope-2-1b-it | ✅ Exists (50 trials) | Needs 200t + more N |
+| google/gemma-3-4b-it | 4B | ✅ gemma-scope-2-4b-it | ❌ Not run | Needed |
+
+**Skip 12B and 27B** — too large for MPS, not worth cloud cost for this paper.
+
+**Run commands:**
+```bash
+# Gemma 270M
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model google/gemma-3-270m-it \
+    --key-levels 2 3 5 --update-levels 3 5 7 10 15 20 30 --trials 100
+
+# Gemma 4B
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model google/gemma-3-4b-it \
+    --key-levels 2 3 5 --update-levels 3 5 7 10 15 20 30 --trials 100
+```
+
+---
+
+### Priority 4 — Other new models
+
+| Model | Arch | Params | Why useful |
+|---|---|---|---|
+| **Falcon-Mamba-7B-Instruct** | SSM (Mamba) | 7B | Instruction-tuned SSM, clean data, no garbage |
+| **Qwen2.5-7B-Instruct** | Transformer GQA | 7B | Extends Qwen series upward |
 
 ---
 
@@ -75,16 +102,24 @@ These would strengthen the cross-architecture claim:
 |---|---|
 | Mamba-130M | 87% garbage — model too small to follow format |
 | RWKV-430M | 99% garbage — completely unusable |
+| Gemma-3-12B, 27B | Too large for MPS, not needed for paper |
 
 ---
 
-## Summary: Minimum Runs for a Credible Paper
+## Final Model List for Paper
 
-To make the scaling law claim across models (need ≥6 N values per model):
+| Model | Size | Arch | Data status |
+|---|---|---|---|
+| Qwen2.5-0.5B-Instruct | 0.5B | Transformer GQA | ✅ (50 trials, needs more N) |
+| Qwen2.5-1.5B-Instruct | 1.5B | Transformer GQA | ✅ (200 trials, needs more N) |
+| Qwen2.5-3B-Base | 3B | Transformer GQA | ✅ (200 trials, 11 N values) |
+| Qwen2.5-3B-Instruct | 3B | Transformer GQA | ✅ (200 trials, needs more N) |
+| **Gemma-3-270M-it** | 270M | Transformer MHA | ❌ need to run |
+| **Gemma-3-1B-it** | 1B | Transformer MHA | ⚠️ (50 trials, needs more) |
+| **Gemma-3-4B-it** | 4B | Transformer MHA | ❌ need to run |
+| TinyLlama-1.1B | 1.1B | Transformer Llama | ✅ (200 trials, needs more N) |
+| StableLM-1.6B | 1.6B | Transformer | ✅ (200 trials, needs more N) |
+| Pythia-410M | 410M | Transformer GPT-NeoX | ⚠️ (50 trials, 48% garbage) |
+| Mamba-1.4B | 1.4B | SSM | ✅ (200 trials, needs more N) |
 
-1. Add N=3,7,15,30,50 to: Qwen 1.5B, TinyLlama, StableLM (~4 models × 5 cells × 200 trials)
-2. Add N=3,15,20 to Mamba 1.4B
-3. Bump Gemma to 200 trials
-
-**Total estimated GPU time: ~12 hours on MPS (sequential)**
-**Or: ~2 hours if run on A100 cloud GPU**
+**Total: 11 models, 2 architecture families (Transformer + SSM), 2 model families with scaling series (Qwen 4 sizes, Gemma 3 sizes)**
