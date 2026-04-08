@@ -6,6 +6,28 @@ Covers the full arc: ACL v1 (behavioral) → mechanistic_probing_v2 (abandoned) 
 
 ---
 
+## QUICK REFERENCE: Every Experiment at a Glance
+
+| Experiment | Question it answers | Model(s) | Status | One-line result |
+|---|---|---|---|---|
+| **Stage 1: Behavioral sweep** | Does PI > RI? How much? On which models? | 9 models | ✅ Done, 200 trials | 91% of cells PI > RI, mean gap +50pp |
+| **Stage 2: Logit lens** | Where in the network does PI fail? | Qwen 0.5B/1.5B/3B, Gemma 1B | ✅ Done | v_last peaks at ~90% depth then suppressed to ~0 |
+| **Stage 3: Causal patching** | Which heads cause the suppression? | Qwen 1.5B/3B, Gemma 1B | ✅ Done | No bottleneck — ablating top heads *hurts* PI (helps don't suppress) |
+| **Probing classifiers** | Is the asymmetry in the representation? | Qwen 1.5B/3B, Gemma 1B | ✅ Done | RI correctness encoded 87%, PI correctness only 61% |
+| **Jacobian at init** | Is primacy bias architectural (pre-training)? | Qwen 1.5B, Mamba 1.4B | ✅ Done | Primacy bias at random init: Qwen 1.47×, Mamba 295× |
+| **Training dynamics (Jacobian)** | When does bias emerge during training? | SmolLM2-1.7B (9 checkpoints) | ✅ Done | Both primacy+recency grow; final model strongest both (2.00× / 1.80×) |
+| **Bidirectional control** | Does removing autoregression remove PI > RI? | Flan-T5-base, BERT | ✅ Done (weak) | T5 gap = -9% (reversed) but 64-77% garbage — preliminary only |
+| **Gemma Scope SAE** | What features encode the asymmetry? | Gemma-3-1B | ⚠️ Partial | Late layers (L22): RI activates 18% more features than PI |
+| **Remedy: behavioral** | Can prompt changes fix PI > RI? | Claude Haiku | ✅ Done | Landmark separators cut gap 70%→37%; lightweight combined eliminates it |
+| **Remedy: logit lens** | Does the remedy change internal suppression? | Qwen 1.5B | ❌ Broken | Behavioral gap cut (PI 20%→38%) but trajectories all zero (mapping bug) |
+| **Narrative: Dota2** | Does PI > RI transfer to real text? | Qwen 1.5B | ✅ Done | Gap +19% on 150 trials, 6/12 cells non-overlapping CIs |
+| **Narrative: Wildlife** | Transfer to wildlife tracking text? | Qwen 1.5B | ✅ Done | Gap +27%, larger than synthetic. 10/11 cells PI > RI |
+| **Narrative: ICU / ATC** | Transfer to clinical / ATC text? | Claude Haiku | ✅ Done | ICU: null. ATC: reversed (-34%). Domain structure matters |
+
+**Status key:** ✅ = complete and paper-ready, ⚠️ = partial/needs fix, ❌ = broken
+
+---
+
 ## 0. PROJECT HISTORY: WHY v2 WAS ABANDONED
 
 ### v1 (ACL paper)
