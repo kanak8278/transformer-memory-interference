@@ -2,6 +2,67 @@
 
 **Date:** 2026-03-18
 **Purpose:** Single reference for all MI experiments, results, code, and theory.
+Covers the full arc: ACL v1 (behavioral) → mechanistic_probing_v2 (abandoned) → v3 (current).
+
+---
+
+## 0. PROJECT HISTORY: WHY v2 WAS ABANDONED
+
+### v1 (ACL paper)
+39-model behavioral sweep. Found PI > RI across all models. No mechanistic explanation.
+The finding: RI accuracy > PI accuracy everywhere, Cohen's d = 1.73.
+
+### v2 (mechanistic_probing_v2/) — WRONG HYPOTHESIS, ABANDONED
+
+**The v2 framing:** PI > RI is caused by specific "primacy heads" — a localizable circuit
+where particular attention heads suppress v_{N-1} and route the output to v_0 instead.
+
+**What v2 found:** L8H3 in Qwen 1.5B — knockout boosted PI from 44% to 92% (+48pp).
+Gemma had L14H2. Looked like a clean circuit. Built 20+ experiments around it.
+
+**Why it fell apart:**
+
+1. **Wrong error distribution.** v2 assumed PI errors landed at position 0 (primacy
+   intrusion — model outputs v_0 instead of v_{N-1}). The entire "primacy heads cause
+   primacy intrusion" narrative was built on this. v3's Stage 1 showed the actual
+   distribution: at low N, **73-98% of PI errors land at the PENULTIMATE position**
+   (v_{N-2}), not v_0. The model fails at off-by-one retrieval, not primacy intrusion.
+   The core assumption was wrong.
+
+2. **Attribution methods gave wrong head rankings.** DLA and attention-based attribution
+   "completely missed L8H3" (experiment 25b log). The real causal head was only found
+   through brute-force knockout — expensive, and it showed that first-order attribution
+   can't capture indirect effects propagating through 20+ downstream layers.
+
+3. **Forced attention gave paradoxical results.** When forcing attention to v_last, PI
+   didn't recover. Eventually traced to forcing the WRONG head (L19H1, not L8H3) —
+   but this revealed the circuit wasn't where v2 thought.
+
+4. **Head effects didn't replicate architecturally.** Gemma: L14H2. Qwen 1.5B: L8H3.
+   Qwen 0.5B: distributed (no dominant head). No architectural consistency.
+
+5. **The "found" circuit was likely a general capability head, not primacy-specific.**
+   L0H3 in Qwen 1.5B knocked out PI without hurting RI — but L8H3 hurt BOTH when
+   ablated. The specificity was questionable.
+
+**What v2 got right (carried into v3):**
+- TransformerLens pipeline for hooking into residual stream
+- Understanding that logit lens and causal patching are the right tools
+- Recognition that early layers (L0) showed strong positional bias from instruction/BOS tokens
+
+### v3 (current) — CORRECT FRAMING
+
+**Reframed questions based on correct error distribution:**
+
+| v2 question | v3 question |
+|---|---|
+| "Which heads suppress v_{N-1} and output v_0?" | "Why does v_{N-1}'s signal peak at 90% depth then get outcompeted?" |
+| "Can we ablate the primacy circuit?" | "Is the mechanism distributed or concentrated?" |
+| "What is the primacy circuit?" | "Does a bottleneck exist at all?" |
+
+**v3 answer:** No bottleneck heads. Ablating any individual head HURTS PI retrieval.
+The mechanism is architectural, distributed, and not a fixable circuit. This is the
+correct and honest answer — less exciting than finding a named circuit, but stronger.
 
 ---
 
