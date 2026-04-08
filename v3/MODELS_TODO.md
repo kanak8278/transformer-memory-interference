@@ -18,6 +18,104 @@
 
 ---
 
+## Unified Grid (Run All Models on Same Range)
+
+**Decision: run all models on the same grid for clean, comparable data.**
+
+### The Grid
+
+```
+key_levels:    [2, 3, 5, 7, 10, 15, 20, 25, 30]
+update_levels: [1, 2, 3, 5, 7, 10, 15, 20, 30, 50, 75, 100]
+trials:        100 per cell
+```
+
+- 108 cells per model × 2 conditions × 100 trials = **21,600 generations per model**
+- Keys 2/3/5/7/10/15/20/25/30: full range from easy to very hard
+- N=1,2,3: captures the starting point (currently missing for most models)
+- N=30,50: captures the floor / tail (where strong models eventually decay)
+- 100 trials: Wilson CI ±10% — sufficient for curve fitting, faster than 200
+
+### Why same range for all?
+
+- **Models at floor (Gemma, TinyLlama, Mamba):** N=1,2,3 will show WHERE the decay starts — currently unknown because we started at N=5
+- **Strong models (Qwen 3B):** N=30,50 confirms the asymptotic floor
+- **Comparable:** all models have the same x-axis, can overlay curves cleanly
+
+### Time Estimates
+
+| Model | Sec/gen | MPS hours |
+|---|---|---|
+| Qwen2.5-0.5B-Instruct | 0.3s | 1.8h |
+| Qwen2.5-1.5B-Instruct | 0.8s | 4.8h |
+| Qwen2.5-3B-Instruct | 1.5s | 9.0h |
+| Qwen2.5-3B-Base | 1.5s | 9.0h |
+| gemma-3-270m-it (NEW) | 0.2s | 1.2h |
+| gemma-3-1b-it | 0.5s | 3.0h |
+| gemma-3-4b-it (NEW) | 1.5s | 9.0h |
+| TinyLlama-1.1B | 0.4s | 2.4h |
+| StableLM-1.6B | 0.8s | 4.8h |
+| Mamba-1.4B | 4.0s | 24.0h |
+| Pythia-410M | 0.3s | 1.8h |
+| **TOTAL (MPS, with early-stopping ~40%)** | | **~43h** |
+| **TOTAL (vLLM A100 ~10x faster)** | | **~4h** |
+
+### Run Commands
+
+```bash
+# One command per model — run sequentially or in parallel on separate GPUs
+
+# Qwen series
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model Qwen/Qwen2.5-0.5B-Instruct \
+    --key-levels 2 3 5 7 10 15 20 25 30 --update-levels 1 2 3 5 7 10 15 20 30 50 75 100 --trials 100
+
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model Qwen/Qwen2.5-1.5B-Instruct \
+    --key-levels 2 3 5 7 10 15 20 25 30 --update-levels 1 2 3 5 7 10 15 20 30 50 75 100 --trials 100
+
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model Qwen/Qwen2.5-3B-Instruct \
+    --key-levels 2 3 5 7 10 15 20 25 30 --update-levels 1 2 3 5 7 10 15 20 30 50 75 100 --trials 100
+
+# Qwen 3B-Base already has good data (11 N values) but run anyway for consistency
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model Qwen/Qwen2.5-3B \
+    --key-levels 2 3 5 7 10 15 20 25 30 --update-levels 1 2 3 5 7 10 15 20 30 50 75 100 --trials 100
+
+# Gemma series
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model google/gemma-3-270m-it \
+    --key-levels 2 3 5 7 10 15 20 25 30 --update-levels 1 2 3 5 7 10 15 20 30 50 75 100 --trials 100
+
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model google/gemma-3-1b-it \
+    --key-levels 2 3 5 7 10 15 20 25 30 --update-levels 1 2 3 5 7 10 15 20 30 50 75 100 --trials 100
+
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model google/gemma-3-4b-it \
+    --key-levels 2 3 5 7 10 15 20 25 30 --update-levels 1 2 3 5 7 10 15 20 30 50 75 100 --trials 100
+
+# Others
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
+    --key-levels 2 3 5 7 10 15 20 25 30 --update-levels 1 2 3 5 7 10 15 20 30 50 75 100 --trials 100
+
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model stabilityai/stablelm-2-1_6b-chat \
+    --key-levels 2 3 5 7 10 15 20 25 30 --update-levels 1 2 3 5 7 10 15 20 30 50 75 100 --trials 100
+
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model state-spaces/mamba-1.4b-hf \
+    --key-levels 2 3 5 7 10 15 20 25 30 --update-levels 1 2 3 5 7 10 15 20 30 50 75 100 --trials 100
+
+.venv/bin/python v3/scripts/experiments/stage1_sweep.py \
+    --model EleutherAI/pythia-410m \
+    --key-levels 2 3 5 7 10 15 20 25 30 --update-levels 1 2 3 5 7 10 15 20 30 50 75 100 --trials 100
+```
+
+---
+
 ## What We Need to Run (Priority Order)
 
 ### Priority 1 — Critical for scaling law claim (need ≥6 N values)
