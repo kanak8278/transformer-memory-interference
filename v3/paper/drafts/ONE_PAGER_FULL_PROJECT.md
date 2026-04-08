@@ -1,7 +1,5 @@
 # Transformers Remember First, Forget Last: Primacy is Architectural
 
-**Kanak Raj** | NeurIPS 2026 Submission
-
 ---
 
 ## The Problem

@@ -88,7 +88,8 @@ def generate_trial(seed, condition, style):
         f"{stream}\n\n"
         f"What was the {query_word} value of {test_cat}?"
     )
-    prompt = format_for_chat(raw, None, model_name=MODEL_NAME, system_prompt=SYSTEM_PROMPT)
+    full_raw = f"{SYSTEM_PROMPT}\n\n{raw}"
+    prompt = format_for_chat(full_raw, None, model_name=MODEL_NAME)
 
     return {
         "prompt": prompt,
@@ -151,19 +152,19 @@ def main():
     model, tokenizer, info = load_model(MODEL_NAME)
     n_layers = model.cfg.n_layers
 
-    # Build value-to-token-id mapping
-    value_pool = get_eligible_categories(DATASET_TYPE, min_values=NUM_UPDATES)
-    from mechanistic_probing_v2.core.dataset_configs import get_value_pool
-    try:
-        all_values = get_value_pool(DATASET_TYPE)
-        value_to_tid = {}
-        for val in all_values:
+    # Build value-to-token-id mapping lazily from trial values
+    value_to_tid = {}
+
+    def ensure_value_mapped(val):
+        """Map a value to its token ID if single-token, else None."""
+        key = val.lower().strip()
+        if key not in value_to_tid:
             tids = model.to_tokens(val, prepend_bos=False)[0]
             if len(tids) == 1:
-                value_to_tid[val.lower()] = tids[0].item()
-    except Exception as e:
-        print(f"Warning: value pool error: {e}")
-        value_to_tid = {}
+                value_to_tid[key] = tids[0].item()
+            else:
+                value_to_tid[key] = None  # multi-token, skip
+        return value_to_tid.get(key)
 
     all_results = {"control": {"PI": [], "RI": []}, "landmark": {"PI": [], "RI": []}}
 
@@ -174,7 +175,12 @@ def main():
             for t_idx in range(N_TRIALS):
                 seed = hash((NUM_KEYS, NUM_UPDATES, condition, t_idx, style, "remedy_ll")) % (2 ** 31)
                 trial = generate_trial(seed, condition, style)
+                # Ensure all values get token IDs mapped
+                for val in trial["all_values"]:
+                    ensure_value_mapped(val)
                 trials.append(trial)
+            print(f"    ({len(value_to_tid)} values mapped, "
+                  f"{sum(1 for v in value_to_tid.values() if v is not None)} single-token)")
 
             res = run_logit_lens(model, tokenizer, trials, value_to_tid)
             all_results[style][condition] = res
