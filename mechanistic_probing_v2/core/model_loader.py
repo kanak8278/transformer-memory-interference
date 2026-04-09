@@ -53,6 +53,7 @@ CONTEXT_LIMITS = {
     # Qwen 2.5
     "Qwen/Qwen2.5-0.5B-Instruct": 32_768,
     "Qwen/Qwen2.5-1.5B-Instruct": 32_768,
+    "Qwen/Qwen2.5-3B":             32_768,
     "Qwen/Qwen2.5-3B-Instruct":   32_768,
     "Qwen/Qwen2.5-7B-Instruct":   32_768,
     # Gemma 3 (all sizes)
@@ -71,9 +72,14 @@ CONTEXT_LIMITS = {
     "EleutherAI/pythia-160m":         2_048,
     "EleutherAI/pythia-160m-deduped": 2_048,
     "EleutherAI/pythia-410m":         2_048,
+    # TinyLlama
+    "TinyLlama/TinyLlama-1.1B-Chat-v1.0": 2_048,
+    # StableLM
+    "stabilityai/stablelm-2-1_6b-chat": 4_096,
     # Mamba
     "state-spaces/mamba-370m-hf":  2_048,
     "state-spaces/mamba2-370m-hf": 2_048,
+    "state-spaces/mamba-1.4b-hf":  2_048,
 }
 
 # Instruction-tuned models (use chat template).

@@ -21,9 +21,11 @@ import numpy as np
 from pathlib import Path
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
-_PROJECT_ROOT = _SCRIPT_DIR.parent
-if str(_PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(_PROJECT_ROOT))
+_V3_SCRIPTS = _SCRIPT_DIR.parent
+_REPO_ROOT = _V3_SCRIPTS.parent.parent
+for p in [str(_V3_SCRIPTS), str(_REPO_ROOT)]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
 
 def parse_args():
@@ -44,7 +46,7 @@ def compute_jacobian_norms(model, tokenizer, seq_len, n_samples, device):
     Higher norm = more influence on output.
     """
     vocab_size = tokenizer.vocab_size
-    d_model = model.config.hidden_size
+    d_model = getattr(model.config, 'hidden_size', None) or getattr(model.config, 'text_config', model.config).hidden_size
 
     all_norms = np.zeros((n_samples, seq_len))
 
@@ -114,7 +116,7 @@ def main():
         )
         print(f"  Loaded pretrained model")
 
-    device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "mps" if hasattr(torch.backends, "mps") and torch.backends.mps.is_available() else "cpu")
     model = model.to(device).eval()
     n_params = sum(p.numel() for p in model.parameters())
     print(f"  {n_params/1e6:.0f}M params on {device}")

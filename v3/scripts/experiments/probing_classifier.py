@@ -29,9 +29,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
-_PROJECT_ROOT = _SCRIPT_DIR.parent
-if str(_PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(_PROJECT_ROOT))
+_V3_SCRIPTS = _SCRIPT_DIR.parent
+_REPO_ROOT = _V3_SCRIPTS.parent.parent
+for p in [str(_V3_SCRIPTS), str(_REPO_ROOT)]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
 from mechanistic_probing_v2.core.model_loader import (
     load_model, verify_single_token, model_short_name, is_instruct_model,
