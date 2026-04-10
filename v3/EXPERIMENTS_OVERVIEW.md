@@ -138,3 +138,131 @@ Results in `v3/results_vllm/`. Total: 300+ JSON files across 15 experiment types
 | Scaling Laws | 11 | 2 | PI = exp decay (R²≈0.9) |
 | Error Positions | 11 | 2 | 3 failure modes |
 | Cross-Model Scaling | 11 | 2 | RI~size r=0.88 |
+
+---
+
+## Results Directory Structure
+
+All results in `v3/results_vllm/`. Each experiment saves a summary JSON (`*_sweep_*.json` or `*_<timestamp>.json`) and optionally a trials JSON (`*_trials_*.json`) with per-trial raw data.
+
+```
+v3/results_vllm/
+│
+├── arbitrary_single/                    # Stage 1 behavioral sweep — single-token values
+│   ├── Qwen2.5-0.5B-Instruct/          # Per-model subdirectory
+│   │   ├── stage1_sweep_*.json          #   Summary: config, per-cell RI/PI accuracy, regime map
+│   │   ├── stage1_trials_*.json         #   Full trial data: every prediction, error type, raw output
+│   │   └── stage1_checkpoint.json       #   Checkpoint (intermediate save, can resume from)
+│   ├── Qwen2.5-1.5B-Instruct/
+│   ├── ... (11 models total)
+│
+├── semantic_multi/                      # Stage 1 behavioral sweep — multi-token semantic values
+│   └── (same structure as arbitrary_single, 11 models)
+│
+├── logit_lens/                          # Stage 2 — per-layer P(v_i) probability tracking
+│   ├── Qwen2.5-0.5B-Instruct/
+│   │   ├── stage2_logit_lens_*.json     #   Per-trial: value_probs_by_layer [n_values × n_layers]
+│   │   └── stage2_checkpoint.json       #   Checkpoint after each operating point
+│   ├── ... (8 models: Qwen x4, Gemma 270m/1b/4b, Pythia)
+│
+├── causal/                              # Stage 3 — attribution patching + targeted patching + ablation
+│   ├── Qwen2.5-0.5B-Instruct/
+│   │   ├── stage3_causal_*.json         #   3A attribution scores, 3B patching deltas, 3C ablation results
+│   │   └── stage3_checkpoint.json
+│   ├── ... (8 models)
+│
+├── probing/                             # Probing classifiers — linear probes on residual stream
+│   ├── probing_Qwen2.5-0.5B-Instruct_2k_5u.json    # Per-layer probe accuracy (condition + correctness)
+│   ├── probing_Qwen2.5-1.5B-Instruct_2k_5u.json
+│   ├── ... (8 models)
+│
+├── jacobian/                            # Jacobian at initialization — positional sensitivity
+│   ├── jacobian_Qwen2.5-0.5B-Instruct_untrained.json  # Random init: per-position gradient norms
+│   ├── jacobian_Qwen2.5-0.5B-Instruct_pretrained.json # Trained: same metric after pretraining
+│   ├── ... (8 models × 2 modes = 16 files)
+│
+├── training_dynamics/                   # SmolLM2-1.7B — 42 intermediate checkpoints
+│   ├── step-125000.json                 #   Per-checkpoint: config, per-cell stats, summary (RI/PI/gap)
+│   ├── step-125000_trials.json          #   Per-trial raw data for this checkpoint
+│   ├── step-250000.json
+│   ├── ...
+│   ├── step-5125000.json
+│   ├── final.json                       #   Final pretrained model
+│   └── training_dynamics_summary.json   #   Combined trajectory: all checkpoints in one file
+│
+├── training_dynamics_smollm3/           # SmolLM3-3B — 35 base + 10 IT (dual format)
+│   ├── stage1-step-40000.json           #   Base pretraining checkpoints (completion format)
+│   ├── stage1-step-160000.json
+│   ├── ...
+│   ├── stage3-step-4720000.json         #   Final pretraining stage
+│   ├── it-SFT_completion.json           #   IT checkpoint in completion format (max_tokens=100)
+│   ├── it-SFT_chat_1024.json           #   Same checkpoint in chat format (max_tokens=1024, with thinking)
+│   ├── it-SFT_chat_1024_trials.json    #   Full raw response saved (includes <think>...</think>)
+│   ├── it-mid-training_completion.json
+│   ├── it-mid-training_chat_1024.json
+│   ├── it-soup-APO_completion.json
+│   ├── it-soup-APO_chat_1024.json
+│   ├── it-LC-expert_completion.json
+│   ├── it-LC-expert_chat_1024.json
+│   ├── final_completion.json
+│   └── final_chat_1024.json
+│
+├── narrative_dota2/                     # Dota 2 narrative interference — naturalistic text
+│   ├── Qwen2.5-0.5B-Instruct/
+│   │   ├── narrative_dota2_*.json       #   Per-cell RI/PI accuracy on Dota 2 match commentary
+│   │   └── narrative_dota2_*_trials.json
+│   ├── ... (7 models: Qwen x4, Gemma x3)
+│
+├── narrative/                           # Old narrative results (copied from v3/results/)
+│   ├── narrative_Qwen2.5-1.5B-Instruct.json         # Dota 2 (Qwen 1.5B)
+│   ├── narrative_wildlife_Qwen2.5-1.5B-Instruct.json # Wildlife domain
+│   ├── narrative_icu_Qwen2.5-1.5B-Instruct.json     # ICU domain
+│   ├── narrative_atc_Qwen2.5-1.5B-Instruct.json     # ATC domain
+│   ├── narrative_api_*_claude-haiku.json              # Claude Haiku on all domains
+│   └── narrative_claude-haiku.json                    # Haiku Dota 2 (150 trials)
+│
+├── remedy/                              # Remedy interventions — 5 prompt styles
+│   ├── Qwen2.5-3B-Instruct/
+│   │   └── remedy_*.json               #   All 5 styles: control, numbered, landmark, recency_cue, combined
+│   ├── gemma-3-4b-it/                  #   Per-style: per-cell RI/PI + comparison table
+│   └── SmolLM3-3B/
+│
+├── sae/                                 # SAE sparse autoencoder features
+│   └── gemma_scope_sae_analysis.json    #   Gemma-3-1b-it feature activation differences (RI vs PI)
+│
+├── bidirectional/                       # Bidirectional model control (old results)
+│   └── bidir_probe_bert-base-uncased.json  # BERT MLM — failed (0% on both RI and PI)
+│
+├── analysis/                            # Cross-model analysis computed from Stage 1 data
+│   ├── scaling_law_fits_arbitrary_single.json    # PI(N) = a*exp(-b*N)+c fits per model per key count
+│   ├── scaling_law_fits_semantic_multi.json
+│   ├── error_positions_arbitrary_single.json     # WHERE PI failures land (position histograms)
+│   ├── error_positions_semantic_multi.json
+│   ├── cross_model_scaling_arbitrary_single.json # RI/PI vs model size correlations
+│   └── cross_model_scaling_semantic_multi.json
+│
+├── summary/                             # Consolidated cross-model summaries
+│   ├── all_models_arbitrary_single.json  # Per-model per-cell stats for all 11 models
+│   ├── all_models_semantic_multi.json
+│   └── cross_model_comparison.json       # Standard operating point comparison
+│
+├── RUN_LOG.md                           # Full chronological run history with issues and decisions
+└── EXPERIMENT_SUMMARY.md                # Quick reference summary of all results
+```
+
+### File naming conventions
+
+| Pattern | Meaning |
+|---|---|
+| `stage1_sweep_YYYYMMDD_HHMMSS.json` | Stage 1 behavioral sweep summary (no trial details) |
+| `stage1_trials_YYYYMMDD_HHMMSS.json` | Stage 1 full trial data (every prediction + raw output) |
+| `stage1_checkpoint.json` | Resumable checkpoint (overwritten during run) |
+| `stage2_logit_lens_*.json` | Stage 2 logit lens with per-layer probability arrays |
+| `stage3_causal_*.json` | Stage 3 attribution + patching + ablation results |
+| `probing_<model>_<keys>k_<updates>u.json` | Probing classifier results at one operating point |
+| `jacobian_<model>_<mode>.json` | Jacobian norms (mode = untrained or pretrained) |
+| `narrative_dota2_*.json` | Dota 2 narrative experiment summary |
+| `remedy_*.json` | Remedy experiment (all 5 styles in one file per model) |
+| `step-<N>.json` | Training dynamics checkpoint result |
+| `*_completion.json` | Run using completion format (few-shot) |
+| `*_chat_1024.json` | Run using chat template with max_tokens=1024 |
