@@ -427,4 +427,50 @@ Stronger models (Qwen 3B, Gemma 4b) show smaller/reversed gap — they handle re
 - 5 styles: control, numbered, landmark, recency_cue, combined
 - 3 models: Qwen 3B-Instruct, Gemma 4b, SmolLM3-3B
 - Full unified grid × 100 trials per style
-- Status: RUNNING
+- Status: COMPLETE
+
+### 2026-04-09 22:20 — Remedy COMPLETE (3 models × 5 styles)
+
+**Qwen 3B-Instruct:**
+| Style | RI | PI | Gap | vs Control |
+|---|---|---|---|---|
+| control | 57.3% | 53.1% | +4.2% | — |
+| numbered | 57.0% | 51.4% | +5.6% | +1.4% |
+| landmark | 46.7% | 59.3% | -12.6% | -16.8% |
+| recency_cue | 34.7% | 28.2% | +6.5% | +2.3% |
+| combined | 60.4% | 63.4% | -3.0% | -7.2% |
+
+**Gemma 4b:**
+| Style | RI | PI | Gap | vs Control |
+|---|---|---|---|---|
+| control | 95.2% | 48.9% | +46.3% | — |
+| numbered | 94.3% | 57.5% | +36.9% | -9.4% |
+| landmark | 93.2% | 59.4% | +33.8% | -12.5% |
+| recency_cue | 92.4% | 36.7% | +55.7% | +9.4% |
+| combined | 92.8% | 63.1% | +29.7% | -16.6% |
+
+**SmolLM3-3B:**
+| Style | RI | PI | Gap | vs Control |
+|---|---|---|---|---|
+| control | 52.5% | 52.2% | +0.3% | — |
+| numbered | 48.4% | 50.6% | -2.2% | -2.5% |
+| landmark | 44.2% | 67.1% | -22.9% | -23.2% |
+| recency_cue | 54.9% | 27.7% | +27.2% | +26.9% |
+| combined | 50.5% | 69.5% | -18.9% | -19.2% |
+
+**Key findings:**
+- **Landmark separators are the most effective intervention** — flip asymmetry for 2/3 models
+- **Combined (landmark + rounds)** also helps, slightly weaker
+- **Recency cue is harmful** — hurts PI for Gemma, destroys both for Qwen
+- **Numbered** has minimal effect across all models
+
+---
+
+## All Experiments Complete
+
+### 2026-04-10 — Final status
+- 300+ JSON result files in `v3/results_vllm/`
+- 15 experiment types across 11 models + 2 training dynamics series
+- All scripts committed to `vllm-experiments` branch
+- Full experiment overview in `v3/EXPERIMENTS_OVERVIEW.md`
+- Results archived: `v3/results_vllm.tar.gz` (101MB)
