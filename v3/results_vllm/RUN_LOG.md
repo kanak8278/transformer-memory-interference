@@ -395,4 +395,36 @@ Results: `v3/results_vllm/{probing,jacobian,sae,training_dynamics_smollm3}/`
 | Narrative (old runs) | 10 | Qwen 1.5B + Haiku, 4 domains |
 | Remedy (old runs) | 1 | Haiku remedy interventions |
 | SAE (old runs) | 1 | Gemma scope features |
-| **TOTAL** | **270** | |
+| Dota2 Narrative | 7 | Qwen x4 + Gemma x3 on full grid |
+| **TOTAL** | **290+** | |
+
+---
+
+## Dota2 Narrative Experiment
+
+### 2026-04-09 17:00 — Dota2 narrative COMPLETE (7 models)
+- Full unified grid: 9 keys × 9 updates × 100 trials
+- Uses DotaTrialGenerator for naturalistic match commentary
+
+| Model | RI | PI | Gap |
+|-------|-----|-----|------|
+| Qwen 0.5B-Inst | 40.5% | 19.2% | +21.2% |
+| Qwen 1.5B-Inst | 56.1% | 37.5% | +18.6% |
+| Qwen 3B-Inst | 51.8% | 55.8% | -4.0% |
+| Qwen 3B-Base | 62.3% | 66.3% | -4.0% |
+| Gemma 270m | 37.3% | 20.1% | +17.2% |
+| Gemma 1b | 41.2% | 37.6% | +3.7% |
+| Gemma 4b | 76.8% | 69.2% | +7.6% |
+
+**Key finding**: PI > RI transfers to narratives for weaker models (+17-21%).
+Stronger models (Qwen 3B, Gemma 4b) show smaller/reversed gap — they handle recency better on naturalistic text.
+
+---
+
+## Remedy Experiment
+
+### 2026-04-09 17:00 — Remedy started
+- 5 styles: control, numbered, landmark, recency_cue, combined
+- 3 models: Qwen 3B-Instruct, Gemma 4b, SmolLM3-3B
+- Full unified grid × 100 trials per style
+- Status: RUNNING
