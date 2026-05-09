@@ -147,8 +147,8 @@ MODEL_ENGINE_CONFIG = {
     "Qwen/Qwen2.5-0.5B-Instruct":          (0.95, 65536, 8192, "half"),
     # Qwen3.5 series — L40S (46GB), bfloat16 required, language_model_only=True (text-only)
     # max_model_len=16384 covers all feasible ARBITRARY_SINGLE cells (verified via tokenizer)
-    # 0.8B: 1.6GB weights → 35.7GB KV headroom
-    "Qwen/Qwen3.5-0.8B":               (0.92, 65536, 16384, "bfloat16"),
+    # 0.8B: smaller max_num_batched_tokens to avoid GDN cache assertion (batch > cache lines)
+    "Qwen/Qwen3.5-0.8B":               (0.92, 8192, 16384, "bfloat16"),
     # 2B: ~4GB weights → 33GB KV headroom
     "Qwen/Qwen3.5-2B":                 (0.92, 65536, 16384, "bfloat16"),
     # 4B: ~8GB weights → 29GB KV headroom
@@ -370,6 +370,19 @@ def load_vllm_model(model_name, gpu_idx=0, tp_size=1):
     print(f"  max_model_len={max_model_len}, max_num_batched_tokens={max_batched_tokens}")
     print(f"  enable_prefix_caching=True, language_model_only={is_text_only}")
 
+    # Qwen3.5 uses GDN (Gated Delta Networks) — hybrid linear+full attention.
+    # vLLM treats GDN recurrent state as Mamba cache. Known issues:
+    #   1. Prefix caching in 'align' mode is experimental → disable for Qwen3.5
+    #   2. CUDA graphs cause GDN cache assertion → enforce_eager
+    #   3. Chunked prefill can trigger GDN linear_attn errors → disable for Qwen3.5
+    prefix_caching = not is_text_only
+    enforce_eager = is_text_only
+    disable_chunked = is_text_only  # chunked prefill triggers GDN linear_attn bug
+
+    extra = {}
+    if disable_chunked:
+        extra["enable_chunked_prefill"] = False
+
     llm = LLM(
         model=model_name,
         tensor_parallel_size=tp_size,
@@ -378,9 +391,11 @@ def load_vllm_model(model_name, gpu_idx=0, tp_size=1):
         max_num_batched_tokens=max_batched_tokens,
         trust_remote_code=True,
         dtype=dtype,
-        enable_prefix_caching=True,
+        enable_prefix_caching=prefix_caching,
+        enforce_eager=enforce_eager,
         seed=42,
         language_model_only=is_text_only,
+        **extra,
     )
 
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
