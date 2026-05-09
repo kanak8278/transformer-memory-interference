@@ -132,7 +132,13 @@ def is_instruct_model(model_name):
         return True
     # Heuristic: -it, -Instruct, -chat, -Chat suffixes indicate instruct models
     lower = model_name.lower()
-    return any(lower.endswith(s) for s in ["-it", "-instruct", "-chat"])
+    if any(lower.endswith(s) for s in ["-it", "-instruct", "-chat"]):
+        return True
+    # Qwen3.5 models without suffix are instruct (they have chat templates)
+    # e.g., Qwen/Qwen3.5-0.8B, Qwen/Qwen3.5-4B, Qwen/Qwen3.5-9B
+    if "qwen3.5" in lower and "-base" not in lower:
+        return True
+    return False
 
 
 def is_base_model(model_name):
