@@ -218,8 +218,12 @@ def run_narrative_sweep(model_name, args):
                             {"role": "system", "content": SYSTEM_PROMPT},
                             {"role": "user", "content": user_msg},
                         ]
+                        # Disable thinking mode — pass enable_thinking=False so the
+                        # template pre-closes <think></think> and model answers directly.
+                        # Works for Qwen3.5-4B/9B which have thinking enabled by default.
                         prompt = tokenizer.apply_chat_template(
-                            messages, tokenize=False, add_generation_prompt=True)
+                            messages, tokenize=False, add_generation_prompt=True,
+                            chat_template_kwargs={"enable_thinking": False})
                     else:
                         prompt = f"{SYSTEM_PROMPT}\n\n{user_msg}\n\nAnswer:"
 
