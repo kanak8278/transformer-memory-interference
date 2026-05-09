@@ -145,15 +145,20 @@ QWEN35_MODELS = [
 MODEL_ENGINE_CONFIG = {
     # <=500M
     "Qwen/Qwen2.5-0.5B-Instruct":          (0.95, 65536, 8192, "half"),
-    # Qwen3.5 series (qwen3_5 arch, bfloat16 required)
-    "Qwen/Qwen3.5-0.8B":               (0.95, 65536, 8192, "bfloat16"),
-    "Qwen/Qwen3.5-2B":                 (0.95, 32768, 8192, "bfloat16"),
-    "Qwen/Qwen3.5-4B":                 (0.92, 16384, 8192, "bfloat16"),
-    "Qwen/Qwen3.5-9B":                 (0.90, 16384, 8192, "bfloat16"),
-    "Qwen/Qwen3.5-0.8B-Base":          (0.95, 65536, 8192, "bfloat16"),
-    "Qwen/Qwen3.5-2B-Base":            (0.95, 32768, 8192, "bfloat16"),
-    "Qwen/Qwen3.5-4B-Base":            (0.92, 16384, 8192, "bfloat16"),
-    "Qwen/Qwen3.5-9B-Base":            (0.90, 16384, 8192, "bfloat16"),
+    # Qwen3.5 series — L40S (46GB), bfloat16 required, language_model_only=True (text-only)
+    # max_model_len=16384 covers all feasible ARBITRARY_SINGLE cells (verified via tokenizer)
+    # 0.8B: 1.6GB weights → 35.7GB KV headroom
+    "Qwen/Qwen3.5-0.8B":               (0.92, 65536, 16384, "bfloat16"),
+    # 2B: ~4GB weights → 33GB KV headroom
+    "Qwen/Qwen3.5-2B":                 (0.92, 65536, 16384, "bfloat16"),
+    # 4B: ~8GB weights → 29GB KV headroom
+    "Qwen/Qwen3.5-4B":                 (0.92, 32768, 16384, "bfloat16"),
+    # 9B: ~18GB weights → 19GB KV headroom
+    "Qwen/Qwen3.5-9B":                 (0.92, 16384, 16384, "bfloat16"),
+    "Qwen/Qwen3.5-0.8B-Base":          (0.92, 65536, 16384, "bfloat16"),
+    "Qwen/Qwen3.5-2B-Base":            (0.92, 65536, 16384, "bfloat16"),
+    "Qwen/Qwen3.5-4B-Base":            (0.92, 32768, 16384, "bfloat16"),
+    "Qwen/Qwen3.5-9B-Base":            (0.92, 16384, 16384, "bfloat16"),
     # Gemma 3
     "google/gemma-3-270m-it":               (0.95, 65536, 8192, "bfloat16"),
     "EleutherAI/pythia-410m":               (0.95, 65536, 2048, "half"),
@@ -355,11 +360,15 @@ def load_vllm_model(model_name, gpu_idx=0, tp_size=1):
     ctx_limit = CONTEXT_LIMITS.get(model_name, 4096)
     max_model_len = min(max_model_len, ctx_limit)
 
+    # Multimodal models (Qwen3.5, Gemma3) run text-only — skip vision encoder
+    # to save ~2GB VRAM and speed up loading
+    is_text_only = any(x in model_name for x in ["Qwen3.5", "gemma-3"])
+
     print(f"\nLoading {model_name} via vLLM")
     print(f"  gpu={gpu_idx}, tp={tp_size}, dtype={dtype}")
     print(f"  gpu_memory_utilization={gpu_mem}")
     print(f"  max_model_len={max_model_len}, max_num_batched_tokens={max_batched_tokens}")
-    print(f"  enable_prefix_caching=True")
+    print(f"  enable_prefix_caching=True, language_model_only={is_text_only}")
 
     llm = LLM(
         model=model_name,
@@ -371,6 +380,7 @@ def load_vllm_model(model_name, gpu_idx=0, tp_size=1):
         dtype=dtype,
         enable_prefix_caching=True,
         seed=42,
+        language_model_only=is_text_only,
     )
 
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
