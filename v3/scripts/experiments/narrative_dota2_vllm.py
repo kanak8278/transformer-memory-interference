@@ -68,6 +68,14 @@ ALL_MODELS = [
     "google/gemma-3-4b-it",
 ]
 
+# Qwen3.5 series — GDN hybrid architecture (separate list for targeted runs)
+QWEN35_MODELS = [
+    "Qwen/Qwen3.5-0.8B",
+    "Qwen/Qwen3.5-2B",
+    "Qwen/Qwen3.5-4B",
+    "Qwen/Qwen3.5-9B",
+]
+
 # vLLM engine config per model
 MODEL_ENGINE_CONFIG = {
     "Qwen/Qwen2.5-0.5B-Instruct":   (0.95, 65536, 8192, "half"),
@@ -77,6 +85,11 @@ MODEL_ENGINE_CONFIG = {
     "google/gemma-3-270m-it":        (0.95, 65536, 8192, "bfloat16"),
     "google/gemma-3-1b-it":          (0.95, 32768, 8192, "bfloat16"),
     "google/gemma-3-4b-it":          (0.92, 16384, 8192, "bfloat16"),
+    # Qwen3.5 — GDN hybrid, bfloat16, language_model_only + enforce_eager required
+    "Qwen/Qwen3.5-0.8B":             (0.92, 8192,  16384, "bfloat16"),
+    "Qwen/Qwen3.5-2B":               (0.92, 65536, 16384, "bfloat16"),
+    "Qwen/Qwen3.5-4B":               (0.92, 32768, 16384, "bfloat16"),
+    "Qwen/Qwen3.5-9B":               (0.92, 16384, 16384, "bfloat16"),
 }
 DEFAULT_CONFIG = (0.90, 16384, 8192, "half")
 
@@ -106,12 +119,23 @@ def load_vllm_model(model_name, gpu_idx=0):
     ctx_limit = CONTEXT_LIMITS.get(model_name, 4096)
     max_model_len = min(max_model_len, ctx_limit)
 
-    print(f"\nLoading {model_name} via vLLM (dtype={dtype}, max_model_len={max_model_len})")
+    # Qwen3.5 uses GDN — requires special flags to avoid engine crashes
+    is_gdn = "Qwen3.5" in model_name
+    extra = {}
+    if is_gdn:
+        extra["language_model_only"] = True      # skip vision encoder
+        extra["enforce_eager"] = True            # skip CUDA graph (GDN cache issue)
+        extra["enable_prefix_caching"] = False   # experimental for GDN
+        extra["enable_chunked_prefill"] = False  # triggers GDN linear_attn bug
+    else:
+        extra["enable_prefix_caching"] = True
+
+    print(f"\nLoading {model_name} via vLLM (dtype={dtype}, max_model_len={max_model_len}, gdn={is_gdn})")
     llm = LLM(
         model=model_name, gpu_memory_utilization=gpu_mem,
         max_model_len=max_model_len, max_num_batched_tokens=max_batched,
-        trust_remote_code=True, dtype=dtype,
-        enable_prefix_caching=True, seed=42,
+        trust_remote_code=True, dtype=dtype, seed=42,
+        **extra,
     )
 
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
@@ -308,14 +332,20 @@ def main():
     parser = argparse.ArgumentParser(description="Dota 2 narrative PI/RI (vLLM)")
     g = parser.add_mutually_exclusive_group()
     g.add_argument("--model", default=None)
-    g.add_argument("--all", action="store_true")
+    g.add_argument("--all", action="store_true", help="Run all Qwen2.5+Gemma models")
+    g.add_argument("--qwen35", action="store_true", help="Run all Qwen3.5 models")
     parser.add_argument("--gpu", type=int, default=0)
     parser.add_argument("--trials", type=int, default=DEFAULT_TRIALS)
     parser.add_argument("--key-levels", type=int, nargs="+", default=None)
     parser.add_argument("--update-levels", type=int, nargs="+", default=None)
     args = parser.parse_args()
 
-    models = ALL_MODELS if args.all else [args.model or "Qwen/Qwen2.5-1.5B-Instruct"]
+    if args.qwen35:
+        models = QWEN35_MODELS
+    elif args.all:
+        models = ALL_MODELS
+    else:
+        models = [args.model or "Qwen/Qwen2.5-1.5B-Instruct"]
 
     print("=" * 60)
     print(f"DOTA 2 NARRATIVE EXPERIMENT (vLLM)")
