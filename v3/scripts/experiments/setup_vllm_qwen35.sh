@@ -116,7 +116,9 @@ echo "=== Step 4: Adding Qwen3.5 to CONTEXT_LIMITS ==="
 python -c "
 from pathlib import Path
 
-model_loader = Path('$REPO_ROOT/mechanistic_probing_v2/core/model_loader.py')
+model_loader = Path('$REPO_ROOT/../mechanistic_probing_v2/core/model_loader.py')
+if not model_loader.exists():
+    model_loader = Path('$REPO_ROOT/mechanistic_probing_v2/core/model_loader.py')
 content = model_loader.read_text()
 
 additions = '''

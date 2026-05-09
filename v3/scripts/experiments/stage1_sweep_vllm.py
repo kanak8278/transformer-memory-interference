@@ -132,12 +132,27 @@ ALL_MODELS = [
     "state-spaces/mamba-1.4b-hf",
 ]
 
+# Qwen3.5 models added after environment upgrade (transformers 5.8.0.dev0 + vLLM 0.20.1)
+QWEN35_MODELS = [
+    "Qwen/Qwen3.5-0.8B",
+    "Qwen/Qwen3.5-4B",
+    "Qwen/Qwen3.5-9B",
+]
+
 # Model-size-aware vLLM engine config.
 # (gpu_memory_utilization, max_num_batched_tokens, max_model_len, dtype)
 # Gemma 3 requires bfloat16 (float16 causes numerical instability).
 MODEL_ENGINE_CONFIG = {
     # <=500M
     "Qwen/Qwen2.5-0.5B-Instruct":          (0.95, 65536, 8192, "half"),
+    # Qwen3.5 series (qwen3_5 arch, bfloat16 required)
+    "Qwen/Qwen3.5-0.8B":               (0.95, 65536, 8192, "bfloat16"),
+    "Qwen/Qwen3.5-4B":                 (0.92, 16384, 8192, "bfloat16"),
+    "Qwen/Qwen3.5-9B":                 (0.90, 16384, 8192, "bfloat16"),
+    "Qwen/Qwen3.5-0.8B-Base":          (0.95, 65536, 8192, "bfloat16"),
+    "Qwen/Qwen3.5-4B-Base":            (0.92, 16384, 8192, "bfloat16"),
+    "Qwen/Qwen3.5-9B-Base":            (0.90, 16384, 8192, "bfloat16"),
+    # Gemma 3
     "google/gemma-3-270m-it":               (0.95, 65536, 8192, "bfloat16"),
     "EleutherAI/pythia-410m":               (0.95, 65536, 2048, "half"),
     # 1-2B

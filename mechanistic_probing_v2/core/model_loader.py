@@ -55,6 +55,14 @@ CONTEXT_LIMITS = {
     "Qwen/Qwen2.5-1.5B-Instruct": 32_768,
     "Qwen/Qwen2.5-3B":             32_768,
     "Qwen/Qwen2.5-3B-Instruct":   32_768,
+    # Qwen3.5 series (qwen3_5 architecture, May 2025)
+    "Qwen/Qwen3.5-0.8B":               32_768,
+    "Qwen/Qwen3.5-4B":                 32_768,
+    "Qwen/Qwen3.5-9B":                 32_768,
+    "Qwen/Qwen3.5-0.8B-Base":          32_768,
+    "Qwen/Qwen3.5-4B-Base":            32_768,
+    "Qwen/Qwen3.5-9B-Base":            32_768,
+
     "Qwen/Qwen2.5-7B-Instruct":   32_768,
     # Gemma 3 (all sizes)
     "google/gemma-3-270m-it": 32_768,
