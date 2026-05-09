@@ -147,9 +147,11 @@ MODEL_ENGINE_CONFIG = {
     "Qwen/Qwen2.5-0.5B-Instruct":          (0.95, 65536, 8192, "half"),
     # Qwen3.5 series (qwen3_5 arch, bfloat16 required)
     "Qwen/Qwen3.5-0.8B":               (0.95, 65536, 8192, "bfloat16"),
+    "Qwen/Qwen3.5-2B":                 (0.95, 32768, 8192, "bfloat16"),
     "Qwen/Qwen3.5-4B":                 (0.92, 16384, 8192, "bfloat16"),
     "Qwen/Qwen3.5-9B":                 (0.90, 16384, 8192, "bfloat16"),
     "Qwen/Qwen3.5-0.8B-Base":          (0.95, 65536, 8192, "bfloat16"),
+    "Qwen/Qwen3.5-2B-Base":            (0.95, 32768, 8192, "bfloat16"),
     "Qwen/Qwen3.5-4B-Base":            (0.92, 16384, 8192, "bfloat16"),
     "Qwen/Qwen3.5-9B-Base":            (0.90, 16384, 8192, "bfloat16"),
     # Gemma 3

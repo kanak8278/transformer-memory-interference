@@ -57,9 +57,11 @@ CONTEXT_LIMITS = {
     "Qwen/Qwen2.5-3B-Instruct":   32_768,
     # Qwen3.5 series (qwen3_5 architecture, May 2025)
     "Qwen/Qwen3.5-0.8B":               32_768,
+    "Qwen/Qwen3.5-2B":                 32_768,
     "Qwen/Qwen3.5-4B":                 32_768,
     "Qwen/Qwen3.5-9B":                 32_768,
     "Qwen/Qwen3.5-0.8B-Base":          32_768,
+    "Qwen/Qwen3.5-2B-Base":            32_768,
     "Qwen/Qwen3.5-4B-Base":            32_768,
     "Qwen/Qwen3.5-9B-Base":            32_768,
 
