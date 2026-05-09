@@ -86,9 +86,12 @@ MODEL_ENGINE_CONFIG = {
     "google/gemma-3-1b-it":          (0.95, 32768, 8192, "bfloat16"),
     "google/gemma-3-4b-it":          (0.92, 16384, 8192, "bfloat16"),
     # Qwen3.5 — GDN hybrid, bfloat16, language_model_only + enforce_eager required
-    "Qwen/Qwen3.5-0.8B":             (0.92, 8192,  16384, "bfloat16"),
+    # Qwen3.5 GDN: max_num_batched_tokens must >= max_model_len (chunked_prefill=False)
+    # 4B/9B use 16384 (= max_model_len) to process one long narrative prompt at a time
+    # This prevents GDN linear_attn crash on variable-length long sequences
+    "Qwen/Qwen3.5-0.8B":             (0.92, 16384, 16384, "bfloat16"),
     "Qwen/Qwen3.5-2B":               (0.92, 65536, 16384, "bfloat16"),
-    "Qwen/Qwen3.5-4B":               (0.92, 32768, 16384, "bfloat16"),
+    "Qwen/Qwen3.5-4B":               (0.92, 16384, 16384, "bfloat16"),
     "Qwen/Qwen3.5-9B":               (0.92, 16384, 16384, "bfloat16"),
 }
 DEFAULT_CONFIG = (0.90, 16384, 8192, "half")
