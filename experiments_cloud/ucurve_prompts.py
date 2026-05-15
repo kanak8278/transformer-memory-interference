@@ -85,6 +85,7 @@ def generate_stream(nk: int, nu: int, seed: int):
 
 # ─── 4 prompt formats ─────────────────────────────────────────────────────────
 QUERY_LABELED = "What was the value of {category} in Update {k}?"
+QUERY_LAST    = "What was the last value of {category}?"
 
 def ordinal(n: int) -> str:
     """1 → '1st', 2 → '2nd', 3 → '3rd', 4 → '4th', ..."""
@@ -178,12 +179,85 @@ def prompt_original(flat_items: list, test_category: str, k: int) -> str:
     )
 
 
+def prompt_block_lastquery(block_items: list, test_category: str) -> str:
+    """Block format with semantic 'last value' query — no update number given."""
+    lines = []
+    for block in block_items:
+        lines.append(f"[Update {block[0]['update_idx']}]")
+        for item in block:
+            lines.append(f"  {item['category']}: {item['value']}")
+    stream = "\n".join(lines)
+    return (
+        f"Read the following key-value stream. "
+        f"Each key is updated multiple times, grouped by update round.\n\n"
+        f"{stream}\n\n"
+        f"{QUERY_LAST.format(category=test_category)}\n"
+        f"Answer with ONLY the exact value. No explanation."
+    )
+
+
+def prompt_flat_short_lastquery(flat_items: list, test_category: str) -> str:
+    """flat_short format with semantic 'last value' query."""
+    stream = "\n".join(
+        f"{item['category']} [U{item['update_idx']}]: {item['value']}"
+        for item in flat_items
+    )
+    return (
+        f"Read the following key-value stream. Each key is updated multiple times. "
+        f"The number in brackets after each key name indicates which update of that key it is "
+        f"— for example, \"coffee variety [U3]: rural\" means the 3rd time "
+        f"coffee variety was updated, its value was \"rural\".\n\n"
+        f"{stream}\n\n"
+        f"{QUERY_LAST.format(category=test_category)}\n"
+        f"Answer with ONLY the exact value. No explanation."
+    )
+
+
+def prompt_flat_verbose_lastquery(flat_items: list, test_category: str) -> str:
+    """flat_verbose format with semantic 'last value' query."""
+    stream = "\n".join(
+        f"{item['category']} (update {item['update_idx']}): {item['value']}"
+        for item in flat_items
+    )
+    return (
+        f"Read the following key-value stream. Each key is updated multiple times.\n\n"
+        f"{stream}\n\n"
+        f"{QUERY_LAST.format(category=test_category)}\n"
+        f"Answer with ONLY the exact value. No explanation."
+    )
+
+
+def prompt_flat_nolabel_lastquery(flat_items: list, test_category: str) -> str:
+    """flat_nolabel format with semantic 'last value' query."""
+    stream = "\n".join(
+        f"{item['category']}: {item['value']}"
+        for item in flat_items
+    )
+    return (
+        f"Read the following key-value stream. Each key appears multiple times "
+        f"as it gets updated. Count each occurrence of a key as one update.\n\n"
+        f"{stream}\n\n"
+        f"What was the last value of {test_category}?\n"
+        f"Answer with ONLY the exact value. No explanation."
+    )
+
+
 FORMATS = {
     "block":        prompt_block,
     "flat_short":   prompt_flat_short,
     "flat_verbose": prompt_flat_verbose,
     "flat_nolabel": prompt_flat_nolabel,
     "original":     prompt_original,
+}
+
+# _lastquery builders: same stream as base format, but always ask "last value"
+# Used by _last sweep formats to fire one extra query per trial alongside all
+# the regular numbered position queries.
+LASTQUERY_BUILDERS = {
+    "block_last":        prompt_block_lastquery,
+    "flat_short_last":   prompt_flat_short_lastquery,
+    "flat_verbose_last": prompt_flat_verbose_lastquery,
+    "flat_nolabel_last": prompt_flat_nolabel_lastquery,
 }
 
 

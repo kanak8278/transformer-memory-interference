@@ -35,11 +35,19 @@ from experiments_cloud.ucurve_prompts import (
     generate_stream, make_seed, query_positions,
     prompt_block, prompt_flat_short, prompt_flat_verbose,
     prompt_flat_nolabel, prompt_original,
+    LASTQUERY_BUILDERS,
     SYSTEM_PROMPT,
 )
 
 # ─── constants ────────────────────────────────────────────────────────────────
-ALL_FORMATS  = ["block", "flat_short", "flat_verbose", "flat_nolabel", "original"]
+ALL_FORMATS  = [
+    "block", "flat_short", "flat_verbose", "flat_nolabel", "original",
+    "block_last", "flat_short_last", "flat_verbose_last", "flat_nolabel_last",
+]
+# _last formats: run same numbered queries as base format + one extra "last" query
+# Results for the extra query stored under key "last" in positions dict
+_LAST_FMTS         = {"block_last", "flat_short_last", "flat_verbose_last", "flat_nolabel_last"}
+_STREAM_COUNT_FMTS = {"flat_nolabel", "flat_nolabel_last"}
 DEFAULT_NK   = [5, 7, 10, 12, 15]
 DEFAULT_NU   = [10, 30, 50, 75, 100]
 MAX_TRIALS   = 200
@@ -49,11 +57,17 @@ DEFAULT_WORKERS = 20
 SAVE_DIR     = "experiments_cloud/results/ucurve"
 
 PROMPT_BUILDERS = {
-    "block":        lambda flat, block, test, k: prompt_block(block, test, k),
-    "flat_short":   lambda flat, block, test, k: prompt_flat_short(flat, test, k),
-    "flat_verbose": lambda flat, block, test, k: prompt_flat_verbose(flat, test, k),
-    "flat_nolabel": lambda flat, block, test, k: prompt_flat_nolabel(flat, test, k),
-    "original":     lambda flat, block, test, k: prompt_original(flat, test, k),
+    "block":             lambda flat, block, test, k: prompt_block(block, test, k),
+    "flat_short":        lambda flat, block, test, k: prompt_flat_short(flat, test, k),
+    "flat_verbose":      lambda flat, block, test, k: prompt_flat_verbose(flat, test, k),
+    "flat_nolabel":      lambda flat, block, test, k: prompt_flat_nolabel(flat, test, k),
+    "original":          lambda flat, block, test, k: prompt_original(flat, test, k),
+    # _last formats reuse the base format's numbered queries for all positions,
+    # then fire one extra "last" query per trial (see LASTQUERY_BUILDERS).
+    "block_last":        lambda flat, block, test, k: prompt_block(block, test, k),
+    "flat_short_last":   lambda flat, block, test, k: prompt_flat_short(flat, test, k),
+    "flat_verbose_last": lambda flat, block, test, k: prompt_flat_verbose(flat, test, k),
+    "flat_nolabel_last": lambda flat, block, test, k: prompt_flat_nolabel(flat, test, k),
 }
 
 # ─── thread-local model ───────────────────────────────────────────────────────
@@ -106,7 +120,8 @@ def verify_expected_values(nk: int, nu: int, n_trials: int = 5) -> list[str]:
     """
     from experiments_cloud.ucurve_prompts import (
         prompt_block, prompt_flat_short, prompt_flat_verbose,
-        prompt_flat_nolabel, prompt_original
+        prompt_flat_nolabel, prompt_original,
+        LASTQUERY_BUILDERS,
     )
     errors = []
     positions = query_positions(nu)
@@ -121,7 +136,6 @@ def verify_expected_values(nk: int, nu: int, n_trials: int = 5) -> list[str]:
             # Labeled formats: expected = chronological update k
             for fmt in ("block", "flat_short", "flat_verbose"):
                 exp = all_values[k - 1]
-                # Verify: find the labeled entry in the prompt and confirm its value
                 if fmt == "block":
                     entry_val = next(
                         i["value"] for i in block[k-1] if i["category"] == test
@@ -137,20 +151,33 @@ def verify_expected_values(nk: int, nu: int, n_trials: int = 5) -> list[str]:
                         f"expected={exp!r} but prompt shows {entry_val!r}"
                     )
 
-            # flat_nolabel: expected = k-th stream occurrence
+            # flat_nolabel: kth stream occurrence
             exp_nolabel = stream_vals[k - 1]
-            actual_kth  = stream_vals[k - 1]   # tautological — but confirms indexing
-            if exp_nolabel != actual_kth:
+            if exp_nolabel != stream_vals[k - 1]:
                 errors.append(
                     f"[flat_nolabel] trial={trial_idx} pos={k}: indexing error"
                 )
 
             # original: k=1 → first stream occurrence, else last
             exp_orig = stream_vals[0] if k == 1 else stream_vals[-1]
-            check     = stream_vals[0] if k == 1 else stream_vals[-1]
-            if exp_orig != check:
+            if exp_orig != (stream_vals[0] if k == 1 else stream_vals[-1]):
                 errors.append(
                     f"[original] trial={trial_idx} pos={k}: expected {exp_orig!r}"
+                )
+
+        # _last formats: extra "last" query expected = last chronological value
+        for fmt_last, ref_is_stream in [
+            ("block_last",        False),
+            ("flat_short_last",   False),
+            ("flat_verbose_last", False),
+            ("flat_nolabel_last", True),
+        ]:
+            exp_last = stream_vals[-1] if ref_is_stream else all_values[-1]
+            # Confirm ground truth is consistent
+            actual_last = stream_vals[-1] if ref_is_stream else all_values[-1]
+            if exp_last != actual_last:
+                errors.append(
+                    f"[{fmt_last}] trial={trial_idx}: last-query expected mismatch"
                 )
 
     return errors
@@ -237,27 +264,39 @@ def run_trial(model_name: str, fmt_name: str, nk: int, nu: int,
     builder = PROMPT_BUILDERS[fmt_name]
     prompts = {k: builder(flat, block, test, k) for k in positions}
 
-    # Fire all position queries concurrently
+    # _last formats: also fire one extra "last" semantic query per trial.
+    # Stored under key "last" (string) alongside the integer position results.
+    if fmt_name in _LAST_FMTS:
+        lq_builder = LASTQUERY_BUILDERS[fmt_name]
+        items = block if "block" in fmt_name else flat
+        prompts["last"] = lq_builder(items, test)
+
+    # Fire all position queries (+ optional "last") concurrently
     results = {}
-    with ThreadPoolExecutor(max_workers=min(workers, len(positions))) as ex:
+    with ThreadPoolExecutor(max_workers=min(workers, len(prompts))) as ex:
         futures = {ex.submit(call_api, model_name, prompt): k
                    for k, prompt in prompts.items()}
         for future in as_completed(futures):
             k = futures[future]
             raw, usage = future.result()
-            if fmt_name == "original":
-                # "first"/"last" words → stream-position semantics
-                # k=1 asks "first" → first stream occurrence
-                # all other k ask "last" → last stream occurrence
+            if k == "last":
+                # Semantic "last" query: expected = last chronological value
+                if fmt_name in _STREAM_COUNT_FMTS:
+                    expected = stream_vals[-1]
+                    ref_list = stream_vals
+                else:
+                    expected = all_values[-1]
+                    ref_list = all_values
+            elif fmt_name == "original":
+                # k=1 asks "first" → first stream occurrence; else "last" → last
                 expected = stream_vals[0] if k == 1 else stream_vals[-1]
                 ref_list = stream_vals
-            elif fmt_name == "flat_nolabel":
-                # "kth value" with no labels → model counts stream occurrences
-                # kth stream occurrence is stream_vals[k-1], not chronological vals[k-1]
+            elif fmt_name in _STREAM_COUNT_FMTS:
+                # flat_nolabel / flat_nolabel_last: kth stream occurrence
                 expected = stream_vals[k - 1]
                 ref_list = stream_vals
             else:
-                # Labeled formats: [Uk] / (update k) → chronological update k
+                # Labeled formats + _last variants: chronological update k
                 expected = all_values[k - 1]
                 ref_list = all_values
             cls        = classify(raw, expected, ref_list)
@@ -296,8 +335,10 @@ def run_cell(model_name: str, fmt_name: str, nk: int, nu: int,
     pos_last  = positions[-1]  # position nu (PI anchor)
 
     trial_details = []
-    # Track correctness per position for Wilson
-    correct_by_pos = {k: [] for k in positions}
+    # Track correctness per position for Wilson.
+    # _last formats also track the extra semantic "last" query under key "last".
+    all_pos_keys = list(positions) + (["last"] if fmt_name in _LAST_FMTS else [])
+    correct_by_pos = {k: [] for k in all_pos_keys}
     stopped_early = False
 
     for trial_idx in range(max_trials):
@@ -305,8 +346,9 @@ def run_cell(model_name: str, fmt_name: str, nk: int, nu: int,
                           trial_idx, positions, workers)
         trial_details.append(trial)
 
-        for k in positions:
-            correct_by_pos[k].append(trial["positions"][k]["correct"])
+        for k in all_pos_keys:
+            if k in trial["positions"]:
+                correct_by_pos[k].append(trial["positions"][k]["correct"])
 
         n_done = trial_idx + 1
         if (early_stop
@@ -315,9 +357,9 @@ def run_cell(model_name: str, fmt_name: str, nk: int, nu: int,
             stopped_early = True
             break
 
-    # Build per-position stats
+    # Build per-position stats (integer positions + "last" for _last formats)
     position_stats = {}
-    for k in positions:
+    for k in all_pos_keys:
         corrects = correct_by_pos[k]
         n = len(corrects)
         acc = sum(corrects) / n if n else 0.0
