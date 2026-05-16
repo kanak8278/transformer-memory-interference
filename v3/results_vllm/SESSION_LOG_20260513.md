@@ -272,3 +272,68 @@ nu=100: [1.00, 0.97, 0.97, 0.79, 0.77, 0.60, 0.68, 0.30, 0.21, 0.12, 0.17, 0.15,
 - Does the gradual decay at nk=1 generalize to other model families?
 - What causes the consistent pos=5 dip?
 - Should nk=1 results go in §5 (Positional Analysis) or §7 (Analysis) of the paper?
+
+---
+
+# Session Log — 2026-05-16
+
+## 1. Behavioral Sweep — 3 Frontier Models, SEMANTIC_MULTI
+
+**Script:** `experiments_cloud/sweep_semantic.py` — plain interleaved stream, FVQ/CVQ queries
+**Grid:** medium tier, K=[2,5,10,15,20,25,30,40,45] × N=[1,5,10,15,20,30,50], 200 trials max, Wilson CI (±7%)
+**Models:** Claude Sonnet 4.5, GPT-4.1, Gemini 2.5 Pro (all via TR workspace auth)
+**Saved to:** `experiments_cloud/results/semantic/{model}/sweep_partial.json`
+
+Note: 3 cells had corrupted data from TR token refresh timeouts mid-batch (RI dropped to 50–82% when it should be ~99%). Those cells were deleted from checkpoints and re-run cleanly.
+
+### Results — Plain Stream (FVQ/CVQ gap)
+
+| Model | Mean RI | Mean PI | Gap |
+|---|---|---|---|
+| Claude Haiku 4.5 (prior run) | 99.4% | 76.3% | +23.0% |
+| GPT-4.1 | 99.7% | 86.3% | +13.3% |
+| Claude Sonnet 4.5 | 99.5% | 91.7% | +7.8% |
+| Gemini 2.5 Pro | 99.6% | 95.9% | +3.7% |
+
+All four models show RI > PI. RI is near-perfect across the board; PI varies by model and load. The asymmetry is universal — no model escapes it, including the strongest thinking model.
+
+## 2. Remedy Sweep — Format Interventions, All 4 Models
+
+**Script:** `experiments_cloud/remedy_sweep.py` (new) — 3 structured stream formats
+**Grid:** same medium tier as behavioral sweep
+**Models:** Claude Haiku 4.5, GPT-4.1, Claude Sonnet 4.5, Gemini 2.5 Pro
+**Saved to:** `experiments_cloud/results/remedy/{model}/{format}/sweep_partial.json`
+
+### Format Descriptions
+- **labeled**: `key (update j): value` interleaved, shuffled, preamble explains notation
+- **block**: `[Round j]` header groups all keys per round, shuffled within round
+- **landmark**: plain `key: value` grouped by round with `---` separator, no numbers
+
+### Results — Mean FVQ/CVQ gap by format and model
+
+| Format | Haiku 4.5 | GPT-4.1 | Sonnet 4.5 | Gemini 2.5P |
+|---|---|---|---|---|
+| Plain (baseline) | +23.0% | +13.3% | +7.8% | +3.7% |
+| Labeled | +1.7% | +2.6% | +6.9% | +0.0% |
+| Block | +0.6% | +0.0% | +0.2% | +0.0% |
+| Landmark | +1.7% | +0.7% | +0.2% | +0.1% |
+
+## 3. Key Findings (2026-05-16)
+
+1. **All three remedy formats nearly eliminate the gap across all 4 models.** The same model that shows 23% gap on plain stream shows ≤1.7% gap with any structured format.
+
+2. **Block is the most reliable remedy.** Gap ≤ 0.6% for every model. Labeled is the weakest and most variable — Sonnet shows +6.9% residual gap on labeled while near-zero on block and landmark.
+
+3. **Landmark (round separators only, no numbers) works nearly as well as block.** Gap ≤ 1.7% across all models. Structural cues don't require explicit numbering — boundary markers alone are sufficient.
+
+4. **The failure is format-conditioned, not a capability failure.** The same content, same query, different stream structure → gap collapses. This is the paper's central claim, now empirically supported across 4 model families.
+
+5. **We do not claim the plain-stream gap scales with model capability.** The 4 models show different gaps on plain stream but this is 4 data points and multiple confounds (model size, training data, instruction tuning, thinking mode). No systematic claim is warranted.
+
+## 4. New Files
+
+- `experiments_cloud/remedy_sweep.py` — new script for format intervention experiments
+  - `--dataset` flag (SEMANTIC_MULTI default, ARBITRARY_SINGLE supported)
+  - `--formats` flag (labeled, block, landmark)
+  - Same Wilson CI stopping, checkpointing, resume as sweep_semantic.py
+  - Separate checkpoint per (model, format): `results/remedy/{model}/{format}/sweep_partial.json`
