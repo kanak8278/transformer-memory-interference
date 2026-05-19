@@ -109,10 +109,14 @@ def parse_args():
                    help="Disable Wilson early stopping — run full trial budget")
     p.add_argument("--n-positions", type=int, default=21,
                    help="Number of evenly spaced query positions per cell (default: 21)")
+    p.add_argument("--dataset", default="ARBITRARY_SINGLE",
+                   choices=["ARBITRARY_SINGLE", "SEMANTIC_MULTI"],
+                   help="Dataset to use (default: ARBITRARY_SINGLE)")
     return p.parse_args()
 
 # ─── pre-run verification ─────────────────────────────────────────────────────
-def verify_expected_values(nk: int, nu: int, n_trials: int = 5) -> list[str]:
+def verify_expected_values(nk: int, nu: int, dataset: str = "ARBITRARY_SINGLE",
+                           n_trials: int = 5) -> list[str]:
     """
     For each format, reconstruct trials and verify that expected values
     are semantically correct given what the prompt actually shows.
@@ -128,7 +132,7 @@ def verify_expected_values(nk: int, nu: int, n_trials: int = 5) -> list[str]:
 
     for trial_idx in range(n_trials):
         seed = make_seed(nk, nu, trial_idx)
-        cats, test, vals, flat, block = generate_stream(nk, nu, seed)
+        cats, test, vals, flat, block = generate_stream(nk, nu, seed, dataset=dataset)
         all_values  = vals[test]
         stream_vals = [i["value"] for i in flat if i["category"] == test]
 
@@ -247,13 +251,13 @@ def call_api(model_name: str, prompt: str) -> tuple[str, dict]:
 # ─── run one trial (paired: all positions, one stream) ────────────────────────
 def run_trial(model_name: str, fmt_name: str, nk: int, nu: int,
               trial_idx: int, positions: list[int],
-              workers: int) -> dict:
+              workers: int, dataset: str = "ARBITRARY_SINGLE") -> dict:
     """
     Generates the stream, builds prompts for all positions, fires them concurrently.
     Returns a dict keyed by position index.
     """
     seed = make_seed(nk, nu, trial_idx)
-    cats, test, vals, flat, block = generate_stream(nk, nu, seed)
+    cats, test, vals, flat, block = generate_stream(nk, nu, seed, dataset=dataset)
     all_values = vals[test]   # ordered list: all_values[k-1] = k-th update
 
     # For 'original' format: expected answer is stream-position order, not
@@ -325,7 +329,8 @@ def run_trial(model_name: str, fmt_name: str, nk: int, nu: int,
 # ─── cell runner (one nk × nu × format) ──────────────────────────────────────
 def run_cell(model_name: str, fmt_name: str, nk: int, nu: int,
              max_trials: int, positions: list[int], workers: int,
-             ci_threshold: float, early_stop: bool) -> tuple[dict, list]:
+             ci_threshold: float, early_stop: bool,
+             dataset: str = "ARBITRARY_SINGLE") -> tuple[dict, list]:
     """
     Runs up to max_trials trials for one (nk, nu, format) cell.
     Early stops when positions[0] and positions[-1] both converge.
@@ -343,7 +348,7 @@ def run_cell(model_name: str, fmt_name: str, nk: int, nu: int,
 
     for trial_idx in range(max_trials):
         trial = run_trial(model_name, fmt_name, nk, nu,
-                          trial_idx, positions, workers)
+                          trial_idx, positions, workers, dataset=dataset)
         trial_details.append(trial)
 
         for k in all_pos_keys:
@@ -416,56 +421,61 @@ def main():
         print(f"Unknown formats: {bad}. Valid: {ALL_FORMATS}")
         sys.exit(1)
 
+    # Per-model subdirectory so multiple models don't share a checkpoint file
+    model_save_dir = Path(args.save_dir) / args.model
+    ckpt_path      = model_save_dir / "checkpoint.json"
+
     print(f"\nU-curve sweep")
     print(f"  model   : {args.model}")
+    print(f"  dataset : {args.dataset}")
     print(f"  formats : {args.formats}")
     print(f"  nk grid : {args.nk}")
     print(f"  nu grid : {args.nu}")
     print(f"  trials  : up to {args.trials} per cell per format")
     print(f"  workers : {args.workers}")
     print(f"  CI stop : {'disabled' if args.no_early_stop else f'Wilson {args.ci}'}")
-    print(f"  save to : {args.save_dir}")
+    print(f"  save to : {model_save_dir}")
     print()
 
+    # Verify API connection first so we can capture the real model_id
+    print("Verifying API connection...", end=" ", flush=True)
+    test_model = create_model(args.model, {"verbose": False})
+    real_model_id = test_model.model_id
+    print(f"✓  ({real_model_id})\n")
+
     # Load or init results
-    ckpt_path = Path(args.save_dir) / "checkpoint.json"
     if args.resume and Path(args.resume).exists():
         results = load_checkpoint(args.resume)
         print(f"Resuming from {args.resume}")
     else:
         results = {
             "model":      args.model,
-            "model_id":   "claude-haiku-4-5-20251001",
-            "dataset":    "ARBITRARY_SINGLE",
+            "model_id":   real_model_id,
+            "dataset":    args.dataset,
             "config": {
-                "formats":     args.formats,
-                "nk_levels":   args.nk,
-                "nu_levels":   args.nu,
-                "max_trials":  args.trials,
+                "formats":      args.formats,
+                "nk_levels":    args.nk,
+                "nu_levels":    args.nu,
+                "max_trials":   args.trials,
                 "ci_threshold": args.ci,
-                "n_positions": 11,
-                "early_stop":  not args.no_early_stop,
+                "n_positions":  args.n_positions,
+                "early_stop":   not args.no_early_stop,
             },
             "start_time":   datetime.now(timezone.utc).isoformat(),
             "cells":        {},
             "trial_details":{},
         }
 
-    # Verify expected-value logic before touching the API
+    # Verify expected-value logic
     print("Verifying expected-value correctness...", end=" ", flush=True)
     sample_nk = args.nk[0]
     sample_nu = args.nu[0]
-    errs = verify_expected_values(sample_nk, sample_nu)
+    errs = verify_expected_values(sample_nk, sample_nu, dataset=args.dataset)
     if errs:
         print(f"\n  FAILED — {len(errs)} error(s):")
         for e in errs[:5]: print(f"    {e}")
         sys.exit(1)
     print(f"✓  (nk={sample_nk}, nu={sample_nu}, 5 trials checked)")
-
-    # Verify API connection
-    print("Verifying API connection...", end=" ", flush=True)
-    test_model = create_model(args.model, {"verbose": False})
-    print(f"✓  ({test_model.model_id})\n")
 
     total_cells = len(args.nk) * len(args.nu) * len(args.formats)
     done_cells  = 0
@@ -497,6 +507,7 @@ def main():
                     workers     = args.workers,
                     ci_threshold= args.ci,
                     early_stop  = not args.no_early_stop,
+                    dataset     = args.dataset,
                 )
                 elapsed = time.time() - t0
 
@@ -525,7 +536,7 @@ def main():
 
     # Also save a clean final file
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    final_path = Path(args.save_dir) / f"ucurve_{ts}.json"
+    final_path = model_save_dir / f"ucurve_{ts}.json"
     save_checkpoint(results, final_path)
 
     print(f"\n✓ Done. Skipped {skipped} already-complete cells.")

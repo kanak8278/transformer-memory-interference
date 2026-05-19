@@ -98,16 +98,25 @@ class GeminiModelInterface(BaseModelInterface):
         self._use_tr_workspace = True
         self.use_vertex = True
 
-        # Eagerly fetch the first token to validate credentials at init time
-        try:
-            self._fetch_tr_token()
-            mode = "thinking" if self.use_thinking else "standard"
-            if self.config.get('verbose', True):
-                print(f"✓ TR Gemini initialized: {self.model_id} [{mode}] (token expires: {self._tr_expires.strftime('%H:%M UTC')})")
-            self.available = True
-        except Exception as e:
-            print(f"⚠️  TR workspace init failed: {e}")
-            self.available = False
+        # Eagerly fetch the first token — retry up to 5× with jitter so 40
+        # concurrent workers don't all hammer the TR auth endpoint at once.
+        import time as _time
+        for _attempt in range(5):
+            try:
+                self._fetch_tr_token()
+                mode = "thinking" if self.use_thinking else "standard"
+                if self.config.get('verbose', True):
+                    print(f"✓ TR Gemini initialized: {self.model_id} [{mode}] (token expires: {self._tr_expires.strftime('%H:%M UTC')})")
+                self.available = True
+                break
+            except Exception as e:
+                if _attempt < 4:
+                    wait = random.uniform(1, 4 * (2 ** _attempt))
+                    print(f"⚠️  TR workspace init failed: {e} — retrying in {wait:.1f}s")
+                    _time.sleep(wait)
+                else:
+                    print(f"⚠️  TR workspace init failed permanently: {e}")
+                    self.available = False
 
     def _fetch_tr_token(self):
         """Fetch a fresh token from TR token endpoint and re-initialize vertexai."""

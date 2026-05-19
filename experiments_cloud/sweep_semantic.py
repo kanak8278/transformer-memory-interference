@@ -290,7 +290,13 @@ def run_trial(model_name, num_keys, num_updates, trial_idx, eligible_cats):
         expected = initial_value if condition == "RI" else final_value
         prompt   = build_prompt(sequence, test_category, condition)
 
-        response = model.generate(prompt)
+        # Retry if model returned an error/mock response (e.g. TR auth failure)
+        for _api_attempt in range(3):
+            response = model.generate(prompt)
+            if response and not response.startswith(("Error:", "Mock response for", "[ERROR")):
+                break
+            if _api_attempt < 2:
+                import time as _t; _t.sleep(2 ** _api_attempt)
 
         # Capture token usage immediately — this thread owns this model instance
         # so model.last_* is safe to read here with no race risk

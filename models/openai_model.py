@@ -9,6 +9,7 @@ TR AI Platform Workspace auth (set TR_WORKSPACE_ID env var):
 """
 
 import os
+import random
 from datetime import datetime, timezone
 from typing import Dict, Optional
 from .base_model import BaseModelInterface
@@ -85,15 +86,23 @@ class OpenAIModelInterface(BaseModelInterface):
         self._use_tr_workspace = True
         self.use_azure = True
 
-        try:
-            self._fetch_tr_token()
-            if self.config.get('verbose', True):
-                expiry = self._tr_expires.strftime('%H:%M UTC') if self._tr_expires else "no expiry"
-                print(f"✓ TR OpenAI initialized: {self.model_id} (token: {expiry})")
-            self.available = True
-        except Exception as e:
-            print(f"⚠️  TR workspace init failed: {e}")
-            self.available = False
+        import time as _time
+        for _attempt in range(5):
+            try:
+                self._fetch_tr_token()
+                if self.config.get('verbose', True):
+                    expiry = self._tr_expires.strftime('%H:%M UTC') if self._tr_expires else "no expiry"
+                    print(f"✓ TR OpenAI initialized: {self.model_id} (token: {expiry})")
+                self.available = True
+                break
+            except Exception as e:
+                if _attempt < 4:
+                    wait = random.uniform(1, 4 * (2 ** _attempt))
+                    print(f"⚠️  TR workspace init failed: {e} — retrying in {wait:.1f}s")
+                    _time.sleep(wait)
+                else:
+                    print(f"⚠️  TR workspace init failed permanently: {e}")
+                    self.available = False
 
     def _fetch_tr_token(self):
         """Fetch fresh TR credentials and recreate the AzureOpenAI client."""

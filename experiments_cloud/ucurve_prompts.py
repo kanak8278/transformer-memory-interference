@@ -47,7 +47,7 @@ def shuffle_no_consecutive(items: list, rng: random.Random) -> list:
     return items  # best effort
 
 
-def generate_stream(nk: int, nu: int, seed: int):
+def generate_stream(nk: int, nu: int, seed: int, dataset: str = "ARBITRARY_SINGLE"):
     """
     Returns:
         categories      — list of nk category names
@@ -58,11 +58,11 @@ def generate_stream(nk: int, nu: int, seed: int):
     """
     rng = random.Random(seed)
 
-    eligible = get_eligible_categories("ARBITRARY_SINGLE", min_values=nu)
+    eligible = get_eligible_categories(dataset, min_values=nu)
     categories = rng.sample(eligible, min(nk, len(eligible)))
     test_category = categories[seed % nk]
 
-    values_per_cat = generate_values_for_trial("ARBITRARY_SINGLE", categories, nu, rng)
+    values_per_cat = generate_values_for_trial(dataset, categories, nu, rng)
 
     # Build flat items with update_idx
     flat_items = []
