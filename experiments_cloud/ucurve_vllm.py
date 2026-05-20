@@ -76,25 +76,25 @@ MODEL_REGISTRY = {
     # Qwen3.5 family
     "Qwen3.5-0.8B": {
         "hf_id":    "Qwen/Qwen3.5-0.8B",
-        "instruct": False,
+        "instruct": True,   # ChatML + thinking tags — RL-trained despite no -Instruct suffix
         "dtype":    "bfloat16",
         "max_len":  32768,
     },
     "Qwen3.5-2B": {
         "hf_id":    "Qwen/Qwen3.5-2B",
-        "instruct": False,
+        "instruct": True,   # ChatML + thinking tags — RL-trained despite no -Instruct suffix
         "dtype":    "bfloat16",
         "max_len":  32768,
     },
     "Qwen3.5-4B": {
         "hf_id":    "Qwen/Qwen3.5-4B",
-        "instruct": False,
+        "instruct": True,   # ChatML + thinking tags — RL-trained despite no -Instruct suffix
         "dtype":    "bfloat16",
         "max_len":  32768,
     },
     "Qwen3.5-9B": {
         "hf_id":    "Qwen/Qwen3.5-9B",
-        "instruct": False,
+        "instruct": True,   # ChatML + thinking tags — RL-trained despite no -Instruct suffix
         "dtype":    "bfloat16",
         "max_len":  32768,
     },
