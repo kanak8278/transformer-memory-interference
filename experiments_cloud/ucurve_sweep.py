@@ -34,19 +34,19 @@ from models.model_factory import create_model
 from experiments_cloud.ucurve_prompts import (
     generate_stream, make_seed, query_positions,
     prompt_block, prompt_flat_short, prompt_flat_verbose,
-    prompt_flat_nolabel, prompt_original,
+    prompt_flat_nolabel, prompt_original, prompt_landmark,
     LASTQUERY_BUILDERS,
     SYSTEM_PROMPT,
 )
 
 # ─── constants ────────────────────────────────────────────────────────────────
 ALL_FORMATS  = [
-    "block", "flat_short", "flat_verbose", "flat_nolabel", "original",
-    "block_last", "flat_short_last", "flat_verbose_last", "flat_nolabel_last",
+    "block", "flat_short", "flat_verbose", "flat_nolabel", "original", "landmark",
+    "block_last", "flat_short_last", "flat_verbose_last", "flat_nolabel_last", "landmark_last",
 ]
 # _last formats: run same numbered queries as base format + one extra "last" query
 # Results for the extra query stored under key "last" in positions dict
-_LAST_FMTS         = {"block_last", "flat_short_last", "flat_verbose_last", "flat_nolabel_last"}
+_LAST_FMTS         = {"block_last", "flat_short_last", "flat_verbose_last", "flat_nolabel_last", "landmark_last"}
 _STREAM_COUNT_FMTS = {"flat_nolabel", "flat_nolabel_last"}
 DEFAULT_NK   = [5, 7, 10, 12, 15]
 DEFAULT_NU   = [10, 30, 50, 75, 100]
@@ -64,10 +64,12 @@ PROMPT_BUILDERS = {
     "original":          lambda flat, block, test, k: prompt_original(flat, test, k),
     # _last formats reuse the base format's numbered queries for all positions,
     # then fire one extra "last" query per trial (see LASTQUERY_BUILDERS).
+    "landmark":          lambda flat, block, test, k: prompt_landmark(block, test, k),
     "block_last":        lambda flat, block, test, k: prompt_block(block, test, k),
     "flat_short_last":   lambda flat, block, test, k: prompt_flat_short(flat, test, k),
     "flat_verbose_last": lambda flat, block, test, k: prompt_flat_verbose(flat, test, k),
     "flat_nolabel_last": lambda flat, block, test, k: prompt_flat_nolabel(flat, test, k),
+    "landmark_last":     lambda flat, block, test, k: prompt_landmark(block, test, k),
 }
 
 # ─── thread-local model ───────────────────────────────────────────────────────
@@ -236,17 +238,23 @@ def classify(predicted: str, expected: str, all_values: list[str]) -> dict:
 
 # ─── single API call ──────────────────────────────────────────────────────────
 def call_api(model_name: str, prompt: str) -> tuple[str, dict]:
-    """Returns (raw_output, token_usage)."""
+    """Returns (raw_output, token_usage). Retries on auth failures / mock responses."""
     model = get_model(model_name)
-    try:
-        raw = model.generate(prompt)
-        usage = {
-            "input_tokens":  getattr(model, "last_input_tokens",  None),
-            "output_tokens": getattr(model, "last_output_tokens", None),
-        }
-        return raw.strip(), usage
-    except Exception as e:
-        return f"[ERROR: {e}]", {}
+    for attempt in range(3):
+        try:
+            raw = model.generate(prompt)
+        except Exception as e:
+            raw = f"[ERROR: {e}]"
+        # Detect failed responses (TR auth failure → mock/error string)
+        if raw and not raw.startswith(("Error:", "Mock response for", "[ERROR")):
+            break
+        if attempt < 2:
+            import time as _t; _t.sleep(2 ** attempt)
+    usage = {
+        "input_tokens":  getattr(model, "last_input_tokens",  None),
+        "output_tokens": getattr(model, "last_output_tokens", None),
+    }
+    return raw.strip(), usage
 
 # ─── run one trial (paired: all positions, one stream) ────────────────────────
 def run_trial(model_name: str, fmt_name: str, nk: int, nu: int,
@@ -272,7 +280,7 @@ def run_trial(model_name: str, fmt_name: str, nk: int, nu: int,
     # Stored under key "last" (string) alongside the integer position results.
     if fmt_name in _LAST_FMTS:
         lq_builder = LASTQUERY_BUILDERS[fmt_name]
-        items = block if "block" in fmt_name else flat
+        items = block if ("block" in fmt_name or "landmark" in fmt_name) else flat
         prompts["last"] = lq_builder(items, test)
 
     # Fire all position queries (+ optional "last") concurrently

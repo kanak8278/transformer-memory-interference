@@ -9,6 +9,7 @@ from .gemini_model import GeminiModelInterface
 from .openai_model import OpenAIModelInterface
 from .llama_model import LlamaModelInterface
 from .bedrock_model import BedrockModelInterface
+from .jumpstart_model import JumpStartModelInterface
 
 
 def create_model(model_name: str, config: Optional[Dict] = None) -> BaseModelInterface:
@@ -16,7 +17,8 @@ def create_model(model_name: str, config: Optional[Dict] = None) -> BaseModelInt
     Create a model instance based on the model name.
 
     Args:
-        model_name: Model identifier (e.g., 'claude-haiku', 'gemini-pro', 'gpt-4', 'llama-3.1-8b', 'bedrock-llama-3-70b')
+        model_name: Model identifier (e.g., 'claude-haiku', 'gemini-pro', 'gpt-4', 'llama-3.1-8b', 'bedrock-llama-3-70b',
+                    'jumpstart-qwen3-5-9b')
         config: Optional configuration dictionary
 
     Returns:
@@ -26,7 +28,9 @@ def create_model(model_name: str, config: Optional[Dict] = None) -> BaseModelInt
         ValueError: If model provider is not recognized
     """
     # Determine provider from model name
-    if model_name.startswith('bedrock-'):
+    if model_name.startswith('jumpstart-'):
+        return JumpStartModelInterface(model_name, config)
+    elif model_name.startswith('bedrock-'):
         return BedrockModelInterface(model_name, config)
     elif model_name.startswith('claude'):
         return ClaudeModelInterface(model_name, config)

@@ -23,15 +23,22 @@ SYSTEM_PROMPT = (
 )
 
 # ─── query positions ──────────────────────────────────────────────────────────
-def query_positions(nu: int, n_points: int = 11) -> list[int]:
-    """n_points evenly spaced positions from 1 to nu, always including 1 and nu."""
+def query_positions(nu: int, n_points: int = 16) -> list[int]:
+    """Position scheme: first 7 fixed + equally spaced fill + final (nu).
+    Total = min(nu, n_points) positions.
+    n_points = 16 means 15 intermediate (first 7 always included) + 1 final.
+    """
     if nu <= n_points:
         return list(range(1, nu + 1))
-    positions = set()
-    for i in range(n_points):
-        pos = round(1 + i * (nu - 1) / (n_points - 1))
-        positions.add(max(1, min(nu, pos)))
-    return sorted(positions)
+    fixed = list(range(1, 8))          # positions 1–7 always included
+    n_fill = n_points - len(fixed) - 1 # slots between pos 8 and nu-1
+    fill = []
+    if n_fill > 0 and nu > 8:
+        for i in range(n_fill):
+            pos = round(8 + i * (nu - 1 - 8) / max(n_fill - 1, 1))
+            fill.append(max(8, min(nu - 1, pos)))
+    positions = sorted(set(fixed + fill + [nu]))
+    return positions
 
 
 # ─── stream generation ────────────────────────────────────────────────────────
@@ -242,22 +249,53 @@ def prompt_flat_nolabel_lastquery(flat_items: list, test_category: str) -> str:
     )
 
 
+def prompt_landmark(block_items: list, test_category: str, k: int) -> str:
+    """Landmark format: block layout with '---' separating rounds (no round numbers)."""
+    rounds = []
+    for block in block_items:
+        rounds.append("\n".join(f"{item['category']}: {item['value']}" for item in block))
+    stream = "\n---\n".join(rounds)
+    return (
+        f"Read the following key-value stream. "
+        f"Each key is updated multiple times, grouped by update round. "
+        f"The '---' marker separates consecutive update rounds.\n\n"
+        f"{stream}\n\n"
+        f"{QUERY_LABELED.format(category=test_category, k=k)}\n"
+        f"Answer with ONLY the exact value. No explanation."
+    )
+
+
+def prompt_landmark_lastquery(block_items: list, test_category: str) -> str:
+    """Landmark format with semantic 'last value' query."""
+    rounds = []
+    for block in block_items:
+        rounds.append("\n".join(f"{item['category']}: {item['value']}" for item in block))
+    stream = "\n---\n".join(rounds)
+    return (
+        f"Read the following key-value stream. "
+        f"Each key is updated multiple times, grouped by update round. "
+        f"The '---' marker separates consecutive update rounds.\n\n"
+        f"{stream}\n\n"
+        f"{QUERY_LAST.format(category=test_category)}\n"
+        f"Answer with ONLY the exact value. No explanation."
+    )
+
+
 FORMATS = {
     "block":        prompt_block,
     "flat_short":   prompt_flat_short,
     "flat_verbose": prompt_flat_verbose,
     "flat_nolabel": prompt_flat_nolabel,
     "original":     prompt_original,
+    "landmark":     prompt_landmark,
 }
 
-# _lastquery builders: same stream as base format, but always ask "last value"
-# Used by _last sweep formats to fire one extra query per trial alongside all
-# the regular numbered position queries.
 LASTQUERY_BUILDERS = {
     "block_last":        prompt_block_lastquery,
     "flat_short_last":   prompt_flat_short_lastquery,
     "flat_verbose_last": prompt_flat_verbose_lastquery,
     "flat_nolabel_last": prompt_flat_nolabel_lastquery,
+    "landmark_last":     prompt_landmark_lastquery,
 }
 
 
