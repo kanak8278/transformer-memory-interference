@@ -63,7 +63,7 @@ MODEL_REGISTRY = {
     },
     "Qwen2.5-3B": {
         "hf_id":    "Qwen/Qwen2.5-3B",
-        "instruct": False,
+        "instruct": True,   # verified: has chat template with system+user roles
         "dtype":    "bfloat16",
         "max_len":  16384,
     },
@@ -101,7 +101,7 @@ MODEL_REGISTRY = {
     # Gemma-3 family
     "gemma-3-270m-it": {
         "hf_id":    "google/gemma-3-270m-it",
-        "instruct": True,
+        "instruct": False,  # verified: no chat template in tokenizer_config.json
         "dtype":    "bfloat16",
         "max_len":  8192,
     },
