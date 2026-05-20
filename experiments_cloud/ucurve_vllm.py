@@ -181,7 +181,7 @@ class HFEngine:
 
         self.model = AutoModelForCausalLM.from_pretrained(
             hf_id,
-            torch_dtype=dtype,
+            dtype=dtype,
             device_map=self.device,
             trust_remote_code=True,
         )
