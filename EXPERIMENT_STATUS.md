@@ -1,5 +1,5 @@
 # Experiment Status Map
-Last updated: 2026-05-20
+Last updated: 2026-05-20 (session 2)
 
 ## Active Model Set
 
@@ -131,9 +131,9 @@ Note: `_last` formats run position queries AND a semantic "last value" query per
 | gemini-2.5-flash | 19/24 | 🔄 Running |
 | gemini-2.5-pro | 13/24 | 🔄 Running |
 
-### Planned: local models (needs vLLM ucurve script)
+### Planned: local models (script READY — `experiments_cloud/ucurve_vllm.py`)
 
-Target models: **gemma-3-4b-it, Qwen2.5-3B-Instruct, Qwen3.5-9B**
+Target models: **gemma-3-4b-it, Qwen2.5-3B-Instruct, Qwen3.5-2B, Qwen3.5-4B, Qwen3.5-9B**
 
 Must exactly match the `ucurve_proprietary` runs so results are directly comparable:
 - **Dataset**: SEMANTIC_MULTI
@@ -144,13 +144,21 @@ Must exactly match the `ucurve_proprietary` runs so results are directly compara
   - No need to also run base formats separately
 - **Grid**: K∈{5,10} × N∈{10,20,50} — 6 cells × 4 formats = 24 format-cells per model
 - **n_positions**: 16 (positions 1–7 fixed, then 8 evenly-spaced fill, then N)
-- **Trials**: 100/cell fixed (vLLM is fast, no adaptive stopping needed)
-- **Save dir**: `experiments_cloud/results/ucurve_local/{model}/checkpoint.json`
-- **Script needed**: vLLM adaptation of `experiments_cloud/ucurve_sweep.py`
-  - Prompt generation: reuse `experiments_cloud/ucurve_prompts.py` as-is
-  - Stream generation: reuse `generate_stream()`, `query_positions()`, `make_seed()`
-  - Only change: replace `call_api()` + ThreadPoolExecutor with vLLM batch inference
-  - Checkpoint/resume logic: same pattern as existing script
+- **Trials**: 50/cell on MPS (Apple Silicon); 100/cell on NVIDIA GPU
+- **Save dir**: `experiments_cloud/results/ucurve_vllm/{model}/checkpoint.json`
+- **Script**: `experiments_cloud/ucurve_vllm.py`
+  - Auto-selects HF backend (MPS/CPU) or vLLM (CUDA)
+  - Reuses `ucurve_prompts.py` prompt generation unchanged
+  - Checkpoint/resume with `--resume` flag
+  - Smoke-tested on Qwen2.5-3B-Instruct (MPS, 29s/cell, 5 trials)
+
+**Run command (MPS):**
+```bash
+python experiments_cloud/ucurve_vllm.py \
+  --model Qwen2.5-3B-Instruct \
+  --formats flat_nolabel_last flat_verbose_last block_last landmark_last \
+  --nk 5 10 --nu 10 20 50 --trials 50 --dataset SEMANTIC_MULTI
+```
 
 ---
 
@@ -163,42 +171,43 @@ All existing probing runs are at K=2/N=5, which is near-ceiling accuracy for mos
 (experiment broke entirely). These files exist but are not usable for the paper.
 - Files: `v3/results_vllm/probing/probing_*_2k_5u.json`
 
-### Planned runs — 7 models, 8 probing points
+### Planned runs — 4 models, 7 probing points
 
-Operating point selection criterion: FVQ >0.80 AND CVQ in 0.30–0.70 (balanced failure/success
-for both query types). Reversal points selected where CVQ CI lower > FVQ CI upper (statistically
-significant reversal confirmed).
+Operating point selection criterion (ARBITRARY_SINGLE only — single-token values enable
+clean logit tracking per value):
+- Normal zone: FVQ ∈ [0.75, 0.95] AND CVQ ∈ [0.25, 0.65]
+- Reversal zone: CVQ > FVQ, both > 0.25 (not at floor)
 
 **Normal zone (FVQ > CVQ — standard failure mode):**
 
 | Model | K/N | FVQ | CVQ | Gap | Purpose |
 |-------|-----|-----|-----|-----|---------|
-| gemma-3-4b-it | K=25/N=10 | 0.97 | 0.39 | +0.58 | Primary model, strongest gap |
-| Qwen2.5-1.5B-Instruct | K=3/N=10 | 0.98 | 0.39 | +0.59 | Cross-family, clean signal |
-| Qwen3.5-4B | K=7/N=7 | 0.98 | 0.65 | +0.33 | Stronger Qwen3.5 |
-| Qwen3.5-9B | K=15/N=30 | 0.89 | 0.53 | +0.36 | Largest local model |
-| Qwen2.5-3B-Instruct | K=2/N=50 | 0.89 | 0.40 | +0.49 | Baseline for reversal comparison |
+| Qwen2.5-3B-Instruct | K=2/N=30 | 0.86 | 0.41 | +0.45 | Baseline for reversal comparison |
+| Qwen3.5-2B | K=2/N=20 | 0.83 | 0.36 | +0.47 | Cross-family, K-anomaly model |
+| Qwen3.5-4B | K=7/N=10 | 0.90 | 0.60 | +0.30 | Larger model, both in range |
+| gemma-3-4b-it | K=7/N=30 | 0.95 | 0.52 | +0.43 | Control — never reverses |
 
 **Reversal zone (CVQ > FVQ — mechanism flip?):**
 
 | Model | K/N | FVQ | CVQ | Gap | Purpose |
 |-------|-----|-----|-----|-----|---------|
-| Qwen2.5-3B-Instruct | K=20/N=50 | 0.10 | 0.65 | −0.55 | Key experiment: does mechanism flip? |
-| Qwen2.5-3B (base) | K=20/N=15 | 0.12 | 0.70 | −0.58 | Strongest reversal; base vs instruct contrast |
-| Qwen3.5-2B | K=25/N=5 | 0.35 | 0.76 | −0.41 | Anomalous: reversal at low N (N/K-driven, not K×N-driven) |
+| Qwen2.5-3B-Instruct | K=15/N=20 | 0.32 | 0.58 | −0.26 | Does logit lens show mechanism flip? |
+| Qwen3.5-2B | K=15/N=7 | 0.41 | 0.66 | −0.25 | K-driven reversal at LOW N (anomaly) |
+| Qwen3.5-4B | K=10/N=50 | 0.43 | 0.65 | −0.22 | Reversal in larger model |
 
-**What reversal probing tests:** In the reversal zone, does logit lens show the *last-occurring
-value* being promoted through layers (mechanism flip: primacy → recency), or does FVQ collapse
-for unrelated reasons while CVQ succeeds accidentally? If logit lens at K=20/N=50 shows the
-last value promoted instead of the first, that's direct evidence of a phase transition in the
-retrieval mechanism driven by total context load (K×N).
+**All operating points verified from ARBITRARY_SINGLE behavioral data (100 trials/cell).**
 
-**Reversal predictor analysis (to run separately on behavioral CSV data):**
-- K×N is the primary predictor of reversal for Qwen2.5-3B, Qwen2.5-3B-Instruct, Qwen3.5-4B,
-  Qwen2.5-1.5B (r=−0.75 to −0.85)
-- Qwen3.5-2B is anomalous: N/K drives reversal (r=+0.76) — reverses at high K / low N
-- Build: logistic regression P(reversal | K, N) per model; reversal boundary heatmap in K-N space
-- This analysis runs on existing behavioral CSV — no new experiments needed
+**What reversal probing tests:** In the reversal zone, does logit lens show v_last being
+promoted across layers instead of v_first (mechanism flip: primacy → recency)? Or does
+FVQ collapse for unrelated reasons while CVQ succeeds via recency? The logit lens will
+distinguish these: a mechanism flip shows v_last rising while v_first decays in early layers.
+
+**Reversal predictor analysis (DONE — see notebooks/reversal_analysis.ipynb):**
+- K (num_keys) is the primary driver, not K×N alone (logistic reg coef log_k=+1.5 to +1.9)
+- Qwen3.5-2B anomaly: N coef = −1.10 (more N → LESS reversal) — pure K-driven
+- Gemma-3-4b never reverses: CVQ structurally near-zero, GQA 4-head architecture
+- SFT raises reversal threshold ~3× (Qwen2.5-3B base KN=49 vs instruct KN=150)
+- Family analysis: notebooks/family_reversal_analysis.ipynb
 
 ---
 
