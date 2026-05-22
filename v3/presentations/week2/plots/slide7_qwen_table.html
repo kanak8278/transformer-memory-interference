@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Slide 7 — Qwen Family Results</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    background: #FFFFFF;
+    color: #1A1A1A;
+    margin: 0;
+    padding: 48px;
+  }
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
+  .dataset-block { }
+  .dataset-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #2C2C2C;
+    margin-bottom: 2px;
+  }
+  .dataset-sub {
+    font-size: 11.5px;
+    color: #888;
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+  table {
+    border-collapse: separate;
+    border-spacing: 3px;
+    width: 100%;
+  }
+  th {
+    font-size: 11px;
+    font-weight: 600;
+    color: #555;
+    padding: 5px 4px;
+    text-align: center;
+    background: #F4F4F4;
+    border-radius: 3px;
+  }
+  th.model { background: transparent; text-align: left; }
+  th.ncells, td.ncells {
+    background: transparent !important;
+    color: #AAA;
+    font-size: 10.5px;
+    text-align: center;
+    font-weight: 400;
+    padding: 4px 4px;
+  }
+  th .hint {
+    display: block;
+    font-size: 9.5px;
+    color: #888;
+    font-weight: 400;
+    margin-top: 1px;
+  }
+  td {
+    padding: 7px 6px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 13.5px;
+    border-radius: 3px;
+  }
+  td.model {
+    text-align: left;
+    background: transparent;
+    color: #1A1A1A;
+    font-weight: 600;
+    font-size: 12.5px;
+    padding-left: 4px;
+  }
+  tr.row-base td.model { font-style: italic; color: #C2185B; }
+  tr.row-base td.model::after {
+    content: " (no SFT)";
+    font-size: 10.5px;
+    color: #999;
+    font-weight: 400;
+    font-style: normal;
+  }
+  tr.family-divider td { background: transparent !important; padding: 0 !important; height: 12px; border-top: 1px dashed #DDD; }
+  .legend {
+    display: flex;
+    gap: 24px;
+    margin-top: 28px;
+    font-size: 11.5px;
+    color: #555;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .swatch {
+    width: 18px; height: 14px; border-radius: 3px; display: inline-block;
+  }
+  .footer {
+    margin-top: 24px;
+    font-size: 11px;
+    color: #999;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Qwen 2.5 Family — Position-Dependent Retrieval</h1>
+    <div class="subtitle">
+      Full-grid means · 100 trials/cell · Wilson 95% CIs ≤ ±10% per cell
+    </div>
+    <div class="grid">
+      
+    <div class="dataset-block">
+      <div class="dataset-title">ARBITRARY-SINGLE</div>
+      <div class="dataset-sub">single-token English words, no semantic priors</div>
+      <table>
+        <thead>
+          <tr>
+            <th class="model"></th>
+            <th>RI<br><span class="hint">recall first</span></th>
+            <th>PI<br><span class="hint">recall last</span></th>
+            <th>Gap<br><span class="hint">RI − PI</span></th>
+            <th class="ncells">cells</th>
+          </tr>
+        </thead>
+        <tbody><tr class="row-instruct fam-qwen"><td class="model">Qwen 0.5B Inst</td><td class="cell" style="background:rgb(182,222,184); color:#1A1A1A">40%</td><td class="cell" style="background:rgb(196,60,61); color:#FFFFFF">9%</td><td class="cell" style="background:rgb(229,159,159); color:#1A1A1A">+31.0%</td><td class="ncells">n=78</td></tr><tr class="row-instruct fam-qwen"><td class="model">Qwen 1.5B Inst</td><td class="cell" style="background:rgb(135,191,137); color:#1A1A1A">63%</td><td class="cell" style="background:rgb(206,85,86); color:#FFFFFF">16%</td><td class="cell" style="background:rgb(217,112,112); color:#1A1A1A">+46.4%</td><td class="ncells">n=79</td></tr><tr class="row-instruct fam-qwen"><td class="model">Qwen 3B Inst</td><td class="cell" style="background:rgb(158,209,160); color:#1A1A1A">53%</td><td class="cell" style="background:rgb(255,205,210); color:#1A1A1A">50%</td><td class="cell" style="background:rgb(252,247,247); color:#1A1A1A">+2.5%</td><td class="ncells">n=79</td></tr><tr class="row-base fam-qwen"><td class="model">Qwen 3B Base</td><td class="cell" style="background:rgb(176,219,177); color:#1A1A1A">44%</td><td class="cell" style="background:rgb(255,210,214); color:#1A1A1A">56%</td><td class="cell" style="background:rgb(163,194,230); color:#1A1A1A">-11.8%</td><td class="ncells">n=73</td></tr><tr class="family-divider"><td colspan="5"></td></tr><tr class="row-instruct fam-gemma"><td class="model">Gemma 270M It</td><td class="cell" style="background:rgb(221,239,222); color:#1A1A1A">18%</td><td class="cell" style="background:rgb(187,39,39); color:#FFFFFF">3%</td><td class="cell" style="background:rgb(242,208,208); color:#1A1A1A">+15.2%</td><td class="ncells">n=63</td></tr><tr class="row-instruct fam-gemma"><td class="model">Gemma 1B It</td><td class="cell" style="background:rgb(147,201,150); color:#1A1A1A">57%</td><td class="cell" style="background:rgb(187,38,38); color:#FFFFFF">3%</td><td class="cell" style="background:rgb(210,88,88); color:#FFFFFF">+54.2%</td><td class="ncells">n=55</td></tr><tr class="row-instruct fam-gemma"><td class="model">Gemma 4B It</td><td class="cell" style="background:rgb(57,133,61); color:#FFFFFF">95%</td><td class="cell" style="background:rgb(253,202,207); color:#1A1A1A">49%</td><td class="cell" style="background:rgb(217,113,113); color:#1A1A1A">+45.9%</td><td class="ncells">n=76</td></tr></tbody>
+      </table>
+    </div>
+    
+      
+    <div class="dataset-block">
+      <div class="dataset-title">SEMANTIC-MULTI</div>
+      <div class="dataset-sub">multi-token category-anchored values</div>
+      <table>
+        <thead>
+          <tr>
+            <th class="model"></th>
+            <th>RI<br><span class="hint">recall first</span></th>
+            <th>PI<br><span class="hint">recall last</span></th>
+            <th>Gap<br><span class="hint">RI − PI</span></th>
+            <th class="ncells">cells</th>
+          </tr>
+        </thead>
+        <tbody><tr class="row-instruct fam-qwen"><td class="model">Qwen 0.5B Inst</td><td class="cell" style="background:rgb(148,201,150); color:#1A1A1A">57%</td><td class="cell" style="background:rgb(207,89,90); color:#FFFFFF">17%</td><td class="cell" style="background:rgb(222,132,132); color:#1A1A1A">+39.8%</td><td class="ncells">n=63</td></tr><tr class="row-instruct fam-qwen"><td class="model">Qwen 1.5B Inst</td><td class="cell" style="background:rgb(140,195,142); color:#1A1A1A">60%</td><td class="cell" style="background:rgb(223,127,129); color:#1A1A1A">28%</td><td class="cell" style="background:rgb(228,155,155); color:#1A1A1A">+32.4%</td><td class="ncells">n=63</td></tr><tr class="row-instruct fam-qwen"><td class="model">Qwen 3B Inst</td><td class="cell" style="background:rgb(134,191,137); color:#1A1A1A">63%</td><td class="cell" style="background:rgb(255,212,217); color:#1A1A1A">58%</td><td class="cell" style="background:rgb(251,240,240); color:#1A1A1A">+4.8%</td><td class="ncells">n=63</td></tr><tr class="row-base fam-qwen"><td class="model">Qwen 3B Base</td><td class="cell" style="background:rgb(165,214,167); color:#1A1A1A">50%</td><td class="cell" style="background:rgb(255,220,223); color:#1A1A1A">65%</td><td class="cell" style="background:rgb(137,177,223); color:#1A1A1A">-15.1%</td><td class="ncells">n=61</td></tr><tr class="family-divider"><td colspan="5"></td></tr><tr class="row-instruct fam-gemma"><td class="model">Gemma 270M It</td><td class="cell" style="background:rgb(232,244,232); color:#1A1A1A">13%</td><td class="cell" style="background:rgb(192,50,51); color:#FFFFFF">6%</td><td class="cell" style="background:rgb(249,235,235); color:#1A1A1A">+6.4%</td><td class="ncells">n=57</td></tr><tr class="row-instruct fam-gemma"><td class="model">Gemma 1B It</td><td class="cell" style="background:rgb(148,201,150); color:#1A1A1A">57%</td><td class="cell" style="background:rgb(191,48,49); color:#FFFFFF">6%</td><td class="cell" style="background:rgb(213,98,98); color:#FFFFFF">+51.1%</td><td class="ncells">n=62</td></tr><tr class="row-instruct fam-gemma"><td class="model">Gemma 4B It</td><td class="cell" style="background:rgb(59,134,62); color:#FFFFFF">94%</td><td class="cell" style="background:rgb(255,217,221); color:#1A1A1A">62%</td><td class="cell" style="background:rgb(228,156,156); color:#1A1A1A">+32.0%</td><td class="ncells">n=62</td></tr></tbody>
+      </table>
+    </div>
+    
+    </div>
+    <div class="legend">
+      <div class="legend-item"><span class="swatch" style="background:#2E7D32"></span>RI high (good)</div>
+      <div class="legend-item"><span class="swatch" style="background:#B71C1C"></span>PI low (bad)</div>
+      <div class="legend-item"><span class="swatch" style="background:#C62828"></span>Gap &gt; 0 — primacy bias (RI &gt; PI)</div>
+      <div class="legend-item"><span class="swatch" style="background:#1565C0"></span>Gap &lt; 0 — recency wins (PI &gt; RI)</div>
+    </div>
+    <div class="footer">
+      RI = recall first value · PI = recall last value · Gap = RI − PI · n_cells = number of (K, N) cells averaged
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Slide 7 — Qwen Family Results (React Demo)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body { margin: 0; background: #F7F7F7; }
+    .deck-frame {
+      max-width: 1400px; margin: 24px auto;
+      background: #FFFFFF; box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+      border-radius: 8px;
+    }
+    .slide-header {
+      padding: 12px 24px; background: #FAFAFA;
+      border-bottom: 1px solid #EEE;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      font-size: 12px; color: #777;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .slide-header strong { color: #333; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="deck-frame">
+    <div class="slide-header">
+      <span><strong>Slide 7</strong> · Qwen Family Results</span>
+      <span>Week 2 Update · React demo</span>
+    </div>
+    <div id="root"></div>
+  </div>
+
+  <script type="text/babel" data-presets="react">
+    const SLIDE_DATA = {
+  "title": "Qwen 2.5 Family \u2014 Position-Dependent Retrieval",
+  "subtitle": "Full-grid means \u00b7 100 trials/cell",
+  "datasets": [
+    {
+      "key": "arbitrary_single",
+      "title": "ARBITRARY-SINGLE",
+      "subtitle": "single-token, no semantic priors"
+    },
+    {
+      "key": "semantic_multi",
+      "title": "SEMANTIC-MULTI",
+      "subtitle": "multi-token, real categories"
+    }
+  ],
+  "models": [
+    {
+      "key": "Qwen2.5-0.5B-Instruct",
+      "label": "Qwen 0.5B Inst",
+      "family": "instruct",
+      "family_group": "qwen"
+    },
+    {
+      "key": "Qwen2.5-1.5B-Instruct",
+      "label": "Qwen 1.5B Inst",
+      "family": "instruct",
+      "family_group": "qwen"
+    },
+    {
+      "key": "Qwen2.5-3B-Instruct",
+      "label": "Qwen 3B Inst",
+      "family": "instruct",
+      "family_group": "qwen"
+    },
+    {
+      "key": "Qwen2.5-3B",
+      "label": "Qwen 3B Base",
+      "family": "base",
+      "family_group": "qwen"
+    },
+    {
+      "key": "gemma-3-270m-it",
+      "label": "Gemma 270M It",
+      "family": "instruct",
+      "family_group": "gemma"
+    },
+    {
+      "key": "gemma-3-1b-it",
+      "label": "Gemma 1B It",
+      "family": "instruct",
+      "family_group": "gemma"
+    },
+    {
+      "key": "gemma-3-4b-it",
+      "label": "Gemma 4B It",
+      "family": "instruct",
+      "family_group": "gemma"
+    }
+  ],
+  "data": {
+    "Qwen 0.5B Inst": {
+      "family": "instruct",
+      "family_group": "qwen",
+      "arbitrary_single": {
+        "ri": 0.4015,
+        "pi": 0.0913,
+        "gap": 0.3103,
+        "n_cells": 78
+      },
+      "semantic_multi": {
+        "ri": 0.5703,
+        "pi": 0.1729,
+        "gap": 0.3975,
+        "n_cells": 63
+      }
+    },
+    "Qwen 1.5B Inst": {
+      "family": "instruct",
+      "family_group": "qwen",
+      "arbitrary_single": {
+        "ri": 0.6254,
+        "pi": 0.1615,
+        "gap": 0.4639,
+        "n_cells": 79
+      },
+      "semantic_multi": {
+        "ri": 0.6038,
+        "pi": 0.2798,
+        "gap": 0.324,
+        "n_cells": 63
+      }
+    },
+    "Qwen 3B Inst": {
+      "family": "instruct",
+      "family_group": "qwen",
+      "arbitrary_single": {
+        "ri": 0.528,
+        "pi": 0.503,
+        "gap": 0.0249,
+        "n_cells": 79
+      },
+      "semantic_multi": {
+        "ri": 0.6267,
+        "pi": 0.5783,
+        "gap": 0.0484,
+        "n_cells": 63
+      }
+    },
+    "Qwen 3B Base": {
+      "family": "base",
+      "family_group": "qwen",
+      "arbitrary_single": {
+        "ri": 0.4378,
+        "pi": 0.5553,
+        "gap": -0.1175,
+        "n_cells": 73
+      },
+      "semantic_multi": {
+        "ri": 0.4993,
+        "pi": 0.6503,
+        "gap": -0.151,
+        "n_cells": 61
+      }
+    },
+    "Gemma 270M It": {
+      "family": "instruct",
+      "family_group": "gemma",
+      "arbitrary_single": {
+        "ri": 0.1838,
+        "pi": 0.0313,
+        "gap": 0.1525,
+        "n_cells": 63
+      },
+      "semantic_multi": {
+        "ri": 0.1275,
+        "pi": 0.0633,
+        "gap": 0.0642,
+        "n_cells": 57
+      }
+    },
+    "Gemma 1B It": {
+      "family": "instruct",
+      "family_group": "gemma",
+      "arbitrary_single": {
+        "ri": 0.5725,
+        "pi": 0.03,
+        "gap": 0.5425,
+        "n_cells": 55
+      },
+      "semantic_multi": {
+        "ri": 0.5692,
+        "pi": 0.0581,
+        "gap": 0.5111,
+        "n_cells": 62
+      }
+    },
+    "Gemma 4B It": {
+      "family": "instruct",
+      "family_group": "gemma",
+      "arbitrary_single": {
+        "ri": 0.9511,
+        "pi": 0.4918,
+        "gap": 0.4592,
+        "n_cells": 76
+      },
+      "semantic_multi": {
+        "ri": 0.945,
+        "pi": 0.625,
+        "gap": 0.32,
+        "n_cells": 62
+      }
+    }
+  },
+  "color_spec": {
+    "ri": {
+      "type": "sequential",
+      "low": "#FFFFFF",
+      "mid": "#A5D6A7",
+      "high": "#2E7D32",
+      "vmin": 0.0,
+      "vmax": 1.0
+    },
+    "pi": {
+      "type": "sequential",
+      "low": "#B71C1C",
+      "mid": "#FFCDD2",
+      "high": "#FFFFFF",
+      "vmin": 0.0,
+      "vmax": 1.0
+    },
+    "gap": {
+      "type": "diverging",
+      "low": "#1565C0",
+      "mid": "#FFFFFF",
+      "high": "#C62828",
+      "vcenter": 0.0,
+      "vmin": -0.3,
+      "vmax": 0.7
+    }
+  }
+};
+
+    /**
+ * Slide7QwenResults — React component for the Qwen-family results table.
+ *
+ * Drop into a React project. Pass `data` as the contents of
+ *   v3/presentations/week2/plots/slide7_qwen_table.json
+ *
+ * Example:
+ *   import data from "./slide7_qwen_table.json";
+ *   <Slide7QwenResults data={data} />
+ *
+ * Styling is co-located via a <style> tag scoped by id selector. In a real
+ * React app you'd move this to CSS modules, Tailwind, or styled-components.
+ */
+
+// ── Colour helpers ───────────────────────────────────────────────────────────
+const lerp = (a, b, t) => a + (b - a) * t;
+const clip01 = t => Math.max(0, Math.min(1, t));
+
+function riColor(v) {
+  const t = clip01(v);
+  let r, g, b;
+  if (t < 0.5) {
+    const u = t / 0.5;
+    r = lerp(255, 165, u); g = lerp(255, 214, u); b = lerp(255, 167, u);
+  } else {
+    const u = (t - 0.5) / 0.5;
+    r = lerp(165, 46, u); g = lerp(214, 125, u); b = lerp(167, 50, u);
+  }
+  return [r, g, b];
+}
+
+function piColor(v) {
+  const t = clip01(v);
+  let r, g, b;
+  if (t < 0.5) {
+    const u = t / 0.5;
+    r = lerp(183, 255, u); g = lerp(28, 205, u); b = lerp(28, 210, u);
+  } else {
+    const u = (t - 0.5) / 0.5;
+    r = lerp(255, 255, u); g = lerp(205, 255, u); b = lerp(210, 255, u);
+  }
+  return [r, g, b];
+}
+
+function gapColor(v) {
+  let r, g, b;
+  if (v >= 0) {
+    const t = clip01(v / 0.7);
+    r = lerp(255, 198, t); g = lerp(255, 40, t); b = lerp(255, 40, t);
+  } else {
+    const t = clip01(-v / 0.3);
+    r = lerp(255, 21, t); g = lerp(255, 101, t); b = lerp(255, 192, t);
+  }
+  return [r, g, b];
+}
+
+const luminance = ([r, g, b]) => (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+const textColor = rgb => (luminance(rgb) < 0.55 ? "#FFFFFF" : "#1A1A1A");
+const rgbStr = ([r, g, b]) => `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
+
+const COLORERS = { ri: riColor, pi: piColor, gap: gapColor };
+
+function fmt(value, kind) {
+  if (Number.isNaN(value) || value == null) return "—";
+  if (kind === "gap") return `${value >= 0 ? "+" : ""}${(value * 100).toFixed(1)}%`;
+  return `${Math.round(value * 100)}%`;
+}
+
+// ── Sub-components ───────────────────────────────────────────────────────────
+function Cell({ value, kind }) {
+  const rgb = COLORERS[kind](value);
+  return (
+    <td className="cell" style={{ background: rgbStr(rgb), color: textColor(rgb) }}>
+      {fmt(value, kind)}
+    </td>
+  );
+}
+
+function DatasetBlock({ datasetKey, title, subtitle, models, data }) {
+  const rows = [];
+  let lastGroup = null;
+  models.forEach(m => {
+    const r = data[m.label][datasetKey];
+    const rowClass = m.family === "base" ? "row-base" : "row-instruct";
+    if (lastGroup !== null && m.family_group !== lastGroup) {
+      rows.push(
+        <tr className="family-divider" key={`div-${m.key}`}>
+          <td colSpan="5" />
+        </tr>
+      );
+    }
+    lastGroup = m.family_group;
+    rows.push(
+      <tr key={m.key} className={`${rowClass} fam-${m.family_group}`}>
+        <td className="model">{m.label}</td>
+        <Cell value={r.ri} kind="ri" />
+        <Cell value={r.pi} kind="pi" />
+        <Cell value={r.gap} kind="gap" />
+        <td className="ncells">n={r.n_cells}</td>
+      </tr>
+    );
+  });
+
+  return (
+    <div className="dataset-block">
+      <div className="dataset-title">{title}</div>
+      <div className="dataset-sub">{subtitle}</div>
+      <table>
+        <thead>
+          <tr>
+            <th className="model" />
+            <th>RI<br /><span className="hint">recall first</span></th>
+            <th>PI<br /><span className="hint">recall last</span></th>
+            <th>Gap<br /><span className="hint">RI − PI</span></th>
+            <th className="ncells">cells</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    </div>
+  );
+}
+
+function Legend() {
+  const items = [
+    { swatch: "#2E7D32", label: "RI high (good)" },
+    { swatch: "#B71C1C", label: "PI low (bad)" },
+    { swatch: "#C62828", label: "Gap > 0 — primacy bias (RI > PI)" },
+    { swatch: "#1565C0", label: "Gap < 0 — recency wins (PI > RI)" },
+  ];
+  return (
+    <div className="legend">
+      {items.map(({ swatch, label }) => (
+        <div className="legend-item" key={label}>
+          <span className="swatch" style={{ background: swatch }} />
+          {label}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Main component ───────────────────────────────────────────────────────────
+function Slide7QwenResults({ data }) {
+  return (
+    <div id="slide7-qwen-results" className="slide">
+      <style>{styles}</style>
+      <div className="container">
+        <h1>{data.title}</h1>
+        <div className="subtitle">{data.subtitle}</div>
+        <div className="grid">
+          {data.datasets.map(ds => (
+            <DatasetBlock
+              key={ds.key}
+              datasetKey={ds.key}
+              title={ds.title}
+              subtitle={ds.subtitle}
+              models={data.models}
+              data={data.data}
+            />
+          ))}
+        </div>
+        <Legend />
+        <div className="footer">
+          RI = recall first value · PI = recall last value · Gap = RI − PI · n_cells = (K, N) cells averaged
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Scoped styles ────────────────────────────────────────────────────────────
+const styles = `
+#slide7-qwen-results { background: #FFFFFF; color: #1A1A1A; padding: 48px; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; }
+#slide7-qwen-results * { box-sizing: border-box; }
+#slide7-qwen-results .container { max-width: 1280px; margin: 0 auto; }
+#slide7-qwen-results h1 { font-size: 22px; font-weight: 700; margin: 0 0 6px 0; letter-spacing: -0.01em; }
+#slide7-qwen-results .subtitle { color: #666; font-size: 13px; margin-bottom: 28px; }
+#slide7-qwen-results .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+#slide7-qwen-results .dataset-title { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: #2C2C2C; margin-bottom: 2px; }
+#slide7-qwen-results .dataset-sub { font-size: 11.5px; color: #888; font-style: italic; margin-bottom: 12px; }
+#slide7-qwen-results table { border-collapse: separate; border-spacing: 3px; width: 100%; }
+#slide7-qwen-results th { font-size: 11px; font-weight: 600; color: #555; padding: 5px 4px; text-align: center; background: #F4F4F4; border-radius: 3px; }
+#slide7-qwen-results th.model { background: transparent; text-align: left; }
+#slide7-qwen-results th.ncells, #slide7-qwen-results td.ncells { background: transparent !important; color: #AAA; font-size: 10.5px; text-align: center; font-weight: 400; padding: 4px 4px; }
+#slide7-qwen-results th .hint { display: block; font-size: 9.5px; color: #888; font-weight: 400; margin-top: 1px; }
+#slide7-qwen-results td { padding: 7px 6px; text-align: center; font-variant-numeric: tabular-nums; font-weight: 600; font-size: 13.5px; border-radius: 3px; }
+#slide7-qwen-results td.model { text-align: left; background: transparent; color: #1A1A1A; font-weight: 600; font-size: 12.5px; padding-left: 4px; }
+#slide7-qwen-results tr.row-base td.model { color: #C2185B; }
+#slide7-qwen-results tr.row-base td.model::after { content: " (no SFT)"; font-size: 10.5px; color: #999; font-weight: 400; font-style: italic; }
+#slide7-qwen-results tr.family-divider td { background: transparent !important; padding: 0 !important; height: 8px; border-top: 1px dashed #DDD; }
+#slide7-qwen-results .legend { display: flex; gap: 24px; margin-top: 28px; font-size: 11.5px; color: #555; flex-wrap: wrap; }
+#slide7-qwen-results .legend-item { display: flex; align-items: center; gap: 8px; }
+#slide7-qwen-results .swatch { width: 18px; height: 14px; border-radius: 3px; display: inline-block; }
+#slide7-qwen-results .footer { margin-top: 24px; font-size: 11px; color: #999; font-style: italic; }
+`;
+
+
+    ReactDOM.createRoot(document.getElementById("root"))
+      .render(<Slide7QwenResults data={SLIDE_DATA} />);
+  </script>
+</body>
+</html>
