@@ -1,0 +1,654 @@
+{
+  "run_name": "dense_ivq",
+  "adapter": "lora_intervention/checkpoints/dense_ivq/checkpoint-400",
+  "timestamp": "20260523_095657",
+  "max_trials": 100,
+  "results": {
+    "ARBITRARY_SINGLE": {
+      "7_30": {
+        "num_keys": 7,
+        "num_updates": 30,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9637,
+            "ci_upper": 1,
+            "n": 70
+          },
+          "PI": {
+            "accuracy": 0.9286,
+            "ci_lower": 0.8621,
+            "ci_upper": 0.995,
+            "n": 70
+          }
+        },
+        "gap": 0.0714,
+        "regime": "AB",
+        "n_trials": 70,
+        "stopped_early": true
+      },
+      "7_50": {
+        "num_keys": 7,
+        "num_updates": 50,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9741,
+            "ci_upper": 1,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.8,
+            "ci_lower": 0.7215,
+            "ci_upper": 0.8785,
+            "n": 100
+          }
+        },
+        "gap": 0.2,
+        "regime": "B",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "7_75": {
+        "num_keys": 7,
+        "num_updates": 75,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.99,
+            "ci_lower": 0.9582,
+            "ci_upper": 1,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.72,
+            "ci_lower": 0.6329,
+            "ci_upper": 0.8071,
+            "n": 100
+          }
+        },
+        "gap": 0.27,
+        "regime": "C",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "10_30": {
+        "num_keys": 10,
+        "num_updates": 30,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.968,
+            "ci_upper": 1,
+            "n": 80
+          },
+          "PI": {
+            "accuracy": 0.9,
+            "ci_lower": 0.8309,
+            "ci_upper": 0.9691,
+            "n": 80
+          }
+        },
+        "gap": 0.1,
+        "regime": "AB",
+        "n_trials": 80,
+        "stopped_early": true
+      },
+      "10_50": {
+        "num_keys": 10,
+        "num_updates": 50,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9741,
+            "ci_upper": 1,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.83,
+            "ci_lower": 0.7558,
+            "ci_upper": 0.9042,
+            "n": 100
+          }
+        },
+        "gap": 0.17,
+        "regime": "B",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "10_75": {
+        "num_keys": 10,
+        "num_updates": 75,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.99,
+            "ci_lower": 0.9582,
+            "ci_upper": 1,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.63,
+            "ci_lower": 0.5369,
+            "ci_upper": 0.7231,
+            "n": 100
+          }
+        },
+        "gap": 0.36,
+        "regime": "C",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "15_15": {
+        "num_keys": 15,
+        "num_updates": 15,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9394,
+            "ci_upper": 1,
+            "n": 40
+          },
+          "PI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9394,
+            "ci_upper": 1,
+            "n": 40
+          }
+        },
+        "gap": 0.0,
+        "regime": "A",
+        "n_trials": 40,
+        "stopped_early": true
+      },
+      "15_20": {
+        "num_keys": 15,
+        "num_updates": 20,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9505,
+            "ci_upper": 1,
+            "n": 50
+          },
+          "PI": {
+            "accuracy": 0.98,
+            "ci_lower": 0.9195,
+            "ci_upper": 1,
+            "n": 50
+          }
+        },
+        "gap": 0.02,
+        "regime": "A",
+        "n_trials": 50,
+        "stopped_early": true
+      },
+      "15_30": {
+        "num_keys": 15,
+        "num_updates": 30,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.9875,
+            "ci_lower": 0.9482,
+            "ci_upper": 1,
+            "n": 80
+          },
+          "PI": {
+            "accuracy": 0.9125,
+            "ci_lower": 0.8465,
+            "ci_upper": 0.9785,
+            "n": 80
+          }
+        },
+        "gap": 0.075,
+        "regime": "AB",
+        "n_trials": 80,
+        "stopped_early": true
+      },
+      "15_50": {
+        "num_keys": 15,
+        "num_updates": 50,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.98,
+            "ci_lower": 0.9433,
+            "ci_upper": 1,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.82,
+            "ci_lower": 0.7443,
+            "ci_upper": 0.8957,
+            "n": 100
+          }
+        },
+        "gap": 0.16,
+        "regime": "B",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "15_75": {
+        "num_keys": 15,
+        "num_updates": 75,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.99,
+            "ci_lower": 0.9582,
+            "ci_upper": 1,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.76,
+            "ci_lower": 0.6768,
+            "ci_upper": 0.8432,
+            "n": 100
+          }
+        },
+        "gap": 0.23,
+        "regime": "B",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "20_15": {
+        "num_keys": 20,
+        "num_updates": 15,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9394,
+            "ci_upper": 1,
+            "n": 40
+          },
+          "PI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9394,
+            "ci_upper": 1,
+            "n": 40
+          }
+        },
+        "gap": 0.0,
+        "regime": "A",
+        "n_trials": 40,
+        "stopped_early": true
+      },
+      "20_20": {
+        "num_keys": 20,
+        "num_updates": 20,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.9857,
+            "ci_lower": 0.9413,
+            "ci_upper": 1,
+            "n": 70
+          },
+          "PI": {
+            "accuracy": 0.9286,
+            "ci_lower": 0.8621,
+            "ci_upper": 0.995,
+            "n": 70
+          }
+        },
+        "gap": 0.0571,
+        "regime": "AB",
+        "n_trials": 70,
+        "stopped_early": true
+      },
+      "20_30": {
+        "num_keys": 20,
+        "num_updates": 30,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9714,
+            "ci_upper": 1,
+            "n": 90
+          },
+          "PI": {
+            "accuracy": 0.9,
+            "ci_lower": 0.8351,
+            "ci_upper": 0.9649,
+            "n": 90
+          }
+        },
+        "gap": 0.1,
+        "regime": "AB",
+        "n_trials": 90,
+        "stopped_early": true
+      },
+      "20_50": {
+        "num_keys": 20,
+        "num_updates": 50,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.98,
+            "ci_lower": 0.9433,
+            "ci_upper": 1,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.85,
+            "ci_lower": 0.779,
+            "ci_upper": 0.921,
+            "n": 100
+          }
+        },
+        "gap": 0.13,
+        "regime": "AB",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "20_75": {
+        "num_keys": 20,
+        "num_updates": 75,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.94,
+            "ci_lower": 0.8889,
+            "ci_upper": 0.9911,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.74,
+            "ci_lower": 0.6547,
+            "ci_upper": 0.8253,
+            "n": 100
+          }
+        },
+        "gap": 0.2,
+        "regime": "B",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "25_10": {
+        "num_keys": 25,
+        "num_updates": 10,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.98,
+            "ci_lower": 0.9195,
+            "ci_upper": 1,
+            "n": 50
+          },
+          "PI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9505,
+            "ci_upper": 1,
+            "n": 50
+          }
+        },
+        "gap": -0.02,
+        "regime": "D",
+        "n_trials": 50,
+        "stopped_early": true
+      },
+      "25_15": {
+        "num_keys": 25,
+        "num_updates": 15,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.96,
+            "ci_lower": 0.8906,
+            "ci_upper": 1,
+            "n": 50
+          },
+          "PI": {
+            "accuracy": 0.98,
+            "ci_lower": 0.9195,
+            "ci_upper": 1,
+            "n": 50
+          }
+        },
+        "gap": -0.02,
+        "regime": "D",
+        "n_trials": 50,
+        "stopped_early": true
+      },
+      "25_20": {
+        "num_keys": 25,
+        "num_updates": 20,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.96,
+            "ci_lower": 0.8906,
+            "ci_upper": 1,
+            "n": 50
+          },
+          "PI": {
+            "accuracy": 0.98,
+            "ci_lower": 0.9195,
+            "ci_upper": 1,
+            "n": 50
+          }
+        },
+        "gap": -0.02,
+        "regime": "D",
+        "n_trials": 50,
+        "stopped_early": true
+      },
+      "25_30": {
+        "num_keys": 25,
+        "num_updates": 30,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.9778,
+            "ci_lower": 0.9373,
+            "ci_upper": 1,
+            "n": 90
+          },
+          "PI": {
+            "accuracy": 0.8778,
+            "ci_lower": 0.8081,
+            "ci_upper": 0.9475,
+            "n": 90
+          }
+        },
+        "gap": 0.1,
+        "regime": "AB",
+        "n_trials": 90,
+        "stopped_early": true
+      },
+      "25_50": {
+        "num_keys": 25,
+        "num_updates": 50,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.95,
+            "ci_lower": 0.8952,
+            "ci_upper": 1,
+            "n": 80
+          },
+          "PI": {
+            "accuracy": 0.9125,
+            "ci_lower": 0.8465,
+            "ci_upper": 0.9785,
+            "n": 80
+          }
+        },
+        "gap": 0.0375,
+        "regime": "A",
+        "n_trials": 80,
+        "stopped_early": true
+      },
+      "25_75": {
+        "num_keys": 25,
+        "num_updates": 75,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.96,
+            "ci_lower": 0.9154,
+            "ci_upper": 1,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.82,
+            "ci_lower": 0.7443,
+            "ci_upper": 0.8957,
+            "n": 100
+          }
+        },
+        "gap": 0.14,
+        "regime": "AB",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "30_10": {
+        "num_keys": 30,
+        "num_updates": 10,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.9429,
+            "ci_lower": 0.8809,
+            "ci_upper": 1,
+            "n": 70
+          },
+          "PI": {
+            "accuracy": 0.9857,
+            "ci_lower": 0.9413,
+            "ci_upper": 1,
+            "n": 70
+          }
+        },
+        "gap": -0.0428,
+        "regime": "D",
+        "n_trials": 70,
+        "stopped_early": true
+      },
+      "30_15": {
+        "num_keys": 30,
+        "num_updates": 15,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.96,
+            "ci_lower": 0.8906,
+            "ci_upper": 1,
+            "n": 50
+          },
+          "PI": {
+            "accuracy": 0.96,
+            "ci_lower": 0.8906,
+            "ci_upper": 1,
+            "n": 50
+          }
+        },
+        "gap": 0.0,
+        "regime": "A",
+        "n_trials": 50,
+        "stopped_early": true
+      },
+      "30_20": {
+        "num_keys": 30,
+        "num_updates": 20,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.98,
+            "ci_lower": 0.9195,
+            "ci_upper": 1,
+            "n": 50
+          },
+          "PI": {
+            "accuracy": 0.98,
+            "ci_lower": 0.9195,
+            "ci_upper": 1,
+            "n": 50
+          }
+        },
+        "gap": 0.0,
+        "regime": "A",
+        "n_trials": 50,
+        "stopped_early": true
+      },
+      "30_30": {
+        "num_keys": 30,
+        "num_updates": 30,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.9286,
+            "ci_lower": 0.8621,
+            "ci_upper": 0.995,
+            "n": 70
+          },
+          "PI": {
+            "accuracy": 0.9429,
+            "ci_lower": 0.8809,
+            "ci_upper": 1,
+            "n": 70
+          }
+        },
+        "gap": -0.0143,
+        "regime": "D",
+        "n_trials": 70,
+        "stopped_early": true
+      },
+      "30_50": {
+        "num_keys": 30,
+        "num_updates": 50,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.97,
+            "ci_lower": 0.9291,
+            "ci_upper": 1,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.82,
+            "ci_lower": 0.7443,
+            "ci_upper": 0.8957,
+            "n": 100
+          }
+        },
+        "gap": 0.15,
+        "regime": "B",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "30_75": {
+        "num_keys": 30,
+        "num_updates": 75,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.93,
+            "ci_lower": 0.8761,
+            "ci_upper": 0.9839,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.68,
+            "ci_lower": 0.5898,
+            "ci_upper": 0.7702,
+            "n": 100
+          }
+        },
+        "gap": 0.25,
+        "regime": "C",
+        "n_trials": 100,
+        "stopped_early": false
+      }
+    }
+  }
+}

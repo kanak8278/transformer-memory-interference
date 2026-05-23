@@ -1,0 +1,30 @@
+{
+  "_note": "Extracted from /private/tmp/.../bidbylybn.output log. Original script was killed before writing JSON; the last two LoRA cells were re-run by lora_sem_finish.py (see lora_sem_finish_results.json). Combined results are summarised below.",
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "adapter": "/tmp/lora_intervention/checkpoints/main/final",
+  "device": "mps",
+  "dataset": "SEMANTIC_MULTI",
+  "trials_per_condition_baseline": 20,
+  "trials_per_condition_lora_first_two_cells": 20,
+  "trials_per_condition_lora_last_two_cells": 10,
+  "baseline": {
+    "7_20":  {"num_keys":  7, "num_updates": 20, "fvq_correct": 12, "fvq_n": 20, "fvq_acc": 0.60, "cvq_correct": 11, "cvq_n": 20, "cvq_acc": 0.55, "gap":  0.05, "elapsed_s":  72},
+    "15_20": {"num_keys": 15, "num_updates": 20, "fvq_correct":  5, "fvq_n": 20, "fvq_acc": 0.25, "cvq_correct": 11, "cvq_n": 20, "cvq_acc": 0.55, "gap": -0.30, "elapsed_s": 159},
+    "15_30": {"num_keys": 15, "num_updates": 30, "fvq_correct":  7, "fvq_n": 20, "fvq_acc": 0.35, "cvq_correct": 16, "cvq_n": 20, "cvq_acc": 0.80, "gap": -0.45, "elapsed_s": 295},
+    "20_30": {"num_keys": 20, "num_updates": 30, "fvq_correct":  5, "fvq_n": 20, "fvq_acc": 0.25, "cvq_correct": 13, "cvq_n": 20, "cvq_acc": 0.65, "gap": -0.40, "elapsed_s": 399}
+  },
+  "lora": {
+    "7_20":  {"num_keys":  7, "num_updates": 20, "fvq_correct": 20, "fvq_n": 20, "fvq_acc": 1.00, "cvq_correct": 20, "cvq_n": 20, "cvq_acc": 1.00, "gap": 0.00, "elapsed_s":  73, "source": "lora_sem_validation.py run"},
+    "15_20": {"num_keys": 15, "num_updates": 20, "fvq_correct": 20, "fvq_n": 20, "fvq_acc": 1.00, "cvq_correct": 20, "cvq_n": 20, "cvq_acc": 1.00, "gap": 0.00, "elapsed_s": 157, "source": "lora_sem_validation.py run"},
+    "15_30": {"num_keys": 15, "num_updates": 30, "fvq_correct": 10, "fvq_n": 10, "fvq_acc": 1.00, "cvq_correct": 10, "cvq_n": 10, "cvq_acc": 1.00, "gap": 0.00, "elapsed_s": 134, "source": "lora_sem_finish.py run"},
+    "20_30": {"num_keys": 20, "num_updates": 30, "fvq_correct": 10, "fvq_n": 10, "fvq_acc": 1.00, "cvq_correct": 10, "cvq_n": 10, "cvq_acc": 1.00, "gap": 0.00, "elapsed_s": 203, "source": "lora_sem_finish.py run"}
+  },
+  "summary": {
+    "all_cells_fixed": true,
+    "max_baseline_gap_magnitude": 0.45,
+    "max_lora_gap_magnitude": 0.00,
+    "lora_average_fvq_accuracy": 1.00,
+    "lora_average_cvq_accuracy": 1.00,
+    "verdict": "Every reversal cell (gap from -30% to -45%) goes to gap 0% with FVQ=CVQ=100%. LoRA trained only on ARBITRARY_SINGLE transfers cleanly to SEMANTIC_MULTI (multi-token semantic values, different format), including held-out (K, N) cells and ~10x context-length extrapolation."
+  }
+}
