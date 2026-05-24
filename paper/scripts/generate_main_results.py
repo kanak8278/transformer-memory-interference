@@ -29,7 +29,8 @@ import numpy as np
 _ROOT = Path(__file__).resolve().parent.parent.parent
 SEM_DIR = _ROOT / "v3" / "results_vllm" / "semantic_multi"
 PROP_CSV = _ROOT / "experiments_cloud" / "results" / "proprietary_semantic_multi.csv"
-OUT_DIR = Path(__file__).resolve().parent
+# Script lives in paper/scripts/; figures live in paper/figures/
+OUT_DIR = Path(__file__).resolve().parent.parent / "figures"
 
 # Deep-dive models (Figure 2)
 DEEP_DIVE = [
@@ -152,8 +153,9 @@ SMOLLM3_STAGES = [
 ]
 
 # Figure 2 axis scans
-VARY_K_AT_N = 10   # vary K at fixed N=10
-VARY_N_AT_K = 5    # vary N at fixed K=5
+VARY_K_AT_N      = 10   # vary K at fixed N=10  (low-load primacy panel)
+VARY_N_AT_K      = 5    # vary N at fixed K=5   (low-load primacy panel)
+VARY_K_AT_N_HIGH = 50   # vary K at fixed N=50  (high-load reversal panel)
 K_SCAN_VALUES = [2, 3, 5, 7, 10, 15, 20]
 N_SCAN_VALUES = [5, 7, 10, 15, 20, 30, 50]
 
@@ -229,53 +231,79 @@ def load_proprietary_cells():
 # FIGURE 2 — DEEP DIVE
 # ═════════════════════════════════════════════════════════════════════════════
 
-def make_figure_2(out_path):
-    """4-panel: 2 models × (vary K at N=10, vary N at K=5)."""
+def _plot_vary_K(ax, model_dir, fixed_N, x_label_on, y_label_on, title_label, xticks_subsample=False):
+    cells = [(K, load_open_weight_cell(model_dir, K, fixed_N)) for K in K_SCAN_VALUES]
+    cells = [(K, c) for K, c in cells if c is not None]
+    if not cells: return
+    Ks  = [K for K, _ in cells]
+    fvq = np.array([c["fvq"] for _, c in cells])
+    cvq = np.array([c["cvq"] for _, c in cells])
+    fvq_hw = np.array([c["fvq_hw"] for _, c in cells])
+    cvq_hw = np.array([c["cvq_hw"] for _, c in cells])
+    ax.errorbar(Ks, fvq, yerr=fvq_hw, marker="o", color="C0", label="FVQ",
+                capsize=3, capthick=1.0, lw=1.2)
+    ax.errorbar(Ks, cvq, yerr=cvq_hw, marker="s", color="C1", label="CVQ",
+                capsize=3, capthick=1.0, lw=1.2)
+    if x_label_on: ax.set_xlabel("Number of keys $K$")
+    if y_label_on: ax.set_ylabel("Accuracy")
+    ax.set_title(title_label, fontsize=10)
+    ax.set_ylim(0, 1.05)
+    ax.set_xticks(Ks)
+    ax.grid(alpha=0.3)
 
-    fig, axes = plt.subplots(2, 2, figsize=(7.8, 5.0), sharey=True)
+
+def _plot_vary_N(ax, model_dir, fixed_K, x_label_on, y_label_on, title_label):
+    cells = [(N, load_open_weight_cell(model_dir, fixed_K, N)) for N in N_SCAN_VALUES]
+    cells = [(N, c) for N, c in cells if c is not None]
+    if not cells: return
+    Ns  = [N for N, _ in cells]
+    fvq = np.array([c["fvq"] for _, c in cells])
+    cvq = np.array([c["cvq"] for _, c in cells])
+    fvq_hw = np.array([c["fvq_hw"] for _, c in cells])
+    cvq_hw = np.array([c["cvq_hw"] for _, c in cells])
+    ax.errorbar(Ns, fvq, yerr=fvq_hw, marker="o", color="C0", label="FVQ",
+                capsize=3, capthick=1.0, lw=1.2)
+    ax.errorbar(Ns, cvq, yerr=cvq_hw, marker="s", color="C1", label="CVQ",
+                capsize=3, capthick=1.0, lw=1.2)
+    if x_label_on: ax.set_xlabel("Updates per key $N$")
+    if y_label_on: ax.set_ylabel("Accuracy")
+    ax.set_title(title_label, fontsize=10)
+    ax.set_ylim(0, 1.05)
+    ax.set_xticks(Ns)
+    ax.grid(alpha=0.3)
+
+
+def make_figure_2(out_path):
+    """6-panel: 2 models × 3 axis scans.
+    Column 1: vary K at low N=10 (low-load primacy regime).
+    Column 2: vary N at low K=5 (low-load primacy regime).
+    Column 3: vary K at high N=50 (reaches reversal regime for Qwen-family).
+    """
+    fig, axes = plt.subplots(2, 3, figsize=(11.5, 5.0), sharey=True)
 
     for row, (model_dir, model_label) in enumerate(DEEP_DIVE):
-        # Vary K at fixed N
-        ax = axes[row, 0]
-        cells = [(K, load_open_weight_cell(model_dir, K, VARY_K_AT_N)) for K in K_SCAN_VALUES]
-        cells = [(K, c) for K, c in cells if c is not None]
-        Ks  = [K for K, _ in cells]
-        fvq = np.array([c["fvq"] for _, c in cells])
-        cvq = np.array([c["cvq"] for _, c in cells])
-        fvq_hw = np.array([c["fvq_hw"] for _, c in cells])
-        cvq_hw = np.array([c["cvq_hw"] for _, c in cells])
-        ax.errorbar(Ks, fvq, yerr=fvq_hw, marker="o", color="C0", label="FVQ",
-                    capsize=3, capthick=1.0, lw=1.2)
-        ax.errorbar(Ks, cvq, yerr=cvq_hw, marker="s", color="C1", label="CVQ",
-                    capsize=3, capthick=1.0, lw=1.2)
-        ax.set_xlabel("Number of keys $K$")
-        ax.set_ylabel("Accuracy")
-        ax.set_title(f"{model_label} — vary $K$ at $N{{=}}{VARY_K_AT_N}$", fontsize=10)
-        ax.set_ylim(0, 1.05)
-        ax.set_xticks(Ks)
-        ax.grid(alpha=0.3)
-        ax.legend(fontsize=9, loc="lower left")
+        is_bottom = (row == 1)
+        # Column 0: vary K at N=10
+        _plot_vary_K(
+            axes[row, 0], model_dir, fixed_N=VARY_K_AT_N,
+            x_label_on=is_bottom, y_label_on=True,
+            title_label=f"{model_label} --- vary $K$ at $N{{=}}{VARY_K_AT_N}$",
+        )
+        # Column 1: vary N at K=5
+        _plot_vary_N(
+            axes[row, 1], model_dir, fixed_K=VARY_N_AT_K,
+            x_label_on=is_bottom, y_label_on=False,
+            title_label=f"{model_label} --- vary $N$ at $K{{=}}{VARY_N_AT_K}$",
+        )
+        # Column 2: vary K at high N=50
+        _plot_vary_K(
+            axes[row, 2], model_dir, fixed_N=VARY_K_AT_N_HIGH,
+            x_label_on=is_bottom, y_label_on=False,
+            title_label=f"{model_label} --- vary $K$ at $N{{=}}{VARY_K_AT_N_HIGH}$",
+        )
 
-        # Vary N at fixed K
-        ax = axes[row, 1]
-        cells = [(N, load_open_weight_cell(model_dir, VARY_N_AT_K, N)) for N in N_SCAN_VALUES]
-        cells = [(N, c) for N, c in cells if c is not None]
-        Ns  = [N for N, _ in cells]
-        fvq = np.array([c["fvq"] for _, c in cells])
-        cvq = np.array([c["cvq"] for _, c in cells])
-        fvq_hw = np.array([c["fvq_hw"] for _, c in cells])
-        cvq_hw = np.array([c["cvq_hw"] for _, c in cells])
-        ax.errorbar(Ns, fvq, yerr=fvq_hw, marker="o", color="C0", label="FVQ",
-                    capsize=3, capthick=1.0, lw=1.2)
-        ax.errorbar(Ns, cvq, yerr=cvq_hw, marker="s", color="C1", label="CVQ",
-                    capsize=3, capthick=1.0, lw=1.2)
-        ax.set_xlabel("Updates per key $N$")
-        ax.set_title(f"{model_label} — vary $N$ at $K{{=}}{VARY_N_AT_K}$", fontsize=10)
-        ax.set_ylim(0, 1.05)
-        ax.set_xticks(Ns)
-        ax.grid(alpha=0.3)
-        ax.legend(fontsize=9, loc="lower left")
-
+    # Single legend in the top-right corner
+    axes[0, 2].legend(fontsize=9, loc="upper right")
     fig.tight_layout()
     fig.savefig(out_path, bbox_inches="tight")
     fig.savefig(str(out_path).replace(".pdf", ".png"), dpi=150, bbox_inches="tight")
@@ -357,11 +385,18 @@ def load_format_open(model_dir, K, N):
     """Returns {format_key: {fvq, cvq, gap, n}} or None.
 
     Open-weight format keys in data are suffixed with `_last`.
+    Falls back to checkpoint.json when no finalised ucurve_*.json
+    exists (run was interrupted mid-sweep but per-cell data was
+    persisted via the checkpointing mechanism).
     """
-    files = sorted(glob.glob(str(UCURVE_VLLM_DIR / model_dir / "ucurve_*.json")))
-    if not files: return None
-    with open(files[-1]) as f: d = json.load(f)
-    cell = d["cells"].get(f"{K}_{N}")
+    candidates = sorted(glob.glob(str(UCURVE_VLLM_DIR / model_dir / "ucurve_*.json")))
+    if not candidates:
+        ckpt = UCURVE_VLLM_DIR / model_dir / "checkpoint.json"
+        if ckpt.exists():
+            candidates = [str(ckpt)]
+    if not candidates: return None
+    with open(candidates[-1]) as f: d = json.load(f)
+    cell = d.get("cells", {}).get(f"{K}_{N}")
     if not cell: return None
     out = {}
     for fmt in FORMAT_KEYS:
@@ -793,6 +828,108 @@ def make_training_dynamics_tables(out_dir):
     print(f"  saved tab_smollm3_formats.tex")
 
 
+def make_multimodel_ivq_figure(out_path, K=10, N=50):
+    """Two-panel figure: per-position accuracy on the default Plain (flat_nolabel)
+    format at (K, N), for open-weight models on the left and proprietary on the
+    right. Demonstrates 'general loss of position-indexed retrieval' across
+    models with sufficient evidence for the claim in §4 Para 3.
+    """
+    # ---- Open-weight: load from ucurve_vllm JSONs ----
+    open_models_dirs = [
+        ("Qwen2.5-3B-Instruct", "Qwen2.5-3B-Inst"),
+        ("Qwen3.5-2B",          "Qwen3.5-2B"),
+        ("Qwen3.5-4B",          "Qwen3.5-4B"),
+        ("Qwen3.5-9B",          "Qwen3.5-9B"),
+        ("gemma-3-4b-it",       "Gemma-3-4b-it"),
+    ]
+    open_curves = []
+    for mdir, label in open_models_dirs:
+        candidates = sorted(glob.glob(str(UCURVE_VLLM_DIR / mdir / "ucurve_*.json")))
+        if not candidates:
+            ckpt = UCURVE_VLLM_DIR / mdir / "checkpoint.json"
+            if ckpt.exists():
+                candidates = [str(ckpt)]
+        if not candidates: continue
+        with open(candidates[-1]) as f: d = json.load(f)
+        cell = d.get("cells", {}).get(f"{K}_{N}", {}).get("flat_nolabel_last")
+        if not cell: continue
+        posns = cell["positions"]
+        pts = [(int(p), pinfo["accuracy"])
+               for p, pinfo in posns.items() if p != "last"]
+        pts.sort()
+        if not pts: continue
+        xs = [p for p, _ in pts]
+        ys = [a for _, a in pts]
+        # Append 'last' if present and not already at the final position
+        last_acc = posns.get("last", {}).get("accuracy")
+        if last_acc is not None and xs[-1] < N:
+            xs.append(N)
+            ys.append(last_acc)
+        open_curves.append((label, xs, ys))
+
+    # ---- Proprietary: load from ucurve_proprietary_results.csv ----
+    prop_labels = {
+        "gpt-4.1":          "GPT-4.1",
+        "gpt-4.1-mini":     "GPT-4.1-mini",
+        "claude-4.5-haiku": "Claude-4.5-Haiku",
+        "claude-sonnet":    "Claude-Sonnet",
+        "gemini-2.5-flash": "Gemini-2.5-Flash",
+        "gemini-2.5-pro":   "Gemini-2.5-Pro",
+    }
+    rows_by_model = {}
+    with open(UCURVE_PROP_CSV) as f:
+        for r in csv.DictReader(f):
+            if r["format"] != "flat_nolabel": continue
+            if int(r["num_keys"]) != K or int(r["num_updates"]) != N: continue
+            rows_by_model.setdefault(r["model"], []).append(
+                (r["position"], float(r["accuracy"]))
+            )
+    prop_curves = []
+    for mkey, label in prop_labels.items():
+        pts = rows_by_model.get(mkey)
+        if not pts: continue
+        # Separate numeric positions and the 'last' position
+        numeric = sorted([(int(p), a) for p, a in pts if p != "last"])
+        last_acc = next((a for p, a in pts if p == "last"), None)
+        if not numeric: continue
+        xs = [p for p, _ in numeric]
+        ys = [a for _, a in numeric]
+        if last_acc is not None and xs[-1] < N:
+            xs.append(N); ys.append(last_acc)
+        prop_curves.append((label, xs, ys))
+
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.0), sharey=True)
+
+    # Open-weight panel
+    ax = axes[0]
+    for label, xs, ys in open_curves:
+        ax.plot(xs, ys, marker="o", markersize=3, lw=1.3, label=label)
+    ax.set_xlabel(f"Query position $k$ (stream of $N{{=}}{N}$ updates)")
+    ax.set_ylabel("Retrieval accuracy")
+    ax.set_title(f"Open-weight models ($K{{=}}{K}, N{{=}}{N}$, Plain format)",
+                 fontsize=10)
+    ax.set_ylim(-0.03, 1.05)
+    ax.grid(alpha=0.3)
+    ax.legend(fontsize=8, loc="upper right", framealpha=0.95)
+
+    # Proprietary panel
+    ax = axes[1]
+    for label, xs, ys in prop_curves:
+        ax.plot(xs, ys, marker="s", markersize=3, lw=1.3, label=label)
+    ax.set_xlabel(f"Query position $k$ (stream of $N{{=}}{N}$ updates)")
+    ax.set_title(f"Proprietary models ($K{{=}}{K}, N{{=}}{N}$, Plain format)",
+                 fontsize=10)
+    ax.set_ylim(-0.03, 1.05)
+    ax.grid(alpha=0.3)
+    ax.legend(fontsize=8, loc="lower left", framealpha=0.95)
+
+    fig.tight_layout()
+    fig.savefig(out_path, bbox_inches="tight")
+    fig.savefig(str(out_path).replace(".pdf", ".png"), dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  saved {out_path}")
+
+
 def make_proprietary_full_table(out_path):
     """Proprietary models on Semantic-Multi at four representative cells.
     Each cell shows gap (FVQ - CVQ) with approximate Wilson half-width.
@@ -869,6 +1006,7 @@ def main():
     make_proprietary_full_table(OUT_DIR / "tab_full_sem_prop.tex")
     make_format_intervention_table(OUT_DIR / "tab_format_gap.tex")
     make_format_intervention_acc_table(OUT_DIR / "tab_format_cvq.tex")
+    make_multimodel_ivq_figure(OUT_DIR / "fig_multimodel_ivq.pdf")
     make_training_dynamics_figure(OUT_DIR / "fig3_training_dynamics.pdf")
     make_training_dynamics_tables(OUT_DIR)
     print("Done.")

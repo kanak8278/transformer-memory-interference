@@ -17,13 +17,14 @@
 \tcbuselibrary{skins, breakable}
 
 % ── Editorial note command ───────────────────────────────────────────────────
-% Usage: \note{Run flat_nolabel on 2 more models before submitting.}
-% Renders as a red-bordered box. Strip all \note{} before final submission.
+% Usage: \note{Pending: run X before submission.}
+% Renders inline in red. Strip all \note{} before final submission.
 \newcommand{\note}[1]{%
   {\color{red!80!black}\small$\langle$\textbf{NOTE:}~#1$\rangle$}%
 }
 
-\title{First Value, Not Latest: How Language Models Fail at\\Sequential Key-Value Update Tracking}
+\title{What Pretraining Doesn't Learn:\\
+Current-Value Retrieval Is Latent in Pretrained LLMs}
 
 \author{Anonymous}
 
@@ -32,11 +33,34 @@
 
 % ============================================================
 \begin{abstract}
-We study sequential update tracking in interleaved streams: given a
-randomly interleaved stream in which $K$ keys each receive $N$ updates, can a language model retrieve the current value of a target key while competing keys are interspersed throughout?
-Across 20 models spanning 14 open-weight checkpoints (270M--9B parameters) and six proprietary frontier models, we find a robust asymmetry: accuracy on current-value queries (CVQ) is systematically lower than on first-value queries (FVQ), and the asymmetry persists across model scale and family.
-This failure is format-conditioned: adding explicit structural cues to the same content substantially reduces or eliminates the gap, while plain interleaved streams fail consistently.
-Our results indicate that language models apply format-conditioned retrieval heuristics over update streams rather than maintaining internal state, with direct implications for how sequential-update tasks are designed and evaluated.
+Language models pretrained on trillions of tokens cannot reliably
+retrieve the current value of a variable that has been overwritten
+multiple times in their own input.
+Across 20 pretrained models (14 open-weight from 270M to 9B
+parameters, 6 proprietary frontier), this failure manifests as a
+general loss of position-indexed retrieval: ceiling accuracy on the
+first value, collapsing accuracy on the current value, and 10--25\%
+accuracy on any intermediate position of the update stream.
+The failure is not architectural.
+A 7.4-million-parameter LoRA --- 0.24\% of one model's weights ---
+trained on 18{,}000 examples drawn from a small training grid
+restores accuracy to 93--100\% on substantially harder held-out cells,
+transfers to a different value distribution without modification, and
+generalises to contexts roughly ten times longer than training; a
+training-free format change produces similar recovery.
+Across 82 published checkpoints from two model families, the failure
+is present at the earliest pretraining checkpoint we can evaluate and
+survives every documented post-training stage.
+The capability is present in pretrained models but not surfaced by
+current pretraining objectives.
+We argue this is one instance of a broader class of latent
+capabilities --- skills the architecture supports but pretraining
+does not develop --- and present a methodology (characterise,
+recover, locate mechanistically~\note{verb-choice pending}) for
+identifying others.
+\note{If \S7 lands: add a clause ``with recovery localised to
+specific upper-middle-layer attention heads'' before the final
+sentence.}
 \end{abstract}
 
 % ============================================================
@@ -44,17 +68,20 @@ Our results indicate that language models apply format-conditioned retrieval heu
 \label{sec:intro}
 % ============================================================
 
-Language models are now deployed in settings that require tracking
-which value is currently assigned to an entity as it changes over time:
-multi-turn assistants where users correct facts mid-conversation,
-retrieval-augmented pipelines where documents may reflect outdated
-state, and tool-augmented agents where successive API calls update the
-same variable.
-\citet{laban2025multiturn} show that multi-turn dialogues cause
-substantial performance degradation as state updates cascade and
-contradict earlier context.
-These failures share a common structure: a model that anchors to an
-earlier value and fails to incorporate subsequent updates.
+Language models are increasingly deployed in settings where the value
+of a variable changes over time and the model must use the current
+value, not an earlier one.
+Multi-turn assistants must respect the most recent user correction;
+retrieval-augmented systems must use the latest version of a document;
+tool-augmented agents must read the current contents of a variable
+after a sequence of writes.
+Failures of this skill have been documented at the application level
+--- \citet{laban2025multiturn} report substantial degradation in
+multi-turn dialogues as state updates cascade --- but the underlying
+mechanism, and whether the failure is intrinsic to current models, is
+not understood.
+We isolate this skill with a minimal controlled instance of the
+broader deployment problem.
 
 \begin{figure}[t]
 \small
@@ -71,533 +98,502 @@ earlier value and fails to incorporate subsequent updates.
 \textbf{CVQ:} What is the \textit{current} value of \texttt{color}? $\rightarrow$ \textbf{green}
 \end{tcolorbox}
 \caption{Task illustration ($K{=}3$, $N{=}3$). The stream randomly
-interleaves updates for all $K$ keys. To answer CVQ correctly, a model
-must isolate \texttt{color} entries from competing keys
-and identify the most recent one among them.}
+interleaves updates for all $K$ keys. To answer CVQ correctly, a
+model must isolate \texttt{color} entries from competing keys and
+identify the most recent one among them.}
 \label{fig:task}
 \end{figure}
 
-Prior work on entity state tracking \citep{kim2023entity,kim2024code}
-tests models on single-entity sequential transitions --- one object
-moved between locations --- without competing entities simultaneously
-present in the stream.
-\citet{unable2forget2025} demonstrate KV interference within context
-but frame it as a fundamental architectural limit.
-Critically, neither line of work examines the cross-key competition
-that characterises real multi-entity tracking: multiple entities whose
-updates are interleaved throughout the stream, each potentially masking
-the others.
-\citet{lostinthemiddle} and long-context benchmarks such as RULER
-\citep{ruler2024} and HELMET \citep{helmet2024} test whether models can
-retrieve static facts from noise --- not whether they can identify
-which update to a repeatedly-modified key is current.
+Our task interleaves $K$ keys each receiving $N$ value updates in a
+single stream and queries either the first value of a target key
+(FVQ) or its current value (CVQ); Figure~\ref{fig:task} shows a small
+instance with $K{=}3, N{=}3$.
+Both queries are trivially solvable in principle: the entire stream
+is present in context, FVQ asks for the first occurrence of the
+target key, and CVQ asks for the last.
+Failure on this task is therefore evidence of a retrieval problem ---
+the model cannot locate the relevant entries in its own input ---
+not a context-length or memory limitation.
 
-We study this gap directly: given a randomly interleaved stream of
-$K$ keys each updated $N$ times, can a model retrieve the current
-value of a target key while competing keys are interspersed throughout
-(Figure~\ref{fig:task})?
-Across 15 models spanning 270M to 9B parameters, we find a robust
-asymmetry between first-value and current-value accuracy across all
-tested models and scales, and show the failure is format-conditioned:
-explicit structural cues and narrative format substantially restore
-performance while plain streams fail consistently.
+We evaluate 20 pretrained models spanning 14 open-weight checkpoints
+(270M--9B parameters) and 6 proprietary frontier models.
+Every model exhibits a substantial gap between FVQ and CVQ accuracy in
+at least one $(K, N)$ cell of our grid
+(Table~\ref{tab:main_results}, Figure~\ref{fig:main_results}).
+At low stream load, models systematically favor the first value
+(\emph{primacy regime}).
+In several smaller open-weight models at high load, the gap inverts
+--- current-query accuracy exceeds first-query accuracy --- but
+both remain well below ceiling (\emph{reversal regime}).
+Neither regime represents correct retrieval; both are deviations
+from the answer the prompt asks for.
+When we ask for any intermediate position $k$ of a target key
+($1 < k < N$), baseline accuracy collapses to 10--25\%
+(Figure~\ref{fig:dense_ivq}; full sweep across six cells in
+Appendix~\ref{app:dense_ivq}), indicating a general loss of
+position-indexed retrieval rather than a first-vs-current confusion.
+
+The failure is not an architectural limit.
+A LoRA adapter \citep{hu2021lora} --- 0.24\% of
+Qwen2.5-3B-Instruct's parameters, trained on 18{,}000 examples drawn
+from a small training grid (against an 18-trillion-token pretraining
+budget; \citealp{qwen25_techreport}) --- restores both FVQ and CVQ
+accuracy to 93--100\% on substantially harder held-out cells, well
+beyond the training grid in both $K$ and $N$
+(Table~\ref{tab:lora_arb}).
+The same LoRA, trained only on one value distribution, transfers to
+a held-out distribution without modification
+(Table~\ref{tab:lora_sem}), and recovers the intermediate-position
+retrieval that the base model lacks
+(Figure~\ref{fig:dense_ivq}).
+An inference-time format intervention --- replacing the plain
+key:value stream with positionally-anchored alternatives ---
+produces similar recovery without any training
+(Table~\ref{tab:format_gap}); this is not the stylistic adjustment
+small-data alignment achieves \citep{zhou2023lima}, but a recovery
+of a specific mechanistic capability.
+The recovery is task-specific: a control LoRA trained on arithmetic
+does not close the gap on update tracking
+\note{pending arithmetic control}.
+Two interventions, one minimal-training and one training-free,
+converge on the same outcome.
+The capability is present in the architecture; pretraining does not
+surface it by default.
 
 We make the following contributions:
+
 \begin{itemize}
-\item A systematic study of sequential update tracking across 20
-  open-weight and proprietary models on a controlled $K \times N$
-  grid, establishing a robust FVQ/CVQ asymmetry across transformer
-  families and scales; results on Arbitrary-Single confirming the
-  pattern are in the appendix (\S\ref{sec:results}).
-
-\item A format ablation showing the asymmetry is format-conditioned:
-  explicit structural markers and narrative format substantially reduce
-  or eliminate the gap, while plain interleaved streams fail
-  consistently (\S\ref{sec:format}).
-
-\item A positional analysis showing that models can track only the
-  first few positions in plain update streams before accuracy collapses,
-  indicating a structural enumeration deficit rather than a
-  recency-specific limitation (\S\ref{sec:positional}).
-
-\item A mechanistic analysis using probing classifiers and logit lens,
-  revealing that CVQ correctness is not reliably encoded in final-layer
-  representations, and identifying two distinct internal failure modes:
-  \textit{first-value anchoring} --- the first value dominates all
-  layers from the outset --- and \textit{transient suppression} ---
-  the correct current value briefly surfaces at intermediate layers
-  but is suppressed before output (\S\ref{sec:analysis}).
-
-\item A training-dynamics analysis across 82 checkpoints from two
-  model families --- 42 pretraining checkpoints of SmolLM2-1.7B and
-  40 SmolLM3-3B checkpoints spanning three pretraining stages and
-  four post-training stages (mid-training, SFT, expert specialisation,
-  alignment soup) --- showing the asymmetry is present at the earliest
-  pretraining checkpoint of both models, persists through every
-  subsequent training step, and survives every post-training stage
-  including the final released model
-  (\S\ref{sec:analysis}, Appendix~\ref{app:training}).
+\item \textbf{Behavioral characterization.} We document a robust
+  FVQ--CVQ gap across 20 pretrained models, including a
+  previously-undocumented reversal regime at high load and a general
+  failure of position-indexed retrieval (\S\ref{sec:failure}).
+\item \textbf{Two independent recoveries.} We show the failure is
+  recoverable via two independent interventions --- a task-specific
+  LoRA and an inference-time format change ---
+  demonstrating the capability is latent rather than absent
+  (\S\ref{sec:recoveries}).
+\item \textbf{Training-dynamics analysis.} We trace the failure
+  across 82 pretraining and post-training checkpoints from two model
+  families, showing it is present from the earliest available
+  pretraining step and survives every documented training stage
+  (\S\ref{sec:dynamics}).
+\item \textbf{Mechanism.} We identify the attention-head clusters
+  carrying the bias pre-intervention
+  \note{post-LoRA mechanism and pre/post comparison pending}
+  (\S\ref{sec:mechanism}).
 \end{itemize}
+
+Together, these results frame a methodology --- \textbf{characterise},
+\textbf{recover}, \textbf{locate} --- for identifying latent
+capabilities pretraining does not develop.
 
 % ============================================================
 \section{Related Work}
 \label{sec:related}
 % ============================================================
 
-\paragraph{Sequential state tracking.}
-Early work established entity state tracking as a hard problem for
-language models: \citet{babi2015} used synthetic narratives and
-\citet{propara2018} used procedural text.
-\citet{kim2023entity} found that only GPT-3.5 could track entity state
-in programmatic transition sequences, attributing this to code
-pretraining \citep{kim2024code}.
-These works evaluate only final-state accuracy using action-verb prose;
-none study the asymmetry between first-value and current-value
-retrieval, nor plain interleaved streams with multiple competing keys.
+\paragraph{Stateful retrieval failures in LLMs.}
+\citet{laban2025multiturn} report substantial degradation in
+multi-turn dialogues as state updates cascade and contradict earlier
+context.
+\citet{kim2023entity} and \citet{kim2024code} formalize entity state
+tracking as updates to a single entity's location or attributes,
+finding the skill is unevenly present across models.
+\citet{rezaee2025state} introduce a state-tracking benchmark with
+three entity-transition tasks, showing that newer-generation models
+can solve the task with chain-of-thought while older generations
+fail after a few transitions.
+The closest direct analogue of our setting is \citet{unable2forget2025},
+who construct a 46-key stream with up to 400 updates and a single
+current-value query; they find a log-linear accuracy decline and
+conclude the failure is fundamental.
+We extend this line in three ways: testing both first-value and
+current-value queries reveals an asymmetry; dense
+intermediate-position queries reveal a general failure of
+position-indexed retrieval; and our interventions demonstrate the
+failure is recoverable.
 
-\paragraph{KV update tracking.}
-Most directly related, \citet{unable2forget2025} study a KV update
-setting where 46 keys each receive up to 400 updates, finding retrieval
-accuracy declines log-linearly as updates accumulate.
-They also test format interventions --- natural language annotations
-marking prior values as outdated --- and find minimal improvement,
-concluding the failure is fundamental.
-Our work differs in three ways: we test both first-value and
-current-value queries, revealing an asymmetry their single-query
-design cannot observe; we apply structural format interventions
-(positional labels and round markers) rather than semantic annotations,
-and find these substantially restore performance; and we vary key
-count $K$ systematically, identifying it as the primary driver
-of failure.
+\paragraph{Known limits on retrieval in long or complex contexts.}
+Position-bias studies document a U-shaped accuracy curve in static
+long contexts \citep{lostinthemiddle} and an ``attention sink'' on
+initial tokens regardless of semantic relevance
+\citep{xiao2024streaming}; long-context benchmarks such as RULER
+\citep{ruler2024} and HELMET \citep{helmet2024} test retrieval of
+static facts from noise.
+Theoretical results constrain transformer computation:
+attention dilutes as sequence length grows \citep{hahn2020},
+fixed-depth transformers are bounded by first-order logic with
+majority quantifiers \citep{merrill2023}, and compositional state
+tracking requires logarithmic depth \citep{fagnou2024} --- a
+constraint our destructive-update setting does not invoke.
+Format sensitivity is also documented: meaning-preserving prompt
+changes can alter accuracy by up to 76 percentage points
+\citep{sclar2024}; our format intervention is a controlled instance.
+Our task differs from these lines in that updates are
+\emph{destructive} (earlier values are overwritten, not merely
+earlier in context) and the bias we observe is regime-dependent,
+flipping sign with stream load rather than tracing a single U-shape.
 
-\paragraph{Long-context retrieval.}
-\citet{lostinthemiddle} show that models exhibit a U-shaped accuracy
-curve in long contexts, reliably accessing information near the
-beginning and end but failing at mid-context positions.
-\citet{ruler2024} introduce a variable-tracking sub-task where a value
-$V$ is assigned to $X_1$, followed by a chain of bindings
-($X_2{=}X_1$, $X_3{=}X_2$, \ldots) embedded in noisy filler text;
-each variable is assigned \textit{once}, and the model must identify
-all variables pointing to $V$.
-Our task differs from both: we test repeated destructive updates to
-the \textit{same} key interleaved with competing keys, and our failure
-scales with the number of competing keys rather than context length
-or chain depth.
+\paragraph{Fine-tuning surfaces latent capacity.}
+Recent work has shown that capabilities not visible in pretrained
+models can be surfaced with minimal supervision.
+\citet{zhou2023lima} demonstrate that 1{,}000 curated dialogues are
+sufficient to teach a pretrained model to follow chat-style
+instructions, attributing this to pretraining having already done
+the work of knowledge acquisition.
+\citet{amuro2024finetuning} make a more general claim across 18
+datasets: pretraining improves models in latent ways only visible
+after fine-tuning.
+The methods we use --- low-rank adaptation \citep{hu2021lora} and
+the observation that fine-tuning lives in a low intrinsic dimension
+\citep{aghajanyan2021intrinsic} --- are by now standard.
+Our contribution against this background is the concrete instance
+with mechanism: a specific capability (in-context update retrieval)
+that pretrained LLMs systematically fail at, surfaced by an
+18{,}000-example LoRA across held-out grid cells, datasets, and
+$\sim$10$\times$ context lengths, with the recovery traced
+mechanistically to upper-middle-layer attention heads
+\note{post-LoRA pre/post comparison pending}.
+The distinction from LIMA is style/alignment versus mechanistic
+capability recovery; the distinction from Amuro \& Char is general
+claim versus concrete instance with mechanism.
 
-\paragraph{Format sensitivity and theoretical limits.}
-\citet{sclar2024} show that meaning-preserving changes to prompt
-formatting cause accuracy swings of up to 76 percentage points; our
-format ablation is a controlled instance of this, holding stream
-content constant while varying only its positional structure.
-\citet{fagnou2024} prove that tracking compositional entity chains ---
-where each state depends on the prior --- requires
-$\lceil \log_2(n{+}1) \rceil$ transformer layers; our task involves
-independent destructive updates with no dependency chain, so this
-depth constraint does not apply.
-\citet{hahn2020} shows that softmax attention dilutes the influence of
-any single token as sequence length grows, and \citet{merrill2023}
-proves that fixed-depth transformers are bounded by first-order logic
-with majority quantifiers: in a plain interleaved stream where all
-entries for a key are structurally identical, attention over those
-entries disperses rather than concentrating on the most recent one.
-Our format interventions are consistent with this: explicit positional
-labels give each entry a unique token signature, allowing attention to
-concentrate on the correct position and converting implicit sequential
-tracking into an explicit lookup.
-\citet{li2025state} apply linear probes and activation patching to
-models trained on permutation composition, identifying two interpretable
-tracking algorithms in models that \emph{succeed} at the task.
-We apply the same toolkit to models that \emph{fail} at destructive
-key-value update tracking---a direction prior work leaves unaddressed---and
-identify two distinct failure modes across model families.
+\paragraph{Mechanism and pretraining dynamics.}
+Our mechanism and pretraining-dynamics analyses build on two threads.
+Mechanistic interpretability has identified circuits for specific
+capabilities --- induction heads forming during pretraining as a
+phase transition \citep{olsson2022induction}, indirect-object
+identification circuits \citep{wang2022ioi}, automated circuit
+discovery \citep{conmy2023acdc}, and interpretable algorithms in
+successful state trackers \citep{li2025state}.
+Closest to our setting, \citet{mishra2025summarization} report that
+62\% of attention heads shift function during fine-tuning on
+summarization, with middle layers exhibiting the most dramatic
+change; we apply the same approach to a mechanistic capability
+rather than a style task.
+On the pretraining-capability side, \citet{wei2022emergent}
+characterize abilities that appear at scale and
+\citet{schaeffer2023mirage} argue these emergences are metric
+artifacts; our work is a \emph{non-emergence} question --- the
+success of this skill does not emerge at any scale we test.
+\citet{allenzhu2024knowledge} show that knowledge can be memorized
+during pretraining but not extractable without targeted augmentation,
+paralleling our latent-capacity claim: the architecture stores the
+information; pretraining does not develop the retrieval pathway by
+default.
 
 % ============================================================
-\section{Task and Experimental Setup}
+\section{Task and Setup}
 \label{sec:setup}
 % ============================================================
 
-\subsection{Task Definition}
-
-We define \textbf{Sequential Update Tracking under Interference} (SUTI):
-given an interleaved stream of key-value pairs in which $K$ keys each
-receive $N$ updates, retrieve the current (most-recently assigned) value
-of a designated target key.
-
-Formally, let $\mathcal{K} = \{k_1, \ldots, k_K\}$ be a set of keys and
-let $V_i = (v_{i,1}, \ldots, v_{i,N})$ be the ordered update sequence for
+\paragraph{Task.}
+Let $\mathcal{K} = \{k_1, \ldots, k_K\}$ be a set of keys and let
+$V_i = (v_{i,1}, \ldots, v_{i,N})$ be an ordered update sequence for
 key $k_i$.
-The input stream $\sigma$ is a randomly interleaved permutation of all
-$K \times N$ pairs $\{(k_i, v_{i,j})\}$, subject to the constraint that
-no two consecutive entries share the same key.
-The model receives $\sigma$ and a target key $k_t$, and is asked one of
-two queries:
+The input stream $\sigma$ is a random interleaving of all
+$K \times N$ pairs $\{(k_i, v_{i,j})\}$, subject to the constraint
+that no two consecutive entries share the same key.
+The model receives $\sigma$ and a target key $k_t$ and is asked one
+of three queries: \textbf{FVQ} (first-value, expected answer
+$v_{t,1}$); \textbf{CVQ} (current-value, expected answer $v_{t,N}$);
+or \textbf{IVQ} (intermediate-value, expected answer $v_{t,k}$ for
+some $1 < k < N$).
+Figure~\ref{fig:task} shows a small instance. The intermediate-value
+query is used only in the dense-retrieval analysis
+(\S\ref{sec:recoveries}; Appendix~\ref{app:dense_ivq}).
 
-\begin{itemize}
-  \item \textbf{FVQ} (first-value query): \textit{``What was the first value of $k_t$?''}
-        $\rightarrow$ expected answer $v_{t,1}$
-  \item \textbf{CVQ} (current-value query): \textit{``What is the current value of $k_t$?''}
-        $\rightarrow$ expected answer $v_{t,N}$
-\end{itemize}
+\paragraph{Datasets.}
+\textbf{Arbitrary-Single (ARB)} uses a pool of 2{,}300 single-token
+English words across 46 semantic categories;
+single-token values keep cross-entropy and probing computations
+clean and make it the dataset for the mechanistic analysis
+(\S\ref{sec:mechanism}).
+\textbf{Semantic-Multi (SEM)} uses real category members as
+multi-token values across the same 46 categories (2{,}403 entries
+total) and is our primary behavioural dataset --- semantic coherence
+between key and value limits template-matching shortcuts.
+\textbf{Narrative (NAR)} embeds key-value updates in a Dota~2 match
+commentary; it is used only for the format intervention in
+\S\ref{sec:recoveries}
+\note{NAR may be dropped from the final paper if the format
+intervention story is fully carried by ARB/SEM; decide before
+submission}.
+Full construction details are in Appendix~\ref{app:datasets}.
 
-\noindent
-Figure~\ref{fig:task} illustrates the structure for $K=3$, $N=3$.
-The stream contains $K \times N = 9$ entries; the correct CVQ answer for
-\textit{color} is \textit{green} (its third update).
-We call $K$ the \textbf{key count} and $N$ the
-\textbf{update depth}.
-The two dimensions are confounded with stream length ($K \times N$ total
-entries); we address this in Section~\ref{sec:results}.
+\paragraph{Grid and trials.}
+We evaluate models on a unified grid
+$K \in \{2, 3, 5, 7, 10, 15, 20, 25, 30\}$,
+$N \in \{5, 7, 10, 15, 20, 30, 50, 75, 100\}$, with up to 200 trials
+per $(K, N)$ cell per query type.
+Cells where the prompt exceeds a model's context limit or where the
+dataset pool cannot supply $N$ distinct values per key are excluded
+(specifics in Appendix~\ref{app:datasets}).
 
-\subsection{Stream Formats}
-\label{sec:formats}
-
-We evaluate three prompt formats applied to the same underlying stream
-content (Figure~\ref{fig:formats}):
-
-\paragraph{Plain stream.}
-Key-value pairs are written as \texttt{key: value}, one per line,
-randomly interleaved. No positional markers are present.
-This is the primary format for our behavioral sweep.
-
-\paragraph{Labeled stream.}
-Each entry is annotated with an explicit update counter inline:
-\texttt{key (update $j$): value}. The model can identify any
-specific update by its label without enumerating the stream.
-
-\paragraph{Block stream.}
-All $K$ keys are grouped together per round under a
-\texttt{[Round $j$]} header. Updates are not individually labeled
-but round boundaries are explicit.
-
-\noindent
-We use these formats in Section~\ref{sec:format} to test whether
-CVQ failure is format-conditioned.
-The plain stream is the failure condition; labeled and block streams
-test whether externalising positional structure restores performance.
-
-\begin{figure*}[t]
-\centering
-\small
-\newlength{\formatboxht}
-\setlength{\formatboxht}{4.0cm}
-\begin{minipage}[t]{0.315\textwidth}
-\begin{tcolorbox}[
-    colframe=black!40, colback=gray!4,
-    boxrule=0.6pt, arc=2pt,
-    left=5pt, right=5pt, top=4pt, bottom=4pt,
-    title={\textbf{Plain stream}},
-    fonttitle=\small\bfseries,
-    coltitle=black,
-    height=\formatboxht,
-    valign=top]
-\texttt{color: red}\\
-\texttt{size: large}\\
-\texttt{color: blue}\\
-\texttt{size: small}\\
-\texttt{color: green}\\
-\texttt{size: medium}\\[8pt]
-\textit{CVQ: current color?}\\
-\textbf{Model: red} \textcolor{red!70!black}{$\times$}
-\end{tcolorbox}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.345\textwidth}
-\begin{tcolorbox}[
-    colframe=black!40, colback=gray!4,
-    boxrule=0.6pt, arc=2pt,
-    left=5pt, right=5pt, top=4pt, bottom=4pt,
-    title={\textbf{Labeled stream}},
-    fonttitle=\small\bfseries,
-    coltitle=black,
-    height=\formatboxht,
-    valign=top]
-\texttt{color (update 1): red}\\
-\texttt{size (update 1): large}\\
-\texttt{color (update 2): blue}\\
-\texttt{size (update 2): small}\\
-\texttt{color (update 3): green}\\
-\texttt{size (update 3): medium}\\[8pt]
-\textit{CVQ: current color?}\\
-\textbf{Model: green} \textcolor{green!60!black}{$\checkmark$}
-\end{tcolorbox}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.315\textwidth}
-\begin{tcolorbox}[
-    colframe=black!40, colback=gray!4,
-    boxrule=0.6pt, arc=2pt,
-    left=5pt, right=5pt, top=4pt, bottom=4pt,
-    title={\textbf{Block stream}},
-    fonttitle=\small\bfseries,
-    coltitle=black,
-    height=\formatboxht,
-    valign=top]
-\texttt{[Round 1]}\\
-\texttt{color: red \quad size: large}\\[4pt]
-\texttt{[Round 2]}\\
-\texttt{color: blue \quad size: small}\\[4pt]
-\texttt{[Round 3]}\\
-\texttt{color: green \quad size: medium}\\[8pt]
-\textit{CVQ: current color?}\\
-\textbf{Model: green} \textcolor{green!60!black}{$\checkmark$}
-\end{tcolorbox}
-\end{minipage}
-\caption{The three stream formats used in our experiments ($K{=}2$, $N{=}3$).
-Same content, different structure.
-The \textbf{plain stream} provides no positional markers; the model
-must enumerate the stream internally to find the most recent entry.
-The \textbf{labeled stream} tags each entry with an explicit update
-index, making any position directly retrievable.
-The \textbf{block stream} groups all keys per round under a round
-header, making round boundaries explicit without per-entry labels.
-Typical model responses shown; \note{replace with actual model outputs
-from experiment data before submission.}}
-\label{fig:formats}
-\end{figure*}
-
-\subsection{Datasets}
-
-We evaluate on two stream formats: a structured \textbf{key--value list},
-used for the main grid and mechanistic analysis, and a natural-language
-\textbf{narrative}, used for the format intervention in
-\S\ref{sec:format}.
-The key--value variant uses 46 semantic categories
-(e.g., \textit{color}, \textit{fruit}, \textit{metal}) following the
-protocol of \citet{unable2forget2025}; the narrative variant is a
-Dota~2 match commentary dataset in which heroes act as keys and
-attribute updates (gold, kills, \ldots) act as values woven into
-match prose. The mechanistic analysis in \S\ref{sec:analysis} uses a
-single-token variant of the key--value format to make activation
-patching tractable. Full construction details for both formats appear
-in Appendix~\ref{app:datasets}.
-
-\subsection{Experimental Grid}
-
-We evaluate all models on a unified grid:
-\[
-K \in \{2, 3, 5, 7, 10, 15, 20, 25, 30\}, \quad
-N \in \{5, 7, 10, 15, 20, 30, 50, 75, 100\}
-\]
-with up to 200 trials per $(K, N)$ cell per query type (FVQ and CVQ).
-Cells excluded for context-length or pool-size reasons are detailed
-in Appendix~\ref{app:datasets}.
-
-\subsection{Models}
-
-We evaluate 14 open-weight models (270M--9B parameters) spanning
-Qwen2.5, Qwen3.5, Gemma-3, and three LLaMA-style models
-(TinyLlama-1.1B, StableLM-2-1.6B, Pythia-410M), together with six
-proprietary frontier models.
-For the figures and mechanistic analysis in the main text we focus
-on two models from different families,
-\textbf{Qwen2.5-3B-Instruct} and \textbf{Gemma-3-4b-it}, chosen for
-their distinct failure shapes (\S\ref{sec:results}).
-Cross-model breadth on Semantic-Multi appears in
-Table~\ref{tab:main_results}; the full per-model grid and
-Arbitrary-Single replication are deferred to
-Appendices~\ref{app:full_results} and~\ref{app:arb}.
-
-\subsection{Evaluation}
-
-For each $(K, N)$ cell, we report FVQ accuracy and CVQ accuracy as
-exact-match proportions, with Wilson score 95\% confidence intervals
+\paragraph{Metric.}
+For each $(K, N)$ cell we report FVQ and CVQ accuracy as
+string-match proportions (matching rule in
+Appendix~\ref{app:prompts}) with Wilson 95\% confidence intervals
 \citep{wilson1927}.
-The primary metric is the \textbf{gap}: $\Delta = \text{FVQ} - \text{CVQ}$.
-A positive gap indicates FVQ dominance (the failure mode we study);
-a negative gap indicates CVQ dominance.
+The primary metric is the \textbf{gap}
+$\Delta = \text{FVQ accuracy} - \text{CVQ accuracy}$; we call a gap
+\textbf{substantial} when $|\Delta| > 0.05$.
 All inferences use greedy decoding (temperature~0) to eliminate
 sampling variance.
 
+\paragraph{Models.}
+We evaluate \textbf{11 open-weight models} from three major
+families --- Qwen2.5 (0.5B--3B; instruct and base), Qwen3.5
+(0.8B--9B; instruct), Gemma-3 (270M--4B; instruct) --- and \textbf{6
+proprietary frontier models} from OpenAI (GPT-4.1, GPT-4.1-mini),
+Anthropic (Claude-4.5-Haiku, Claude-Sonnet), and Google
+(Gemini-2.5-Flash, Gemini-2.5-Pro).
+Three additional smaller models --- TinyLlama-1.1B, StableLM-2-1.6B,
+Pythia-410M --- appear only in the appendix.
+The full model list is in Appendix~\ref{app:models}; per-cell
+behavioural results are in Appendix~\ref{app:full_results}.
+
 % ============================================================
-\section{The FVQ--CVQ Asymmetry}
-\label{sec:results}
+\section{Pretraining Fails at In-Context Update Retrieval}
+\label{sec:failure}
 % ============================================================
 
-Every model we evaluate is more accurate at recovering the
-\emph{first} value bound to a key than the \emph{current} value, on at
-least one $(K, N)$ cell of our grid.
-Figure~\ref{fig:main_results} shows the shape of the failure for
-two representative open-weight models, and
-Table~\ref{tab:main_results} reports a representative cross-model
-summary on Semantic-Multi.
+Every model we evaluate exhibits a substantial FVQ--CVQ gap.
+At the representative cells in Table~\ref{tab:main_results}, gaps
+range from +6 to +53 percentage points, with the majority exceeding
++20 pp.
+Per-cell evidence across the full $(K, N)$ grid for all 20 models is
+in Appendix~\ref{app:full_results}.
+Figure~\ref{fig:main_results} shows the trajectory in two open-weight
+models under three axis scans, including one that reaches the
+reversal regime.
 
-\paragraph{Shape of the failure.}
-Figure~\ref{fig:main_results} traces FVQ and CVQ accuracy along two
-axes of the grid for Qwen2.5-3B-Instruct and Gemma-3-4b-it.
-In Gemma-3-4b-it FVQ tracks ceiling while CVQ degrades monotonically
-in both $K$ (number of competing keys) and $N$ (updates per key) ---
-the canonical asymmetric pattern.
-In Qwen2.5-3B-Instruct both FVQ and CVQ degrade, but CVQ degrades
-faster and stays below FVQ throughout the scanned region.
-The asymmetry is therefore not a single phenomenon: in some models it
-takes the form of a failure to overwrite a stable first binding, in
-others a faster loss of the most recent binding under load.
+The gap takes two shapes.
+In most cells of Table~\ref{tab:main_results} --- the
+\textbf{primacy regime} --- FVQ exceeds CVQ: the model anchors to the
+first value bound to the key and fails to overwrite.
+In several smaller open-weight models at higher $(K, N)$, the gap
+inverts to a \textbf{reversal regime}: CVQ exceeds FVQ, but both
+queries stay well below ceiling, with CVQ accuracy in the 50--65\%
+range.
+Figure~\ref{fig:main_results}'s third panel column shows the reversal
+explicitly for Qwen2.5-3B-Instruct, while Gemma-3-4b-it stays in the
+primacy regime throughout.
+Neither regime equals correct retrieval; both are deviations from
+the answer the prompt asks for.
+We trace the mechanism underlying the regime split in
+\S\ref{sec:mechanism}.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.85\textwidth]{figures/fig2_main_results.pdf}
-\caption{FVQ and CVQ accuracy on Semantic-Multi for two open-weight
-models. \textbf{Top row}: Qwen2.5-3B-Instruct. \textbf{Bottom row}:
-Gemma-3-4b-it. \textbf{Left}: vary number of keys $K$ at fixed
-update depth $N{=}10$. \textbf{Right}: vary update depth $N$ at fixed
-key count $K{=}5$. Error bars are Wilson 95\% confidence intervals.
-CVQ sits below FVQ at every cell shown.}
-\label{fig:main_results}
-\end{figure*}
+Intermediate-position queries ($1 < k < N$) collapse uniformly across
+all 5 open-weight models we test under the default Plain format: at
+$K{=}10, N{=}50$, accuracy drops below 5\% within two positions of
+the stream start and remains there
+(Appendix~\ref{app:formats}, multi-model IVQ figure, left panel).
+Three of the six proprietary models we evaluate show the same
+pattern (GPT-4.1, GPT-4.1-mini, Claude-4.5-Haiku);
+Claude-Sonnet shows U-shaped recovery and Gemini-2.5-Flash a partial
+dip; Gemini-2.5-Pro is the single model that maintains near-ceiling
+accuracy across all positions, indicating the capability is
+achievable but not developed in the majority of models we test.
+A deeper per-cell dive for Qwen2.5-3B-Instruct with the LoRA recovery
+panel is in Appendix~\ref{app:dense_ivq} (cited again in
+\S\ref{sec:recoveries}).
+The FVQ--CVQ asymmetry measured above is therefore one slice of a
+broader failure of position-indexed retrieval --- present in 8 of 11
+models we evaluate.
 
-\paragraph{Cross-model breadth.}
-Table~\ref{tab:main_results} reports the asymmetry across twelve
-models on Semantic-Multi.
-Because the cell at which a model first exhibits a measurable gap
-depends on scale, we report each block at the smallest $(K, N)$ where
-every model in that block shows gap $> +0.05$: $K{=}20, N{=}50$ for
-proprietary models, $K{=}5, N{=}30$ for open-weight models.
-Scale shifts the failure regime --- proprietary models hold the
-ceiling on cells where open-weight models already collapse --- but
-does not eliminate the asymmetry.
+The rest of the paper asks two questions about this failure: whether
+it is recoverable from the architecture's existing capacity
+(\S\ref{sec:recoveries}), and when during pretraining and
+post-training the failure develops (\S\ref{sec:dynamics}).
 
 \begin{table}[t]
 \centering
 \small
 \input{figures/tab_main.tex}
-\caption{FVQ and CVQ accuracy on Semantic-Multi.
-Up to 200 trials per cell; values are accuracy~$\pm$~Wilson 95\%
-half-width. Each block reports the smallest $(K, N)$ cell at which
-every model in the block shows gap $> +0.05$.}
+\caption{FVQ and CVQ accuracy on Semantic-Multi at a representative
+$(K, N)$ cell for each block: $K{=}20, N{=}50$ for proprietary
+models, $K{=}5, N{=}30$ for open-weight (each is the smallest cell
+at which every model in the block exhibits gap~$> +0.05$). Up to 200
+trials per cell; values are accuracy~$\pm$~Wilson 95\% half-width.}
 \label{tab:main_results}
 \end{table}
 
-\note{Qwen2.5-3B-Instruct reverses to CVQ $>$ FVQ at $K{\geq}10, N{\geq}15$
-on SEM (e.g., $-0.27$ at $K{=}10, N{=}50$); not used in the figure or
-table above. We defer this to \S\ref{sec:analysis}, where it is
-related to the magnitude of the discriminating attention heads.}
-
-The behavioural asymmetry shown above motivates the rest of the paper.
-\S\ref{sec:positional} examines whether the failure is positional ---
-which entries within a key's update sequence the model can and cannot
-recover.
-\S\ref{sec:format} shows that structural format changes (positional
-labels, round blocks) substantially close the gap without changing
-the underlying content, indicating the failure is format-conditioned
-rather than informational.
-\S\ref{sec:analysis} identifies the internal mechanism: a specific
-cluster of attention heads in the upper-middle layers carries the
-FVQ--CVQ distinction in both Qwen2.5-3B-Instruct and Gemma-3-4b-it,
-and the asymmetric magnitudes of their primacy and recency boosts
-predict the behavioural asymmetry observed here.
-Full per-model $(K, N)$ grids and results on the controlled
-Arbitrary-Single (ARB) dataset --- which qualitatively replicates the
-SEM patterns --- appear in Appendices~\ref{app:full_results}
-and~\ref{app:arb}.
-
-% ============================================================
-\section{Positional Analysis}
-\label{sec:positional}
-% ============================================================
-% TODO
-
-% ============================================================
-\section{Format Interventions}
-\label{sec:format}
-% ============================================================
-% TODO
-
-% ============================================================
-\section{Analysis}
-\label{sec:analysis}
-% ============================================================
-% TODO — mechanistic content (probing, logit lens, attention routing)
-% will go here.  The Training dynamics subsection below is complete.
-
-\subsection{Training dynamics}
-\label{sec:analysis:training}
-
-To rule out the asymmetry being an artifact of alignment, supervised
-fine-tuning, or any single training step, we track the FVQ$-$CVQ gap
-across 82 checkpoints from two model families:
-42 pretraining checkpoints of SmolLM2-1.7B
-\citep[step 125k through the released final model;
-][]{allal2025smollm2} and 40 SmolLM3-3B checkpoints spanning three
-pretraining stages and four post-training stages
-\citep[mid-training, SFT, expert specialisation, alignment soup;
-][]{smollm3}.
-At each checkpoint we evaluate on Arbitrary-Single at
-$K \in \{2, 3, 5, 7\}, N \in \{2, 3, 5, 7, 10, 15, 20, 30\}$
-(100 trials/cell, completion format throughout to avoid
-chat-template artifacts at early IT checkpoints; see
-Appendix~\ref{app:training}).
-
-Figure~\ref{fig:training_dynamics} reports the mean gap at each
-checkpoint, partitioned into two regimes that show qualitatively
-different trajectories.
-For \textbf{low-load cells} ($K \leq 3$; mean over 16 cells per
-checkpoint), the gap is positive at the earliest available
-checkpoint in both models and stays positive across the entire
-trajectory --- the primacy regime.
-For \textbf{high-load cells} ($K \geq 5$ and $N \geq 20$; mean over
-4 cells per checkpoint), the gap is \emph{negative} at the earliest
-checkpoint in both models and stays negative across the entire
-trajectory --- the recency regime, in which CVQ accuracy exceeds FVQ.
-
-The reversal we noted in \S\ref{sec:results} for Qwen-family models
-at high $(K, N)$ is therefore not an idiosyncrasy: the same regime
-flip is established within the first 40k--125k pretraining steps of
-both SmolLM2 and SmolLM3, persists through every pretraining stage,
-and survives every SmolLM3 post-training stage including the final
-released model.
-The bias is regime-dependent, not unidirectional, and it is not
-introduced by any single training stage.
-
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/fig3_training_dynamics.pdf}
-\caption{Mean FVQ$-$CVQ gap across training checkpoints, partitioned
-by stream-load regime.
-\textbf{Blue (circles)}: mean over low-load cells ($K \leq 3$,
-16 cells/checkpoint) --- consistently positive across training, the
-primacy regime.
-\textbf{Red (squares)}: mean over high-load cells ($K \geq 5,
-N \geq 20$, 4 cells/checkpoint) --- consistently \emph{negative}, the
-recency regime in which CVQ exceeds FVQ.
-\textbf{Top}: SmolLM2-1.7B across 41 pretraining steps plus the
-released checkpoint, with the published four-stage pretraining
-curriculum \citep{allal2025smollm2} shown as coloured bands.
-\textbf{Bottom}: SmolLM3-3B across 32 pretraining steps and the
-four documented post-training stages (mid-training, SFT, APO,
-LC-expert) plus the released model \citep{smollm3}; coloured bands
-mark each stage. Dashed lines connect post-training stages, which
-are categorical rather than step-indexed. The regime-dependent
-bias is present from the earliest available checkpoint and persists
-through every training stage in both models.}
-\label{fig:training_dynamics}
+\includegraphics[width=\textwidth]{figures/fig2_main_results.pdf}
+\caption{FVQ and CVQ accuracy on Semantic-Multi for two open-weight
+models. \textbf{Top}: Qwen2.5-3B-Instruct.
+\textbf{Bottom}: Gemma-3-4b-it.
+\textbf{Left}: vary $K$ at $N{=}10$ (low-load primacy regime).
+\textbf{Middle}: vary $N$ at $K{=}5$ (low-load primacy regime).
+\textbf{Right}: vary $K$ at $N{=}50$ (high load).
+The right panel shows a clear crossover into the reversal regime for
+Qwen2.5-3B-Instruct at $K \approx 7$ (CVQ exceeds FVQ; neither
+approaches ceiling), while Gemma-3-4b-it stays in the primacy regime
+throughout.
+Error bars are Wilson 95\% confidence intervals.}
+\label{fig:main_results}
 \end{figure*}
+
+% ============================================================
+\section{Two Recoveries: Format and LoRA}
+\label{sec:recoveries}
+% ============================================================
+
+\subsection{Format intervention}
+\label{sec:recoveries:format}
+
+If the failure measured in \S\ref{sec:failure} is about
+\emph{locating} the relevant entries in the stream, making positions
+explicit at the surface should make the lookup easier.
+We test this with four prompt formats applied to the same key-value
+stream: \textbf{Plain} (the default condition used in
+\S\ref{sec:failure}, no positional markers); \textbf{Labeled} (each
+entry tagged with an explicit update index); \textbf{Block} (entries
+grouped under per-round headers); and \textbf{Landmark} (block layout
+with \texttt{-{}-{}-} separating rounds, no numbers).
+Worked examples for each format are in
+Appendix~\ref{app:prompts}.
+We report results at $K{=}10, N{=}50$ --- the hardest cell in the
+format sweep --- across 11 models (5 open-weight, 6 proprietary)
+in Tables~\ref{tab:format_gap} (gap) and~\ref{tab:format_cvq} (CVQ
+accuracy).
+
+\begin{table}[t]
+\centering
+\small
+\input{figures/tab_format_gap.tex}
+\caption{FVQ$-$CVQ gap by format on Semantic-Multi at
+$K{=}10, N{=}50$. Up to 200 trials per (model, format) cell.
+Plain is the default condition used in \S\ref{sec:failure}.}
+\label{tab:format_gap}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\input{figures/tab_format_cvq.tex}
+\caption{CVQ accuracy by format on Semantic-Multi at
+$K{=}10, N{=}50$. Under Block, open-weight CVQ rises from $\le 0.23$
+(Plain) to $\geq 0.89$ for every model; FVQ remains at or near
+ceiling (Table~\ref{tab:format_gap}), so the gap closes because both
+queries are answered correctly.}
+\label{tab:format_cvq}
+\end{table}
+
+\textbf{Block} format eliminates the FVQ--CVQ gap across every
+open-weight model where we measure it
+(Tables~\ref{tab:format_gap},~\ref{tab:format_cvq}).
+The recovery is genuine, not equalisation: CVQ rises from near-zero
+under Plain to near-ceiling under Block, and FVQ stays at or above
+its Plain value --- both queries are now answered correctly.
+Proprietary models follow the same pattern at smaller magnitudes;
+Gemini-2.5-Pro is the only model at ceiling on both queries under
+Plain, consistent with its non-collapse in \S\ref{sec:failure}.
+\note{Qwen3.5-9B has only Plain-format data at $K{=}10, N{=}50$;
+the remaining three formats were not run.}
+
+\textbf{Labeled} and \textbf{Landmark} close the gap with different
+consequences.
+In two open-weight models (Qwen2.5-3B-Instruct, Gemma-3-4b-it)
+Labeled closes the gap by \emph{degrading FVQ} rather than restoring
+CVQ --- both queries end up around 0.4 in those models
+(Table~\ref{tab:format_cvq}) and the failure shifts rather than
+disappears.
+Landmark, which gives round structure without numbers, recovers the
+proprietary set but leaves the open-weight models near their
+Plain-format failure (Gemma-3-4b-it gap stays at $+0.92$).
+Across the three intervention formats the cleanest reading is that
+\emph{explicit per-update tokens} --- numbers paired with each entry ---
+are what reliably enables retrieval in the open-weight set; visual
+round structure alone is not enough.
+
+The format intervention demonstrates that the retrieval circuit
+exists in the pretrained model: given the right surface cue at
+inference time, the model already has what it needs to retrieve the
+current value of an in-context variable.
+Pretraining does not, by default, dispatch this circuit from the
+Plain key-value format.
+The same capability is also recoverable from within the model, via
+targeted fine-tuning, which we show next.
+
+\begin{table*}[t]
+\centering
+\small
+\input{figures/tab_lora_arb.tex}
+\caption{LoRA intervention on Qwen2.5-3B-Instruct evaluated on
+held-out Arbitrary-Single cells. The adapter is trained on a small
+grid ($K \le 10, N \le 20$) and tested at $K$ up to 30 and $N$ up
+to 75. Across every held-out cell, both FVQ and CVQ accuracy reach
+93--100\% post-adapter.}
+\label{tab:lora_arb}
+\end{table*}
+
+\begin{table}[t]
+\centering
+\small
+\input{figures/tab_lora_sem.tex}
+\caption{Cross-distribution transfer: the same LoRA trained only on
+Arbitrary-Single restores accuracy to ceiling on Semantic-Multi
+(multi-token semantic values) without modification. Four held-out
+$(K, N)$ cells; all four go from baseline reversal regime to gap
+$0\%$.}
+\label{tab:lora_sem}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_dense_ivq.pdf}
+\caption{Per-position retrieval accuracy at $K{=}5, N{=}10$ on
+Arbitrary-Single. The base model recovers position~1 reliably and
+collapses on intermediate positions; the LoRA-tuned model is at or
+near ceiling at every queried position.}
+\label{fig:dense_ivq}
+\end{figure}
+
+% ============================================================
+\section{When Does the Failure Develop?}
+\label{sec:dynamics}
+% ============================================================
+\note{Training dynamics: 82 checkpoints (SmolLM2 + SmolLM3) with
+stage bands. Two-regime lines per panel. Rules out alignment, SFT,
+late-pretraining-shift as causes.}
+
+% ============================================================
+\section{Mechanism: What LoRA Changes}
+\label{sec:mechanism}
+% ============================================================
+\note{Pre-LoRA mechanism (existing data): probing, logit lens,
+attention routing, per-trial correlation, causal ablation.
+Post-LoRA mechanism: \emph{pending experiments}.
+Pre/post comparison: \emph{pending}.}
 
 % ============================================================
 \section{Discussion}
 \label{sec:discussion}
 % ============================================================
-% TODO
+\note{Three implications: scaling won't fix this trivially; LM loss
+has a structural blind spot; characterise--recover--locate as a
+methodology.}
 
 % ============================================================
 \section*{Limitations}
 % ============================================================
-
-\paragraph{$K$ and context length are confounded.} The total stream
-length grows as $K \times N$, so increases in $K$ at fixed $N$
-co-vary with overall context length.
-We do not separate the contribution of key count from context length:
-doing so would require holding $K \times N$ constant and varying the
-$K/N$ ratio, which we leave for future work.
+\note{K vs context-length confound; LoRA tested on one or two
+families; mechanism for one model; no real-world stateful benchmark;
+reversal-regime predictor absent.}
 
 % ============================================================
 \section*{Ethical Considerations}
 % ============================================================
-% TODO
+\note{Standard ACL/EMNLP boilerplate; no human subjects; no
+sensitive data; synthetic stream construction.}
 
 % ============================================================
 \section*{Acknowledgments}
 % ============================================================
-% TODO
+\note{To fill in.}
 
 \bibliography{references}
 
@@ -610,25 +606,26 @@ $K/N$ ratio, which we leave for future work.
 
 We construct three datasets, varying the surface form of the update
 stream while holding the underlying $(K, N)$ structure fixed.
-The two key--value variants (ARB and SEM) share schema and grid; the
-narrative variant (NAR) tests the same task in prose.
+The two key--value variants (ARB and SEM) share schema and grid;
+the narrative variant (NAR) tests the same task in prose.
 
 \paragraph{Arbitrary-Single (ARB).}
-A pool of 2,300 single-token English words organized into 46 semantic
-categories (e.g., \textit{color}, \textit{fruit}, \textit{metal}).
+A pool of 2{,}300 single-token English words organised into 46
+semantic categories (e.g., \textit{color}, \textit{fruit},
+\textit{metal}).
 For each trial, $K$ categories are sampled as keys and $N$ values are
 drawn without replacement from each category's pool.
 Keys and values share no inherent update semantics --- there is no
 reason to expect any particular ordering among values of the same
-category. This isolates tracking from semantic shortcuts and provides
-the single-token values required for the mechanistic analysis
-(\S\ref{sec:analysis}).
+category.
+This isolates tracking from semantic shortcuts and provides the
+single-token values required for the mechanistic analysis
+(\S\ref{sec:mechanism}).
 
 \paragraph{Semantic-Multi (SEM).}
 A pool of 2{,}403 multi-token values across the same 46 categories,
-where values are real members of each category
-(e.g., \textit{gemstone} $\rightarrow$ \textit{alexandrite},
-\textit{amethyst}, \ldots).
+where values are real members of each category (e.g., \textit{gemstone}
+$\rightarrow$ \textit{alexandrite}, \textit{amethyst}, \ldots).
 Values are multi-token and drawn from a smaller per-category pool
 (45--70 values), limiting feasible update counts to $N \leq 50$ for
 most key counts.
@@ -643,11 +640,10 @@ We use a Dota~2 match commentary dataset in which $K$ game entities
 (heroes) each have $N$ attribute updates (e.g., gold, kills) woven
 into match narration; FVQ and CVQ queries ask for the first and
 current attribute value of a target hero.
-\note{Run GPT-4.1-mini and Claude Haiku on full narrative grid before
-submission. Existing results: Qwen2.5-3B-Instruct, Qwen3.5-9B,
-Gemma-3-4b already done. Claude Haiku has partial results (old runs).
-Target: Gemma-3-4b, Qwen3.5-9B, Qwen2.5-3B-Instruct, Claude Haiku,
-GPT-4.1-mini with matched grid for clean cross-format comparison.}
+\note{Re-run GPT-4.1-mini and Claude-Haiku on the matched narrative
+grid for cross-format comparison; existing runs cover
+Qwen2.5-3B-Instruct, Qwen3.5-9B, Gemma-3-4b. Decide before
+submission whether to retain NAR or drop it.}
 
 \paragraph{Grid coverage.}
 On the unified grid $K \in \{2, 3, 5, 7, 10, 15, 20, 25, 30\}$,
@@ -655,19 +651,184 @@ $N \in \{5, 7, 10, 15, 20, 30, 50, 75, 100\}$ (\S\ref{sec:setup}),
 cells where the prompt exceeds a model's context limit are excluded;
 cells where the dataset pool is insufficient are also excluded
 (relevant for SEM at high $N$).
-This yields up to 79 feasible cells per model on ARB and up to 63 on
-SEM.
+This yields up to 79 feasible cells per model on ARB and up to 63
+on SEM.
 
 % ============================================================
-\section{Prompt Examples}
+\section{Prompts, Matching Rule, and Seeds}
 \label{app:prompts}
 % ============================================================
-% TODO
+
+This appendix documents the exact text used to construct the
+inference prompts, the four format variants used in
+\S\ref{sec:recoveries}, the string-matching rule used to score model
+responses, and the deterministic seeding scheme.
+
+\paragraph{Naming convention.}
+The main text refers to the second query type as \emph{CVQ}
+(current-value query), reflecting its meaning. The actual prompt
+text asks for the \emph{last} value of the target key, which is
+operationally equivalent when the stream is the complete record of
+updates.
+
+\begin{figure}[h]
+\small
+\centering
+\begin{tcolorbox}[
+    colframe=black!30, colback=gray!4,
+    boxrule=0.5pt, arc=2pt,
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    title={\textbf{System prompt and queries}},
+    fonttitle=\small\bfseries,
+    coltitle=black]
+\textbf{System prompt:}\\[1pt]
+\emph{You are a precise data extraction tool. Output ONLY a single
+word --- the exact value requested. No other text, no explanation,
+no punctuation.}\\[6pt]
+\textbf{Queries} (rendered with the target key substituted in):\\[1pt]
+\textbf{FVQ}: \emph{What was the first value of {\sc[target]}?}\\
+\textbf{CVQ}: \emph{What was the last value of {\sc[target]}?}\\
+\textbf{IVQ}: \emph{What was the {\sc[k]}-th value of
+{\sc[target]}?}
+\end{tcolorbox}
+\caption{Inference-time system prompt and per-query phrasing used in
+all behavioural sweeps reported in the paper. ``CVQ'' in the main
+text corresponds to the literal ``last value of'' query above.}
+\label{fig:prompt_system}
+\end{figure}
+
+\paragraph{Stream formats.}
+The four formats compared in \S\ref{sec:recoveries} differ only in
+how the stream lines are rendered and which user-turn preamble
+introduces them. Figure~\ref{fig:prompt_formats} shows a small
+($K{=}2, N{=}3$) example in each format.
+
+\begin{figure}[h]
+\small
+\centering
+\begin{tcolorbox}[
+    colframe=black!30, colback=gray!4,
+    boxrule=0.5pt, arc=2pt,
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    title={\textbf{Plain} (\texttt{flat\_nolabel}; default in \S\ref{sec:failure})},
+    fonttitle=\small\bfseries,
+    coltitle=black]
+\emph{Read the following key-value stream. Each key appears
+multiple times as it gets updated. Count each occurrence of a key as
+one update.}\\[4pt]
+\texttt{color: red}\\
+\texttt{size: large}\\
+\texttt{color: blue}\\
+\texttt{size: small}\\
+\texttt{color: green}\\
+\texttt{size: medium}\\[4pt]
+\emph{What was the 3rd value of color?}\\
+\emph{Answer with ONLY the exact value. No explanation.}
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+    colframe=black!30, colback=gray!4,
+    boxrule=0.5pt, arc=2pt,
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    title={\textbf{Labeled} (\texttt{flat\_verbose})},
+    fonttitle=\small\bfseries,
+    coltitle=black]
+\emph{Read the following key-value stream. Each key is updated
+multiple times.}\\[4pt]
+\texttt{color (update 1): red}\\
+\texttt{size (update 1): large}\\
+\texttt{color (update 2): blue}\\
+\texttt{size (update 2): small}\\
+\texttt{color (update 3): green}\\
+\texttt{size (update 3): medium}\\[4pt]
+\emph{What was the value of color in Update 3?}\\
+\emph{Answer with ONLY the exact value. No explanation.}
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+    colframe=black!30, colback=gray!4,
+    boxrule=0.5pt, arc=2pt,
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    title={\textbf{Block} (\texttt{block})},
+    fonttitle=\small\bfseries,
+    coltitle=black]
+\emph{Read the following key-value stream. Each key is updated
+multiple times, grouped by update round.}\\[4pt]
+\texttt{[Update 1]}\\
+\texttt{\ \ color: red}\\
+\texttt{\ \ size: large}\\
+\texttt{[Update 2]}\\
+\texttt{\ \ color: blue}\\
+\texttt{\ \ size: small}\\
+\texttt{[Update 3]}\\
+\texttt{\ \ color: green}\\
+\texttt{\ \ size: medium}\\[4pt]
+\emph{What was the value of color in Update 3?}\\
+\emph{Answer with ONLY the exact value. No explanation.}
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+    colframe=black!30, colback=gray!4,
+    boxrule=0.5pt, arc=2pt,
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    title={\textbf{Landmark} (\texttt{landmark})},
+    fonttitle=\small\bfseries,
+    coltitle=black]
+\emph{Read the following key-value stream. Each key is updated
+multiple times, grouped by update round. The `\,---\,' marker
+separates consecutive update rounds.}\\[4pt]
+\texttt{color: red}\\
+\texttt{size: large}\\
+\texttt{---}\\
+\texttt{color: blue}\\
+\texttt{size: small}\\
+\texttt{---}\\
+\texttt{color: green}\\
+\texttt{size: medium}\\[4pt]
+\emph{What was the value of color in Update 3?}\\
+\emph{Answer with ONLY the exact value. No explanation.}
+\end{tcolorbox}
+\caption{The four prompt formats compared in
+\S\ref{sec:recoveries}, illustrated on a $K{=}2, N{=}3$ instance.
+Same underlying stream content; only the surface structure changes.
+The ``Plain'' format is the default for all main-body figures and
+tables (\S\ref{sec:failure}).}
+\label{fig:prompt_formats}
+\end{figure}
+
+\paragraph{Chat-template rendering.}
+For instruction-tuned models the user/system messages are rendered
+through the model's tokenizer-default chat template; for base
+models without a chat template we use a completion-style few-shot
+wrapper described in the released code.
+
+\paragraph{Matching rule.}
+A model response is counted as correct if, after lowercasing and
+stripping whitespace, the expected value either equals the response,
+is contained in the response, or is a prefix of the response. This
+prefix-tolerant case-insensitive rule accommodates multi-token
+semantic values where models occasionally emit a trailing
+qualifier; spot-checks confirm it does not credit lexically
+unrelated strings.
+
+\paragraph{Seeds.}
+For each $(K, N, \text{query type}, \text{trial index})$ tuple we
+derive a deterministic seed by hashing the tuple. This ensures the
+identical stream is presented across base-vs-intervention
+comparisons at the same cell and trial index, so the two conditions
+are scored on identical inputs.
 
 % ============================================================
 \section{Model Details}
 \label{app:models}
 % ============================================================
+
+Table~\ref{tab:models} lists every model evaluated in this paper.
+The first block is the main open-weight set whose behaviour is
+analysed in the main text; the second block is three smaller
+auxiliary models reported in Appendix~\ref{app:full_results} for
+completeness; the third block is the proprietary frontier models.
+IT = instruction-tuned.
 
 \begin{table}[h]
 \centering
@@ -676,6 +837,7 @@ SEM.
 \toprule
 \textbf{Model} & \textbf{Family} & \textbf{Params} & \textbf{IT?} \\
 \midrule
+\multicolumn{4}{l}{\emph{Main open-weight}} \\
 Qwen2.5-0.5B-Instruct  & Qwen2.5   & 0.5B  & \checkmark \\
 Qwen2.5-1.5B-Instruct  & Qwen2.5   & 1.5B  & \checkmark \\
 Qwen2.5-3B-Instruct    & Qwen2.5   & 3B    & \checkmark \\
@@ -687,10 +849,13 @@ Qwen3.5-9B             & Qwen3.5   & 9B    & \checkmark \\
 Gemma-3-270m-it        & Gemma-3   & 270M  & \checkmark \\
 Gemma-3-1b-it          & Gemma-3   & 1B    & \checkmark \\
 Gemma-3-4b-it          & Gemma-3   & 4B    & \checkmark \\
+\midrule
+\multicolumn{4}{l}{\emph{Auxiliary (appendix only)}} \\
 TinyLlama-1.1B         & LLaMA     & 1.1B  & \checkmark \\
 StableLM-2-1.6B        & StableLM  & 1.6B  & \checkmark \\
 Pythia-410M            & Pythia    & 410M  & $\times$   \\
 \midrule
+\multicolumn{4}{l}{\emph{Proprietary frontier}} \\
 GPT-4.1                & OpenAI    & ---   & ---        \\
 GPT-4.1-mini           & OpenAI    & ---   & ---        \\
 Claude-4.5-Haiku       & Anthropic & ---   & ---        \\
@@ -699,8 +864,10 @@ Gemini-2.5-Flash       & Google    & ---   & ---        \\
 Gemini-2.5-Pro         & Google    & ---   & ---        \\
 \bottomrule
 \end{tabular}
-\caption{All 20 models evaluated. IT = instruction-tuned.
-Parameter counts unavailable for proprietary models.}
+\caption{All 20 models evaluated, grouped by role: 11 main
+open-weight models that drive the main analyses; 3 smaller auxiliary
+models reported only in Appendix~\ref{app:full_results}; and 6
+proprietary frontier models.}
 \label{tab:models}
 \end{table}
 
@@ -708,236 +875,111 @@ Parameter counts unavailable for proprietary models.}
 \section{Full Model Results}
 \label{app:full_results}
 % ============================================================
-
-Table~\ref{tab:full_sem} reports the FVQ$-$CVQ gap for all 15
-open-weight models at four representative $(K, N)$ cells on
-Semantic-Multi.
-Values are gap = FVQ $-$ CVQ with the half-width of an approximate
-95\% Wilson interval on the difference; up to 200 trials per cell.
-Empty cells correspond either to the model's context-length limit
-(TinyLlama, Mamba) or to dataset pool exhaustion at high $N$.
-
-Two patterns are visible across the table.
-First, the gap is positive (FVQ $>$ CVQ) for the great majority of
-populated cells across all model families.
-Second, three models cross into reversal (gap $< 0$) at large $(K, N)$:
-Qwen2.5-3B-Instruct (from $+0.06$ at $K{=}5, N{=}30$ to $-0.55$ at
-$K{=}20, N{=}50$), Qwen2.5-3B base ($-0.20$ already at $K{=}5,N{=}30$),
-and Qwen3.5-4B ($-0.07$ at $K{=}10, N{=}50$).
-The Qwen2.5-3B-Instruct reversal is examined mechanistically in
-\S\ref{sec:analysis}.
-
-\begin{table*}[h]
-\centering
-\small
-\input{figures/tab_full_sem.tex}
-\caption{Open-weight models on Semantic-Multi at four representative
-$(K, N)$ cells. Each cell reports gap $=$ FVQ$\,-\,$CVQ with the
-half-width of an approximate Wilson 95\% interval on the difference;
-up to 200 trials per cell. Empty cells: context-length limit or
-dataset pool exhaustion.}
-\label{tab:full_sem}
-\end{table*}
-
-Table~\ref{tab:full_sem_prop} reports the same gap statistic for the
-six proprietary frontier models on the same four $(K, N)$ cells.
-At small $(K, N)$ all proprietary models hold the FVQ ceiling and
-exhibit only a small gap; the asymmetry emerges at higher load,
-where every model shows gap $> +0.13$ at $(K{=}20, N{=}50)$.
-
-\begin{table*}[h]
-\centering
-\small
-\input{figures/tab_full_sem_prop.tex}
-\caption{Proprietary frontier models on Semantic-Multi at the same
-four $(K, N)$ cells as Table~\ref{tab:full_sem}. Format follows
-Table~\ref{tab:full_sem}.}
-\label{tab:full_sem_prop}
-\end{table*}
+\note{Carry over: per-model SEM grid + proprietary table.}
 
 % ============================================================
 \section{Arbitrary-Single Replication}
 \label{app:arb}
 % ============================================================
-
-The Semantic-Multi dataset uses real category members as values, so
-trivial template matching cannot solve the task; the Arbitrary-Single
-(ARB) dataset replaces these with single-token words drawn from the
-same 46 categories, removing semantic coherence between key and
-value.
-ARB is also the dataset used for the mechanistic analysis
-(\S\ref{sec:analysis}) because single-token values are required for
-activation patching.
-Table~\ref{tab:full_arb} reports the gap on ARB at the same four
-$(K, N)$ cells as Table~\ref{tab:full_sem}.
-
-The qualitative pattern matches: gap $> 0$ for the great majority of
-cells, with the same three models (Qwen2.5-3B-Instruct, Qwen2.5-3B
-base, Qwen3.5-4B) crossing into reversal at large $(K, N)$.
-Absolute gap magnitudes are within $\pm$0.1 of their SEM counterparts
-in 9 of 12 fully-populated rows, supporting our reliance on ARB for
-mechanistic analysis: the failure mode visible mechanistically on
-single-token values is the same failure mode visible behaviourally on
-realistic multi-token values.
-
-\begin{table*}[h]
-\centering
-\small
-\input{figures/tab_full_arb.tex}
-\caption{Open-weight models on Arbitrary-Single at the same four
-$(K, N)$ cells as Table~\ref{tab:full_sem}. Format follows
-Table~\ref{tab:full_sem}.}
-\label{tab:full_arb}
-\end{table*}
+\note{Carry over: ARB grid table.}
 
 % ============================================================
 \section{Format Intervention Data}
 \label{app:formats}
 % ============================================================
 
-This appendix reports raw format-intervention data used by
-\S\ref{sec:format}. We test four prompt formats applied to the same
-underlying stream content on the Semantic-Multi dataset at
-$K{=}10, N{=}50$ --- the hardest cell available in the format sweep
-($K \in \{5, 10\}$, $N \in \{10, 20, 50\}$).
-Up to 200 trials per (model, format) cell.
+This appendix supports two claims made in the main text:
+the format-intervention results in \S\ref{sec:recoveries:format}
+(Tables~\ref{tab:format_gap} and~\ref{tab:format_cvq}, both in
+\S\ref{sec:recoveries:format}) and the multi-model
+intermediate-position retrieval claim in \S\ref{sec:failure}.
 
-\paragraph{Formats.}
-\textbf{Plain} (\texttt{flat\_nolabel}) is the default condition used
-elsewhere in the paper: \texttt{key: value}, one per line, no
-positional markers.
-\textbf{Labeled} (\texttt{flat\_verbose}) tags each entry with an
-explicit update index: \texttt{key (update $j$): value}.
-\textbf{Block} groups all $K$ keys per round under a
-\texttt{[Update $j$]} header (no per-entry labels).
-\textbf{Landmark} uses the block layout but separates rounds with a
-\texttt{---} delimiter and no round number, so round boundaries are
-visually explicit without a numeric anchor.
+\paragraph{Multi-model per-position retrieval under the default
+Plain format.}
+Figure~\ref{fig:multimodel_ivq} shows per-position retrieval
+accuracy at $K{=}10, N{=}50$ on Arbitrary-Single under the default
+Plain format, separately for the five open-weight models in the
+ucurve sweep and the six proprietary frontier models. All five
+open-weight models collapse below 5\% accuracy within two positions
+of the stream start. The proprietary panel reveals three regimes:
+three models (GPT-4.1, GPT-4.1-mini, Claude-4.5-Haiku) collapse like
+the open-weight set; Claude-Sonnet and Gemini-2.5-Flash show partial
+recovery; Gemini-2.5-Pro alone maintains near-ceiling accuracy
+across all queried positions.
 
-\paragraph{Gap reduction (Table~\ref{tab:format_gap}).}
-Both explicit-label formats collapse the FVQ$-$CVQ gap toward zero
-for open-weight models: Plain-format gaps of $+0.27$ to $+0.99$
-become $\pm 0.10$ under Labeled or Block.
-Proprietary models start with a smaller Plain-format gap (mostly
-$\le +0.31$, with Claude-4.5-Haiku at $+0.56$) but follow the same
-direction.
-The Landmark format --- which removes numeric labels but keeps round
-boundaries visible --- helps the proprietary models reach near-zero
-gap but does not help Gemma-3-4b-it ($+0.92$) or Qwen3.5 models
-($+0.52$ to $+0.73$), suggesting that explicit per-update tokens
-(not just round structure) are what restores CVQ in the open-weight
-group.
-
-\begin{table*}[h]
+\begin{figure*}[h]
 \centering
-\small
-\input{figures/tab_format_gap.tex}
-\caption{FVQ$-$CVQ gap by format on Semantic-Multi at
-$K{=}10, N{=}50$. Up to 200 trials per (model, format) cell.
-A gap near zero indicates the format intervention has equalised
-first-position and last-position retrieval; large positive gap means
-the asymmetry persists. Qwen3.5-9B runs incomplete.}
-\label{tab:format_gap}
-\end{table*}
-
-\paragraph{Absolute CVQ accuracy (Table~\ref{tab:format_cvq}).}
-The gap reduction is driven by CVQ rising under labelled formats, not
-by FVQ falling: under Plain, open-weight CVQ accuracy is $\le 0.23$
-for all four reported models; under Block it rises to $\ge 0.89$ in
-every case. Labeled gives a similar lift for three of four
-open-weight models (Qwen3.5-2B/4B, Qwen2.5-3B-Instruct, and to a
-lesser extent Gemma-3-4b-it at 0.47).
-This rules out the alternative explanation that the formats simply
-confuse the model into uniform random output.
-
-\begin{table*}[h]
-\centering
-\small
-\input{figures/tab_format_cvq.tex}
-\caption{CVQ (last-position) accuracy by format on Semantic-Multi at
-$K{=}10, N{=}50$. Under the Plain format CVQ collapses to near zero
-for the open-weight models (except Qwen2.5-3B-Instruct, $0.23$);
-explicit-label formats restore CVQ to near-ceiling for most
-open-weight models and to ceiling for all proprietary models.}
-\label{tab:format_cvq}
-\end{table*}
+\includegraphics[width=\textwidth]{figures/fig_multimodel_ivq.pdf}
+\caption{Per-position retrieval accuracy on Arbitrary-Single at
+$K{=}10, N{=}50$ under the default Plain format (ucurve sweep;
+\texttt{flat\_nolabel} condition). Each line is one model.
+\textbf{Left}: five open-weight models, all collapsing uniformly to
+near-floor by position 2.
+\textbf{Right}: six proprietary models; most collapse but
+Gemini-2.5-Pro maintains near-ceiling accuracy throughout, and
+Claude-Sonnet shows U-shaped recovery toward the end of the stream.}
+\label{fig:multimodel_ivq}
+\end{figure*}
 
 % ============================================================
 \section{Training Dynamics Data}
 \label{app:training}
 % ============================================================
+\note{Carry over: SmolLM2 + SmolLM3 trajectory tables.}
 
-This appendix lists the per-checkpoint behavioural numbers behind
-Figure~\ref{fig:training_dynamics} (\S\ref{sec:analysis:training}).
+% ============================================================
+\section{LoRA Training Details}
+\label{app:lora}
+% ============================================================
+\note{New: LoRA config, training data construction, held-out
+category and cell split, arithmetic control config, Gemma control
+config (pending).}
 
-\paragraph{Method.}
-For each checkpoint we evaluate on Arbitrary-Single across
-$K \in \{2, 3, 5, 7\}, N \in \{2, 3, 5, 7, 10, 15, 20, 30\}$ (32 cells)
-with 100 trials per cell.
-We use the \texttt{completion} prompt format throughout because the
-chat template returns near-zero accuracy on early
-instruction-tuned checkpoints
-(e.g., SmolLM3 \texttt{it-mid-training} under \texttt{chat\_1024}
-gives RI = PI = 0.001).
-Per-cell numbers are aggregated to a mean RI, mean PI, and mean gap
-per checkpoint.
+% ============================================================
+\section{Dense Intermediate-Position Retrieval — Full Sweep}
+\label{app:dense_ivq}
+% ============================================================
 
-\paragraph{SmolLM2-1.7B (Table~\ref{tab:smollm2_traj}).}
-The 41 pretraining steps span training step 125{,}000 through
-5{,}125{,}000; the \emph{final} row is the released SmolLM2-1.7B
-checkpoint.
-The gap is positive at every checkpoint; it rises sharply through
-mid-pretraining (peaking at step 625{,}000) and partially collapses
-late in pretraining before stabilising around $+0.25$.
+Figure~\ref{fig:dense_ivq} in \S\ref{sec:recoveries} shows
+position-by-position retrieval accuracy at a single cell
+($K{=}5, N{=}10$). To substantiate the broader claim that the failure
+is a general loss of position-indexed retrieval, we report the same
+measurement across all six cells we tested.
+Figure~\ref{fig:dense_ivq_panel} shows the per-position curves;
+Table~\ref{tab:dense_ivq} summarises first / intermediate / last
+position accuracy per cell. Across all six $(K, N)$ cells, baseline
+intermediate-position accuracy stays at or below $25\%$ and the
+LoRA-tuned model recovers near-ceiling accuracy at every position
+queried.
+
+\begin{figure*}[h]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_dense_ivq_panel.pdf}
+\caption{Per-position retrieval accuracy at all six tested
+$(K, N)$ cells on Arbitrary-Single, base model vs LoRA-tuned model.
+Group labels (\texttt{train}, \texttt{held-moderate},
+\texttt{held-hard}) indicate whether the cell was included in the
+LoRA training grid.}
+\label{fig:dense_ivq_panel}
+\end{figure*}
 
 \begin{table}[h]
 \centering
 \small
-\input{figures/tab_smollm2_traj.tex}
-\caption{SmolLM2-1.7B per-checkpoint mean RI (FVQ), PI (CVQ), and gap
-on Arbitrary-Single. 32 cells per checkpoint; 100 trials/cell.}
-\label{tab:smollm2_traj}
+\input{figures/tab_dense_ivq.tex}
+\caption{Per-cell summary of dense intermediate-position retrieval
+accuracy on Arbitrary-Single. ``Interm.\ min--max'' is the range
+across all intermediate positions ($1 < k < N$) at that cell.
+The base model loses accuracy at every intermediate position across
+every cell; the LoRA-tuned model holds near ceiling.}
+\label{tab:dense_ivq}
 \end{table}
 
-\paragraph{SmolLM3-3B (Table~\ref{tab:smollm3_traj}).}
-The pretraining block covers 32 checkpoints across the three
-documented pretraining stages of SmolLM3
-\citep{smollm3} in completion-few-shot format; the post-training
-block reports the four documented intermediate stages
-(\texttt{it-mid-training}, \texttt{it-SFT}, \texttt{it-LC-expert},
-\texttt{it-soup-APO}) followed by the released final model.
-The gap is positive at every checkpoint and at every post-training
-stage including \texttt{final}.
-
-\begin{table}[h]
-\centering
-\small
-\input{figures/tab_smollm3_traj.tex}
-\caption{SmolLM3-3B per-checkpoint mean RI (FVQ), PI (CVQ), and gap
-on Arbitrary-Single (completion format throughout). 32 cells per
-checkpoint; 100 trials/cell.}
-\label{tab:smollm3_traj}
-\end{table}
-
-\paragraph{Prompt-format sensitivity for post-training
-(Table~\ref{tab:smollm3_formats}).}
-For SmolLM3 post-training stages we additionally ran the chat-format
-prompt. Magnitudes differ between formats but the sign and ordering
-of the gap are preserved, except for the \texttt{it-mid-training}
-chat run where the chat template breaks the model entirely (both RI
-and PI collapse to near zero; the gap is undefined and we omit it
-from Figure~\ref{fig:training_dynamics}).
-
-\begin{table}[h]
-\centering
-\small
-\input{figures/tab_smollm3_formats.tex}
-\caption{SmolLM3-3B post-training stages: gap under
-\texttt{completion} vs \texttt{chat\_1024} prompt formats.
-The chat template returns near-zero accuracy at
-\texttt{it-mid-training}; magnitudes shift at later stages but the
-gap stays positive under both formats.}
-\label{tab:smollm3_formats}
-\end{table}
+% ============================================================
+\section{Pre/Post Mechanism Details}
+\label{app:mechanism}
+% ============================================================
+\note{New: pre/post probing, logit-lens, attention-routing figures
+and tables (pending experiments).}
 
 \end{document}
