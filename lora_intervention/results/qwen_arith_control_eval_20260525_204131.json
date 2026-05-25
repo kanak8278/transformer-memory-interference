@@ -1,0 +1,126 @@
+{
+  "run_name": "qwen_arith_control",
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "adapter": "lora_intervention/checkpoints/qwen_arith_control/checkpoint-100",
+  "timestamp": "20260525_204131",
+  "max_trials": 100,
+  "results": {
+    "ARBITRARY_SINGLE": {
+      "10_50": {
+        "num_keys": 10,
+        "num_updates": 50,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.48,
+            "ci_lower": 0.3839,
+            "ci_upper": 0.5761,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.26,
+            "ci_lower": 0.1747,
+            "ci_upper": 0.3453,
+            "n": 100
+          }
+        },
+        "gap": 0.22,
+        "regime": "B",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "15_20": {
+        "num_keys": 15,
+        "num_updates": 20,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.49,
+            "ci_lower": 0.3938,
+            "ci_upper": 0.5862,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.33,
+            "ci_lower": 0.2391,
+            "ci_upper": 0.4209,
+            "n": 100
+          }
+        },
+        "gap": 0.16,
+        "regime": "B",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "20_30": {
+        "num_keys": 20,
+        "num_updates": 30,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.32,
+            "ci_lower": 0.2298,
+            "ci_upper": 0.4102,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.29,
+            "ci_lower": 0.202,
+            "ci_upper": 0.378,
+            "n": 100
+          }
+        },
+        "gap": 0.03,
+        "regime": "A",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "25_75": {
+        "num_keys": 25,
+        "num_updates": 75,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.11,
+            "ci_lower": 0.0465,
+            "ci_upper": 0.1735,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.19,
+            "ci_lower": 0.1129,
+            "ci_upper": 0.2671,
+            "n": 100
+          }
+        },
+        "gap": -0.08,
+        "regime": "D",
+        "n_trials": 100,
+        "stopped_early": false
+      },
+      "30_75": {
+        "num_keys": 30,
+        "num_updates": 75,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.07,
+            "ci_lower": 0.0161,
+            "ci_upper": 0.1239,
+            "n": 100
+          },
+          "PI": {
+            "accuracy": 0.26,
+            "ci_lower": 0.1747,
+            "ci_upper": 0.3453,
+            "n": 100
+          }
+        },
+        "gap": -0.19,
+        "regime": "D",
+        "n_trials": 100,
+        "stopped_early": false
+      }
+    }
+  }
+}

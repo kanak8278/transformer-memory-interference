@@ -375,6 +375,87 @@ heads identified in Qwen (L31-L33 cluster) have an analog in Gemma, or
 whether Gemma's recovery routes through different heads given its
 shallower suppressor cluster (L17-L19 + L30H6).
 
+## 5.6 §5.3 negative-control LoRA (arithmetic) — fills paper's `\note{pending}` placeholders
+
+**Headline.** Arithmetic-domain LoRA on Qwen2.5-3B-Instruct, same
+hyperparameters as the main task-specific LoRA, fails to close the
+FVQ/CVQ gap. 0 of 5 representative held-out cells reach the "fixed"
+criterion (RI ≥ 0.65 AND PI ≥ 0.65), versus 28/28 for the
+task-specific LoRA. The paper's three `\note{pending arithmetic control}`
+references can now cite this run.
+
+**Stronger control than originally planned.** PLAN.md Decision 7
+specifies single-token numeric answers for the arithmetic data
+(format-identity with main LoRA). We deviated to **full GSM8K
+including chain-of-thought reasoning** (`openai/gsm8k`, main config,
+train split, 6,726 train / 747 val) — a more conservative test:
+"even arithmetic *reasoning* training doesn't fix the gap." Same
+system prompt as main run.
+
+**Training (`checkpoints/qwen_arith_adapter/`).**
+
+- Qwen/Qwen2.5-3B-Instruct + rank-16 attention-only LoRA, lr 2e-4
+  cosine, batch 2 × grad_accum 32 (eff 64), max_seq_len 768
+- Stopped at step 100 of 212 (epoch 0.95) — train/eval loss
+  plateaued (0.29/0.31), no overfit, eval token acc 90.8%
+- Wall time: ~30 min on L4
+
+**GSM8K task accuracy (end-to-end generation, 250 test problems).**
+
+| Model | GSM8K accuracy | Δ |
+|---|---|---|
+| Qwen2.5-3B-Instruct (baseline) | 16.0% (40/250) | — |
+| Qwen + arith LoRA | **69.6% (174/250)** | **+53.6 pts** |
+
+The LoRA *demonstrably* learned arithmetic. The pipeline is effective.
+
+**FVQ/CVQ held-out grid (5-cell subset, 100 trials/cell, vLLM, Wilson 95% CIs).**
+
+| Cell      | Base RI/PI [CIs]            | Arith-LoRA RI/PI [CIs]      | Main-LoRA RI/PI (§5.1)   |
+|-----------|-----------------------------|-----------------------------|--------------------------|
+| K=10 N=50 | 0.42 [.32,.52] / 0.50 [.40,.60] | 0.48 [.38,.58] / **0.26** [.17,.35] | 1.00 / 1.00 |
+| K=15 N=20 | 0.32 [.23,.42] / 0.58 [.48,.67] | 0.49 [.39,.59] / **0.33** [.24,.42] | 1.00 / 0.98 |
+| K=20 N=30 | 0.21 [.13,.29] / 0.51 [.41,.60] | 0.32 [.23,.41] / **0.29** [.20,.38] | 1.00 / 0.98 |
+| K=25 N=75 | 0.06 [.02,.11] / 0.60 [.50,.69] | 0.11 [.05,.17] / **0.19** [.11,.27] | 1.00 / 0.93 |
+| K=30 N=75 | 0.01 [.00,.03] / 0.56 [.46,.66] | 0.07 [.02,.12] / **0.26** [.17,.35] | 0.99 / 0.92 |
+
+PI dropped significantly on every cell (95% CIs of base and arith-LoRA
+PI do not overlap). RI rose modestly. Neither RI nor PI reach the
+65% "fixed" threshold on any cell.
+
+**Mechanism — catastrophic forgetting, not format mismatch.** Sampled
+predictions show the arith-LoRA model produces GSM8K-style verbose
+output ("The first value of X is Y", with Markdown formatting,
+multi-sentence reasoning) **and frequently hallucinates values that
+are not in the input stream**. Our lenient `is_correct` matcher
+(`pred == exp or exp in pred or pred.startswith(exp)`) catches the
+correct-but-verbose cases, so the reported 26-33% PI is not an
+undercount caused by format. The model has lost retrieval competence
+on the FVQ/CVQ task. Example:
+
+```
+expected: 'bet'   (category: visual art)
+prediction: "The first value of ancient civilization is 'blood'."
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+            wrong category                   value not in the stream
+```
+
+This makes the §5.3 claim **stronger**: targeted task-aligned
+data doesn't merely fail to help — generic LoRA training on a
+different domain *destroys* the pretrained retrieval signal.
+
+**Files.**
+
+- Adapter: `lora_intervention/checkpoints/qwen_arith_adapter/`
+  (44 MB, mirrors the convention of `gemma_adapter/` and `adapter/`)
+- Data generator: `lora_intervention/data_gen_arithmetic.py`
+- Training data: regenerable, gitignored at `lora_intervention/data_arithmetic/`
+- FVQ/CVQ eval JSON: `lora_intervention/results/qwen_arith_control_eval_*.json`
+- FVQ/CVQ comparison table: `lora_intervention/results/qwen_arith_control_comparison.txt`
+- GSM8K task eval (arith): `lora_intervention/results/gsm8k_task_eval_qwen_arith_control_*.json`
+- GSM8K task eval (base):  `lora_intervention/results/gsm8k_task_eval_qwen_base_*.json`
+- Eval script for GSM8K: `lora_intervention/eval_gsm8k_task.py`
+
 ## 6. Next steps (not in this commit)
 
 - **§7 stage 3 on Gemma**: HF-direct attention head ablation. Test

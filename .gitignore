@@ -19,6 +19,13 @@ lora_intervention/checkpoints/gemma_main/
 # Generated training data (regenerable from data_gen.py with deterministic seeds).
 lora_intervention/data/
 
+# §5.3 arithmetic-control training data (regenerable from data_gen_arithmetic.py).
+lora_intervention/data_arithmetic/
+
+# §5.3 training working directory (intermediate checkpoints + optimizer state).
+# Inference-only durable adapter at lora_intervention/checkpoints/qwen_arith_adapter/.
+lora_intervention/checkpoints/qwen_arith_control/
+
 # Training/eval logs (transient).
 lora_intervention/logs/
 

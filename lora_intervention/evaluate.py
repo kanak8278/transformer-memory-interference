@@ -382,6 +382,9 @@ def parse_args():
     p.add_argument("--trials",   type=int, default=DEFAULT_TRIALS)
     p.add_argument("--skip-ood", action="store_true",
                    help="Skip SEMANTIC_MULTI OOD evaluation")
+    p.add_argument("--cells",    default=None,
+                   help="Override ARB grid with comma-separated K_N cells, e.g. "
+                        "'10_50,15_20,20_30,25_75,30_75' for a minimal control run.")
     p.add_argument("--smoke",    action="store_true")
     return p.parse_args()
 
@@ -424,10 +427,21 @@ def main():
 
     all_results = {}
 
+    # Optionally narrow the ARB grid
+    arb_grid = dict(TEST_GRID_ARBI)
+    if args.cells:
+        from collections import defaultdict
+        narrowed = defaultdict(list)
+        for spec in args.cells.split(","):
+            k, n = spec.strip().split("_")
+            narrowed[int(k)].append(int(n))
+        arb_grid = {k: sorted(v) for k, v in narrowed.items()}
+        print(f"\nUsing custom grid: {arb_grid}")
+
     # ── ARBITRARY_SINGLE (in-distribution, held-out cells) ────────────────────
     print("\n--- ARBITRARY_SINGLE (held-out cells) ---")
     arbi_results = {}
-    for nk, nu_list in TEST_GRID_ARBI.items():
+    for nk, nu_list in arb_grid.items():
         for nu in nu_list:
             cell_key = f"{nk}_{nu}"
             print(f"  K={nk:>2}, N={nu:>3}...", end=" ", flush=True)
