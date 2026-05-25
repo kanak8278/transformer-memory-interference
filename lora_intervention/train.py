@@ -33,6 +33,8 @@ from datetime import datetime, timezone
 
 os.environ.setdefault("VLLM_USE_FLASHINFER_SAMPLER", "0")
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+os.environ.setdefault("USE_TF", "0")
+os.environ.setdefault("USE_JAX", "0")
 
 # Patch broken tensorflow version string before datasets imports it
 import importlib.metadata as _imeta
@@ -51,6 +53,10 @@ from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
 )
+try:
+    from transformers import Gemma3ForCausalLM
+except ImportError:
+    Gemma3ForCausalLM = None
 from peft import LoraConfig, get_peft_model, TaskType
 from trl import SFTTrainer, SFTConfig
 
@@ -148,11 +154,18 @@ def main():
         tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"   # SFTTrainer needs right-padding
 
-    model = AutoModelForCausalLM.from_pretrained(
+    # Gemma-3 checkpoints ship as vision-language; load text-only causal head.
+    model_cls = (
+        Gemma3ForCausalLM
+        if (Gemma3ForCausalLM is not None and "gemma-3" in args.model.lower())
+        else AutoModelForCausalLM
+    )
+    model = model_cls.from_pretrained(
         args.model,
         torch_dtype=torch.bfloat16,
         device_map="auto",
         trust_remote_code=True,
+        attn_implementation="sdpa",
     )
     model.enable_input_require_grads()  # needed for gradient checkpointing with PEFT
 
@@ -208,6 +221,7 @@ def main():
         train_dataset= train_ds,
         eval_dataset = val_ds,
         args         = sft_cfg,
+        processing_class = tokenizer,
     )
 
     # ── Train ─────────────────────────────────────────────────────────────────

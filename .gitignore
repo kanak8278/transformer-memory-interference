@@ -8,6 +8,20 @@ docs/
 # and IS tracked — it's the durable artifact from the L40S training run.
 lora_intervention/checkpoints/merged/
 
+# Training working directory (intermediate checkpoints + optimizer state, ~420 MB).
+# Inference-only durable adapter lives at lora_intervention/checkpoints/gemma_adapter/.
+lora_intervention/checkpoints/gemma_main/
+
+# Generated training data (regenerable from data_gen.py with deterministic seeds).
+lora_intervention/data/
+
+# Training/eval logs (transient).
+lora_intervention/logs/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
 # Large result archives (move/extract as needed, never tracked)
 *.tar.gz
 

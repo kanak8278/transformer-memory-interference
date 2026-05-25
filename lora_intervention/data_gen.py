@@ -28,9 +28,16 @@ import sys
 import json
 import math
 import random
+import hashlib
 import argparse
 from pathlib import Path
 from collections import defaultdict
+
+
+def stable_seed(*parts) -> int:
+    """Deterministic seed independent of PYTHONHASHSEED."""
+    key = "|".join(str(p) for p in parts).encode("utf-8")
+    return int.from_bytes(hashlib.blake2b(key, digest_size=4).digest(), "big")
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_PROJECT_ROOT))
@@ -241,7 +248,7 @@ def generate_split(
 
         for cond, count in cond_counts.items():
             for i in range(count):
-                seed = hash((dataset_type, nk, nu, cond, global_idx)) % (2**31)
+                seed = stable_seed(dataset_type, nk, nu, cond, global_idx)
                 global_idx += 1
 
                 rng = random.Random(seed)
@@ -282,7 +289,7 @@ def generate_test_split(
 
             for cond in ["FVQ", "CVQ"]:
                 for i in range(trials_per_cell_per_cond):
-                    seed = hash((dataset_type, "test", nk, nu, cond, global_idx)) % (2**31)
+                    seed = stable_seed(dataset_type, "test", nk, nu, cond, global_idx)
                     global_idx += 1
 
                     rng = random.Random(seed)
@@ -349,7 +356,7 @@ def main():
         condition_fracs  = cond_fracs,
         smoke            = args.smoke,
     )
-    random.shuffle(all_train)
+    random.Random(stable_seed("train_val_split")).shuffle(all_train)
 
     val_n   = max(1, int(len(all_train) * VAL_FRAC))
     val_set = all_train[:val_n]

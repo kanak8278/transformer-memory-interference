@@ -37,21 +37,34 @@ DTYPE = torch.float32  # MPS: float32 for safest merge; downstream can cast
 SMOKE_PROMPT = "fruit: apple\nfruit: banana\nfruit: cherry\nWhat was the first 'fruit'?"
 
 
+def _model_class_for(model_id: str):
+    if "gemma-3" in model_id.lower():
+        try:
+            from transformers import Gemma3ForCausalLM
+            return Gemma3ForCausalLM
+        except ImportError:
+            pass
+    return AutoModelForCausalLM
+
+
 def parse_args():
     p = argparse.ArgumentParser()
+    p.add_argument("--base", default=BASE_MODEL,
+                   help=f"HF model id of base (default: {BASE_MODEL})")
     p.add_argument("--adapter", default="lora_intervention/checkpoints/adapter",
                    help="Path to PEFT adapter dir")
     p.add_argument("--out", required=True, help="Where to save merged HF model")
-    p.add_argument("--device", default=None, help="cpu | mps. Default: cpu (safest for merge)")
+    p.add_argument("--device", default=None, help="cpu | mps | cuda. Default: cpu (safest for merge)")
     p.add_argument("--no-validate", action="store_true", help="Skip pre/post smoke check")
     return p.parse_args()
 
 
-def load_base(device):
-    print(f"[1/4] Loading base model {BASE_MODEL} on {device} ({DTYPE})...")
-    tok = AutoTokenizer.from_pretrained(BASE_MODEL, trust_remote_code=True)
-    base = AutoModelForCausalLM.from_pretrained(
-        BASE_MODEL, torch_dtype=DTYPE, low_cpu_mem_usage=True,
+def load_base(base_id, device):
+    print(f"[1/4] Loading base model {base_id} on {device} ({DTYPE})...")
+    tok = AutoTokenizer.from_pretrained(base_id, trust_remote_code=True)
+    model_cls = _model_class_for(base_id)
+    base = model_cls.from_pretrained(
+        base_id, torch_dtype=DTYPE, low_cpu_mem_usage=True,
         trust_remote_code=True,
     ).to(device)
     base.eval()
@@ -85,7 +98,7 @@ def main():
     device = args.device or "cpu"  # CPU is safest + has enough RAM (36GB unified)
     print(f"Device: {device}\nOut:    {out}\n")
 
-    base, tok = load_base(device)
+    base, tok = load_base(args.base, device)
     peft_model = attach_adapter(base, str(adapter), device)
 
     # ── Validate: forward through PEFT model ──
@@ -130,8 +143,8 @@ def main():
     # Size
     total_mb = sum(p.stat().st_size for p in out.rglob("*") if p.is_file()) / (1024 ** 2)
     print(f"\n✓ Saved merged model: {out}  ({total_mb:.0f} MB)")
-    print("\nNext: load it with AutoModelForCausalLM.from_pretrained(out) or")
-    print("HookedTransformer.from_pretrained('Qwen/Qwen2.5-3B-Instruct', hf_model=merged_hf, ...)")
+    print(f"\nNext: load it with AutoModelForCausalLM.from_pretrained(out) or")
+    print(f"HookedTransformer.from_pretrained('{args.base}', hf_model=merged_hf, ...)")
 
 
 if __name__ == "__main__":

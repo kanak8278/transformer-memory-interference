@@ -51,7 +51,7 @@ from mechanistic_probing_v2.core.dataset_configs import (
 MODEL_ID    = "Qwen/Qwen2.5-3B-Instruct"
 CKPT_DIR    = Path(__file__).parent / "checkpoints"
 RESULTS_DIR = Path(__file__).parent / "results"
-BASELINE_PATH = _ROOT / "v3/results_vllm/arbitrary_single/Qwen2.5-3B-Instruct/stage1_sweep_20260409_000134.json"
+DEFAULT_BASELINE = _ROOT / "v3/results_vllm/arbitrary_single/Qwen2.5-3B-Instruct/stage1_sweep_20260409_000134.json"
 
 SYSTEM_PROMPT = (
     "You are a precise data extraction tool. "
@@ -164,17 +164,30 @@ def build_prompt(tokenizer, dataset_type, categories, num_updates, condition, se
 
 # ─── merge LoRA + save to temp dir ────────────────────────────────────────────
 
-def merge_and_save(adapter_path: Path, tmp_dir: str):
+def _model_class_for(model_id: str):
+    """Gemma-3 ships as VLM via Auto*; pick text-only causal head explicitly."""
+    from transformers import AutoModelForCausalLM
+    if "gemma-3" in model_id.lower():
+        try:
+            from transformers import Gemma3ForCausalLM
+            return Gemma3ForCausalLM
+        except ImportError:
+            pass
+    return AutoModelForCausalLM
+
+
+def merge_and_save(adapter_path: Path, tmp_dir: str, base_model_id: str):
     """Merge LoRA adapter into base model and save for vLLM loading."""
     from peft import PeftModel
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from transformers import AutoTokenizer
 
-    print(f"  Loading base model {MODEL_ID}...", flush=True)
-    model = AutoModelForCausalLM.from_pretrained(
-        MODEL_ID, torch_dtype=torch.bfloat16, device_map="cpu",
+    print(f"  Loading base model {base_model_id}...", flush=True)
+    model_cls = _model_class_for(base_model_id)
+    model = model_cls.from_pretrained(
+        base_model_id, torch_dtype=torch.bfloat16, device_map="cpu",
         trust_remote_code=True,
     )
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(base_model_id, trust_remote_code=True)
 
     print(f"  Loading adapter from {adapter_path}...", flush=True)
     model = PeftModel.from_pretrained(model, str(adapter_path))
@@ -283,11 +296,14 @@ def eval_cell(engine, tokenizer, dataset_type, nk, nu, max_trials):
 
 # ─── comparison table ─────────────────────────────────────────────────────────
 
-def load_baseline():
-    if not BASELINE_PATH.exists():
+def load_baseline(baseline_path: Path):
+    if not baseline_path or not baseline_path.exists():
         return {}
-    with open(BASELINE_PATH) as f:
+    with open(baseline_path) as f:
         d = json.load(f)
+    # Support both eval-format (results.ARBITRARY_SINGLE) and stage1-format (cells)
+    if "results" in d and "ARBITRARY_SINGLE" in d.get("results", {}):
+        return d["results"]["ARBITRARY_SINGLE"]
     return d.get("cells", {})
 
 
@@ -356,8 +372,13 @@ def print_comparison(eval_results, baseline_cells, run_name):
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--run-name", default="main")
+    p.add_argument("--model",    default=MODEL_ID,
+                   help=f"Base HF model id (default: {MODEL_ID})")
     p.add_argument("--adapter",  default=None,
-                   help="Path to adapter (default: checkpoints/<run_name>/final)")
+                   help="Path to adapter (default: checkpoints/<run_name>/final). "
+                        "Use 'none' to evaluate the base model with no adapter.")
+    p.add_argument("--baseline-path", default=str(DEFAULT_BASELINE),
+                   help="Path to baseline JSON for comparison table. Empty to skip.")
     p.add_argument("--trials",   type=int, default=DEFAULT_TRIALS)
     p.add_argument("--skip-ood", action="store_true",
                    help="Skip SEMANTIC_MULTI OOD evaluation")
@@ -368,10 +389,13 @@ def parse_args():
 def main():
     args = parse_args()
 
-    adapter_path = Path(args.adapter) if args.adapter else CKPT_DIR / args.run_name / "final"
-    if not adapter_path.exists():
-        print(f"ERROR: adapter not found at {adapter_path}")
-        sys.exit(1)
+    use_adapter = args.adapter != "none"
+    adapter_path = None
+    if use_adapter:
+        adapter_path = Path(args.adapter) if args.adapter else CKPT_DIR / args.run_name / "final"
+        if not adapter_path.exists():
+            print(f"ERROR: adapter not found at {adapter_path}")
+            sys.exit(1)
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
@@ -380,64 +404,74 @@ def main():
 
     print("=" * 60)
     print(f"LoRA Evaluation — {args.run_name}")
-    print(f"  Adapter:  {adapter_path}")
-    print(f"  Trials:   up to {max_trials} per cell per condition")
-    print(f"  Smoke:    {args.smoke}")
+    print(f"  Base model: {args.model}")
+    print(f"  Adapter:    {adapter_path if use_adapter else 'NONE (baseline eval)'}")
+    print(f"  Trials:     up to {max_trials} per cell per condition")
+    print(f"  Smoke:      {args.smoke}")
     print("=" * 60)
 
-    # ── Merge adapter + load into vLLM ────────────────────────────────────────
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        merge_and_save(adapter_path, tmp_dir)
-        engine = VLLMEngine(tmp_dir, max_len=16384)
+    from transformers import AutoTokenizer
+    tokenizer = AutoTokenizer.from_pretrained(args.model, trust_remote_code=True)
 
-        from transformers import AutoTokenizer
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
+    # ── Load engine (merged if adapter, base otherwise) ───────────────────────
+    tmp = None
+    if use_adapter:
+        tmp = tempfile.TemporaryDirectory()
+        merge_and_save(adapter_path, tmp.name, args.model)
+        engine = VLLMEngine(tmp.name, max_len=16384)
+    else:
+        engine = VLLMEngine(args.model, max_len=16384)
 
-        all_results = {}
+    all_results = {}
 
-        # ── ARBITRARY_SINGLE (in-distribution, held-out cells) ────────────────
-        print("\n--- ARBITRARY_SINGLE (held-out cells) ---")
-        arbi_results = {}
-        for nk, nu_list in TEST_GRID_ARBI.items():
+    # ── ARBITRARY_SINGLE (in-distribution, held-out cells) ────────────────────
+    print("\n--- ARBITRARY_SINGLE (held-out cells) ---")
+    arbi_results = {}
+    for nk, nu_list in TEST_GRID_ARBI.items():
+        for nu in nu_list:
+            cell_key = f"{nk}_{nu}"
+            print(f"  K={nk:>2}, N={nu:>3}...", end=" ", flush=True)
+            cell = eval_cell(engine, tokenizer, "ARBITRARY_SINGLE", nk, nu, max_trials)
+            if cell:
+                arbi_results[cell_key] = cell
+                ri = cell["stats"]["RI"]["accuracy"]
+                pi = cell["stats"]["PI"]["accuracy"]
+                print(f"RI={ri:.0%}  PI={pi:.0%}  gap={cell['gap']:+.0%}  {cell['regime']}")
+            else:
+                print("SKIPPED")
+    all_results["ARBITRARY_SINGLE"] = arbi_results
+
+    # ── SEMANTIC_MULTI (OOD) ──────────────────────────────────────────────────
+    if not args.skip_ood:
+        print("\n--- SEMANTIC_MULTI (OOD) ---")
+        sem_results = {}
+        for nk, nu_list in TEST_GRID_SEM.items():
             for nu in nu_list:
                 cell_key = f"{nk}_{nu}"
                 print(f"  K={nk:>2}, N={nu:>3}...", end=" ", flush=True)
-                cell = eval_cell(engine, tokenizer, "ARBITRARY_SINGLE", nk, nu, max_trials)
+                cell = eval_cell(engine, tokenizer, "SEMANTIC_MULTI", nk, nu, max_trials)
                 if cell:
-                    arbi_results[cell_key] = cell
+                    sem_results[cell_key] = cell
                     ri = cell["stats"]["RI"]["accuracy"]
                     pi = cell["stats"]["PI"]["accuracy"]
                     print(f"RI={ri:.0%}  PI={pi:.0%}  gap={cell['gap']:+.0%}  {cell['regime']}")
                 else:
                     print("SKIPPED")
-        all_results["ARBITRARY_SINGLE"] = arbi_results
+        all_results["SEMANTIC_MULTI"] = sem_results
 
-        # ── SEMANTIC_MULTI (OOD) ──────────────────────────────────────────────
-        if not args.skip_ood:
-            print("\n--- SEMANTIC_MULTI (OOD) ---")
-            sem_results = {}
-            for nk, nu_list in TEST_GRID_SEM.items():
-                for nu in nu_list:
-                    cell_key = f"{nk}_{nu}"
-                    print(f"  K={nk:>2}, N={nu:>3}...", end=" ", flush=True)
-                    cell = eval_cell(engine, tokenizer, "SEMANTIC_MULTI", nk, nu, max_trials)
-                    if cell:
-                        sem_results[cell_key] = cell
-                        ri = cell["stats"]["RI"]["accuracy"]
-                        pi = cell["stats"]["PI"]["accuracy"]
-                        print(f"RI={ri:.0%}  PI={pi:.0%}  gap={cell['gap']:+.0%}  {cell['regime']}")
-                    else:
-                        print("SKIPPED")
-            all_results["SEMANTIC_MULTI"] = sem_results
+    if tmp is not None:
+        tmp.cleanup()
 
     # ── Comparison vs baseline ────────────────────────────────────────────────
-    baseline = load_baseline()
+    baseline_path = Path(args.baseline_path) if args.baseline_path else None
+    baseline = load_baseline(baseline_path)
     comparison_text = print_comparison(arbi_results, baseline, args.run_name)
 
     # ── Save ──────────────────────────────────────────────────────────────────
     out = {
         "run_name":    args.run_name,
-        "adapter":     str(adapter_path),
+        "model":       args.model,
+        "adapter":     str(adapter_path) if adapter_path else None,
         "timestamp":   ts,
         "max_trials":  max_trials,
         "results":     all_results,
