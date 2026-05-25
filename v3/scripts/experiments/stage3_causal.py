@@ -593,6 +593,8 @@ def run_ablation_logit_lens(model, tokenizer, value_to_tid, value_pool,
         "heads_ablated": [h["label"] for h in ablate_heads],
         "avg_normal_trajectory": avg_normal.tolist(),
         "avg_ablated_trajectory": avg_ablated.tolist(),
+        "per_trial_normal_trajectory": normal_trajectories,
+        "per_trial_ablated_trajectory": ablated_trajectories,
         "p_last_normal_final": float(avg_normal[n_values - 1, -1]),
         "p_last_ablated_final": float(avg_ablated[n_values - 1, -1]),
     }

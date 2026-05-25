@@ -87,22 +87,21 @@ def make_figure(out_path, cell_key="5_10"):
     base_y = [base_cell.get(p, 0) for p in positions]
     lora_y = [lora_cell.get(p, 0) for p in positions]
 
-    fig, ax = plt.subplots(figsize=(5.4, 3.0))
+    fig, ax = plt.subplots(figsize=(6.5, 2.4))
     ax.plot(positions, base_y, marker="o", markersize=4, lw=1.4, color="#d62728",
             label="Base model")
     ax.plot(positions, lora_y, marker="s", markersize=4, lw=1.4, color="#1f77b4",
             label="+ LoRA (18k examples)")
-    ax.set_xlabel(f"Query position $k$ in a stream of $N{{=}}{N}$ updates")
-    ax.set_ylabel("Retrieval accuracy")
+    ax.set_xlabel(f"Query position $k$ in a stream of $N{{=}}{N}$ updates",
+                  fontsize=9)
+    ax.set_ylabel("Retrieval accuracy", fontsize=9)
     ax.set_ylim(-0.03, 1.05)
     ax.set_xticks(positions)
+    ax.tick_params(labelsize=8)
     ax.grid(alpha=0.3)
-    ax.legend(loc="lower left", fontsize=9, framealpha=0.95)
-    ax.set_title(
-        f"Position-indexed retrieval on $K{{=}}{K}, N{{=}}{N}$ (Arbitrary-Single)",
-        fontsize=10,
-    )
 
+    # In-axes legend (centre-right empty space) to save vertical real estate.
+    ax.legend(loc="center right", frameon=False, fontsize=9)
     fig.tight_layout()
     fig.savefig(out_path, bbox_inches="tight")
     fig.savefig(str(out_path).replace(".pdf", ".png"), dpi=150, bbox_inches="tight")

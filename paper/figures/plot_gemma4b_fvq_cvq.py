@@ -49,7 +49,7 @@ plt.rcParams.update({
     "grid.linewidth": 0.6,
 })
 
-fig, axes = plt.subplots(1, 2, figsize=(7.5, 3.0))
+fig, axes = plt.subplots(1, 2, figsize=(7.5, 3.3))
 
 # ── Panel A: vs K at fixed N=10 ───────────────────────────────────────────────
 N_FIXED = 10
@@ -87,9 +87,6 @@ ax.set_ylim(0, 1.05)
 ax.set_xticks(k_valid)
 ax.xaxis.set_tick_params(labelsize=8)
 ax.yaxis.set_tick_params(labelsize=8)
-ax.legend(frameon=False, fontsize=9, loc="lower left")
-ax.text(0.97, 0.97, "(a)", transform=ax.transAxes,
-        ha="right", va="top", fontsize=10, fontweight="bold")
 
 # ── Panel B: vs N at fixed K=5 ────────────────────────────────────────────────
 K_FIXED = 5
@@ -127,14 +124,17 @@ ax.set_ylim(0, 1.05)
 ax.set_xticks(n_valid)
 ax.xaxis.set_tick_params(labelsize=8, rotation=45)
 ax.yaxis.set_tick_params(labelsize=8)
-ax.legend(frameon=False, fontsize=9, loc="lower left")
-ax.text(0.97, 0.97, "(b)", transform=ax.transAxes,
-        ha="right", va="top", fontsize=10, fontweight="bold")
 
 # ── Save ───────────────────────────────────────────────────────────────────────
 fig.suptitle("Gemma-3-4b · Arbitrary-Single · 100 trials/cell",
              fontsize=10, y=1.02)
-plt.tight_layout()
+
+# Single shared legend at bottom (paper figure standard).
+handles, labels = axes[0].get_legend_handles_labels()
+fig.legend(handles, labels, loc="lower center",
+           bbox_to_anchor=(0.5, -0.02), ncol=2,
+           frameon=False, fontsize=10)
+plt.tight_layout(rect=[0, 0.07, 1, 1])
 
 out_base = "/Users/kanak.raj/workspace/hobby/research_work_ri/paper/figures/gemma3_4b_fvq_cvq"
 plt.savefig(out_base + ".pdf", dpi=200, bbox_inches="tight")
