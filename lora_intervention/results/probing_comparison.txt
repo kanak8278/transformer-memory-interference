@@ -1,0 +1,50 @@
+================================================================================
+PROBING CLASSIFIER — Qwen2.5-3B-Instruct  (baseline vs +LoRA, K=2, N=5, 200 trials)
+================================================================================
+
+Behavioral accuracy (single-token argmax through unembed at answer position;
+strict exact-match — underestimates true generation accuracy but is internally
+consistent across baseline / LoRA):
+  RI:  46% → 56%  (+10 pts)
+  PI:  15% → 55%  (+40 pts)   ← LoRA preferentially fixes PI
+
+Probe results — last 6 layers (binary linear probe, 5-fold CV accuracy):
+
+ Layer   cond-base   cond-lora  ||  RI-correct probe   ||  PI-correct probe
+                                ||    base     lora    ||    base     lora
+L  0       67%         61%      ||    47%      49%     ||    45%      53%
+L  6      100%         99%      ||    49%      45%     ||    50%      49%
+L 12      100%        100%      ||    51%      48%     ||    57%      49%
+L 18      100%        100%      ||    54%      49%     ||    45%      49%
+L 21      100%        100%      ||    53%      50%     ||    50%      53%
+L 24      100%        100%      ||    55%      53%     ||    45%      54%
+L 27      100%        100%      ||    59%      60%     ||    53%      77%   ← +24
+L 30      100%        100%      ||    77%      85%     ||    57%      84%   ← +27
+L 33      100%        100%      ||    81%      93%     ||    58%      94%   ← +36
+
+INTERPRETATION
+--------------
+1) Condition discrimination (RI vs PI as a classifier target on the residual
+   stream) is already ~100% from layer 3 in BOTH models. The model has always
+   known "which question am I being asked." LoRA does not add this signal.
+
+2) RI-correctness probe: late layers (L30-L33) carry a moderate-to-strong
+   signal (77-81%) about whether RI will be answered correctly, even in the
+   baseline. LoRA bumps L33 from 81% → 93% — refinement of an existing signal.
+
+3) PI-correctness probe: BASELINE LAYERS L27-L33 ARE AT CHANCE (53-58%) — the
+   model does not encode whether it is about to get PI right. POST-LORA: the
+   same layers jump to 77-94%. LoRA installs a PI-correctness signal in the
+   upper-layer circuitry that previously had none.
+
+Mechanism story for §7:
+   The skill was LATENT, not missing. The condition-discrimination machinery
+   pre-existed; the late-layer readout circuitry pre-existed; the RI-correctness
+   signal pre-existed. What LoRA added was a PI-correctness representation
+   in the SAME late layers (L27-L33) — the model already had the substrate,
+   it just lacked the trained mapping from condition → correct-readout for PI.
+
+Source: probing_Qwen2.5-3B-Instruct_2k_5u.json  (baseline)
+        probing_Qwen2.5-3B-Instruct-LoRA_2k_5u.json  (post-LoRA)
+Elapsed: 127 s on M3 Pro / MPS (full 200-trial run)
+================================================================================

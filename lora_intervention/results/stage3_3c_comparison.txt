@@ -1,0 +1,76 @@
+================================================================================
+STAGE 3 — Experiment 3C (Logit Lens Under Ablation)
+Qwen2.5-3B-Instruct, K=2/N=5, 50 trials each, baseline vs +LoRA
+Ablated heads (same set both runs): L26H3, L27H3, L30H3, L29H3, L29H4
+================================================================================
+
+P(v_last) trajectory — last value at answer position, per-layer mean
+--------------------------------------------------------------------
+Layer    BASE normal    BASE abl    BASE Δ   ||   LoRA normal    LoRA abl    LoRA Δ
+L 0       0.0000          0.0000     +0.000        0.0000          0.0000     +0.000
+L10       0.0000          0.0000     +0.000        0.0000          0.0000     +0.000
+L20       0.0000          0.0000     +0.000        0.0000          0.0000     +0.000
+L25       0.0000          0.0000     +0.000        0.0000          0.0000     +0.000
+L28       0.0000          0.0000     +0.000        0.0000          0.0000     +0.000
+L30       0.0000          0.0000     +0.000        0.0189          0.0193     +0.000
+L31       0.0207          0.0991    +0.0784        0.2765          0.4260    +0.1495    ← release effect
+L32       0.3902          0.3815    -0.009         0.9799          0.9793    -0.001
+L33       0.5942          0.5367    -0.058         1.0000          1.0000     +0.000
+L34       0.5038          0.4963    -0.008         1.0000          1.0000     +0.000
+L35       0.3977          0.4128    +0.015         1.0000          1.0000     +0.000
+
+KEY OBSERVATIONS
+----------------
+1) At L31, ablating these 5 heads RAISES P(v_last) in BOTH models:
+     baseline +0.078, LoRA +0.150
+   → These heads still SUPPRESS v_last in the LoRA model (the suppression
+     mechanism is NOT removed by LoRA).
+
+2) By L33+, the ablation has zero effect on the LoRA model's output (Δ ≈ 0)
+   while baseline's L33 still shows a measurable drop (-0.058).
+   → LoRA's downstream promotion saturates at P(v_last) = 1.0 and absorbs
+     the perturbation entirely.
+
+3) Baseline L31 normal P(v_last) is 0.021. LoRA L31 normal is 0.276 (13×).
+   The "release from suppression" signal at L31 is larger in LoRA because
+   there is more underlying v_last activity already present at that depth.
+
+REVISED MECHANISM STORY
+-----------------------
+LoRA did NOT remove the late-layer suppression mechanism. The same heads
+in L26-L30 still suppress v_last at L31 — measurably stronger in the LoRA
+model (because there's more signal to suppress). What LoRA added is a
+PROMOTION mechanism in L30-L33 (the 15 heads identified in attention
+routing) that overwhelms the suppression and drives final P(v_last) to 1.0.
+
+The pretraining failure is therefore not "missing v_last representation"
+nor "broken suppression heads" — it is "no upper-layer promoter to win the
+tug-of-war." LoRA installs the missing promoter; old suppressors are still
+firing but their effect is dwarfed.
+
+CONVERGENCE WITH OTHER SESSION FINDINGS
+----------------------------------------
+- Probing (K=2/N=5): PI-correctness L33 58% → 94%. Encodes the new promoter signal.
+- Logit lens (K=2/N=5,10,50): P(v_last) final 0.25→1.00. Promoter wins late.
+- Attention routing (K=2/N=30): 15 heads L30-L33 went from 0.08-0.23 to 0.60-0.86
+  P(attend to v_last). Identifies the promoter heads physically.
+- Stage 3C (this file): old suppressor heads (L26-L30) still suppress at L31,
+  but ablating them no longer matters because promoter saturates by L33.
+
+All four signals point to the same layer band (L24-L33, peak L30-L33) and the
+same mechanism: ADDITIVE promotion of v_last, not removal of suppression.
+
+3A AND 3B WERE DEGENERATE
+-------------------------
+3A (attribution patching) and 3B (paired patching) are designed to find heads
+that, when changed, would FIX the model's failure. The LoRA model has no
+failures to fix at K=2/N=5 (P(v_last) ≈ 1.0). 3A's gradient saturates to
+zero; 3B's "skip if pred==expected" guard skips every trial. Only 3C runs.
+This is a fundamental experimental-design issue with the LoRA model at this
+operating point — not a bug. Pre-LoRA 3A/3B results (in the baseline file)
+identified the suppressor cluster; we use that as the ablation target here.
+
+Source files:
+  baseline: v3/results_vllm/causal/Qwen2.5-3B-Instruct/stage3_causal_20260409_055011.json
+  lora:     v3/scripts/experiments/results/Qwen2.5-3B-Instruct-LoRA-clean5/stage3_causal_20260525_071300.json
+================================================================================

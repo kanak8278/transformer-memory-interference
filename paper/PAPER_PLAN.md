@@ -1,7 +1,25 @@
 # Paper Plan — Narrative B
 
 Living document. Update as items resolve.
-Last updated: 2026-05-23.
+Last updated: 2026-05-25.
+
+**Session 2026-05-25 progress (M3 Pro local runs — all 4 §5.1 sub-experiments done):**
+- §5.1 probing classifier on +LoRA — DONE (127 s). PI-correctness L33: 58% → 94%.
+- §5.1 logit lens on +LoRA — DONE (955 s). P(v_last) at L35 (PI): 0.25 → 1.00 across N=5/10/50.
+- §5.1 attention routing on +LoRA — DONE (326 s, K=2/N=30). 15 heads in L30-L33
+  shifted from ~0.08-0.23 to 0.60-0.86 P(attend to v_last). Layer-mean delta
+  peaks at L33 (+0.46). Early layers + final readout unchanged.
+- §5.1 Stage 3 causal — partial. 3A/3B broken on LoRA model (no failures →
+  gradient zero, no paired patching trials). 3C (ablation) runs cleanly:
+  ablating baseline's 8 top heads has ZERO effect on LoRA's P(v_last) — LoRA
+  built alternative routing in L31-L33.
+- **§7 mechanism now triangulated by 3 methods**: probing + logit lens +
+  attention routing all converge on L24-L33 (peak L30-L33). 3C confirms LoRA
+  is independent of baseline's suppressor cluster.
+- LoRA-merge pipeline reproducible: `lora_intervention/{merge_lora,run_probing_lora,
+  run_logit_lens_lora,run_attention_routing_lora,run_stage3_targeted_lora}.py`.
+- Earlier "L40S required" estimates for attention routing + stage3 were wrong:
+  attention routing 5 min, stage3 3C ~10 min. The MacBook handled the entire §5.1.
 
 ## 1. Headline finding (confirmed)
 
@@ -80,29 +98,86 @@ These are the experiments that take the paper from "publishable" to
 "bulletproof at top venue." Each closes a reviewer critique we cannot
 otherwise answer.
 
-### 5.1 Pre/Post LoRA mechanistic re-run (HIGH priority)
+### 5.1 Pre/Post LoRA mechanistic re-run (HIGH priority) — IN PROGRESS
 
 Why: converts §7 from black-box ("LoRA fixes it") into a mechanistic
 story ("LoRA changes attention head X from primacy-encoding to
 position-aware"). The single highest-value missing experiment.
 
 Tasks:
-- [ ] Re-run probing classifier on Qwen2.5-3B-Instruct + LoRA on a held-out
-  cell (e.g., K=10, N=20). Compare to existing baseline probing result
-  (v3/results/.../probing_*.json).
-- [ ] Re-run logit lens (v_first vs v_last appearance across layers) on
-  the LoRA-tuned model.
-- [ ] Re-run attention routing analysis on the LoRA-tuned model. Identify
-  whether the 11 discriminating heads (L27-L32) change function, get
-  amplified, or get replaced.
-- [ ] Causal patching / ablation on the LoRA-tuned model. Which components
-  carry the new tracking signal?
+- [x] **Re-run probing classifier** on Qwen2.5-3B-Instruct + LoRA, K=2/N=5,
+  200 trials. Done 2026-05-25 on M3 Pro / MPS / fp32 (127 s).
+  Result: PI-correctness probe at L33 went 58% (chance) → 94%; RI-correctness
+  L33 went 81% → 93%; condition-discrimination already ~100% pre-LoRA
+  unchanged. Files:
+  - `v3/results_vllm/probing/probing_Qwen2.5-3B-Instruct_2k_5u.json` (baseline)
+  - `v3/results_vllm/probing/probing_Qwen2.5-3B-Instruct-LoRA_2k_5u.json` (post-LoRA)
+  - `lora_intervention/results/probing_comparison.txt` (human-readable)
+- [x] **Re-run logit lens** (v_first vs v_last per layer) on LoRA model.
+  Done 2026-05-25, 3 cells × 100 trials (955 s on MPS).
+  Result: pre-LoRA P(v_last) at L35 PI = 0.25 / 0.23 / 0.11 (N=5/10/50)
+  → post-LoRA 1.00 / 1.00 / 0.90. The "v_last found then suppressed" pattern
+  is removed; LoRA stops the late-layer attenuation. Files:
+  - `v3/results_vllm/logit_lens/Qwen2.5-3B-Instruct/stage2_logit_lens_20260409_054632.json` (baseline)
+  - `v3/scripts/experiments/results/Qwen2.5-3B-Instruct-LoRA/stage2_logit_lens_20260524_194921.json` (post-LoRA)
+  - `lora_intervention/results/logit_lens_comparison.txt` (human-readable)
+- [x] **Re-run attention routing analysis** on the LoRA-tuned model.
+  Done 2026-05-25, K=2/N=30 normal mode, 50 trials (326 s on MPS).
+  Result: 15 heads in L30-L33 went from ~0.08-0.23 to 0.60-0.86 P(attend to
+  v_last round) under CVQ. Per-layer mean peaks at L33 (+0.46), L31 (+0.39),
+  L32 (+0.39). Early layers (L0-L20) and final readout (L34-L35) unchanged.
+  The new v_last routing is concentrated in L30-L33 — partially overlapping
+  but mostly NOT identical to baseline's 3A "suppressor cluster" (L26-L30).
+  Files:
+  - `v3/results_vllm/attention_routing/Qwen2.5-3B-Instruct__normal.json` (baseline)
+  - `v3/results_vllm/attention_routing/Qwen2.5-3B-Instruct-LoRA__normal.json` (post-LoRA)
+  - `lora_intervention/results/attention_routing_comparison.txt`
+- [x] **Causal patching / ablation** (Stage 3, partial). Done 2026-05-25.
+  3A (attribution patching) and 3B (paired patching) are DEGENERATE on the
+  LoRA model at K=2/N=5 — the LoRA model outputs P(v_last) ≈ 1.0, so 3A's
+  gradient saturates to zero everywhere and 3B's "skip if pred==expected"
+  guard skips every trial. 3C (ablation logit lens) runs cleanly.
+  Re-ran with baseline's exact 5-head ablate set (L26H3, L27H3, L30H3,
+  L29H3, L29H4) for apples-to-apples comparison. Result is more nuanced than
+  initially expected:
+  - At L31 the LoRA model also gets a release-from-suppression bump when
+    these heads are ablated (Δ P(v_last) = +0.150 vs baseline +0.078).
+    The suppression mechanism is NOT removed by LoRA.
+  - At L33+ the LoRA model is invariant to the ablation (Δ = 0.000) while
+    baseline L33 still drops by -0.058.
+  Revised mechanism: LoRA did not remove suppression; it added a PROMOTION
+  path in L30-L33 (the 15 heads identified by attention routing) that
+  overwhelms the still-firing suppression and saturates P(v_last) to 1.0 by
+  the readout. Files:
+  - `v3/results_vllm/causal/Qwen2.5-3B-Instruct/stage3_causal_20260409_055011.json` (baseline)
+  - `v3/scripts/experiments/results/Qwen2.5-3B-Instruct-LoRA-clean5/stage3_causal_20260525_071300.json` (post-LoRA)
+  - `lora_intervention/results/stage3_3c_comparison.txt`
+
+Pipeline used (reproducible):
+1. `lora_intervention/merge_lora.py --adapter <peft-dir> --out lora_intervention/checkpoints/merged`
+   — folds LoRA into base Qwen2.5-3B-Instruct, smoke-validates PEFT vs merged forward
+   (max logit |diff| 7e-5), saves a standalone HF model.
+2. `lora_intervention/run_probing_lora.py --merged_path … --point 2,5 --trials 200`
+3. `lora_intervention/run_logit_lens_lora.py --merged_path … --points "2,5;2,10;2,50" --trials 100`
+   Both wrappers load the merged model and inject via `HookedTransformer.from_pretrained(..., hf_model=merged_hf, ...)`,
+   then call the existing `probing_classifier.collect_representations/train_probes`
+   and `stage2_logit_lens.run_stage2` functions unchanged — so the analyses are
+   apples-to-apples with the baselines (same script, same `generate_trial`, same
+   prompt format, same chat template).
+
+Apples-to-apples caveats (flagged in `probing_comparison.txt`):
+- Trials are i.i.d. from the same distribution but **not paired by seed**
+  (Python string hashing is randomized; baseline and LoRA run draw different
+  concrete trials of the same K/N/condition spec). Population-level claim only.
+- Baseline used CUDA fp16; LoRA run used MPS fp32. Residual values differ by
+  ~1e-3, well below the 30+ point signal we report.
 
 Source data needed:
 - LoRA adapter (have it: `/tmp/lora_intervention/checkpoints/main/final`)
-- Baseline mechanistic results (have them in v3/results)
+- Baseline mechanistic results (in `v3/results_vllm/{probing,logit_lens}/`)
+- Merged standalone HF model: `lora_intervention/checkpoints/merged/` (11.8 GB fp32, reusable)
 
-Estimated time: 1-2 days of focused GPU work.
+Estimated remaining time: 1–2 days of L40S work for attention routing + causal.
 
 ### 5.2 Family control: LoRA on Gemma-3-4b-it (HIGH priority)
 

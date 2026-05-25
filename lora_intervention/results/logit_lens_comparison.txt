@@ -1,0 +1,55 @@
+================================================================================
+LOGIT LENS — Qwen2.5-3B-Instruct  (baseline vs +LoRA)
+ARBITRARY_SINGLE, 3 cells × 100 trials per condition, layer L0…L35 (36 layers)
+================================================================================
+
+PI condition — P(v_last) per layer
+-----------------------------------
+    K=2, N=5                K=2, N=10               K=2, N=50
+    base   lora    Δ        base   lora    Δ        base   lora    Δ
+L 0  0.000 0.000   +0.00    0.000 0.000   +0.00    0.000 0.000   +0.00
+L 4  0.000 0.000   +0.00    0.000 0.000   +0.00    0.000 0.000   +0.00
+L 8  0.000 0.000   +0.00    0.000 0.000   +0.00    0.000 0.000   +0.00
+L12  0.000 0.000   +0.00    0.000 0.000   +0.00    0.000 0.000   +0.00
+L16  0.000 0.000   +0.00    0.000 0.000   +0.00    0.000 0.000   +0.00
+L20  0.000 0.000   +0.00    0.000 0.000   +0.00    0.000 0.000   +0.00
+L24  0.000 0.000   +0.00    0.000 0.000   +0.00    0.000 0.000   +0.00
+L28  0.000 0.000   +0.00    0.000 0.000   +0.00    0.000 0.000   +0.00
+L32  0.340 0.985   +0.65    0.207 0.932   +0.73    0.021 0.621   +0.60
+L35  0.249 1.000   +0.75    0.228 1.000   +0.77    0.106 0.899   +0.79
+
+RI condition — P(v_first) per layer
+------------------------------------
+    K=2, N=5                K=2, N=10               K=2, N=50
+    base   lora    Δ        base   lora    Δ        base   lora    Δ
+L 0  0.000 0.000   +0.00    0.000 0.000   +0.00    0.000 0.000   +0.00
+L10  0.000 0.000   +0.00    0.000 0.000   +0.00    0.000 0.000   +0.00
+L20  0.000 0.000   +0.00    0.000 0.000   +0.00    0.000 0.000   +0.00
+L30  0.000 0.000   +0.00    0.000 0.000   +0.00    0.011 0.000   -0.01
+L35  0.403 1.000   +0.60    0.355 1.000   +0.65    0.441 1.000   +0.56
+
+INTERPRETATION
+--------------
+1) "v_last found then suppressed" replicates in baseline:
+   K=2/N=5: P(v_last) peaks at L32 (0.34) then DECAYS to L35 (0.25)
+   K=2/N=50: barely surfaces (L32=0.02, L35=0.11) — high-load suppression
+2) Post-LoRA: late-layer suppression eliminated. P(v_last) at L32 already
+   high (0.62–0.99) and reaches the final layer near saturation (0.90–1.00).
+3) RI side: baseline final-layer P(v_first) is only 0.36–0.44 even though
+   RI behavioral accuracy is high. The model picks v_first as argmax but
+   with low confidence/entropy. LoRA sharpens this to P(v_first)=1.00.
+
+Mechanism (combined with probing finding):
+- The v_last representation EXISTS in baseline upper layers (L32) but gets
+  attenuated before readout (L35). LoRA doesn't build a new v_last finder —
+  it removes the late-layer suppression that was tearing down the correct answer.
+- Probing showed the substrate (condition discrimination, RI/PI signal in
+  the residual) pre-existed. Logit lens shows the v_last token ALSO pre-existed
+  in late layers. The pretraining failure was a calibration / readout failure,
+  not a representational one. 18k LoRA examples fix the calibration.
+
+Source files:
+  baseline: v3/results_vllm/logit_lens/Qwen2.5-3B-Instruct/stage2_logit_lens_20260409_054632.json
+  lora:     v3/scripts/experiments/results/Qwen2.5-3B-Instruct-LoRA/stage2_logit_lens_20260524_194921.json
+Elapsed (LoRA run): 955 s on M3 Pro / MPS / fp32 (600 forward passes with cache).
+================================================================================

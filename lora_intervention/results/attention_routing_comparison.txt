@@ -1,0 +1,73 @@
+================================================================================
+ATTENTION ROUTING — Qwen2.5-3B-Instruct  (baseline vs +LoRA)
+Operating point: K=2, N=30, normal mode, 50 trials, ARBITRARY_SINGLE
+Source: per-head attention from gen-token to each round of the test category,
+        CVQ ("last value") condition.  Reported: P(attend to last round).
+================================================================================
+
+PER-LAYER MEAN — head-averaged P(attend to v_last round) under CVQ
+------------------------------------------------------------------
+       base    lora    Δ
+L 0    0.101   0.107   +0.006
+L 5    0.056   0.045   -0.011
+L10    0.139   0.158   +0.019
+L15    0.155   0.231   +0.076    ← shift starts
+L20    0.019   0.089   +0.070
+L23    0.079   0.249   +0.170    ← acceleration
+L24    0.112   0.394   +0.282
+L26    0.157   0.381   +0.224
+L28    0.140   0.422   +0.283
+L29    0.089   0.398   +0.309
+L30    0.093   0.414   +0.321
+L31    0.102   0.495   +0.394    ← peak shift
+L32    0.055   0.442   +0.386
+L33    0.068   0.529   +0.461    ← largest single delta
+L34    0.012   0.018   +0.006    ← final layers unchanged
+L35    0.028   0.041   +0.013
+
+Top 15 heads gaining v_last attention (all in L30-L33):
+   L32H3   (0.108 → 0.789, +0.68)     L32H7   (0.126 → 0.777, +0.65)
+   L31H12  (0.166 → 0.814, +0.65)     L31H15  (0.233 → 0.863, +0.63)
+   L32H10  (0.063 → 0.669, +0.61)     L30H11  (0.190 → 0.781, +0.59)
+   L32H0   (0.085 → 0.675, +0.59)     L32H14  (0.077 → 0.661, +0.58)
+   L31H8   (0.116 → 0.698, +0.58)     L32H9   (0.053 → 0.631, +0.58)
+   L33H8   (0.076 → 0.650, +0.57)     L31H1   (0.043 → 0.601, +0.56)
+   L32H1   (0.064 → 0.604, +0.54)     L33H11  (0.073 → 0.606, +0.53)
+   L32H12  (0.072 → 0.602, +0.53)
+
+Top heads LOSING v_last attention (all early-layer, deltas small):
+   L2H9, L4H3, L9H10, L15H1, L2H0, L5H2, L3H14 (all -0.04 to -0.06)
+
+INTERPRETATION
+--------------
+1) The routing change is SPATIALLY LOCALIZED to layers 24-33, peaking at L31-L33.
+   L34-L35 (the final readout) are essentially unchanged.
+2) Early-layer attention patterns are nearly identical (small negative deltas)
+   — LoRA did not rewire feature extraction.
+3) Fifteen heads in L30-L33 went from ~0.08-0.23 P(attend to v_last) to
+   0.60-0.86 — a 4-12× increase. These heads are now strongly recency-routing
+   under CVQ where they previously were not.
+
+CONVERGENT EVIDENCE WITH PROBING + LOGIT LENS (same session)
+------------------------------------------------------------
+Probing said: PI-correctness signal installed in L27-L33 (chance → 94%)
+Logit lens said: v_last appears in residual at L32 (P=0.34 → 0.99)
+Attention routing now says: it's because heads in L30-L33 are physically
+attending to the v_last token position 4-12× more than they were.
+
+The §7 mechanism is now triangulated by three independent methods agreeing on
+the same upper-middle layer band (L24-L33, peaking L30-L33).
+
+NOTE ON METHODOLOGY
+-------------------
+attn_from_gen was summed across both K columns (test cat + distractor cat)
+rather than restricted to the test cat's column — small dilution effect, but
+applied identically to baseline and LoRA so deltas are unaffected. For
+publication-grade per-head numbers, re-run extraction restricting to the test
+category's rounds only (~5 min code change).
+
+Source files:
+  baseline: v3/results_vllm/attention_routing/Qwen2.5-3B-Instruct__normal.json
+  lora:     v3/results_vllm/attention_routing/Qwen2.5-3B-Instruct-LoRA__normal.json
+Elapsed (LoRA run): 326 s on M3 Pro / MPS / bf16, 50 trials.
+================================================================================
