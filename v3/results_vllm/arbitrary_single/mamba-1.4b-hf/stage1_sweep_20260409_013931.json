@@ -1,0 +1,171 @@
+{
+  "model": "state-spaces/mamba-1.4b-hf",
+  "dataset_type": "ARBITRARY_SINGLE",
+  "prompt_format": "completion_few_shot",
+  "min_updates": 5,
+  "backend": "vllm",
+  "config": {
+    "key_levels": [
+      2,
+      3,
+      5,
+      7,
+      10,
+      15,
+      20,
+      25,
+      30
+    ],
+    "update_levels": [
+      5,
+      7,
+      10,
+      15,
+      20,
+      30,
+      50,
+      75,
+      100
+    ],
+    "trials_per_cell": 100,
+    "max_new_tokens": 30,
+    "gpu": 0,
+    "engine": {
+      "gpu_memory_utilization": 0.95,
+      "max_num_batched_tokens": 32768,
+      "max_model_len": 2048,
+      "enable_prefix_caching": true,
+      "dtype": "float16"
+    },
+    "sampling": {
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "top_k": -1,
+      "repetition_penalty": 1.0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    }
+  },
+  "cells": {
+    "2_5": {
+      "num_keys": 2,
+      "num_updates": 5,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7,
+          "ci_lower": 0.61,
+          "ci_upper": 0.79,
+          "n": 100,
+          "error_types": {
+            "correct": 70,
+            "garbage": 30
+          },
+          "n_failures": 30,
+          "n_garbage": 30,
+          "failure_avg_relative_pos": null
+        },
+        "PI": {
+          "accuracy": 0.05,
+          "ci_lower": 0.01,
+          "ci_upper": 0.1,
+          "n": 100,
+          "error_types": {
+            "correct": 5,
+            "primacy_intrusion": 49,
+            "intermediate_intrusion": 30,
+            "garbage": 16
+          },
+          "n_failures": 95,
+          "n_garbage": 16,
+          "failure_avg_relative_pos": 0.1456
+        }
+      },
+      "regime": "C",
+      "n_trials": 100,
+      "max_trials": 100,
+      "stopped_early": false
+    },
+    "2_7": {
+      "num_keys": 2,
+      "num_updates": 7,
+      "stats": {
+        "RI": {
+          "accuracy": 0.75,
+          "ci_lower": 0.66,
+          "ci_upper": 0.83,
+          "n": 100,
+          "error_types": {
+            "correct": 75,
+            "garbage": 24,
+            "intermediate_intrusion": 1
+          },
+          "n_failures": 25,
+          "n_garbage": 24,
+          "failure_avg_relative_pos": 0.1667
+        },
+        "PI": {
+          "accuracy": 0.07,
+          "ci_lower": 0.03,
+          "ci_upper": 0.12,
+          "n": 100,
+          "error_types": {
+            "correct": 7,
+            "primacy_intrusion": 52,
+            "intermediate_intrusion": 19,
+            "garbage": 22
+          },
+          "n_failures": 93,
+          "n_garbage": 22,
+          "failure_avg_relative_pos": 0.1268
+        }
+      },
+      "regime": "C",
+      "n_trials": 100,
+      "max_trials": 100,
+      "stopped_early": false
+    },
+    "2_10": {
+      "num_keys": 2,
+      "num_updates": 10,
+      "stats": {
+        "RI": {
+          "accuracy": 0.65,
+          "ci_lower": 0.55,
+          "ci_upper": 0.74,
+          "n": 100,
+          "error_types": {
+            "garbage": 35,
+            "correct": 65
+          },
+          "n_failures": 35,
+          "n_garbage": 35,
+          "failure_avg_relative_pos": null
+        },
+        "PI": {
+          "accuracy": 0.06,
+          "ci_lower": 0.02,
+          "ci_upper": 0.11,
+          "n": 100,
+          "error_types": {
+            "garbage": 28,
+            "primacy_intrusion": 37,
+            "correct": 6,
+            "intermediate_intrusion": 29
+          },
+          "n_failures": 94,
+          "n_garbage": 28,
+          "failure_avg_relative_pos": 0.1919
+        }
+      },
+      "regime": "C",
+      "n_trials": 100,
+      "max_trials": 100,
+      "stopped_early": false
+    }
+  },
+  "total_prompts": 600,
+  "inference_time_sec": 55.1,
+  "throughput_prompts_per_sec": 10.9,
+  "start_time": "2026-04-09T01:39:31.125971+00:00",
+  "end_time": "2026-04-09T01:39:31.125982+00:00"
+}
