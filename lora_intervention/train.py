@@ -95,6 +95,14 @@ def parse_args():
     p.add_argument("--batch-size", type=int,   default=BATCH_SIZE)
     p.add_argument("--grad-accum", type=int,   default=GRAD_ACCUM)
     p.add_argument("--max-seq-len",type=int,   default=MAX_SEQ_LEN)
+    p.add_argument("--target-modules", default=None,
+                   help="Comma-separated PEFT target module names. "
+                        "Default: q_proj,k_proj,v_proj,o_proj (attention). "
+                        "For MLP-only: gate_proj,up_proj,down_proj.")
+    p.add_argument("--max-steps", type=int, default=-1,
+                   help="Override num_train_epochs with hard step cap (default: -1 = use epochs)")
+    p.add_argument("--eval-steps", type=int, default=100)
+    p.add_argument("--save-steps", type=int, default=100)
     p.add_argument("--smoke",      action="store_true", help="Quick 10-step test")
     return p.parse_args()
 
@@ -170,19 +178,29 @@ def main():
     model.enable_input_require_grads()  # needed for gradient checkpointing with PEFT
 
     # ── LoRA config ───────────────────────────────────────────────────────────
+    target_modules = (
+        [m.strip() for m in args.target_modules.split(",")]
+        if args.target_modules else LORA_TARGET
+    )
+    print(f"  LoRA targets: {target_modules}")
     lora_cfg = LoraConfig(
         task_type     = TaskType.CAUSAL_LM,
         r             = args.rank,
         lora_alpha    = args.rank * 2,
         lora_dropout  = LORA_DROPOUT,
-        target_modules= LORA_TARGET,
+        target_modules= target_modules,
         bias          = "none",
     )
     model = get_peft_model(model, lora_cfg)
     model.print_trainable_parameters()
 
     # ── Training config (TRL 1.x SFTConfig) ──────────────────────────────────
-    max_steps = 10 if args.smoke else -1
+    if args.smoke:
+        max_steps = 10
+    elif args.max_steps > 0:
+        max_steps = args.max_steps
+    else:
+        max_steps = -1
 
     sft_cfg = SFTConfig(
         output_dir              = str(ckpt_path),
@@ -197,9 +215,9 @@ def main():
         bf16                    = True,
         logging_steps           = 10,
         eval_strategy           = "steps",
-        eval_steps              = 100,
+        eval_steps              = args.eval_steps,
         save_strategy           = "steps",
-        save_steps              = 100,
+        save_steps              = args.save_steps,
         save_total_limit        = 3,
         load_best_model_at_end  = True,
         metric_for_best_model   = "eval_loss",
