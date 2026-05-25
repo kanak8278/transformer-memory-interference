@@ -35,12 +35,24 @@ sys.path.insert(0, str(_ROOT))
 from experiments.stage2_logit_lens import run_stage2
 from mechanistic_probing_v2.core.model_loader import detect_device, ModelInfo
 
-BASE_MODEL = "Qwen/Qwen2.5-3B-Instruct"
+BASE_MODEL_DEFAULT = "Qwen/Qwen2.5-3B-Instruct"
+
+
+def _model_class_for(model_id: str):
+    if "gemma-3" in model_id.lower():
+        try:
+            from transformers import Gemma3ForCausalLM
+            return Gemma3ForCausalLM
+        except ImportError:
+            pass
+    return AutoModelForCausalLM
 
 
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--merged_path", required=True)
+    p.add_argument("--base", default=BASE_MODEL_DEFAULT,
+                   help=f"HF model id of base architecture (default: {BASE_MODEL_DEFAULT})")
     p.add_argument("--point", default="2,5", help="Single point 'k,u' OR ignored if --points used")
     p.add_argument("--points", default=None,
                    help="Multi-point spec like '2,5;2,10;2,50' to match baseline")
@@ -50,16 +62,17 @@ def parse_args():
     return p.parse_args()
 
 
-def load_merged_into_tl(merged_path, device, dtype):
+def load_merged_into_tl(merged_path, base_model, device, dtype):
     print(f"Loading merged HF model from {merged_path}...")
     tokenizer = AutoTokenizer.from_pretrained(merged_path, trust_remote_code=True)
-    hf_model = AutoModelForCausalLM.from_pretrained(
+    model_cls = _model_class_for(base_model)
+    hf_model = model_cls.from_pretrained(
         merged_path, dtype=dtype, low_cpu_mem_usage=True, trust_remote_code=True,
     )
     hf_model.eval()
-    print(f"Wrapping in HookedTransformer (device={device}, dtype={dtype})...")
+    print(f"Wrapping in HookedTransformer (base={base_model}, device={device}, dtype={dtype})...")
     model = HookedTransformer.from_pretrained(
-        BASE_MODEL, hf_model=hf_model, tokenizer=tokenizer,
+        base_model, hf_model=hf_model, tokenizer=tokenizer,
         device=device, dtype=dtype,
         fold_ln=True, center_writing_weights=True, center_unembed=True,
     )
@@ -69,7 +82,7 @@ def load_merged_into_tl(merged_path, device, dtype):
         torch.cuda.empty_cache()
 
     info = ModelInfo(
-        name=BASE_MODEL,
+        name=base_model,
         n_layers=model.cfg.n_layers,
         n_heads=model.cfg.n_heads,
         d_model=model.cfg.d_model,
@@ -91,7 +104,7 @@ def main():
     device = args.device or detect_device()[0]
     dtype = torch.float32 if device in ("cpu", "mps") else torch.float16
 
-    model, tokenizer, info = load_merged_into_tl(args.merged_path, device, dtype)
+    model, tokenizer, info = load_merged_into_tl(args.merged_path, args.base, device, dtype)
 
     # Override the model_name embedded in info so the saved file is tagged as the LoRA variant
     info_lora = info._replace(name=args.out_name) if hasattr(info, "_replace") else info

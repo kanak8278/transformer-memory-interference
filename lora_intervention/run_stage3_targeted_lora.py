@@ -58,15 +58,12 @@ from mechanistic_probing_v2.core.model_loader import detect_device, ModelInfo
 from mechanistic_probing_v2.core.dataset_configs import get_value_pool
 from mechanistic_probing_v2.core.model_loader import verify_single_token
 
-BASE_MODEL = "Qwen/Qwen2.5-3B-Instruct"
+BASE_MODEL_DEFAULT = "Qwen/Qwen2.5-3B-Instruct"
 
-# Top 8 heads from baseline 3A attribution patching (Qwen2.5-3B-Instruct,
-# K=2/N=5). Source: v3/results_vllm/causal/Qwen2.5-3B-Instruct/
-# stage3_causal_20260409_055011.json
-BASELINE_TOP_HEADS = [
-    # Matches baseline 3C's ablate set exactly (came from baseline 3B's top-5 picks).
-    # Source: v3/results_vllm/causal/Qwen2.5-3B-Instruct/stage3_causal_20260409_055011.json
-    # field experiments.3C.heads_ablated
+# Default Qwen suppressor heads. Source:
+# v3/results_vllm/causal/Qwen2.5-3B-Instruct/stage3_causal_20260409_055011.json
+# field experiments.3C.heads_ablated
+QWEN_baseline_heads = [
     {"layer": 26, "head": 3, "label": "L26H3"},
     {"layer": 27, "head": 3, "label": "L27H3"},
     {"layer": 30, "head": 3, "label": "L30H3"},
@@ -74,10 +71,39 @@ BASELINE_TOP_HEADS = [
     {"layer": 29, "head": 4, "label": "L29H4"},
 ]
 
+# Gemma-3-4b-it suppressor heads identified by baseline Stage 3.
+# Source: v3/results_vllm/causal/gemma-3-4b-it/stage3_causal_20260409_150736.json
+# field experiments.3C.heads_ablated
+GEMMA_baseline_heads = [
+    {"layer": 17, "head": 0, "label": "L17H0"},
+    {"layer": 17, "head": 1, "label": "L17H1"},
+    {"layer": 17, "head": 3, "label": "L17H3"},
+    {"layer": 19, "head": 4, "label": "L19H4"},
+    {"layer": 30, "head": 6, "label": "L30H6"},
+]
+
+
+def _model_class_for(model_id: str):
+    if "gemma-3" in model_id.lower():
+        try:
+            from transformers import Gemma3ForCausalLM
+            return Gemma3ForCausalLM
+        except ImportError:
+            pass
+    return AutoModelForCausalLM
+
+
+def _default_heads_for(base_model: str):
+    if "gemma-3" in base_model.lower():
+        return GEMMA_baseline_heads
+    return QWEN_baseline_heads
+
 
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--merged_path", required=True)
+    p.add_argument("--base", default=BASE_MODEL_DEFAULT,
+                   help=f"HF model id of base architecture (default: {BASE_MODEL_DEFAULT})")
     p.add_argument("--stage2", required=True)
     p.add_argument("--point", default="2,5")
     p.add_argument("--trials", type=int, default=50)
@@ -87,23 +113,24 @@ def parse_args():
     return p.parse_args()
 
 
-def load_merged_into_tl(merged_path, device, dtype):
+def load_merged_into_tl(merged_path, base_model, device, dtype):
     print(f"Loading merged HF model from {merged_path}...")
     tokenizer = AutoTokenizer.from_pretrained(merged_path, trust_remote_code=True)
-    hf_model = AutoModelForCausalLM.from_pretrained(
+    model_cls = _model_class_for(base_model)
+    hf_model = model_cls.from_pretrained(
         merged_path, dtype=dtype, low_cpu_mem_usage=True, trust_remote_code=True,
     )
     hf_model.eval()
-    print(f"Wrapping in HookedTransformer (device={device}, dtype={dtype})...")
+    print(f"Wrapping in HookedTransformer (base={base_model}, device={device}, dtype={dtype})...")
     model = HookedTransformer.from_pretrained(
-        BASE_MODEL, hf_model=hf_model, tokenizer=tokenizer,
+        base_model, hf_model=hf_model, tokenizer=tokenizer,
         device=device, dtype=dtype,
         fold_ln=True, center_writing_weights=True, center_unembed=True,
     )
     model.eval()
     del hf_model
     info = ModelInfo(
-        name=BASE_MODEL,
+        name=base_model,
         n_layers=model.cfg.n_layers,
         n_heads=model.cfg.n_heads,
         d_model=model.cfg.d_model,
@@ -123,7 +150,8 @@ def main():
     dtype = torch.float32 if device in ("cpu", "mps") else torch.float16
     experiments = [e.strip() for e in args.experiments.split(",")]
 
-    model, tokenizer, _info = load_merged_into_tl(args.merged_path, device, dtype)
+    model, tokenizer, _info = load_merged_into_tl(args.merged_path, args.base, device, dtype)
+    baseline_heads = _default_heads_for(args.base)
 
     # Reuse the stage2 metadata for operating-point context
     s2_info = analyze_stage2(args.stage2)
@@ -137,7 +165,7 @@ def main():
     print(f"V3 STAGE 3 — TARGETED (baseline-heads ablation on LoRA)")
     print(f"  Model:           {args.out_name}")
     print(f"  Operating point: {nk}k_{nu}u")
-    print(f"  Target heads:    {[h['label'] for h in BASELINE_TOP_HEADS]}")
+    print(f"  Target heads:    {[h['label'] for h in baseline_heads]}")
     print(f"  Trials:          {args.trials}")
     print(f"  Experiments:     {experiments}")
     print(f"{'='*70}\n")
@@ -152,9 +180,9 @@ def main():
             "stage2_path": args.stage2,
             "trials": args.trials,
             "experiments": experiments,
-            "target_heads_source": "BASELINE top-8 from stage3_causal_20260409_055011.json",
+            "target_heads_source": f"baseline 3C heads for base={args.base}",
         },
-        "target_heads": BASELINE_TOP_HEADS,
+        "target_heads": baseline_heads,
         "start_time": datetime.now(timezone.utc).isoformat(),
         "experiments": {},
     }
@@ -164,7 +192,7 @@ def main():
         result_3b = run_targeted_patching(
             model, tokenizer, value_to_tid, value_pool,
             args.out_name, nk, nu, args.trials,
-            BASELINE_TOP_HEADS, results["config"],
+            baseline_heads, results["config"],
         )
         result_3b["elapsed_sec"] = round(time.time() - t0, 1)
         results["experiments"]["3B"] = result_3b
@@ -175,7 +203,7 @@ def main():
         result_3c = run_ablation_logit_lens(
             model, tokenizer, value_to_tid, value_pool,
             args.out_name, nk, nu, args.trials,
-            BASELINE_TOP_HEADS, results["config"],
+            baseline_heads, results["config"],
         )
         result_3c["elapsed_sec"] = round(time.time() - t0, 1)
         results["experiments"]["3C"] = result_3c

@@ -172,14 +172,161 @@ Outputs:
 | Training epochs | 2.0 | 1.42 (stopped early; eval still improving) |
 | Training data | Same K/N grid, same conditions, same volume; different concrete examples (PYTHONHASHSEED reset across runs — deterministic seeding introduced for Gemma run) |
 
-## 5. Next steps (not in this commit)
+## 5. §7 mechanism on Gemma — post-LoRA probing + logit lens
 
-- **§7 mechanism on Gemma**: post-LoRA probing / logit-lens /
-  attention-routing on merged Gemma+LoRA. Gemma's suppressor cluster is
-  at L17-L19 + L30H6 (per pre-existing baseline data in
-  `v3/results_vllm/causal/gemma-3-4b-it/`), vs Qwen's L26-L30 cluster.
-  Post-LoRA mechanism likely re-localizes promoters around Gemma's
-  cluster. See `GEMMA_PROBING_PLAN.md`.
+Mirroring the §5.1 Qwen mechanistic re-run, but with two caveats:
+
+1. `transformer_lens` OOMs on Gemma-3-4b on the L4 (23 GB) because TL
+   duplicates weights into its layer-wise structures during construction,
+   exceeding GPU memory even with `from_pretrained_no_processing`.
+   Wrote HF-direct replacements: `run_probing_lora_hf.py` and
+   `run_logit_lens_lora_hf.py`. Same `train_probes` sklearn function,
+   same metric semantics; different access path (HF
+   `output_hidden_states=True` + `model.lm_head` instead of TL `cache`
+   and `model.W_U`).
+2. Pre-existing baseline files for Gemma probing
+   (`probing_gemma-3-4b-it_2k_5u.json`) and logit lens
+   (`logit_lens/gemma-3-4b-it/stage2_logit_lens_*.json`) are
+   **broken** (RI/PI behavioral 0%, probes at chance everywhere, value
+   prob matrices all-NaN or all-zero). Re-ran both on **base
+   Gemma-3-4b-it** through the new HF-direct path for a clean
+   apples-to-apples comparison.
+
+### 5.1 Merge
+
+```
+python3 lora_intervention/merge_lora.py \
+  --base google/gemma-3-4b-it \
+  --adapter lora_intervention/checkpoints/gemma_adapter \
+  --out lora_intervention/checkpoints/gemma_merged --device cpu
+```
+
+CPU merge in float32 (safest); validation passed (top-5 token-ID match,
+max logit |diff| 5.72e-06 between PEFT-forward and merged-forward).
+Saved 14.8 GB merged model (gitignored).
+
+### 5.2 Probing classifier @ K=2/N=5, 200 trials per condition
+
+```
+python3 lora_intervention/run_probing_lora_hf.py \
+  --merged_path google/gemma-3-4b-it \
+  --base google/gemma-3-4b-it \
+  --out_name gemma-3-4b-it-baseline-hf \
+  --point 2,5 --trials 200 --device cuda --dtype bfloat16
+
+python3 lora_intervention/run_probing_lora_hf.py \
+  --merged_path lora_intervention/checkpoints/gemma_merged \
+  --base google/gemma-3-4b-it \
+  --out_name gemma-3-4b-it-LoRA \
+  --point 2,5 --trials 200 --device cuda --dtype bfloat16
+```
+
+Each cell ran in ~64 s (model load + 400 forward passes + sklearn
+training across 34 layers). bf16 forward passes; final logits and
+hidden states unchanged downstream.
+
+| Probe (late layers L26-L33) | Base Gemma | Gemma+LoRA | Δ |
+|---|---|---|---|
+| Behavioral RI | 83% | 80% | -3 |
+| Behavioral PI | 63% | **81%** | **+18** |
+| Condition discrimination (RI vs PI) | 100% | 100% | 0 |
+| RI correct probe | 90-93% | 84-93% | flat |
+| **PI correct probe** | **70-73%** | **82-89%** | **+15 to +20** |
+
+The condition probe is already saturated pre-LoRA — the residual stream
+distinguishes which kind of query the model is being asked. What LoRA
+changes is the **PI-correctness** probe: pre-LoRA the late-layer
+residual encodes whether the model has the right answer for PI only
+~70% of the time; post-LoRA that rises to ~85%. This is the same
+metric §5.1 reported for Qwen (58% → 94%); both architectures converge
+to similar post-LoRA probe accuracy.
+
+Files:
+- `v3/results_vllm/probing/probing_gemma-3-4b-it-baseline-hf_2k_5u.json`
+- `v3/results_vllm/probing/probing_gemma-3-4b-it-LoRA_2k_5u.json`
+
+### 5.3 Logit lens @ {K=2/N=5, K=2/N=10, K=2/N=50}, 100 trials/cell
+
+```
+python3 lora_intervention/run_logit_lens_lora_hf.py \
+  --merged_path google/gemma-3-4b-it \
+  --base google/gemma-3-4b-it \
+  --out_name gemma-3-4b-it-baseline-hf \
+  --points "2,5;2,10;2,50" --trials 100 --device cuda --dtype bfloat16
+
+python3 lora_intervention/run_logit_lens_lora_hf.py \
+  --merged_path lora_intervention/checkpoints/gemma_merged \
+  --base google/gemma-3-4b-it \
+  --out_name gemma-3-4b-it-LoRA \
+  --points "2,5;2,10;2,50" --trials 100 --device cuda --dtype bfloat16
+```
+
+Both runs ~166 s total each (model load + 600 forward passes + per-layer
+projection through `lm_head`).
+
+PI P(v_last) at final layer L33:
+
+| Cell | Base Gemma | Gemma+LoRA | Δ | Qwen Δ (§5.1) |
+|---|---|---|---|---|
+| K=2/N=5 | 0.807 | **1.000** | +0.19 | +0.75 |
+| K=2/N=10 | 0.569 | **1.000** | +0.43 | +0.77 |
+| K=2/N=50 | 0.502 | **0.999** | +0.50 | +0.79 |
+
+RI P(v_first) at L33 is ≥0.97 pre-LoRA and =1.000 post-LoRA — already
+clean for v_first, so the LoRA improvement here is small but consistent
+with the behavioral §5.2 number (RI stays near-perfect).
+
+Both architectures converge to **P(v_last) ≈ 1.0 at L33 post-LoRA** from
+very different starting points (Qwen 0.11 → 1.0, Gemma 0.50 → 1.0). The
+"v_last found in mid-layers then suppressed by late layers" pattern is
+fully removed.
+
+Files:
+- `v3/results_vllm/logit_lens/gemma-3-4b-it-baseline-hf/stage2_logit_lens_*.json`
+- `v3/results_vllm/logit_lens/gemma-3-4b-it-LoRA/stage2_logit_lens_*.json`
+
+### 5.4 Stage 3 ablation — DEFERRED
+
+The pre-existing Gemma Stage 3 (`v3/results_vllm/causal/gemma-3-4b-it/`)
+identifies suppressor heads at **L17H0, L17H1, L17H3, L19H4, L30H6** —
+qualitatively different topology from Qwen's L26-L30 cluster (Gemma's
+is mid-depth + one late head, Qwen's is uniformly late). The
+post-LoRA Stage 3 ablation would test whether LoRA refined this circuit
+or built a parallel path. It requires HF-direct attention head hooks
+(transformer_lens is unusable on Gemma on this hardware), which we did
+not implement in this pass. Logged as future work.
+
+### 5.5 §7 mechanism — what we can claim from Gemma
+
+The two analyses above (probing + logit lens) on Gemma+LoRA, combined
+with the §5.1 results on Qwen+LoRA, support the following:
+
+> **Architecture-agnostic recovery mechanism.** Both Qwen2.5-3B-Instruct
+> and Gemma-3-4b-it suppress v_last at late layers in the base model
+> (PI P(v_last) at the final layer = 0.11 / 0.50-0.81 for Qwen / Gemma).
+> Targeted 18k-example LoRA training on the same task format closes
+> this suppression in both models: P(v_last) at the final layer reaches
+> ≈1.0 in all tested cells for both architectures. The same probe-level
+> signature also emerges in both: the residual stream goes from
+> not-encoding-PI-correctness (Qwen 58%, Gemma 70%) to clearly
+> encoding it (Qwen 94%, Gemma 86%). The starting points differ; the
+> destinations are nearly identical.
+
+What remains open without Stage 3: whether the late-layer promoter
+heads identified in Qwen (L31-L33 cluster) have an analog in Gemma, or
+whether Gemma's recovery routes through different heads given its
+shallower suppressor cluster (L17-L19 + L30H6).
+
+## 6. Next steps (not in this commit)
+
+- **§7 stage 3 on Gemma**: HF-direct attention head ablation. Test
+  whether ablating Gemma's baseline suppressor set (L17H0, L17H1,
+  L17H3, L19H4, L30H6) on the LoRA model has any effect on
+  P(v_last) — i.e., whether LoRA reuses the same suppressor circuit
+  with different weights, or builds an independent promoter path.
+- **Attention routing on Gemma+LoRA**: identifies the *promoter* heads
+  built by LoRA. Blocked by missing `v3/attention_routing.py` module
+  in this repo checkout. Once that file is available, the same script
+  approach as §5.1 should work.
 - **§5.3 negative control**: arithmetic-only LoRA on Qwen — rules out
   "any LoRA closes the gap" critique.
-- Both are paper-strengthening, not required for §5.2 to hold.

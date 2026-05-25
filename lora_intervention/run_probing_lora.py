@@ -44,16 +44,28 @@ from mechanistic_probing_v2.core.dataset_configs import (
 )
 from mechanistic_probing_v2.core.model_loader import verify_single_token
 
-# We pretend the merged model is still Qwen2.5-3B-Instruct (architecturally it is —
-# LoRA was merged into the weights). This is the model_name string used for
-# chat-template formatting in probing_classifier.
-BASE_MODEL = "Qwen/Qwen2.5-3B-Instruct"
+# The merged model is architecturally the base (LoRA folded into weights).
+# This is the model_name string used for chat-template formatting in
+# probing_classifier and for transformer_lens architecture loading.
+BASE_MODEL_DEFAULT = "Qwen/Qwen2.5-3B-Instruct"
+
+
+def _model_class_for(model_id: str):
+    if "gemma-3" in model_id.lower():
+        try:
+            from transformers import Gemma3ForCausalLM
+            return Gemma3ForCausalLM
+        except ImportError:
+            pass
+    return AutoModelForCausalLM
 
 
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--merged_path", required=True,
                    help="Path to merged (base + LoRA) HF model dir")
+    p.add_argument("--base", default=BASE_MODEL_DEFAULT,
+                   help=f"HF model id of base architecture (default: {BASE_MODEL_DEFAULT})")
     p.add_argument("--point", default="2,5", help="Operating point 'keys,updates'")
     p.add_argument("--trials", type=int, default=200)
     p.add_argument("--device", default=None, help="mps | cpu | cuda. Default: auto")
@@ -64,27 +76,47 @@ def parse_args():
     return p.parse_args()
 
 
-def load_merged_into_tl(merged_path, device, dtype):
-    """Load merged HF model and inject into HookedTransformer."""
-    print(f"Loading merged HF model from {merged_path}...")
+def load_merged_into_tl(merged_path, base_model, device, dtype):
+    """Load merged HF model and inject into HookedTransformer.
+
+    Two-step load to avoid OOM on small GPUs:
+    1. Load HF model on CPU and wrap TL on CPU (~16GB host RAM for Gemma-3-4b bf16)
+    2. Move TL model to target device (8GB GPU); free hf_model first
+    """
+    print(f"Loading merged HF model from {merged_path} (CPU)...")
     tokenizer = AutoTokenizer.from_pretrained(merged_path, trust_remote_code=True)
-    hf_model = AutoModelForCausalLM.from_pretrained(
+    model_cls = _model_class_for(base_model)
+    hf_model = model_cls.from_pretrained(
         merged_path, dtype=dtype, low_cpu_mem_usage=True, trust_remote_code=True,
     )
     hf_model.eval()
 
-    print(f"Wrapping in HookedTransformer (base name={BASE_MODEL}, device={device}, dtype={dtype})...")
-    model = HookedTransformer.from_pretrained(
-        BASE_MODEL, hf_model=hf_model, tokenizer=tokenizer,
-        device=device, dtype=dtype,
-        fold_ln=True, center_writing_weights=True, center_unembed=True,
-    )
+    use_no_processing = dtype in (torch.float16, torch.bfloat16)
+    if use_no_processing:
+        print(f"Wrapping in HookedTransformer.from_pretrained_no_processing (base={base_model}, CPU, dtype={dtype})...")
+        model = HookedTransformer.from_pretrained_no_processing(
+            base_model, hf_model=hf_model, tokenizer=tokenizer,
+            device="cpu", dtype=dtype,
+        )
+    else:
+        print(f"Wrapping in HookedTransformer.from_pretrained (base={base_model}, CPU, dtype={dtype})...")
+        model = HookedTransformer.from_pretrained(
+            base_model, hf_model=hf_model, tokenizer=tokenizer,
+            device="cpu", dtype=dtype,
+            fold_ln=True, center_writing_weights=True, center_unembed=True,
+        )
     model.eval()
 
-    # Free the HF reference once HT has copied weights
+    # Free HF reference BEFORE moving TL to GPU — keeps peak GPU memory low
     del hf_model
-    if device == "cuda":
-        torch.cuda.empty_cache()
+    import gc; gc.collect()
+    if device != "cpu":
+        if device == "cuda":
+            torch.cuda.empty_cache()
+        print(f"Moving HookedTransformer to {device}...")
+        model = model.to(device)
+        if device == "cuda":
+            torch.cuda.empty_cache()
     return model, tokenizer
 
 
@@ -105,7 +137,7 @@ def main():
         dtype = torch.float16
     print(f"Device: {device}  |  dtype: {dtype}")
 
-    model, tokenizer = load_merged_into_tl(args.merged_path, device, dtype)
+    model, tokenizer = load_merged_into_tl(args.merged_path, args.base, device, dtype)
 
     candidate_pool = get_value_pool("ARBITRARY_SINGLE")
     value_to_tid = verify_single_token(tokenizer, values=candidate_pool)
@@ -115,7 +147,7 @@ def main():
     print(f"\nOperating point: {nk}k_{nu}u  |  {args.trials} trials per condition\n")
 
     t0 = time.time()
-    data = collect_representations(model, tokenizer, value_pool, BASE_MODEL,
+    data = collect_representations(model, tokenizer, value_pool, args.base,
                                    nk, nu, args.trials, value_to_tid)
     probe_results = train_probes(data, model.cfg.n_layers)
     elapsed = time.time() - t0
@@ -144,7 +176,7 @@ def main():
 
     output = {
         "model": args.out_name,
-        "base_model": BASE_MODEL,
+        "base_model": args.base,
         "lora_merged_from": str(args.merged_path),
         "point": {"keys": nk, "updates": nu},
         "trials": args.trials,
