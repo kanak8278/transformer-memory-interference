@@ -8,7 +8,7 @@ merged model on a small prompt. Aborts if they diverge.
 
 Usage:
     .venv/bin/python lora_intervention/merge_lora.py \
-        --adapter /tmp/lora_intervention/checkpoints/main/final \
+        --adapter lora_intervention/checkpoints/adapter \
         --out lora_intervention/checkpoints/merged
 """
 import argparse
@@ -39,7 +39,8 @@ SMOKE_PROMPT = "fruit: apple\nfruit: banana\nfruit: cherry\nWhat was the first '
 
 def parse_args():
     p = argparse.ArgumentParser()
-    p.add_argument("--adapter", required=True, help="Path to PEFT adapter dir")
+    p.add_argument("--adapter", default="lora_intervention/checkpoints/adapter",
+                   help="Path to PEFT adapter dir")
     p.add_argument("--out", required=True, help="Where to save merged HF model")
     p.add_argument("--device", default=None, help="cpu | mps. Default: cpu (safest for merge)")
     p.add_argument("--no-validate", action="store_true", help="Skip pre/post smoke check")

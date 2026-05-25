@@ -1,0 +1,20 @@
+{
+  "run_name": "main",
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "train_file": "/home/sagemaker-user/transformer-memory-interference/lora_intervention/data/train.jsonl",
+  "val_file": "/home/sagemaker-user/transformer-memory-interference/lora_intervention/data/val.jsonl",
+  "epochs": 2,
+  "lr": 0.0002,
+  "rank": 16,
+  "lora_alpha": 32,
+  "target_modules": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj"
+  ],
+  "batch_size": 8,
+  "grad_accum": 8,
+  "max_seq_len": 2048,
+  "timestamp": "20260522_233254"
+}
