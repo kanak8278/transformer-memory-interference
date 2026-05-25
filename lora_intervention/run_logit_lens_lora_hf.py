@@ -153,6 +153,17 @@ def run_logit_lens_cell(model, tokenizer, base_model, nk, nu, trials, device):
     n_layers = cfg.num_hidden_layers
     # lm_head: (vocab, hidden) — we project resid through it
     lm_head = model.get_output_embeddings()  # typically Linear(hidden, vocab)
+    # Final RMSNorm — fold it in for the intermediate-layer logit lens.
+    # Without this, intermediate residual streams are unnormalized and
+    # softmax over lm_head(resid) gives near-uniform distributions.
+    final_norm = None
+    for attr in ("norm", "final_layer_norm"):
+        # Gemma3 keeps it at `model.model.norm`; Qwen at `model.model.norm`; etc.
+        cand = getattr(getattr(model, "model", None), attr, None) if hasattr(model, "model") else None
+        if cand is not None:
+            final_norm = cand
+            break
+    print(f"final_norm: {type(final_norm).__name__ if final_norm is not None else 'NONE — using raw projections'}")
 
     result = {}
 
@@ -165,6 +176,9 @@ def run_logit_lens_cell(model, tokenizer, base_model, nk, nu, trials, device):
         pos_count         = np.zeros((nu,), dtype=np.int64)
         n_correct = 0
         n_total = 0
+        # Per-trial trajectories for bootstrap CIs (P(v_first/v_last) per layer)
+        per_trial_first = []  # list of [n_layers] arrays
+        per_trial_last  = []
 
         for t_idx in range(trials):
             seed = hash((nk, nu, condition, t_idx, "logit_lens")) % (2**31)
@@ -181,8 +195,15 @@ def run_logit_lens_cell(model, tokenizer, base_model, nk, nu, trials, device):
             out = model(**inputs, output_hidden_states=True, return_dict=True, use_cache=False)
 
             # hidden_states tuple: (n_layers + 1) of [1, T, H]; index L+1 = after layer L
+            trial_first = np.zeros(n_layers, dtype=np.float64)
+            trial_last  = np.zeros(n_layers, dtype=np.float64)
             for L in range(n_layers):
                 resid = out.hidden_states[L + 1][0, -1, :]  # [H]
+                # Apply final RMSNorm to intermediate layers ONLY. HF's
+                # last hidden_state is already post-final-norm; applying
+                # final_norm again zeros out the projection.
+                if final_norm is not None and L < n_layers - 1:
+                    resid = final_norm(resid.unsqueeze(0)).squeeze(0)
                 layer_logits = lm_head(resid)  # [vocab]
                 probs = torch.softmax(layer_logits.float(), dim=-1)
                 # P(v_i) = max prob across that value's candidate tids
@@ -193,8 +214,12 @@ def run_logit_lens_cell(model, tokenizer, base_model, nk, nu, trials, device):
                     p_pos_per_layer[vi, L] += p_vi
                     if vi == 0:
                         p_first_per_layer[L] += p_vi
+                        trial_first[L] = p_vi
                     if vi == n_vals - 1:
                         p_last_per_layer[L] += p_vi
+                        trial_last[L] = p_vi
+            per_trial_first.append(trial_first.tolist())
+            per_trial_last.append(trial_last.tolist())
 
             # behavioral correctness from final logits
             final_logits = out.logits[0, -1, :]
@@ -226,6 +251,9 @@ def run_logit_lens_cell(model, tokenizer, base_model, nk, nu, trials, device):
             "p_first_per_layer": p_first_per_layer.tolist(),
             "p_last_per_layer":  p_last_per_layer.tolist(),
             "p_pos_per_layer":   p_pos_per_layer.tolist(),  # [N, n_layers]
+            # Per-trial trajectories for bootstrap CIs — [n_trials, n_layers]
+            "per_trial_p_first_per_layer": per_trial_first,
+            "per_trial_p_last_per_layer":  per_trial_last,
         }
     return result
 

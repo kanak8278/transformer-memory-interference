@@ -296,6 +296,64 @@ or built a parallel path. It requires HF-direct attention head hooks
 (transformer_lens is unusable on Gemma on this hardware), which we did
 not implement in this pass. Logged as future work.
 
+### 5.4b Bootstrap 95% CIs on Gemma deltas
+
+Mirrors `compute_cis.py` from Qwen §5.1 R2; new script
+`compute_cis_gemma.py`. Probing CIs are parametric (sklearn 5-fold CV
+`mean ± 1.96 × std / sqrt(5)`, pooled-variance for Δ); logit lens CIs
+are nonparametric bootstrap (n=2000, seed=17) over per-trial means.
+
+The logit lens script `run_logit_lens_lora_hf.py` was extended to save
+per-trial trajectories (`per_trial_p_first_per_layer`,
+`per_trial_p_last_per_layer`); baseline and LoRA logit lens were
+re-run with this output enabled (files
+`stage2_logit_lens_20260525_195739.json` and
+`stage2_logit_lens_20260525_200056.json`).
+
+**Probing classifier — PI correctness probe** (key dual to the
+behavioral PI fix):
+
+| Layer | Base [95% CI]      | LoRA [95% CI]      | Δ [95% CI]              |
+|-------|--------------------|--------------------|-------------------------|
+| L26   | 0.702 [.65, .76]   | 0.815 [.73, .90]   | +0.113 [+0.011, +0.215] |
+| L27   | 0.689 [.63, .74]   | 0.842 [.75, .94]   | +0.153 [+0.044, +0.263] |
+| L28   | 0.729 [.64, .82]   | 0.882 [.83, .94]   | +0.153 [+0.044, +0.261] |
+| L29   | 0.709 [.65, .77]   | 0.894 [.83, .95]   | +0.185 [+0.098, +0.272] |
+| L30   | 0.716 [.69, .75]   | 0.894 [.83, .95]   | +0.178 [+0.110, +0.246] |
+| L31   | 0.710 [.67, .75]   | 0.882 [.83, .94]   | +0.172 [+0.101, +0.243] |
+| L32   | 0.730 [.69, .77]   | 0.869 [.81, .93]   | +0.140 [+0.067, +0.212] |
+| L33   | 0.703 [.60, .81]   | 0.857 [.78, .93]   | +0.153 [+0.022, +0.285] |
+
+All eight late layers show Δ > 0 with 95% CI excluding zero. The
+condition probe and RI-correct probe Δs include zero (no
+post-LoRA change — consistent with §5.1 Qwen).
+
+**Logit lens — P(v_last) at final layer L33** (PI condition):
+
+| Cell        | Base [95% CI]    | LoRA [95% CI]    | Δ [95% CI]              |
+|-------------|------------------|------------------|-------------------------|
+| K=2, N=5    | 0.802 [.72, .87] | 1.000 [1.0, 1.0] | +0.198 [+0.124, +0.278] |
+| K=2, N=10   | 0.562 [.47, .65] | 1.000 [1.0, 1.0] | +0.438 [+0.344, +0.531] |
+| K=2, N=50   | 0.588 [.50, .68] | 0.993 [.99, 1.0] | +0.405 [+0.309, +0.494] |
+
+All three cells: Δ > 0.19 with 95% CI excluding zero. P(v_first) at
+L33 for RI is at ceiling pre-LoRA (≥ 0.98) so the LoRA Δ is small but
+positive across the board.
+
+**Methodological note.** Intermediate-layer logit lens (L29-L32) on
+Gemma is uninformative under the chosen lens configuration:
+`output_hidden_states` returns pre-final-RMSNorm states for L < n_layers
+- 1, and projecting those through `lm_head` gives near-uniform
+distributions over Gemma's 262k-vocab. Only the post-norm final state
+(included by HF as `hidden_states[n_layers]`) carries useful signal.
+Reapplying `final_norm` at intermediate layers was tested but applying
+it at the final layer too (i.e., a blanket fold-in) double-norms and
+breaks L33. Skipping the fold-in at L=n_layers-1 was implemented in the
+script but not re-run for the CI tables — the L33 result is the
+headline metric.
+
+Output: `lora_intervention/results/ci_analysis_gemma.txt`
+
 ### 5.5 §7 mechanism — what we can claim from Gemma
 
 The two analyses above (probing + logit lens) on Gemma+LoRA, combined
