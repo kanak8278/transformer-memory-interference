@@ -456,6 +456,28 @@ different domain *destroys* the pretrained retrieval signal.
 - GSM8K task eval (base):  `lora_intervention/results/gsm8k_task_eval_qwen_base_*.json`
 - Eval script for GSM8K: `lora_intervention/eval_gsm8k_task.py`
 
+### Full 28-cell ARB grid (added after 5-cell preview)
+
+Re-ran the same arith adapter on the complete 28-cell ARB held-out
+grid (`--run-name qwen_arith_control_full`, 100 trials/cell, ~50 min
+wall time on L4 + vLLM).
+
+| | Cells fixed | Mean RI | Mean PI | Mean gap |
+|---|---|---|---|---|
+| Qwen base (no LoRA) | 0/28 | ~25% | ~52% | reversal regime D |
+| Qwen + **arith** LoRA | **0/28** | **37.7%** | **23.9%** | +13.8% (weak primacy) |
+| Qwen + **task-specific** LoRA (§5.1) | **28/28** | 99.9% | 97.7% | ~0% |
+
+Every one of the 28 cells fails the "fixed" criterion (RI ≥ 0.65 AND
+PI ≥ 0.65). Pattern is uniform across the grid: RI rises modestly,
+PI drops sharply, regime flips from baseline reversal to weak
+primacy, but neither metric approaches the task-specific LoRA's
+near-ceiling values.
+
+Files:
+- `lora_intervention/results/qwen_arith_control_full_eval_*.json`
+- `lora_intervention/results/qwen_arith_control_full_comparison.txt`
+
 ## 6. Next steps (not in this commit)
 
 - **§7 stage 3 on Gemma**: HF-direct attention head ablation. Test
