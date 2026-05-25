@@ -1,0 +1,12 @@
+% Hand-written from lora_intervention/results/stage3_four_way_comparison.txt
+% Paired within-run Δ (ablated − normal). Stage 3C, K=2/N=5, 50 trials per cell, PI condition.
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Ablation condition} & \textbf{$\Delta$ at L31} & \textbf{$\Delta$ at L32} & \textbf{$\Delta$ at L33} & \textbf{$\Delta$ at L35} \\
+\midrule
+Baseline $+$ 5 baseline-suppressor heads        & $+0.078$ & $-0.009$ & $-0.058$ & $+0.015$ \\
+$+$LoRA   $+$ 5 baseline-suppressor heads        & $+0.150$ & $-0.001$ & $+0.000$ & $+0.000$ \\
+$+$LoRA   $+$ 8 LoRA-promoter heads             & $+0.050$ & $-0.278$ & $+0.000$ & $+0.000$ \\
+\textbf{Baseline $+$ 8 LoRA-promoter heads (control)} & $+0.003$ & $\mathbf{-0.377}$ & $-0.133$ & $-0.088$ \\
+\bottomrule
+\end{tabular}

@@ -57,6 +57,8 @@ def parse_args():
     p.add_argument("--point", default="2,5", help="Operating point 'keys,updates'")
     p.add_argument("--trials", type=int, default=200)
     p.add_argument("--device", default=None, help="mps | cpu | cuda. Default: auto")
+    p.add_argument("--dtype", default="float32", choices=["float32", "bfloat16"],
+                   help="float32 is default; bf16 needed for K=15/N=20 to fit in 36GB MPS")
     p.add_argument("--out_name", default="Qwen2.5-3B-Instruct-LoRA",
                    help="model_short_name used in output filename")
     return p.parse_args()
@@ -95,7 +97,12 @@ def main():
     else:
         device, _ = detect_device()
 
-    dtype = torch.float32 if device in ("cpu", "mps") else torch.float16
+    if args.dtype == "bfloat16":
+        dtype = torch.bfloat16
+    elif device in ("cpu", "mps"):
+        dtype = torch.float32
+    else:
+        dtype = torch.float16
     print(f"Device: {device}  |  dtype: {dtype}")
 
     model, tokenizer = load_merged_into_tl(args.merged_path, device, dtype)

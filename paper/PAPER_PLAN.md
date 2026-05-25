@@ -335,6 +335,18 @@ Estimated time: 0.5 day.
 - [ ] **Compile sweep.** After every major edit, recompile and check
   page count + warning count.
 
+## 7b. Optional / nice-to-have (note only)
+
+- [ ] **Rank-64 / partial full-FT control on Qwen2.5-3B-Instruct.**
+  Train a higher-rank LoRA (rank 64) or partial full-FT and re-run
+  attention routing on the 5 baseline suppressor heads (L26H3, L27H3,
+  L29H3, L29H4, L30H3). If suppressors *still* show baseline-level
+  v_last attention post-FT → strong evidence that "additive promotion"
+  is what the network actually wants (not a rank-16 artefact). If
+  suppressors *do* shift → re-frame §7 claim. ~2-3 hours of compute.
+  Defer until §7 draft is complete; add as paragraph in §7 or
+  Limitations depending on outcome.
+
 ## 8. Things explicitly NOT in scope
 
 - Architectural ablations (Mamba/SSM comparison) — dropped earlier.

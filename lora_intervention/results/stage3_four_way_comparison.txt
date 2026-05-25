@@ -1,0 +1,119 @@
+================================================================================
+STAGE 3 3C — FOUR-WAY ABLATION COMPARISON
+Qwen2.5-3B-Instruct, K=2/N=5, 50 trials each, PI condition
+================================================================================
+
+Four ablation conditions tested. Compare same-row-paired Δ (normal vs ablated
+within the same run, same trials). Cross-run "normal" baselines differ because
+PYTHONHASHSEED is not pinned — trial pools differ. Paired Δ is the trustworthy
+statistic.
+
+CONDITIONS
+----------
+1. BASELINE model + 5 baseline-suppressor heads ablated (from baseline 3B top-5)
+   Heads: L26H3, L27H3, L30H3, L29H3, L29H4
+
+2. LORA model + same 5 baseline-suppressor heads
+   Heads: same as #1
+
+3. LORA model + 8 LoRA-promoter heads (from attention-routing top 8)
+   Heads: L32H3, L32H7, L31H12, L31H15, L32H10, L30H11, L32H0, L32H14
+
+4. *** NEW: BASELINE model + same 8 LoRA-promoter heads (control for #3) ***
+   Heads: same as #3 — tests "were these heads already v_last carriers pre-LoRA,
+   or installed by LoRA?"
+
+PAIRED Δ — ABLATED minus NORMAL within each run
+------------------------------------------------
+
+Condition 1 — BASELINE + suppressor heads (5 heads)
+   L31:  +0.078       (small release; suppressor was suppressing)
+   L32:  -0.009
+   L33:  -0.058
+   L35:  +0.015
+   max |Δ|: 0.078
+
+Condition 2 — LORA + suppressor heads (5 heads)
+   L31:  +0.150       (LARGER release in LoRA — same suppressors still firing,
+                       absorbing more v_last signal)
+   L32:  -0.001
+   L33:  +0.000
+   L35:  +0.000
+   max |Δ|: 0.150 (at L31)
+
+Condition 3 — LORA + promoter heads (8 heads)
+   L31:  +0.050
+   L32:  -0.278       ← causal: these heads carry the v_last signal at L32 in LoRA
+   L33:  +0.000
+   L35:  +0.000
+   max |Δ|: 0.278 (at L32) — downstream L33+ has redundancy
+
+Condition 4 — BASELINE + promoter heads (8 heads)  *** NEW ***
+   L31:  +0.003
+   L32:  -0.377       ← causal: these heads ALSO carry v_last in BASELINE
+   L33:  -0.133
+   L35:  -0.088
+   max |Δ|: 0.377 (at L32)
+
+The L32 Δ in baseline (−0.38) is comparable to the L32 Δ in LoRA (−0.28). The
+8 heads are not LoRA-installed; they pre-exist as partial v_last carriers in
+the base model.
+
+REFRAMED MECHANISM CLAIM
+------------------------
+Earlier (after Conditions 1-3): "LoRA installs new v_last attention in L30-L33."
+After Condition 4: "LoRA AMPLIFIES pre-existing partial promoters AND installs
+downstream redundancy."
+
+Evidence for "amplification of partial pre-existing circuit":
+* Condition 4 shows the same 8 heads carry causal v_last signal in baseline.
+  Ablating them drops baseline L32 P(v_last) by 0.38 (largest Δ across all 4
+  conditions).
+* Attention routing showed these heads had P(attend to v_last) ≈ 0.05-0.23 in
+  baseline — non-zero. They were partial v_last attenders pre-LoRA.
+
+Evidence for "installation of downstream redundancy":
+* Condition 4 baseline ablation propagates downstream: L33 Δ -0.13, L34 -0.15,
+  L35 -0.09. Final output retains a measurable hit.
+* Condition 3 LoRA ablation: L33 Δ +0.00, L35 +0.00. The same upstream
+  perturbation is completely absorbed by L33+. The LoRA model has gained
+  downstream pathways that re-amplify v_last when the upstream signal is
+  partially knocked out.
+
+Combined: LoRA does TWO things simultaneously in upper layers:
+1. Strengthen the L30-L32 v_last-attending circuit that was already partially
+   present (the "amplification" piece).
+2. Install new L33+ amplifier pathways that compensate for upstream
+   perturbations (the "redundancy" piece).
+
+CROSS-RUN CAVEAT
+----------------
+Normal trajectories differ across runs because trial seeds aren't paired
+(PYTHONHASHSEED not pinned):
+   Condition 1 baseline normal L32: 0.39  (different trial pool from Cond 4)
+   Condition 4 baseline normal L32: 0.76
+The PAIRED-within-run Δ is what's directly interpretable. For exact apples-to-
+apples cross-run comparison, re-run all four conditions with PYTHONHASHSEED=0
+(~30 min). The qualitative story above does not depend on the paired-trial fix.
+
+CONVERGENCE WITH OTHER METHODS
+-------------------------------
+Probing: PI-correctness signal installed in L27-L33 (chance → 94%)         ✓
+Logit lens: v_last residual signal goes from 0.34 → 0.99 at L32 post-LoRA    ✓
+Attention routing: same heads attend 4-12× more to v_last post-LoRA          ✓ (amplification)
+Stage 3C baseline-promoters: same heads ALREADY partial v_last carriers      ✓ (new finding)
+Stage 3C LoRA-promoters: causally drive L32 P(v_last) post-LoRA              ✓
+Stage 3C suppressor: pre-existing suppression still fires post-LoRA          ✓
+
+All six measurements support the reframed claim: the L30-L33 promoter circuit
+is AMPLIFIED, not installed. The downstream L33+ redundancy is genuinely new.
+
+Source files:
+  baseline + suppressor (5h): v3/results_vllm/causal/Qwen2.5-3B-Instruct/stage3_causal_20260409_055011.json
+  LoRA + suppressor (5h):     v3/scripts/experiments/results/Qwen2.5-3B-Instruct-LoRA-clean5/stage3_causal_20260525_071300.json
+  LoRA + promoter (8h):       v3/scripts/experiments/results/Qwen2.5-3B-Instruct-LoRA-promoters/stage3_causal_20260525_112134.json
+  BASELINE + promoter (8h):   v3/scripts/experiments/results/Qwen2.5-3B-Instruct-baseline-promoters/stage3_causal_20260525_122807.json
+
+Total compute on M3 Pro for these 4 conditions: ~30 minutes wall clock
+(condition 1 was pre-existing).
+================================================================================

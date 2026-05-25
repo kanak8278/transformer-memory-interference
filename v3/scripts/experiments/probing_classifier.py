@@ -122,7 +122,7 @@ def collect_representations(model, tokenizer, value_pool, model_name,
             # Extract residual stream at answer position (last token) for each layer
             reps = np.zeros((n_layers, d_model))
             for layer in range(n_layers):
-                resid = cache["resid_post", layer][0, -1, :].cpu().numpy()
+                resid = cache["resid_post", layer][0, -1, :].float().cpu().numpy()
                 reps[layer] = resid
 
             # Get model's prediction

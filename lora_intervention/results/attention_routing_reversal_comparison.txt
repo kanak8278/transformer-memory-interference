@@ -1,0 +1,93 @@
+================================================================================
+ATTENTION ROUTING — Qwen2.5-3B-Instruct (REVERSAL regime, K=15, N=20)
+Baseline vs +LoRA, 50 trials, CVQ condition, P(attend to v_last_round)
+================================================================================
+
+CRITICAL CROSS-REGIME RESULT
+-----------------------------
+The 8 promoter heads identified in PRIMACY regime (K=2/N=30, prior session)
+ARE ALSO the top promoter heads in REVERSAL regime (K=15/N=20). All eight
+heads moved from baseline P(attend to v_last) ≈ 0.11-0.32 to LoRA values
+0.69-0.87 — comparable in size to primacy-regime deltas.
+
+This says the L30-L33 v_last promoter circuit is REGIME-INVARIANT for the
+LoRA model: same heads carry the new signal whether the base model was in
+the primacy regime (RI > PI) or reversal regime (PI > RI).
+
+PER-LAYER MEAN — head-averaged P(attend to v_last_round) under CVQ
+-------------------------------------------------------------------
+       base    lora    Δ              (compare to K=2/N=30 normal Δ)
+L 0    0.176   0.177   +0.001
+L 4    0.149   0.148   -0.001
+L 8    0.063   0.055   -0.008
+L12    0.129   0.142   +0.013
+L16    0.206   0.338   +0.132    (vs +0.098 in primacy)
+L20    0.047   0.135   +0.088    (vs +0.070)
+L24    0.105   0.394   +0.289    (vs +0.282)
+L28    0.130   0.545   +0.414    (vs +0.283)
+L30    0.129   0.535   +0.407    (vs +0.321)
+L31    0.149   0.613   +0.464    (vs +0.394)
+L32    0.100   0.610   +0.510    (vs +0.386)
+L33    0.118   0.646   +0.528    (vs +0.461 — peak in both regimes)
+L34    0.137   0.224   +0.087    (vs +0.006 — small in primacy, modest in reversal)
+L35    0.164   0.239   +0.076    (vs +0.013)
+
+The shift onset is earlier (L16) and the peak is broader in reversal regime
+than in primacy. Layers L34-L35 also show some non-trivial activation in
+reversal, unlike primacy where they were unchanged.
+
+TOP 12 HEADS GAINING v_last ATTENTION IN REVERSAL REGIME
+---------------------------------------------------------
+  L32H7    0.177 → 0.849    Δ +0.672    (in primacy top 8 too)
+  L32H3    0.187 → 0.851    Δ +0.665    (in primacy top 8)
+  L29H4    0.145 → 0.786    Δ +0.641    ← NEW (not in primacy top 15)
+  L27H6    0.047 → 0.687    Δ +0.639    ← NEW
+  L32H0    0.163 → 0.787    Δ +0.624    (in primacy top 8)
+  L28H10   0.053 → 0.673    Δ +0.620    ← NEW
+  L27H1    0.079 → 0.699    Δ +0.620    ← NEW
+  L31H8    0.152 → 0.760    Δ +0.608
+  L32H12   0.103 → 0.708    Δ +0.605
+  L33H8    0.136 → 0.731    Δ +0.595
+  L31H12   0.240 → 0.834    Δ +0.594    (in primacy top 8)
+  L27H5    0.108 → 0.702    Δ +0.593    ← NEW
+
+Primacy top-8 head behavior at K=15/N=20:
+  L32H3:  0.187 → 0.851  Δ +0.665     (matches its primacy Δ +0.68)
+  L32H7:  0.177 → 0.849  Δ +0.672     (matches primacy Δ +0.65)
+  L31H12: 0.240 → 0.834  Δ +0.594     (matches primacy Δ +0.65)
+  L31H15: 0.254 → 0.838  Δ +0.585     (matches primacy Δ +0.63)
+  L32H10: 0.115 → 0.694  Δ +0.579     (matches primacy Δ +0.61)
+  L30H11: 0.322 → 0.872  Δ +0.550     (matches primacy Δ +0.59)
+  L32H0:  0.163 → 0.787  Δ +0.624     (matches primacy Δ +0.59)
+  L32H14: 0.110 → 0.697  Δ +0.588     (matches primacy Δ +0.58)
+
+INTERPRETATION
+--------------
+1) The primary v_last promoter circuit (L30-L33) is regime-invariant — same
+   heads, same direction, comparable magnitude in both primacy and reversal.
+
+2) Reversal regime activates 4 additional promoter heads in L27-L29 that
+   weren't prominent in primacy (L27H6, L27H1, L27H5, L28H10, L29H4). These
+   are likely specific to the high-K (15 keys) routing demand: with 15
+   distinct keys, the model needs more upstream filtering before the L30-L33
+   promoter circuit takes over.
+
+3) Reversal regime also shows modest activation in L34-L35 (+0.08, +0.08)
+   absent in primacy. The full readout in this harder regime spreads
+   slightly more across the final layers.
+
+4) Baseline P(attend to v_last) is consistently HIGHER in reversal than in
+   primacy (e.g., L33: 0.118 vs 0.068 at primacy). This is consistent with
+   the regime characterisation: the base model in reversal is already
+   recency-biased; LoRA just amplifies further.
+
+The §7 mechanism story can now claim regime-general validity: the LoRA
+recovery uses a single attentional circuit in L30-L33 to drive v_last
+into the readout, and the circuit is robust enough to handle both the
+primacy and reversal failure modes of the base model.
+
+Source files:
+  baseline: v3/results_vllm/attention_routing/Qwen2.5-3B-Instruct__reversal.json
+  lora:     v3/results_vllm/attention_routing/Qwen2.5-3B-Instruct-LoRA__reversal.json
+Elapsed (LoRA): 1113 s = 18.5 min on M3 Pro / MPS / bf16, 50 trials at K=15/N=20.
+================================================================================

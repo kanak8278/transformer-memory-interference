@@ -15,6 +15,7 @@ Run:
 
 import glob
 import json
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -23,6 +24,16 @@ import numpy as np
 _ROOT = Path(__file__).resolve().parent.parent.parent
 OUT_DIR = Path(__file__).resolve().parent.parent / "figures"
 OUT_DIR.mkdir(exist_ok=True)
+
+# Share heatmap helpers with the main results generator (percent-aware
+# variants come from generate_lora_tables which already wraps them).
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from generate_main_results import _acc_shade  # noqa: E402
+
+
+def _acc_pct_cell(x):
+    """Shaded accuracy cell in percent form: \cellcolor{blue!24}60\%."""
+    return rf"\cellcolor{{blue!{_acc_shade(x)}}}{x * 100:.0f}\%"
 
 IVQ_GLOB = str(_ROOT / "lora_intervention" / "results" / "dense_ivq_ivq_*.json")
 
@@ -67,7 +78,11 @@ def make_figure(out_path, cell_key="5_10"):
         return
 
     K, N = map(int, cell_key.split("_"))
-    positions = sorted(p for p in base_cell.keys() if p > 0)
+    # Drop position N: the experiment script (evaluate_ivq.py:121) substitutes
+    # the CVQ ``last value of'' prompt for k=N, so position N is operationally a
+    # CVQ query and does not belong on an IVQ axis (matches \S4's $1 < k < N$
+    # definition; we keep k=1 because the ordinal ``1st'' prompt is faithful).
+    positions = sorted(p for p in base_cell.keys() if 0 < p < N)
 
     base_y = [base_cell.get(p, 0) for p in positions]
     lora_y = [lora_cell.get(p, 0) for p in positions]
@@ -122,7 +137,7 @@ def make_panel_figure(out_path):
         if base_cell is None or lora_cell is None:
             ax.set_title(f"$K{{=}}{K}, N{{=}}{N}$ (missing)", fontsize=9)
             continue
-        positions = sorted(p for p in base_cell.keys() if p > 0)
+        positions = sorted(p for p in base_cell.keys() if 0 < p < N)
         base_y = [base_cell.get(p, 0) for p in positions]
         lora_y = [lora_cell.get(p, 0) for p in positions]
         ax.plot(positions, base_y, marker="o", markersize=3, lw=1.1, color="#d62728")
@@ -176,7 +191,7 @@ def make_summary_table(out_path):
         K, N = map(int, cell_key.split("_"))
         base_cell = data.get("base", {}).get(cell_key) or {}
         lora_cell = data.get("lora", {}).get(cell_key) or {}
-        positions = sorted(p for p in base_cell.keys() if p > 0)
+        positions = sorted(p for p in base_cell.keys() if 0 < p < N)
         if not positions:
             lines.append(f"  $({K}, {N})$ & --- & --- & --- & --- & --- & --- \\\\")
             continue
@@ -184,17 +199,17 @@ def make_summary_table(out_path):
         interm_positions = positions[1:-1] if len(positions) >= 3 else []
         b_first = base_cell.get(first_pos, 0); l_first = lora_cell.get(first_pos, 0)
         b_last  = base_cell.get(last_pos, 0);  l_last  = lora_cell.get(last_pos, 0)
-        def _pct(x): return f"{x * 100:.0f}\\%"
         if interm_positions:
             b_int = [base_cell.get(p, 0) for p in interm_positions]
             l_int = [lora_cell.get(p, 0) for p in interm_positions]
-            b_int_str = f"{_pct(min(b_int))}--{_pct(max(b_int))}"
-            l_int_str = f"{_pct(min(l_int))}--{_pct(max(l_int))}"
+            # Range strings: shade by the worst (min) endpoint, but show both.
+            b_int_str = f"{_acc_pct_cell(min(b_int))}--{_acc_pct_cell(max(b_int))}"
+            l_int_str = f"{_acc_pct_cell(min(l_int))}--{_acc_pct_cell(max(l_int))}"
         else:
             b_int_str = l_int_str = "---"
         lines.append(
-            f"  $({K}, {N})$ & {_pct(b_first)} & {b_int_str} & {_pct(b_last)} & "
-            f"{_pct(l_first)} & {l_int_str} & {_pct(l_last)} \\\\"
+            f"  $({K}, {N})$ & {_acc_pct_cell(b_first)} & {b_int_str} & {_acc_pct_cell(b_last)} & "
+            f"{_acc_pct_cell(l_first)} & {l_int_str} & {_acc_pct_cell(l_last)} \\\\"
         )
     lines += [r"\bottomrule", r"\end{tabular}"]
     Path(out_path).write_text("\n".join(lines) + "\n")
