@@ -410,7 +410,7 @@ Gemma-3-4b-it --- a different model family with the opposite
 baseline regime ($\le {+}87$ pp primacy vs Qwen's reversal) ---
 closes the gap on $28/28$ held-out ARB cells (mean FVQ $99.4\%$,
 CVQ $97.0\%$) and $16/16$ SEM OOD cells (mean FVQ $100\%$,
-CVQ $96.8\%$; Appendix~\ref{app:lora_gemma}). The recovery is
+CVQ $96.8\%$; Appendix~\ref{app:lora_gemma}, Table~\ref{tab:lora_cross_family}). The recovery is
 neither Qwen-specific nor regime-specific.
 
 \paragraph{Negative control.} The same recipe trained on GSM8K
@@ -822,7 +822,7 @@ on SEM.
 % ============================================================
 
 This appendix documents the exact text used to construct the
-inference prompts, the four format variants used in
+inference prompts (Figure~\ref{fig:prompt_system}), the four format variants used in
 \S\ref{sec:recoveries}, the string-matching rule used to score model
 responses, and the deterministic seeding scheme.
 
@@ -1288,7 +1288,7 @@ combination.}
 \label{tab:block_2x2}
 \end{table}
 
-\paragraph{Reading the decomposition.}
+\paragraph{Reading the decomposition (Table~\ref{tab:block_2x2}).}
 For \textbf{CVQ}, both ingredients help independently ($+10.6$ pp
 from numbering, $+13.6$ pp from grouping; both CIs exclude zero).
 Block's combined gain ($+14.3$ pp) is less than the sum
@@ -1804,7 +1804,7 @@ Table~\ref{tab:mechanism}.}
 \label{tab:gemma_probing}
 \end{table*}
 
-\paragraph{Logit lens.}
+\paragraph{Logit lens (Table~\ref{tab:gemma_logit_lens}).}
 Per-trial residual-stream activations at the final layer (L33) are
 projected through Gemma's unembedding matrix to recover layer-level
 token distributions; we report $\Pr(v_{\mathrm{first}})$ for RI and
@@ -1825,7 +1825,7 @@ endpoints coincide.}
 \label{tab:gemma_logit_lens}
 \end{table*}
 
-\paragraph{Attention routing.}
+\paragraph{Attention routing (Table~\ref{tab:gemma_routing}).}
 We replicate the \S\ref{sec:mechanism:promoter} attention-routing
 analysis on Gemma using an HF-direct extractor (TransformerLens
 exceeded the available GPU memory budget on Gemma-3-4b). Operating
@@ -1892,7 +1892,7 @@ gap $+40$ pp $\to$ $+24$ pp; $n=100$): Block produces a
 substantial behavioural effect at this cell, so the mechanism
 question is well posed.
 
-\paragraph{Pooled result.}
+\paragraph{Pooled result (Table~\ref{tab:block_locus_pooled}).}
 \begin{table}[!htbp]
 \centering
 \footnotesize
@@ -1956,7 +1956,7 @@ to reach comparable eval accuracy). Trainable parameters: $22.6$M
 count because $d_{\mathrm{intermediate}} > d_{\mathrm{model}}$ in
 Qwen2.5-3B. Eval accuracy reaches $97.1\%$ at step 100.
 
-\paragraph{5-cell preview.}
+\paragraph{5-cell preview (Table~\ref{tab:mlp_lora}).}
 We evaluated on the five hardest cells in the held-out grid
 ($n=100$ trials/cell). All five reach FVQ $\ge 96\%$ and
 CVQ $\ge 94\%$ --- indistinguishable from attention-only LoRA
