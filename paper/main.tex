@@ -24,8 +24,15 @@
   {\color{red!80!black}\small$\langle$\textbf{NOTE:}~#1$\rangle$}%
 }
 
-\title{What Pretraining Doesn't Learn:\\
-Current-Value Retrieval Is Latent in Pretrained LLMs}
+% ── Tighter float spacing (mainly affects appendix tables) ──────────────────
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\dbltextfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\dblfloatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+
+\title{Tracked but Suppressed:\\
+How LLMs Fail Current-Value Retrieval}
 
 \author{Anonymous}
 
@@ -52,8 +59,9 @@ training-free format change produces similar recovery.
 Across 79 published checkpoints from two model families, the failure
 is present at the earliest pretraining checkpoint we can evaluate and
 survives every post-training stage.
-The capability is present in pretrained models but not surfaced by
-current pretraining objectives.
+The capability is tracked in pretrained models but suppressed
+downstream --- present in mid-layer representations, absent from the
+output.
 Mechanistically, LoRA amplifies an attention-head circuit that
 already attends partially to the latest value in the pretrained
 model and installs downstream redundancy that absorbs upstream
@@ -372,9 +380,10 @@ Gemini-2.5-Pro is the only model at ceiling on both queries under
 Plain, consistent with its non-collapse in \S\ref{sec:failure}.
 
 Labeled and Landmark produce mixed recoveries
-(Table~\ref{tab:format}; per-model breakdown in
-App.~\ref{app:formats}): round-grouping and explicit numbering are
-both needed.
+(Table~\ref{tab:format}; per-model breakdown + 2×2 decomposition in
+App.~\ref{app:formats}): round-grouping and numbering each
+contribute to CVQ recovery, but no single property alone restores
+both queries.
 
 \subsection{LoRA intervention}
 \label{sec:recoveries:lora}
@@ -414,14 +423,17 @@ with identical hyperparameters learns arithmetic
 unchanged on every held-out cell (Appendix~\ref{app:lora}): the
 recovery is task-specific.
 
-The format and LoRA interventions converge: both close the gap and
-restore intermediate-position retrieval (Block-format per-position
-recovery in App.~\ref{app:formats},
-Figure~\ref{fig:multimodel_ivq_block}; LoRA per-position recovery
-in Figure~\ref{fig:dense_ivq}) --- one at inference time without
-gradients, the other with $0.24\%$ of the model's parameters. Together they demonstrate the capability is
-\emph{latent}: present in the pretrained architecture but not
-surfaced by default.\footnote{We treat a capability as latent when
+Format and LoRA produce the same behavioural outcome via
+\emph{operationally distinct internal loci}: pooled
+$\Pr(\text{attend to }v_{\text{last}})$ on the 15 LoRA-promoter
+heads is $0.16$ under Block versus $0.68$ under LoRA, with $0$ of
+$15$ heads reaching LoRA-level activation
+(App.~\ref{app:block_locus}). Both restore intermediate-position
+retrieval (App.~\ref{app:formats},
+Figure~\ref{fig:multimodel_ivq_block};
+Figure~\ref{fig:dense_ivq}). Together they demonstrate the
+capability is \emph{latent}: present in the pretrained architecture
+but not surfaced by default.\footnote{We treat a capability as latent when
 (i) a small, task-matched fine-tune restores it and (ii) the
 mechanism amplifies pre-existing structure rather than installing it
 from scratch. The arithmetic LoRA control (App~\ref{app:lora})
@@ -620,15 +632,18 @@ is partially knocked out --- redundancy that does not pre-exist in
 baseline.
 
 \paragraph{Cross-family replication.}
-The probing and logit-lens signatures replicate on Gemma-3-4b-it
-(different family, opposite baseline regime). The CVQ-correctness
-probe at L26--L33 rises from $0.70$--$0.73$ to $0.82$--$0.89$
-($\Delta$ between $+0.11$ and $+0.19$, all eight layers with 95\%
-CI excluding zero); logit lens at L33 shows
-$\Pr(v_{\text{last}})$ rising from $0.50$--$0.80$ to
-$\approx 1.00$ across three cells (App.~\ref{app:mechanism_gemma}).
-Pre-LoRA starting points differ between architectures (Qwen
-$0.11$, Gemma $0.50$--$0.80$); post-LoRA endpoints coincide.
+Probing, logit-lens, and attention-routing signatures replicate on
+Gemma-3-4b-it (different family, opposite baseline regime). The
+CVQ-correctness probe at L26--L33 rises from $0.70$--$0.73$ to
+$0.82$--$0.89$ ($\Delta$ between $+0.11$ and $+0.19$, all eight
+layers with CI excluding zero); logit lens at L33 shows
+$\Pr(v_{\text{last}})$ rising from $0.50$--$0.80$ to $\approx 1.00$
+across three cells; attention routing identifies a top-15
+promoter cluster spread across L14--L32 ($\Delta$ $+0.33$ to
+$+0.47$) --- same late-layer functional pattern as Qwen, with a
+distributed rather than concentrated topology
+(App.~\ref{app:mechanism_gemma}). Paired causal ablation on Gemma
+is left to future work.
 
 \paragraph{Synthesis.}
 The four methods form a closed causal chain: heads in L30--L33
@@ -671,7 +686,7 @@ redundancy: baseline leaks to the readout, LoRA absorbs it.}
 \label{tab:ablation_fourway}
 \end{table*}
 
-\begin{figure*}[t]
+\begin{figure*}[!ht]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_mechanism.pdf}
 \caption{Mechanism summary for Qwen2.5-3B-Instruct ($K{=}2, N{=}5$).
@@ -731,9 +746,10 @@ non-Transformer architectures, other languages, and format families
 beyond our four is future work.
 
 \paragraph{LoRA scope.}
-Our LoRA is attention-only ($\{Q, K, V, O\}$, rank 16). Whether
-MLP-targeted or full-parameter fine-tuning would recover the
-capability through different pre-existing circuits is open.
+Our main LoRA is attention-only ($\{Q, K, V, O\}$, rank 16). A
+5-cell preview with MLP-only LoRA also closes the gap
+(App.~\ref{app:mlp_lora}); full-grid evaluation and mechanism
+characterisation of the MLP pathway are open.
 
 \paragraph{Open questions.}
 A prose-narrative variant built on Dota~2 match commentary could
@@ -985,7 +1001,7 @@ auxiliary models reported in Appendix~\ref{app:full_results} for
 completeness; the third block is the proprietary frontier models.
 IT = instruction-tuned.
 
-\begin{table*}[h]
+\begin{table*}[!htbp]
 \centering
 \small
 \begin{tabular}{llccc}
@@ -1028,6 +1044,63 @@ provider documentation for proprietary; see
 Appendix~\ref{app:full_results}).}
 \label{tab:models}
 \end{table*}
+
+\paragraph{Model licenses.}
+All open-weight models are used under the license listed on each
+model's HuggingFace page (verified individually). Proprietary
+models are accessed through their official APIs under each
+provider's terms of service.
+
+\begin{itemize}\setlength\itemsep{0pt}
+\item \texttt{Qwen/Qwen2.5-0.5B-Instruct} (HuggingFace):
+  \textbf{Apache 2.0}.
+\item \texttt{Qwen/Qwen2.5-1.5B-Instruct} (HuggingFace):
+  \textbf{Apache 2.0}.
+\item \texttt{Qwen/Qwen2.5-3B-Instruct} (HuggingFace):
+  \textbf{Qwen Research License}
+  (\url{https://huggingface.co/Qwen/Qwen2.5-3B-Instruct/blob/main/LICENSE}).
+\item \texttt{Qwen/Qwen2.5-3B} (HuggingFace):
+  \textbf{Qwen Research License}.
+\item \texttt{Qwen/Qwen3.5-0.8B} (HuggingFace):
+  \textbf{Apache 2.0}.
+\item \texttt{Qwen/Qwen3.5-2B} (HuggingFace):
+  \textbf{Apache 2.0}.
+\item \texttt{Qwen/Qwen3.5-4B} (HuggingFace):
+  \textbf{Apache 2.0}.
+\item \texttt{Qwen/Qwen3.5-9B} (HuggingFace):
+  \textbf{Apache 2.0}.
+\item \texttt{google/gemma-3-270m-it} (HuggingFace):
+  \textbf{Gemma Terms of Use}
+  (\url{https://ai.google.dev/gemma/terms}).
+\item \texttt{google/gemma-3-1b-it} (HuggingFace):
+  \textbf{Gemma Terms of Use}.
+\item \texttt{google/gemma-3-4b-it} (HuggingFace):
+  \textbf{Gemma Terms of Use}.
+\item \texttt{TinyLlama/TinyLlama-1.1B-Chat-v1.0} (HuggingFace):
+  \textbf{Apache 2.0}.
+\item \texttt{stabilityai/stablelm-2-1\_6b-chat} (HuggingFace):
+  \textbf{Stability AI Non-Commercial Research Community License}
+  (\url{https://huggingface.co/stabilityai/stablelm-2-1_6b-chat/blob/main/LICENSE.md}).
+\item \texttt{EleutherAI/pythia-410m} (HuggingFace):
+  \textbf{Apache 2.0}.
+\item \texttt{HuggingFaceTB/SmolLM2-1.7B-Instruct} (HuggingFace):
+  \textbf{Apache 2.0}.
+\item \texttt{HuggingFaceTB/SmolLM3-3B} (HuggingFace):
+  \textbf{Apache 2.0}.
+\item \textbf{GPT-4.1, GPT-4.1-mini} (OpenAI API):
+  OpenAI Terms of Service
+  (\url{https://openai.com/policies/terms-of-use/}).
+\item \textbf{Claude-4.5-Haiku, Claude-4.5-Sonnet} (Anthropic API):
+  Anthropic Commercial Terms of Service
+  (\url{https://www.anthropic.com/legal/commercial-terms}).
+\item \textbf{Gemini-2.5-Flash, Gemini-2.5-Pro} (Google API):
+  Gemini API Additional Terms of Service
+  (\url{https://ai.google.dev/gemini-api/terms}).
+\end{itemize}
+
+The LoRA adapter we release is distributed under the
+\textbf{Qwen Research License}, matching the license of its base
+model (\texttt{Qwen/Qwen2.5-3B-Instruct}).
 
 % ============================================================
 \section{Full Model Results}
@@ -1177,6 +1250,55 @@ Qwen2.5-3B-Instruct in Figure~\ref{fig:dense_ivq}.}
 \label{fig:multimodel_ivq_block}
 \end{figure*}
 
+\paragraph{Block 2×2 decomposition.}
+The Block format combines two design properties: round-grouping
+(entries clustered by update round) and round-numbering (headers
+labelling each round). The Labeled and Landmark formats separate
+these: Labeled uses per-entry numbering without grouping, Landmark
+uses grouping without numbering. We decompose Block's effect
+across 36 (model, $K$, $N$) cells from the proprietary ucurve
+sweep, bootstrap 95\% CIs (\,$n_{\text{boot}} {=} 2000$, seed 17\,).
+
+\begin{table}[h]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lc}
+\toprule
+\textbf{CVQ contrast} & \textbf{$\Delta$\,[95\% CI]} \\
+\midrule
+Numbering (Labeled $-$ Plain) & $+0.106$\,[$+0.065$,\,$+0.153$] \\
+Grouping (Landmark $-$ Plain) & $+0.136$\,[$+0.099$,\,$+0.177$] \\
+Combined (Block $-$ Plain)    & $+0.143$\,[$+0.085$,\,$+0.213$] \\
+Super-additivity              & $-0.100$\,[$-0.143$,\,$-0.062$] \\
+\midrule
+\textbf{FVQ contrast} & \textbf{$\Delta$\,[95\% CI]} \\
+\midrule
+Numbering (Labeled $-$ Plain) & $+0.002$\,[$-0.000$,\,$+0.005$] \\
+Grouping (Landmark $-$ Plain) & $-0.142$\,[$-0.210$,\,$-0.086$] \\
+Combined (Block $-$ Plain)    & $-0.001$\,[$-0.005$,\,$+0.001$] \\
+Super-additivity              & $+0.141$\,[$+0.085$,\,$+0.213$] \\
+\bottomrule
+\end{tabular}
+\caption{Block 2$\times$2 decomposition. Both numbering and grouping
+contribute to CVQ recovery, but their combination undershoots the
+sum (sub-additive). For FVQ, grouping alone hurts ($-14.2$ pp) and
+numbering rescues; Block's no-cost FVQ behaviour depends on the
+combination.}
+\label{tab:block_2x2}
+\end{table}
+
+\paragraph{Reading the decomposition.}
+For \textbf{CVQ}, both ingredients help independently ($+10.6$ pp
+from numbering, $+13.6$ pp from grouping; both CIs exclude zero).
+Block's combined gain ($+14.3$ pp) is less than the sum
+(super-additivity $-0.10$, CI excludes zero): the two ingredients
+partially overlap. For \textbf{FVQ}, numbering alone is null and
+grouping alone \emph{hurts} ($-14.2$ pp); Block recovers because
+numbering compensates the grouping cost. Block's ability to lift
+CVQ \emph{without} sacrificing FVQ is therefore not attributable
+to either property alone --- it depends on the combination.
+
 % ============================================================
 \section{Dense Intermediate-Position Retrieval — Full Sweep}
 \label{app:dense_ivq}
@@ -1233,40 +1355,41 @@ the released codebase.
 \paragraph{Adapter and optimiser.}
 The adapter is fitted with PEFT \citep{hu2021lora} on top of the
 frozen base model.
-LoRA matrices are inserted into the four attention projections
-$\{Q, K, V, O\}$ of every transformer layer; MLP and embedding
-weights are left unmodified.
-Hyperparameters are listed in Table~\ref{tab:lora_hparams}.
+Table~\ref{tab:lora_hparams} lists the hyperparameters; LoRA matrices
+are inserted into the four attention projections $\{Q, K, V, O\}$ of
+every transformer layer, and MLP and embedding weights are left
+unmodified.
 
-\begin{table*}[h]
+\begin{table}[!htbp]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{ll}
 \toprule
 \textbf{Setting} & \textbf{Value} \\
 \midrule
-Base model            & Qwen2.5-3B-Instruct \\
-LoRA rank             & 16 \\
-LoRA $\alpha$         & 32 \\
-LoRA dropout          & 0.05 \\
-Target modules        & q\_proj, k\_proj, v\_proj, o\_proj \\
-Trainable parameters  & 7.4M (0.24\% of model) \\
+Base model           & Qwen2.5-3B-Instruct \\
+LoRA rank            & 16 \\
+LoRA $\alpha$        & 32 \\
+LoRA dropout         & 0.05 \\
+Target modules       & q/k/v/o\_proj \\
+Trainable parameters & 7.4M (0.24\% of model) \\
 \midrule
-Learning rate         & $2 \times 10^{-4}$ \\
-LR schedule           & cosine decay, 100-step linear warm-up \\
-Optimiser             & paged AdamW (8-bit) \\
-Epochs                & 2 \\
-Batch size            & 8 (×8 grad accum = effective 64) \\
-Max sequence length   & 2{,}048 \\
-Mixed precision       & bfloat16 \\
+Learning rate        & $2 \times 10^{-4}$ \\
+LR schedule          & cosine, 100-step linear warm-up \\
+Optimiser            & paged AdamW (8-bit) \\
+Epochs               & 2 \\
+Batch size           & 8 ($\times$8 accum = eff.\ 64) \\
+Max sequence length  & 2{,}048 \\
+Mixed precision      & bfloat16 \\
 \midrule
-Training examples     & 18{,}000 (+2{,}000 validation, same cells, different seeds) \\
-Checkpoint selected   & best validation loss (step 564, end of epoch 2) \\
+Training examples    & 18k (+2k val, different seeds) \\
+Checkpoint selected  & best val loss (step 564, end of ep.\ 2) \\
 \bottomrule
 \end{tabular}
 \caption{LoRA training hyperparameters.}
 \label{tab:lora_hparams}
-\end{table*}
+\end{table}
 
 \paragraph{Training data composition.}
 Each training example is one $(K, N)$ stream with a single query
@@ -1286,27 +1409,22 @@ Table~\ref{tab:lora_cells} lists both grids; held-out cells extend
 roughly $10\times$ beyond training in stream length ($K \times N$
 from $\le 200$ at training to $\le 2{,}250$ at evaluation).
 
-\begin{table*}[h]
+\begin{table}[!htbp]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{ll}
 \toprule
 \textbf{Split} & \textbf{Cells $(K, N)$} \\
 \midrule
-Training (16 cells) & $K \in \{2, 3, 5, 10\}$, $N \in \{5, 10, 15, 20\}$ \\
+Training (16) & $K \in \{2, 3, 5, 10\}$, $N \in \{5, 10, 15, 20\}$ \\
 \midrule
-Held-out (28 cells) &
-$K{=}7, N \in \{30, 50, 75\}$ \\
-                    &
-$K{=}10, N \in \{30, 50, 75\}$ \\
-                    &
-$K{=}15, N \in \{15, 20, 30, 50, 75\}$ \\
-                    &
-$K{=}20, N \in \{15, 20, 30, 50, 75\}$ \\
-                    &
-$K{=}25, N \in \{10, 15, 20, 30, 50, 75\}$ \\
-                    &
-$K{=}30, N \in \{10, 15, 20, 30, 50, 75\}$ \\
+Held-out (28) & $K{=}7, N \in \{30, 50, 75\}$ \\
+              & $K{=}10, N \in \{30, 50, 75\}$ \\
+              & $K{=}15, N \in \{15, 20, 30, 50, 75\}$ \\
+              & $K{=}20, N \in \{15, 20, 30, 50, 75\}$ \\
+              & $K{=}25, N \in \{10, 15, 20, 30, 50, 75\}$ \\
+              & $K{=}30, N \in \{10, 15, 20, 30, 50, 75\}$ \\
 \bottomrule
 \end{tabular}
 \caption{Training and held-out cells for the LoRA intervention.
@@ -1314,7 +1432,7 @@ Training cells cover only low $(K, N)$; held-out cells extend to
 $K{=}30$ and $N{=}75$, well outside the training distribution in
 both dimensions.}
 \label{tab:lora_cells}
-\end{table*}
+\end{table}
 
 \paragraph{Category split.}
 Of the 46 semantic categories in the Arbitrary-Single pool
@@ -1322,9 +1440,9 @@ Of the 46 semantic categories in the Arbitrary-Single pool
 are held out for evaluation; no category appears in both splits
 (Table~\ref{tab:lora_categories}).
 
-\begin{table*}[h]
+\begin{table*}[!htbp]
 \centering
-\small
+\footnotesize
 \begin{tabular}{p{0.45\textwidth} p{0.45\textwidth}}
 \toprule
 \textbf{Training (35)} & \textbf{Held-out (11)} \\
@@ -1348,10 +1466,44 @@ held out for evaluation; no overlap.}
 \label{tab:lora_categories}
 \end{table*}
 
-\paragraph{Compute.}
-End-to-end training (18k examples, two epochs, effective batch~64)
-runs to completion on a single L40S GPU in approximately
-1.5 hours, including evaluation passes after each epoch.
+\paragraph{Compute Budget and Software Stack.}
+Open-weight model evaluation (14-model behavioural sweep,
+format-intervention sweep, intermediate-position sweep,
+training-dynamics across 79 SmolLM2/3 checkpoints, mechanism
+probing) and the main Qwen2.5-3B-Instruct LoRA training ran on a
+single NVIDIA L40S GPU node, totalling roughly $120$ GPU-hours
+wall-clock. The Gemma-3-4b-it family-control LoRA and the
+cross-family mechanism analyses ran on a SageMaker NVIDIA L4 node.
+Proprietary-model evaluation is via official APIs and uses no local
+GPU. All decoding is greedy (temperature 0) with maximum new
+tokens 32.
+
+\textbf{Hardware:}
+\begin{itemize}\setlength\itemsep{0pt}
+\item NVIDIA L40S (48\,GB VRAM): main open-weight evaluation,
+  Qwen2.5-3B-Instruct LoRA training. $\sim$120 GPU-hours total.
+\item NVIDIA L4 (23\,GB VRAM, Ubuntu 24.04 LTS, driver 595.58.03):
+  Gemma family-control LoRA, cross-family mechanism analyses.
+\item Proprietary APIs (no local GPU): GPT-4.1, GPT-4.1-mini,
+  Claude-4.5-Haiku, Claude-4.5-Sonnet, Gemini-2.5-Flash,
+  Gemini-2.5-Pro.
+\end{itemize}
+
+\textbf{Software:}
+\begin{itemize}\setlength\itemsep{0pt}
+\item Python 3.12.13; PyTorch 2.11.0 (CUDA 13.0, cuDNN 9.19).
+\item \texttt{transformers} 4.57.6, \texttt{tokenizers} 0.22.2,
+  \texttt{safetensors} 0.7.0, \texttt{sentencepiece} 0.2.1,
+  \texttt{huggingface-hub} 0.36.2.
+\item LoRA training: \texttt{peft} 0.19.1, \texttt{trl} 1.4.0
+  (\texttt{SFTTrainer}), \texttt{datasets} 4.8.5,
+  \texttt{accelerate} 1.13.0, \texttt{bitsandbytes} 0.49.2.
+\item Batched inference: \texttt{vllm} 0.21.0.
+\item Mechanistic analysis: \texttt{transformer\_lens} 3.2.1.
+\item Probing + statistics: \texttt{scikit-learn} 1.7.2,
+  \texttt{numpy} 2.3.5, \texttt{pandas} 3.0.3.
+\item Plotting: \texttt{matplotlib} 3.10.9.
+\end{itemize}
 
 \paragraph{Pre-registered controls.}
 We pre-registered two controls before running the main experiment.
@@ -1635,9 +1787,10 @@ the eight late layers L26--L33 with parametric 95\% CIs
 (mean $\pm 1.96 \cdot \sigma / \sqrt{5}$, pooled variance for
 $\Delta$).
 
-\begin{table*}[h]
+\begin{table*}[t]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{3pt}
 \input{figures/tab_gemma_probing.tex}
 \caption{Gemma-3-4b-it: $\Delta$ (LoRA $-$ base) in probing accuracy
 across late layers, with 95\% CIs. Bold entries exclude zero. The
@@ -1656,7 +1809,7 @@ token distributions; we report $\Pr(v_{\mathrm{first}})$ for RI and
 $\Pr(v_{\mathrm{last}})$ for CVQ, averaged over 100 trials per cell
 with nonparametric bootstrap 95\% CIs (n\_boot = 2000, seed 17).
 
-\begin{table*}[h]
+\begin{table*}[t]
 \centering
 \scriptsize
 \input{figures/tab_gemma_logit_lens.tex}
@@ -1669,5 +1822,165 @@ starting points differ between architectures, but the post-LoRA
 endpoints coincide.}
 \label{tab:gemma_logit_lens}
 \end{table*}
+
+\paragraph{Attention routing.}
+We replicate the \S\ref{sec:mechanism:promoter} attention-routing
+analysis on Gemma using an HF-direct extractor (TransformerLens
+exceeded the available GPU memory budget on Gemma-3-4b). Operating
+point $K{=}2, N{=}30$, 50 trials, expA\_CVQ. The top-15 promoter
+heads on Gemma span L14--L32 (19 of 34 layers), with $\Delta$ in
+$\Pr(\text{attend to }v_{\mathrm{last}})$ ranging from $+0.33$ to
+$+0.47$. Per-layer mean $\Delta$ peaks at L25 ($+0.31$), with
+secondary peaks at L20 ($+0.26$) and L30 ($+0.24$).
+
+\begin{table*}[!htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Property} & \textbf{Qwen2.5-3B-Inst} & \textbf{Gemma-3-4b-it} \\
+\midrule
+Layers $\times$ heads        & 36L $\times$ 16H & 34L $\times$ 8H (GQA) \\
+Top-15 promoter range        & L30--L33 (4L)    & L14--L32 (19L) \\
+Max single-head $\Delta$     & $+0.68$ (L32H3)  & $+0.47$ (L25H0) \\
+Baseline suppressor cluster  & L26--L30 (late)  & L17--L19 + L30H6 \\
+Topology                     & concentrated     & distributed \\
+\bottomrule
+\end{tabular}
+\caption{Cross-architecture attention-routing comparison. Both
+architectures recover via late-layer attention reweighting toward
+$v_{\mathrm{last}}$. Qwen's promoters concentrate in the last four
+layers; Gemma's spread across mid-to-late depth with three local
+peaks. The promoter topology in each architecture sits close to
+its baseline suppressor cluster.}
+\label{tab:gemma_routing}
+\end{table*}
+
+Both architectures recover the FVQ--CVQ task via late-layer
+attention reweighting; the spatial distribution differs (Qwen
+concentrated, Gemma distributed), but the functional pattern
+--- promotion of $v_{\mathrm{last}}$ at late layers --- is shared.
+Paired Stage-3 ablation on Gemma is left to future work; the
+probing, logit-lens, and attention-routing convergences here are
+the cross-family evidence we report.
+
+% ============================================================
+\section{Block format and LoRA recruit different internal circuits}
+\label{app:block_locus}
+% ============================================================
+
+\S\ref{sec:recoveries:lora} reports that format intervention and
+LoRA both close the FVQ--CVQ gap behaviourally. We test whether
+the two interventions share an internal locus on
+Qwen2.5-3B-Instruct.
+
+\paragraph{Experimental design.}
+Three conditions at $K{=}2, N{=}30$, 50 trials each (expA\_CVQ):
+\textbf{(A)} base + Plain format, \textbf{(B)} base + Block format,
+\textbf{(C)} base + main LoRA + Plain format. For each of the 15
+LoRA-promoter heads in L30--L33 identified in
+\S\ref{sec:mechanism:promoter}, we compute
+$\Pr(\text{attend to }v_{\mathrm{last}})$ at the generation
+position.
+
+\paragraph{Behavioural pre-check.} At $K{=}2, N{=}30$ on Qwen,
+Block lifts CVQ from $49\%$ to $74\%$ (FVQ $89\% \to 98\%$;
+gap $+40$ pp $\to$ $+24$ pp; $n=100$): Block produces a
+substantial behavioural effect at this cell, so the mechanism
+question is well posed.
+
+\paragraph{Pooled result.}
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lc}
+\toprule
+\textbf{Condition} & \textbf{Pooled $\Pr(\text{attend})$} \\
+\midrule
+A: base + Plain        & $0.103$ \\
+B: base + Block        & $0.160$ \\
+C: base + LoRA + Plain & $0.676$ \\
+\midrule
+$\Delta$(B $-$ A)      & $+0.056$ \\
+$\Delta$(C $-$ A)      & $+0.573$ \\
+$\Delta$(B $-$ C)      & $-0.516$ \\
+\bottomrule
+\end{tabular}
+\caption{Pooled $\Pr(\text{attend to }v_{\mathrm{last}})$ across
+the 15 LoRA-promoter heads in L30--L33. Block format barely
+activates the cluster ($+0.056$ above baseline); LoRA strongly
+activates it ($+0.573$). Block falls $51$ pp short of LoRA's
+activation despite producing the same behavioural recovery.}
+\label{tab:block_locus_pooled}
+\end{table}
+
+\paragraph{Per-head verdict.}
+Out of 15 LoRA-promoter heads, \textbf{0 reach LoRA-level
+activation under Block} (pre-registered criterion:
+$\Pr_B$ within bootstrap CI of $\Pr_C$ AND $\Pr_B > 0.4$). 4 of 15
+are statistically indistinguishable from baseline under Block
+(L31H15, L32H10, L32H14, L33H14). The remaining 11 partially
+activate but stay well below LoRA. No head reaches LoRA's
+activation level.
+
+\paragraph{Verdict.} Block format and LoRA produce the same
+behavioural outcome via different internal routes. Block presumably
+exploits the explicit \texttt{[Round j]} headers as a discrete-step
+positional cue; LoRA installs attention reweighting in the
+L30--L33 cluster. The relationship is operational distinctness,
+not shared mechanism.
+
+% ============================================================
+\section{MLP-only LoRA control}
+\label{app:mlp_lora}
+% ============================================================
+
+\S\ref{sec:recoveries:lora} fits LoRA on the four attention
+projections $\{Q, K, V, O\}$. A skeptical reading would observe
+that attention-only LoRA \emph{can only} reweight attention, so
+``amplification'' findings are partly structural. To probe this,
+we train a control LoRA targeting only MLP modules
+($\{$gate, up, down$\}_{\text{proj}}$) on the same data.
+
+\paragraph{Training.}
+Identical configuration to \S\ref{sec:recoveries:lora}: rank 16,
+$\alpha {=} 32$, dropout $0.05$, lr $2 \times 10^{-4}$ cosine,
+effective batch 64, bf16, on Qwen2.5-3B-Instruct. Capped at 100
+optimisation steps (the attention-only LoRA took $\sim$ 564 steps
+to reach comparable eval accuracy). Trainable parameters: $22.6$M
+($0.73\%$ of model weights), $\sim$1.5$\times$ the attention-only
+count because $d_{\mathrm{intermediate}} > d_{\mathrm{model}}$ in
+Qwen2.5-3B. Eval accuracy reaches $97.1\%$ at step 100.
+
+\paragraph{5-cell preview.}
+We evaluated on the five hardest cells in the held-out grid
+($n=100$ trials/cell). All five reach FVQ $\ge 96\%$ and
+CVQ $\ge 94\%$ --- indistinguishable from attention-only LoRA
+within trial-level noise. Full 28-cell evaluation and
+Semantic-Multi OOD test are open.
+
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcc}
+\toprule
+$(K, N)$ & \textbf{Base FVQ / CVQ} & \textbf{+MLP-LoRA FVQ / CVQ} \\
+\midrule
+$(10, 50)$ & 42\% / 50\% & \textbf{98\% / 96\%} \\
+$(15, 20)$ & 32\% / 58\% & \textbf{100\% / 98\%} \\
+$(20, 30)$ & 21\% / 51\% & \textbf{96\% / 96\%} \\
+$(25, 75)$ &  6\% / 60\% & \textbf{100\% / 94\%} \\
+$(30, 75)$ &  1\% / 56\% & \textbf{96\% / 96\%} \\
+\bottomrule
+\end{tabular}
+\caption{MLP-only LoRA on Qwen2.5-3B-Instruct, 5-cell preview at
+the hardest part of the held-out grid (100 trials/cell). All five
+cells close to ceiling; comparable to attention-only LoRA on the
+same cells (cf.\ Table~\ref{tab:lora_arb}).}
+\label{tab:mlp_lora}
+\end{table}
 
 \end{document}
