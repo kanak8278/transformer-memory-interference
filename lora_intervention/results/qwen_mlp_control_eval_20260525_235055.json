@@ -1,0 +1,126 @@
+{
+  "run_name": "qwen_mlp_control",
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "adapter": "lora_intervention/checkpoints/qwen_mlp_lora/final",
+  "timestamp": "20260525_235055",
+  "max_trials": 100,
+  "results": {
+    "ARBITRARY_SINGLE": {
+      "10_50": {
+        "num_keys": 10,
+        "num_updates": 50,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.98,
+            "ci_lower": 0.9195,
+            "ci_upper": 1,
+            "n": 50
+          },
+          "PI": {
+            "accuracy": 0.96,
+            "ci_lower": 0.8906,
+            "ci_upper": 1,
+            "n": 50
+          }
+        },
+        "gap": 0.02,
+        "regime": "A",
+        "n_trials": 50,
+        "stopped_early": true
+      },
+      "15_20": {
+        "num_keys": 15,
+        "num_updates": 20,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9505,
+            "ci_upper": 1,
+            "n": 50
+          },
+          "PI": {
+            "accuracy": 0.98,
+            "ci_lower": 0.9195,
+            "ci_upper": 1,
+            "n": 50
+          }
+        },
+        "gap": 0.02,
+        "regime": "A",
+        "n_trials": 50,
+        "stopped_early": true
+      },
+      "20_30": {
+        "num_keys": 20,
+        "num_updates": 30,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.96,
+            "ci_lower": 0.8906,
+            "ci_upper": 1,
+            "n": 50
+          },
+          "PI": {
+            "accuracy": 0.96,
+            "ci_lower": 0.8906,
+            "ci_upper": 1,
+            "n": 50
+          }
+        },
+        "gap": 0.0,
+        "regime": "A",
+        "n_trials": 50,
+        "stopped_early": true
+      },
+      "25_75": {
+        "num_keys": 25,
+        "num_updates": 75,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 1.0,
+            "ci_lower": 0.9637,
+            "ci_upper": 1,
+            "n": 70
+          },
+          "PI": {
+            "accuracy": 0.9429,
+            "ci_lower": 0.8809,
+            "ci_upper": 1,
+            "n": 70
+          }
+        },
+        "gap": 0.0571,
+        "regime": "AB",
+        "n_trials": 70,
+        "stopped_early": true
+      },
+      "30_75": {
+        "num_keys": 30,
+        "num_updates": 75,
+        "dataset": "ARBITRARY_SINGLE",
+        "stats": {
+          "RI": {
+            "accuracy": 0.96,
+            "ci_lower": 0.8906,
+            "ci_upper": 1,
+            "n": 50
+          },
+          "PI": {
+            "accuracy": 0.96,
+            "ci_lower": 0.8906,
+            "ci_upper": 1,
+            "n": 50
+          }
+        },
+        "gap": 0.0,
+        "regime": "A",
+        "n_trials": 50,
+        "stopped_early": true
+      }
+    }
+  }
+}

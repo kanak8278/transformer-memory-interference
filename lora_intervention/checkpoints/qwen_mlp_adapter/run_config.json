@@ -1,0 +1,49 @@
+{
+  "run_name": "qwen_mlp_lora",
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "purpose": "§7 critique #7 — does MLP-only LoRA also close the FVQ/CVQ gap? Tests whether the 'amplification via attention' framing is structurally circular (attention-only LoRA can only reweight; can't install MLP features).",
+  "train_file": "lora_intervention/data/train.jsonl",
+  "val_file": "lora_intervention/data/val.jsonl",
+  "data_source": "deterministic-seed ARB train (same 18k examples as main Qwen LoRA)",
+  "epochs_planned": "100 steps (max-steps)",
+  "steps_completed": 100,
+  "lr": 0.0002,
+  "rank": 16,
+  "lora_alpha": 32,
+  "target_modules": ["gate_proj", "up_proj", "down_proj"],
+  "comment": "Target modules are MLP-ONLY. Attention {q,k,v,o}_proj are FROZEN in this run.",
+  "batch_size": 2,
+  "grad_accum": 32,
+  "max_seq_len": 1280,
+  "attn_implementation": "sdpa",
+  "dtype": "bfloat16",
+  "gradient_checkpointing": true,
+  "trainable_params": 22560768,
+  "total_params": 3108499456,
+  "trainable_pct": 0.7258,
+  "compared_to_attention_only_lora": {
+    "attention_only_trainable": 14942208,
+    "attention_only_trainable_pct": 0.482,
+    "mlp_only_trainable": 22560768,
+    "mlp_only_trainable_pct": 0.7258,
+    "ratio": 1.51,
+    "note": "MLP-LoRA has ~1.5x more trainable capacity (intermediate_size > hidden_size)."
+  },
+  "train_loss_step100": 0.076,
+  "eval_loss_step100": 0.091,
+  "eval_token_accuracy_step100": 0.971,
+  "fvq_cvq_5cell_eval": {
+    "n_cells_tested": 5,
+    "cells": ["10_50", "15_20", "20_30", "25_75", "30_75"],
+    "n_cells_fixed": 5,
+    "ri_min": 0.96,
+    "ri_max": 1.00,
+    "pi_min": 0.94,
+    "pi_max": 0.98,
+    "compared_to": {
+      "attention_only_lora_section_5_1": "28/28 fixed at higher trial count",
+      "arith_control_lora": "0/28 fixed (catastrophic forgetting)"
+    }
+  },
+  "implication": "Both attention-only and MLP-only LoRA close the gap. The capacity is in the network; either pathway suffices. The §7 'amplification not installation' claim must be reframed: the L30-L33 attention promoter heads (§5.1) are A WAY to express the task, not the ONLY way."
+}
