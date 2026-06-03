@@ -1,0 +1,208 @@
+% ============================================================
+% TIGHTENED §7 — proposed cuts (do not include in main.tex yet)
+%
+% This is a *side-by-side comparison file*.  Read alongside the current
+% §7 in main.tex (lines 664–868) to evaluate the cut decisions.
+%
+% Compared to the current version:
+%   - Opening: factually corrected ("amplifies" not "installs"; gain-and-
+%     robustness, not routing) and tightened by ~2 lines.
+%   - §7.1: hardness-scaling parenthetical for K=2/N=50 cut (already in
+%     Table 12); final 2 sentences merged.
+%   - §7.2: 4 paragraphs collapsed to 3.  Specific head IDs (L32H3 etc.)
+%     moved to App J.  Unchanged-layer claim compressed.  "LoRA does not
+%     install from scratch" sentence merged with the "Importantly" pivot.
+%     Token-level + representational consequence merged into one paragraph.
+%   - §7.3: caveat parenthetical compressed.  "Final-layer retains a
+%     measurable hit" sentence cut as redundant with the numbers it
+%     paraphrases.  Amplification interpretation merged with the
+%     pre-existence claim.
+%   - Synthesis: cut the "two things in this chain" repetition (already
+%     established in §7.3).  Trimmed the substrate-list sentence.
+%
+% Net change: ~206 → ~178 lines.  Every load-bearing claim is preserved.
+% ============================================================
+
+% ============================================================
+\section{Mechanism: What LoRA Changes}
+\label{sec:mechanism}
+% ============================================================
+
+The recovery in \S\ref{sec:recoveries:lora} shows the capability is
+present in the pretrained architecture; \S\ref{sec:dynamics} shows it
+remains unsurfaced through every documented training stage. We now
+ask what changes inside the model when an 18{,}000-example LoRA
+surfaces it. Four mechanistic methods --- probing, logit lens,
+attention routing, and causal ablation --- converge on the same
+answer: the pretrained model already represents
+$v_{\text{last}}$ internally and has an intact readout, but the
+partial circuit between them is too weak and lacks downstream
+redundancy. LoRA amplifies that partial circuit in 15 attention heads
+of layers 30--33 and installs new downstream redundancy at L33+.
+All measurements use Qwen2.5-3B-Instruct on Arbitrary-Single at
+$K{=}2, N{=}5$ unless noted otherwise (layer indexing 0-based, L0--L35);
+Table~\ref{tab:mechanism} reports bootstrap 95\% CIs on the focal deltas
+and Figure~\ref{fig:mechanism} shows the per-layer trajectories.
+
+\subsection{The substrate already exists in baseline}
+\label{sec:mechanism:substrate}
+
+A linear probe trained on the residual stream to distinguish the FVQ
+from the CVQ prompt reaches 100\% accuracy from layer~6 onward in
+\emph{both} the baseline and LoRA models; LoRA adds nothing to this
+signal. The pretrained model already knows which question it is being
+asked. A second probe, trained to predict whether the model
+\emph{will get the FVQ right}, reaches 81\% accuracy at L33 in baseline ---
+the model also internally tracks FVQ correctness.
+
+What the baseline does \emph{not} encode is whether it will get the
+CVQ right. The CVQ-correctness probe at L27--L33 sits at chance in
+baseline (53--58\%) while the corresponding FVQ probe is at 77--81\%.
+Logit lens reveals the parallel pattern at the token level: at L32 of
+the baseline, $\Pr(v_{\text{last}}){=}0.34$ --- the answer surfaces
+briefly --- then decays to $\Pr(v_{\text{last}}){=}0.25$ at L35.
+\emph{Found then suppressed.} The pretrained model identifies the
+query, partially computes the answer, and has an intact readout in
+layers 34--35 (their attention patterns are nearly identical pre- and
+post-LoRA; Figure~\ref{fig:mechanism}b); it fails only because the
+partial answer does not propagate.
+
+\subsection{LoRA amplifies a partial v\textsubscript{last} promoter
+circuit in layers 30--33}
+\label{sec:mechanism:promoter}
+
+Attention routing locates the change precisely. We measure, per head,
+the probability of attending from the generation token to the round
+containing $v_{\text{last}}$ under the CVQ prompt. Fifteen heads in the
+L30--L33 band (Figure~\ref{fig:mechanism}b) gain substantial
+$v_{\text{last}}$ attention: pre-LoRA values of 0.05--0.23 rise to
+0.60--0.86 post-LoRA --- a 4--12$\times$ increase per head (specific
+heads listed in Appendix~\ref{app:mechanism}). Layers 0--20 and 34--35
+attention patterns are essentially unchanged (small negative shifts
+under $-0.06$); the rewiring is spatially confined to a four-layer
+band in the upper-middle of the stack.
+
+The pre-LoRA values are non-zero. These heads were already
+\emph{partial} $v_{\text{last}}$ attenders before any LoRA training,
+and (\S\ref{sec:mechanism:causal}) they already carried causal
+$v_{\text{last}}$ signal in baseline. LoRA does not install them;
+it amplifies a partial pre-existing circuit. The token-level
+consequence is immediate: baseline L32 has
+$\Pr(v_{\text{last}}){=}0.34$, post-LoRA L32 has 0.99 at
+$K{=}2, N{=}5$ and 0.62 at the harder $K{=}2, N{=}50$ cell, and
+$\Pr(v_{\text{last}})$ saturates to 1.0 by L33--L35 even at the
+harder cell. At the representational level the CVQ-correctness probe
+rises from chance to 92--94\% at L27--L33 (bootstrap 95\% CI
+$\Delta {=} +0.36~[+0.21, +0.50]$ at L33), installed in the same
+late layers that already carried the FVQ-correctness signal.
+
+A naive alternative would be that LoRA \emph{removes} the late-layer
+suppression that attenuated $v_{\text{last}}$ in baseline. Stage~3
+causal ablation rules this out. Ablating the five baseline suppressor
+heads (L26H3, L27H3, L29H3, L29H4, L30H3) in the LoRA model still
+produces a measurable release of $v_{\text{last}}$ at L31
+($\Delta{=}{+}0.150$, \emph{larger} than the $+0.078$ release seen
+when the same heads are ablated in baseline). The suppressors keep
+firing post-LoRA with more signal to suppress; LoRA strengthens a
+parallel promoter pathway that overpowers them.
+
+\subsection{Two LoRA changes: amplification and downstream
+redundancy}
+\label{sec:mechanism:causal}
+
+To distinguish what LoRA \emph{installs} from what it \emph{amplifies}, we
+ablate the eight highest-attribution promoter heads in both the
+baseline and the LoRA model and compare the resulting trajectories.
+Table~\ref{tab:ablation_fourway} summarises the four conditions;
+within-run paired $\Delta$ at L32 is the trustworthy statistic
+(trial seeds are not pinned across runs).
+
+Two findings emerge. First, ablating the eight heads in the
+\emph{baseline} model drops L32 $\Pr(v_{\text{last}})$ by $-0.38$,
+\emph{comparable in magnitude to the $-0.28$ drop in the LoRA model}.
+The heads are not LoRA-installed; they already carry partial causal
+$v_{\text{last}}$ signal pre-training (consistent with their non-zero
+pre-LoRA $\Pr(\text{attend})$), and LoRA's contribution is best
+described as \emph{amplification} of a partially functional circuit.
+
+Second, the downstream propagation of the perturbation differs
+sharply between baseline and LoRA. In baseline, ablating the L30--L33
+promoters propagates through readout: L33 $\Delta {=} -0.13$, L35
+$\Delta {=} -0.09$. In the LoRA model, the same ablation is absorbed
+by L33+: L33 $\Delta {=} {+}0.00$, L35 $\Delta {=} {+}0.00$. The
+downstream layers have gained compensatory pathways that re-amplify
+$v_{\text{last}}$ when the upstream signal is partially knocked out.
+This redundancy is genuinely new --- it does not pre-exist in the
+baseline architecture in any form we can detect by ablation.
+
+\paragraph{Synthesis.}
+The four methods form a closed causal chain: attention heads in
+L30--L33 attend to $v_{\text{last}}$ (attention routing) $\to$
+$v_{\text{last}}$ builds in the residual stream at L32 (logit lens)
+$\to$ a CVQ-correctness feature becomes linearly decodable at L27--L33
+(probing) $\to$ behaviour recovers (\S\ref{sec:recoveries:lora}).
+The substrate was therefore even more complete than a first reading
+suggests: the $v_{\text{last}}$ representation, condition
+discrimination, intact readout, \emph{and} a partial promoter circuit
+were all present pre-training. The pretraining failure is a gain and
+robustness failure --- the partial circuit fires too weakly to win
+the tug-of-war against suppression, and the readout has no redundancy
+to compensate when the upstream signal is incomplete. 18\,000 LoRA
+examples turn up the gain and install error-correcting pathways. We
+discuss what this implies for the broader latent capability claim in
+\S\ref{sec:discussion}.
+
+\begin{table*}[t]
+\centering
+\small
+\input{figures/tab_mechanism.tex}
+\caption{Cross-method bootstrap 95\% CIs on the focal mechanistic
+deltas at the L30--L33 band, baseline vs +LoRA. Probing and
+attention routing aggregate across the relevant heads or layers;
+logit-lens rows report $\Pr(v_{\text{last}})$ at L32 for the focal
+$(K, N)$ cells in our analysis.}
+\label{tab:mechanism}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\small
+\input{figures/tab_ablation_fourway.tex}
+\caption{Stage~3C four-way causal-ablation summary. Each row reports
+the paired within-run $\Delta {=}$ ablated $-$ normal at four
+representative layers. The bold row is the new baseline control
+($K{=}2, N{=}5$, 50 trials per cell, CVQ condition):
+ablating the same eight LoRA-promoter heads in the \emph{baseline}
+model produces a comparable L32 drop
+($-0.377$ vs $-0.278$ in the LoRA model), establishing that the heads
+were partial $v_{\text{last}}$ carriers pre-LoRA. The downstream
+columns (L33, L35) tell the complementary story: baseline ablation
+propagates through readout ($-0.133$, $-0.088$); the LoRA model
+absorbs the same perturbation at L33+ ($+0.000$, $+0.000$),
+revealing the new downstream redundancy.}
+\label{tab:ablation_fourway}
+\end{table*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_mechanism.pdf}
+\caption{Mechanism summary for Qwen2.5-3B-Instruct,
+$K{=}2, N{=}5$ unless noted.
+\textbf{(a)} Per-layer $\Pr(v_{\text{last}})$ at the answer position
+(logit lens) and CVQ-correctness probe accuracy, baseline vs +LoRA.
+Both signals converge on the L27--L33 band, shaded for reference.
+\textbf{(b)} Per-head $\Delta$ in $\Pr(\text{attend to }
+v_{\text{last}})$ from attention routing under CVQ, across all 36
+layers $\times$ 16 heads. The bright band at L30--L33 (dashed
+outline) contains the 15 promoter heads identified in
+\S\ref{sec:mechanism:promoter}.
+\textbf{(c)} Stage~3C causal ablation: ablating the eight
+highest-attribution promoter heads drops $\Pr(v_{\text{last}})$
+sharply at L32 in \emph{both} the baseline and LoRA models, showing
+the heads were already partial $v_{\text{last}}$ carriers
+pre-training. Baseline ablation continues to drop at L33--L35; the
+same perturbation in the LoRA model is absorbed by L33+ redundancy
+and recovers to $\Pr(v_{\text{last}}) {\approx} 1.0$ at the final
+layer.}
+\label{fig:mechanism}
+\end{figure*}

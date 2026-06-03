@@ -131,34 +131,31 @@ Note: `_last` formats run position queries AND a semantic "last value" query per
 | gemini-2.5-flash | 19/24 | 🔄 Running |
 | gemini-2.5-pro | 13/24 | 🔄 Running |
 
-### Planned: local models (script READY — `experiments_cloud/ucurve_vllm.py`)
+### Local models (DONE — 2026-05-20)
 
-Target models: **gemma-3-4b-it, Qwen2.5-3B-Instruct, Qwen3.5-2B, Qwen3.5-4B, Qwen3.5-9B**
+Dir: `experiments_cloud/results/ucurve_vllm/{model}/ucurve_*.json`
 
-Must exactly match the `ucurve_proprietary` runs so results are directly comparable:
+| Model | Format-cells with data | Notes | File |
+|---|---|---|---|
+| Qwen2.5-3B-Instruct | 24/24 | all 200 trials | `ucurve_20260520_124743.json` |
+| Qwen3.5-2B | 24/24 | all 200 trials | `ucurve_20260520_122122.json` |
+| Qwen3.5-4B | 24/24 | one cell @ 70 trials, rest @ 200 | `ucurve_20260520_154253.json` |
+| Qwen3.5-9B | 21/24 | 19 cells @ 200, 5 cells @ 50–140; 3 cells of `10_50` missing | `checkpoint.json` (no final snapshot) |
+| gemma-3-4b-it | 24/24 | one cell @ 190 trials, rest @ 200 | `ucurve_20260520_141803.json` |
+
+For Qwen3.5-9B, the `checkpoint.json` IS the data — all 21 format-cells with
+saved trials are readable from it the same way as a final file. The 3 missing
+cells are `10_50 × {flat_verbose_last, block_last, landmark_last}`. 9B 10_50 of `flat_nolabel_last` is present at 200 trials.
+
+Setup matches `ucurve_proprietary`:
 - **Dataset**: SEMANTIC_MULTI
 - **Formats**: flat_nolabel_last, flat_verbose_last, block_last, landmark_last
-  - `_last` variants run ALL position queries (same as base format) PLUS one extra
-    semantic CVQ query ("what is the current value?") per trial stored under key "last"
-  - This means one run covers both: positional cliff analysis AND format intervention
-  - No need to also run base formats separately
-- **Grid**: K∈{5,10} × N∈{10,20,50} — 6 cells × 4 formats = 24 format-cells per model
-- **n_positions**: 16 (positions 1–7 fixed, then 8 evenly-spaced fill, then N)
-- **Trials**: 50/cell on MPS (Apple Silicon); 100/cell on NVIDIA GPU
-- **Save dir**: `experiments_cloud/results/ucurve_vllm/{model}/checkpoint.json`
+- **Grid**: K∈{5,10} × N∈{10,20,50} — 6 cells × 4 formats = 24 format-cells/model
+- **n_positions**: 11 (positions 1–10 + N)
 - **Script**: `experiments_cloud/ucurve_vllm.py`
-  - Auto-selects HF backend (MPS/CPU) or vLLM (CUDA)
-  - Reuses `ucurve_prompts.py` prompt generation unchanged
-  - Checkpoint/resume with `--resume` flag
-  - Smoke-tested on Qwen2.5-3B-Instruct (MPS, 29s/cell, 5 trials)
 
-**Run command (MPS):**
-```bash
-python experiments_cloud/ucurve_vllm.py \
-  --model Qwen2.5-3B-Instruct \
-  --formats flat_nolabel_last flat_verbose_last block_last landmark_last \
-  --nk 5 10 --nu 10 20 50 --trials 50 --dataset SEMANTIC_MULTI
-```
+5 local models now directly comparable with the 6 proprietary API models
+in `experiments_cloud/results/ucurve_proprietary/`.
 
 ---
 
@@ -284,7 +281,7 @@ distinguish these: a mechanism flip shows v_last rising while v_first decays in 
 | Priority | Experiment | Models | Est. time |
 |----------|-----------|--------|-----------|
 | 🔴 Critical | Mechanistic probing at correct operating points (see Section 4) | 7 models, 8 points (5 normal + 3 reversal) | ~6h cloud |
-| 🔴 Critical | Ucurve local models — write vLLM script adapting `ucurve_sweep.py`, use `_last` formats, SEMANTIC_MULTI, K∈{5,10} N∈{10,20,50} | gemma-3-4b-it, Qwen2.5-3B-Instruct, Qwen3.5-9B | ~3h local |
+| ~~🔴 Critical~~ | ~~Ucurve local models~~ — **DONE 2026-05-20**, see Section 2 | ~~5 local models~~ | ~~done~~ |
 | 🟡 High | Complete Mamba behavioral (if keeping arch claim) | Mamba-1.4B | ~3h local |
 | 🟡 High | Fill Gemma-3-4b semantic to 81/81 | gemma-3-4b-it | ~1h local |
 | 🟠 Medium | Ucurve on SmolLM3 checkpoints (3–4 ckpts) | SmolLM3-3B | ~2h local |

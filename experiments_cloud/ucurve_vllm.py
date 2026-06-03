@@ -30,6 +30,11 @@ MODEL REGISTRY (add new models here):
 """
 
 import sys, os, json, math, time, argparse
+
+# FlashInfer JIT-compiles CUDA kernels but on SageMaker the sampler
+# kernels fail because CUDA_HOME isn't set. Disable the FlashInfer sampler
+# entirely — vLLM falls back to its built-in PyTorch sampler, no perf loss.
+os.environ.setdefault("VLLM_USE_FLASHINFER_SAMPLER", "0")
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Optional
@@ -63,7 +68,7 @@ MODEL_REGISTRY = {
     },
     "Qwen2.5-3B": {
         "hf_id":    "Qwen/Qwen2.5-3B",
-        "instruct": True,   # verified: has chat template with system+user roles
+        "instruct": False,
         "dtype":    "bfloat16",
         "max_len":  16384,
     },
@@ -88,20 +93,24 @@ MODEL_REGISTRY = {
     },
     "Qwen3.5-4B": {
         "hf_id":    "Qwen/Qwen3.5-4B",
-        "instruct": True,   # ChatML + thinking tags — RL-trained despite no -Instruct suffix
+        "instruct": True,
+        "no_thinking": True,  # thinking model — must suppress or outputs reasoning tokens
         "dtype":    "bfloat16",
-        "max_len":  32768,
+        "max_len":  16384,    # 32K OOMs on L4 alongside other state; cap at 16K
     },
     "Qwen3.5-9B": {
         "hf_id":    "Qwen/Qwen3.5-9B",
-        "instruct": True,   # ChatML + thinking tags — RL-trained despite no -Instruct suffix
-        "dtype":    "bfloat16",
-        "max_len":  32768,
+        "instruct": True,
+        "no_thinking":    True,   # thinking model — suppress CoT
+        "dtype":          "bfloat16",
+        "max_len":        6144,   # verbose K=10 N=50 prompts reach ~5.7K tokens
+        "gpu_mem":        0.95,   # weights ~18GB; need headroom for KV cache
+        "enforce_eager":  True,   # skip CUDA graph profiling — avoids OOM on init
     },
     # Gemma-3 family
     "gemma-3-270m-it": {
         "hf_id":    "google/gemma-3-270m-it",
-        "instruct": False,  # verified: no chat template in tokenizer_config.json
+        "instruct": True,
         "dtype":    "bfloat16",
         "max_len":  8192,
     },
@@ -152,7 +161,10 @@ PROMPT_BUILDERS = {
 
 DEFAULT_NK     = [5, 10]
 DEFAULT_NU     = [10, 20, 50]
-DEFAULT_TRIALS = 50
+DEFAULT_TRIALS = 200
+MIN_TRIALS     = 50
+CI_THRESHOLD   = 0.05
+BATCH_TRIALS   = 10   # trials per inference batch before checking convergence
 SAVE_BASE      = "experiments_cloud/results/ucurve_vllm"
 
 
@@ -225,17 +237,18 @@ class HFEngine:
 class VLLMEngine:
     """vLLM offline inference — NVIDIA GPU only."""
 
-    def __init__(self, hf_id: str, dtype_str: str, max_len: int, batch_size: int):
+    def __init__(self, hf_id: str, dtype_str: str, max_len: int, batch_size: int,
+                 gpu_memory_utilization: float = 0.92, enforce_eager: bool = False):
         from vllm import LLM, SamplingParams
 
-        print(f"  Loading {hf_id} via vLLM ({dtype_str})...", flush=True)
+        print(f"  Loading {hf_id} via vLLM ({dtype_str}, gpu_mem={gpu_memory_utilization}, enforce_eager={enforce_eager})...", flush=True)
         self.llm = LLM(
             model=hf_id,
             dtype=dtype_str,
             max_model_len=max_len,
             trust_remote_code=True,
-            gpu_memory_utilization=0.85,
-            enforce_eager=False,
+            gpu_memory_utilization=gpu_memory_utilization,
+            enforce_eager=enforce_eager,
             enable_prefix_caching=True,
         )
         self.sampling = SamplingParams(
@@ -254,7 +267,7 @@ class VLLMEngine:
 
 
 def build_engine(model_alias: str, backend: str, batch_size: int) -> tuple:
-    """Returns (engine, cfg, is_instruct)."""
+    """Returns (engine, cfg, is_instruct, no_thinking)."""
     cfg = MODEL_REGISTRY[model_alias]
     hf_id    = cfg["hf_id"]
     dtype    = cfg["dtype"]
@@ -264,34 +277,36 @@ def build_engine(model_alias: str, backend: str, batch_size: int) -> tuple:
     if backend == "auto":
         backend = "vllm" if torch.cuda.is_available() else "hf"
 
-    print(f"\nBackend: {backend.upper()}")
+    no_thinking   = cfg.get("no_thinking", False)
+    gpu_mem       = cfg.get("gpu_mem", 0.92)
+    enforce_eager = cfg.get("enforce_eager", False)
+    print(f"\nBackend: {backend.upper()}{' [thinking suppressed]' if no_thinking else ''}{' [enforce_eager]' if enforce_eager else ''}")
     if backend == "vllm":
-        engine = VLLMEngine(hf_id, dtype, max_len, batch_size)
+        engine = VLLMEngine(hf_id, dtype, max_len, batch_size, gpu_mem, enforce_eager)
     else:
         engine = HFEngine(hf_id, dtype, max_len, batch_size)
 
-    return engine, cfg, instruct
+    return engine, cfg, instruct, no_thinking
 
 
 # ─── prompt formatting (instruct vs base) ────────────────────────────────────
-def apply_chat_template(tokenizer, user_text: str) -> str:
+def apply_chat_template(tokenizer, user_text: str, no_thinking: bool = False) -> str:
     """Wrap user_text in the model's chat template. Returns full formatted string."""
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user",   "content": user_text},
     ]
-    return tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=True,
-    )
+    kwargs = {"tokenize": False, "add_generation_prompt": True}
+    if no_thinking:
+        kwargs["enable_thinking"] = False  # Qwen3.5 thinking models: suppress CoT
+    return tokenizer.apply_chat_template(messages, **kwargs)
 
 
 def format_prompt_for_model(raw_prompt: str, instruct: bool,
-                             tokenizer=None) -> str:
+                             tokenizer=None, no_thinking: bool = False) -> str:
     """For instruct models: apply chat template. For base models: use as-is."""
     if instruct and tokenizer is not None:
-        return apply_chat_template(tokenizer, raw_prompt)
+        return apply_chat_template(tokenizer, raw_prompt, no_thinking=no_thinking)
     return raw_prompt
 
 
@@ -320,76 +335,64 @@ def wilson_hw(n: int, k: int, z: float = 1.96) -> float:
     return z * math.sqrt(p_t * (1 - p_t) / n_t)
 
 
-# ─── cell runner ──────────────────────────────────────────────────────────────
-def run_cell(engine, fmt_name: str, nk: int, nu: int,
-             max_trials: int, positions: list[int],
-             instruct: bool, tokenizer, dataset: str) -> tuple[dict, list]:
-    """
-    Builds all prompts for the cell, fires them in one batched generate call.
-    Returns (cell_summary, trial_details).
-    """
-    is_last_fmt    = fmt_name in _LAST_FMTS
-    is_stream_cnt  = fmt_name in _STREAM_COUNT_FMTS
-    builder        = PROMPT_BUILDERS[fmt_name]
-    lq_builder     = LASTQUERY_BUILDERS.get(fmt_name)
-    all_pos_keys   = list(positions) + (["last"] if is_last_fmt else [])
+def converged(correct_by_pos: dict, threshold: float) -> bool:
+    """True when ALL positions have Wilson CI half-width ≤ threshold."""
+    for results in correct_by_pos.values():
+        n = len(results)
+        k = sum(results)
+        if wilson_hw(n, k) > threshold:
+            return False
+    return True
 
-    # ── build all prompts upfront ─────────────────────────────────────────────
-    # Layout: for each trial → for each position (+ optional last query)
-    trial_meta   = []   # (trial_idx, seed, test_cat, stream_vals, all_values)
-    prompt_list  = []   # flat list of formatted prompts
-    pos_key_list = []   # parallel to prompt_list: which (trial_idx, pos_key)
 
-    for trial_idx in range(max_trials):
+def _build_batch_prompts(trial_indices: list[int], nk: int, nu: int,
+                         fmt_name: str, positions: list[int],
+                         is_last_fmt: bool, builder, lq_builder,
+                         instruct: bool, tokenizer, no_thinking: bool,
+                         dataset: str) -> tuple[list, list, list]:
+    """Build prompts for a batch of trials. Returns (trial_meta, prompt_list, pos_key_list)."""
+    is_stream_cnt = fmt_name in _STREAM_COUNT_FMTS
+    trial_meta, prompt_list, pos_key_list = [], [], []
+
+    for trial_idx in trial_indices:
         seed = make_seed(nk, nu, trial_idx)
         cats, test, vals, flat, block = generate_stream(nk, nu, seed, dataset=dataset)
-        all_values   = vals[test]
-        stream_vals  = [i["value"] for i in flat if i["category"] == test]
+        all_values  = vals[test]
+        stream_vals = [i["value"] for i in flat if i["category"] == test]
 
         trial_meta.append({
-            "trial_idx":     trial_idx,
-            "seed":          seed,
-            "test_category": test,
-            "categories":    cats,
-            "all_values":    all_values,
-            "stream_vals":   stream_vals,
+            "trial_idx": trial_idx, "seed": seed,
+            "test_category": test, "categories": cats,
+            "all_values": all_values, "stream_vals": stream_vals,
         })
-
-        # Positional queries
         for k in positions:
             raw = builder(flat, block, test, k)
-            prompt_list.append(format_prompt_for_model(raw, instruct, tokenizer))
+            prompt_list.append(format_prompt_for_model(raw, instruct, tokenizer, no_thinking))
             pos_key_list.append((trial_idx, k))
-
-        # Optional semantic "last" query
         if is_last_fmt and lq_builder:
             items = block if ("block" in fmt_name or "landmark" in fmt_name) else flat
-            raw_last = lq_builder(items, test)
-            prompt_list.append(format_prompt_for_model(raw_last, instruct, tokenizer))
+            prompt_list.append(format_prompt_for_model(lq_builder(items, test), instruct, tokenizer, no_thinking))
             pos_key_list.append((trial_idx, "last"))
 
-    # ── batch inference ───────────────────────────────────────────────────────
-    responses = engine.generate_batch(prompt_list, max_new_tokens=8)
+    return trial_meta, prompt_list, pos_key_list
 
-    # ── parse responses back into trial structure ─────────────────────────────
-    trial_details       = []
-    correct_by_pos      = {k: [] for k in all_pos_keys}
 
-    # index responses by (trial_idx, pos_key)
-    resp_map = {}
-    for (ti, pk), resp in zip(pos_key_list, responses):
-        resp_map[(ti, pk)] = resp
+def _parse_batch_responses(trial_meta: list, responses: list, pos_key_list: list,
+                            all_pos_keys: list, fmt_name: str,
+                            is_stream_cnt: bool) -> tuple[list, dict]:
+    """Parse inference responses into trial_details and correct_by_pos updates."""
+    resp_map = {(ti, pk): resp for (ti, pk), resp in zip(pos_key_list, responses)}
+    trial_details = []
+    correct_by_pos_batch = {k: [] for k in all_pos_keys}
 
     for meta in trial_meta:
-        ti          = meta["trial_idx"]
-        all_values  = meta["all_values"]
-        stream_vals = meta["stream_vals"]
-        test        = meta["test_category"]
-
+        ti, all_values, stream_vals, test = (
+            meta["trial_idx"], meta["all_values"],
+            meta["stream_vals"], meta["test_category"],
+        )
         pos_results = {}
         for pk in all_pos_keys:
             raw = resp_map.get((ti, pk), "")
-            # Determine expected
             if pk == "last":
                 expected = stream_vals[-1] if is_stream_cnt else all_values[-1]
                 ref_list = stream_vals    if is_stream_cnt else all_values
@@ -405,24 +408,71 @@ def run_cell(engine, fmt_name: str, nk: int, nu: int,
 
             cls = classify(raw, expected, ref_list)
             correct = cls["error_type"] == "correct"
-            correct_by_pos[pk].append(correct)
-
+            correct_by_pos_batch[pk].append(correct)
             pos_results[pk] = {
-                "expected":               expected,
-                "predicted":              raw,
-                "correct":                correct,
-                "error_type":             cls["error_type"],
-                "predicted_idx":          cls["predicted_idx"],
+                "expected": expected, "predicted": raw, "correct": correct,
+                "error_type": cls["error_type"],
+                "predicted_idx": cls["predicted_idx"],
                 "predicted_relative_pos": cls["predicted_relative_pos"],
             }
 
         trial_details.append({
-            "trial_idx":     ti,
-            "seed":          meta["seed"],
-            "test_category": test,
-            "categories":    meta["categories"],
-            "positions":     pos_results,
+            "trial_idx": ti, "seed": meta["seed"],
+            "test_category": test, "categories": meta["categories"],
+            "positions": pos_results,
         })
+
+    return trial_details, correct_by_pos_batch
+
+
+# ─── cell runner ──────────────────────────────────────────────────────────────
+def run_cell(engine, fmt_name: str, nk: int, nu: int,
+             max_trials: int, positions: list[int],
+             instruct: bool, tokenizer, dataset: str,
+             no_thinking: bool = False,
+             ci_threshold: float = CI_THRESHOLD,
+             min_trials: int = MIN_TRIALS,
+             early_stop: bool = True) -> tuple[dict, list]:
+    """
+    Runs trials in batches of BATCH_TRIALS. After each batch, checks Wilson CI
+    convergence across ALL positions. Stops early when converged and n ≥ min_trials.
+    Returns (cell_summary, trial_details).
+    """
+    is_last_fmt   = fmt_name in _LAST_FMTS
+    is_stream_cnt = fmt_name in _STREAM_COUNT_FMTS
+    builder       = PROMPT_BUILDERS[fmt_name]
+    lq_builder    = LASTQUERY_BUILDERS.get(fmt_name)
+    all_pos_keys  = list(positions) + (["last"] if is_last_fmt else [])
+
+    correct_by_pos = {k: [] for k in all_pos_keys}
+    all_trial_details: list = []
+    stopped_early = False
+    trial_idx = 0
+
+    while trial_idx < max_trials:
+        batch_end = min(trial_idx + BATCH_TRIALS, max_trials)
+        batch_indices = list(range(trial_idx, batch_end))
+
+        trial_meta, prompt_list, pos_key_list = _build_batch_prompts(
+            batch_indices, nk, nu, fmt_name, positions,
+            is_last_fmt, builder, lq_builder,
+            instruct, tokenizer, no_thinking, dataset,
+        )
+        responses = engine.generate_batch(prompt_list, max_new_tokens=8)
+        trial_details, cbp_batch = _parse_batch_responses(
+            trial_meta, responses, pos_key_list,
+            all_pos_keys, fmt_name, is_stream_cnt,
+        )
+
+        all_trial_details.extend(trial_details)
+        for pk in all_pos_keys:
+            correct_by_pos[pk].extend(cbp_batch[pk])
+
+        trial_idx = batch_end
+
+        if early_stop and trial_idx >= min_trials and converged(correct_by_pos, ci_threshold):
+            stopped_early = True
+            break
 
     # ── build position stats ──────────────────────────────────────────────────
     position_stats = {}
@@ -443,18 +493,20 @@ def run_cell(engine, fmt_name: str, nk: int, nu: int,
     pos_first = str(positions[0])
     pos_last  = str(positions[-1])
     cell_summary = {
-        "num_keys":    nk,
-        "num_updates": nu,
-        "format":      fmt_name,
-        "n_trials":    max_trials,
-        "positions":   position_stats,
-        "first_acc":   position_stats[pos_first]["accuracy"],
-        "last_acc":    position_stats[pos_last]["accuracy"],
-        "gap":         round(
+        "num_keys":     nk,
+        "num_updates":  nu,
+        "format":       fmt_name,
+        "n_trials":     len(all_trial_details),
+        "max_trials":   max_trials,
+        "stopped_early": stopped_early,
+        "positions":    position_stats,
+        "first_acc":    position_stats[pos_first]["accuracy"],
+        "last_acc":     position_stats[pos_last]["accuracy"],
+        "gap":          round(
             position_stats[pos_first]["accuracy"] -
             position_stats[pos_last]["accuracy"], 4),
     }
-    return cell_summary, trial_details
+    return cell_summary, all_trial_details
 
 
 # ─── checkpoint helpers ───────────────────────────────────────────────────────
@@ -488,7 +540,13 @@ def parse_args():
     p.add_argument("--nu",      nargs="+", type=int, default=DEFAULT_NU,
                    help=f"Update levels (default: {DEFAULT_NU})")
     p.add_argument("--trials",  type=int, default=DEFAULT_TRIALS,
-                   help=f"Trials per cell (default: {DEFAULT_TRIALS})")
+                   help=f"Max trials per cell (default: {DEFAULT_TRIALS})")
+    p.add_argument("--min-trials", type=int, default=MIN_TRIALS,
+                   help=f"Min trials before Wilson CI early stopping (default: {MIN_TRIALS})")
+    p.add_argument("--ci", type=float, default=CI_THRESHOLD,
+                   help=f"Wilson CI half-width threshold for early stopping (default: {CI_THRESHOLD})")
+    p.add_argument("--no-early-stop", action="store_true",
+                   help="Disable Wilson CI early stopping — run full trial budget")
     p.add_argument("--n-positions", type=int, default=16,
                    help="Number of query positions per cell (default: 16)")
     p.add_argument("--dataset", default="ARBITRARY_SINGLE",
@@ -528,19 +586,21 @@ def main():
     print(f"  formats    : {args.formats}")
     print(f"  nk grid    : {args.nk}")
     print(f"  nu grid    : {args.nu}")
-    print(f"  trials     : {args.trials} per cell")
+    print(f"  trials     : up to {args.trials} per cell (min {args.min_trials}, CI≤{args.ci}{'  [no early stop]' if args.no_early_stop else ''})")
     print(f"  n_positions: {args.n_positions}")
     print(f"  batch_size : {args.batch_size}")
     print(f"  save to    : {save_dir}")
 
     # ── build engine ──────────────────────────────────────────────────────────
-    engine, cfg, instruct = build_engine(args.model, args.backend, args.batch_size)
+    engine, cfg, instruct, no_thinking = build_engine(args.model, args.backend, args.batch_size)
     tokenizer = None
     if instruct:
         from transformers import AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(
             cfg["hf_id"], trust_remote_code=True)
         print(f"  Chat template: {tokenizer.chat_template is not None}")
+        if no_thinking:
+            print(f"  Thinking suppressed: enable_thinking=False")
 
     # ── load or init results ──────────────────────────────────────────────────
     if args.resume and ckpt_path.exists():
@@ -559,6 +619,9 @@ def main():
                 "nk_levels":    args.nk,
                 "nu_levels":    args.nu,
                 "max_trials":   args.trials,
+                "min_trials":   args.min_trials,
+                "ci_threshold": args.ci,
+                "early_stop":   not args.no_early_stop,
                 "n_positions":  args.n_positions,
                 "batch_size":   args.batch_size,
             },
@@ -591,15 +654,19 @@ def main():
 
                 t0 = time.time()
                 cell_sum, trial_det = run_cell(
-                    engine    = engine,
-                    fmt_name  = fmt,
-                    nk        = nk,
-                    nu        = nu,
-                    max_trials= args.trials,
-                    positions = positions,
-                    instruct  = instruct,
-                    tokenizer = tokenizer,
-                    dataset   = args.dataset,
+                    engine       = engine,
+                    fmt_name     = fmt,
+                    nk           = nk,
+                    nu           = nu,
+                    max_trials   = args.trials,
+                    positions    = positions,
+                    instruct     = instruct,
+                    tokenizer    = tokenizer,
+                    dataset      = args.dataset,
+                    no_thinking  = no_thinking,
+                    ci_threshold = args.ci,
+                    min_trials   = args.min_trials,
+                    early_stop   = not args.no_early_stop,
                 )
                 elapsed = time.time() - t0
 
@@ -611,8 +678,10 @@ def main():
                     results["trial_details"][cell_key] = {}
                 results["trial_details"][cell_key][fmt] = trial_det
 
+                early_tag = " [early]" if cell_sum["stopped_early"] else ""
                 tqdm.write(
                     f"  [{done_cells}/{total_cells}] nk={nk} nu={nu} fmt={fmt:20s} | "
+                    f"n={cell_sum['n_trials']}{early_tag}  "
                     f"first={cell_sum['first_acc']:.3f}  "
                     f"last={cell_sum['last_acc']:.3f}  "
                     f"gap={cell_sum['gap']:+.3f}  "

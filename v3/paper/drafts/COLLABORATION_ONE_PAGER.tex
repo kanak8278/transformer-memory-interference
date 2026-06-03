@@ -1,0 +1,240 @@
+\documentclass[9pt, a4paper]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[top=0.65in, bottom=0.65in, left=0.80in, right=0.80in]{geometry}
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{caption}
+\usepackage{placeins}
+
+% ── Fonts ─────────────────────────────────────────────────────────────────────
+\setmainfont{Arial Unicode MS}
+\setmonofont{Menlo}[Scale=0.85]
+
+% ── Colors ────────────────────────────────────────────────────────────────────
+\definecolor{linkblue}{RGB}{26, 115, 232}
+\definecolor{sectiongray}{RGB}{40, 40, 40}
+
+% ── Hyperref ──────────────────────────────────────────────────────────────────
+\hypersetup{colorlinks=true, linkcolor=linkblue, urlcolor=linkblue, citecolor=linkblue}
+
+% ── Section: rule ABOVE title, no rule below — eliminates double-rule ──────────
+\titleformat{\section}
+  {\normalsize\bfseries\color{sectiongray}}
+  {}
+  {0em}
+  {\vspace{2pt}\rule{\linewidth}{0.5pt}\\\vspace{3pt}}
+  []
+\titlespacing{\section}{0pt}{10pt}{3pt}
+
+% ── Subsection: bold, slightly indented number ────────────────────────────────
+\titleformat{\subsection}
+  {\small\bfseries}
+  {}
+  {0em}
+  {}
+  []
+\titlespacing{\subsection}{0pt}{7pt}{2pt}
+
+% ── List spacing ──────────────────────────────────────────────────────────────
+\setlist[itemize]{itemsep=2pt, parsep=0pt, topsep=3pt, leftmargin=1.4em}
+
+% ── Caption ───────────────────────────────────────────────────────────────────
+\captionsetup{font=scriptsize, labelfont=bf, skip=3pt}
+
+% ── Paragraph ─────────────────────────────────────────────────────────────────
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\begin{document}
+% ═════════════════════════════════════════════════════════════════════════════
+
+% ── Header ───────────────────────────────────────────────────────────────────
+{\large\bfseries Why LLMs Remember First and Forget Last: Behavioral and Mechanistic Evidence}
+
+\vspace{4pt}
+\textbf{Kanak Raj} · \href{mailto:kanak8278@gmail.com}{kanak8278@gmail.com}\\
+{\small \textit{Extension of:} \href{https://arxiv.org/abs/2603.00270}{``Transformers Remember First, Forget Last: Dual-Process Interference in LLMs''} · \textit{[PDF attached]}}
+
+\vspace{2pt}\rule{\linewidth}{0.5pt}
+
+% ── The Problem ───────────────────────────────────────────────────────────────
+\section*{The Problem}
+
+Consider a match commentary feed a model is asked to track:
+
+\begin{quote}\small
+\textit{``Arteezy draws first blood — 1 kill at minute 3. \ldots\ A dominant midgame: Arteezy is now sitting at 8 kills, the lobby's MVP. \ldots\ A clutch Roshan fight seals it — Arteezy closes out with 14 kills.''}
+\end{quote}
+
+Ask \textbf{``How many kills did Arteezy have after first blood?''} $\rightarrow$ models answer correctly $\sim$70\% of the time.\\
+Ask \textbf{``How many kills did Arteezy finish with?''} $\rightarrow$ models answer correctly $\sim$20\% of the time.
+
+The model reliably remembers the \textit{first} recorded value but systematically fails to recall the \textit{most recent} — the one that actually matters. We measure this as \textbf{RI accuracy} (recall first value, \textit{Retroactive Interference}) vs \textbf{PI accuracy} (recall last value, \textit{Proactive Interference}). The gap — RI$-$PI — is large, robust, and consistent. We call it \textbf{primacy bias}.
+
+This is not a toy effect on a synthetic KV task. We confirm it on naturalistic Dota 2 match commentary (gap = \textbf{+18pp}, Qwen 1.5B) and on two independent KV datasets. The model is being asked a factual question about the state of the world \textit{right now}, and it keeps reaching back to the beginning.
+
+In our prior paper we documented this behaviorally across 39 models. This document describes the mechanistic extension: \textbf{why does this happen?}
+
+% ── Prior Work ────────────────────────────────────────────────────────────────
+\section*{Prior Work Already Tells Us What to Look For}
+
+Two recent lines of work establish the theoretical conditions under which this asymmetry \textit{must} arise:
+
+\begin{itemize}
+    \item \textbf{Over-squashing in decoder-only Transformers} [Barbero, Banino, Kumaran, Araújo, Veličković, Pascanu — NeurIPS 2024]: Proves that certain distinct input sequences yield arbitrarily close representations in the final token of a decoder-only Transformer. The last token's representation is provably unable to distinguish them. The effect is exacerbated by low-precision floating point. This is the ``Glasses'' paper — the model needs glasses to see the end of the sequence.
+
+    \item \textbf{Attention sinks and anti-over-mixing} [Barbero, Arroyo, Gu, Veličković, Bronstein, Pascanu — arXiv 2025]: LLMs attend heavily to the first token to \textit{avoid} over-mixing of information. The first token acts as a sink that preserves early information while preventing later tokens from polluting it. Mechanistically, this is not a bug — it's learned because it is useful.
+\end{itemize}
+
+\textbf{Together these predict our finding exactly:}
+\begin{itemize}
+    \item First-token attention sink $\rightarrow$ first value is \textit{protected} $\rightarrow$ RI is robust
+    \item Last-token representation collapse (over-squashing) $\rightarrow$ most recent value \textit{degrades} $\rightarrow$ PI fails
+\end{itemize}
+
+What was missing was a controlled behavioral measurement of the joint consequence, and mechanistic evidence of \textit{where} in the network the collapse occurs. That is what this work provides.
+
+% ── What We Measured ──────────────────────────────────────────────────────────
+\section*{What We Measured}
+
+\textbf{11 models · 2 datasets · 9 key-levels × 12 update-levels · 100 trials/cell = 650 total test conditions}
+
+\textit{KV dataset: a controlled task where a key is assigned a value that is updated N times in sequence; the model is asked either for the first value (RI) or the most recent value (PI). Three variants tested:}
+\begin{itemize}
+    \item \textbf{\textit{ARBITRARY\_SINGLE}} \textit{— synthetic single-token English words (e.g.\ ``cat'', ``blue''); maximally controlled, no semantic priors; key - value might not be related}
+    \item \textbf{\textit{SEMANTIC\_MULTI}} \textit{— multi-token real-world values (e.g.\ names, locations) drawn from the same category; tests whether the effect survives richer content}
+    \item \textbf{\textit{Dota 2 narratives}} \textit{— naturalistic match commentary generated programmatically from a Dota 2 game engine simulator; each ``key'' is a player, each ``value update'' is a kill-count change reported through realistic play-by-play text. Tests whether PI $>$ RI survives when values are embedded in genuine narrative rather than a KV list (result: gap = \textbf{+18pp}, confirming the effect is not a format artifact)}
+\end{itemize}
+
+Models span: Qwen2.5 (0.5B / 1.5B / 3B), Gemma-3 (270M / 1B / 4B), TinyLlama-1.1B, StableLM-1.6B, Pythia-410M, Mamba-1.4B (SSM). Each model evaluated on a unified grid of \textbf{9 key-levels × 12 update-levels × 100 trials per cell} — giving tight Wilson confidence intervals (±5–7pp) and enough resolution to fit the exponential decay curve per model.
+
+\vspace{4pt}
+\begin{center}
+\small
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Model} & \textbf{RI accuracy} & \textbf{PI accuracy} & \textbf{Gap} \\
+\midrule
+Gemma-1B          & 57\% & 3\%  & \textbf{+54pp} \\
+StableLM-1.6B     & 71\% & 5\%  & \textbf{+66pp} \\
+Qwen 1.5B         & 63\% & 16\% & \textbf{+46pp} \\
+Mamba-1.4B (SSM)  & 70\% & 6\%  & \textbf{+64pp} \\
+Gemma-4B          & 95\% & 49\% & \textbf{+46pp} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{2pt}
+
+\textit{Mean gap across instruction-tuned models: +43pp. PI accuracy follows exponential decay with updates N: PI(N) = $a \cdot e^{-bN} + c$, $R^2=0.83$--$0.97$.}
+
+\textit{Numbers above from ARBITRARY\_SINGLE. Effect replicates on SEMANTIC\_MULTI and Dota 2 narratives (see dataset descriptions above).}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{../../results_vllm/plots/pi_vs_n_all_models.png}
+    \caption{RI$-$PI gap vs number of updates N across 8 models (2 keys, 100 trials/cell). All instruction-tuned models stay above zero and the gap grows with N. Qwen 3B-Base (dashed) starts near zero, reflecting the base model effect. Solid lines = instruct/chat; dashed = base.}
+\end{figure}
+
+\FloatBarrier
+
+% ── Mechanistic Analysis Suite ────────────────────────────────────────────────
+\section*{Mechanistic Analysis Suite}
+
+We ran a full interpretability pipeline across 6–8 models per experiment:
+
+\vspace{3pt}
+{\small
+\begin{tabularx}{\linewidth}{@{} l l X @{}}
+\toprule
+\textbf{Experiment} & \textbf{Technique} & \textbf{What it asks} \\
+\midrule
+\textbf{Logit lens}            & Layer-wise vocabulary projection                              & At which layer does $v_\text{last}$ appear — and where does it get suppressed? \\[2pt]
+\textbf{Linear probing}        & Probe on residual stream per layer                            & Does the model encode RI/PI correctness in its representations? \\[2pt]
+\textbf{Attention attribution} & Activation patching, head-level $\Delta P(v_\text{last})$    & Which heads contribute to $v_\text{last}$ retrieval vs suppression? \\[2pt]
+\textbf{Causal ablation}       & Zero-out top-k heads, measure accuracy drop                   & Is the mechanism localised or distributed? \\[2pt]
+\textbf{Jacobian at init}      & $\partial$output/$\partial$input position norms, untrained model & Is the primacy bias present before any training? \\[2pt]
+\textbf{Training dynamics}     & Full behavioral sweep across 40+ checkpoints                  & When during pretraining does the bias consolidate? \\[2pt]
+\textbf{SAE feature analysis}  & Gemma Scope sparse autoencoder (Gemma-1B)                     & Do interpretable features activate selectively for $v_\text{first}$ vs $v_\text{last}$? \\
+\bottomrule
+\end{tabularx}
+}
+
+\FloatBarrier
+
+% ── Three Mechanistic Findings ────────────────────────────────────────────────
+\section*{Three Mechanistic Findings}
+
+\subsection*{1. The bias is present before training — it's in the architecture geometry}
+
+Jacobian analysis at random initialization (before any training) shows that position 0 influences the output \textbf{2.1× more} than middle positions (Qwen 0.5B). For Mamba SSM: \textbf{295×} (explained by HiPPO matrix transient growth). The primacy bias is geometric — it exists in the untrained model's computational structure, not in learned weights.
+
+\subsection*{2. The correct answer is computed, then lost — logit lens locates where}
+
+Layer-by-layer logit lens shows $P(v_\text{last})$ (probability of the most recent value) rises to a peak of 0.03–0.24 at \textbf{$\sim$85\% network depth}, then is consistently outcompeted in the final layers by adjacent values. Final-layer $P(v_\text{last}) = 0.00$--$0.04$.
+
+For $v_\text{first}$ (RI): $P(v_\text{first})$ rises \textit{monotonically} from early layers to 0.92–1.00 with no competition.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{../../results_vllm/plots/logit_lens.png}
+    \caption{Left — PI failures: $P(v_\text{last})$ peaks at 81–92\% network depth across 5 models, then collapses in the final layers (zoomed to the active region 0.6–1.0). Right — RI correct: $P(v_\text{first})$ rises monotonically to 0.87–1.00 with no suppression. The asymmetry is consistent across all architectures tested.}
+\end{figure}
+
+The model finds the right answer. The final layers throw it away. This is precisely the representational collapse Barbero et al.\ prove must occur.
+
+\subsection*{3. The bias is fixed from the earliest pretraining steps — fine-tuning doesn't cause it}
+
+Training dynamics on SmolLM3-3B (full pretraining + SFT + alignment checkpoints):
+\begin{itemize}
+    \item \textbf{Step 40K} (earliest checkpoint): gap = \textbf{+59\%} — the bias is already present
+    \item Gap remains positive through all pretraining stages, SFT, mid-training, and alignment
+    \item SmolLM2-1.7B: same pattern, positive from step 125K, persists to final model
+\end{itemize}
+
+Fine-tuning neither creates nor removes the primacy bias. It is established early in pretraining and is persistent.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{../../results_vllm/plots/training_dynamics_gap.png}
+    \caption{RI$-$PI gap across all training stages of SmolLM3-3B (37 checkpoints). The bias is already +59\% at step 40K — the very first checkpoint — and remains positive through all pretraining stages, SFT, mid-training, APO, and long-context fine-tuning.}
+\end{figure}
+
+\FloatBarrier
+
+% ── What We Cannot Yet Explain ────────────────────────────────────────────────
+\section*{What We Cannot Yet Explain}
+
+These are the open questions where collaboration would be most useful.
+
+\textbf{Q1 — Where is the suppression circuit?}\\
+Causal ablation shows no single bottleneck head responsible for suppressing $v_\text{last}$. Ablating the top contributing heads \textit{hurts} retrieval (they help, not suppress). The mechanism is distributed across the final layer stack. What is the architectural unit — attention pattern, residual stream interaction, MLP block — that implements the ``forget the last value'' behavior? Is there a graph-theoretic characterization of the computational graph that predicts suppression?
+
+\textbf{Q2 — Can we quantify the collapse magnitude from architecture parameters?}\\
+The Jacobian shows a 2.1× primacy ratio for transformers but 295× for Mamba at initialization. Is there a theory connecting $d_\text{model}$, sequence length, and number of layers to the interference ratio? The Glasses paper proves collapse is \textit{inevitable}, but does not predict its magnitude for a given architecture. We would like to bound PI floor as a function of model capacity.
+
+\textbf{Q3 — Is there a phase transition in the bias during pretraining?}\\
+The gap is +59\% at SmolLM3 step 40K — essentially fully formed at $\sim$1\% through pretraining. Does the bias emerge from the first token processed, or is there an earlier phase where it is absent? What data or objective triggers consolidation of the primacy structure?
+
+\textbf{Q4 — What is the connection to over-squashing in the GNN sense?}\\
+Our logit lens shows the collapse occurs in the final 15\% of layers. Is there an over-squashing interpretation — that the computational graph of the last few layers has too few paths from late-sequence tokens to the output? Or is it a competitive dynamics issue (multiple values competing for the same representation)?
+
+\textbf{Q5 — Can we fix it, and what does fixing it require architecturally?}\\
+We ran preliminary remedy experiments (landmark tokens, recency cues, numbered context) and found only marginal improvement — the bias resists surface-level prompt interventions. The deeper question is architectural: does fixing PI $>$ RI require changing the attention pattern (e.g.\ bidirectional encoding), the state capacity (e.g.\ larger $d_\text{model}$ per position), or the positional geometry (e.g.\ replacing RoPE with a scheme that doesn't amplify early positions)? Our bidirectional control (Flan-T5) shows no primacy bias — but at the cost of 64–77\% garbage rate on the retrieval task, so bidirectionality alone is not sufficient. What is the \textit{minimal} architectural change that preserves RI performance while restoring PI? This is the practical design question downstream of all the mechanistic findings.
+
+\vfill
+\noindent\rule{\linewidth}{0.4pt}
+{\scriptsize \textit{11 models · 2 datasets · 650 test conditions · 100 trials/cell · SmolLM2/3 training dynamics across 40+ pretraining checkpoints}}
+
+\end{document}
