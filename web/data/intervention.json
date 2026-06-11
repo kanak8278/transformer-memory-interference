@@ -14,6 +14,32 @@
   "trained_on": "arbitrary-token task (ARB)",
   "evaluated_on": "semantic task (SEM) \u2014 cross-distribution transfer"
  },
+ "ablation": {
+  "note": "Does the fix have to touch attention? No. A LoRA on the MLP blocks closes the gap just as well as one on attention \u2014 the capability is distributed across the late layers, not owned by the attention heads.",
+  "cells": [
+   {
+    "K": 10,
+    "N": 50,
+    "base_gap": -0.08,
+    "attn_gap": 0.0,
+    "mlp_gap": 0.02
+   },
+   {
+    "K": 15,
+    "N": 20,
+    "base_gap": -0.26,
+    "attn_gap": 0.02,
+    "mlp_gap": 0.02
+   },
+   {
+    "K": 20,
+    "N": 30,
+    "base_gap": -0.3,
+    "attn_gap": 0.02,
+    "mlp_gap": 0.0
+   }
+  ]
+ },
  "cells": [
   {
    "K": 7,
@@ -148,6 +174,24 @@
     "ci": [
      0.6,
      0.71
+    ]
+   },
+   {
+    "q": "P(attend v_last), L32H7",
+    "base": 0.12,
+    "lora": 0.78,
+    "ci": [
+     0.62,
+     0.68
+    ]
+   },
+   {
+    "q": "P(attend v_last), L31H15",
+    "base": 0.23,
+    "lora": 0.86,
+    "ci": [
+     0.57,
+     0.7
     ]
    }
   ],

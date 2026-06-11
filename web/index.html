@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=12" />
+<link rel="stylesheet" href="css/style.css?v=14" />
 </head>
 <body>
 
@@ -26,6 +26,8 @@
     <a class="navlink hide-sm" href="#load">Load</a>
     <a class="navlink hide-sm" href="#why">Why</a>
     <a class="navlink hide-sm" href="#inside">Inside</a>
+    <a class="navlink hide-sm" href="#training">Born</a>
+    <a class="navlink hide-sm" href="#format">Format</a>
     <a class="navlink" href="#fix">The fix</a>
     <a class="navlink hide-sm" href="#details">Details</a>
   </div>
@@ -54,7 +56,7 @@
           <tr><td class="f-claim">It worsens with <b>updates</b>, not context length</td><td class="f-result">current-value recall decays as N grows (&lt;4% of context used)</td><td class="f-where"><a href="#load">→ §4</a></td></tr>
           <tr><td class="f-claim">The correct value is <b>computed, then suppressed</b></td><td class="f-result">it surfaces in late layers (P≈0.5) then decays before the output</td><td class="f-where"><a href="#inside">→ §6</a></td></tr>
           <tr><td class="f-claim">The model <b>can't tell</b> it's about to be wrong</td><td class="f-result">current-value-correctness probe sits at chance (58%)</td><td class="f-where"><a href="#knows">→ §7</a></td></tr>
-          <tr><td class="f-claim">A small <b>fine-tune</b> closes the gap</td><td class="f-result">gap → ~0; the late-layer suppression is removed</td><td class="f-where"><a href="#fix">→ §8</a></td></tr>
+          <tr><td class="f-claim">A small <b>fine-tune</b> closes the gap</td><td class="f-result">gap → ~0; the late-layer suppression is removed</td><td class="f-where"><a href="#fix">→ §10</a></td></tr>
         </tbody>
       </table>
     </div>
@@ -300,11 +302,48 @@
   </div>
 </section>
 
-<!-- §5 the fix -->
+<!-- §8 training dynamics -->
+<section id="training">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">08 — When it's born</p>
+      <h2>The bias is learned during pretraining.</h2>
+      <p class="lead">Re-evaluate SmolLM2 across its public pretraining checkpoints. Early on, first and current value are close. As training proceeds, <span style="color:var(--good);font-weight:600">first</span>-value recall climbs while <span style="color:var(--bad);font-weight:600">current</span>-value recall lags — the asymmetry <b>grows with training</b>. It isn't bolted on by instruction tuning; it emerges from the pretraining objective itself.</p>
+    </div>
+    <div class="card">
+      <div class="controls-row"><span class="dim-label" id="td-caption"></span></div>
+      <div id="tdchart" class="chartwrap"></div>
+      <div class="legend" id="td-legend"></div>
+    </div>
+    <div class="key-insight" id="td-insight"></div>
+  </div>
+</section>
+
+<!-- §9 format intervention -->
+<section id="format" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">09 — Can you prompt around it?</p>
+      <h2>Formatting helps — but doesn't cure it.</h2>
+      <p class="lead">Same updates, four layouts: <b>Plain</b> key:value, <b>Labeled</b>, <b>Block</b>-grouped, and <b>Landmark</b> markers. Block grouping helps a lot; the default Plain format is often the worst; no single format reliably closes the gap across models. Formatting is a band-aid — it never touches the underlying readout failure (and you can't always control the format your input arrives in).</p>
+    </div>
+    <div class="card">
+      <div class="controls-row">
+        <div class="toggle" id="fmt-model"></div>
+        <span class="dim-label">First vs current accuracy by prompt format (K=10, N=50)</span>
+      </div>
+      <div id="fmtchart" class="chartwrap"></div>
+      <div class="legend" id="fmt-legend"></div>
+    </div>
+    <div class="key-insight" id="fmt-insight"></div>
+  </div>
+</section>
+
+<!-- §10 the fix -->
 <section id="fix">
   <div class="wrap">
     <div class="section-head">
-      <p class="eyebrow">08 — The fix</p>
+      <p class="eyebrow">10 — The fix</p>
       <h2>A small fine-tune closes the gap.</h2>
       <p class="lead">The skill was latent, not missing. A LoRA fine-tune — trained only on this task — doesn't teach the model anything new about <i>finding</i> values. It removes the late-layer suppression that was tearing down the correct answer.</p>
     </div>
@@ -316,6 +355,18 @@
       <summary>Show the per-cell numbers (LoRA transfer table)</summary>
       <div class="panel-body"><div id="fix-table"></div></div>
     </details>
+
+    <h3 style="margin-top:40px">Where the fix acts</h3>
+    <p class="lead" style="font-size:1.05rem">The fine-tune re-routes a handful of late-layer attention heads back onto the current value.</p>
+    <div class="card">
+      <div class="dim-label" style="margin-bottom:10px">Probability the head attends to the current value · baseline → +LoRA (Qwen2.5-3B, K=2 N=5)</div>
+      <div id="fix-routing"></div>
+    </div>
+
+    <h3 style="margin-top:40px">It isn't specific to attention</h3>
+    <p class="lead" style="font-size:1.05rem">A LoRA on the MLP blocks closes the gap just as well — the capability is distributed, not owned by the attention heads.</p>
+    <div class="card" style="padding:8px 8px"><div id="fix-ablation"></div></div>
+
     <div class="key-insight" id="fix-insight"></div>
   </div>
 </section>
@@ -406,6 +457,6 @@ What was the last value of gemstone?      → expected: pearl</pre>
 
 <div class="tip" id="tip"></div>
 
-<script src="js/app.js?v=12"></script>
+<script src="js/app.js?v=14"></script>
 </body>
 </html>

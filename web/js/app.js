@@ -45,19 +45,23 @@ Promise.all([
   J("data/examples.json"), J("data/models_scatter.json"),
   J("data/logit_lens.json"), J("data/probing.json"), J("data/intervention.json"),
   J("data/position_curve.json"), J("data/load.json"),
-]).then(([examples, scatter, ll, probing, fix, pos, load]) => {
+  J("data/training_dynamics.json"), J("data/format.json"),
+]).then(([examples, scatter, ll, probing, fix, pos, load, td, fmt]) => {
   buildHero(scatter, fix);
   buildDemo(examples);
   buildScatter(scatter);
   buildScatterTable(scatter);
   buildPositionCurve(pos);
   buildLoad(load);
+  buildTraining(td);
+  buildFormat(fmt);
   buildLogitLens(ll);
   buildProbing(probing);
   buildFix(fix);
   setupReveal();
   addEventListener("resize", debounce(() => {
     buildScatter(scatter); buildPositionCurve(pos, true); buildLoad(load, true);
+    buildTraining(td); buildFormat(fmt, true);
     buildLogitLens(ll, true); buildProbing(probing, true);
   }, 180));
 }).catch(e => console.error("data load failed", e));
@@ -343,6 +347,82 @@ function buildLoad(data, keepState = false) {
   $$("#load-model button").forEach(b => b.onclick = () => {
     $$("#load-model button").forEach(x => x.classList.remove("active"));
     b.classList.add("active"); loadMi = +b.dataset.i; draw();
+  });
+  draw();
+}
+
+// ════════════════════════════════════════════════════════════════ grouped bar chart
+function groupedBar(host, { groups, yMax = 1, yLabel, barColors }) {
+  host.replaceChildren();
+  const W = 880, H = 380, m = { t: 18, r: 16, b: 52, l: 48 };
+  const iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const y = v => m.t + (1 - v / yMax) * ih;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, width: "100%", style: "max-height:400px" });
+  for (let i = 0; i <= 4; i++) {
+    const t = (yMax * i) / 4;
+    svg.appendChild(el("line", { class: "gridline", x1: m.l, y1: y(t), x2: m.l + iw, y2: y(t) }));
+    svg.appendChild(el("text", { x: m.l - 8, y: y(t) + 4, "text-anchor": "end", "font-size": 11, fill: COL.muted, text: pct(t / yMax) + "%" }));
+  }
+  const gw = iw / groups.length;
+  groups.forEach((g, gi) => {
+    const n = g.bars.length, pad = gw * 0.18, bw = (gw - 2 * pad) / n;
+    g.bars.forEach((b, bi) => {
+      const x = m.l + gi * gw + pad + bi * bw;
+      svg.appendChild(el("rect", { x: x + 2, y: y(b.v), width: bw - 4, height: Math.max(0, ih - (y(b.v) - m.t)),
+        rx: 3, fill: b.color, "fill-opacity": b.opacity == null ? 1 : b.opacity }));
+      svg.appendChild(el("text", { x: x + bw / 2, y: y(b.v) - 5, "text-anchor": "middle", "font-size": 10,
+        fill: COL.muted, text: pct(b.v) + "%" }));
+    });
+    svg.appendChild(el("text", { x: m.l + gi * gw + gw / 2, y: m.t + ih + 20, "text-anchor": "middle",
+      "font-size": 12, fill: COL.ink, "font-weight": 600, text: g.label }));
+  });
+  host.appendChild(svg);
+}
+
+// ════════════════════════════════════════════════════════════════ §8 training dynamics
+function buildTraining(data) {
+  const p = data.points;
+  $("#td-caption").textContent = `${data.model} · first vs current accuracy across pretraining (averaged over the K×N grid)`;
+  lineChart($("#tdchart"), {
+    series: [
+      { data: p.map(x => x.fvq), color: COL.good, width: 2.75, name: "FVQ" },
+      { data: p.map(x => x.cvq), color: COL.bad, width: 2.75, name: "CVQ" },
+    ],
+    nLayers: p.length, yMax: 1, yLabel: "accuracy", xLabel: data.x_unit,
+    tickLabel: i => (p[i].step / 1e6).toFixed(1) + "M",
+  });
+  $("#td-legend").replaceChildren(
+    legItem(COL.good, "First value (FVQ)"), legItem(COL.bad, "Current value (CVQ)"),
+    el("span", { class: "muted", text: data.model }));
+  const a = p[0], z = p[p.length - 1];
+  $("#td-insight").innerHTML = `From step ${(a.step/1e6).toFixed(1)}M to ${(z.step/1e6).toFixed(1)}M, first-value recall climbs <b style="color:var(--good)">${pct(a.fvq)}% → ${pct(z.fvq)}%</b> while current-value recall trails (<b style="color:var(--bad)">${pct(a.cvq)}% → ${pct(z.cvq)}%</b>). The gap is present early and widens — the model <b>learns to favour the first value</b> over the course of pretraining.`;
+}
+
+// ════════════════════════════════════════════════════════════════ §9 format intervention
+let fmtMi = 0;
+function buildFormat(data, keepState = false) {
+  const tog = $("#fmt-model");
+  if (!keepState) {
+    tog.replaceChildren(...data.models.map((mm, i) => el("button", { "data-i": i, class: i === 0 ? "active" : "", text: mm.model })));
+    fmtMi = Math.max(0, data.models.findIndex(mm => mm.model === data.default_model));
+    [...tog.children].forEach((b, i) => b.classList.toggle("active", i === fmtMi));
+  }
+  function draw() {
+    const m = data.models[fmtMi];
+    const groups = data.formats.map((f, i) => ({
+      label: f, bars: [{ v: m.fvq[i], color: COL.good }, { v: m.cvq[i], color: COL.bad }],
+    }));
+    groupedBar($("#fmtchart"), { groups, yMax: 1 });
+    $("#fmt-legend").replaceChildren(
+      legItem(COL.good, "First value (FVQ)"), legItem(COL.bad, "Current value (CVQ)"),
+      el("span", { class: "muted", text: `${m.model} · ${data.cell}` }));
+    const cvqMin = Math.min(...m.cvq), cvqMax = Math.max(...m.cvq);
+    const bestF = data.formats[m.cvq.indexOf(cvqMax)], worstF = data.formats[m.cvq.indexOf(cvqMin)];
+    $("#fmt-insight").innerHTML = `For ${m.model}, current-value accuracy swings from <b style="color:var(--bad)">${pct(cvqMin)}% (${worstF})</b> to <b>${pct(cvqMax)}% (${bestF})</b> — the layout matters enormously. But the first-value bars stay high throughout: formatting shuffles <i>how badly</i> the current value is lost, without removing the asymmetry.`;
+  }
+  $$("#fmt-model button").forEach(b => b.onclick = () => {
+    $$("#fmt-model button").forEach(x => x.classList.remove("active"));
+    b.classList.add("active"); fmtMi = +b.dataset.i; draw();
   });
   draw();
 }
@@ -642,7 +722,30 @@ function buildFix(data) {
       <tbody>${rows}</tbody></table>`;
   }
 
-  $("#fix-insight").innerHTML = `<strong>The skill was latent, not missing.</strong> ${m.story}`;
+  // attention-routing: 4 promoter heads, baseline → +LoRA
+  const fr = $("#fix-routing");
+  if (fr && m.attention) {
+    const groups = m.attention.map(a => ({
+      label: a.q.replace("P(attend v_last), ", ""),
+      bars: [{ v: a.base, color: COL.muted }, { v: a.lora, color: COL.lora }],
+    }));
+    groupedBar(fr, { groups, yMax: 1 });
+    const lg = el("div", { class: "legend" }, [legItem(COL.muted, "Baseline"), legItem(COL.lora, "+ LoRA")]);
+    fr.appendChild(lg);
+  }
+  // attention-vs-MLP ablation table
+  const fa = $("#fix-ablation");
+  if (fa && data.ablation) {
+    const g = v => `<td class="num ${Math.abs(v) > 0.03 ? "gap-pos" : "gap-neg"}">${v > 0 ? "+" : ""}${pct(v)}%</td>`;
+    const rows = data.ablation.cells.map(c => `<tr>
+      <td class="num">K=${c.K}, N=${c.N}</td>${g(c.base_gap)}${g(c.attn_gap)}${g(c.mlp_gap)}</tr>`).join("");
+    fa.innerHTML = `<table class="data-table">
+      <thead><tr><th>Cell</th><th>Gap · baseline</th><th>Gap · attention-LoRA</th><th>Gap · MLP-LoRA</th></tr></thead>
+      <tbody>${rows}</tbody></table>`;
+  }
+
+  const story = m.story.replace(/^The skill was latent, not missing\.\s*/, "");
+  $("#fix-insight").innerHTML = `<strong>The skill was latent, not missing.</strong> ${story}`;
 }
 
 // ════════════════════════════════════════════════════════════════ reveal

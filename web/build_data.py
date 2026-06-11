@@ -480,6 +480,8 @@ def build_intervention():
         "attention": [
             {"q": "P(attend v_last), L32H3",  "base": 0.11, "lora": 0.78, "ci": [0.65, 0.71]},
             {"q": "P(attend v_last), L31H12", "base": 0.16, "lora": 0.81, "ci": [0.60, 0.71]},
+            {"q": "P(attend v_last), L32H7",  "base": 0.12, "lora": 0.78, "ci": [0.62, 0.68]},
+            {"q": "P(attend v_last), L31H15", "base": 0.23, "lora": 0.86, "ci": [0.57, 0.70]},
         ],
         "story": ("The skill was latent, not missing. Condition-discrimination, the "
                   "late-layer readout, and the v_last representation all pre-existed in "
@@ -492,6 +494,18 @@ def build_intervention():
         "adapter": {"type": "LoRA", "targets": ["q_proj", "k_proj", "v_proj", "o_proj"],
                     "r": 16, "alpha": 32, "size_mb": 28, "trained_on": "arbitrary-token task (ARB)",
                     "evaluated_on": "semantic task (SEM) — cross-distribution transfer"},
+        # attention-LoRA vs MLP-LoRA: both close the gap → the capability is distributed,
+        # not localized to attention. (main_comparison.txt + qwen_mlp_control_comparison.txt)
+        "ablation": {
+            "note": ("Does the fix have to touch attention? No. A LoRA on the MLP blocks "
+                     "closes the gap just as well as one on attention — the capability is "
+                     "distributed across the late layers, not owned by the attention heads."),
+            "cells": [
+                {"K": 10, "N": 50, "base_gap": -0.08, "attn_gap": 0.00, "mlp_gap": 0.02},
+                {"K": 15, "N": 20, "base_gap": -0.26, "attn_gap": 0.02, "mlp_gap": 0.02},
+                {"K": 20, "N": 30, "base_gap": -0.30, "attn_gap": 0.02, "mlp_gap": 0.00},
+            ],
+        },
         "cells": cells,
         "mechanism": mechanism,
         "note": ("Behavioural numbers are the published values from the paper's LoRA "
@@ -575,12 +589,67 @@ def build_load():
     print(f"  load.json — {len(models)} models, K={K}, N={Ns}")
 
 
+# ── §8 (new)  training dynamics — when the bias is born ──────────────────────
+TD_DIR = ROOT / "v3" / "results_vllm" / "training_dynamics"
+def build_training_dynamics():
+    files = [f for f in glob.glob(str(TD_DIR / "step-*.json")) if "trials" not in f]
+    pts = []
+    for f in files:
+        step = int(f.split("step-")[1].split(".json")[0])
+        d = json.load(open(f))
+        s = d.get("summary", {})
+        if "mean_ri" in s and "mean_pi" in s:
+            pts.append({"step": step, "fvq": round(s["mean_ri"], 3),
+                        "cvq": round(s["mean_pi"], 3), "gap": round(s["mean_gap"], 3)})
+    pts.sort(key=lambda p: p["step"])
+    out = {
+        "model": "SmolLM2-1.7B",
+        "x_unit": "pretraining step",
+        "points": pts,
+        "note": ("Re-evaluating SmolLM2-1.7B's public pretraining checkpoints (averaged over "
+                 "the full K×N grid). Early in training the model is roughly even on first vs "
+                 "current value; as pretraining proceeds, first-value recall climbs while "
+                 "current-value recall stalls — the asymmetry is acquired during pretraining, "
+                 "not bolted on by instruction tuning."),
+    }
+    json.dump(out, open(OUT / "training_dynamics.json", "w"), indent=1)
+    print(f"  training_dynamics.json — {len(pts)} checkpoints (SmolLM2)")
+
+
+# ── §9 (new)  format intervention — can you prompt around it? ────────────────
+def build_format():
+    # Published values from paper/figures/tab_format.tex (K=10, N=50).  FVQ / CVQ.
+    F = ["Plain", "Labeled", "Block", "Landmark"]
+    rows = {
+        "Qwen2.5-3B-Instruct": [(.49, .23), (.34, .39), (.84, .92), (.71, .27)],
+        "Qwen3.5-2B":          [(.95, .01), (.85, .93), (1.0, .98), (.80, .07)],
+        "Qwen3.5-4B":          [(.99, .00), (.93, .97), (1.0, 1.0), (.99, .47)],
+        "Gemma-3-4b-it":       [(.92, .01), (.39, .47), (.99, .89), (.92, .00)],
+        "GPT-4.1":             [(1.0, .69), (1.0, .96), (1.0, .98), (.99, .99)],
+        "Claude-4.5-Haiku":    [(1.0, .43), (1.0, .95), (1.0, .99), (.91, .90)],
+    }
+    models = [{"model": m, "fvq": [a for a, b in v], "cvq": [b for a, b in v]} for m, v in rows.items()]
+    out = {
+        "cell": "K=10, N=50", "formats": F, "models": models,
+        "default_model": "Qwen2.5-3B-Instruct",
+        "note": ("Re-formatting the same updates (Plain key:value, Labeled, Block-grouped, or "
+                 "Landmark markers) shifts current-value accuracy a lot — Block grouping helps "
+                 "most — but no format reliably fixes it across models, and the default Plain "
+                 "format is the worst. Formatting is a band-aid, not a cure; it doesn't touch "
+                 "the underlying readout failure."),
+    }
+    json.dump(out, open(OUT / "format.json", "w"), indent=1)
+    print(f"  format.json — {len(models)} models × {len(F)} formats")
+
+
 if __name__ == "__main__":
     print("Building web/data/ ...")
     build_demo()
     build_scatter()
     build_position_curve()
     build_load()
+    build_training_dynamics()
+    build_format()
     build_logit_lens()
     build_probing()
     build_intervention()
