@@ -197,7 +197,7 @@ Mirroring the §5.1 Qwen mechanistic re-run, but with two caveats:
 ```
 python3 lora_intervention/merge_lora.py \
   --base google/gemma-3-4b-it \
-  --adapter lora_intervention/checkpoints/gemma_adapter \
+  --adapter lora_intervention/checkpoints/transformers-remember-first-forget-last/gemma_adapter \
   --out lora_intervention/checkpoints/gemma_merged --device cpu
 ```
 
@@ -392,7 +392,7 @@ train split, 6,726 train / 747 val) — a more conservative test:
 "even arithmetic *reasoning* training doesn't fix the gap." Same
 system prompt as main run.
 
-**Training (`checkpoints/qwen_arith_adapter/`).**
+**Training (`checkpoints/transformers-remember-first-forget-last/qwen_arith_adapter/`).**
 
 - Qwen/Qwen2.5-3B-Instruct + rank-16 attention-only LoRA, lr 2e-4
   cosine, batch 2 × grad_accum 32 (eff 64), max_seq_len 768
@@ -446,7 +446,7 @@ different domain *destroys* the pretrained retrieval signal.
 
 **Files.**
 
-- Adapter: `lora_intervention/checkpoints/qwen_arith_adapter/`
+- Adapter: `lora_intervention/checkpoints/transformers-remember-first-forget-last/qwen_arith_adapter/`
   (44 MB, mirrors the convention of `gemma_adapter/` and `adapter/`)
 - Data generator: `lora_intervention/data_gen_arithmetic.py`
 - Training data: regenerable, gitignored at `lora_intervention/data_arithmetic/`

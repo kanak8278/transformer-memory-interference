@@ -5,7 +5,7 @@ full 28-cell ARB grid deferred.
 
 **Data**: `lora_intervention/results/qwen_mlp_control_eval_*.json`
 + `qwen_mlp_control_comparison.txt`. Durable adapter at
-`lora_intervention/checkpoints/qwen_mlp_adapter/` (102 MB,
+`lora_intervention/checkpoints/transformers-remember-first-forget-last/qwen_mlp_adapter/` (102 MB,
 adapter_model.safetensors 90 MB — larger than attention-only's 29 MB
 because MLP modules have more parameters).
 
@@ -174,7 +174,7 @@ narrows the §7 claim to what we measured.
 
 ## Files
 
-- `lora_intervention/checkpoints/qwen_mlp_adapter/` — durable
+- `lora_intervention/checkpoints/transformers-remember-first-forget-last/qwen_mlp_adapter/` — durable
   adapter (102 MB, mirrors the convention of `qwen_arith_adapter/`
   and `gemma_adapter/`)
 - `lora_intervention/results/qwen_mlp_control_eval_*.json`
@@ -194,7 +194,7 @@ python lora_intervention/train.py --run-name qwen_mlp_lora \
 # Eval (5-cell preview):
 python lora_intervention/evaluate.py \
   --model Qwen/Qwen2.5-3B-Instruct \
-  --adapter lora_intervention/checkpoints/qwen_mlp_adapter \
+  --adapter lora_intervention/checkpoints/transformers-remember-first-forget-last/qwen_mlp_adapter \
   --baseline-path v3/results_vllm/arbitrary_single/Qwen2.5-3B-Instruct/stage1_sweep_20260409_000134.json \
   --run-name qwen_mlp_control \
   --cells "10_50,15_20,20_30,25_75,30_75" \

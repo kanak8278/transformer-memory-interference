@@ -8,7 +8,7 @@ merged model on a small prompt. Aborts if they diverge.
 
 Usage:
     .venv/bin/python lora_intervention/merge_lora.py \
-        --adapter lora_intervention/checkpoints/adapter \
+        --adapter lora_intervention/checkpoints/transformers-remember-first-forget-last/adapter \
         --out lora_intervention/checkpoints/merged
 """
 import argparse
@@ -51,7 +51,7 @@ def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--base", default=BASE_MODEL,
                    help=f"HF model id of base (default: {BASE_MODEL})")
-    p.add_argument("--adapter", default="lora_intervention/checkpoints/adapter",
+    p.add_argument("--adapter", default="lora_intervention/checkpoints/transformers-remember-first-forget-last/adapter",
                    help="Path to PEFT adapter dir")
     p.add_argument("--out", required=True, help="Where to save merged HF model")
     p.add_argument("--device", default=None, help="cpu | mps | cuda. Default: cpu (safest for merge)")
