@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tracked but Suppressed — How LLMs Fail Current-Value Retrieval</title>
+<meta name="description" content="LLMs recall the first value of a key in a stream of updates but fail on its current value. The right answer is computed inside the model, then suppressed before the output. An interactive look at the failure, the mechanism, and a small fine-tune that fixes it." />
+<meta property="og:title" content="Tracked but Suppressed: How LLMs Fail Current-Value Retrieval" />
+<meta property="og:description" content="LLMs fail to retrieve the current value of a key — not because they can't find it, but because they suppress it before the output. See the failure, the mechanism inside the model, and a small fine-tune that fixes it." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=12" />
+</head>
+<body>
+
+<!-- nav -->
+<nav class="nav">
+  <div class="wrap">
+    <span class="brand">Tracked but Suppressed</span>
+    <span class="spacer"></span>
+    <a class="navlink" href="#demo">The bug</a>
+    <a class="navlink hide-sm" href="#universal">Every model</a>
+    <a class="navlink hide-sm" href="#positions">Where</a>
+    <a class="navlink hide-sm" href="#load">Load</a>
+    <a class="navlink hide-sm" href="#why">Why</a>
+    <a class="navlink hide-sm" href="#inside">Inside</a>
+    <a class="navlink" href="#fix">The fix</a>
+    <a class="navlink hide-sm" href="#details">Details</a>
+  </div>
+</nav>
+
+<!-- hero -->
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">Mechanistic interpretability · memory interference</span>
+    <h1>Tracked,<br>then suppressed.</h1>
+    <p class="sub">Give an LLM a stream of updates to the same key and ask for its <b>current</b> value. It reliably recalls the <b>first</b> value it saw — but fails on the latest. Not because it can't find it: the right answer is computed inside the model, then <b>erased before the output</b>. Here's the failure, the mechanism, and a small fine-tune that fixes it.</p>
+    <div class="hero-stats" id="hero-stats"></div>
+  </div>
+</header>
+
+<!-- key findings / TL;DR -->
+<section id="findings" style="padding-top:56px;padding-bottom:56px">
+  <div class="wrap">
+    <p class="eyebrow">In one glance</p>
+    <h2 style="font-size:1.5rem;margin-bottom:18px">Key findings</h2>
+    <div class="card" style="padding:8px 8px">
+      <table>
+        <tbody>
+          <tr><td class="f-claim">Models recall a key's <b>first</b> value but fail on its <b>current</b> value</td><td class="f-result">gap +6 to +53 pp · 17/19 models above the line</td><td class="f-where"><a href="#universal">→ §2</a></td></tr>
+          <tr><td class="f-claim">It's <b>primacy</b>, not "lost in the middle"</td><td class="f-result">the first write is kept; later writes are lost</td><td class="f-where"><a href="#positions">→ §3</a></td></tr>
+          <tr><td class="f-claim">It worsens with <b>updates</b>, not context length</td><td class="f-result">current-value recall decays as N grows (&lt;4% of context used)</td><td class="f-where"><a href="#load">→ §4</a></td></tr>
+          <tr><td class="f-claim">The correct value is <b>computed, then suppressed</b></td><td class="f-result">it surfaces in late layers (P≈0.5) then decays before the output</td><td class="f-where"><a href="#inside">→ §6</a></td></tr>
+          <tr><td class="f-claim">The model <b>can't tell</b> it's about to be wrong</td><td class="f-result">current-value-correctness probe sits at chance (58%)</td><td class="f-where"><a href="#knows">→ §7</a></td></tr>
+          <tr><td class="f-claim">A small <b>fine-tune</b> closes the gap</td><td class="f-result">gap → ~0; the late-layer suppression is removed</td><td class="f-where"><a href="#fix">→ §8</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- §1 feel the bug -->
+<section id="demo">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">01 — Feel the bug</p>
+      <h2>Same stream. One question flips the answer.</h2>
+      <p class="lead">A key gets updated many times over, interleaved with others. Ask for its <span style="color:var(--good);font-weight:600">first</span> value and the model nails it. Ask for its <span style="color:var(--bad);font-weight:600">last</span> value and it hands back something from the middle.</p>
+    </div>
+    <div class="card" id="demo-card">
+      <div class="controls-row">
+        <div class="toggle q" id="q-toggle">
+          <button data-q="first" class="active">Ask the FIRST value</button>
+          <button data-q="last">Ask the LAST value</button>
+        </div>
+        <div id="demo-target"></div>
+      </div>
+      <div class="demo-layout">
+        <div class="demo-stream-wrap">
+          <div class="stream-caption">The stream the model reads <span class="muted" id="demo-streamlen"></span></div>
+          <div id="demo-stream" class="stream-list"></div>
+        </div>
+        <div class="demo-side">
+          <div class="memory-panel">
+            <div class="dim-label">What each key holds now</div>
+            <div id="demo-memory"></div>
+          </div>
+          <div id="demo-answer"></div>
+        </div>
+      </div>
+      <div class="scrub demo-nscrub">
+        <span class="muted" style="font-size:.85rem">Updates per key</span>
+        <input type="range" id="demo-nslider" />
+        <span class="lyr" id="demo-nval"></span>
+      </div>
+      <div class="demo-controls">
+        <span class="muted" style="font-size:.9rem">Real predictions from <span class="mono">Qwen2.5-3B-Instruct</span> · K=3 keys</span>
+        <button class="btn" id="demo-next">Next example →</button>
+      </div>
+    </div>
+    <div class="key-insight">
+      When the model is wrong about the <strong>last</strong> value, it doesn't return noise — it returns an <strong>earlier value from the same stream</strong>. The first write sticks; later writes fail to overwrite it. We call this <b>proactive interference</b>.
+    </div>
+  </div>
+</section>
+
+<!-- §2 universal -->
+<section id="universal" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">02 — It's not one model</p>
+      <h2>Almost every model lands above the line.</h2>
+      <p class="lead">Each dot is a model. Up = recalls the first value (FVQ). Right = recalls the last value (CVQ). The diagonal is "equally good at both." Almost everything sits <b>above</b> it: better at first than last. (A couple of small/base models invert — the paper's "reversal" regime.)</p>
+    </div>
+    <div class="card">
+      <div id="scatter" class="chartwrap"></div>
+      <div class="legend" id="scatter-legend"></div>
+    </div>
+    <p class="note" id="scatter-note"></p>
+    <details class="panel" style="margin-top:18px">
+      <summary>Show the per-model numbers</summary>
+      <div class="panel-body"><div class="tbl-wrap" id="scatter-table" style="max-height:none;margin-top:0"></div></div>
+    </details>
+  </div>
+</section>
+
+<!-- §3 position curve -->
+<section id="positions">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">03 — Where it fails</p>
+      <h2>It keeps the first write and loses the rest.</h2>
+      <p class="lead">Ask for the value at <b>every</b> position, not just first and last. The baseline shows a sharp <b>primacy</b> spike at position 1, a faint recency bump at the end, and a dead zone in between — the model holds onto the first write and drops everything after. Flip <span style="color:var(--lora);font-weight:600">+LoRA</span> and the whole curve lifts: every position becomes retrievable.</p>
+    </div>
+    <div class="card">
+      <div class="controls-row">
+        <div class="toggle ba" id="pos-version">
+          <button data-v="base" class="active">Baseline</button>
+          <button data-v="lora">+ LoRA</button>
+        </div>
+        <span class="dim-label" id="pos-caption"></span>
+        <select id="pos-cell" class="btn"></select>
+      </div>
+      <div id="poscurve" class="chartwrap"></div>
+      <div class="legend" id="pos-legend"></div>
+    </div>
+    <div class="key-insight" id="pos-insight"></div>
+
+    <h3 style="margin-top:40px">Isn't this just "lost in the middle"?</h3>
+    <p class="lead" style="font-size:1.05rem">No — and the shape of the curve is the proof.</p>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="c-head">Lost in the middle <span class="badge">prior work</span></div>
+        <ul>
+          <li>Driven by <b>absolute position</b> in a long context.</li>
+          <li>U-shaped: the <b>middle</b> of the context is worst; both ends recalled well.</li>
+          <li>Appears at long context lengths.</li>
+        </ul>
+      </div>
+      <div class="compare-card ours">
+        <div class="c-head">What we see <span class="badge">this work</span></div>
+        <ul>
+          <li>Driven by <b>update order</b>, not context position.</li>
+          <li><b>Monotone primacy:</b> the first write is kept, the most recent is lost — the worst point is the <i>end</i>, not the middle.</li>
+          <li>Appears in tiny prompts (&lt;4% of the window) — it's interference, not length.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top:40px">It's the opposite of human memory</h3>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="c-head">Humans</div>
+        <ul>
+          <li>Strong <b>recency</b>: the most recent item is recalled best.</li>
+          <li><b>Retroactive</b> interference dominates — new information overwrites old.</li>
+        </ul>
+      </div>
+      <div class="compare-card ours">
+        <div class="c-head">LLMs <span class="badge">inverted</span></div>
+        <ul>
+          <li>Strong <b>primacy</b>: the first value sticks, the current one is lost.</li>
+          <li><b>Proactive</b> interference dominates — old information blocks new.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §4 load (CVQ vs N) -->
+<section id="load" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">04 — The more updates, the worse</p>
+      <h2>Every extra update buries the answer deeper.</h2>
+      <p class="lead">Fix the number of keys; grow the number of updates per key. <span style="color:var(--good);font-weight:600">First</span>-value recall holds steady; <span style="color:var(--bad);font-weight:600">current</span>-value recall decays with load. The failure tracks how much is written <i>after</i> the target — not context length (these prompts use under 4% of the window).</p>
+    </div>
+    <div class="card">
+      <div class="controls-row">
+        <div class="toggle" id="load-model"></div>
+        <span class="dim-label">First vs current accuracy as updates grow (K = 5 keys)</span>
+      </div>
+      <div id="loadchart" class="chartwrap"></div>
+      <div class="legend" id="load-legend"></div>
+    </div>
+    <div class="key-insight" id="load-insight"></div>
+  </div>
+</section>
+
+<!-- §5 why it matters -->
+<section id="why">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">05 — Why it matters</p>
+      <h2>This is the everyday failure mode of "what changed?"</h2>
+      <p class="lead">The benchmark is abstract, but the pattern is not. Any time a value is set and then <i>updated</i> in context, the model is at risk of answering with the <b>stale</b> original instead of the current one — and, as §7 shows, without any sign that it's unsure.</p>
+    </div>
+    <div class="stakes-grid">
+      <div class="stake">
+        <div class="s-emoji">📄</div>
+        <div class="s-title">RAG over revised documents</div>
+        <div class="s-body">A policy doc is retrieved alongside its earlier version. Asked for the rule, the model may quote the <span class="stale">superseded</span> clause.</div>
+      </div>
+      <div class="stake">
+        <div class="s-emoji">💬</div>
+        <div class="s-title">Multi-turn corrections</div>
+        <div class="s-body">"Make the booking for 4." … "Actually, make it 6." Later, the model books for <span class="stale">4</span> — it kept the first value.</div>
+      </div>
+      <div class="stake">
+        <div class="s-emoji">🤖</div>
+        <div class="s-title">Agents tracking state</div>
+        <div class="s-body">A variable, balance, or file path is reassigned mid-trajectory. The agent acts on the <span class="stale">initial</span> assignment.</div>
+      </div>
+      <div class="stake">
+        <div class="s-emoji">🛠️</div>
+        <div class="s-title">Tool / function outputs</div>
+        <div class="s-body">A tool returns an updated value across calls. The model reasons over the <span class="stale">first</span> result it saw, not the latest.</div>
+      </div>
+    </div>
+    <div class="key-insight">The dangerous part isn't the error rate — it's that the model is <strong>confidently</strong> wrong (§7). It gives no signal that the value it returns is stale, so the failure is silent.</div>
+  </div>
+</section>
+
+<!-- §6 inside -->
+<section id="inside">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">06 — Look inside</p>
+      <h2>The right answer is there — then it gets erased.</h2>
+      <p class="lead">Decode the model's hidden state at every layer: the <b>correct</b> value, the <b>strongest competing</b> value, and the total mass on any tracked value. Asking for the <b>current</b> value, the correct answer surfaces in the late layers — then gets <b>suppressed</b> before the output, and a competing value wins. Flip <span style="color:var(--lora);font-weight:600">+LoRA</span> and the suppression is gone.</p>
+    </div>
+    <div class="card">
+      <div class="controls-row">
+        <div class="toggle ba" id="ll-version">
+          <button data-v="base" class="active">Baseline</button>
+          <button data-v="lora">+ LoRA</button>
+        </div>
+        <div class="toggle q" id="ll-cond">
+          <button data-c="PI" class="active">Last value (CVQ)</button>
+          <button data-c="RI">First value (FVQ)</button>
+        </div>
+        <select id="ll-cell" class="btn"></select>
+      </div>
+      <div class="dim-label" id="ll-caption" style="margin-bottom:6px"></div>
+      <div id="logitlens" class="chartwrap"></div>
+      <div class="scrub">
+        <span class="muted" style="font-size:.85rem">Layer</span>
+        <input type="range" id="ll-slider" min="0" value="0" />
+        <span class="lyr" id="ll-layerval"></span>
+      </div>
+      <div class="legend" id="ll-legend"></div>
+    </div>
+    <p class="note">Qwen2.5-3B-Instruct, the paper's §7 mechanism probe: arbitrary single-token values, strict single-token decoding through the unembedding. Absolute accuracy runs lower than the semantic task in §1–§4, but the surfaced-then-suppressed pattern is the mechanism the paper reports.</p>
+    <div class="key-insight" id="ll-insight"></div>
+  </div>
+</section>
+
+<!-- §4 what it knows (Phase 2) -->
+<section id="knows" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">07 — What the model knows about itself</p>
+      <h2>It can't tell when it's about to be wrong.</h2>
+      <p class="lead">We train a tiny probe to read, from the hidden state, whether the model will answer correctly. For the <b>first</b>-value task the signal is there. For the <b>last</b>-value task it's at chance — until LoRA installs it in the very same layers.</p>
+    </div>
+    <div class="card">
+      <div class="controls-row">
+        <div class="toggle ba" id="pr-version">
+          <button data-v="base" class="active">Baseline</button>
+          <button data-v="lora">+ LoRA</button>
+        </div>
+        <span class="dim-label" id="pr-caption">Linear probe accuracy across layers</span>
+      </div>
+      <div id="probing" class="chartwrap"></div>
+      <div class="legend" id="pr-legend"></div>
+    </div>
+    <div class="key-insight" id="pr-insight"></div>
+  </div>
+</section>
+
+<!-- §5 the fix -->
+<section id="fix">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">08 — The fix</p>
+      <h2>A small fine-tune closes the gap.</h2>
+      <p class="lead">The skill was latent, not missing. A LoRA fine-tune — trained only on this task — doesn't teach the model anything new about <i>finding</i> values. It removes the late-layer suppression that was tearing down the correct answer.</p>
+    </div>
+    <div class="card">
+      <div class="barpair" id="fix-bars"></div>
+      <div style="text-align:center;margin-top:26px" id="fix-gap"></div>
+    </div>
+    <details class="panel" style="margin-top:18px">
+      <summary>Show the per-cell numbers (LoRA transfer table)</summary>
+      <div class="panel-body"><div id="fix-table"></div></div>
+    </details>
+    <div class="key-insight" id="fix-insight"></div>
+  </div>
+</section>
+
+<!-- appendix -->
+<section id="details" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Details</p>
+      <h2>Methods, limitations &amp; how to cite</h2>
+    </div>
+    <div class="appendix">
+      <details class="panel">
+        <summary>The exact task &amp; prompt</summary>
+        <div class="panel-body">
+          <p>Each trial interleaves updates to <b>K</b> keys, each updated <b>N</b> times, shuffled so no two consecutive updates share a key. The model is asked for the <b>first</b> (FVQ), <b>current/last</b> (CVQ), or <b>k-th</b> (IVQ) value of one target key. "First/last" is defined by position in the presented stream.</p>
+          <pre class="codeblock">System: You are a precise data extraction tool. Output ONLY a single
+word — the exact value requested. No other text, no explanation.
+
+User: Read the following key-value stream. Each key gets updated
+multiple times.
+
+gemstone: ruby
+fabric: silk
+gemstone: jade
+fabric: linen
+gemstone: opal
+gemstone: pearl
+
+What was the last value of gemstone?      → expected: pearl</pre>
+        </div>
+      </details>
+
+      <details class="panel">
+        <summary>Methods</summary>
+        <div class="panel-body">
+          <ul>
+            <li><b>Models:</b> 20 in the main set — 14 open-weight (270M–9B: Qwen2.5, Qwen3.5, Gemma-3, TinyLlama, StableLM, Pythia) + 6 proprietary frontier (GPT-4.1/-mini, Claude-4.5-Haiku/-Sonnet, Gemini-2.5-Flash/-Pro). Mamba included separately as an SSM control.</li>
+            <li><b>Datasets:</b> Semantic-Multi (named categories → real values; §1–§4) and arbitrary single-token (the §6 mechanism probe).</li>
+            <li><b>Scoring:</b> behavioural = exact-match generation; logit-lens / probing = strict single-token argmax through the unembedding (a conservative lower bound).</li>
+            <li><b>Cells:</b> open-weight scored at K=5, N=30; proprietary at the harder K=20, N=50, matching the paper.</li>
+            <li><b>Intervention:</b> LoRA (rank 16, α=32) on the attention projections, trained on the arbitrary-token task and evaluated on the semantic task (cross-distribution transfer).</li>
+            <li><b>Mechanism:</b> logit lens, linear correctness probes, and attention routing on Qwen2.5-3B-Instruct; bootstrap 95% CIs (n=2000).</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="panel">
+        <summary>Limitations &amp; honest caveats</summary>
+        <div class="panel-body">
+          <ul>
+            <li>The §6 logit-lens/probing runs use the <b>arbitrary-token</b> probe; absolute accuracy is lower than the semantic task — the <i>pattern</i> (surfaced-then-suppressed) is the result, not the absolute numbers.</li>
+            <li>Single-token argmax <b>underestimates</b> true generation accuracy; it's used because it's internally consistent across baseline/LoRA.</li>
+            <li>Per-point confidence intervals are <b>wide</b> in the position curve (20 trials/position) and logit lens (100 trials/cell) — read the shapes, not individual points.</li>
+            <li>A minority of small / base models show a <b>reversal</b> (CVQ &gt; FVQ) at high load — the asymmetry is dominant, not universal.</li>
+            <li>The fine-tune result is demonstrated on Qwen2.5-3B (and Gemma-3-4B) at specific cells; it is a proof that the skill is latent, not a production recipe.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="panel">
+        <summary>Cite this work</summary>
+        <div class="panel-body">
+          <p>Under double-blind review; author/venue details withheld.</p>
+          <pre class="codeblock">@misc{trackedbutsuppressed,
+  title  = {Tracked but Suppressed: How LLMs Fail Current-Value Retrieval},
+  author = {Anonymous},
+  year   = {2026},
+  note   = {Under review}
+}</pre>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- footer -->
+<footer id="paper">
+  <div class="wrap narrow">
+    <div class="links">
+      <a href="paper.pdf">📄 Read the paper</a>
+      <a href="https://github.com/kanak8278/transformer-memory-interference">💻 Code &amp; data</a>
+      <a href="#demo">↑ Back to top</a>
+    </div>
+    <p class="muted">An interactive companion to <i>“Tracked but Suppressed: How LLMs Fail Current-Value Retrieval.”</i> All figures are real measurements on <span class="mono">Qwen2.5-3B-Instruct</span> and other open / proprietary models — no model runs in your browser; results are precomputed.</p>
+  </div>
+</footer>
+
+<div class="tip" id="tip"></div>
+
+<script src="js/app.js?v=12"></script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+{
+ "headline": {
+  "n_models_paper": 20,
+  "gap_range_pp": [
+   6,
+   53
+  ],
+  "n_shown": 19,
+  "n_gap_positive": 17,
+  "mean_gap": 0.297
+ },
+ "points": [
+  {
+   "model": "StableLM-2-1.6B",
+   "family": "StableLM",
+   "size_b": 1.6,
+   "fvq": 0.95,
+   "cvq": 0.03,
+   "gap": 0.92,
+   "fvq_hw": 0.045,
+   "cvq_hw": 0.037,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "Qwen2.5-0.5B-Instruct",
+   "family": "Qwen2.5",
+   "size_b": 0.5,
+   "fvq": 0.72,
+   "cvq": 0.13,
+   "gap": 0.59,
+   "fvq_hw": 0.087,
+   "cvq_hw": 0.066,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "Gemma-3-1b-it",
+   "family": "Gemma-3",
+   "size_b": 1.0,
+   "fvq": 0.55,
+   "cvq": 0.02,
+   "gap": 0.53,
+   "fvq_hw": 0.096,
+   "cvq_hw": 0.032,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "Qwen3.5-0.8B",
+   "family": "Qwen3.5",
+   "size_b": 0.8,
+   "fvq": 0.75,
+   "cvq": 0.25,
+   "gap": 0.5,
+   "fvq_hw": 0.084,
+   "cvq_hw": 0.084,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "Claude-4.5-Haiku",
+   "family": "Claude",
+   "size_b": null,
+   "fvq": 1.0,
+   "cvq": 0.525,
+   "gap": 0.475,
+   "fvq_hw": 0.009,
+   "cvq_hw": 0.069,
+   "n": 200,
+   "cell": {
+    "K": 20,
+    "N": 50
+   },
+   "proprietary": true
+  },
+  {
+   "model": "Gemini-2.5-Flash",
+   "family": "Gemini",
+   "size_b": null,
+   "fvq": 1.0,
+   "cvq": 0.54,
+   "gap": 0.46,
+   "fvq_hw": 0.009,
+   "cvq_hw": 0.068,
+   "n": 200,
+   "cell": {
+    "K": 20,
+    "N": 50
+   },
+   "proprietary": true
+  },
+  {
+   "model": "Qwen2.5-1.5B-Instruct",
+   "family": "Qwen2.5",
+   "size_b": 1.5,
+   "fvq": 0.7,
+   "cvq": 0.27,
+   "gap": 0.43,
+   "fvq_hw": 0.088,
+   "cvq_hw": 0.086,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "GPT-4.1",
+   "family": "GPT",
+   "size_b": 1760.0,
+   "fvq": 1.0,
+   "cvq": 0.706,
+   "gap": 0.294,
+   "fvq_hw": 0.012,
+   "cvq_hw": 0.07,
+   "n": 160,
+   "cell": {
+    "K": 20,
+    "N": 50
+   },
+   "proprietary": true
+  },
+  {
+   "model": "Gemma-3-4b-it",
+   "family": "Gemma-3",
+   "size_b": 4.0,
+   "fvq": 0.97,
+   "cvq": 0.68,
+   "gap": 0.29,
+   "fvq_hw": 0.037,
+   "cvq_hw": 0.09,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "Gemma-3-270m-it",
+   "family": "Gemma-3",
+   "size_b": 0.27,
+   "fvq": 0.31,
+   "cvq": 0.05,
+   "gap": 0.26,
+   "fvq_hw": 0.089,
+   "cvq_hw": 0.045,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "GPT-4.1-mini",
+   "family": "GPT",
+   "size_b": null,
+   "fvq": 1.0,
+   "cvq": 0.743,
+   "gap": 0.257,
+   "fvq_hw": 0.011,
+   "cvq_hw": 0.064,
+   "n": 175,
+   "cell": {
+    "K": 20,
+    "N": 50
+   },
+   "proprietary": true
+  },
+  {
+   "model": "Claude-4.5-Sonnet",
+   "family": "Claude",
+   "size_b": null,
+   "fvq": 1.0,
+   "cvq": 0.744,
+   "gap": 0.256,
+   "fvq_hw": 0.012,
+   "cvq_hw": 0.067,
+   "n": 160,
+   "cell": {
+    "K": 20,
+    "N": 50
+   },
+   "proprietary": true
+  },
+  {
+   "model": "Qwen3.5-4B",
+   "family": "Qwen3.5",
+   "size_b": 4.0,
+   "fvq": 0.86,
+   "cvq": 0.64,
+   "gap": 0.22,
+   "fvq_hw": 0.068,
+   "cvq_hw": 0.092,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "Qwen3.5-2B",
+   "family": "Qwen3.5",
+   "size_b": 2.0,
+   "fvq": 0.62,
+   "cvq": 0.48,
+   "gap": 0.14,
+   "fvq_hw": 0.093,
+   "cvq_hw": 0.096,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "Gemini-2.5-Pro",
+   "family": "Gemini",
+   "size_b": null,
+   "fvq": 0.9,
+   "cvq": 0.769,
+   "gap": 0.131,
+   "fvq_hw": 0.047,
+   "cvq_hw": 0.065,
+   "n": 160,
+   "cell": {
+    "K": 20,
+    "N": 50
+   },
+   "proprietary": true
+  },
+  {
+   "model": "Qwen3.5-9B",
+   "family": "Qwen3.5",
+   "size_b": 9.0,
+   "fvq": 0.86,
+   "cvq": 0.79,
+   "gap": 0.07,
+   "fvq_hw": 0.068,
+   "cvq_hw": 0.079,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "Qwen2.5-3B-Instruct",
+   "family": "Qwen2.5",
+   "size_b": 3.0,
+   "fvq": 0.61,
+   "cvq": 0.55,
+   "gap": 0.06,
+   "fvq_hw": 0.094,
+   "cvq_hw": 0.096,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "TinyLlama-1.1B",
+   "family": "TinyLlama",
+   "size_b": 1.1,
+   "fvq": 0.19,
+   "cvq": 0.23,
+   "gap": -0.04,
+   "fvq_hw": 0.076,
+   "cvq_hw": 0.082,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  },
+  {
+   "model": "Qwen2.5-3B (base)",
+   "family": "Qwen2.5",
+   "size_b": 3.0,
+   "fvq": 0.4,
+   "cvq": 0.6,
+   "gap": -0.2,
+   "fvq_hw": 0.094,
+   "cvq_hw": 0.094,
+   "n": 100,
+   "cell": {
+    "K": 5,
+    "N": 30
+   },
+   "proprietary": false
+  }
+ ],
+ "note": "FVQ = First-Value Query (\u201cwhat was the FIRST value?\u201d; models good). CVQ = Current-Value Query (\u201cwhat is the CURRENT/last value?\u201d; models bad). Open-weight models scored at K=5, N=30; proprietary at the harder K=20, N=50, matching the paper. Mamba (an SSM control) is excluded from the main set."
+}

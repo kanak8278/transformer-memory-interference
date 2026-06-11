@@ -1,0 +1,158 @@
+{
+ "model": "Qwen2.5-3B-Instruct",
+ "adapter": {
+  "type": "LoRA",
+  "targets": [
+   "q_proj",
+   "k_proj",
+   "v_proj",
+   "o_proj"
+  ],
+  "r": 16,
+  "alpha": 32,
+  "size_mb": 28,
+  "trained_on": "arbitrary-token task (ARB)",
+  "evaluated_on": "semantic task (SEM) \u2014 cross-distribution transfer"
+ },
+ "cells": [
+  {
+   "K": 7,
+   "N": 20,
+   "base": {
+    "fvq": 0.6,
+    "cvq": 0.55,
+    "gap": 0.05
+   },
+   "lora": {
+    "fvq": 1.0,
+    "cvq": 1.0,
+    "gap": 0.0
+   }
+  },
+  {
+   "K": 15,
+   "N": 20,
+   "base": {
+    "fvq": 0.25,
+    "cvq": 0.55,
+    "gap": -0.3
+   },
+   "lora": {
+    "fvq": 1.0,
+    "cvq": 1.0,
+    "gap": 0.0
+   }
+  },
+  {
+   "K": 15,
+   "N": 30,
+   "base": {
+    "fvq": 0.35,
+    "cvq": 0.8,
+    "gap": -0.45
+   },
+   "lora": {
+    "fvq": 1.0,
+    "cvq": 1.0,
+    "gap": 0.0
+   }
+  },
+  {
+   "K": 20,
+   "N": 30,
+   "base": {
+    "fvq": 0.25,
+    "cvq": 0.65,
+    "gap": -0.4
+   },
+   "lora": {
+    "fvq": 1.0,
+    "cvq": 1.0,
+    "gap": 0.0
+   }
+  }
+ ],
+ "mechanism": {
+  "probe": [
+   {
+    "q": "CVQ-correctness probe, L33",
+    "base": 0.58,
+    "lora": 0.94,
+    "ci": [
+     0.21,
+     0.5
+    ]
+   },
+   {
+    "q": "CVQ-correctness probe, L32",
+    "base": 0.65,
+    "lora": 0.94,
+    "ci": [
+     0.22,
+     0.36
+    ]
+   },
+   {
+    "q": "FVQ-correctness probe, L33",
+    "base": 0.81,
+    "lora": 0.93,
+    "ci": [
+     0.05,
+     0.19
+    ]
+   }
+  ],
+  "logit_lens": [
+   {
+    "q": "P(v_last) at L32, K=2,N=5",
+    "base": 0.34,
+    "lora": 0.99,
+    "ci": [
+     0.55,
+     0.73
+    ]
+   },
+   {
+    "q": "P(v_last) at L32, K=2,N=50",
+    "base": 0.02,
+    "lora": 0.62,
+    "ci": [
+     0.5,
+     0.69
+    ]
+   },
+   {
+    "q": "P(v_last) at L35, K=2,N=50",
+    "base": 0.11,
+    "lora": 0.9,
+    "ci": [
+     0.71,
+     0.87
+    ]
+   }
+  ],
+  "attention": [
+   {
+    "q": "P(attend v_last), L32H3",
+    "base": 0.11,
+    "lora": 0.78,
+    "ci": [
+     0.65,
+     0.71
+    ]
+   },
+   {
+    "q": "P(attend v_last), L31H12",
+    "base": 0.16,
+    "lora": 0.81,
+    "ci": [
+     0.6,
+     0.71
+    ]
+   }
+  ],
+  "story": "The skill was latent, not missing. Condition-discrimination, the late-layer readout, and the v_last representation all pre-existed in the baseline. LoRA fixes a calibration / readout failure \u2014 re-routing attention to the last value and lifting it through the final layers \u2014 not a representational one."
+ },
+ "note": "Behavioural numbers are the published values from the paper's LoRA transfer table (Semantic-Multi eval); mechanism deltas carry the paper's bootstrap 95% CIs.",
+ "source": "paper/figures/tab_lora_sem.tex, tab_mechanism.tex"
+}

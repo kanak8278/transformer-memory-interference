@@ -1,0 +1,9261 @@
+{
+ "model": "Qwen2.5-3B-Instruct",
+ "K": 3,
+ "n_values": [
+  5,
+  10,
+  15,
+  20,
+  30
+ ],
+ "scenarios": [
+  {
+   "id": "0_gemstone",
+   "target_key": "gemstone",
+   "keys": [
+    "gemstone",
+    "surgical procedure",
+    "volcano name"
+   ],
+   "by_n": {
+    "5": {
+     "stream": [
+      {
+       "category": "volcano name",
+       "value": "krakatoa"
+      },
+      {
+       "category": "gemstone",
+       "value": "padparadscha"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "endarterectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "amethyst"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "lasik"
+      },
+      {
+       "category": "volcano name",
+       "value": "popocatepetl"
+      },
+      {
+       "category": "gemstone",
+       "value": "jet"
+      },
+      {
+       "category": "volcano name",
+       "value": "kilimanjaro"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "cholecystectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "coral"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "colectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "tambora"
+      },
+      {
+       "category": "gemstone",
+       "value": "agate"
+      },
+      {
+       "category": "volcano name",
+       "value": "cotopaxi"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "lobectomy"
+      }
+     ],
+     "target_values": [
+      "padparadscha",
+      "amethyst",
+      "jet",
+      "coral",
+      "agate"
+     ],
+     "memory_now": {
+      "gemstone": "agate",
+      "surgical procedure": "lobectomy",
+      "volcano name": "cotopaxi"
+     },
+     "fvq": {
+      "expected": "padparadscha",
+      "predicted": "jet",
+      "correct": false
+     },
+     "cvq": {
+      "expected": "agate",
+      "predicted": "agate",
+      "correct": true
+     }
+    },
+    "10": {
+     "stream": [
+      {
+       "category": "volcano name",
+       "value": "ruapehu"
+      },
+      {
+       "category": "gemstone",
+       "value": "jadeite"
+      },
+      {
+       "category": "volcano name",
+       "value": "llaima"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "lobectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "rhodochrosite"
+      },
+      {
+       "category": "volcano name",
+       "value": "nyiragongo"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "pancreaticoduodenectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "azurite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "endarterectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "sakurajima"
+      },
+      {
+       "category": "gemstone",
+       "value": "tourmaline"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "arthroscopy"
+      },
+      {
+       "category": "volcano name",
+       "value": "kilauea"
+      },
+      {
+       "category": "gemstone",
+       "value": "labradorite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "nephrectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "pearl"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "angioplasty"
+      },
+      {
+       "category": "gemstone",
+       "value": "ammolite"
+      },
+      {
+       "category": "volcano name",
+       "value": "santorini"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "colectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "garnet"
+      },
+      {
+       "category": "volcano name",
+       "value": "pinatubo"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "endoscopy"
+      },
+      {
+       "category": "volcano name",
+       "value": "chimborazo"
+      },
+      {
+       "category": "gemstone",
+       "value": "aventurine"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "lasik"
+      },
+      {
+       "category": "volcano name",
+       "value": "krakatau"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "adenoidectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "tongariro"
+      },
+      {
+       "category": "gemstone",
+       "value": "shell"
+      }
+     ],
+     "target_values": [
+      "jadeite",
+      "rhodochrosite",
+      "azurite",
+      "tourmaline",
+      "labradorite",
+      "pearl",
+      "ammolite",
+      "garnet",
+      "aventurine",
+      "shell"
+     ],
+     "memory_now": {
+      "gemstone": "shell",
+      "surgical procedure": "adenoidectomy",
+      "volcano name": "tongariro"
+     },
+     "fvq": {
+      "expected": "jadeite",
+      "predicted": "jadeite",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "shell",
+      "predicted": "shell",
+      "correct": true
+     }
+    },
+    "15": {
+     "stream": [
+      {
+       "category": "volcano name",
+       "value": "merapi"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "colectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "heimaey"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "facelift"
+      },
+      {
+       "category": "gemstone",
+       "value": "rhodonite"
+      },
+      {
+       "category": "volcano name",
+       "value": "kilauea"
+      },
+      {
+       "category": "gemstone",
+       "value": "sapphire"
+      },
+      {
+       "category": "volcano name",
+       "value": "thera"
+      },
+      {
+       "category": "gemstone",
+       "value": "aventurine"
+      },
+      {
+       "category": "volcano name",
+       "value": "chimborazo"
+      },
+      {
+       "category": "gemstone",
+       "value": "ammolite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "splenectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "tungurahua"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "adenoidectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "etna"
+      },
+      {
+       "category": "gemstone",
+       "value": "garnet"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "rhinoplasty"
+      },
+      {
+       "category": "volcano name",
+       "value": "sakurajima"
+      },
+      {
+       "category": "gemstone",
+       "value": "sardonyx"
+      },
+      {
+       "category": "volcano name",
+       "value": "nyiragongo"
+      },
+      {
+       "category": "gemstone",
+       "value": "carnelian"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "angioplasty"
+      },
+      {
+       "category": "volcano name",
+       "value": "elbrus"
+      },
+      {
+       "category": "gemstone",
+       "value": "goshenite"
+      },
+      {
+       "category": "volcano name",
+       "value": "ruapehu"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "bunionectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "prasiolite"
+      },
+      {
+       "category": "volcano name",
+       "value": "vesuvius"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "laminectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "galunggung"
+      },
+      {
+       "category": "gemstone",
+       "value": "pearl"
+      },
+      {
+       "category": "volcano name",
+       "value": "damavand"
+      },
+      {
+       "category": "gemstone",
+       "value": "turquoise"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "cholecystectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "citrine"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "parathyroidectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "topaz"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "endarterectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "pinatubo"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "biopsy"
+      },
+      {
+       "category": "gemstone",
+       "value": "copal"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "tonsillectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "pectolite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "lasik"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "transplant"
+      }
+     ],
+     "target_values": [
+      "rhodonite",
+      "sapphire",
+      "aventurine",
+      "ammolite",
+      "garnet",
+      "sardonyx",
+      "carnelian",
+      "goshenite",
+      "prasiolite",
+      "pearl",
+      "turquoise",
+      "citrine",
+      "topaz",
+      "copal",
+      "pectolite"
+     ],
+     "memory_now": {
+      "gemstone": "pectolite",
+      "surgical procedure": "transplant",
+      "volcano name": "pinatubo"
+     },
+     "fvq": {
+      "expected": "rhodonite",
+      "predicted": "rhodonite",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "pectolite",
+      "predicted": "pectolite",
+      "correct": true
+     }
+    },
+    "20": {
+     "stream": [
+      {
+       "category": "volcano name",
+       "value": "heimaey"
+      },
+      {
+       "category": "gemstone",
+       "value": "tanzanite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "colectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "ararat"
+      },
+      {
+       "category": "gemstone",
+       "value": "alexandrite"
+      },
+      {
+       "category": "volcano name",
+       "value": "vesuvius"
+      },
+      {
+       "category": "gemstone",
+       "value": "padparadscha"
+      },
+      {
+       "category": "volcano name",
+       "value": "arenal"
+      },
+      {
+       "category": "gemstone",
+       "value": "moonstone"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "laminectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "paricutin"
+      },
+      {
+       "category": "gemstone",
+       "value": "jadeite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "facelift"
+      },
+      {
+       "category": "gemstone",
+       "value": "malachite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "transplant"
+      },
+      {
+       "category": "volcano name",
+       "value": "etna"
+      },
+      {
+       "category": "gemstone",
+       "value": "prasiolite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "mastectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "villarrica"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "thyroidectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "elbrus"
+      },
+      {
+       "category": "gemstone",
+       "value": "pectolite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "thrombectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "bone"
+      },
+      {
+       "category": "volcano name",
+       "value": "kelud"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "endoscopy"
+      },
+      {
+       "category": "gemstone",
+       "value": "zircon"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "prostatectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "ruapehu"
+      },
+      {
+       "category": "gemstone",
+       "value": "bixbite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "gastrectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "kilauea"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "stenting"
+      },
+      {
+       "category": "volcano name",
+       "value": "taal"
+      },
+      {
+       "category": "gemstone",
+       "value": "citrine"
+      },
+      {
+       "category": "volcano name",
+       "value": "nyiragongo"
+      },
+      {
+       "category": "gemstone",
+       "value": "ammolite"
+      },
+      {
+       "category": "volcano name",
+       "value": "pinatubo"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "tonsillectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "thera"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "appendectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "aquamarine"
+      },
+      {
+       "category": "volcano name",
+       "value": "stromboli"
+      },
+      {
+       "category": "gemstone",
+       "value": "amethyst"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "arthroscopy"
+      },
+      {
+       "category": "volcano name",
+       "value": "chimborazo"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "splenectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "krakatoa"
+      },
+      {
+       "category": "gemstone",
+       "value": "jasper"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "pancreaticoduodenectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "morganite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "rhinoplasty"
+      },
+      {
+       "category": "gemstone",
+       "value": "labradorite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "adrenalectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "kazbek"
+      },
+      {
+       "category": "gemstone",
+       "value": "jet"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "endarterectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "ruby"
+      },
+      {
+       "category": "volcano name",
+       "value": "tungurahua"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "angioplasty"
+      }
+     ],
+     "target_values": [
+      "tanzanite",
+      "alexandrite",
+      "padparadscha",
+      "moonstone",
+      "jadeite",
+      "malachite",
+      "prasiolite",
+      "pectolite",
+      "bone",
+      "zircon",
+      "bixbite",
+      "citrine",
+      "ammolite",
+      "aquamarine",
+      "amethyst",
+      "jasper",
+      "morganite",
+      "labradorite",
+      "jet",
+      "ruby"
+     ],
+     "memory_now": {
+      "gemstone": "ruby",
+      "surgical procedure": "angioplasty",
+      "volcano name": "tungurahua"
+     },
+     "fvq": {
+      "expected": "tanzanite",
+      "predicted": "tanzanite",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "ruby",
+      "predicted": "jet",
+      "correct": false
+     }
+    },
+    "30": {
+     "stream": [
+      {
+       "category": "gemstone",
+       "value": "morganite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "parathyroidectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "tourmaline"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "rhinoplasty"
+      },
+      {
+       "category": "gemstone",
+       "value": "malachite"
+      },
+      {
+       "category": "volcano name",
+       "value": "santorini"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "nephrectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "aventurine"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "cholecystectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "villarrica"
+      },
+      {
+       "category": "gemstone",
+       "value": "ammolite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "endoscopy"
+      },
+      {
+       "category": "volcano name",
+       "value": "elbrus"
+      },
+      {
+       "category": "gemstone",
+       "value": "garnet"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "biopsy"
+      },
+      {
+       "category": "gemstone",
+       "value": "zircon"
+      },
+      {
+       "category": "volcano name",
+       "value": "kelud"
+      },
+      {
+       "category": "gemstone",
+       "value": "aquamarine"
+      },
+      {
+       "category": "volcano name",
+       "value": "cotopaxi"
+      },
+      {
+       "category": "gemstone",
+       "value": "moonstone"
+      },
+      {
+       "category": "volcano name",
+       "value": "taranaki"
+      },
+      {
+       "category": "gemstone",
+       "value": "prasiolite"
+      },
+      {
+       "category": "volcano name",
+       "value": "kilimanjaro"
+      },
+      {
+       "category": "gemstone",
+       "value": "jasper"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "meniscectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "emerald"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "adenoidectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "merapi"
+      },
+      {
+       "category": "gemstone",
+       "value": "shell"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "appendectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "osorno"
+      },
+      {
+       "category": "gemstone",
+       "value": "peridot"
+      },
+      {
+       "category": "volcano name",
+       "value": "kilauea"
+      },
+      {
+       "category": "gemstone",
+       "value": "chrysocolla"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "facelift"
+      },
+      {
+       "category": "volcano name",
+       "value": "vesuvius"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "pancreaticoduodenectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "amethyst"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "transplant"
+      },
+      {
+       "category": "gemstone",
+       "value": "rhodonite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "laparoscopy"
+      },
+      {
+       "category": "volcano name",
+       "value": "thera"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "liposuction"
+      },
+      {
+       "category": "gemstone",
+       "value": "goshenite"
+      },
+      {
+       "category": "volcano name",
+       "value": "popocatepetl"
+      },
+      {
+       "category": "gemstone",
+       "value": "alexandrite"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "tonsillectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "galunggung"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "prostatectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "agate"
+      },
+      {
+       "category": "volcano name",
+       "value": "stromboli"
+      },
+      {
+       "category": "gemstone",
+       "value": "topaz"
+      },
+      {
+       "category": "volcano name",
+       "value": "llaima"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "thyroidectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "paricutin"
+      },
+      {
+       "category": "gemstone",
+       "value": "citrine"
+      },
+      {
+       "category": "volcano name",
+       "value": "krakatau"
+      },
+      {
+       "category": "gemstone",
+       "value": "ruby"
+      },
+      {
+       "category": "volcano name",
+       "value": "tongariro"
+      },
+      {
+       "category": "gemstone",
+       "value": "jet"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "colonoscopy"
+      },
+      {
+       "category": "volcano name",
+       "value": "ararat"
+      },
+      {
+       "category": "gemstone",
+       "value": "padparadscha"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "colectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "taal"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "splenectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "chrysoprase"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "bunionectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "krakatoa"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "adrenalectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "ivory"
+      },
+      {
+       "category": "volcano name",
+       "value": "ruapehu"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "stenting"
+      },
+      {
+       "category": "volcano name",
+       "value": "nyiragongo"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "hysterectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "arenal"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "lobectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "chimborazo"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "endarterectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "tambora"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "laminectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "spinel"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "gastrectomy"
+      },
+      {
+       "category": "volcano name",
+       "value": "heimaey"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "arthroscopy"
+      },
+      {
+       "category": "volcano name",
+       "value": "etna"
+      },
+      {
+       "category": "surgical procedure",
+       "value": "mastectomy"
+      },
+      {
+       "category": "gemstone",
+       "value": "amber"
+      },
+      {
+       "category": "volcano name",
+       "value": "unzen"
+      },
+      {
+       "category": "gemstone",
+       "value": "sunstone"
+      }
+     ],
+     "target_values": [
+      "morganite",
+      "tourmaline",
+      "malachite",
+      "aventurine",
+      "ammolite",
+      "garnet",
+      "zircon",
+      "aquamarine",
+      "moonstone",
+      "prasiolite",
+      "jasper",
+      "emerald",
+      "shell",
+      "peridot",
+      "chrysocolla",
+      "amethyst",
+      "rhodonite",
+      "goshenite",
+      "alexandrite",
+      "agate",
+      "topaz",
+      "citrine",
+      "ruby",
+      "jet",
+      "padparadscha",
+      "chrysoprase",
+      "ivory",
+      "spinel",
+      "amber",
+      "sunstone"
+     ],
+     "memory_now": {
+      "gemstone": "sunstone",
+      "surgical procedure": "mastectomy",
+      "volcano name": "unzen"
+     },
+     "fvq": {
+      "expected": "morganite",
+      "predicted": "morganite",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "sunstone",
+      "predicted": "amber",
+      "correct": false
+     }
+    }
+   }
+  },
+  {
+   "id": "1_flower_species",
+   "target_key": "flower species",
+   "keys": [
+    "flower species",
+    "literary genre",
+    "musical instrument"
+   ],
+   "by_n": {
+    "5": {
+     "stream": [
+      {
+       "category": "flower species",
+       "value": "tulip"
+      },
+      {
+       "category": "literary genre",
+       "value": "fantasy"
+      },
+      {
+       "category": "musical instrument",
+       "value": "kalimba"
+      },
+      {
+       "category": "flower species",
+       "value": "poppy"
+      },
+      {
+       "category": "literary genre",
+       "value": "drama"
+      },
+      {
+       "category": "musical instrument",
+       "value": "balalaika"
+      },
+      {
+       "category": "flower species",
+       "value": "snapdragon"
+      },
+      {
+       "category": "literary genre",
+       "value": "bildungsroman"
+      },
+      {
+       "category": "musical instrument",
+       "value": "mellophone"
+      },
+      {
+       "category": "flower species",
+       "value": "lupine"
+      },
+      {
+       "category": "musical instrument",
+       "value": "guqin"
+      },
+      {
+       "category": "literary genre",
+       "value": "dystopian"
+      },
+      {
+       "category": "musical instrument",
+       "value": "clarinet"
+      },
+      {
+       "category": "literary genre",
+       "value": "postmodernist"
+      },
+      {
+       "category": "flower species",
+       "value": "magnolia"
+      }
+     ],
+     "target_values": [
+      "tulip",
+      "poppy",
+      "snapdragon",
+      "lupine",
+      "magnolia"
+     ],
+     "memory_now": {
+      "flower species": "magnolia",
+      "literary genre": "postmodernist",
+      "musical instrument": "clarinet"
+     },
+     "fvq": {
+      "expected": "tulip",
+      "predicted": "tulip",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "magnolia",
+      "predicted": "magnolia",
+      "correct": true
+     }
+    },
+    "10": {
+     "stream": [
+      {
+       "category": "flower species",
+       "value": "aster"
+      },
+      {
+       "category": "musical instrument",
+       "value": "kalimba"
+      },
+      {
+       "category": "flower species",
+       "value": "primrose"
+      },
+      {
+       "category": "musical instrument",
+       "value": "oboe"
+      },
+      {
+       "category": "flower species",
+       "value": "delphinium"
+      },
+      {
+       "category": "musical instrument",
+       "value": "piccolo"
+      },
+      {
+       "category": "flower species",
+       "value": "tulip"
+      },
+      {
+       "category": "musical instrument",
+       "value": "gong"
+      },
+      {
+       "category": "flower species",
+       "value": "ranunculus"
+      },
+      {
+       "category": "literary genre",
+       "value": "gothic"
+      },
+      {
+       "category": "flower species",
+       "value": "clover"
+      },
+      {
+       "category": "musical instrument",
+       "value": "shakuhachi"
+      },
+      {
+       "category": "literary genre",
+       "value": "romance"
+      },
+      {
+       "category": "musical instrument",
+       "value": "piano"
+      },
+      {
+       "category": "flower species",
+       "value": "gladiolus"
+      },
+      {
+       "category": "literary genre",
+       "value": "surrealism"
+      },
+      {
+       "category": "musical instrument",
+       "value": "timpani"
+      },
+      {
+       "category": "literary genre",
+       "value": "whodunit"
+      },
+      {
+       "category": "flower species",
+       "value": "snowdrop"
+      },
+      {
+       "category": "musical instrument",
+       "value": "flugelhorn"
+      },
+      {
+       "category": "flower species",
+       "value": "lupine"
+      },
+      {
+       "category": "musical instrument",
+       "value": "cornet"
+      },
+      {
+       "category": "literary genre",
+       "value": "journalism"
+      },
+      {
+       "category": "musical instrument",
+       "value": "djembe"
+      },
+      {
+       "category": "literary genre",
+       "value": "poetry"
+      },
+      {
+       "category": "flower species",
+       "value": "azalea"
+      },
+      {
+       "category": "literary genre",
+       "value": "thriller"
+      },
+      {
+       "category": "literary genre",
+       "value": "western"
+      },
+      {
+       "category": "literary genre",
+       "value": "memoir"
+      },
+      {
+       "category": "literary genre",
+       "value": "fantasy"
+      }
+     ],
+     "target_values": [
+      "aster",
+      "primrose",
+      "delphinium",
+      "tulip",
+      "ranunculus",
+      "clover",
+      "gladiolus",
+      "snowdrop",
+      "lupine",
+      "azalea"
+     ],
+     "memory_now": {
+      "flower species": "azalea",
+      "literary genre": "fantasy",
+      "musical instrument": "djembe"
+     },
+     "fvq": {
+      "expected": "aster",
+      "predicted": "aster",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "azalea",
+      "predicted": "azalea",
+      "correct": true
+     }
+    },
+    "15": {
+     "stream": [
+      {
+       "category": "musical instrument",
+       "value": "tuba"
+      },
+      {
+       "category": "literary genre",
+       "value": "parable"
+      },
+      {
+       "category": "musical instrument",
+       "value": "panpipes"
+      },
+      {
+       "category": "flower species",
+       "value": "orchid"
+      },
+      {
+       "category": "musical instrument",
+       "value": "cello"
+      },
+      {
+       "category": "flower species",
+       "value": "wildflower"
+      },
+      {
+       "category": "literary genre",
+       "value": "essay"
+      },
+      {
+       "category": "flower species",
+       "value": "carnation"
+      },
+      {
+       "category": "literary genre",
+       "value": "horror"
+      },
+      {
+       "category": "flower species",
+       "value": "geranium"
+      },
+      {
+       "category": "musical instrument",
+       "value": "harpsichord"
+      },
+      {
+       "category": "flower species",
+       "value": "hyacinth"
+      },
+      {
+       "category": "literary genre",
+       "value": "autobiography"
+      },
+      {
+       "category": "musical instrument",
+       "value": "tabla"
+      },
+      {
+       "category": "literary genre",
+       "value": "satire"
+      },
+      {
+       "category": "flower species",
+       "value": "gladiolus"
+      },
+      {
+       "category": "literary genre",
+       "value": "postmodernist"
+      },
+      {
+       "category": "flower species",
+       "value": "coneflower"
+      },
+      {
+       "category": "literary genre",
+       "value": "travelogue"
+      },
+      {
+       "category": "flower species",
+       "value": "dandelion"
+      },
+      {
+       "category": "musical instrument",
+       "value": "bassoon"
+      },
+      {
+       "category": "flower species",
+       "value": "columbine"
+      },
+      {
+       "category": "literary genre",
+       "value": "mystery"
+      },
+      {
+       "category": "flower species",
+       "value": "begonia"
+      },
+      {
+       "category": "musical instrument",
+       "value": "castanets"
+      },
+      {
+       "category": "flower species",
+       "value": "violet"
+      },
+      {
+       "category": "musical instrument",
+       "value": "glockenspiel"
+      },
+      {
+       "category": "literary genre",
+       "value": "philosophy"
+      },
+      {
+       "category": "flower species",
+       "value": "magnolia"
+      },
+      {
+       "category": "musical instrument",
+       "value": "marimba"
+      },
+      {
+       "category": "flower species",
+       "value": "freesia"
+      },
+      {
+       "category": "musical instrument",
+       "value": "triangle"
+      },
+      {
+       "category": "literary genre",
+       "value": "crime"
+      },
+      {
+       "category": "musical instrument",
+       "value": "banjo"
+      },
+      {
+       "category": "literary genre",
+       "value": "epistolary"
+      },
+      {
+       "category": "musical instrument",
+       "value": "bugle"
+      },
+      {
+       "category": "literary genre",
+       "value": "romance"
+      },
+      {
+       "category": "musical instrument",
+       "value": "melodica"
+      },
+      {
+       "category": "flower species",
+       "value": "zinnia"
+      },
+      {
+       "category": "literary genre",
+       "value": "fantasy"
+      },
+      {
+       "category": "musical instrument",
+       "value": "contrabassoon"
+      },
+      {
+       "category": "flower species",
+       "value": "aster"
+      },
+      {
+       "category": "literary genre",
+       "value": "experimental"
+      },
+      {
+       "category": "musical instrument",
+       "value": "trumpet"
+      },
+      {
+       "category": "literary genre",
+       "value": "dystopian"
+      }
+     ],
+     "target_values": [
+      "orchid",
+      "wildflower",
+      "carnation",
+      "geranium",
+      "hyacinth",
+      "gladiolus",
+      "coneflower",
+      "dandelion",
+      "columbine",
+      "begonia",
+      "violet",
+      "magnolia",
+      "freesia",
+      "zinnia",
+      "aster"
+     ],
+     "memory_now": {
+      "flower species": "aster",
+      "literary genre": "dystopian",
+      "musical instrument": "trumpet"
+     },
+     "fvq": {
+      "expected": "orchid",
+      "predicted": "orchid",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "aster",
+      "predicted": "zinnia",
+      "correct": false
+     }
+    },
+    "20": {
+     "stream": [
+      {
+       "category": "flower species",
+       "value": "crocus"
+      },
+      {
+       "category": "literary genre",
+       "value": "drama"
+      },
+      {
+       "category": "musical instrument",
+       "value": "recorder"
+      },
+      {
+       "category": "literary genre",
+       "value": "crime"
+      },
+      {
+       "category": "flower species",
+       "value": "fuchsia"
+      },
+      {
+       "category": "musical instrument",
+       "value": "harpsichord"
+      },
+      {
+       "category": "literary genre",
+       "value": "metafiction"
+      },
+      {
+       "category": "flower species",
+       "value": "lavender"
+      },
+      {
+       "category": "musical instrument",
+       "value": "harmonica"
+      },
+      {
+       "category": "literary genre",
+       "value": "noir"
+      },
+      {
+       "category": "musical instrument",
+       "value": "kalimba"
+      },
+      {
+       "category": "flower species",
+       "value": "carnation"
+      },
+      {
+       "category": "musical instrument",
+       "value": "glockenspiel"
+      },
+      {
+       "category": "literary genre",
+       "value": "modernist"
+      },
+      {
+       "category": "musical instrument",
+       "value": "lyre"
+      },
+      {
+       "category": "flower species",
+       "value": "camellia"
+      },
+      {
+       "category": "literary genre",
+       "value": "poetry"
+      },
+      {
+       "category": "musical instrument",
+       "value": "dulcimer"
+      },
+      {
+       "category": "flower species",
+       "value": "coreopsis"
+      },
+      {
+       "category": "musical instrument",
+       "value": "oboe"
+      },
+      {
+       "category": "flower species",
+       "value": "hydrangea"
+      },
+      {
+       "category": "literary genre",
+       "value": "gothic"
+      },
+      {
+       "category": "flower species",
+       "value": "foxglove"
+      },
+      {
+       "category": "literary genre",
+       "value": "romance"
+      },
+      {
+       "category": "flower species",
+       "value": "rhododendron"
+      },
+      {
+       "category": "literary genre",
+       "value": "satire"
+      },
+      {
+       "category": "flower species",
+       "value": "aster"
+      },
+      {
+       "category": "musical instrument",
+       "value": "triangle"
+      },
+      {
+       "category": "literary genre",
+       "value": "travelogue"
+      },
+      {
+       "category": "musical instrument",
+       "value": "bugle"
+      },
+      {
+       "category": "literary genre",
+       "value": "detective"
+      },
+      {
+       "category": "musical instrument",
+       "value": "ukulele"
+      },
+      {
+       "category": "flower species",
+       "value": "orchid"
+      },
+      {
+       "category": "musical instrument",
+       "value": "marimba"
+      },
+      {
+       "category": "literary genre",
+       "value": "essay"
+      },
+      {
+       "category": "flower species",
+       "value": "jasmine"
+      },
+      {
+       "category": "musical instrument",
+       "value": "panpipes"
+      },
+      {
+       "category": "flower species",
+       "value": "rose"
+      },
+      {
+       "category": "musical instrument",
+       "value": "shakuhachi"
+      },
+      {
+       "category": "literary genre",
+       "value": "journalism"
+      },
+      {
+       "category": "flower species",
+       "value": "geranium"
+      },
+      {
+       "category": "musical instrument",
+       "value": "violin"
+      },
+      {
+       "category": "flower species",
+       "value": "freesia"
+      },
+      {
+       "category": "musical instrument",
+       "value": "xylophone"
+      },
+      {
+       "category": "flower species",
+       "value": "tulip"
+      },
+      {
+       "category": "literary genre",
+       "value": "existentialist"
+      },
+      {
+       "category": "musical instrument",
+       "value": "castanets"
+      },
+      {
+       "category": "literary genre",
+       "value": "horror"
+      },
+      {
+       "category": "flower species",
+       "value": "daisy"
+      },
+      {
+       "category": "literary genre",
+       "value": "experimental"
+      },
+      {
+       "category": "flower species",
+       "value": "iris"
+      },
+      {
+       "category": "literary genre",
+       "value": "postmodernist"
+      },
+      {
+       "category": "flower species",
+       "value": "wildflower"
+      },
+      {
+       "category": "literary genre",
+       "value": "epistolary"
+      },
+      {
+       "category": "musical instrument",
+       "value": "cornet"
+      },
+      {
+       "category": "literary genre",
+       "value": "fable"
+      },
+      {
+       "category": "musical instrument",
+       "value": "guqin"
+      },
+      {
+       "category": "flower species",
+       "value": "chrysanthemum"
+      },
+      {
+       "category": "musical instrument",
+       "value": "theremin"
+      },
+      {
+       "category": "literary genre",
+       "value": "whodunit"
+      }
+     ],
+     "target_values": [
+      "crocus",
+      "fuchsia",
+      "lavender",
+      "carnation",
+      "camellia",
+      "coreopsis",
+      "hydrangea",
+      "foxglove",
+      "rhododendron",
+      "aster",
+      "orchid",
+      "jasmine",
+      "rose",
+      "geranium",
+      "freesia",
+      "tulip",
+      "daisy",
+      "iris",
+      "wildflower",
+      "chrysanthemum"
+     ],
+     "memory_now": {
+      "flower species": "chrysanthemum",
+      "literary genre": "whodunit",
+      "musical instrument": "theremin"
+     },
+     "fvq": {
+      "expected": "crocus",
+      "predicted": "crocus",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "chrysanthemum",
+      "predicted": "chrysanthemum",
+      "correct": true
+     }
+    },
+    "30": {
+     "stream": [
+      {
+       "category": "musical instrument",
+       "value": "lyre"
+      },
+      {
+       "category": "literary genre",
+       "value": "essay"
+      },
+      {
+       "category": "flower species",
+       "value": "crocus"
+      },
+      {
+       "category": "literary genre",
+       "value": "biography"
+      },
+      {
+       "category": "flower species",
+       "value": "daffodil"
+      },
+      {
+       "category": "musical instrument",
+       "value": "didgeridoo"
+      },
+      {
+       "category": "literary genre",
+       "value": "surrealism"
+      },
+      {
+       "category": "flower species",
+       "value": "clover"
+      },
+      {
+       "category": "musical instrument",
+       "value": "chimes"
+      },
+      {
+       "category": "flower species",
+       "value": "delphinium"
+      },
+      {
+       "category": "literary genre",
+       "value": "poetry"
+      },
+      {
+       "category": "musical instrument",
+       "value": "clarinet"
+      },
+      {
+       "category": "flower species",
+       "value": "peony"
+      },
+      {
+       "category": "literary genre",
+       "value": "allegory"
+      },
+      {
+       "category": "flower species",
+       "value": "salvia"
+      },
+      {
+       "category": "literary genre",
+       "value": "horror"
+      },
+      {
+       "category": "musical instrument",
+       "value": "kalimba"
+      },
+      {
+       "category": "literary genre",
+       "value": "journalism"
+      },
+      {
+       "category": "musical instrument",
+       "value": "melodica"
+      },
+      {
+       "category": "flower species",
+       "value": "jasmine"
+      },
+      {
+       "category": "musical instrument",
+       "value": "sousaphone"
+      },
+      {
+       "category": "flower species",
+       "value": "columbine"
+      },
+      {
+       "category": "musical instrument",
+       "value": "balalaika"
+      },
+      {
+       "category": "literary genre",
+       "value": "whodunit"
+      },
+      {
+       "category": "musical instrument",
+       "value": "harp"
+      },
+      {
+       "category": "literary genre",
+       "value": "fantasy"
+      },
+      {
+       "category": "flower species",
+       "value": "coneflower"
+      },
+      {
+       "category": "musical instrument",
+       "value": "marimba"
+      },
+      {
+       "category": "literary genre",
+       "value": "experimental"
+      },
+      {
+       "category": "musical instrument",
+       "value": "flugelhorn"
+      },
+      {
+       "category": "literary genre",
+       "value": "history"
+      },
+      {
+       "category": "musical instrument",
+       "value": "trumpet"
+      },
+      {
+       "category": "flower species",
+       "value": "buttercup"
+      },
+      {
+       "category": "musical instrument",
+       "value": "synthesizer"
+      },
+      {
+       "category": "flower species",
+       "value": "magnolia"
+      },
+      {
+       "category": "musical instrument",
+       "value": "theremin"
+      },
+      {
+       "category": "literary genre",
+       "value": "bildungsroman"
+      },
+      {
+       "category": "flower species",
+       "value": "hydrangea"
+      },
+      {
+       "category": "musical instrument",
+       "value": "euphonium"
+      },
+      {
+       "category": "literary genre",
+       "value": "memoir"
+      },
+      {
+       "category": "musical instrument",
+       "value": "saxophone"
+      },
+      {
+       "category": "literary genre",
+       "value": "parable"
+      },
+      {
+       "category": "flower species",
+       "value": "marigold"
+      },
+      {
+       "category": "musical instrument",
+       "value": "trombone"
+      },
+      {
+       "category": "literary genre",
+       "value": "epistolary"
+      },
+      {
+       "category": "musical instrument",
+       "value": "cornet"
+      },
+      {
+       "category": "literary genre",
+       "value": "crime"
+      },
+      {
+       "category": "flower species",
+       "value": "impatiens"
+      },
+      {
+       "category": "literary genre",
+       "value": "dystopian"
+      },
+      {
+       "category": "flower species",
+       "value": "coreopsis"
+      },
+      {
+       "category": "musical instrument",
+       "value": "djembe"
+      },
+      {
+       "category": "flower species",
+       "value": "narcissus"
+      },
+      {
+       "category": "literary genre",
+       "value": "mystery"
+      },
+      {
+       "category": "musical instrument",
+       "value": "tuba"
+      },
+      {
+       "category": "flower species",
+       "value": "daisy"
+      },
+      {
+       "category": "literary genre",
+       "value": "thriller"
+      },
+      {
+       "category": "flower species",
+       "value": "aster"
+      },
+      {
+       "category": "literary genre",
+       "value": "gothic"
+      },
+      {
+       "category": "flower species",
+       "value": "camellia"
+      },
+      {
+       "category": "musical instrument",
+       "value": "ukulele"
+      },
+      {
+       "category": "flower species",
+       "value": "anemone"
+      },
+      {
+       "category": "literary genre",
+       "value": "fable"
+      },
+      {
+       "category": "flower species",
+       "value": "begonia"
+      },
+      {
+       "category": "literary genre",
+       "value": "travelogue"
+      },
+      {
+       "category": "flower species",
+       "value": "lupine"
+      },
+      {
+       "category": "literary genre",
+       "value": "autobiography"
+      },
+      {
+       "category": "musical instrument",
+       "value": "oud"
+      },
+      {
+       "category": "literary genre",
+       "value": "utopian"
+      },
+      {
+       "category": "musical instrument",
+       "value": "flute"
+      },
+      {
+       "category": "flower species",
+       "value": "orchid"
+      },
+      {
+       "category": "musical instrument",
+       "value": "bongos"
+      },
+      {
+       "category": "flower species",
+       "value": "primrose"
+      },
+      {
+       "category": "literary genre",
+       "value": "cyberpunk"
+      },
+      {
+       "category": "flower species",
+       "value": "rhododendron"
+      },
+      {
+       "category": "literary genre",
+       "value": "drama"
+      },
+      {
+       "category": "musical instrument",
+       "value": "zither"
+      },
+      {
+       "category": "flower species",
+       "value": "azalea"
+      },
+      {
+       "category": "literary genre",
+       "value": "existentialist"
+      },
+      {
+       "category": "flower species",
+       "value": "gladiolus"
+      },
+      {
+       "category": "literary genre",
+       "value": "satire"
+      },
+      {
+       "category": "musical instrument",
+       "value": "harmonica"
+      },
+      {
+       "category": "flower species",
+       "value": "violet"
+      },
+      {
+       "category": "literary genre",
+       "value": "western"
+      },
+      {
+       "category": "musical instrument",
+       "value": "gong"
+      },
+      {
+       "category": "flower species",
+       "value": "bluebell"
+      },
+      {
+       "category": "musical instrument",
+       "value": "glockenspiel"
+      },
+      {
+       "category": "literary genre",
+       "value": "absurdist"
+      },
+      {
+       "category": "musical instrument",
+       "value": "violin"
+      },
+      {
+       "category": "flower species",
+       "value": "zinnia"
+      },
+      {
+       "category": "musical instrument",
+       "value": "harpsichord"
+      }
+     ],
+     "target_values": [
+      "crocus",
+      "daffodil",
+      "clover",
+      "delphinium",
+      "peony",
+      "salvia",
+      "jasmine",
+      "columbine",
+      "coneflower",
+      "buttercup",
+      "magnolia",
+      "hydrangea",
+      "marigold",
+      "impatiens",
+      "coreopsis",
+      "narcissus",
+      "daisy",
+      "aster",
+      "camellia",
+      "anemone",
+      "begonia",
+      "lupine",
+      "orchid",
+      "primrose",
+      "rhododendron",
+      "azalea",
+      "gladiolus",
+      "violet",
+      "bluebell",
+      "zinnia"
+     ],
+     "memory_now": {
+      "flower species": "zinnia",
+      "literary genre": "absurdist",
+      "musical instrument": "harpsichord"
+     },
+     "fvq": {
+      "expected": "crocus",
+      "predicted": "crocus",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "zinnia",
+      "predicted": "zinnia",
+      "correct": true
+     }
+    }
+   }
+  },
+  {
+   "id": "2_bird_species",
+   "target_key": "bird species",
+   "keys": [
+    "bird species",
+    "visual art",
+    "ocean current"
+   ],
+   "by_n": {
+    "5": {
+     "stream": [
+      {
+       "category": "ocean current",
+       "value": "leeuwin"
+      },
+      {
+       "category": "bird species",
+       "value": "grosbeak"
+      },
+      {
+       "category": "ocean current",
+       "value": "gyre"
+      },
+      {
+       "category": "visual art",
+       "value": "impressionism"
+      },
+      {
+       "category": "bird species",
+       "value": "bluejay"
+      },
+      {
+       "category": "visual art",
+       "value": "expressionism"
+      },
+      {
+       "category": "ocean current",
+       "value": "agulhas"
+      },
+      {
+       "category": "visual art",
+       "value": "symbolism"
+      },
+      {
+       "category": "bird species",
+       "value": "egret"
+      },
+      {
+       "category": "ocean current",
+       "value": "cromwell"
+      },
+      {
+       "category": "visual art",
+       "value": "rayonism"
+      },
+      {
+       "category": "bird species",
+       "value": "warbler"
+      },
+      {
+       "category": "ocean current",
+       "value": "eddy"
+      },
+      {
+       "category": "visual art",
+       "value": "realism"
+      },
+      {
+       "category": "bird species",
+       "value": "tanager"
+      }
+     ],
+     "target_values": [
+      "grosbeak",
+      "bluejay",
+      "egret",
+      "warbler",
+      "tanager"
+     ],
+     "memory_now": {
+      "bird species": "tanager",
+      "visual art": "realism",
+      "ocean current": "eddy"
+     },
+     "fvq": {
+      "expected": "grosbeak",
+      "predicted": "grosbeak",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "tanager",
+      "predicted": "warbler",
+      "correct": false
+     }
+    },
+    "10": {
+     "stream": [
+      {
+       "category": "visual art",
+       "value": "vorticism"
+      },
+      {
+       "category": "ocean current",
+       "value": "humboldt"
+      },
+      {
+       "category": "visual art",
+       "value": "bauhaus"
+      },
+      {
+       "category": "bird species",
+       "value": "hawk"
+      },
+      {
+       "category": "visual art",
+       "value": "minimalism"
+      },
+      {
+       "category": "bird species",
+       "value": "tern"
+      },
+      {
+       "category": "ocean current",
+       "value": "equatorial"
+      },
+      {
+       "category": "bird species",
+       "value": "ostrich"
+      },
+      {
+       "category": "visual art",
+       "value": "transavantgarde"
+      },
+      {
+       "category": "ocean current",
+       "value": "peru"
+      },
+      {
+       "category": "visual art",
+       "value": "surrealism"
+      },
+      {
+       "category": "bird species",
+       "value": "peacock"
+      },
+      {
+       "category": "ocean current",
+       "value": "canary"
+      },
+      {
+       "category": "visual art",
+       "value": "lowbrow"
+      },
+      {
+       "category": "bird species",
+       "value": "crow"
+      },
+      {
+       "category": "ocean current",
+       "value": "guinea"
+      },
+      {
+       "category": "bird species",
+       "value": "flamingo"
+      },
+      {
+       "category": "ocean current",
+       "value": "upwelling"
+      },
+      {
+       "category": "visual art",
+       "value": "realism"
+      },
+      {
+       "category": "ocean current",
+       "value": "convergence"
+      },
+      {
+       "category": "visual art",
+       "value": "fauvism"
+      },
+      {
+       "category": "bird species",
+       "value": "thrush"
+      },
+      {
+       "category": "ocean current",
+       "value": "labrador"
+      },
+      {
+       "category": "visual art",
+       "value": "renaissance"
+      },
+      {
+       "category": "bird species",
+       "value": "emu"
+      },
+      {
+       "category": "ocean current",
+       "value": "benguela"
+      },
+      {
+       "category": "bird species",
+       "value": "kite"
+      },
+      {
+       "category": "ocean current",
+       "value": "divergence"
+      },
+      {
+       "category": "visual art",
+       "value": "pointillism"
+      },
+      {
+       "category": "bird species",
+       "value": "sparrow"
+      }
+     ],
+     "target_values": [
+      "hawk",
+      "tern",
+      "ostrich",
+      "peacock",
+      "crow",
+      "flamingo",
+      "thrush",
+      "emu",
+      "kite",
+      "sparrow"
+     ],
+     "memory_now": {
+      "bird species": "sparrow",
+      "visual art": "pointillism",
+      "ocean current": "divergence"
+     },
+     "fvq": {
+      "expected": "hawk",
+      "predicted": "hawk",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "sparrow",
+      "predicted": "sparrow",
+      "correct": true
+     }
+    },
+    "15": {
+     "stream": [
+      {
+       "category": "visual art",
+       "value": "constructivism"
+      },
+      {
+       "category": "ocean current",
+       "value": "divergence"
+      },
+      {
+       "category": "bird species",
+       "value": "sparrow"
+      },
+      {
+       "category": "visual art",
+       "value": "lowbrow"
+      },
+      {
+       "category": "bird species",
+       "value": "penguin"
+      },
+      {
+       "category": "visual art",
+       "value": "cubism"
+      },
+      {
+       "category": "bird species",
+       "value": "emu"
+      },
+      {
+       "category": "visual art",
+       "value": "symbolism"
+      },
+      {
+       "category": "bird species",
+       "value": "coot"
+      },
+      {
+       "category": "visual art",
+       "value": "mannerism"
+      },
+      {
+       "category": "ocean current",
+       "value": "kuroshio"
+      },
+      {
+       "category": "visual art",
+       "value": "orphism"
+      },
+      {
+       "category": "ocean current",
+       "value": "guinea"
+      },
+      {
+       "category": "visual art",
+       "value": "rococo"
+      },
+      {
+       "category": "ocean current",
+       "value": "canary"
+      },
+      {
+       "category": "visual art",
+       "value": "minimalism"
+      },
+      {
+       "category": "ocean current",
+       "value": "norwegian"
+      },
+      {
+       "category": "bird species",
+       "value": "bluejay"
+      },
+      {
+       "category": "visual art",
+       "value": "fauvism"
+      },
+      {
+       "category": "bird species",
+       "value": "chickadee"
+      },
+      {
+       "category": "ocean current",
+       "value": "meander"
+      },
+      {
+       "category": "bird species",
+       "value": "ostrich"
+      },
+      {
+       "category": "ocean current",
+       "value": "cromwell"
+      },
+      {
+       "category": "bird species",
+       "value": "pigeon"
+      },
+      {
+       "category": "ocean current",
+       "value": "eddy"
+      },
+      {
+       "category": "visual art",
+       "value": "vorticism"
+      },
+      {
+       "category": "bird species",
+       "value": "oriole"
+      },
+      {
+       "category": "visual art",
+       "value": "suprematism"
+      },
+      {
+       "category": "bird species",
+       "value": "grebe"
+      },
+      {
+       "category": "visual art",
+       "value": "neoclassicism"
+      },
+      {
+       "category": "ocean current",
+       "value": "azores"
+      },
+      {
+       "category": "bird species",
+       "value": "raven"
+      },
+      {
+       "category": "ocean current",
+       "value": "upwelling"
+      },
+      {
+       "category": "bird species",
+       "value": "magpie"
+      },
+      {
+       "category": "ocean current",
+       "value": "california"
+      },
+      {
+       "category": "bird species",
+       "value": "woodpecker"
+      },
+      {
+       "category": "ocean current",
+       "value": "somali"
+      },
+      {
+       "category": "visual art",
+       "value": "stuckism"
+      },
+      {
+       "category": "bird species",
+       "value": "wren"
+      },
+      {
+       "category": "ocean current",
+       "value": "benguela"
+      },
+      {
+       "category": "bird species",
+       "value": "parrot"
+      },
+      {
+       "category": "visual art",
+       "value": "renaissance"
+      },
+      {
+       "category": "ocean current",
+       "value": "convergence"
+      },
+      {
+       "category": "visual art",
+       "value": "dadaism"
+      },
+      {
+       "category": "ocean current",
+       "value": "downwelling"
+      }
+     ],
+     "target_values": [
+      "sparrow",
+      "penguin",
+      "emu",
+      "coot",
+      "bluejay",
+      "chickadee",
+      "ostrich",
+      "pigeon",
+      "oriole",
+      "grebe",
+      "raven",
+      "magpie",
+      "woodpecker",
+      "wren",
+      "parrot"
+     ],
+     "memory_now": {
+      "bird species": "parrot",
+      "visual art": "dadaism",
+      "ocean current": "downwelling"
+     },
+     "fvq": {
+      "expected": "sparrow",
+      "predicted": "sparrow",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "parrot",
+      "predicted": "parrot",
+      "correct": true
+     }
+    },
+    "20": {
+     "stream": [
+      {
+       "category": "ocean current",
+       "value": "filament"
+      },
+      {
+       "category": "bird species",
+       "value": "kestrel"
+      },
+      {
+       "category": "ocean current",
+       "value": "irminger"
+      },
+      {
+       "category": "visual art",
+       "value": "rococo"
+      },
+      {
+       "category": "bird species",
+       "value": "condor"
+      },
+      {
+       "category": "visual art",
+       "value": "bauhaus"
+      },
+      {
+       "category": "ocean current",
+       "value": "azores"
+      },
+      {
+       "category": "bird species",
+       "value": "goose"
+      },
+      {
+       "category": "visual art",
+       "value": "surrealism"
+      },
+      {
+       "category": "ocean current",
+       "value": "gyre"
+      },
+      {
+       "category": "visual art",
+       "value": "mannerism"
+      },
+      {
+       "category": "ocean current",
+       "value": "labrador"
+      },
+      {
+       "category": "visual art",
+       "value": "vorticism"
+      },
+      {
+       "category": "ocean current",
+       "value": "humboldt"
+      },
+      {
+       "category": "bird species",
+       "value": "toucan"
+      },
+      {
+       "category": "visual art",
+       "value": "futurism"
+      },
+      {
+       "category": "ocean current",
+       "value": "kuroshio"
+      },
+      {
+       "category": "bird species",
+       "value": "parrot"
+      },
+      {
+       "category": "visual art",
+       "value": "orphism"
+      },
+      {
+       "category": "bird species",
+       "value": "peacock"
+      },
+      {
+       "category": "ocean current",
+       "value": "leeuwin"
+      },
+      {
+       "category": "visual art",
+       "value": "superflat"
+      },
+      {
+       "category": "ocean current",
+       "value": "agulhas"
+      },
+      {
+       "category": "visual art",
+       "value": "baroque"
+      },
+      {
+       "category": "bird species",
+       "value": "chickadee"
+      },
+      {
+       "category": "ocean current",
+       "value": "divergence"
+      },
+      {
+       "category": "bird species",
+       "value": "grosbeak"
+      },
+      {
+       "category": "ocean current",
+       "value": "somali"
+      },
+      {
+       "category": "bird species",
+       "value": "osprey"
+      },
+      {
+       "category": "visual art",
+       "value": "precisionism"
+      },
+      {
+       "category": "bird species",
+       "value": "gull"
+      },
+      {
+       "category": "visual art",
+       "value": "symbolism"
+      },
+      {
+       "category": "bird species",
+       "value": "hawk"
+      },
+      {
+       "category": "ocean current",
+       "value": "oyashio"
+      },
+      {
+       "category": "bird species",
+       "value": "buzzard"
+      },
+      {
+       "category": "visual art",
+       "value": "modernism"
+      },
+      {
+       "category": "ocean current",
+       "value": "meander"
+      },
+      {
+       "category": "bird species",
+       "value": "duck"
+      },
+      {
+       "category": "ocean current",
+       "value": "cromwell"
+      },
+      {
+       "category": "visual art",
+       "value": "pointillism"
+      },
+      {
+       "category": "bird species",
+       "value": "oriole"
+      },
+      {
+       "category": "visual art",
+       "value": "renaissance"
+      },
+      {
+       "category": "bird species",
+       "value": "harrier"
+      },
+      {
+       "category": "visual art",
+       "value": "rayonism"
+      },
+      {
+       "category": "ocean current",
+       "value": "california"
+      },
+      {
+       "category": "visual art",
+       "value": "romanticism"
+      },
+      {
+       "category": "bird species",
+       "value": "ostrich"
+      },
+      {
+       "category": "visual art",
+       "value": "minimalism"
+      },
+      {
+       "category": "ocean current",
+       "value": "peru"
+      },
+      {
+       "category": "bird species",
+       "value": "wren"
+      },
+      {
+       "category": "ocean current",
+       "value": "canary"
+      },
+      {
+       "category": "visual art",
+       "value": "impressionism"
+      },
+      {
+       "category": "bird species",
+       "value": "coot"
+      },
+      {
+       "category": "visual art",
+       "value": "expressionism"
+      },
+      {
+       "category": "bird species",
+       "value": "pigeon"
+      },
+      {
+       "category": "ocean current",
+       "value": "benguela"
+      },
+      {
+       "category": "visual art",
+       "value": "dadaism"
+      },
+      {
+       "category": "ocean current",
+       "value": "eddy"
+      },
+      {
+       "category": "bird species",
+       "value": "nuthatch"
+      },
+      {
+       "category": "ocean current",
+       "value": "mozambique"
+      }
+     ],
+     "target_values": [
+      "kestrel",
+      "condor",
+      "goose",
+      "toucan",
+      "parrot",
+      "peacock",
+      "chickadee",
+      "grosbeak",
+      "osprey",
+      "gull",
+      "hawk",
+      "buzzard",
+      "duck",
+      "oriole",
+      "harrier",
+      "ostrich",
+      "wren",
+      "coot",
+      "pigeon",
+      "nuthatch"
+     ],
+     "memory_now": {
+      "bird species": "nuthatch",
+      "visual art": "dadaism",
+      "ocean current": "mozambique"
+     },
+     "fvq": {
+      "expected": "kestrel",
+      "predicted": "kestrel",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "nuthatch",
+      "predicted": "buzzard",
+      "correct": false
+     }
+    },
+    "30": {
+     "stream": [
+      {
+       "category": "bird species",
+       "value": "dove"
+      },
+      {
+       "category": "visual art",
+       "value": "dadaism"
+      },
+      {
+       "category": "bird species",
+       "value": "swan"
+      },
+      {
+       "category": "visual art",
+       "value": "pointillism"
+      },
+      {
+       "category": "ocean current",
+       "value": "divergence"
+      },
+      {
+       "category": "bird species",
+       "value": "cardinal"
+      },
+      {
+       "category": "ocean current",
+       "value": "equatorial"
+      },
+      {
+       "category": "visual art",
+       "value": "rococo"
+      },
+      {
+       "category": "ocean current",
+       "value": "brazil"
+      },
+      {
+       "category": "visual art",
+       "value": "cubism"
+      },
+      {
+       "category": "bird species",
+       "value": "emu"
+      },
+      {
+       "category": "visual art",
+       "value": "expressionism"
+      },
+      {
+       "category": "bird species",
+       "value": "heron"
+      },
+      {
+       "category": "ocean current",
+       "value": "canary"
+      },
+      {
+       "category": "visual art",
+       "value": "surrealism"
+      },
+      {
+       "category": "bird species",
+       "value": "mockingbird"
+      },
+      {
+       "category": "visual art",
+       "value": "realism"
+      },
+      {
+       "category": "ocean current",
+       "value": "gyre"
+      },
+      {
+       "category": "visual art",
+       "value": "modernism"
+      },
+      {
+       "category": "bird species",
+       "value": "pigeon"
+      },
+      {
+       "category": "visual art",
+       "value": "constructivism"
+      },
+      {
+       "category": "ocean current",
+       "value": "leeuwin"
+      },
+      {
+       "category": "bird species",
+       "value": "tanager"
+      },
+      {
+       "category": "visual art",
+       "value": "renaissance"
+      },
+      {
+       "category": "bird species",
+       "value": "harrier"
+      },
+      {
+       "category": "ocean current",
+       "value": "irminger"
+      },
+      {
+       "category": "visual art",
+       "value": "photorealism"
+      },
+      {
+       "category": "bird species",
+       "value": "kingfisher"
+      },
+      {
+       "category": "visual art",
+       "value": "baroque"
+      },
+      {
+       "category": "ocean current",
+       "value": "meander"
+      },
+      {
+       "category": "bird species",
+       "value": "cormorant"
+      },
+      {
+       "category": "ocean current",
+       "value": "jet"
+      },
+      {
+       "category": "visual art",
+       "value": "stuckism"
+      },
+      {
+       "category": "bird species",
+       "value": "egret"
+      },
+      {
+       "category": "ocean current",
+       "value": "norwegian"
+      },
+      {
+       "category": "bird species",
+       "value": "kestrel"
+      },
+      {
+       "category": "visual art",
+       "value": "vorticism"
+      },
+      {
+       "category": "ocean current",
+       "value": "downwelling"
+      },
+      {
+       "category": "visual art",
+       "value": "mannerism"
+      },
+      {
+       "category": "bird species",
+       "value": "finch"
+      },
+      {
+       "category": "ocean current",
+       "value": "humboldt"
+      },
+      {
+       "category": "visual art",
+       "value": "romanticism"
+      },
+      {
+       "category": "ocean current",
+       "value": "cromwell"
+      },
+      {
+       "category": "bird species",
+       "value": "nuthatch"
+      },
+      {
+       "category": "ocean current",
+       "value": "alaska"
+      },
+      {
+       "category": "visual art",
+       "value": "superflat"
+      },
+      {
+       "category": "bird species",
+       "value": "penguin"
+      },
+      {
+       "category": "ocean current",
+       "value": "eddy"
+      },
+      {
+       "category": "visual art",
+       "value": "precisionism"
+      },
+      {
+       "category": "bird species",
+       "value": "warbler"
+      },
+      {
+       "category": "visual art",
+       "value": "orphism"
+      },
+      {
+       "category": "ocean current",
+       "value": "guinea"
+      },
+      {
+       "category": "bird species",
+       "value": "falcon"
+      },
+      {
+       "category": "visual art",
+       "value": "bauhaus"
+      },
+      {
+       "category": "bird species",
+       "value": "bluejay"
+      },
+      {
+       "category": "ocean current",
+       "value": "filament"
+      },
+      {
+       "category": "visual art",
+       "value": "transavantgarde"
+      },
+      {
+       "category": "ocean current",
+       "value": "azores"
+      },
+      {
+       "category": "bird species",
+       "value": "bunting"
+      },
+      {
+       "category": "visual art",
+       "value": "rayonism"
+      },
+      {
+       "category": "ocean current",
+       "value": "ring"
+      },
+      {
+       "category": "bird species",
+       "value": "condor"
+      },
+      {
+       "category": "ocean current",
+       "value": "labrador"
+      },
+      {
+       "category": "bird species",
+       "value": "magpie"
+      },
+      {
+       "category": "ocean current",
+       "value": "upwelling"
+      },
+      {
+       "category": "bird species",
+       "value": "loon"
+      },
+      {
+       "category": "visual art",
+       "value": "minimalism"
+      },
+      {
+       "category": "bird species",
+       "value": "merlin"
+      },
+      {
+       "category": "visual art",
+       "value": "symbolism"
+      },
+      {
+       "category": "ocean current",
+       "value": "mozambique"
+      },
+      {
+       "category": "visual art",
+       "value": "fauvism"
+      },
+      {
+       "category": "bird species",
+       "value": "albatross"
+      },
+      {
+       "category": "visual art",
+       "value": "lowbrow"
+      },
+      {
+       "category": "ocean current",
+       "value": "somali"
+      },
+      {
+       "category": "bird species",
+       "value": "peacock"
+      },
+      {
+       "category": "visual art",
+       "value": "futurism"
+      },
+      {
+       "category": "bird species",
+       "value": "flamingo"
+      },
+      {
+       "category": "ocean current",
+       "value": "oyashio"
+      },
+      {
+       "category": "bird species",
+       "value": "duck"
+      },
+      {
+       "category": "visual art",
+       "value": "neoclassicism"
+      },
+      {
+       "category": "ocean current",
+       "value": "benguela"
+      },
+      {
+       "category": "bird species",
+       "value": "thrush"
+      },
+      {
+       "category": "ocean current",
+       "value": "peru"
+      },
+      {
+       "category": "visual art",
+       "value": "impressionism"
+      },
+      {
+       "category": "bird species",
+       "value": "ostrich"
+      },
+      {
+       "category": "ocean current",
+       "value": "kuroshio"
+      },
+      {
+       "category": "visual art",
+       "value": "suprematism"
+      },
+      {
+       "category": "ocean current",
+       "value": "california"
+      },
+      {
+       "category": "ocean current",
+       "value": "convergence"
+      },
+      {
+       "category": "ocean current",
+       "value": "agulhas"
+      }
+     ],
+     "target_values": [
+      "dove",
+      "swan",
+      "cardinal",
+      "emu",
+      "heron",
+      "mockingbird",
+      "pigeon",
+      "tanager",
+      "harrier",
+      "kingfisher",
+      "cormorant",
+      "egret",
+      "kestrel",
+      "finch",
+      "nuthatch",
+      "penguin",
+      "warbler",
+      "falcon",
+      "bluejay",
+      "bunting",
+      "condor",
+      "magpie",
+      "loon",
+      "merlin",
+      "albatross",
+      "peacock",
+      "flamingo",
+      "duck",
+      "thrush",
+      "ostrich"
+     ],
+     "memory_now": {
+      "bird species": "ostrich",
+      "visual art": "suprematism",
+      "ocean current": "agulhas"
+     },
+     "fvq": {
+      "expected": "dove",
+      "predicted": "dove",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "ostrich",
+      "predicted": "penguin",
+      "correct": false
+     }
+    }
+   }
+  },
+  {
+   "id": "3_tree_species",
+   "target_key": "tree species",
+   "keys": [
+    "tree species",
+    "cooking method",
+    "constellation"
+   ],
+   "by_n": {
+    "5": {
+     "stream": [
+      {
+       "category": "cooking method",
+       "value": "grilling"
+      },
+      {
+       "category": "tree species",
+       "value": "basswood"
+      },
+      {
+       "category": "constellation",
+       "value": "hydra"
+      },
+      {
+       "category": "tree species",
+       "value": "poplar"
+      },
+      {
+       "category": "cooking method",
+       "value": "boiling"
+      },
+      {
+       "category": "constellation",
+       "value": "libra"
+      },
+      {
+       "category": "tree species",
+       "value": "sycamore"
+      },
+      {
+       "category": "cooking method",
+       "value": "folding"
+      },
+      {
+       "category": "constellation",
+       "value": "crater"
+      },
+      {
+       "category": "tree species",
+       "value": "baobab"
+      },
+      {
+       "category": "constellation",
+       "value": "centaurus"
+      },
+      {
+       "category": "tree species",
+       "value": "rosewood"
+      },
+      {
+       "category": "cooking method",
+       "value": "glazing"
+      },
+      {
+       "category": "constellation",
+       "value": "aries"
+      },
+      {
+       "category": "cooking method",
+       "value": "piping"
+      }
+     ],
+     "target_values": [
+      "basswood",
+      "poplar",
+      "sycamore",
+      "baobab",
+      "rosewood"
+     ],
+     "memory_now": {
+      "tree species": "rosewood",
+      "cooking method": "piping",
+      "constellation": "aries"
+     },
+     "fvq": {
+      "expected": "basswood",
+      "predicted": "basswood",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "rosewood",
+      "predicted": "baobab",
+      "correct": false
+     }
+    },
+    "10": {
+     "stream": [
+      {
+       "category": "constellation",
+       "value": "lupus"
+      },
+      {
+       "category": "tree species",
+       "value": "eucalyptus"
+      },
+      {
+       "category": "constellation",
+       "value": "andromeda"
+      },
+      {
+       "category": "tree species",
+       "value": "sandalwood"
+      },
+      {
+       "category": "constellation",
+       "value": "centaurus"
+      },
+      {
+       "category": "cooking method",
+       "value": "confit"
+      },
+      {
+       "category": "constellation",
+       "value": "camelopardalis"
+      },
+      {
+       "category": "tree species",
+       "value": "cashew"
+      },
+      {
+       "category": "constellation",
+       "value": "auriga"
+      },
+      {
+       "category": "cooking method",
+       "value": "flambeing"
+      },
+      {
+       "category": "constellation",
+       "value": "puppis"
+      },
+      {
+       "category": "tree species",
+       "value": "spruce"
+      },
+      {
+       "category": "constellation",
+       "value": "orion"
+      },
+      {
+       "category": "cooking method",
+       "value": "reduction"
+      },
+      {
+       "category": "constellation",
+       "value": "scorpius"
+      },
+      {
+       "category": "cooking method",
+       "value": "boiling"
+      },
+      {
+       "category": "constellation",
+       "value": "indus"
+      },
+      {
+       "category": "cooking method",
+       "value": "curing"
+      },
+      {
+       "category": "tree species",
+       "value": "larch"
+      },
+      {
+       "category": "cooking method",
+       "value": "creaming"
+      },
+      {
+       "category": "tree species",
+       "value": "aspen"
+      },
+      {
+       "category": "cooking method",
+       "value": "deglazing"
+      },
+      {
+       "category": "tree species",
+       "value": "buckeye"
+      },
+      {
+       "category": "constellation",
+       "value": "aquarius"
+      },
+      {
+       "category": "tree species",
+       "value": "mango"
+      },
+      {
+       "category": "cooking method",
+       "value": "piping"
+      },
+      {
+       "category": "tree species",
+       "value": "walnut"
+      },
+      {
+       "category": "cooking method",
+       "value": "broiling"
+      },
+      {
+       "category": "tree species",
+       "value": "hemlock"
+      },
+      {
+       "category": "cooking method",
+       "value": "baking"
+      }
+     ],
+     "target_values": [
+      "eucalyptus",
+      "sandalwood",
+      "cashew",
+      "spruce",
+      "larch",
+      "aspen",
+      "buckeye",
+      "mango",
+      "walnut",
+      "hemlock"
+     ],
+     "memory_now": {
+      "tree species": "hemlock",
+      "cooking method": "baking",
+      "constellation": "aquarius"
+     },
+     "fvq": {
+      "expected": "eucalyptus",
+      "predicted": "eucalyptus",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "hemlock",
+      "predicted": "hemlock",
+      "correct": true
+     }
+    },
+    "15": {
+     "stream": [
+      {
+       "category": "constellation",
+       "value": "perseus"
+      },
+      {
+       "category": "tree species",
+       "value": "fig"
+      },
+      {
+       "category": "cooking method",
+       "value": "tempering"
+      },
+      {
+       "category": "constellation",
+       "value": "crux"
+      },
+      {
+       "category": "cooking method",
+       "value": "braising"
+      },
+      {
+       "category": "tree species",
+       "value": "basswood"
+      },
+      {
+       "category": "constellation",
+       "value": "lupus"
+      },
+      {
+       "category": "tree species",
+       "value": "baobab"
+      },
+      {
+       "category": "cooking method",
+       "value": "steaming"
+      },
+      {
+       "category": "tree species",
+       "value": "mahogany"
+      },
+      {
+       "category": "constellation",
+       "value": "pisces"
+      },
+      {
+       "category": "cooking method",
+       "value": "grilling"
+      },
+      {
+       "category": "constellation",
+       "value": "aries"
+      },
+      {
+       "category": "cooking method",
+       "value": "proofing"
+      },
+      {
+       "category": "tree species",
+       "value": "birch"
+      },
+      {
+       "category": "cooking method",
+       "value": "creaming"
+      },
+      {
+       "category": "constellation",
+       "value": "virgo"
+      },
+      {
+       "category": "cooking method",
+       "value": "piping"
+      },
+      {
+       "category": "constellation",
+       "value": "corvus"
+      },
+      {
+       "category": "tree species",
+       "value": "beech"
+      },
+      {
+       "category": "constellation",
+       "value": "orion"
+      },
+      {
+       "category": "tree species",
+       "value": "redwood"
+      },
+      {
+       "category": "cooking method",
+       "value": "smoking"
+      },
+      {
+       "category": "constellation",
+       "value": "bootes"
+      },
+      {
+       "category": "tree species",
+       "value": "sycamore"
+      },
+      {
+       "category": "constellation",
+       "value": "camelopardalis"
+      },
+      {
+       "category": "tree species",
+       "value": "buckeye"
+      },
+      {
+       "category": "constellation",
+       "value": "pegasus"
+      },
+      {
+       "category": "cooking method",
+       "value": "laminating"
+      },
+      {
+       "category": "constellation",
+       "value": "puppis"
+      },
+      {
+       "category": "tree species",
+       "value": "hickory"
+      },
+      {
+       "category": "cooking method",
+       "value": "emulsifying"
+      },
+      {
+       "category": "tree species",
+       "value": "larch"
+      },
+      {
+       "category": "cooking method",
+       "value": "fermenting"
+      },
+      {
+       "category": "constellation",
+       "value": "grus"
+      },
+      {
+       "category": "tree species",
+       "value": "banyan"
+      },
+      {
+       "category": "constellation",
+       "value": "centaurus"
+      },
+      {
+       "category": "tree species",
+       "value": "teak"
+      },
+      {
+       "category": "cooking method",
+       "value": "toasting"
+      },
+      {
+       "category": "tree species",
+       "value": "juniper"
+      },
+      {
+       "category": "constellation",
+       "value": "draco"
+      },
+      {
+       "category": "cooking method",
+       "value": "kneading"
+      },
+      {
+       "category": "tree species",
+       "value": "walnut"
+      },
+      {
+       "category": "cooking method",
+       "value": "marinating"
+      },
+      {
+       "category": "cooking method",
+       "value": "stewing"
+      }
+     ],
+     "target_values": [
+      "fig",
+      "basswood",
+      "baobab",
+      "mahogany",
+      "birch",
+      "beech",
+      "redwood",
+      "sycamore",
+      "buckeye",
+      "hickory",
+      "larch",
+      "banyan",
+      "teak",
+      "juniper",
+      "walnut"
+     ],
+     "memory_now": {
+      "tree species": "walnut",
+      "cooking method": "stewing",
+      "constellation": "draco"
+     },
+     "fvq": {
+      "expected": "fig",
+      "predicted": "fig",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "walnut",
+      "predicted": "walnut",
+      "correct": true
+     }
+    },
+    "20": {
+     "stream": [
+      {
+       "category": "constellation",
+       "value": "orion"
+      },
+      {
+       "category": "tree species",
+       "value": "chestnut"
+      },
+      {
+       "category": "cooking method",
+       "value": "emulsifying"
+      },
+      {
+       "category": "tree species",
+       "value": "birch"
+      },
+      {
+       "category": "constellation",
+       "value": "cygnus"
+      },
+      {
+       "category": "tree species",
+       "value": "fir"
+      },
+      {
+       "category": "constellation",
+       "value": "centaurus"
+      },
+      {
+       "category": "tree species",
+       "value": "buckeye"
+      },
+      {
+       "category": "cooking method",
+       "value": "deglazing"
+      },
+      {
+       "category": "constellation",
+       "value": "puppis"
+      },
+      {
+       "category": "cooking method",
+       "value": "roasting"
+      },
+      {
+       "category": "tree species",
+       "value": "oak"
+      },
+      {
+       "category": "constellation",
+       "value": "aries"
+      },
+      {
+       "category": "cooking method",
+       "value": "caramelizing"
+      },
+      {
+       "category": "tree species",
+       "value": "spruce"
+      },
+      {
+       "category": "cooking method",
+       "value": "poaching"
+      },
+      {
+       "category": "tree species",
+       "value": "ash"
+      },
+      {
+       "category": "constellation",
+       "value": "leo"
+      },
+      {
+       "category": "cooking method",
+       "value": "browning"
+      },
+      {
+       "category": "constellation",
+       "value": "hercules"
+      },
+      {
+       "category": "cooking method",
+       "value": "broiling"
+      },
+      {
+       "category": "tree species",
+       "value": "sandalwood"
+      },
+      {
+       "category": "cooking method",
+       "value": "baking"
+      },
+      {
+       "category": "constellation",
+       "value": "pegasus"
+      },
+      {
+       "category": "cooking method",
+       "value": "searing"
+      },
+      {
+       "category": "tree species",
+       "value": "cashew"
+      },
+      {
+       "category": "cooking method",
+       "value": "confit"
+      },
+      {
+       "category": "constellation",
+       "value": "vela"
+      },
+      {
+       "category": "cooking method",
+       "value": "parboiling"
+      },
+      {
+       "category": "tree species",
+       "value": "eucalyptus"
+      },
+      {
+       "category": "cooking method",
+       "value": "blanching"
+      },
+      {
+       "category": "tree species",
+       "value": "redwood"
+      },
+      {
+       "category": "constellation",
+       "value": "pavo"
+      },
+      {
+       "category": "tree species",
+       "value": "baobab"
+      },
+      {
+       "category": "cooking method",
+       "value": "stewing"
+      },
+      {
+       "category": "tree species",
+       "value": "basswood"
+      },
+      {
+       "category": "constellation",
+       "value": "cassiopeia"
+      },
+      {
+       "category": "cooking method",
+       "value": "charring"
+      },
+      {
+       "category": "tree species",
+       "value": "larch"
+      },
+      {
+       "category": "cooking method",
+       "value": "boiling"
+      },
+      {
+       "category": "constellation",
+       "value": "libra"
+      },
+      {
+       "category": "cooking method",
+       "value": "laminating"
+      },
+      {
+       "category": "constellation",
+       "value": "cepheus"
+      },
+      {
+       "category": "tree species",
+       "value": "hickory"
+      },
+      {
+       "category": "constellation",
+       "value": "virgo"
+      },
+      {
+       "category": "tree species",
+       "value": "banyan"
+      },
+      {
+       "category": "constellation",
+       "value": "hydra"
+      },
+      {
+       "category": "tree species",
+       "value": "jacaranda"
+      },
+      {
+       "category": "constellation",
+       "value": "bootes"
+      },
+      {
+       "category": "cooking method",
+       "value": "fermenting"
+      },
+      {
+       "category": "constellation",
+       "value": "draco"
+      },
+      {
+       "category": "cooking method",
+       "value": "smoking"
+      },
+      {
+       "category": "constellation",
+       "value": "capricornus"
+      },
+      {
+       "category": "tree species",
+       "value": "cherry"
+      },
+      {
+       "category": "constellation",
+       "value": "lyra"
+      },
+      {
+       "category": "tree species",
+       "value": "palm"
+      },
+      {
+       "category": "cooking method",
+       "value": "curing"
+      },
+      {
+       "category": "constellation",
+       "value": "crux"
+      },
+      {
+       "category": "tree species",
+       "value": "poplar"
+      },
+      {
+       "category": "cooking method",
+       "value": "steaming"
+      }
+     ],
+     "target_values": [
+      "chestnut",
+      "birch",
+      "fir",
+      "buckeye",
+      "oak",
+      "spruce",
+      "ash",
+      "sandalwood",
+      "cashew",
+      "eucalyptus",
+      "redwood",
+      "baobab",
+      "basswood",
+      "larch",
+      "hickory",
+      "banyan",
+      "jacaranda",
+      "cherry",
+      "palm",
+      "poplar"
+     ],
+     "memory_now": {
+      "tree species": "poplar",
+      "cooking method": "steaming",
+      "constellation": "crux"
+     },
+     "fvq": {
+      "expected": "chestnut",
+      "predicted": "chestnut",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "poplar",
+      "predicted": "poplar",
+      "correct": true
+     }
+    },
+    "30": {
+     "stream": [
+      {
+       "category": "tree species",
+       "value": "chestnut"
+      },
+      {
+       "category": "cooking method",
+       "value": "kneading"
+      },
+      {
+       "category": "tree species",
+       "value": "acacia"
+      },
+      {
+       "category": "cooking method",
+       "value": "clarifying"
+      },
+      {
+       "category": "constellation",
+       "value": "pegasus"
+      },
+      {
+       "category": "cooking method",
+       "value": "roasting"
+      },
+      {
+       "category": "constellation",
+       "value": "grus"
+      },
+      {
+       "category": "cooking method",
+       "value": "toasting"
+      },
+      {
+       "category": "tree species",
+       "value": "alder"
+      },
+      {
+       "category": "cooking method",
+       "value": "proofing"
+      },
+      {
+       "category": "constellation",
+       "value": "gemini"
+      },
+      {
+       "category": "cooking method",
+       "value": "parboiling"
+      },
+      {
+       "category": "constellation",
+       "value": "crater"
+      },
+      {
+       "category": "cooking method",
+       "value": "reduction"
+      },
+      {
+       "category": "tree species",
+       "value": "aspen"
+      },
+      {
+       "category": "cooking method",
+       "value": "laminating"
+      },
+      {
+       "category": "tree species",
+       "value": "larch"
+      },
+      {
+       "category": "cooking method",
+       "value": "fermenting"
+      },
+      {
+       "category": "tree species",
+       "value": "sequoia"
+      },
+      {
+       "category": "cooking method",
+       "value": "emulsifying"
+      },
+      {
+       "category": "tree species",
+       "value": "birch"
+      },
+      {
+       "category": "constellation",
+       "value": "scorpius"
+      },
+      {
+       "category": "tree species",
+       "value": "sandalwood"
+      },
+      {
+       "category": "constellation",
+       "value": "puppis"
+      },
+      {
+       "category": "cooking method",
+       "value": "charring"
+      },
+      {
+       "category": "tree species",
+       "value": "mahogany"
+      },
+      {
+       "category": "cooking method",
+       "value": "grilling"
+      },
+      {
+       "category": "tree species",
+       "value": "yew"
+      },
+      {
+       "category": "constellation",
+       "value": "delphinus"
+      },
+      {
+       "category": "tree species",
+       "value": "jacaranda"
+      },
+      {
+       "category": "cooking method",
+       "value": "broiling"
+      },
+      {
+       "category": "constellation",
+       "value": "capricornus"
+      },
+      {
+       "category": "tree species",
+       "value": "poplar"
+      },
+      {
+       "category": "constellation",
+       "value": "pisces"
+      },
+      {
+       "category": "cooking method",
+       "value": "simmering"
+      },
+      {
+       "category": "tree species",
+       "value": "bamboo"
+      },
+      {
+       "category": "cooking method",
+       "value": "braising"
+      },
+      {
+       "category": "constellation",
+       "value": "centaurus"
+      },
+      {
+       "category": "tree species",
+       "value": "ebony"
+      },
+      {
+       "category": "constellation",
+       "value": "camelopardalis"
+      },
+      {
+       "category": "cooking method",
+       "value": "confit"
+      },
+      {
+       "category": "tree species",
+       "value": "beech"
+      },
+      {
+       "category": "cooking method",
+       "value": "folding"
+      },
+      {
+       "category": "constellation",
+       "value": "lacerta"
+      },
+      {
+       "category": "cooking method",
+       "value": "smoking"
+      },
+      {
+       "category": "constellation",
+       "value": "aquila"
+      },
+      {
+       "category": "tree species",
+       "value": "sycamore"
+      },
+      {
+       "category": "cooking method",
+       "value": "stewing"
+      },
+      {
+       "category": "tree species",
+       "value": "breadfruit"
+      },
+      {
+       "category": "cooking method",
+       "value": "curing"
+      },
+      {
+       "category": "tree species",
+       "value": "walnut"
+      },
+      {
+       "category": "cooking method",
+       "value": "boiling"
+      },
+      {
+       "category": "constellation",
+       "value": "aries"
+      },
+      {
+       "category": "cooking method",
+       "value": "baking"
+      },
+      {
+       "category": "constellation",
+       "value": "hercules"
+      },
+      {
+       "category": "tree species",
+       "value": "ash"
+      },
+      {
+       "category": "cooking method",
+       "value": "steaming"
+      },
+      {
+       "category": "tree species",
+       "value": "neem"
+      },
+      {
+       "category": "cooking method",
+       "value": "flambeing"
+      },
+      {
+       "category": "constellation",
+       "value": "lyra"
+      },
+      {
+       "category": "tree species",
+       "value": "maple"
+      },
+      {
+       "category": "constellation",
+       "value": "virgo"
+      },
+      {
+       "category": "tree species",
+       "value": "cypress"
+      },
+      {
+       "category": "constellation",
+       "value": "ara"
+      },
+      {
+       "category": "tree species",
+       "value": "juniper"
+      },
+      {
+       "category": "constellation",
+       "value": "orion"
+      },
+      {
+       "category": "cooking method",
+       "value": "piping"
+      },
+      {
+       "category": "constellation",
+       "value": "corvus"
+      },
+      {
+       "category": "cooking method",
+       "value": "poaching"
+      },
+      {
+       "category": "constellation",
+       "value": "leo"
+      },
+      {
+       "category": "tree species",
+       "value": "pine"
+      },
+      {
+       "category": "cooking method",
+       "value": "searing"
+      },
+      {
+       "category": "constellation",
+       "value": "aquarius"
+      },
+      {
+       "category": "tree species",
+       "value": "cinnamon"
+      },
+      {
+       "category": "constellation",
+       "value": "draco"
+      },
+      {
+       "category": "cooking method",
+       "value": "browning"
+      },
+      {
+       "category": "tree species",
+       "value": "banyan"
+      },
+      {
+       "category": "constellation",
+       "value": "tucana"
+      },
+      {
+       "category": "tree species",
+       "value": "fir"
+      },
+      {
+       "category": "constellation",
+       "value": "carina"
+      },
+      {
+       "category": "tree species",
+       "value": "teak"
+      },
+      {
+       "category": "constellation",
+       "value": "lupus"
+      },
+      {
+       "category": "tree species",
+       "value": "eucalyptus"
+      },
+      {
+       "category": "constellation",
+       "value": "octans"
+      },
+      {
+       "category": "tree species",
+       "value": "spruce"
+      },
+      {
+       "category": "cooking method",
+       "value": "caramelizing"
+      },
+      {
+       "category": "constellation",
+       "value": "pavo"
+      },
+      {
+       "category": "cooking method",
+       "value": "brining"
+      },
+      {
+       "category": "constellation",
+       "value": "sagittarius"
+      },
+      {
+       "category": "constellation",
+       "value": "perseus"
+      }
+     ],
+     "target_values": [
+      "chestnut",
+      "acacia",
+      "alder",
+      "aspen",
+      "larch",
+      "sequoia",
+      "birch",
+      "sandalwood",
+      "mahogany",
+      "yew",
+      "jacaranda",
+      "poplar",
+      "bamboo",
+      "ebony",
+      "beech",
+      "sycamore",
+      "breadfruit",
+      "walnut",
+      "ash",
+      "neem",
+      "maple",
+      "cypress",
+      "juniper",
+      "pine",
+      "cinnamon",
+      "banyan",
+      "fir",
+      "teak",
+      "eucalyptus",
+      "spruce"
+     ],
+     "memory_now": {
+      "tree species": "spruce",
+      "cooking method": "brining",
+      "constellation": "perseus"
+     },
+     "fvq": {
+      "expected": "chestnut",
+      "predicted": "chestnut",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "spruce",
+      "predicted": "spruce",
+      "correct": true
+     }
+    }
+   }
+  },
+  {
+   "id": "4_wine_variety",
+   "target_key": "wine variety",
+   "keys": [
+    "wine variety",
+    "sea creature",
+    "musical instrument"
+   ],
+   "by_n": {
+    "5": {
+     "stream": [
+      {
+       "category": "wine variety",
+       "value": "carmenere"
+      },
+      {
+       "category": "musical instrument",
+       "value": "castanets"
+      },
+      {
+       "category": "wine variety",
+       "value": "primitivo"
+      },
+      {
+       "category": "musical instrument",
+       "value": "ocarina"
+      },
+      {
+       "category": "sea creature",
+       "value": "swordfish"
+      },
+      {
+       "category": "musical instrument",
+       "value": "congas"
+      },
+      {
+       "category": "sea creature",
+       "value": "eel"
+      },
+      {
+       "category": "wine variety",
+       "value": "fiano"
+      },
+      {
+       "category": "sea creature",
+       "value": "narwhal"
+      },
+      {
+       "category": "musical instrument",
+       "value": "trombone"
+      },
+      {
+       "category": "wine variety",
+       "value": "gamay"
+      },
+      {
+       "category": "sea creature",
+       "value": "grouper"
+      },
+      {
+       "category": "wine variety",
+       "value": "nebbiolo"
+      },
+      {
+       "category": "musical instrument",
+       "value": "flugelhorn"
+      },
+      {
+       "category": "sea creature",
+       "value": "squid"
+      }
+     ],
+     "target_values": [
+      "carmenere",
+      "primitivo",
+      "fiano",
+      "gamay",
+      "nebbiolo"
+     ],
+     "memory_now": {
+      "wine variety": "nebbiolo",
+      "sea creature": "squid",
+      "musical instrument": "flugelhorn"
+     },
+     "fvq": {
+      "expected": "carmenere",
+      "predicted": "carmenere",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "nebbiolo",
+      "predicted": "nebbiolo",
+      "correct": true
+     }
+    },
+    "10": {
+     "stream": [
+      {
+       "category": "wine variety",
+       "value": "tempranillo"
+      },
+      {
+       "category": "sea creature",
+       "value": "seahorse"
+      },
+      {
+       "category": "musical instrument",
+       "value": "tambourine"
+      },
+      {
+       "category": "wine variety",
+       "value": "mourvedre"
+      },
+      {
+       "category": "sea creature",
+       "value": "barnacle"
+      },
+      {
+       "category": "wine variety",
+       "value": "roussanne"
+      },
+      {
+       "category": "musical instrument",
+       "value": "sousaphone"
+      },
+      {
+       "category": "sea creature",
+       "value": "crab"
+      },
+      {
+       "category": "wine variety",
+       "value": "fiano"
+      },
+      {
+       "category": "sea creature",
+       "value": "shark"
+      },
+      {
+       "category": "musical instrument",
+       "value": "koto"
+      },
+      {
+       "category": "wine variety",
+       "value": "chardonnay"
+      },
+      {
+       "category": "musical instrument",
+       "value": "viola"
+      },
+      {
+       "category": "sea creature",
+       "value": "narwhal"
+      },
+      {
+       "category": "musical instrument",
+       "value": "tabla"
+      },
+      {
+       "category": "wine variety",
+       "value": "verdejo"
+      },
+      {
+       "category": "musical instrument",
+       "value": "marimba"
+      },
+      {
+       "category": "wine variety",
+       "value": "barbera"
+      },
+      {
+       "category": "sea creature",
+       "value": "cuttlefish"
+      },
+      {
+       "category": "musical instrument",
+       "value": "trumpet"
+      },
+      {
+       "category": "wine variety",
+       "value": "sangiovese"
+      },
+      {
+       "category": "sea creature",
+       "value": "sailfish"
+      },
+      {
+       "category": "wine variety",
+       "value": "greco"
+      },
+      {
+       "category": "sea creature",
+       "value": "eel"
+      },
+      {
+       "category": "musical instrument",
+       "value": "theremin"
+      },
+      {
+       "category": "sea creature",
+       "value": "jellyfish"
+      },
+      {
+       "category": "musical instrument",
+       "value": "euphonium"
+      },
+      {
+       "category": "wine variety",
+       "value": "cortese"
+      },
+      {
+       "category": "sea creature",
+       "value": "squid"
+      },
+      {
+       "category": "musical instrument",
+       "value": "flugelhorn"
+      }
+     ],
+     "target_values": [
+      "tempranillo",
+      "mourvedre",
+      "roussanne",
+      "fiano",
+      "chardonnay",
+      "verdejo",
+      "barbera",
+      "sangiovese",
+      "greco",
+      "cortese"
+     ],
+     "memory_now": {
+      "wine variety": "cortese",
+      "sea creature": "squid",
+      "musical instrument": "flugelhorn"
+     },
+     "fvq": {
+      "expected": "tempranillo",
+      "predicted": "tempranillo",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "cortese",
+      "predicted": "cortese",
+      "correct": true
+     }
+    },
+    "15": {
+     "stream": [
+      {
+       "category": "wine variety",
+       "value": "malbec"
+      },
+      {
+       "category": "sea creature",
+       "value": "shark"
+      },
+      {
+       "category": "musical instrument",
+       "value": "timpani"
+      },
+      {
+       "category": "wine variety",
+       "value": "roussanne"
+      },
+      {
+       "category": "musical instrument",
+       "value": "gong"
+      },
+      {
+       "category": "wine variety",
+       "value": "zinfandel"
+      },
+      {
+       "category": "musical instrument",
+       "value": "accordion"
+      },
+      {
+       "category": "wine variety",
+       "value": "greco"
+      },
+      {
+       "category": "sea creature",
+       "value": "narwhal"
+      },
+      {
+       "category": "wine variety",
+       "value": "cortese"
+      },
+      {
+       "category": "musical instrument",
+       "value": "mandolin"
+      },
+      {
+       "category": "sea creature",
+       "value": "orca"
+      },
+      {
+       "category": "musical instrument",
+       "value": "glockenspiel"
+      },
+      {
+       "category": "wine variety",
+       "value": "gamay"
+      },
+      {
+       "category": "musical instrument",
+       "value": "banjo"
+      },
+      {
+       "category": "sea creature",
+       "value": "flounder"
+      },
+      {
+       "category": "wine variety",
+       "value": "moscato"
+      },
+      {
+       "category": "sea creature",
+       "value": "barracuda"
+      },
+      {
+       "category": "musical instrument",
+       "value": "castanets"
+      },
+      {
+       "category": "sea creature",
+       "value": "manatee"
+      },
+      {
+       "category": "musical instrument",
+       "value": "viola"
+      },
+      {
+       "category": "wine variety",
+       "value": "prosecco"
+      },
+      {
+       "category": "sea creature",
+       "value": "starfish"
+      },
+      {
+       "category": "musical instrument",
+       "value": "panpipes"
+      },
+      {
+       "category": "sea creature",
+       "value": "jellyfish"
+      },
+      {
+       "category": "wine variety",
+       "value": "tempranillo"
+      },
+      {
+       "category": "musical instrument",
+       "value": "bassoon"
+      },
+      {
+       "category": "sea creature",
+       "value": "whale"
+      },
+      {
+       "category": "wine variety",
+       "value": "malmsey"
+      },
+      {
+       "category": "musical instrument",
+       "value": "oboe"
+      },
+      {
+       "category": "sea creature",
+       "value": "nautilus"
+      },
+      {
+       "category": "musical instrument",
+       "value": "djembe"
+      },
+      {
+       "category": "sea creature",
+       "value": "walrus"
+      },
+      {
+       "category": "musical instrument",
+       "value": "shakuhachi"
+      },
+      {
+       "category": "sea creature",
+       "value": "eel"
+      },
+      {
+       "category": "musical instrument",
+       "value": "cymbals"
+      },
+      {
+       "category": "wine variety",
+       "value": "chardonnay"
+      },
+      {
+       "category": "sea creature",
+       "value": "wahoo"
+      },
+      {
+       "category": "wine variety",
+       "value": "viognier"
+      },
+      {
+       "category": "musical instrument",
+       "value": "harpsichord"
+      },
+      {
+       "category": "sea creature",
+       "value": "porpoise"
+      },
+      {
+       "category": "wine variety",
+       "value": "mourvedre"
+      },
+      {
+       "category": "sea creature",
+       "value": "sailfish"
+      },
+      {
+       "category": "wine variety",
+       "value": "sherry"
+      },
+      {
+       "category": "wine variety",
+       "value": "syrah"
+      }
+     ],
+     "target_values": [
+      "malbec",
+      "roussanne",
+      "zinfandel",
+      "greco",
+      "cortese",
+      "gamay",
+      "moscato",
+      "prosecco",
+      "tempranillo",
+      "malmsey",
+      "chardonnay",
+      "viognier",
+      "mourvedre",
+      "sherry",
+      "syrah"
+     ],
+     "memory_now": {
+      "wine variety": "syrah",
+      "sea creature": "sailfish",
+      "musical instrument": "harpsichord"
+     },
+     "fvq": {
+      "expected": "malbec",
+      "predicted": "malbec",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "syrah",
+      "predicted": "sherry",
+      "correct": false
+     }
+    },
+    "20": {
+     "stream": [
+      {
+       "category": "wine variety",
+       "value": "primitivo"
+      },
+      {
+       "category": "musical instrument",
+       "value": "didgeridoo"
+      },
+      {
+       "category": "wine variety",
+       "value": "grenache"
+      },
+      {
+       "category": "musical instrument",
+       "value": "bassoon"
+      },
+      {
+       "category": "sea creature",
+       "value": "shark"
+      },
+      {
+       "category": "wine variety",
+       "value": "tokaji"
+      },
+      {
+       "category": "sea creature",
+       "value": "starfish"
+      },
+      {
+       "category": "musical instrument",
+       "value": "banjo"
+      },
+      {
+       "category": "sea creature",
+       "value": "grouper"
+      },
+      {
+       "category": "musical instrument",
+       "value": "guqin"
+      },
+      {
+       "category": "sea creature",
+       "value": "narwhal"
+      },
+      {
+       "category": "musical instrument",
+       "value": "ukulele"
+      },
+      {
+       "category": "sea creature",
+       "value": "beluga"
+      },
+      {
+       "category": "musical instrument",
+       "value": "trombone"
+      },
+      {
+       "category": "wine variety",
+       "value": "gamay"
+      },
+      {
+       "category": "musical instrument",
+       "value": "piano"
+      },
+      {
+       "category": "wine variety",
+       "value": "tempranillo"
+      },
+      {
+       "category": "sea creature",
+       "value": "dolphin"
+      },
+      {
+       "category": "wine variety",
+       "value": "moscato"
+      },
+      {
+       "category": "musical instrument",
+       "value": "saxophone"
+      },
+      {
+       "category": "wine variety",
+       "value": "sauternes"
+      },
+      {
+       "category": "sea creature",
+       "value": "tuna"
+      },
+      {
+       "category": "musical instrument",
+       "value": "flute"
+      },
+      {
+       "category": "wine variety",
+       "value": "pinotage"
+      },
+      {
+       "category": "musical instrument",
+       "value": "castanets"
+      },
+      {
+       "category": "wine variety",
+       "value": "chardonnay"
+      },
+      {
+       "category": "musical instrument",
+       "value": "flugelhorn"
+      },
+      {
+       "category": "wine variety",
+       "value": "marsanne"
+      },
+      {
+       "category": "sea creature",
+       "value": "eel"
+      },
+      {
+       "category": "wine variety",
+       "value": "sherry"
+      },
+      {
+       "category": "musical instrument",
+       "value": "ocarina"
+      },
+      {
+       "category": "wine variety",
+       "value": "greco"
+      },
+      {
+       "category": "sea creature",
+       "value": "seal"
+      },
+      {
+       "category": "musical instrument",
+       "value": "bongos"
+      },
+      {
+       "category": "sea creature",
+       "value": "orca"
+      },
+      {
+       "category": "musical instrument",
+       "value": "clarinet"
+      },
+      {
+       "category": "wine variety",
+       "value": "verdejo"
+      },
+      {
+       "category": "sea creature",
+       "value": "cuttlefish"
+      },
+      {
+       "category": "wine variety",
+       "value": "zinfandel"
+      },
+      {
+       "category": "musical instrument",
+       "value": "sitar"
+      },
+      {
+       "category": "sea creature",
+       "value": "krill"
+      },
+      {
+       "category": "musical instrument",
+       "value": "koto"
+      },
+      {
+       "category": "sea creature",
+       "value": "snapper"
+      },
+      {
+       "category": "musical instrument",
+       "value": "euphonium"
+      },
+      {
+       "category": "wine variety",
+       "value": "cortese"
+      },
+      {
+       "category": "sea creature",
+       "value": "shrimp"
+      },
+      {
+       "category": "wine variety",
+       "value": "vermentino"
+      },
+      {
+       "category": "musical instrument",
+       "value": "oud"
+      },
+      {
+       "category": "wine variety",
+       "value": "merlot"
+      },
+      {
+       "category": "sea creature",
+       "value": "seahorse"
+      },
+      {
+       "category": "musical instrument",
+       "value": "recorder"
+      },
+      {
+       "category": "sea creature",
+       "value": "marlin"
+      },
+      {
+       "category": "wine variety",
+       "value": "syrah"
+      },
+      {
+       "category": "sea creature",
+       "value": "octopus"
+      },
+      {
+       "category": "wine variety",
+       "value": "gewurztraminer"
+      },
+      {
+       "category": "sea creature",
+       "value": "barnacle"
+      },
+      {
+       "category": "wine variety",
+       "value": "albarino"
+      },
+      {
+       "category": "sea creature",
+       "value": "flounder"
+      },
+      {
+       "category": "musical instrument",
+       "value": "triangle"
+      },
+      {
+       "category": "sea creature",
+       "value": "sponge"
+      }
+     ],
+     "target_values": [
+      "primitivo",
+      "grenache",
+      "tokaji",
+      "gamay",
+      "tempranillo",
+      "moscato",
+      "sauternes",
+      "pinotage",
+      "chardonnay",
+      "marsanne",
+      "sherry",
+      "greco",
+      "verdejo",
+      "zinfandel",
+      "cortese",
+      "vermentino",
+      "merlot",
+      "syrah",
+      "gewurztraminer",
+      "albarino"
+     ],
+     "memory_now": {
+      "wine variety": "albarino",
+      "sea creature": "sponge",
+      "musical instrument": "triangle"
+     },
+     "fvq": {
+      "expected": "primitivo",
+      "predicted": "primitivo",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "albarino",
+      "predicted": "gewurztraminer",
+      "correct": false
+     }
+    },
+    "30": {
+     "stream": [
+      {
+       "category": "musical instrument",
+       "value": "gong"
+      },
+      {
+       "category": "wine variety",
+       "value": "sangiovese"
+      },
+      {
+       "category": "sea creature",
+       "value": "marlin"
+      },
+      {
+       "category": "musical instrument",
+       "value": "tambourine"
+      },
+      {
+       "category": "sea creature",
+       "value": "seal"
+      },
+      {
+       "category": "musical instrument",
+       "value": "guqin"
+      },
+      {
+       "category": "wine variety",
+       "value": "cava"
+      },
+      {
+       "category": "musical instrument",
+       "value": "melodica"
+      },
+      {
+       "category": "sea creature",
+       "value": "manatee"
+      },
+      {
+       "category": "musical instrument",
+       "value": "drums"
+      },
+      {
+       "category": "sea creature",
+       "value": "jellyfish"
+      },
+      {
+       "category": "wine variety",
+       "value": "merlot"
+      },
+      {
+       "category": "sea creature",
+       "value": "walrus"
+      },
+      {
+       "category": "wine variety",
+       "value": "greco"
+      },
+      {
+       "category": "sea creature",
+       "value": "crab"
+      },
+      {
+       "category": "musical instrument",
+       "value": "panpipes"
+      },
+      {
+       "category": "sea creature",
+       "value": "tuna"
+      },
+      {
+       "category": "wine variety",
+       "value": "viognier"
+      },
+      {
+       "category": "musical instrument",
+       "value": "xylophone"
+      },
+      {
+       "category": "sea creature",
+       "value": "shrimp"
+      },
+      {
+       "category": "musical instrument",
+       "value": "flugelhorn"
+      },
+      {
+       "category": "sea creature",
+       "value": "nautilus"
+      },
+      {
+       "category": "musical instrument",
+       "value": "koto"
+      },
+      {
+       "category": "wine variety",
+       "value": "gewurztraminer"
+      },
+      {
+       "category": "sea creature",
+       "value": "swordfish"
+      },
+      {
+       "category": "wine variety",
+       "value": "torrontes"
+      },
+      {
+       "category": "musical instrument",
+       "value": "cowbell"
+      },
+      {
+       "category": "sea creature",
+       "value": "lobster"
+      },
+      {
+       "category": "musical instrument",
+       "value": "oud"
+      },
+      {
+       "category": "sea creature",
+       "value": "whale"
+      },
+      {
+       "category": "musical instrument",
+       "value": "euphonium"
+      },
+      {
+       "category": "wine variety",
+       "value": "muscat"
+      },
+      {
+       "category": "sea creature",
+       "value": "halibut"
+      },
+      {
+       "category": "wine variety",
+       "value": "semillon"
+      },
+      {
+       "category": "musical instrument",
+       "value": "clarinet"
+      },
+      {
+       "category": "wine variety",
+       "value": "grenache"
+      },
+      {
+       "category": "sea creature",
+       "value": "dolphin"
+      },
+      {
+       "category": "musical instrument",
+       "value": "bugle"
+      },
+      {
+       "category": "sea creature",
+       "value": "snapper"
+      },
+      {
+       "category": "musical instrument",
+       "value": "sousaphone"
+      },
+      {
+       "category": "wine variety",
+       "value": "lambrusco"
+      },
+      {
+       "category": "musical instrument",
+       "value": "tuba"
+      },
+      {
+       "category": "sea creature",
+       "value": "grouper"
+      },
+      {
+       "category": "musical instrument",
+       "value": "shakuhachi"
+      },
+      {
+       "category": "sea creature",
+       "value": "octopus"
+      },
+      {
+       "category": "wine variety",
+       "value": "prosecco"
+      },
+      {
+       "category": "sea creature",
+       "value": "orca"
+      },
+      {
+       "category": "wine variety",
+       "value": "vermentino"
+      },
+      {
+       "category": "musical instrument",
+       "value": "lute"
+      },
+      {
+       "category": "wine variety",
+       "value": "primitivo"
+      },
+      {
+       "category": "sea creature",
+       "value": "barnacle"
+      },
+      {
+       "category": "wine variety",
+       "value": "fiano"
+      },
+      {
+       "category": "musical instrument",
+       "value": "organ"
+      },
+      {
+       "category": "wine variety",
+       "value": "madeira"
+      },
+      {
+       "category": "musical instrument",
+       "value": "cornet"
+      },
+      {
+       "category": "wine variety",
+       "value": "riesling"
+      },
+      {
+       "category": "musical instrument",
+       "value": "castanets"
+      },
+      {
+       "category": "wine variety",
+       "value": "malmsey"
+      },
+      {
+       "category": "musical instrument",
+       "value": "sitar"
+      },
+      {
+       "category": "sea creature",
+       "value": "krill"
+      },
+      {
+       "category": "wine variety",
+       "value": "albarino"
+      },
+      {
+       "category": "musical instrument",
+       "value": "piccolo"
+      },
+      {
+       "category": "sea creature",
+       "value": "barracuda"
+      },
+      {
+       "category": "wine variety",
+       "value": "sauternes"
+      },
+      {
+       "category": "sea creature",
+       "value": "flounder"
+      },
+      {
+       "category": "wine variety",
+       "value": "verdejo"
+      },
+      {
+       "category": "musical instrument",
+       "value": "harpsichord"
+      },
+      {
+       "category": "wine variety",
+       "value": "malbec"
+      },
+      {
+       "category": "sea creature",
+       "value": "squid"
+      },
+      {
+       "category": "wine variety",
+       "value": "champagne"
+      },
+      {
+       "category": "sea creature",
+       "value": "sponge"
+      },
+      {
+       "category": "wine variety",
+       "value": "roussanne"
+      },
+      {
+       "category": "musical instrument",
+       "value": "mandolin"
+      },
+      {
+       "category": "sea creature",
+       "value": "coral"
+      },
+      {
+       "category": "musical instrument",
+       "value": "mellophone"
+      },
+      {
+       "category": "wine variety",
+       "value": "nebbiolo"
+      },
+      {
+       "category": "musical instrument",
+       "value": "guitar"
+      },
+      {
+       "category": "wine variety",
+       "value": "chardonnay"
+      },
+      {
+       "category": "musical instrument",
+       "value": "bassoon"
+      },
+      {
+       "category": "sea creature",
+       "value": "seahorse"
+      },
+      {
+       "category": "wine variety",
+       "value": "moscato"
+      },
+      {
+       "category": "sea creature",
+       "value": "sailfish"
+      },
+      {
+       "category": "wine variety",
+       "value": "marsanne"
+      },
+      {
+       "category": "sea creature",
+       "value": "wahoo"
+      },
+      {
+       "category": "wine variety",
+       "value": "barbera"
+      },
+      {
+       "category": "musical instrument",
+       "value": "cymbals"
+      },
+      {
+       "category": "sea creature",
+       "value": "starfish"
+      },
+      {
+       "category": "musical instrument",
+       "value": "flute"
+      },
+      {
+       "category": "wine variety",
+       "value": "zinfandel"
+      },
+      {
+       "category": "sea creature",
+       "value": "cuttlefish"
+      }
+     ],
+     "target_values": [
+      "sangiovese",
+      "cava",
+      "merlot",
+      "greco",
+      "viognier",
+      "gewurztraminer",
+      "torrontes",
+      "muscat",
+      "semillon",
+      "grenache",
+      "lambrusco",
+      "prosecco",
+      "vermentino",
+      "primitivo",
+      "fiano",
+      "madeira",
+      "riesling",
+      "malmsey",
+      "albarino",
+      "sauternes",
+      "verdejo",
+      "malbec",
+      "champagne",
+      "roussanne",
+      "nebbiolo",
+      "chardonnay",
+      "moscato",
+      "marsanne",
+      "barbera",
+      "zinfandel"
+     ],
+     "memory_now": {
+      "wine variety": "zinfandel",
+      "sea creature": "cuttlefish",
+      "musical instrument": "flute"
+     },
+     "fvq": {
+      "expected": "sangiovese",
+      "predicted": "greco",
+      "correct": false
+     },
+     "cvq": {
+      "expected": "zinfandel",
+      "predicted": "moscato",
+      "correct": false
+     }
+    }
+   }
+  },
+  {
+   "id": "5_sea_creature",
+   "target_key": "sea creature",
+   "keys": [
+    "sea creature",
+    "constellation",
+    "fruit variety"
+   ],
+   "by_n": {
+    "5": {
+     "stream": [
+      {
+       "category": "constellation",
+       "value": "hydra"
+      },
+      {
+       "category": "sea creature",
+       "value": "marlin"
+      },
+      {
+       "category": "constellation",
+       "value": "cancer"
+      },
+      {
+       "category": "fruit variety",
+       "value": "lemon"
+      },
+      {
+       "category": "sea creature",
+       "value": "halibut"
+      },
+      {
+       "category": "constellation",
+       "value": "aquila"
+      },
+      {
+       "category": "sea creature",
+       "value": "walrus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "kiwi"
+      },
+      {
+       "category": "sea creature",
+       "value": "eel"
+      },
+      {
+       "category": "fruit variety",
+       "value": "damson"
+      },
+      {
+       "category": "constellation",
+       "value": "andromeda"
+      },
+      {
+       "category": "fruit variety",
+       "value": "medlar"
+      },
+      {
+       "category": "constellation",
+       "value": "crater"
+      },
+      {
+       "category": "fruit variety",
+       "value": "guava"
+      },
+      {
+       "category": "sea creature",
+       "value": "porpoise"
+      }
+     ],
+     "target_values": [
+      "marlin",
+      "halibut",
+      "walrus",
+      "eel",
+      "porpoise"
+     ],
+     "memory_now": {
+      "sea creature": "porpoise",
+      "constellation": "crater",
+      "fruit variety": "guava"
+     },
+     "fvq": {
+      "expected": "marlin",
+      "predicted": "marlin",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "porpoise",
+      "predicted": "porpoise",
+      "correct": true
+     }
+    },
+    "10": {
+     "stream": [
+      {
+       "category": "constellation",
+       "value": "hydra"
+      },
+      {
+       "category": "fruit variety",
+       "value": "lime"
+      },
+      {
+       "category": "sea creature",
+       "value": "manatee"
+      },
+      {
+       "category": "constellation",
+       "value": "tucana"
+      },
+      {
+       "category": "fruit variety",
+       "value": "lemon"
+      },
+      {
+       "category": "sea creature",
+       "value": "sponge"
+      },
+      {
+       "category": "fruit variety",
+       "value": "jackfruit"
+      },
+      {
+       "category": "constellation",
+       "value": "phoenix"
+      },
+      {
+       "category": "fruit variety",
+       "value": "date"
+      },
+      {
+       "category": "sea creature",
+       "value": "walrus"
+      },
+      {
+       "category": "constellation",
+       "value": "cepheus"
+      },
+      {
+       "category": "sea creature",
+       "value": "octopus"
+      },
+      {
+       "category": "constellation",
+       "value": "lacerta"
+      },
+      {
+       "category": "sea creature",
+       "value": "barnacle"
+      },
+      {
+       "category": "constellation",
+       "value": "pavo"
+      },
+      {
+       "category": "fruit variety",
+       "value": "cranberry"
+      },
+      {
+       "category": "sea creature",
+       "value": "ray"
+      },
+      {
+       "category": "constellation",
+       "value": "lyra"
+      },
+      {
+       "category": "sea creature",
+       "value": "crab"
+      },
+      {
+       "category": "constellation",
+       "value": "corvus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "prune"
+      },
+      {
+       "category": "sea creature",
+       "value": "lobster"
+      },
+      {
+       "category": "constellation",
+       "value": "andromeda"
+      },
+      {
+       "category": "sea creature",
+       "value": "halibut"
+      },
+      {
+       "category": "fruit variety",
+       "value": "tangerine"
+      },
+      {
+       "category": "constellation",
+       "value": "pegasus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "rambutan"
+      },
+      {
+       "category": "sea creature",
+       "value": "tuna"
+      },
+      {
+       "category": "fruit variety",
+       "value": "cherry"
+      },
+      {
+       "category": "fruit variety",
+       "value": "dragonfruit"
+      }
+     ],
+     "target_values": [
+      "manatee",
+      "sponge",
+      "walrus",
+      "octopus",
+      "barnacle",
+      "ray",
+      "crab",
+      "lobster",
+      "halibut",
+      "tuna"
+     ],
+     "memory_now": {
+      "sea creature": "tuna",
+      "constellation": "pegasus",
+      "fruit variety": "dragonfruit"
+     },
+     "fvq": {
+      "expected": "manatee",
+      "predicted": "manatee",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "tuna",
+      "predicted": "tuna",
+      "correct": true
+     }
+    },
+    "15": {
+     "stream": [
+      {
+       "category": "constellation",
+       "value": "orion"
+      },
+      {
+       "category": "fruit variety",
+       "value": "medlar"
+      },
+      {
+       "category": "constellation",
+       "value": "libra"
+      },
+      {
+       "category": "sea creature",
+       "value": "squid"
+      },
+      {
+       "category": "constellation",
+       "value": "scorpius"
+      },
+      {
+       "category": "fruit variety",
+       "value": "longan"
+      },
+      {
+       "category": "sea creature",
+       "value": "cuttlefish"
+      },
+      {
+       "category": "constellation",
+       "value": "cygnus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "lemon"
+      },
+      {
+       "category": "sea creature",
+       "value": "lobster"
+      },
+      {
+       "category": "fruit variety",
+       "value": "greengage"
+      },
+      {
+       "category": "constellation",
+       "value": "hercules"
+      },
+      {
+       "category": "fruit variety",
+       "value": "mangosteen"
+      },
+      {
+       "category": "sea creature",
+       "value": "tuna"
+      },
+      {
+       "category": "fruit variety",
+       "value": "lime"
+      },
+      {
+       "category": "constellation",
+       "value": "pegasus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "date"
+      },
+      {
+       "category": "constellation",
+       "value": "vela"
+      },
+      {
+       "category": "sea creature",
+       "value": "starfish"
+      },
+      {
+       "category": "fruit variety",
+       "value": "loquat"
+      },
+      {
+       "category": "sea creature",
+       "value": "halibut"
+      },
+      {
+       "category": "fruit variety",
+       "value": "fig"
+      },
+      {
+       "category": "constellation",
+       "value": "delphinus"
+      },
+      {
+       "category": "sea creature",
+       "value": "shrimp"
+      },
+      {
+       "category": "constellation",
+       "value": "lyra"
+      },
+      {
+       "category": "fruit variety",
+       "value": "huckleberry"
+      },
+      {
+       "category": "sea creature",
+       "value": "coral"
+      },
+      {
+       "category": "constellation",
+       "value": "aquarius"
+      },
+      {
+       "category": "sea creature",
+       "value": "dolphin"
+      },
+      {
+       "category": "constellation",
+       "value": "bootes"
+      },
+      {
+       "category": "sea creature",
+       "value": "jellyfish"
+      },
+      {
+       "category": "constellation",
+       "value": "andromeda"
+      },
+      {
+       "category": "fruit variety",
+       "value": "cherry"
+      },
+      {
+       "category": "sea creature",
+       "value": "ray"
+      },
+      {
+       "category": "constellation",
+       "value": "lupus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "peach"
+      },
+      {
+       "category": "sea creature",
+       "value": "grouper"
+      },
+      {
+       "category": "constellation",
+       "value": "pisces"
+      },
+      {
+       "category": "fruit variety",
+       "value": "raspberry"
+      },
+      {
+       "category": "sea creature",
+       "value": "swordfish"
+      },
+      {
+       "category": "fruit variety",
+       "value": "pineapple"
+      },
+      {
+       "category": "constellation",
+       "value": "auriga"
+      },
+      {
+       "category": "sea creature",
+       "value": "barnacle"
+      },
+      {
+       "category": "fruit variety",
+       "value": "rambutan"
+      },
+      {
+       "category": "sea creature",
+       "value": "snapper"
+      }
+     ],
+     "target_values": [
+      "squid",
+      "cuttlefish",
+      "lobster",
+      "tuna",
+      "starfish",
+      "halibut",
+      "shrimp",
+      "coral",
+      "dolphin",
+      "jellyfish",
+      "ray",
+      "grouper",
+      "swordfish",
+      "barnacle",
+      "snapper"
+     ],
+     "memory_now": {
+      "sea creature": "snapper",
+      "constellation": "auriga",
+      "fruit variety": "rambutan"
+     },
+     "fvq": {
+      "expected": "squid",
+      "predicted": "squid",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "snapper",
+      "predicted": "snapper",
+      "correct": true
+     }
+    },
+    "20": {
+     "stream": [
+      {
+       "category": "constellation",
+       "value": "aquarius"
+      },
+      {
+       "category": "sea creature",
+       "value": "ray"
+      },
+      {
+       "category": "fruit variety",
+       "value": "mango"
+      },
+      {
+       "category": "constellation",
+       "value": "phoenix"
+      },
+      {
+       "category": "sea creature",
+       "value": "shark"
+      },
+      {
+       "category": "fruit variety",
+       "value": "passionfruit"
+      },
+      {
+       "category": "constellation",
+       "value": "delphinus"
+      },
+      {
+       "category": "sea creature",
+       "value": "orca"
+      },
+      {
+       "category": "constellation",
+       "value": "gemini"
+      },
+      {
+       "category": "fruit variety",
+       "value": "peach"
+      },
+      {
+       "category": "constellation",
+       "value": "lyra"
+      },
+      {
+       "category": "sea creature",
+       "value": "grouper"
+      },
+      {
+       "category": "fruit variety",
+       "value": "kumquat"
+      },
+      {
+       "category": "constellation",
+       "value": "puppis"
+      },
+      {
+       "category": "sea creature",
+       "value": "eel"
+      },
+      {
+       "category": "fruit variety",
+       "value": "papaya"
+      },
+      {
+       "category": "sea creature",
+       "value": "cuttlefish"
+      },
+      {
+       "category": "constellation",
+       "value": "octans"
+      },
+      {
+       "category": "fruit variety",
+       "value": "banana"
+      },
+      {
+       "category": "constellation",
+       "value": "aquila"
+      },
+      {
+       "category": "sea creature",
+       "value": "krill"
+      },
+      {
+       "category": "constellation",
+       "value": "sagittarius"
+      },
+      {
+       "category": "sea creature",
+       "value": "octopus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "mulberry"
+      },
+      {
+       "category": "sea creature",
+       "value": "coral"
+      },
+      {
+       "category": "fruit variety",
+       "value": "watermelon"
+      },
+      {
+       "category": "sea creature",
+       "value": "halibut"
+      },
+      {
+       "category": "fruit variety",
+       "value": "apple"
+      },
+      {
+       "category": "constellation",
+       "value": "lupus"
+      },
+      {
+       "category": "sea creature",
+       "value": "sailfish"
+      },
+      {
+       "category": "fruit variety",
+       "value": "lemon"
+      },
+      {
+       "category": "sea creature",
+       "value": "whale"
+      },
+      {
+       "category": "fruit variety",
+       "value": "durian"
+      },
+      {
+       "category": "sea creature",
+       "value": "seal"
+      },
+      {
+       "category": "fruit variety",
+       "value": "rambutan"
+      },
+      {
+       "category": "constellation",
+       "value": "cancer"
+      },
+      {
+       "category": "sea creature",
+       "value": "walrus"
+      },
+      {
+       "category": "constellation",
+       "value": "pisces"
+      },
+      {
+       "category": "fruit variety",
+       "value": "persimmon"
+      },
+      {
+       "category": "sea creature",
+       "value": "snapper"
+      },
+      {
+       "category": "fruit variety",
+       "value": "blueberry"
+      },
+      {
+       "category": "constellation",
+       "value": "pegasus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "boysenberry"
+      },
+      {
+       "category": "constellation",
+       "value": "capricornus"
+      },
+      {
+       "category": "sea creature",
+       "value": "seahorse"
+      },
+      {
+       "category": "constellation",
+       "value": "auriga"
+      },
+      {
+       "category": "sea creature",
+       "value": "marlin"
+      },
+      {
+       "category": "fruit variety",
+       "value": "currant"
+      },
+      {
+       "category": "constellation",
+       "value": "pavo"
+      },
+      {
+       "category": "fruit variety",
+       "value": "greengage"
+      },
+      {
+       "category": "sea creature",
+       "value": "jellyfish"
+      },
+      {
+       "category": "fruit variety",
+       "value": "prune"
+      },
+      {
+       "category": "constellation",
+       "value": "virgo"
+      },
+      {
+       "category": "fruit variety",
+       "value": "cranberry"
+      },
+      {
+       "category": "constellation",
+       "value": "carina"
+      },
+      {
+       "category": "fruit variety",
+       "value": "guava"
+      },
+      {
+       "category": "constellation",
+       "value": "taurus"
+      },
+      {
+       "category": "sea creature",
+       "value": "narwhal"
+      },
+      {
+       "category": "constellation",
+       "value": "cepheus"
+      },
+      {
+       "category": "sea creature",
+       "value": "wahoo"
+      }
+     ],
+     "target_values": [
+      "ray",
+      "shark",
+      "orca",
+      "grouper",
+      "eel",
+      "cuttlefish",
+      "krill",
+      "octopus",
+      "coral",
+      "halibut",
+      "sailfish",
+      "whale",
+      "seal",
+      "walrus",
+      "snapper",
+      "seahorse",
+      "marlin",
+      "jellyfish",
+      "narwhal",
+      "wahoo"
+     ],
+     "memory_now": {
+      "sea creature": "wahoo",
+      "constellation": "cepheus",
+      "fruit variety": "guava"
+     },
+     "fvq": {
+      "expected": "ray",
+      "predicted": "ray",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "wahoo",
+      "predicted": "halibut",
+      "correct": false
+     }
+    },
+    "30": {
+     "stream": [
+      {
+       "category": "fruit variety",
+       "value": "loganberry"
+      },
+      {
+       "category": "constellation",
+       "value": "pavo"
+      },
+      {
+       "category": "sea creature",
+       "value": "octopus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "greengage"
+      },
+      {
+       "category": "sea creature",
+       "value": "jellyfish"
+      },
+      {
+       "category": "constellation",
+       "value": "lyra"
+      },
+      {
+       "category": "fruit variety",
+       "value": "peach"
+      },
+      {
+       "category": "constellation",
+       "value": "capricornus"
+      },
+      {
+       "category": "sea creature",
+       "value": "manatee"
+      },
+      {
+       "category": "constellation",
+       "value": "puppis"
+      },
+      {
+       "category": "fruit variety",
+       "value": "lemon"
+      },
+      {
+       "category": "sea creature",
+       "value": "cuttlefish"
+      },
+      {
+       "category": "fruit variety",
+       "value": "mulberry"
+      },
+      {
+       "category": "constellation",
+       "value": "vela"
+      },
+      {
+       "category": "fruit variety",
+       "value": "damson"
+      },
+      {
+       "category": "constellation",
+       "value": "leo"
+      },
+      {
+       "category": "fruit variety",
+       "value": "pineapple"
+      },
+      {
+       "category": "constellation",
+       "value": "indus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "pomelo"
+      },
+      {
+       "category": "sea creature",
+       "value": "tuna"
+      },
+      {
+       "category": "constellation",
+       "value": "aquarius"
+      },
+      {
+       "category": "fruit variety",
+       "value": "gooseberry"
+      },
+      {
+       "category": "constellation",
+       "value": "draco"
+      },
+      {
+       "category": "sea creature",
+       "value": "krill"
+      },
+      {
+       "category": "constellation",
+       "value": "lupus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "lychee"
+      },
+      {
+       "category": "sea creature",
+       "value": "wahoo"
+      },
+      {
+       "category": "fruit variety",
+       "value": "mangosteen"
+      },
+      {
+       "category": "sea creature",
+       "value": "flounder"
+      },
+      {
+       "category": "fruit variety",
+       "value": "cherry"
+      },
+      {
+       "category": "constellation",
+       "value": "centaurus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "dragonfruit"
+      },
+      {
+       "category": "sea creature",
+       "value": "starfish"
+      },
+      {
+       "category": "fruit variety",
+       "value": "elderberry"
+      },
+      {
+       "category": "sea creature",
+       "value": "seal"
+      },
+      {
+       "category": "fruit variety",
+       "value": "plum"
+      },
+      {
+       "category": "sea creature",
+       "value": "coral"
+      },
+      {
+       "category": "fruit variety",
+       "value": "papaya"
+      },
+      {
+       "category": "sea creature",
+       "value": "whale"
+      },
+      {
+       "category": "constellation",
+       "value": "libra"
+      },
+      {
+       "category": "fruit variety",
+       "value": "nectarine"
+      },
+      {
+       "category": "sea creature",
+       "value": "eel"
+      },
+      {
+       "category": "constellation",
+       "value": "taurus"
+      },
+      {
+       "category": "sea creature",
+       "value": "shrimp"
+      },
+      {
+       "category": "constellation",
+       "value": "pegasus"
+      },
+      {
+       "category": "fruit variety",
+       "value": "banana"
+      },
+      {
+       "category": "constellation",
+       "value": "grus"
+      },
+      {
+       "category": "sea creature",
+       "value": "halibut"
+      },
+      {
+       "category": "constellation",
+       "value": "delphinus"
+      },
+      {
+       "category": "sea creature",
+       "value": "shark"
+      },
+      {
+       "category": "constellation",
+       "value": "carina"
+      },
+      {
+       "category": "sea creature",
+       "value": "ray"
+      },
+      {
+       "category": "fruit variety",
+       "value": "boysenberry"
+      },
+      {
+       "category": "constellation",
+       "value": "cassiopeia"
+      },
+      {
+       "category": "fruit variety",
+       "value": "prune"
+      },
+      {
+       "category": "constellation",
+       "value": "aries"
+      },
+      {
+       "category": "sea creature",
+       "value": "sponge"
+      },
+      {
+       "category": "constellation",
+       "value": "cygnus"
+      },
+      {
+       "category": "sea creature",
+       "value": "sailfish"
+      },
+      {
+       "category": "fruit variety",
+       "value": "lime"
+      },
+      {
+       "category": "sea creature",
+       "value": "dolphin"
+      },
+      {
+       "category": "constellation",
+       "value": "virgo"
+      },
+      {
+       "category": "fruit variety",
+       "value": "mango"
+      },
+      {
+       "category": "sea creature",
+       "value": "marlin"
+      },
+      {
+       "category": "constellation",
+       "value": "aquila"
+      },
+      {
+       "category": "fruit variety",
+       "value": "persimmon"
+      },
+      {
+       "category": "constellation",
+       "value": "hercules"
+      },
+      {
+       "category": "sea creature",
+       "value": "crab"
+      },
+      {
+       "category": "fruit variety",
+       "value": "medlar"
+      },
+      {
+       "category": "sea creature",
+       "value": "narwhal"
+      },
+      {
+       "category": "fruit variety",
+       "value": "cranberry"
+      },
+      {
+       "category": "sea creature",
+       "value": "swordfish"
+      },
+      {
+       "category": "fruit variety",
+       "value": "guava"
+      },
+      {
+       "category": "constellation",
+       "value": "lacerta"
+      },
+      {
+       "category": "sea creature",
+       "value": "grouper"
+      },
+      {
+       "category": "constellation",
+       "value": "sagittarius"
+      },
+      {
+       "category": "sea creature",
+       "value": "squid"
+      },
+      {
+       "category": "fruit variety",
+       "value": "bergamot"
+      },
+      {
+       "category": "constellation",
+       "value": "perseus"
+      },
+      {
+       "category": "sea creature",
+       "value": "barracuda"
+      },
+      {
+       "category": "constellation",
+       "value": "orion"
+      },
+      {
+       "category": "sea creature",
+       "value": "orca"
+      },
+      {
+       "category": "constellation",
+       "value": "hydra"
+      },
+      {
+       "category": "sea creature",
+       "value": "lobster"
+      },
+      {
+       "category": "fruit variety",
+       "value": "date"
+      },
+      {
+       "category": "constellation",
+       "value": "auriga"
+      },
+      {
+       "category": "sea creature",
+       "value": "barnacle"
+      },
+      {
+       "category": "constellation",
+       "value": "tucana"
+      },
+      {
+       "category": "fruit variety",
+       "value": "sloe"
+      },
+      {
+       "category": "fruit variety",
+       "value": "mandarin"
+      }
+     ],
+     "target_values": [
+      "octopus",
+      "jellyfish",
+      "manatee",
+      "cuttlefish",
+      "tuna",
+      "krill",
+      "wahoo",
+      "flounder",
+      "starfish",
+      "seal",
+      "coral",
+      "whale",
+      "eel",
+      "shrimp",
+      "halibut",
+      "shark",
+      "ray",
+      "sponge",
+      "sailfish",
+      "dolphin",
+      "marlin",
+      "crab",
+      "narwhal",
+      "swordfish",
+      "grouper",
+      "squid",
+      "barracuda",
+      "orca",
+      "lobster",
+      "barnacle"
+     ],
+     "memory_now": {
+      "sea creature": "barnacle",
+      "constellation": "tucana",
+      "fruit variety": "mandarin"
+     },
+     "fvq": {
+      "expected": "octopus",
+      "predicted": "octopus",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "barnacle",
+      "predicted": "orca",
+      "correct": false
+     }
+    }
+   }
+  },
+  {
+   "id": "6_martial_art",
+   "target_key": "martial art",
+   "keys": [
+    "martial art",
+    "tree species",
+    "gemstone"
+   ],
+   "by_n": {
+    "5": {
+     "stream": [
+      {
+       "category": "tree species",
+       "value": "cashew"
+      },
+      {
+       "category": "gemstone",
+       "value": "aventurine"
+      },
+      {
+       "category": "martial art",
+       "value": "capoeira"
+      },
+      {
+       "category": "tree species",
+       "value": "fir"
+      },
+      {
+       "category": "gemstone",
+       "value": "garnet"
+      },
+      {
+       "category": "tree species",
+       "value": "cedar"
+      },
+      {
+       "category": "gemstone",
+       "value": "alexandrite"
+      },
+      {
+       "category": "martial art",
+       "value": "judo"
+      },
+      {
+       "category": "gemstone",
+       "value": "padparadscha"
+      },
+      {
+       "category": "tree species",
+       "value": "beech"
+      },
+      {
+       "category": "martial art",
+       "value": "pankration"
+      },
+      {
+       "category": "gemstone",
+       "value": "chalcedony"
+      },
+      {
+       "category": "martial art",
+       "value": "combatives"
+      },
+      {
+       "category": "tree species",
+       "value": "basswood"
+      },
+      {
+       "category": "martial art",
+       "value": "wrestling"
+      }
+     ],
+     "target_values": [
+      "capoeira",
+      "judo",
+      "pankration",
+      "combatives",
+      "wrestling"
+     ],
+     "memory_now": {
+      "martial art": "wrestling",
+      "tree species": "basswood",
+      "gemstone": "chalcedony"
+     },
+     "fvq": {
+      "expected": "capoeira",
+      "predicted": "capoeira",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "wrestling",
+      "predicted": "combatives",
+      "correct": false
+     }
+    },
+    "10": {
+     "stream": [
+      {
+       "category": "martial art",
+       "value": "bajiquan"
+      },
+      {
+       "category": "tree species",
+       "value": "banyan"
+      },
+      {
+       "category": "martial art",
+       "value": "bartitsu"
+      },
+      {
+       "category": "tree species",
+       "value": "basswood"
+      },
+      {
+       "category": "gemstone",
+       "value": "labradorite"
+      },
+      {
+       "category": "martial art",
+       "value": "sambo"
+      },
+      {
+       "category": "gemstone",
+       "value": "goshenite"
+      },
+      {
+       "category": "martial art",
+       "value": "pankration"
+      },
+      {
+       "category": "gemstone",
+       "value": "garnet"
+      },
+      {
+       "category": "tree species",
+       "value": "juniper"
+      },
+      {
+       "category": "martial art",
+       "value": "kickboxing"
+      },
+      {
+       "category": "tree species",
+       "value": "alder"
+      },
+      {
+       "category": "gemstone",
+       "value": "diamond"
+      },
+      {
+       "category": "tree species",
+       "value": "chestnut"
+      },
+      {
+       "category": "martial art",
+       "value": "wrestling"
+      },
+      {
+       "category": "tree species",
+       "value": "aspen"
+      },
+      {
+       "category": "gemstone",
+       "value": "chrysoprase"
+      },
+      {
+       "category": "tree species",
+       "value": "jacaranda"
+      },
+      {
+       "category": "gemstone",
+       "value": "topaz"
+      },
+      {
+       "category": "tree species",
+       "value": "eucalyptus"
+      },
+      {
+       "category": "gemstone",
+       "value": "ruby"
+      },
+      {
+       "category": "martial art",
+       "value": "kyokushin"
+      },
+      {
+       "category": "gemstone",
+       "value": "kunzite"
+      },
+      {
+       "category": "martial art",
+       "value": "hapkido"
+      },
+      {
+       "category": "tree species",
+       "value": "poplar"
+      },
+      {
+       "category": "gemstone",
+       "value": "bloodstone"
+      },
+      {
+       "category": "martial art",
+       "value": "sanda"
+      },
+      {
+       "category": "gemstone",
+       "value": "zircon"
+      },
+      {
+       "category": "tree species",
+       "value": "cashew"
+      },
+      {
+       "category": "martial art",
+       "value": "systema"
+      }
+     ],
+     "target_values": [
+      "bajiquan",
+      "bartitsu",
+      "sambo",
+      "pankration",
+      "kickboxing",
+      "wrestling",
+      "kyokushin",
+      "hapkido",
+      "sanda",
+      "systema"
+     ],
+     "memory_now": {
+      "martial art": "systema",
+      "tree species": "cashew",
+      "gemstone": "zircon"
+     },
+     "fvq": {
+      "expected": "bajiquan",
+      "predicted": "bajiquan",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "systema",
+      "predicted": "sanda",
+      "correct": false
+     }
+    },
+    "15": {
+     "stream": [
+      {
+       "category": "tree species",
+       "value": "fir"
+      },
+      {
+       "category": "martial art",
+       "value": "pankration"
+      },
+      {
+       "category": "gemstone",
+       "value": "topaz"
+      },
+      {
+       "category": "tree species",
+       "value": "buckeye"
+      },
+      {
+       "category": "martial art",
+       "value": "shooto"
+      },
+      {
+       "category": "tree species",
+       "value": "aspen"
+      },
+      {
+       "category": "gemstone",
+       "value": "turquoise"
+      },
+      {
+       "category": "martial art",
+       "value": "silat"
+      },
+      {
+       "category": "tree species",
+       "value": "hickory"
+      },
+      {
+       "category": "gemstone",
+       "value": "ivory"
+      },
+      {
+       "category": "tree species",
+       "value": "banyan"
+      },
+      {
+       "category": "gemstone",
+       "value": "padparadscha"
+      },
+      {
+       "category": "martial art",
+       "value": "hapkido"
+      },
+      {
+       "category": "gemstone",
+       "value": "diamond"
+      },
+      {
+       "category": "martial art",
+       "value": "systema"
+      },
+      {
+       "category": "tree species",
+       "value": "mango"
+      },
+      {
+       "category": "martial art",
+       "value": "escrima"
+      },
+      {
+       "category": "tree species",
+       "value": "cinnamon"
+      },
+      {
+       "category": "gemstone",
+       "value": "goshenite"
+      },
+      {
+       "category": "martial art",
+       "value": "kyokushin"
+      },
+      {
+       "category": "gemstone",
+       "value": "pearl"
+      },
+      {
+       "category": "tree species",
+       "value": "cedar"
+      },
+      {
+       "category": "martial art",
+       "value": "baguazhang"
+      },
+      {
+       "category": "tree species",
+       "value": "maple"
+      },
+      {
+       "category": "martial art",
+       "value": "boxing"
+      },
+      {
+       "category": "tree species",
+       "value": "elm"
+      },
+      {
+       "category": "gemstone",
+       "value": "prasiolite"
+      },
+      {
+       "category": "tree species",
+       "value": "rosewood"
+      },
+      {
+       "category": "gemstone",
+       "value": "sardonyx"
+      },
+      {
+       "category": "martial art",
+       "value": "taekwondo"
+      },
+      {
+       "category": "gemstone",
+       "value": "kunzite"
+      },
+      {
+       "category": "tree species",
+       "value": "hemlock"
+      },
+      {
+       "category": "martial art",
+       "value": "xingyiquan"
+      },
+      {
+       "category": "gemstone",
+       "value": "moonstone"
+      },
+      {
+       "category": "tree species",
+       "value": "juniper"
+      },
+      {
+       "category": "gemstone",
+       "value": "bloodstone"
+      },
+      {
+       "category": "tree species",
+       "value": "cypress"
+      },
+      {
+       "category": "gemstone",
+       "value": "sapphire"
+      },
+      {
+       "category": "tree species",
+       "value": "redwood"
+      },
+      {
+       "category": "gemstone",
+       "value": "azurite"
+      },
+      {
+       "category": "martial art",
+       "value": "iaido"
+      },
+      {
+       "category": "gemstone",
+       "value": "emerald"
+      },
+      {
+       "category": "martial art",
+       "value": "arnis"
+      },
+      {
+       "category": "martial art",
+       "value": "capoeira"
+      },
+      {
+       "category": "martial art",
+       "value": "shootfighting"
+      }
+     ],
+     "target_values": [
+      "pankration",
+      "shooto",
+      "silat",
+      "hapkido",
+      "systema",
+      "escrima",
+      "kyokushin",
+      "baguazhang",
+      "boxing",
+      "taekwondo",
+      "xingyiquan",
+      "iaido",
+      "arnis",
+      "capoeira",
+      "shootfighting"
+     ],
+     "memory_now": {
+      "martial art": "shootfighting",
+      "tree species": "redwood",
+      "gemstone": "emerald"
+     },
+     "fvq": {
+      "expected": "pankration",
+      "predicted": "pankration",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "shootfighting",
+      "predicted": "shootfighting",
+      "correct": true
+     }
+    },
+    "20": {
+     "stream": [
+      {
+       "category": "tree species",
+       "value": "neem"
+      },
+      {
+       "category": "gemstone",
+       "value": "aquamarine"
+      },
+      {
+       "category": "martial art",
+       "value": "boxing"
+      },
+      {
+       "category": "tree species",
+       "value": "acacia"
+      },
+      {
+       "category": "martial art",
+       "value": "ninjutsu"
+      },
+      {
+       "category": "gemstone",
+       "value": "malachite"
+      },
+      {
+       "category": "tree species",
+       "value": "palm"
+      },
+      {
+       "category": "gemstone",
+       "value": "copal"
+      },
+      {
+       "category": "martial art",
+       "value": "kyokushin"
+      },
+      {
+       "category": "tree species",
+       "value": "juniper"
+      },
+      {
+       "category": "martial art",
+       "value": "aikido"
+      },
+      {
+       "category": "tree species",
+       "value": "basswood"
+      },
+      {
+       "category": "martial art",
+       "value": "kali"
+      },
+      {
+       "category": "gemstone",
+       "value": "carnelian"
+      },
+      {
+       "category": "martial art",
+       "value": "wushu"
+      },
+      {
+       "category": "tree species",
+       "value": "alder"
+      },
+      {
+       "category": "gemstone",
+       "value": "agate"
+      },
+      {
+       "category": "tree species",
+       "value": "elm"
+      },
+      {
+       "category": "martial art",
+       "value": "kendo"
+      },
+      {
+       "category": "gemstone",
+       "value": "pearl"
+      },
+      {
+       "category": "martial art",
+       "value": "hapkido"
+      },
+      {
+       "category": "tree species",
+       "value": "oak"
+      },
+      {
+       "category": "gemstone",
+       "value": "coral"
+      },
+      {
+       "category": "martial art",
+       "value": "karate"
+      },
+      {
+       "category": "gemstone",
+       "value": "diamond"
+      },
+      {
+       "category": "tree species",
+       "value": "poplar"
+      },
+      {
+       "category": "martial art",
+       "value": "arnis"
+      },
+      {
+       "category": "gemstone",
+       "value": "bixbite"
+      },
+      {
+       "category": "tree species",
+       "value": "pine"
+      },
+      {
+       "category": "gemstone",
+       "value": "onyx"
+      },
+      {
+       "category": "martial art",
+       "value": "pancrase"
+      },
+      {
+       "category": "tree species",
+       "value": "cherry"
+      },
+      {
+       "category": "martial art",
+       "value": "xingyiquan"
+      },
+      {
+       "category": "tree species",
+       "value": "ebony"
+      },
+      {
+       "category": "martial art",
+       "value": "judo"
+      },
+      {
+       "category": "gemstone",
+       "value": "kunzite"
+      },
+      {
+       "category": "martial art",
+       "value": "shootfighting"
+      },
+      {
+       "category": "tree species",
+       "value": "beech"
+      },
+      {
+       "category": "gemstone",
+       "value": "ammolite"
+      },
+      {
+       "category": "martial art",
+       "value": "iaido"
+      },
+      {
+       "category": "tree species",
+       "value": "yew"
+      },
+      {
+       "category": "gemstone",
+       "value": "ivory"
+      },
+      {
+       "category": "tree species",
+       "value": "cacao"
+      },
+      {
+       "category": "gemstone",
+       "value": "sunstone"
+      },
+      {
+       "category": "martial art",
+       "value": "baguazhang"
+      },
+      {
+       "category": "gemstone",
+       "value": "chrysoprase"
+      },
+      {
+       "category": "tree species",
+       "value": "cashew"
+      },
+      {
+       "category": "gemstone",
+       "value": "prasiolite"
+      },
+      {
+       "category": "martial art",
+       "value": "escrima"
+      },
+      {
+       "category": "gemstone",
+       "value": "sapphire"
+      },
+      {
+       "category": "tree species",
+       "value": "chestnut"
+      },
+      {
+       "category": "gemstone",
+       "value": "heliodor"
+      },
+      {
+       "category": "martial art",
+       "value": "savate"
+      },
+      {
+       "category": "tree species",
+       "value": "bamboo"
+      },
+      {
+       "category": "martial art",
+       "value": "kickboxing"
+      },
+      {
+       "category": "gemstone",
+       "value": "padparadscha"
+      },
+      {
+       "category": "tree species",
+       "value": "redwood"
+      },
+      {
+       "category": "martial art",
+       "value": "sanda"
+      },
+      {
+       "category": "gemstone",
+       "value": "garnet"
+      },
+      {
+       "category": "tree species",
+       "value": "ash"
+      }
+     ],
+     "target_values": [
+      "boxing",
+      "ninjutsu",
+      "kyokushin",
+      "aikido",
+      "kali",
+      "wushu",
+      "kendo",
+      "hapkido",
+      "karate",
+      "arnis",
+      "pancrase",
+      "xingyiquan",
+      "judo",
+      "shootfighting",
+      "iaido",
+      "baguazhang",
+      "escrima",
+      "savate",
+      "kickboxing",
+      "sanda"
+     ],
+     "memory_now": {
+      "martial art": "sanda",
+      "tree species": "ash",
+      "gemstone": "garnet"
+     },
+     "fvq": {
+      "expected": "boxing",
+      "predicted": "boxing",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "sanda",
+      "predicted": "sanda",
+      "correct": true
+     }
+    },
+    "30": {
+     "stream": [
+      {
+       "category": "tree species",
+       "value": "neem"
+      },
+      {
+       "category": "gemstone",
+       "value": "copal"
+      },
+      {
+       "category": "martial art",
+       "value": "savate"
+      },
+      {
+       "category": "tree species",
+       "value": "ebony"
+      },
+      {
+       "category": "martial art",
+       "value": "wushu"
+      },
+      {
+       "category": "gemstone",
+       "value": "bone"
+      },
+      {
+       "category": "tree species",
+       "value": "palm"
+      },
+      {
+       "category": "gemstone",
+       "value": "jasper"
+      },
+      {
+       "category": "tree species",
+       "value": "sandalwood"
+      },
+      {
+       "category": "gemstone",
+       "value": "tanzanite"
+      },
+      {
+       "category": "tree species",
+       "value": "eucalyptus"
+      },
+      {
+       "category": "martial art",
+       "value": "combatives"
+      },
+      {
+       "category": "tree species",
+       "value": "cashew"
+      },
+      {
+       "category": "martial art",
+       "value": "kendo"
+      },
+      {
+       "category": "gemstone",
+       "value": "ammolite"
+      },
+      {
+       "category": "tree species",
+       "value": "beech"
+      },
+      {
+       "category": "martial art",
+       "value": "judo"
+      },
+      {
+       "category": "gemstone",
+       "value": "rhodonite"
+      },
+      {
+       "category": "tree species",
+       "value": "acacia"
+      },
+      {
+       "category": "gemstone",
+       "value": "rhodochrosite"
+      },
+      {
+       "category": "tree species",
+       "value": "spruce"
+      },
+      {
+       "category": "gemstone",
+       "value": "chalcedony"
+      },
+      {
+       "category": "martial art",
+       "value": "kickboxing"
+      },
+      {
+       "category": "tree species",
+       "value": "mahogany"
+      },
+      {
+       "category": "gemstone",
+       "value": "emerald"
+      },
+      {
+       "category": "tree species",
+       "value": "ash"
+      },
+      {
+       "category": "gemstone",
+       "value": "heliodor"
+      },
+      {
+       "category": "martial art",
+       "value": "systema"
+      },
+      {
+       "category": "gemstone",
+       "value": "jet"
+      },
+      {
+       "category": "tree species",
+       "value": "cinnamon"
+      },
+      {
+       "category": "gemstone",
+       "value": "azurite"
+      },
+      {
+       "category": "tree species",
+       "value": "chestnut"
+      },
+      {
+       "category": "martial art",
+       "value": "capoeira"
+      },
+      {
+       "category": "tree species",
+       "value": "cedar"
+      },
+      {
+       "category": "gemstone",
+       "value": "spinel"
+      },
+      {
+       "category": "martial art",
+       "value": "sambo"
+      },
+      {
+       "category": "gemstone",
+       "value": "kunzite"
+      },
+      {
+       "category": "martial art",
+       "value": "kali"
+      },
+      {
+       "category": "tree species",
+       "value": "walnut"
+      },
+      {
+       "category": "martial art",
+       "value": "kyokushin"
+      },
+      {
+       "category": "gemstone",
+       "value": "amber"
+      },
+      {
+       "category": "tree species",
+       "value": "bamboo"
+      },
+      {
+       "category": "martial art",
+       "value": "xingyiquan"
+      },
+      {
+       "category": "tree species",
+       "value": "elm"
+      },
+      {
+       "category": "gemstone",
+       "value": "agate"
+      },
+      {
+       "category": "tree species",
+       "value": "banyan"
+      },
+      {
+       "category": "martial art",
+       "value": "shaolin"
+      },
+      {
+       "category": "gemstone",
+       "value": "tourmaline"
+      },
+      {
+       "category": "martial art",
+       "value": "karate"
+      },
+      {
+       "category": "tree species",
+       "value": "teak"
+      },
+      {
+       "category": "martial art",
+       "value": "aikido"
+      },
+      {
+       "category": "gemstone",
+       "value": "bloodstone"
+      },
+      {
+       "category": "tree species",
+       "value": "fir"
+      },
+      {
+       "category": "gemstone",
+       "value": "pearl"
+      },
+      {
+       "category": "martial art",
+       "value": "baguazhang"
+      },
+      {
+       "category": "gemstone",
+       "value": "sardonyx"
+      },
+      {
+       "category": "martial art",
+       "value": "taekwondo"
+      },
+      {
+       "category": "gemstone",
+       "value": "coral"
+      },
+      {
+       "category": "tree species",
+       "value": "alder"
+      },
+      {
+       "category": "martial art",
+       "value": "bartitsu"
+      },
+      {
+       "category": "tree species",
+       "value": "cacao"
+      },
+      {
+       "category": "martial art",
+       "value": "iaido"
+      },
+      {
+       "category": "tree species",
+       "value": "hickory"
+      },
+      {
+       "category": "gemstone",
+       "value": "zircon"
+      },
+      {
+       "category": "martial art",
+       "value": "silat"
+      },
+      {
+       "category": "tree species",
+       "value": "birch"
+      },
+      {
+       "category": "gemstone",
+       "value": "padparadscha"
+      },
+      {
+       "category": "martial art",
+       "value": "sanda"
+      },
+      {
+       "category": "gemstone",
+       "value": "morganite"
+      },
+      {
+       "category": "martial art",
+       "value": "hapkido"
+      },
+      {
+       "category": "tree species",
+       "value": "sycamore"
+      },
+      {
+       "category": "martial art",
+       "value": "shootfighting"
+      },
+      {
+       "category": "tree species",
+       "value": "jacaranda"
+      },
+      {
+       "category": "gemstone",
+       "value": "onyx"
+      },
+      {
+       "category": "tree species",
+       "value": "buckeye"
+      },
+      {
+       "category": "gemstone",
+       "value": "malachite"
+      },
+      {
+       "category": "martial art",
+       "value": "ninjutsu"
+      },
+      {
+       "category": "gemstone",
+       "value": "turquoise"
+      },
+      {
+       "category": "martial art",
+       "value": "shooto"
+      },
+      {
+       "category": "tree species",
+       "value": "baobab"
+      },
+      {
+       "category": "martial art",
+       "value": "wrestling"
+      },
+      {
+       "category": "gemstone",
+       "value": "jadeite"
+      },
+      {
+       "category": "martial art",
+       "value": "escrima"
+      },
+      {
+       "category": "tree species",
+       "value": "aspen"
+      },
+      {
+       "category": "martial art",
+       "value": "arnis"
+      },
+      {
+       "category": "gemstone",
+       "value": "ivory"
+      },
+      {
+       "category": "martial art",
+       "value": "boxing"
+      },
+      {
+       "category": "tree species",
+       "value": "maple"
+      },
+      {
+       "category": "martial art",
+       "value": "pancrase"
+      },
+      {
+       "category": "gemstone",
+       "value": "labradorite"
+      }
+     ],
+     "target_values": [
+      "savate",
+      "wushu",
+      "combatives",
+      "kendo",
+      "judo",
+      "kickboxing",
+      "systema",
+      "capoeira",
+      "sambo",
+      "kali",
+      "kyokushin",
+      "xingyiquan",
+      "shaolin",
+      "karate",
+      "aikido",
+      "baguazhang",
+      "taekwondo",
+      "bartitsu",
+      "iaido",
+      "silat",
+      "sanda",
+      "hapkido",
+      "shootfighting",
+      "ninjutsu",
+      "shooto",
+      "wrestling",
+      "escrima",
+      "arnis",
+      "boxing",
+      "pancrase"
+     ],
+     "memory_now": {
+      "martial art": "pancrase",
+      "tree species": "maple",
+      "gemstone": "labradorite"
+     },
+     "fvq": {
+      "expected": "savate",
+      "predicted": "savate",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "pancrase",
+      "predicted": "boxing",
+      "correct": false
+     }
+    }
+   }
+  },
+  {
+   "id": "7_dance_style",
+   "target_key": "dance style",
+   "keys": [
+    "dance style",
+    "sword type",
+    "constellation"
+   ],
+   "by_n": {
+    "5": {
+     "stream": [
+      {
+       "category": "dance style",
+       "value": "house"
+      },
+      {
+       "category": "sword type",
+       "value": "seax"
+      },
+      {
+       "category": "dance style",
+       "value": "krumping"
+      },
+      {
+       "category": "constellation",
+       "value": "orion"
+      },
+      {
+       "category": "dance style",
+       "value": "zouk"
+      },
+      {
+       "category": "constellation",
+       "value": "lacerta"
+      },
+      {
+       "category": "sword type",
+       "value": "spatha"
+      },
+      {
+       "category": "constellation",
+       "value": "indus"
+      },
+      {
+       "category": "dance style",
+       "value": "waacking"
+      },
+      {
+       "category": "sword type",
+       "value": "claymore"
+      },
+      {
+       "category": "constellation",
+       "value": "perseus"
+      },
+      {
+       "category": "sword type",
+       "value": "dao"
+      },
+      {
+       "category": "dance style",
+       "value": "freestyle"
+      },
+      {
+       "category": "constellation",
+       "value": "aquarius"
+      },
+      {
+       "category": "sword type",
+       "value": "saber"
+      }
+     ],
+     "target_values": [
+      "house",
+      "krumping",
+      "zouk",
+      "waacking",
+      "freestyle"
+     ],
+     "memory_now": {
+      "dance style": "freestyle",
+      "sword type": "saber",
+      "constellation": "aquarius"
+     },
+     "fvq": {
+      "expected": "house",
+      "predicted": "house",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "freestyle",
+      "predicted": "freestyle",
+      "correct": true
+     }
+    },
+    "10": {
+     "stream": [
+      {
+       "category": "sword type",
+       "value": "khopesh"
+      },
+      {
+       "category": "dance style",
+       "value": "tango"
+      },
+      {
+       "category": "sword type",
+       "value": "ida"
+      },
+      {
+       "category": "dance style",
+       "value": "quickstep"
+      },
+      {
+       "category": "constellation",
+       "value": "corvus"
+      },
+      {
+       "category": "sword type",
+       "value": "gladius"
+      },
+      {
+       "category": "dance style",
+       "value": "popping"
+      },
+      {
+       "category": "sword type",
+       "value": "saif"
+      },
+      {
+       "category": "constellation",
+       "value": "cancer"
+      },
+      {
+       "category": "sword type",
+       "value": "kris"
+      },
+      {
+       "category": "constellation",
+       "value": "lyra"
+      },
+      {
+       "category": "sword type",
+       "value": "kilij"
+      },
+      {
+       "category": "constellation",
+       "value": "octans"
+      },
+      {
+       "category": "sword type",
+       "value": "longsword"
+      },
+      {
+       "category": "dance style",
+       "value": "locking"
+      },
+      {
+       "category": "constellation",
+       "value": "cepheus"
+      },
+      {
+       "category": "dance style",
+       "value": "waltz"
+      },
+      {
+       "category": "constellation",
+       "value": "cygnus"
+      },
+      {
+       "category": "sword type",
+       "value": "yataghan"
+      },
+      {
+       "category": "constellation",
+       "value": "virgo"
+      },
+      {
+       "category": "dance style",
+       "value": "jitterbug"
+      },
+      {
+       "category": "sword type",
+       "value": "dadao"
+      },
+      {
+       "category": "dance style",
+       "value": "clog"
+      },
+      {
+       "category": "sword type",
+       "value": "kampilan"
+      },
+      {
+       "category": "constellation",
+       "value": "aries"
+      },
+      {
+       "category": "dance style",
+       "value": "jive"
+      },
+      {
+       "category": "constellation",
+       "value": "leo"
+      },
+      {
+       "category": "dance style",
+       "value": "mambo"
+      },
+      {
+       "category": "constellation",
+       "value": "aquarius"
+      },
+      {
+       "category": "dance style",
+       "value": "contemporary"
+      }
+     ],
+     "target_values": [
+      "tango",
+      "quickstep",
+      "popping",
+      "locking",
+      "waltz",
+      "jitterbug",
+      "clog",
+      "jive",
+      "mambo",
+      "contemporary"
+     ],
+     "memory_now": {
+      "dance style": "contemporary",
+      "sword type": "kampilan",
+      "constellation": "aquarius"
+     },
+     "fvq": {
+      "expected": "tango",
+      "predicted": "tango",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "contemporary",
+      "predicted": "contemporary",
+      "correct": true
+     }
+    },
+    "15": {
+     "stream": [
+      {
+       "category": "sword type",
+       "value": "foil"
+      },
+      {
+       "category": "constellation",
+       "value": "orion"
+      },
+      {
+       "category": "sword type",
+       "value": "smallsword"
+      },
+      {
+       "category": "dance style",
+       "value": "ballet"
+      },
+      {
+       "category": "sword type",
+       "value": "nodachi"
+      },
+      {
+       "category": "constellation",
+       "value": "perseus"
+      },
+      {
+       "category": "dance style",
+       "value": "tango"
+      },
+      {
+       "category": "sword type",
+       "value": "khanjar"
+      },
+      {
+       "category": "dance style",
+       "value": "cumbia"
+      },
+      {
+       "category": "sword type",
+       "value": "seax"
+      },
+      {
+       "category": "constellation",
+       "value": "vela"
+      },
+      {
+       "category": "sword type",
+       "value": "yataghan"
+      },
+      {
+       "category": "constellation",
+       "value": "crater"
+      },
+      {
+       "category": "dance style",
+       "value": "quickstep"
+      },
+      {
+       "category": "sword type",
+       "value": "takoba"
+      },
+      {
+       "category": "dance style",
+       "value": "modern"
+      },
+      {
+       "category": "sword type",
+       "value": "talwar"
+      },
+      {
+       "category": "constellation",
+       "value": "pisces"
+      },
+      {
+       "category": "sword type",
+       "value": "katana"
+      },
+      {
+       "category": "dance style",
+       "value": "bolero"
+      },
+      {
+       "category": "sword type",
+       "value": "estoc"
+      },
+      {
+       "category": "constellation",
+       "value": "tucana"
+      },
+      {
+       "category": "sword type",
+       "value": "kopis"
+      },
+      {
+       "category": "constellation",
+       "value": "hydra"
+      },
+      {
+       "category": "dance style",
+       "value": "folk"
+      },
+      {
+       "category": "constellation",
+       "value": "leo"
+      },
+      {
+       "category": "sword type",
+       "value": "kilij"
+      },
+      {
+       "category": "constellation",
+       "value": "aries"
+      },
+      {
+       "category": "dance style",
+       "value": "foxtrot"
+      },
+      {
+       "category": "constellation",
+       "value": "lyra"
+      },
+      {
+       "category": "dance style",
+       "value": "forr\u00f3"
+      },
+      {
+       "category": "sword type",
+       "value": "parazonium"
+      },
+      {
+       "category": "constellation",
+       "value": "bootes"
+      },
+      {
+       "category": "sword type",
+       "value": "cutlass"
+      },
+      {
+       "category": "constellation",
+       "value": "cancer"
+      },
+      {
+       "category": "dance style",
+       "value": "swing"
+      },
+      {
+       "category": "constellation",
+       "value": "cygnus"
+      },
+      {
+       "category": "dance style",
+       "value": "clog"
+      },
+      {
+       "category": "constellation",
+       "value": "sagittarius"
+      },
+      {
+       "category": "dance style",
+       "value": "kizomba"
+      },
+      {
+       "category": "sword type",
+       "value": "pugio"
+      },
+      {
+       "category": "dance style",
+       "value": "freestyle"
+      },
+      {
+       "category": "constellation",
+       "value": "crux"
+      },
+      {
+       "category": "dance style",
+       "value": "breakdancing"
+      },
+      {
+       "category": "dance style",
+       "value": "lyrical"
+      }
+     ],
+     "target_values": [
+      "ballet",
+      "tango",
+      "cumbia",
+      "quickstep",
+      "modern",
+      "bolero",
+      "folk",
+      "foxtrot",
+      "forr\u00f3",
+      "swing",
+      "clog",
+      "kizomba",
+      "freestyle",
+      "breakdancing",
+      "lyrical"
+     ],
+     "memory_now": {
+      "dance style": "lyrical",
+      "sword type": "pugio",
+      "constellation": "crux"
+     },
+     "fvq": {
+      "expected": "ballet",
+      "predicted": "ballet",
+      "correct": true
+     },
+     "cvq": {
+      "expected": "lyrical",
+      "predicted": "lyricd",
+      "correct": false
+     }
+    },
+    "20": {
+     "stream": [
+      {
+       "category": "dance style",
+       "value": "tango"
+      },
+      {
+       "category": "sword type",
+       "value": "rapier"
+      },
+      {
+       "category": "dance style",
+       "value": "waltz"
+      },
+      {
+       "category": "sword type",
+       "value": "yataghan"
+      },
+      {
+       "category": "constellation",
+       "value": "draco"
+      },
+      {
+       "category": "sword type",
+       "value": "zweihander"
+      },
+      {
+       "category": "constellation",
+       "value": "crater"
+      },
+      {
+       "category": "sword type",
+       "value": "dadao"
+      },
+      {
+       "category": "constellation",
+       "value": "lyra"
+      },
+      {
+       "category": "dance style",
+       "value": "krumping"
+      },
+      {
+       "category": "constellation",
+       "value": "orion"
+      },
+      {
+       "category": "sword type",
+       "value": "ida"
+      },
+      {
+       "category": "constellation",
+       "value": "ara"
+      },
+      {
+       "category": "sword type",
+       "value": "spatha"
+      },
+      {
+       "category": "constellation",
+       "value": "pavo"
+      },
+      {
+       "category": "dance style",
+       "value": "modern"
+      },
+      {
+       "category": "constellation",
+       "value": "taurus"
+      },
+      {
+       "category": "sword type",
+       "value": "khanjar"
+      },
+      {
+       "category": "constellation",
+       "value": "virgo"
+      },
+      {
+       "category": "dance style",
+       "value": "contemporary"
+      },
+      {
+       "category": "sword type",
+       "value": "nimcha"
+      },
+      {
+       "category": "dance style",
+       "value": "merengue"
+      },
+      {
+       "category": "sword type",
+       "value": "kilij"
+      },
+      {
+       "category": "constellation",
+       "value": "leo"
+      },
+      {
+       "category": "dance style",
+       "value": "flamenco"
+      },
+      {
+       "category": "constellation",
+       "value": "bootes"
+      },
+      {
+       "category": "dance style",
+       "value": "swing"
+      },
+      {
+       "category": "sword type",
+       "value": "khanda"
+      },
+      {
+       "category": "dance style",
+       "value": "kizomba"
+      },
+      {
+       "category": "constellation",
+       "value": "indus"
+      },
+      {
+       "category": "dance style",
+       "value": "freestyle"
+      },
+      {
+       "category": "constellation",
+       "value": "auriga"
+      },
+      {
+       "category": "dance style",
+       "value": "popping"
+      },
+      {
+       "category": "constellation",
+       "value": "cassiopeia"
+      },
+      {
+       "category": "sword type",
+       "value": "greatsword"
+      },
+      {
+       "category": "constellation",
+       "value": "carina"
+      },
+      {
+       "category": "sword type",
+       "value": "xiphos"
+      },
+      {
+       "category": "dance style",
+       "value": "jitterbug"
+      },
+      {
+       "category": "constellation",
+       "value": "hercules"
+      },
+      {
+       "category": "sword type",
+       "value": "pugio"
+      },
+      {
+       "category": "dance style",
+       "value": "locking"
+      },
+      {
+       "category": "sword type",
+       "value": "epee"
+      },
+      {
+       "category": "constellation",
+       "value": "capricornus"
+      },
+      {
+       "category": "dance style",
+       "value": "zouk"
+      },
+      {
+       "category": "sword type",
+       "value": "shotel"
+      },
+      {
+       "category": "dance style",
+       "value": "folk"
+      },
+      {
+       "category": "constellation",
+       "value": "pisces"
+      },
+      {
+       "category": "dance style",
+       "value": "electro"
+      },
+      {
+       "category": "constellation",
+       "value": "phoenix"
+      },
+      {
+       "category": "sword type",
+       "value": "katana"
+      },
+      {
+       "category": "constellation",
+       "value": "lupus"
+      },
+      {
+       "category": "dance style",
+       "value": "quickstep"
+      },
+      {
+       "category": "sword type",
+       "value": "foil"
+      },
+      {
+       "category": "constellation",
+       "value": "scorpius"
+      },
+      {
+       "category": "sword type",
+       "value": "seax"
+      },
+      {
+       "category": "dance style",
+       "value": "samba"
+      },
+      {
+       "category": "sword type",
+       "value": "estoc"
+      },
+      {
+       "category": "dance style",
+       "value": "jive"
+      },
+      {
+       "category": "sword type",
+       "value": "smallsword"
+      },
+      {
+       "category": "dance style",
+       "value": "lambada"
+      }
+     ],
+     "target_values": [
+      "tango",
+      "waltz",
+      "krumping",
+      "modern",
+      "contemporary",
+      "merengue",
+      "flamenco",
+      "swing",
+      "kizomba",
+      "freestyle",
+      "popping",
+      "jitterbug",
+      "locking",
+      "zouk",
+      "folk",
+      "electro",
+      "quickstep",
+      "samba",
+      "jive",
+      "lambada"
+     ],
+     "memory_now": {
+      "dance style": "lambada",
+      "sword type": "smallsword",
+      "constellation": "scorpius"
+     },
+     "fvq": {
+      "expected": "tango",
+      "predicted": "dance style: tango",
+      "correct": false
+     },
+     "cvq": {
+      "expected": "lambada",
+      "predicted": "lambada",
+      "correct": true
+     }
+    },
+    "30": {
+     "stream": [
+      {
+       "category": "dance style",
+       "value": "cumbia"
+      },
+      {
+       "category": "sword type",
+       "value": "kilij"
+      },
+      {
+       "category": "dance style",
+       "value": "postmodern"
+      },
+      {
+       "category": "constellation",
+       "value": "scorpius"
+      },
+      {
+       "category": "sword type",
+       "value": "takoba"
+      },
+      {
+       "category": "constellation",
+       "value": "lupus"
+      },
+      {
+       "category": "sword type",
+       "value": "rapier"
+      },
+      {
+       "category": "dance style",
+       "value": "jive"
+      },
+      {
+       "category": "sword type",
+       "value": "wakizashi"
+      },
+      {
+       "category": "dance style",
+       "value": "kizomba"
+      },
+      {
+       "category": "constellation",
+       "value": "gemini"
+      },
+      {
+       "category": "dance style",
+       "value": "popping"
+      },
+      {
+       "category": "sword type",
+       "value": "epee"
+      },
+      {
+       "category": "dance style",
+       "value": "reggaeton"
+      },
+      {
+       "category": "constellation",
+       "value": "aquarius"
+      },
+      {
+       "category": "sword type",
+       "value": "tanto"
+      },
+      {
+       "category": "dance style",
+       "value": "flamenco"
+      },
+      {
+       "category": "sword type",
+       "value": "makhaira"
+      },
+      {
+       "category": "dance style",
+       "value": "rumba"
+      },
+      {
+       "category": "sword type",
+       "value": "gladius"
+      },
+      {
+       "category": "constellation",
+       "value": "octans"
+      },
+      {
+       "category": "dance style",
+       "value": "house"
+      },
+      {
+       "category": "constellation",
+       "value": "tucana"
+      },
+      {
+       "category": "sword type",
+       "value": "parazonium"
+      },
+      {
+       "category": "constellation",
+       "value": "cancer"
+      },
+      {
+       "category": "sword type",
+       "value": "estoc"
+      },
+      {
+       "category": "dance style",
+       "value": "folk"
+      },
+      {
+       "category": "constellation",
+       "value": "cygnus"
+      },
+      {
+       "category": "dance style",
+       "value": "salsa"
+      },
+      {
+       "category": "sword type",
+       "value": "katana"
+      },
+      {
+       "category": "dance style",
+       "value": "tap"
+      },
+      {
+       "category": "constellation",
+       "value": "phoenix"
+      },
+      {
+       "category": "sword type",
+       "value": "khanda"
+      },
+      {
+       "category": "constellation",
+       "value": "corvus"
+      },
+      {
+       "category": "dance style",
+       "value": "freestyle"
+      },
+      {
+       "category": "sword type",
+       "value": "greatsword"
+      },
+      {
+       "category": "dance style",
+       "value": "zouk"
+      },
+      {
+       "category": "sword type",
+       "value": "smallsword"
+      },
+      {
+       "category": "constellation",
+       "value": "camelopardalis"
+      },
+      {
+       "category": "sword type",
+       "value": "saber"
+      },
+      {
+       "category": "dance style",
+       "value": "modern"
+      },
+      {
+       "category": "sword type",
+       "value": "kris"
+      },
+      {
+       "category": "constellation",
+       "value": "bootes"
+      },
+      {
+       "category": "dance style",
+       "value": "lyrical"
+      },
+      {
+       "category": "sword type",
+       "value": "spatha"
+      },
+      {
+       "category": "dance style",
+       "value": "krumping"
+      },
+      {
+       "category": "constellation",
+       "value": "pegasus"
+      },
+      {
+       "category": "sword type",
+       "value": "kopis"
+      },
+      {
+       "category": "constellation",
+       "value": "draco"
+      },
+      {
+       "category": "dance style",
+       "value": "electro"
+      },
+      {
+       "category": "constellation",
+       "value": "hercules"
+      },
+      {
+       "category": "sword type",
+       "value": "shamshir"
+      },
+      {
+       "category": "dance style",
+       "value": "ballet"
+      },
+      {
+       "category": "sword type",
+       "value": "broadsword"
+      },
+      {
+       "category": "dance style",
+       "value": "forr\u00f3"
+      },
+      {
+       "category": "constellation",
+       "value": "virgo"
+      },
+      {
+       "category": "dance style",
+       "value": "lambada"
+      },
+      {
+       "category": "constellation",
+       "value": "lacerta"
+      },
+      {
+       "category": "dance style",
+       "value": "contemporary"
+      },
+      {
+       "category": "constellation",
+       "value": "pisces"
+      },
+      {
+       "category": "dance style",
+       "value": "voguing"
+      },
+      {
+       "category": "sword type",
+       "value": "tachi"
+      },
+      {
+       "category": "constellation",
+       "value": "andromeda"
+      },
+      {
+       "category": "sword type",
+       "value": "nimcha"
+      },
+      {
+       "category": "dance style",
+       "value": "merengue"
+      },
+      {
+       "category": "sword type",
+       "value": "khanjar"
+      },
+      {
+       "category": "constellation",
+       "value": "aquila"
+      },
+      {
+       "category": "dance style",
+       "value": "breakdancing"
+      },
+      {
+       "category": "constellation",
+       "value": "cepheus"
+      },
+      {
+       "category": "sword type",
+       "value": "yataghan"
+      },
+      {
+       "category": "dance style",
+       "value": "jitterbug"
+      },
+      {
+       "category": "sword type",
+       "value": "dadao"
+      },
+      {
+       "category": "dance style",
+       "value": "waacking"
+      },
+      {
+       "category": "constellation",
+       "value": "pavo"
+      },
+      {
+       "category": "sword type",
+       "value": "seax"
+      },
+      {
+       "category": "constellation",
+       "value": "libra"
+      },
+      {
+       "category": "sword type",
+       "value": "scramasax"
+      },
+      {
+       "category": "constellation",
+       "value": "delphinus"
+      },
+      {
+       "category": "dance style",
+       "value": "jazz"
+      },
+      {
+       "category": "sword type",
+       "value": "dao"
+      },
+      {
+       "category": "constellation",
+       "value": "crater"
+      },
+      {
+       "category": "dance style",
+       "value": "quickstep"
+      },
+      {
+       "category": "sword type",
+       "value": "kampilan"
+      },
+      {
+       "category": "constellation",
+       "value": "grus"
+      },
+      {
+       "category": "sword type",
+       "value": "talwar"
+      },
+      {
+       "category": "constellation",
+       "value": "leo"
+      },
+      {
+       "category": "dance style",
+       "value": "clog"
+      },
+      {
+       "category": "constellation",
+       "value": "sagittarius"
+      },
+      {
+       "category": "constellation",
+       "value": "crux"
+      },
+      {
+       "category": "constellation",
+       "value": "auriga"
+      }
+     ],
+     "target_values": [
+      "cumbia",
+      "postmodern",
+      "jive",
+      "kizomba",
+      "popping",
+      "reggaeton",
+      "flamenco",
+      "rumba",
+      "house",
+      "folk",
+      "salsa",
+      "tap",
+      "freestyle",
+      "zouk",
+      "modern",
+      "lyrical",
+      "krumping",
+      "electro",
+      "ballet",
+      "forr\u00f3",
+      "lambada",
+      "contemporary",
+      "voguing",
+      "merengue",
+      "breakdancing",
+      "jitterbug",
+      "waacking",
+      "jazz",
+      "quickstep",
+      "clog"
+     ],
+     "memory_now": {
+      "dance style": "clog",
+      "sword type": "talwar",
+      "constellation": "auriga"
+     },
+     "fvq": {
+      "expected": "cumbia",
+      "predicted": "dance style: cumbia",
+      "correct": false
+     },
+     "cvq": {
+      "expected": "clog",
+      "predicted": "jitterbug",
+      "correct": false
+     }
+    }
+   }
+  }
+ ]
+}
