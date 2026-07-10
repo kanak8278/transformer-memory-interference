@@ -254,6 +254,64 @@ Gaps found:
 3. **C1.5 bridge experiment:** do it or defend synthetic-only scope?
 4. **D6 preprint citation:** cite or not.
 
+## 5b. Verification findings (checked 2026-07-11, local data)
+
+**C1.1 SEM — CONFIRMED (with caveat).** All 4 held-out SEM cells go to
+FVQ=CVQ=100%, deepest baseline reversal −0.45 at (15,30), matches paper.
+*Caveat:* n=10–20 trials/cell only, and `lora_sem_validation_results.json`
+`_note` says the original run was killed and results reconstructed from a log +
+a re-run of the last two cells. Provenance is fragile; consider a clean re-run
+at n≥100 for the camera-ready.
+
+**C1.2 dense-IVQ — TABLE HONEST, PROSE WRONG (must fix).** `tab_dense_ivq.tex`
+faithfully reports LoRA intermediate min of **0%** at cells (10,30), (15,30),
+(20,30), (25,50) — the adapter decays to 0.0 at late-intermediate positions
+(e.g. LoRA (10,30): pos1-5 ≈ ceiling, pos17-20 = 0.0). But the prose contradicts
+the paper's own table:
+  - §5.2: "recover to near-ceiling at every queried position across six cells"
+  - App dense_ivq: "the LoRA-tuned model recovers near-ceiling accuracy at
+    every position queried"
+  - Table caption: "the LoRA-tuned model holds near ceiling"
+These are FALSE for 4/6 cells and a reviewer reading the table under the caption
+catches it instantly. **Fix:** soften to "recovers early-to-mid intermediate
+positions the base model fails, with decay at late positions in long streams."
+This decay is the in-repo seed of the E1 extrapolation story. (Also n=20/pos.)
+
+**C1.3 Gemma — CONFIRMED.** 28/28 cells fixed; mean FVQ 99.5% (paper 99.4%,
+integer-rounding in source txt), mean CVQ 97.0% (exact). The two `---` cells
+(25,75)/(30,75) are baseline-insufficient-trials only; post-LoRA unaffected.
+
+**C3.1 mechanism — 3 of 4 methods CONFIRMED, ablation NOT (must resolve).**
+  - Probing: CONFIRMED. PI-correctness Δ +0.356 at L33, CI [+0.208,+0.504] →
+    paper's +0.36 [+0.21,+0.50]. Base near-chance, LoRA 84–94%. ✓
+  - Logit lens: CONFIRMED. L32 base Pr(v_last)=0.340→0.985 LoRA; N=50 base 0.021.
+    All match. ✓
+  - Attention routing: CONFIRMED. 15 heads base 0.05–0.23 → LoRA 0.57–0.86
+    (4–12×). ✓ (paper says LoRA min 0.60; actual 0.573 — trivial.)
+  - Downstream redundancy: CONFIRMED. Baseline ablation propagates
+    (L33 −0.133, L34 −0.150, L35 −0.088); LoRA absorbs (L33/34/35 = 0.000). ✓
+  - **Stage-3C L32 ablation magnitude: CONTRADICTED.** Paper table +
+    §7.3 claim: baseline −0.28, LoRA −0.40, paired diff **+0.12** ("post-LoRA
+    the 8 heads carry ~40% MORE causal effect"). Local **n=50** JSONs give
+    **LoRA −0.278, baseline −0.377** — the *opposite* ordering (baseline effect
+    LARGER). The source `stage3_four_way_comparison.txt` matches the local n=50
+    (−0.278/−0.377) and concluded only "heads pre-exist as partial carriers,"
+    NOT amplification-at-L32. The paper's −0.396/−0.277 are labeled n=200 but
+    that data is **not in the repo**, and the paper's baseline (−0.277) is
+    numerically ~identical to the local LoRA value (−0.278) → possible label
+    swap. The ablation CIs also require per-trial n=200 arrays that
+    `ci_analysis.txt` explicitly says weren't preserved.
+    **What's safe:** the heads pre-exist as causal partial v_last carriers
+    (baseline ablation −0.377 is large) and downstream redundancy is real —
+    both verified. **What's at risk:** the specific "LoRA carries ~40% more
+    causal effect at L32 (paired +0.12)" sentence. **Resolution:** recover the
+    n=200 per-trial data OR re-run stage3 at n=200 with PYTHONHASHSEED pinned +
+    per-trial export (~30 min, source txt already flags this as the fix). Until
+    then, do NOT build new mechanism experiments assuming +0.12 holds.
+
+**Cross-cutting:** small/undocumented trial counts recur (SEM n=10–20, dense-IVQ
+n=20, ablation n=50 local vs n=200 claimed). Add trial counts to every caption.
+
 ## 5. Suggested execution order
 
 1. Group B (mechanical, no dependencies) + C1.1–C1.3 + C3.1 (local
