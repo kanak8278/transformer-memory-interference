@@ -165,6 +165,22 @@ Gaps found:
       defensible to skip via Limitations.
 - [ ] **C1.6 Training-dynamics data:** nothing scientifically open (79-checkpoint
       story complete); only sync/verify per A1. Re-run only if challenged.
+- [ ] **C1.7 (GPU, HIGH VALUE) E1 — LoRA extrapolation frontier.**
+      Question: did LoRA surface a *general* positional-indexing skill, or
+      just push the operating point out? Current held-out grid stops at
+      K=30, N=75 with LoRA still at ceiling — its failure frontier was never
+      found. Design (existing adapter, no retraining; ARB shared pool caps
+      K×N ≤ ~2,300; existing `evaluate.py`/`stage1_sweep.py` machinery):
+      - Scan A (N-axis, K=2): N ∈ {50, 100, 200, 350, 500, 750, 1000} (50× training N)
+      - Scan B (K-axis, N=20): K ∈ {10, 20, 30, 50, 75, 100} (10× training K)
+      - Scan C (diagonal K=N): up to ≈45
+      - 100 trials/cell, greedy, FVQ + CVQ + sampled IVQ positions
+      Measure: (i) accuracy-vs-load curves base vs LoRA, locate the knee;
+      (ii) failure-mode at the frontier — does LoRA miss near-last like base
+      ("recency imprecision") or differently (`analyze_reversals.py`);
+      (iii) per-position IVQ at 2–3 extreme cells. Either outcome helps:
+      robust-to-pool-limit → stronger latency claim; collapse → boundary
+      connects to the retrieval-bound theory (v3/PLAN.md). ~4–8 GPU-h.
 
 #### C2. Training / LoRA fine-tuning tasks
 
@@ -176,7 +192,14 @@ Gaps found:
 - [ ] **C2.2 Regenerate LoRA training data locally** (`data_gen.py`,
       deterministic seeds) so `lora_intervention/data/*.jsonl` exists for the
       release archive.
-- [ ] **C2.3 (decision) Any new fine-tune variants?** e.g., rank ablation or
+- [ ] **C2.3 (decision, GPU) E2 — training-mix ablation.** Train CVQ-only and
+      FVQ-only LoRAs (identical recipe/grid to main adapter, only the query
+      mix changes from 40/40/20), evaluate all three query types on the
+      held-out grid. Answers: does supervising one position teach general
+      positional indexing, or only the supervised query? Sharpens the paper's
+      claim that the IVQ mix blocks a recency shortcut. ~12–15 GPU-h
+      (2–3 retrainings + evals). Optional tier-2, behind C2.1 and C1.7.
+- [ ] **C2.5 (decision) Other fine-tune variants** — rank ablation or
       smaller-data LoRA ("how few examples suffice?") — nice-to-have,
       strengthens the "latent capability" story, not required.
 - [ ] **C2.4 Package adapters for release** (HF-style cards from B6/B7;
@@ -223,10 +246,11 @@ Gaps found:
 
 1. **Remote data:** does the L40S / SageMaker storage still exist? (gates A1,
    C1.4, C3.4)
-2. **GPU budget & timeline:** which of C2.1 / C3.2 / C3.3 are in scope before
-   the AAAI deadline? Suggested priority by review-risk reduction per
-   GPU-hour: **C2.1 (MLP-LoRA full eval) → C3.3 (harder-cell mechanism) →
-   C3.2 (Gemma ablation)**.
+2. **GPU budget & timeline:** which of C1.7 / C2.1 / C2.3 / C3.2 / C3.3 are
+   in scope before the AAAI deadline? Suggested priority by review-risk
+   reduction per GPU-hour: **C2.1 (MLP-LoRA full eval) ≈ C1.7 (extrapolation
+   frontier) → C3.3 (harder-cell mechanism) → C3.2 (Gemma ablation) →
+   C2.3 (training-mix ablation)**.
 3. **C1.5 bridge experiment:** do it or defend synthetic-only scope?
 4. **D6 preprint citation:** cite or not.
 
