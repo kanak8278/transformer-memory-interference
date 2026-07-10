@@ -43,7 +43,7 @@ This repo contains **two generations of work**:
 |---|---|
 | `results/` (top-level) | Original ACL paper API results (bedrock/claude/gpt/gemini raw runs) |
 | `data/`, `datasets_v0/`, `prompts/`, `models/`, `scripts/` (top-level) | Original paper's datasets, jinja prompts, API model wrappers, analysis scripts |
-| `mechanistic_probing_v2/` | Earlier SmolLM2 probing generation (pre-v3; superseded) |
+| `mechanistic_probing_v2/` | Mostly superseded pre-v3 probing — **BUT `core/dataset_configs.py` is a LIVE dependency**: `lora_intervention/data_gen.py` imports `get_eligible_categories`/`generate_values_for_trial` from it (ARB shared 2,300-word pool + 46 category-keys live here). Do not delete this module. |
 | `narrative_generator/` | Dota2/ATC/ICU narrative variant — abandoned (see paper §Limitations "Open questions") |
 | `notebooks/` | Old reversal-analysis notebooks |
 | `draft/`, `docs/` | Old paper drafts / ICML-era notes |

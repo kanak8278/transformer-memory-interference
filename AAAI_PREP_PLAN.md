@@ -169,11 +169,15 @@ Gaps found:
       Question: did LoRA surface a *general* positional-indexing skill, or
       just push the operating point out? Current held-out grid stops at
       K=30, N=75 with LoRA still at ceiling — its failure frontier was never
-      found. Design (existing adapter, no retraining; ARB shared pool caps
-      K×N ≤ ~2,300; existing `evaluate.py`/`stage1_sweep.py` machinery):
-      - Scan A (N-axis, K=2): N ∈ {50, 100, 200, 350, 500, 750, 1000} (50× training N)
-      - Scan B (K-axis, N=20): K ∈ {10, 20, 30, 50, 75, 100} (10× training K)
-      - Scan C (diagonal K=N): up to ≈45
+      found. Design (existing adapter, no retraining; existing
+      `evaluate.py`/`data_gen.py` machinery. CONFIRMED constraints: ARB uses a
+      SHARED 2,300-word pool so K*N <= 2,300, and only 46 category-keys exist so
+      K <= 46; Qwen ctx 32K not binding; streams reach ~10K tokens ~= 5x the
+      LoRA's 2,048 training seq-len, itself part of what E1 tests):
+      - Scan A (N-axis, K=2): N in {30,50,75,100,150,200,350,500,750,1000}
+        feasible (2*1000 <= 2300), up to 50x training N. RUN FIRST.
+      - Scan B (K-axis, N=20): K in {10,15,20,30,46} CAPPED AT 46 keys (not 100).
+      - Scan C (diagonal K=N): K=N in {15,20,30,40,46} (46^2=2116 <= 2300).
       - 100 trials/cell, greedy, FVQ + CVQ + sampled IVQ positions
       Measure: (i) accuracy-vs-load curves base vs LoRA, locate the knee;
       (ii) failure-mode at the frontier — does LoRA miss near-last like base
