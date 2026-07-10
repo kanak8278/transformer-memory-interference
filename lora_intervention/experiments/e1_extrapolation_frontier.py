@@ -294,13 +294,22 @@ def main():
     ap.add_argument("--adapter", default=str(_PROJECT_ROOT / "lora_intervention" / "checkpoints" / "adapter"))
     ap.add_argument("--merged-dir", default="/content/merged_lora")
     ap.add_argument("--only", choices=["base", "lora", "both"], default="both")
+    ap.add_argument("--smoke", action="store_true",
+                    help="Quick end-to-end check: 8 trials, only the smallest + "
+                         "largest cell of each scan (exercises fast + long-context paths).")
     args = ap.parse_args()
 
+    global MAX_TRIALS, MIN_TRIALS
     out_dir = Path(args.out_dir); out_dir.mkdir(parents=True, exist_ok=True)
     stop_file = out_dir / "STOP"
     logf = out_dir / "run.log"
     cells_by_scan = {s: SCANS[s] for s in args.scans.split(",") if s in SCANS}
-    log(logf, f"E1 start. scans={list(cells_by_scan)} out={out_dir}")
+    if args.smoke:
+        MAX_TRIALS = MIN_TRIALS = 8
+        cells_by_scan = {s: sorted({cells[0], cells[-1]})
+                         for s, cells in cells_by_scan.items()}
+        log(logf, "SMOKE MODE: 8 trials, first+last cell per scan.")
+    log(logf, f"E1 start. scans={list(cells_by_scan)} cells={cells_by_scan} out={out_dir}")
 
     from transformers import AutoTokenizer
     tokenizer = AutoTokenizer.from_pretrained(args.base_model, trust_remote_code=True)
