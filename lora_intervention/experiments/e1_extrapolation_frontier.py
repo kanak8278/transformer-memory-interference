@@ -219,7 +219,57 @@ def eval_condition(engine, tokenizer, scan, model_tag, k_keys, n_updates,
     }
 
 
-# ─── vLLM engine wrapper (matches evaluate.py) ────────────────────────────────
+# ─── inference engines ────────────────────────────────────────────────────────
+# Greedy (temp 0) decoding is deterministic, so HF and vLLM give equivalent
+# results; HF is the default because vLLM's prebuilt wheels routinely mismatch
+# Colab's CUDA runtime (libcudart.so version). vLLM stays available for L40S-class
+# boxes where it installs cleanly and is much faster.
+
+class HFEngine:
+    """transformers backend. Handles base or base+adapter (merged in-memory)."""
+    def __init__(self, base_id, adapter_path=None, micro_batch=4):
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+        self.torch = torch
+        self.micro_batch = micro_batch
+        self.tok = AutoTokenizer.from_pretrained(base_id, trust_remote_code=True)
+        self.tok.padding_side = "left"          # decoder-only batched generation
+        if self.tok.pad_token_id is None:
+            self.tok.pad_token = self.tok.eos_token
+        model = AutoModelForCausalLM.from_pretrained(
+            base_id, torch_dtype=torch.bfloat16, device_map="cuda",
+            trust_remote_code=True)
+        if adapter_path:
+            from peft import PeftModel
+            model = PeftModel.from_pretrained(model, str(adapter_path))
+            model = model.merge_and_unload()
+        model.eval()
+        self.model = model
+
+    def generate(self, prompts, max_new_tokens=8):
+        torch = self.torch
+        outs = []
+        for i in range(0, len(prompts), self.micro_batch):
+            chunk = prompts[i:i + self.micro_batch]
+            enc = self.tok(chunk, return_tensors="pt", padding=True,
+                           truncation=False).to(self.model.device)
+            with torch.no_grad():
+                gen = self.model.generate(
+                    **enc, max_new_tokens=max_new_tokens, do_sample=False,
+                    pad_token_id=self.tok.pad_token_id)
+            new = gen[:, enc["input_ids"].shape[1]:]
+            outs.extend(self.tok.decode(r, skip_special_tokens=True).strip()
+                        for r in new)
+        return outs
+
+    def close(self):
+        del self.model
+        gc.collect()
+        try:
+            self.torch.cuda.empty_cache()
+        except Exception:
+            pass
+
 
 class VLLMEngine:
     def __init__(self, model_path, max_len=16384):
@@ -242,7 +292,7 @@ class VLLMEngine:
 
 
 def merge_lora(base_id, adapter_path, tmp_dir):
-    """Merge adapter into base and save; return merged path."""
+    """Merge adapter into base and save to disk (vLLM path only); return path."""
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from peft import PeftModel
@@ -257,14 +307,21 @@ def merge_lora(base_id, adapter_path, tmp_dir):
     return tmp_dir
 
 
+def build_engine(backend, base_id, adapter_path=None):
+    if backend == "vllm":
+        if adapter_path:
+            return VLLMEngine(merge_lora(base_id, adapter_path, "/content/merged_lora"))
+        return VLLMEngine(base_id)
+    return HFEngine(base_id, adapter_path)
+
+
 # ─── main ─────────────────────────────────────────────────────────────────────
 
-def run_model(model_tag, model_path, cells_by_scan, out_dir, tokenizer, stop_file):
+def run_model(model_tag, engine, cells_by_scan, out_dir, tokenizer, stop_file):
     results_path = out_dir / "results.jsonl"
     logf = out_dir / "run.log"
     done = load_done(results_path)
-    engine = VLLMEngine(model_path)
-    log(logf, f"=== model={model_tag} path={model_path} ===")
+    log(logf, f"=== model={model_tag} ===")
     try:
         for scan, cells in cells_by_scan.items():
             for (k_keys, n_updates) in cells:
@@ -292,7 +349,8 @@ def main():
     ap.add_argument("--scans", default="A", help="comma list of A,B,C")
     ap.add_argument("--base-model", default="Qwen/Qwen2.5-3B-Instruct")
     ap.add_argument("--adapter", default=str(_PROJECT_ROOT / "lora_intervention" / "checkpoints" / "adapter"))
-    ap.add_argument("--merged-dir", default="/content/merged_lora")
+    ap.add_argument("--backend", choices=["hf", "vllm"], default="hf",
+                    help="hf (default, robust on Colab) or vllm (faster, needs matching CUDA).")
     ap.add_argument("--only", choices=["base", "lora", "both"], default="both")
     ap.add_argument("--smoke", action="store_true",
                     help="Quick end-to-end check: 8 trials, only the smallest + "
@@ -308,18 +366,26 @@ def main():
         MAX_TRIALS = MIN_TRIALS = 8
         cells_by_scan = {s: sorted({cells[0], cells[-1]})
                          for s, cells in cells_by_scan.items()}
-        log(logf, "SMOKE MODE: 8 trials, first+last cell per scan.")
+        # Isolate smoke results so their 8-trial rows never get mistaken for
+        # "done" by a subsequent full (100-trial) run sharing the parent dir.
+        out_dir = out_dir / "smoke"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        stop_file = out_dir / "STOP"
+        logf = out_dir / "run.log"
+        log(logf, "SMOKE MODE: 8 trials, first+last cell per scan, out -> smoke/")
     log(logf, f"E1 start. scans={list(cells_by_scan)} cells={cells_by_scan} out={out_dir}")
 
     from transformers import AutoTokenizer
     tokenizer = AutoTokenizer.from_pretrained(args.base_model, trust_remote_code=True)
 
     if args.only in ("base", "both"):
-        run_model("base", args.base_model, cells_by_scan, out_dir, tokenizer, stop_file)
+        log(logf, f"Loading base ({args.backend})...")
+        eng = build_engine(args.backend, args.base_model, None)
+        run_model("base", eng, cells_by_scan, out_dir, tokenizer, stop_file)
     if args.only in ("lora", "both") and not stop_file.exists():
-        log(logf, "Merging LoRA adapter...")
-        merged = merge_lora(args.base_model, args.adapter, args.merged_dir)
-        run_model("lora", merged, cells_by_scan, out_dir, tokenizer, stop_file)
+        log(logf, f"Loading LoRA ({args.backend})...")
+        eng = build_engine(args.backend, args.base_model, args.adapter)
+        run_model("lora", eng, cells_by_scan, out_dir, tokenizer, stop_file)
 
     log(logf, "E1 done.")
 
