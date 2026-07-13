@@ -84,10 +84,16 @@ BATCH_TRIALS = 10
 
 IVQ_DEPTHS = [0.10, 0.25, 0.50, 0.75, 0.90]   # relative positions for intermediate queries
 
+# Extrapolation grid = MULTIPLES of the LoRA training maxima (K_train<=10, N_train<=20).
+# Both scans emanate from the training corner (K=10, N=20) and push one axis to
+# ~5x while holding the other at its training max. This targets the frontier just
+# beyond training (where it actually is) instead of wasting time at extreme N.
+# (A diagonal scan is infeasible: 4x-5x in both dims exceeds the 2,300 shared pool.)
 SCANS = {
-    "A": [(2, n) for n in (30, 50, 75, 100, 150, 200, 350, 500, 750, 1000)],
-    "B": [(k, 20) for k in (10, 15, 20, 30, 46)],
-    "C": [(k, k) for k in (15, 20, 30, 40, 46)],
+    # N-scan: hold K=10 (training max), N = 1x..5x of N_train=20.
+    "A": [(10, n) for n in (20, 40, 60, 80, 100)],
+    # K-scan: hold N=20 (training max), K = 1x..~5x of K_train=10 (46 = category cap).
+    "B": [(k, 20) for k in (10, 20, 30, 40, 46)],
 }
 
 # Category-key names for ARB (values come from the shared pool; keys are labels).
