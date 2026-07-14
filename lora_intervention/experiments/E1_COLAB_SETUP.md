@@ -2,6 +2,14 @@
 
 Validated 2026-07-11 via a smoke run (base+LoRA, cells (2,30) & (2,1000)).
 
+## ⛔ Xet-backed models (gemma-3-*) don't reliably download on Colab
+Qwen2.5-3B (classic LFS) downloads fine. **Gemma-3-4b-it is Xet-backed and its
+weight shards hang / 403 from Colab** (see the global colab-cli-stability note
+for the full diagnosis + mitigations). If you must run a Gemma cross-check,
+either retry when HF Xet is healthier, use `HF_XET_HIGH_PERFORMANCE=1`, or run
+it off Colab on a box with normal HF connectivity. The 2026-07-14 Gemma attempt
+stalled at ~90% (1 of 2 shards) and was deferred.
+
 ## Environment gotchas (discovered during smoke)
 1. **Do NOT use vLLM on Colab.** Prebuilt vLLM wheels expect CUDA 13
    (`libcudart.so.13`); Colab ships CUDA 12 → `ImportError` on import. The
