@@ -231,18 +231,31 @@ def eval_condition(engine, tokenizer, scan, model_tag, k_keys, n_updates,
 # Colab's CUDA runtime (libcudart.so version). vLLM stays available for L40S-class
 # boxes where it installs cleanly and is much faster.
 
+def _model_class_for(base_id):
+    """Gemma-3 ships as a VLM via Auto*; pick the text-only causal head."""
+    from transformers import AutoModelForCausalLM
+    if "gemma-3" in base_id.lower():
+        try:
+            from transformers import Gemma3ForCausalLM
+            return Gemma3ForCausalLM
+        except ImportError:
+            pass
+    return AutoModelForCausalLM
+
+
 class HFEngine:
     """transformers backend. Handles base or base+adapter (merged in-memory)."""
     def __init__(self, base_id, adapter_path=None, micro_batch=4):
         import torch
-        from transformers import AutoModelForCausalLM, AutoTokenizer
+        from transformers import AutoTokenizer
         self.torch = torch
         self.micro_batch = micro_batch
         self.tok = AutoTokenizer.from_pretrained(base_id, trust_remote_code=True)
         self.tok.padding_side = "left"          # decoder-only batched generation
         if self.tok.pad_token_id is None:
             self.tok.pad_token = self.tok.eos_token
-        model = AutoModelForCausalLM.from_pretrained(
+        model_cls = _model_class_for(base_id)
+        model = model_cls.from_pretrained(
             base_id, torch_dtype=torch.bfloat16, device_map="cuda",
             trust_remote_code=True)
         if adapter_path:
@@ -300,10 +313,10 @@ class VLLMEngine:
 def merge_lora(base_id, adapter_path, tmp_dir):
     """Merge adapter into base and save to disk (vLLM path only); return path."""
     import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from transformers import AutoTokenizer
     from peft import PeftModel
-    model = AutoModelForCausalLM.from_pretrained(base_id, torch_dtype=torch.bfloat16,
-                                                 trust_remote_code=True)
+    model = _model_class_for(base_id).from_pretrained(base_id, torch_dtype=torch.bfloat16,
+                                                       trust_remote_code=True)
     model = PeftModel.from_pretrained(model, str(adapter_path))
     model = model.merge_and_unload()
     tok = AutoTokenizer.from_pretrained(base_id, trust_remote_code=True)
