@@ -97,6 +97,14 @@ def make_prompt(tokenizer, k_keys, n_updates, condition, fmt, seed):
     return prompt, expected, v_first, v_last
 
 
+def is_correct(pred, expected):
+    """Match evaluate.py: prefix/contains-tolerant, so multi-token values score
+    correctly (the single-token argmax match under-counts them)."""
+    p = pred.lower().strip()
+    e = expected.lower().strip()
+    return p == e or e in p or p.startswith(e)
+
+
 def first_tok(tokenizer, value):
     ids = set()
     for s in (f" {value}", value):
@@ -110,6 +118,8 @@ def load(base_id, adapter=None):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
     tok = AutoTokenizer.from_pretrained(base_id, trust_remote_code=True)
+    if tok.pad_token_id is None:
+        tok.pad_token = tok.eos_token
     model = AutoModelForCausalLM.from_pretrained(
         base_id, torch_dtype=torch.bfloat16, device_map="cuda", trust_remote_code=True)
     if adapter:
@@ -158,8 +168,14 @@ def run_condition(model, tok, k_keys, n_updates, trials, fmt):
                     p_last[L] += max(probs[i].item() for i in tl)
                 if tf:
                     p_first[L] += max(probs[i].item() for i in tf)
-            pred = tok.decode([int(r.logits[0, -1, :].argmax())]).strip().lower()
-            correct.append(int(pred == expected.lower().strip()))
+            # Behavioral label: greedy multi-token generation + prefix/contains
+            # match (matches evaluate.py). A single-token argmax match under-counts
+            # multi-token values and corrupts the probe's correctness labels.
+            with torch.no_grad():
+                gen = model.generate(**enc, max_new_tokens=8, do_sample=False,
+                                     pad_token_id=tok.pad_token_id)
+            pred = tok.decode(gen[0, enc["input_ids"].shape[1]:], skip_special_tokens=True)
+            correct.append(int(is_correct(pred, expected)))
             n += 1
             del r, enc
             if (t + 1) % 25 == 0:
