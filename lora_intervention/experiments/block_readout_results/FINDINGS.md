@@ -1,7 +1,25 @@
 # Block vs LoRA — "two roads, one readout"
 
-**Run:** 2026-07-14, Colab L4, HF backend, Qwen2.5-3B, ARB single-token,
-**K=2, N=30, 100 trials/condition**. Data: `results_K2N30.json`.
+**Runs:** 2026-07-14, Colab L4, HF backend, Qwen2.5-3B, ARB single-token,
+100 trials/condition. **Two cells, both confirm the pattern:**
+`results_K2N30.json` (K=2, N=30) and `results_K10N50.json` (K=10, N=50 — the
+harder cell where Block's format win is largest). Behavioral accs use the
+prefix/contains matcher (multi-token-safe); logit-lens uses first-token P.
+
+## Replication across cells (CVQ P(v_last) at readout L35; behavioral CVQ acc)
+
+| cell | base_plain | base_block | lora_plain | mean\|block−lora\| vs \|block−base\| (L31–35) |
+|---|---|---|---|---|
+| K=2, N=30  | 0.37 (acc 0.41) | 0.96 (acc 0.96) | 0.99 (acc **1.00**) | 0.058 vs 0.450 |
+| K=10, N=50 | 0.50 (acc 0.50) | 0.86 (acc 0.87) | 0.99 (acc **1.00**) | 0.075 vs 0.282 |
+
+Both cells: base_plain's v_last stays **suppressed** at the readout; base_block
+and lora_plain both **build and propagate** it, tracking each other ~4–8× closer
+than either is to base_plain. **LoRA fully fixes CVQ (acc 1.00) at both cells** —
+confirming this is a valid comparison cell (the earlier "0.58" was a single-token
+exact-match artifact, since fixed).
+
+Detailed K=2/N=30 layer trajectory below; K=10/N=50 shows the same shape.
 
 ## Question
 App `block_locus` already showed Block and LoRA activate **different** attention
@@ -56,14 +74,15 @@ distinct upstream (routing), functionally convergent downstream (readout).**
 Candidate figure: the 3-condition per-layer P(v_last) overlay above.
 
 ## Caveats
-- Single model / single cell (K=2, N=30). A harder confirmation cell
-  (K=10, N=50, where Block's format win is largest) would strengthen it.
-- **Metric note:** logit-lens P(v_last) is *first-token* probability (0.98);
-  behavioral CVQ accuracy is *full-word exact match* (base_block 0.60,
-  lora_plain 0.58). The gap is because some ARB "single-token" words are
-  multi-token under Qwen's tokenizer, so first-token-correct ≠ full-word-correct.
-  This does not affect the readout-convergence claim (which uses the standard
-  first-token logit-lens metric, matching the paper's §7 methodology), but the
-  behavioral accuracies here are a stricter metric than the logit lens.
+- Single model (Qwen2.5-3B). Confirmed at two cells (K=2/N=30 and K=10/N=50);
+  a cross-family replication (Gemma) is blocked by the HF-Xet download issue.
+- **Metric note (resolved):** an earlier version of this run scored behavior by
+  single-token argmax + exact match, which under-counted multi-token-under-Qwen
+  values (reported base_block 0.60 / lora_plain 0.58). Fixed to multi-token
+  greedy generation + prefix/contains match (matching evaluate.py); corrected
+  accs are base_block 0.87–0.96, lora_plain **1.00**. The logit-lens uses the
+  standard first-token P (matching the paper's §7 methodology), so the
+  readout-convergence claim was never affected; the probe labels now use the
+  corrected (proper-metric) correctness labels.
 - Routing leg reused from `block_locus` (K=2, N=30) — same cell, so directly
   comparable.
