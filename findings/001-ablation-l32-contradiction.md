@@ -1,9 +1,18 @@
 # Finding 001 — Stage-3C L32 ablation: paper claim contradicted by local data
 
 - **Severity:** 🔴 Critical (affects a headline causal claim in §7)
-- **Status:** Open — requires the n=200 per-trial data (not in repo) or a re-run
+- **Status:** ✅ **RESOLVED 2026-07-15** via n=200 HF-hook re-run (pinned seeds,
+  per-trial CIs), K2/N5 + K2/N50. **The paper's amplification DIRECTION is
+  confirmed** (LoRA ablation Δ > base, paired CI excludes zero at both cells);
+  the local n=50 that contradicted it was noise (small n, unpinned seeds). See
+  `lora_intervention/experiments/ablation_rerun_results/FINDINGS.md`.
+  Action left for the paper: swap the old −0.28/−0.40 magnitudes for the n=200
+  numbers (paired K2/N5 −0.082 [−0.108,−0.056], K2/N50 −0.230 [−0.267,−0.196]),
+  note K2/N5 is a near-success cell (base CVQ 0.77) and cite K2/N50 as the
+  genuine-failure confirmation, and scope the downstream-redundancy claim to low
+  load. Details below are the original diagnosis.
 - **Related task:** C3.1 (verify), C3.4 (re-obtain mechanism files)
-- **Verified:** 2026-07-11, against local n=50 stage-3 JSONs
+- **Verified:** 2026-07-11 (diagnosis); 2026-07-15 (resolved via re-run)
 
 ## Paper claim
 

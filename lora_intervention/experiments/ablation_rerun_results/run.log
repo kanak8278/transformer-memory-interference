@@ -1,0 +1,10 @@
+[18:33:30] Stage-3C ablation re-run (HF hooks). heads=['L32H3', 'L32H7', 'L31H12', 'L31H15', 'L32H10', 'L30H11', 'L32H0', 'L32H14'] trials=200 cells=[(2, 5), (2, 50)]
+[18:33:30] loading base...
+[18:33:50] base loaded. head_dim=128, final_norm=Qwen2RMSNorm
+[18:35:02] K2N5 base: L32 delta=-0.065 (normal=0.297 ablated=0.233) n=200 (72s) | base precheck FVQ=0.85 CVQ=0.77
+[18:36:39] K2N50 base: L32 delta=+0.017 (normal=0.021 ablated=0.038) n=200 (97s) | base precheck FVQ=0.90 CVQ=0.40
+[18:36:40] loading lora...
+[18:36:45] lora loaded. head_dim=128, final_norm=Qwen2RMSNorm
+[18:37:43] K2N5 lora: L32 delta=-0.147 (normal=0.392 ablated=0.245) n=200 (58s)
+[18:39:01] K2N50 lora: L32 delta=-0.213 (normal=0.379 ablated=0.166) n=200 (78s)
+[18:39:01] DONE
