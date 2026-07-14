@@ -43,3 +43,19 @@ colab --config /tmp/e1_colab.json new -s e1 --gpu L4
   results.jsonl. For the full run, either mount Drive (interactive, per-VM) and
   point --out-dir there, or write to /content and `colab download` results.jsonl
   periodically so a VM loss costs at most the un-downloaded tail.
+
+## Monitoring a >1h run (IMPORTANT — token expiry)
+The Colab runtime-proxy token expires ~1h in, after which `colab download`/`ls`
+fail with "File or directory not found" for files that DO exist — the VM and the
+detached run are unaffected (verify with `colab status`: still IDLE/alive).
+Don't fight it. Monitor with the bundled helper `colab_fetch.py`, which re-mints
+a fresh token each call and hits the contents API directly (no `colab exec`, so
+no teardown risk):
+```
+~/.local/share/uv/tools/google-colab-cli/bin/python \
+    lora_intervention/experiments/colab_fetch.py \
+    content/drive/MyDrive/transformer-memory-interference/<out>/run.log > /tmp/run.log
+```
+(Path relative to jupyter root: drop the leading slash on /content/...). Launch
+the job DETACHED so only one `exec` is ever needed, then poll with the helper.
+Full rationale in the global colab-cli-stability note.
