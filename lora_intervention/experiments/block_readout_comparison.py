@@ -114,14 +114,27 @@ def first_tok(tokenizer, value):
     return list(ids)
 
 
+def _model_class_for(base_id):
+    """Gemma-3 ships as a VLM via Auto*; pick the text-only causal head."""
+    from transformers import AutoModelForCausalLM
+    if "gemma-3" in base_id.lower():
+        try:
+            from transformers import Gemma3ForCausalLM
+            return Gemma3ForCausalLM
+        except ImportError:
+            pass
+    return AutoModelForCausalLM
+
+
 def load(base_id, adapter=None):
     import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from transformers import AutoTokenizer
     tok = AutoTokenizer.from_pretrained(base_id, trust_remote_code=True)
     if tok.pad_token_id is None:
         tok.pad_token = tok.eos_token
-    model = AutoModelForCausalLM.from_pretrained(
-        base_id, torch_dtype=torch.bfloat16, device_map="cuda", trust_remote_code=True)
+    model = _model_class_for(base_id).from_pretrained(
+        base_id, torch_dtype=torch.bfloat16, device_map="cuda",
+        attn_implementation="sdpa", trust_remote_code=True)
     if adapter:
         from peft import PeftModel
         model = PeftModel.from_pretrained(model, adapter).merge_and_unload()
@@ -140,7 +153,9 @@ def final_norm_of(model):
 
 def run_condition(model, tok, k_keys, n_updates, trials, fmt):
     import torch, numpy as np
-    n_layers = model.config.num_hidden_layers
+    n_layers = getattr(model.config, "num_hidden_layers", None)
+    if n_layers is None:  # some Gemma-3 configs nest it under text_config
+        n_layers = model.config.text_config.num_hidden_layers
     lm_head = model.get_output_embeddings()
     fnorm = final_norm_of(model)
     out = {}

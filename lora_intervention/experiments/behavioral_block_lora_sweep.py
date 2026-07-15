@@ -80,17 +80,30 @@ def make_prompt_block(tokenizer, nk, nu, k, seed):
     return prompt, expected
 
 
+def _model_class_for(base_id):
+    """Gemma-3 ships as a VLM via Auto*; pick the text-only causal head."""
+    from transformers import AutoModelForCausalLM
+    if "gemma-3" in base_id.lower():
+        try:
+            from transformers import Gemma3ForCausalLM
+            return Gemma3ForCausalLM
+        except ImportError:
+            pass
+    return AutoModelForCausalLM
+
+
 class HFEngine:
     def __init__(self, base_id, adapter=None):
         import torch
-        from transformers import AutoModelForCausalLM, AutoTokenizer
+        from transformers import AutoTokenizer
         self.torch = torch
         self.tok = AutoTokenizer.from_pretrained(base_id, trust_remote_code=True)
         self.tok.padding_side = "left"
         if self.tok.pad_token_id is None:
             self.tok.pad_token = self.tok.eos_token
-        m = AutoModelForCausalLM.from_pretrained(
-            base_id, torch_dtype=torch.bfloat16, device_map="cuda", trust_remote_code=True)
+        m = _model_class_for(base_id).from_pretrained(
+            base_id, torch_dtype=torch.bfloat16, device_map="cuda",
+            attn_implementation="sdpa", trust_remote_code=True)
         if adapter:
             from peft import PeftModel
             m = PeftModel.from_pretrained(m, adapter).merge_and_unload()

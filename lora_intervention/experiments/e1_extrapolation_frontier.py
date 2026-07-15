@@ -257,7 +257,7 @@ class HFEngine:
         model_cls = _model_class_for(base_id)
         model = model_cls.from_pretrained(
             base_id, torch_dtype=torch.bfloat16, device_map="cuda",
-            trust_remote_code=True)
+            attn_implementation="sdpa", trust_remote_code=True)
         if adapter_path:
             from peft import PeftModel
             model = PeftModel.from_pretrained(model, str(adapter_path))
