@@ -5180,6 +5180,35 @@
    ],
    "fvq_acc": 0.96875,
    "cvq_acc": 0.9375
+  },
+  "lora_plain": {
+   "keys": 10,
+   "updates": 100,
+   "mode": "endpoints",
+   "positions": [
+    {
+     "k": 1,
+     "acc": 1.0,
+     "n": 48,
+     "correct": 48,
+     "ci_lo": 0.9485813916897793,
+     "ci_hi": 1.0,
+     "wilson_hw": 0.05141860831022067,
+     "stopped_early": true
+    },
+    {
+     "k": 100,
+     "acc": 0.9375,
+     "n": 64,
+     "correct": 60,
+     "ci_lo": 0.8703384944005647,
+     "ci_hi": 1.0,
+     "wilson_hw": 0.0671615055994353,
+     "stopped_early": true
+    }
+   ],
+   "fvq_acc": 1.0,
+   "cvq_acc": 0.9375
   }
  }
 }

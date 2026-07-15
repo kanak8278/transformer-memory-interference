@@ -1,0 +1,53 @@
+++ date
++ echo '=== BOOTSTRAP3 (behavioral resume, OOM fix) START Wed Jul 15 04:22:12 PM UTC 2026 ==='
+=== BOOTSTRAP3 (behavioral resume, OOM fix) START Wed Jul 15 04:22:12 PM UTC 2026 ===
++ GEMMA=google/gemma-3-4b-it
++ OUT=/content/gemma_out
++ ADAPTER=/content/repo/lora_intervention/checkpoints/gemma_adapter
++ pip -q install transformers==4.56.2 'peft>=0.19.1' 'huggingface_hub>=0.34.0' hf_transfer accelerate
++ tail -2
++ pip -q install --no-deps --upgrade 'torchao>=0.16.0'
++ tail -1
++ cd /content
++ rm -rf repo
++ git clone -q --branch aaai-prep --depth 1 https://github.com/kanak8278/transformer-memory-interference.git repo
++ cd /content/repo
++ git rev-parse --short HEAD
+adcfb31
++ python3 -c 'import sys;sys.path.insert(0,'\''.'\'');from mechanistic_probing_v2.core.dataset_configs import get_eligible_categories as g;print('\''DATA_OK'\'',len(g('\''ARBITRARY_SINGLE'\'',min_values=50)))'
+DATA_OK 46
+++ date
++ echo '=== resume behavioral (skips 7 done base cells; runs K10N100 base + 8 lora) @ Wed Jul 15 04:22:30 PM UTC 2026 ==='
+=== resume behavioral (skips 7 done base cells; runs K10N100 base + 8 lora) @ Wed Jul 15 04:22:30 PM UTC 2026 ===
++ python3 lora_intervention/experiments/behavioral_block_lora_sweep.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --out-dir /content/gemma_out/behavioral
+[16:22:32] loading base...
+2026-07-15 16:22:38.846347: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-07-15 16:22:38.929285: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+/usr/local/lib/python3.12/dist-packages/google/api_core/_python_package_support.py:185: FutureWarning: DEPRECATION: Package google.api_core depends on google.protobuf, currently installed at version 0.0.0. Future updates to google.api_core will require google.protobuf at version 4.25.8 or higher (we recommend {recommended_version}). Please ensure that either (a) your Python environment doesn't pin the version of google.protobuf, so that updates to google.api_core can require the higher version, or (b) you manually update your Python environment to use at least version 4.25.8 of google.protobuf.
+  warnings.warn(
+Failed to load /usr/local/lib/python3.12/dist-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: /usr/local/lib/python3.12/dist-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load /usr/local/lib/python3.12/dist-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: /usr/local/lib/python3.12/dist-packages/torchao/_C_cutlass_90a.abi3.so
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.18s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.11s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.12s/it]
+The following generation flags are not valid and may be ignored: ['top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[16:27:46] K10N100 base_plain: FVQ=0.91 CVQ=0.10 (2 pos, 298s)
+[16:32:38] K10N100 base_block: FVQ=0.97 CVQ=0.94 (2 pos, 292s)
+[16:32:39] loading lora...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.18s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.11s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.12s/it]
+[16:38:35] K5N20 lora_plain: FVQ=1.00 CVQ=1.00 (20 pos, 350s)
+[16:52:26] K10N25 lora_plain: FVQ=1.00 CVQ=1.00 (25 pos, 831s)
+[17:33:44] K10N50 lora_plain: FVQ=1.00 CVQ=0.97 (50 pos, 2478s)
+[17:45:25] K5N50 lora_plain: FVQ=1.00 CVQ=1.00 (26 pos, 701s)
+[18:09:28] K5N75 lora_plain: FVQ=1.00 CVQ=1.00 (39 pos, 1443s)
+[18:09:38] K2N30 lora_plain: FVQ=1.00 CVQ=1.00 (2 pos, 10s)
+[18:10:34] K20N20 lora_plain: FVQ=1.00 CVQ=1.00 (2 pos, 56s)
+[18:13:43] K10N100 lora_plain: FVQ=1.00 CVQ=0.94 (2 pos, 189s)
+[18:13:44] DONE
+++ date
++ echo '=== EXIT 0 @ Wed Jul 15 06:13:46 PM UTC 2026 ==='
+=== EXIT 0 @ Wed Jul 15 06:13:46 PM UTC 2026 ===
++ echo BEHAVIORAL_DONE3
+BEHAVIORAL_DONE3
++ touch /content/gemma_out/ALL_DONE3
+
