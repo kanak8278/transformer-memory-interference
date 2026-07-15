@@ -87,8 +87,15 @@ per-position, `FINDINGS.md`)
   counts to captions; 005 purge 4 "RI" mentions + add RI=FVQ/PI=CVQ release note.
 
 ### C. Optional strengthening (GPU, only if time)
-- **Gemma cross-family** for E1 + block (behavioral + mechanistic) — DEFERRED by the
-  HF-Xet download blocker; run off-Colab or when Xet is healthy (see finding notes).
+- **Gemma-3-4b cross-family** — ✅ **DONE 2026-07-15** (Colab L4). E1 + block-readout
+  + behavioral per-position sweep all replicate Qwen closely. Summary:
+  `lora_intervention/experiments/gemma_results/GEMMA_CROSS_FAMILY.md` (+ per-exp
+  `e1/`, `block/`, `behavioral/` FINDINGS). Headline: K10/N50 interior means
+  base 0.01 / Block 0.66 / LoRA 0.11 (Qwen: 0.02/0.72/0.12). The Xet download
+  blocker is dead — modern HF stack (transformers 4.56.2 + hf_transfer) pulls
+  gemma-3 fine on Colab. Ablation (#4) still deferred (needs Gemma promoter-head
+  discovery first). → paper can now report all 3 session-new results as
+  two-family (Qwen + Gemma), i.e. architecture-general.
 - **MLP-LoRA full eval** (App L is a 5-cell preview) — retrain (~100 steps) + full
   28-cell eval; adapter not local.
 
