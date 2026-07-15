@@ -1,0 +1,673 @@
+++ date
++ echo '=== BOOTSTRAP START Wed Jul 15 09:12:31 AM UTC 2026 ==='
+=== BOOTSTRAP START Wed Jul 15 09:12:31 AM UTC 2026 ===
++ GEMMA=google/gemma-3-4b-it
++ OUT=/content/gemma_out
++ ADAPTER=/content/repo/lora_intervention/checkpoints/gemma_adapter
++ mkdir -p /content/gemma_out
++ echo '=== PIP (unsloth-proven gemma-3 stack) ==='
+=== PIP (unsloth-proven gemma-3 stack) ===
++ pip -q install transformers==4.56.2 'peft>=0.19.1' 'huggingface_hub>=0.34.0' hf_transfer accelerate
++ tail -8
++ pip -q install --no-deps --upgrade 'torchao>=0.16.0'
++ tail -3
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/3.2 MB 101.2 MB/s eta 0:00:00
++ python3 -c 'import transformers,peft,huggingface_hub as h,torchao;print('\''transformers'\'',transformers.__version__,'\''peft'\'',peft.__version__,'\''hub'\'',h.__version__,'\''torchao'\'',torchao.__version__)'
+2026-07-15 09:12:42.700188: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-07-15 09:12:42.772449: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Failed to load /usr/local/lib/python3.12/dist-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: /usr/local/lib/python3.12/dist-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load /usr/local/lib/python3.12/dist-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: /usr/local/lib/python3.12/dist-packages/torchao/_C_cutlass_90a.abi3.so
+transformers 4.56.2 peft 0.19.1 hub 0.36.2 torchao 0.17.0
++ echo '=== CLONE repo (aaai-prep) ==='
+=== CLONE repo (aaai-prep) ===
++ cd /content
++ rm -rf repo
++ git clone -q --branch aaai-prep --depth 1 https://github.com/kanak8278/transformer-memory-interference.git repo
++ cd /content/repo
++ ls /content/repo/lora_intervention/checkpoints/gemma_adapter
++ head
+adapter_config.json
+adapter_model.safetensors
+added_tokens.json
+chat_template.jinja
+README.md
+run_config.json
+special_tokens_map.json
+tokenizer_config.json
+tokenizer.json
+tokenizer.model
++ echo '=== DOWNLOAD google/gemma-3-4b-it ==='
+=== DOWNLOAD google/gemma-3-4b-it ===
++ python3 -
+DL_DONE /root/.cache/huggingface/hub/models--google--gemma-3-4b-it/snapshots/093f9f388b31de276ce2de164bdc2081324b9767
++ run lora_intervention/experiments/e1_extrapolation_frontier.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --scans A,B --backend hf --only both --out-dir /content/gemma_out/e1
+++ date
++ echo '=== RUN: lora_intervention/experiments/e1_extrapolation_frontier.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --scans A,B --backend hf --only both --out-dir /content/gemma_out/e1 @ Wed Jul 15 09:13:03 AM UTC 2026 ==='
+=== RUN: lora_intervention/experiments/e1_extrapolation_frontier.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --scans A,B --backend hf --only both --out-dir /content/gemma_out/e1 @ Wed Jul 15 09:13:03 AM UTC 2026 ===
++ python3 lora_intervention/experiments/e1_extrapolation_frontier.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --scans A,B --backend hf --only both --out-dir /content/gemma_out/e1
+[09:13:03] E1 start. scans=['A', 'B'] cells={'A': [(10, 20), (10, 40), (10, 60), (10, 80), (10, 100)], 'B': [(10, 20), (20, 20), (30, 20), (40, 20), (46, 20)]} out=/content/gemma_out/e1
+[09:13:10] Loading base (hf)...
+2026-07-15 09:13:13.375040: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-07-15 09:13:13.459993: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Failed to load /usr/local/lib/python3.12/dist-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: /usr/local/lib/python3.12/dist-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load /usr/local/lib/python3.12/dist-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: /usr/local/lib/python3.12/dist-packages/torchao/_C_cutlass_90a.abi3.so
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.18s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.11s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.12s/it]
+[09:13:20] === model=base ===
+[09:13:21] Loading LoRA (hf)...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.19s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.11s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.13s/it]
+[09:13:27] === model=lora ===
+The following generation flags are not valid and may be ignored: ['top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[09:13:38] A K=10 N=20 FVQ: acc=1.000 n=40 hw=0.061 (12s)
+[09:13:53] A K=10 N=20 CVQ: acc=0.980 n=50 hw=0.061 (14s)
+[09:14:04] A K=10 N=20 IVQ@0.10: acc=1.000 n=40 hw=0.061 (11s)
+[09:14:33] A K=10 N=20 IVQ@0.25: acc=0.710 n=100 hw=0.088 (29s)
+[09:15:02] A K=10 N=20 IVQ@0.50: acc=0.260 n=100 hw=0.085 (29s)
+[09:15:31] A K=10 N=20 IVQ@0.75: acc=0.210 n=100 hw=0.080 (29s)
+[09:16:00] A K=10 N=20 IVQ@0.90: acc=0.260 n=100 hw=0.085 (29s)
+[09:16:23] A K=10 N=40 FVQ: acc=1.000 n=40 hw=0.061 (23s)
+[09:16:53] A K=10 N=40 CVQ: acc=0.980 n=50 hw=0.061 (30s)
+[09:17:34] A K=10 N=40 IVQ@0.10: acc=0.943 n=70 hw=0.062 (41s)
+[09:18:15] A K=10 N=40 IVQ@0.25: acc=0.057 n=70 hw=0.062 (42s)
+[09:18:39] A K=10 N=40 IVQ@0.50: acc=0.000 n=40 hw=0.061 (24s)
+[09:19:21] A K=10 N=40 IVQ@0.75: acc=0.071 n=70 hw=0.066 (42s)
+[09:20:02] A K=10 N=40 IVQ@0.90: acc=0.071 n=70 hw=0.066 (42s)
+[09:20:39] A K=10 N=60 FVQ: acc=1.000 n=40 hw=0.061 (37s)
+[09:21:16] A K=10 N=60 CVQ: acc=1.000 n=40 hw=0.061 (37s)
+[09:22:48] A K=10 N=60 IVQ@0.10: acc=0.290 n=100 hw=0.088 (92s)
+[09:23:34] A K=10 N=60 IVQ@0.25: acc=0.020 n=50 hw=0.061 (46s)
+[09:24:11] A K=10 N=60 IVQ@0.50: acc=0.000 n=40 hw=0.061 (37s)
+[09:24:57] A K=10 N=60 IVQ@0.75: acc=0.020 n=50 hw=0.061 (46s)
+[09:26:11] A K=10 N=60 IVQ@0.90: acc=0.087 n=80 hw=0.066 (74s)
+[09:27:03] A K=10 N=80 FVQ: acc=1.000 n=40 hw=0.061 (52s)
+[09:27:55] A K=10 N=80 CVQ: acc=1.000 n=40 hw=0.061 (52s)
+[09:30:04] A K=10 N=80 IVQ@0.10: acc=0.380 n=100 hw=0.094 (128s)
+[09:30:55] A K=10 N=80 IVQ@0.25: acc=0.000 n=40 hw=0.061 (52s)
+[09:31:48] A K=10 N=80 IVQ@0.50: acc=0.000 n=40 hw=0.061 (52s)
+[09:32:40] A K=10 N=80 IVQ@0.75: acc=0.000 n=40 hw=0.061 (52s)
+[09:33:45] A K=10 N=80 IVQ@0.90: acc=0.040 n=50 hw=0.069 (65s)
+[09:34:52] A K=10 N=100 FVQ: acc=1.000 n=40 hw=0.061 (67s)
+[09:36:00] A K=10 N=100 CVQ: acc=1.000 n=40 hw=0.061 (68s)
+[09:38:48] A K=10 N=100 IVQ@0.10: acc=0.220 n=100 hw=0.081 (168s)
+[09:39:55] A K=10 N=100 IVQ@0.25: acc=0.000 n=40 hw=0.061 (67s)
+[09:41:03] A K=10 N=100 IVQ@0.50: acc=0.000 n=40 hw=0.061 (68s)
+[09:42:10] A K=10 N=100 IVQ@0.75: acc=0.000 n=40 hw=0.061 (67s)
+[09:43:34] A K=10 N=100 IVQ@0.90: acc=0.020 n=50 hw=0.061 (84s)
+[09:43:45] B K=10 N=20 FVQ: acc=1.000 n=40 hw=0.061 (11s)
+[09:44:00] B K=10 N=20 CVQ: acc=0.980 n=50 hw=0.061 (14s)
+[09:44:11] B K=10 N=20 IVQ@0.10: acc=1.000 n=40 hw=0.061 (11s)
+[09:44:40] B K=10 N=20 IVQ@0.25: acc=0.710 n=100 hw=0.088 (29s)
+[09:45:09] B K=10 N=20 IVQ@0.50: acc=0.260 n=100 hw=0.085 (29s)
+[09:45:38] B K=10 N=20 IVQ@0.75: acc=0.210 n=100 hw=0.080 (29s)
+[09:46:07] B K=10 N=20 IVQ@0.90: acc=0.260 n=100 hw=0.085 (29s)
+[09:46:30] B K=20 N=20 FVQ: acc=1.000 n=40 hw=0.061 (23s)
+[09:47:00] B K=20 N=20 CVQ: acc=0.980 n=50 hw=0.061 (29s)
+[09:47:29] B K=20 N=20 IVQ@0.10: acc=0.980 n=50 hw=0.061 (29s)
+[09:48:27] B K=20 N=20 IVQ@0.25: acc=0.420 n=100 hw=0.095 (58s)
+[09:49:26] B K=20 N=20 IVQ@0.50: acc=0.130 n=100 hw=0.067 (59s)
+[09:50:24] B K=20 N=20 IVQ@0.75: acc=0.180 n=100 hw=0.076 (58s)
+[09:51:22] B K=20 N=20 IVQ@0.90: acc=0.240 n=100 hw=0.083 (58s)
+[09:52:07] B K=30 N=20 FVQ: acc=0.980 n=50 hw=0.061 (45s)
+[09:53:01] B K=30 N=20 CVQ: acc=0.950 n=60 hw=0.065 (54s)
+[09:53:46] B K=30 N=20 IVQ@0.10: acc=0.980 n=50 hw=0.061 (45s)
+[09:55:16] B K=30 N=20 IVQ@0.25: acc=0.490 n=100 hw=0.096 (90s)
+[09:56:02] B K=30 N=20 IVQ@0.50: acc=0.040 n=50 hw=0.069 (45s)
+[09:57:23] B K=30 N=20 IVQ@0.75: acc=0.122 n=90 hw=0.070 (82s)
+[09:58:53] B K=30 N=20 IVQ@0.90: acc=0.180 n=100 hw=0.076 (90s)
+[09:59:45] B K=40 N=20 FVQ: acc=1.000 n=40 hw=0.061 (51s)
+[10:01:14] B K=40 N=20 CVQ: acc=0.929 n=70 hw=0.066 (89s)
+[10:02:05] B K=40 N=20 IVQ@0.10: acc=1.000 n=40 hw=0.061 (51s)
+[10:04:12] B K=40 N=20 IVQ@0.25: acc=0.530 n=100 hw=0.096 (127s)
+[10:05:17] B K=40 N=20 IVQ@0.50: acc=0.040 n=50 hw=0.069 (65s)
+[10:06:21] B K=40 N=20 IVQ@0.75: acc=0.040 n=50 hw=0.069 (64s)
+[10:08:03] B K=40 N=20 IVQ@0.90: acc=0.100 n=80 hw=0.069 (102s)
+[10:09:17] B K=46 N=20 FVQ: acc=0.980 n=50 hw=0.061 (74s)
+[10:11:00] B K=46 N=20 CVQ: acc=0.943 n=70 hw=0.062 (104s)
+[10:12:29] B K=46 N=20 IVQ@0.10: acc=0.950 n=60 hw=0.065 (88s)
+[10:14:56] B K=46 N=20 IVQ@0.25: acc=0.610 n=100 hw=0.094 (147s)
+[10:17:09] B K=46 N=20 IVQ@0.50: acc=0.122 n=90 hw=0.070 (133s)
+[10:18:23] B K=46 N=20 IVQ@0.75: acc=0.020 n=50 hw=0.061 (74s)
+[10:20:21] B K=46 N=20 IVQ@0.90: acc=0.075 n=80 hw=0.063 (118s)
+[10:20:22] E1 done.
+++ date
++ echo '=== EXIT 0 @ Wed Jul 15 10:20:24 AM UTC 2026 ==='
+=== EXIT 0 @ Wed Jul 15 10:20:24 AM UTC 2026 ===
++ echo E1_DONE
+E1_DONE
++ cp -r /content/gemma_out/e1 /content/gemma_out/e1.snapshot
++ run lora_intervention/experiments/block_readout_comparison.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --keys 2 --updates 30 --trials 100 --out-dir /content/gemma_out/block_k2n30
+++ date
++ echo '=== RUN: lora_intervention/experiments/block_readout_comparison.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --keys 2 --updates 30 --trials 100 --out-dir /content/gemma_out/block_k2n30 @ Wed Jul 15 10:20:24 AM UTC 2026 ==='
+=== RUN: lora_intervention/experiments/block_readout_comparison.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --keys 2 --updates 30 --trials 100 --out-dir /content/gemma_out/block_k2n30 @ Wed Jul 15 10:20:24 AM UTC 2026 ===
++ python3 lora_intervention/experiments/block_readout_comparison.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --keys 2 --updates 30 --trials 100 --out-dir /content/gemma_out/block_k2n30
+[10:20:24] Block-readout comparison K=2 N=30 trials=100
+[10:20:24] loading base...
+2026-07-15 10:20:32.290989: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-07-15 10:20:32.374125: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Failed to load /usr/local/lib/python3.12/dist-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: /usr/local/lib/python3.12/dist-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load /usr/local/lib/python3.12/dist-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: /usr/local/lib/python3.12/dist-packages/torchao/_C_cutlass_90a.abi3.so
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.19s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.11s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.12s/it]
+[10:20:39] running base_plain...
+The following generation flags are not valid and may be ignored: ['top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+[10:23:45] base_plain: CVQ acc=0.70
+[10:23:45] running base_block...
+[10:25:42] base_block: CVQ acc=0.96
+[10:25:42] loading LoRA (merged)...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.20s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.12s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.13s/it]
+[10:25:48] running lora_plain...
+[10:27:15] lora_plain: CVQ acc=1.00
+[10:27:15] DONE
+++ date
++ echo '=== EXIT 0 @ Wed Jul 15 10:27:17 AM UTC 2026 ==='
+=== EXIT 0 @ Wed Jul 15 10:27:17 AM UTC 2026 ===
++ run lora_intervention/experiments/block_readout_comparison.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --keys 10 --updates 50 --trials 100 --out-dir /content/gemma_out/block_k10n50
+++ date
++ echo '=== RUN: lora_intervention/experiments/block_readout_comparison.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --keys 10 --updates 50 --trials 100 --out-dir /content/gemma_out/block_k10n50 @ Wed Jul 15 10:27:17 AM UTC 2026 ==='
+=== RUN: lora_intervention/experiments/block_readout_comparison.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --keys 10 --updates 50 --trials 100 --out-dir /content/gemma_out/block_k10n50 @ Wed Jul 15 10:27:17 AM UTC 2026 ===
++ python3 lora_intervention/experiments/block_readout_comparison.py --base-model google/gemma-3-4b-it --adapter /content/repo/lora_intervention/checkpoints/gemma_adapter --keys 10 --updates 50 --trials 100 --out-dir /content/gemma_out/block_k10n50
+[10:27:17] Block-readout comparison K=10 N=50 trials=100
+[10:27:17] loading base...
+2026-07-15 10:27:25.704193: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-07-15 10:27:25.788076: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Failed to load /usr/local/lib/python3.12/dist-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: /usr/local/lib/python3.12/dist-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load /usr/local/lib/python3.12/dist-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: /usr/local/lib/python3.12/dist-packages/torchao/_C_cutlass_90a.abi3.so
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.19s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.12s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.13s/it]
+[10:27:33] running base_plain...
+The following generation flags are not valid and may be ignored: ['top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Traceback (most recent call last):
+  File "/content/repo/lora_intervention/experiments/block_readout_comparison.py", line 283, in <module>
+  File "/content/repo/lora_intervention/experiments/block_readout_comparison.py", line 262, in main
+  File "/content/repo/lora_intervention/experiments/block_readout_comparison.py", line 169, in run_condition
+  File "/content/repo/lora_intervention/experiments/block_readout_comparison.py", line 86, in make_prompt
+  File "/content/repo/lora_intervention/experiments/block_readout_comparison.py", line 49, in stream_items
+  File "/content/repo/mechanistic_probing_v2/core/dataset_configs.py", line 313, in get_eligible_categories
+  File "/content/repo/mechanistic_probing_v2/core/dataset_configs.py", line 234, in load_dataset_config
+FileNotFoundError: [Errno 2] No such file or directory: '/content/repo/mechanistic_probing_v2/core/data/arbitrary_single.json'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Traceback (most recent call last):
+  File "/content/repo/lora_intervention/experiments/block_readout_comparison.py", line 283, in <module>
+  File "/content/repo/lora_intervention/experiments/block_readout_comparison.py", line 262, in main
+  File "/content/repo/lora_intervention/experiments/block_readout_comparison.py", line 169, in run_condition
+  File "/content/repo/lora_intervention/experiments/block_readout_comparison.py", line 86, in make_prompt
+  File "/content/repo/lora_intervention/experiments/block_readout_comparison.py", line 49, in stream_items
+  File "/content/repo/mechanistic_probing_v2/core/dataset_configs.py", line 313, in get_eligible_categories
+  File "/content/repo/mechanistic_probing_v2/core/dataset_configs.py", line 234, in load_dataset_config
+FileNotFoundError: [Errno 2] No such file or directory: '/content/repo/mechanistic_probing_v2/core/data/arbitrary_single.json'
+
