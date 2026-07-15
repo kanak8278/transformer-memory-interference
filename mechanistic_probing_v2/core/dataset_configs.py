@@ -116,6 +116,26 @@ VALID_DATASET_TYPES = list(DATASET_CONFIGS.keys())
 _cached_pools = {}
 
 
+def _read_json_retry(path, attempts=6, delay=0.4):
+    """Read+parse JSON, retrying transient misses.
+
+    Colab's /content overlay FS occasionally raises FileNotFoundError/OSError
+    for a file that exists (metadata lag), which crashes callers that open the
+    same data file on a hot path (e.g. per-trial). Retry with backoff before
+    giving up so a momentary miss doesn't kill a long run.
+    """
+    import time
+    last = None
+    for i in range(attempts):
+        try:
+            with open(path) as f:
+                return json.load(f)
+        except (FileNotFoundError, OSError) as e:
+            last = e
+            time.sleep(delay * (i + 1))
+    raise last
+
+
 def _load_arbitrary_single_pool():
     """Load the 2300 single-token English words from JSON."""
     cache_key = "arbitrary_single"
@@ -123,8 +143,7 @@ def _load_arbitrary_single_pool():
         return _cached_pools[cache_key]
 
     path = DATA_DIR / "arbitrary_single.json"
-    with open(path) as f:
-        data = json.load(f)
+    data = _read_json_retry(path)
 
     values = data["values"]
     _cached_pools[cache_key] = values
@@ -230,9 +249,14 @@ def load_dataset_config(dataset_type):
     config = DATASET_CONFIGS[dataset_type].copy()
 
     if dataset_type == "ARBITRARY_SINGLE":
-        path = DATA_DIR / "arbitrary_single.json"
-        with open(path) as f:
-            data = json.load(f)
+        # cache the raw read: get_eligible_categories() calls this per trial,
+        # so re-opening the file hundreds of times invites a transient FS miss.
+        ck = "arbitrary_single_raw"
+        if ck in _cached_pools:
+            data = _cached_pools[ck]
+        else:
+            data = _read_json_retry(DATA_DIR / "arbitrary_single.json")
+            _cached_pools[ck] = data
         pool = data["values"]
         categories = data["categories"]
         config["categories"] = categories
