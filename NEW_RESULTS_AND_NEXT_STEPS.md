@@ -93,8 +93,11 @@ per-position, `FINDINGS.md`)
   `e1/`, `block/`, `behavioral/` FINDINGS). Headline: K10/N50 interior means
   base 0.01 / Block 0.66 / LoRA 0.11 (Qwen: 0.02/0.72/0.12). The Xet download
   blocker is dead — modern HF stack (transformers 4.56.2 + hf_transfer) pulls
-  gemma-3 fine on Colab. Ablation (#4) still deferred (needs Gemma promoter-head
-  discovery first). → paper can now report all 3 session-new results as
+  gemma-3 fine on Colab. **Ablation (#4) now ALSO done** (`ablation/FINDINGS.md`):
+  Gemma promoter heads (top-8 FVQ−CVQ, cluster at L23) already discovered in
+  `head_analysis_report.md`; n=200 paired ablation confirms amplification —
+  paired (LoRA−base) Δ at L33 = −0.53 (K2/N30) / −0.74 (K10/N50), both CIs exclude
+  zero, larger than Qwen. → paper can report **all 4 session-new results** as
   two-family (Qwen + Gemma), i.e. architecture-general.
 - **MLP-LoRA full eval** (App L is a 5-cell preview) — retrain (~100 steps) + full
   28-cell eval; adapter not local.

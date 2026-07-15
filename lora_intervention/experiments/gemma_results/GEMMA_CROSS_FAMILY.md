@@ -8,9 +8,9 @@ mechanism claims hold across model families.
 
 The original paper pipeline (ARB behavioral, logit-lens, probing, attention-
 routing) was already done for gemma-3-4b (in `v3/results_vllm/`, from SageMaker).
-This adds the three session-new experiments. Ablation (#4) deferred (needs
-Gemma-specific promoter-head discovery). Data + per-experiment findings:
-`e1/`, `block/`, `behavioral/`.
+This adds the **four** session-new experiments (E1, block-readout, behavioral,
+ablation) — all now cross-family. Data + per-experiment findings: `e1/`, `block/`,
+`behavioral/`, `ablation/`.
 
 ## Result: all three replicate Qwen closely
 
@@ -39,8 +39,19 @@ Gemma-specific promoter-head discovery). Data + per-experiment findings:
 - K10/N50 per-position: base 0.01 / Block 0.66 / LoRA 0.11 interior mean vs Qwen
   0.02 / 0.72 / 0.12. **Near-identical.**
 
+### 4. Stage-3C ablation (`ablation/FINDINGS.md`)
+- **LoRA amplification confirmed, every paired CI excludes zero.** Ablating the 8
+  Gemma promoter heads (top-8 FVQ−CVQ, cluster at L23) reduces P(v_last) far more
+  under LoRA than base. Paired (LoRA−base) Δ at readout L33: **K2/N30 −0.529
+  [−0.601,−0.458]; K10/N50 −0.738 [−0.794,−0.677]** (n=200, paired seeds).
+- K10/N50 cleanest: base normal P(v_last) 0.11–0.21 (fails), LoRA's 0.74–0.98 is
+  **almost entirely head-driven** (ablation removes 0.68–0.93).
+- **Even larger than Qwen** (Qwen paired −0.082/−0.230). Promoter cluster is
+  mid-depth (L23), upstream of the late readout (L33) — different topology from
+  Qwen's late cluster, same causal role.
+
 ## Bottom line
-The paper's three session-new results are **architecture-general**, not
+The paper's four session-new results are **architecture-general**, not
 Qwen-specific:
 1. LoRA surfaces robust *endpoint* retrieval that extrapolates to ~5×, not general
    position indexing (interior N-bounded, decaying).
@@ -48,6 +59,9 @@ Qwen-specific:
    readout via different routing.
 3. Block installs true position indexing; LoRA only amplifies end-anchored
    retrieval. Endpoints converge, interior diverges.
+4. LoRA amplifies the causal contribution of pre-existing promoter heads to the
+   current-value readout (ablation: paired LoRA−base Δ excludes zero at both
+   cells, larger than Qwen).
 
 Readout layer differs (Gemma L33/34 vs Qwen L35/36, both near-final); everything
 else matches quantitatively. Strong second-family evidence for the paper.
