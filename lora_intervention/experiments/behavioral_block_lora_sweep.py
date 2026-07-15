@@ -111,17 +111,35 @@ class HFEngine:
         self.model = m
 
     def generate(self, prompts, max_new_tokens=8):
+        # Length-aware micro-batching: a fixed BATCH OOMs on very long prompts
+        # (e.g. K10/N100 ~1000-line streams) on a 23GB L4. Sort by length and
+        # pack each sub-batch so count*max_chars stays under a budget, capped at
+        # BATCH. Short cells still run at full BATCH; long cells shrink to fit.
         torch = self.torch
-        outs = []
-        for i in range(0, len(prompts), BATCH):
-            chunk = prompts[i:i + BATCH]
+        n = len(prompts)
+        results = [""] * n
+        CHAR_BUDGET = 80000  # count * max_prompt_chars per forward (K10/N50@16 was safe)
+        order = sorted(range(n), key=lambda i: len(prompts[i]))
+        i = 0
+        while i < n:
+            j, maxlen = i, 0
+            while j < n:
+                ml = max(maxlen, len(prompts[order[j]]))
+                cnt = j - i + 1
+                if cnt > BATCH or (cnt > 1 and cnt * ml > CHAR_BUDGET):
+                    break
+                maxlen, j = ml, j + 1
+            idx = order[i:j]
+            chunk = [prompts[k] for k in idx]
             enc = self.tok(chunk, return_tensors="pt", padding=True, truncation=False).to(self.model.device)
             with torch.no_grad():
                 g = self.model.generate(**enc, max_new_tokens=max_new_tokens,
                                         do_sample=False, pad_token_id=self.tok.pad_token_id)
             new = g[:, enc["input_ids"].shape[1]:]
-            outs.extend(self.tok.decode(r, skip_special_tokens=True).strip() for r in new)
-        return outs
+            for k, r in zip(idx, new):
+                results[k] = self.tok.decode(r, skip_special_tokens=True).strip()
+            i = j
+        return results
 
     def close(self):
         del self.model
