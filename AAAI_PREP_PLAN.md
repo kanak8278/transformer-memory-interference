@@ -1,5 +1,10 @@
 # AAAI Submission Preparation Plan
 
+> **▶ RESUME HERE:** see `NEW_RESULTS_AND_NEXT_STEPS.md` (repo root) for the
+> 2026-07-15 session summary — 4 new experiments (E1 extrapolation, block-readout,
+> behavioral sweep, ablation re-run) + Finding 001 resolved + prioritized next
+> steps. All committed on branch `aaai-prep`.
+
 **Paper:** "Tracked but Suppressed: How LLMs Fail Current-Value Retrieval"
 (`paper/main.tex`, 23 pp compiled, currently in ACL review format)
 
