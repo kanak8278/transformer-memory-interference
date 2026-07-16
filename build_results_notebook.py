@@ -278,34 +278,20 @@ across families, **different depth** — a point we return to in the cross-famil
 that's C4/E4.
 """)
 
-# ─── C5 probing (short) ──────────────────────────────────────────────────────
+# ─── C5 probing — PULLED pending methodological redesign ─────────────────────
 md(r"""
 ---
-## C5. Probing — is "will CVQ be correct" linearly decodable, and where?
+## C5. Probing — *pulled pending redesign (see discussion)*
 
-**Question.** Can a linear probe read CVQ-correctness off the residual stream, and at which layer?
-**Measured:** probe accuracy per layer (Qwen LoRA).
-""")
-code(r"""
-pf = find('v3/results_vllm/probing/probing_Qwen2.5-3B-Instruct-LoRA_2k_5u.json')
-if pf:
-    d = jload(pf[0]); cp = d['probe_results']['condition_probe']
-    layers = sorted(cp, key=int); acc = [cp[k]['accuracy'] for k in layers]
-    plt.figure(figsize=(7,3.2)); plt.plot([int(x) for x in layers], acc, 'o-', ms=3)
-    plt.title('Qwen LoRA: CVQ-correctness probe accuracy per layer')
-    plt.xlabel('layer'); plt.ylabel('probe acc'); plt.ylim(0.4,1.02); plt.show()
-    print(f'peak probe acc {max(acc):.2f} @ layer {layers[acc.index(max(acc))]}; behavioral CVQ={d["behavioral"]}')
-""")
-md(r"""
-**Result.** CVQ-correctness becomes linearly decodable and rises through the mid/late layers.
+The linear-probing results are **intentionally omitted** from this notebook. The current probe
+targets **CVQ-correctness** (predict whether the model will answer correctly), which is (a)
+**degenerate** for the LoRA/Block conditions (they answer ~100% correctly → only one class), and
+(b) a *meta*-target that doesn't cleanly test whether the current value is **represented**.
 
-**Interpretation.** The information needed to answer CVQ *is present* in the representation before
-the output — consistent with "tracked but suppressed."
-
-**Caveat (important, don't gloss).** In the **block-readout** experiment (E2) the probe is
-**degenerate for the LoRA condition** — LoRA answers CVQ ~100% correctly, so there's no
-"incorrect" class to train a probe against. The probe is informative for base conditions;
-the *logit lens* (E2) is the load-bearing comparison for LoRA.
+The raw files remain in `v3/results_vllm/probing/` and
+`lora_intervention/experiments/*/results*.json`; they are not deleted, only removed from the
+walkthrough until the probe is redesigned to decode **content** (v_last identity) with balanced
+classes, held-out splits, and a selectivity control. See the design note at the end.
 """)
 
 # ─── D held-out eval ─────────────────────────────────────────────────────────
@@ -435,9 +421,10 @@ same high P(v_last) at the same late layer** (per-layer correlation printed abov
 (prompt markers vs weight edits) but **converge on the same late readout locus**. The base model
 *tracks* v_last but *suppresses* it; both fixes release the same readout.
 
-**Caveat.** The companion linear probe is degenerate for `lora_plain` (see C5) — logit-lens is the
-valid cross-condition comparison here. Cross-format activation patching is *not* meaningful (block
-vs plain prompts aren't token-aligned), so we don't claim it.
+**Caveat.** The comparison here is **logit-lens only** (a companion correctness-probe was pulled —
+see C5). Cross-format activation patching is *not* meaningful (block vs plain prompts aren't
+token-aligned), so we don't claim it either. Logit-lens itself reads through the frozen unembedding,
+so it measures *output-basis alignment*, not representation — flagged in the design note.
 """)
 
 # ─── E3 behavioral 3-way ─────────────────────────────────────────────────────
@@ -566,10 +553,37 @@ exact head-for-head match would be.
 
 ## Open items / honest limitations
 - Ablation magnitudes are HF-hook (gentler than TL); report direction+significance, not the old numbers.
-- E2 probe degenerate for LoRA (too-good-to-probe) — logit-lens is the valid comparison.
+- **Probing pulled pending redesign** (C5) — current target is degenerate/meta; see design note below.
+- Logit-lens reads through the frozen unembedding → measures *output-basis alignment*, not representation.
 - Gemma ablation #4 uses FVQ−CVQ-ranked heads (same metric as Qwen); a causal head-search could refine.
 - Cross-model absolute accuracies aren't tokenizer-matched — read patterns.
 - Single seed per config in the mechanistic runs (behavioral uses many trials + Wilson CIs).
+
+---
+## Design note — logit lens vs a *proper* linear probe (why C5 was pulled)
+
+**Logit lens** = apply the model's frozen unembedding `W_U` to an intermediate residual and read
+P(v_last). It answers *"is v_last aligned with the output direction at layer L?"* — an **output-basis
+readout**, not a representation test. It can under-report information that is present but written in a
+direction `W_U` doesn't read (exactly the "suppressed" case), and is known to be unfaithful at
+early/mid layers (motivating the *tuned lens*).
+
+**A trained linear probe** learns its own direction `w` from residual→label, so it answers
+*"is the information linearly **present** at layer L?"* — independent of the model's readout. That is
+the right tool for the **"tracked"** half of "tracked but suppressed."
+
+**Why the current probe doesn't earn that claim:**
+1. **Target is correctness** ("will the model be right"), a *meta*-signal — not the *content*.
+2. **Degenerate** where it matters: LoRA/Block answer ~100% correctly → one class → no probe.
+3. **No leakage control**: 5-fold CV over the same trials can pick up value/position artifacts.
+4. **No selectivity baseline**: a strong probe can decode from noise; without a control the number is uninterpretable.
+
+**Proper setup (proposed):** probe for **content** — decode v_last (identity, or v_last-vs-v_first)
+from the residual at each layer; **balanced classes**; **prompts/values split** train vs test (no
+category/value overlap); **selectivity control** (shuffled-label probe ≈ chance); run **base vs LoRA
+on matched data**; optionally a **tuned lens** instead of raw logit lens. The payoff is a clean
+**double dissociation**: probe shows v_last is decodable at layer L (*tracked*) while logit lens shows
+P(v_last) is low there (*suppressed*). That pair is the real evidence — discussed as next steps.
 """)
 
 nb['cells'] = cells
