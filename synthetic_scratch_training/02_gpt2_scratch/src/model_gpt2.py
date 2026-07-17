@@ -34,6 +34,9 @@ class GPT2FromScratch(nn.Module):
         self.gpt2 = GPT2LMHeadModel(config)
 
     def forward(self, input_ids, return_attn=False):
-        out = self.gpt2(input_ids=input_ids, output_attentions=return_attn)
+        # logits_to_keep=2: every caller in this codebase only reads logits[:, -2:, :]
+        # (VALUE, EOS). Cheap at this vocab_size (51) but kept consistent with
+        # model_gpt2_pretrained.py, where it's load-bearing (50257-token vocab).
+        out = self.gpt2(input_ids=input_ids, output_attentions=return_attn, logits_to_keep=2)
         attn = list(out.attentions) if return_attn else None
         return out.logits, attn

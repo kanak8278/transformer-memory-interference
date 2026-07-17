@@ -80,6 +80,11 @@ def main():
     ap.add_argument("--keep_last_n_ckpts", type=int, default=3,
                      help="prune step_*.pt checkpoints beyond the last N (plus best.pt) — at 124M "
                           "params each is ~1GB+, unlike exp01's ~1-2MB")
+    ap.add_argument("--eval_chunk_size", type=int, default=64,
+                     help="eval_utils' default (512) OOMs on MPS at this scale — attention memory "
+                          "scales as batch*heads*seq^2, and GPT-2-small's 12 heads over ~290-token "
+                          "sequences blew past 25GB at batch=512. Empirically 128 was fine, 64 is a "
+                          "safety margin under real-training memory conditions.")
     args = ap.parse_args()
 
     ckpt_dir = os.path.join(CKPT_DIR, args.tag)
@@ -150,7 +155,7 @@ def main():
             per_cell_losses = {}
 
         if step % args.ckpt_every == 0 or step == args.total_steps:
-            results = eval_utils.evaluate_split(model, iid_val, device)
+            results = eval_utils.evaluate_split(model, iid_val, device, chunk_size=args.eval_chunk_size)
             agg = eval_utils.aggregate_results(results)
             val_acc = agg["overall"]
             print(f"  [val@{step}] overall_acc={val_acc:.4f} by_role={ {k: v['acc'] for k, v in agg['by_role'].items()} }")

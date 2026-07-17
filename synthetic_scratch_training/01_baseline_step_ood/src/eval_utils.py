@@ -12,11 +12,15 @@ EVAL_CHUNK = 512
 
 
 @torch.no_grad()
-def evaluate_split(model, packed, device):
+def evaluate_split(model, packed, device, chunk_size=EVAL_CHUNK):
     """packed: dict[(k,n)] -> {"input_ids": LongTensor[N,L], "meta": list[dict]}.
 
     Returns a flat list of per-example result dicts (meta + correct + loss), for the
     caller to aggregate however it wants (see aggregate_results below).
+
+    chunk_size default (512) was tuned for experiment 01's tiny model — attention memory
+    scales as batch*heads*seq^2, so a real GPT-2-scale model (experiments 02/03) needs a
+    much smaller chunk_size passed explicitly (see those experiments' train.py).
     """
     model.eval()
     results = []
@@ -24,8 +28,8 @@ def evaluate_split(model, packed, device):
         input_ids_full = group["input_ids"].to(device)
         meta_list = group["meta"]
         num = input_ids_full.shape[0]
-        for start in range(0, num, EVAL_CHUNK):
-            chunk = input_ids_full[start:start + EVAL_CHUNK]
+        for start in range(0, num, chunk_size):
+            chunk = input_ids_full[start:start + chunk_size]
             inp = chunk[:, :-1]
             targets = chunk[:, -2:]  # [VALUE, EOS]
             logits, _ = model(inp)
