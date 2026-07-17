@@ -1,0 +1,347 @@
+[{"stream_name":"stdout","time":6.036512901,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.6/11.6 MB 92.1 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":6.070139973,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 516.0/516.0 kB 32.1 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":49.582985857,"data":"torch=2.10.0+cu128 cuda_available=True\n"}
+,{"stream_name":"stdout","time":49.613761261,"data":"visible GPUs: 2\n"}
+,{"stream_name":"stdout","time":49.613806987,"data":"transformers=5.14.1\n"}
+,{"stream_name":"stdout","time":63.321616715,"data":"world_size=2, per-gpu batch=32, accum_steps=4, effective_batch=256, total_steps=15000\n"}
+,{"stream_name":"stdout","time":63.321845777,"data":"GPU0: Tesla T4\n"}
+,{"stream_name":"stdout","time":63.322074242,"data":"held-out cells (8): [(6, 5), (8, 2), (8, 6), (10, 2), (10, 4), (10, 9), (12, 4), (12, 8)]\n"}
+,{"stream_name":"stdout","time":65.343326092,"data":"model params: 85,881,600\n"}
+,{"stream_name":"stdout","time":65.343367166,"data":"generating eval data (seed=42, deterministic)...\n"}
+,{"stream_name":"stdout","time":117.987228076,"data":"step 50/15000 lr=5.00e-05 loss=1.9761 elapsed=51.6s\n"}
+,{"stream_name":"stdout","time":174.916470278,"data":"step 100/15000 lr=1.00e-04 loss=1.1355 elapsed=108.5s\n"}
+,{"stream_name":"stdout","time":226.061582825,"data":"step 150/15000 lr=1.50e-04 loss=1.1040 elapsed=159.6s\n"}
+,{"stream_name":"stdout","time":281.22207816,"data":"step 200/15000 lr=2.00e-04 loss=1.0985 elapsed=214.8s\n"}
+,{"stream_name":"stdout","time":338.149820367,"data":"step 250/15000 lr=2.50e-04 loss=1.0791 elapsed=271.7s\n"}
+,{"stream_name":"stdout","time":393.497612528,"data":"step 300/15000 lr=3.00e-04 loss=1.0807 elapsed=327.1s\n"}
+,{"stream_name":"stdout","time":445.046611399,"data":"step 350/15000 lr=3.00e-04 loss=1.0644 elapsed=378.6s\n"}
+,{"stream_name":"stdout","time":498.112958388,"data":"step 400/15000 lr=3.00e-04 loss=1.0614 elapsed=431.7s\n"}
+,{"stream_name":"stdout","time":552.308015354,"data":"step 450/15000 lr=3.00e-04 loss=1.0633 elapsed=485.9s\n"}
+,{"stream_name":"stdout","time":607.611565001,"data":"step 500/15000 lr=3.00e-04 loss=1.0602 elapsed=541.2s\n"}
+,{"stream_name":"stdout","time":662.022932229,"data":"step 550/15000 lr=3.00e-04 loss=1.0490 elapsed=595.6s\n"}
+,{"stream_name":"stdout","time":714.478790997,"data":"step 600/15000 lr=3.00e-04 loss=1.0427 elapsed=648.1s\n"}
+,{"stream_name":"stdout","time":768.777530475,"data":"step 650/15000 lr=3.00e-04 loss=1.0514 elapsed=702.4s\n"}
+,{"stream_name":"stdout","time":823.083440898,"data":"step 700/15000 lr=3.00e-04 loss=1.0417 elapsed=756.7s\n"}
+,{"stream_name":"stdout","time":879.151380802,"data":"step 750/15000 lr=3.00e-04 loss=1.0352 elapsed=812.7s\n"}
+,{"stream_name":"stderr","time":879.154347018,"data":"/usr/local/lib/python3.12/dist-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.\n"}
+,{"stream_name":"stderr","time":879.154451639,"data":"  return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":962.426949565,"data":"  [val@750] overall_acc=0.2006 by_role={'first': 0.2594444444444444, 'last': 0.2388888888888889, 'intermediate': 0.1740909090909091}\n"}
+,{"stream_name":"stdout","time":964.773882313,"data":"  new best val_acc=0.2006\n"}
+,{"stream_name":"stdout","time":1016.590436044,"data":"step 800/15000 lr=3.00e-04 loss=1.0278 elapsed=950.2s\n"}
+,{"stream_name":"stdout","time":1072.167511151,"data":"step 850/15000 lr=3.00e-04 loss=1.0671 elapsed=1005.7s\n"}
+,{"stream_name":"stdout","time":1123.730879288,"data":"step 900/15000 lr=3.00e-04 loss=1.0573 elapsed=1057.3s\n"}
+,{"stream_name":"stdout","time":1177.727970224,"data":"step 950/15000 lr=3.00e-04 loss=1.0514 elapsed=1111.3s\n"}
+,{"stream_name":"stdout","time":1233.200098194,"data":"step 1000/15000 lr=3.00e-04 loss=1.0542 elapsed=1166.8s\n"}
+,{"stream_name":"stdout","time":1287.241866519,"data":"step 1050/15000 lr=3.00e-04 loss=1.0499 elapsed=1220.8s\n"}
+,{"stream_name":"stdout","time":1343.183462317,"data":"step 1100/15000 lr=3.00e-04 loss=1.0502 elapsed=1276.8s\n"}
+,{"stream_name":"stdout","time":1396.040867346,"data":"step 1150/15000 lr=3.00e-04 loss=1.0455 elapsed=1329.6s\n"}
+,{"stream_name":"stdout","time":1450.934177681,"data":"step 1200/15000 lr=3.00e-04 loss=1.0409 elapsed=1384.5s\n"}
+,{"stream_name":"stdout","time":1502.177717359,"data":"step 1250/15000 lr=3.00e-04 loss=1.0500 elapsed=1435.8s\n"}
+,{"stream_name":"stdout","time":1557.835228482,"data":"step 1300/15000 lr=3.00e-04 loss=1.0415 elapsed=1491.4s\n"}
+,{"stream_name":"stdout","time":1611.288017114,"data":"step 1350/15000 lr=3.00e-04 loss=1.0161 elapsed=1544.9s\n"}
+,{"stream_name":"stdout","time":1667.435260112,"data":"step 1400/15000 lr=3.00e-04 loss=1.0474 elapsed=1601.0s\n"}
+,{"stream_name":"stdout","time":1724.169357921,"data":"step 1450/15000 lr=3.00e-04 loss=1.0285 elapsed=1657.8s\n"}
+,{"stream_name":"stdout","time":1776.751434662,"data":"step 1500/15000 lr=3.00e-04 loss=1.0416 elapsed=1710.3s\n"}
+,{"stream_name":"stdout","time":1860.349575723,"data":"  [val@1500] overall_acc=0.2035 by_role={'first': 0.2738888888888889, 'last': 0.22666666666666666, 'intermediate': 0.17803030303030304}\n"}
+,{"stream_name":"stdout","time":1863.303721209,"data":"  new best val_acc=0.2035\n"}
+,{"stream_name":"stdout","time":1917.140138353,"data":"step 1550/15000 lr=3.00e-04 loss=1.0471 elapsed=1850.7s\n"}
+,{"stream_name":"stdout","time":1969.657733597,"data":"step 1600/15000 lr=3.00e-04 loss=1.0413 elapsed=1903.2s\n"}
+,{"stream_name":"stdout","time":2029.281471348,"data":"step 1650/15000 lr=3.00e-04 loss=1.0570 elapsed=1962.9s\n"}
+,{"stream_name":"stdout","time":2081.430468,"data":"step 1700/15000 lr=3.00e-04 loss=1.0250 elapsed=2015.0s\n"}
+,{"stream_name":"stdout","time":2134.986413307,"data":"step 1750/15000 lr=3.00e-04 loss=1.0320 elapsed=2068.6s\n"}
+,{"stream_name":"stdout","time":2187.215117723,"data":"step 1800/15000 lr=3.00e-04 loss=1.0450 elapsed=2120.8s\n"}
+,{"stream_name":"stdout","time":2241.988719185,"data":"step 1850/15000 lr=3.00e-04 loss=1.0523 elapsed=2175.6s\n"}
+,{"stream_name":"stdout","time":2296.035271187,"data":"step 1900/15000 lr=3.00e-04 loss=1.0277 elapsed=2229.6s\n"}
+,{"stream_name":"stdout","time":2350.260616089,"data":"step 1950/15000 lr=3.00e-04 loss=1.0450 elapsed=2283.8s\n"}
+,{"stream_name":"stdout","time":2402.94079241,"data":"step 2000/15000 lr=3.00e-04 loss=1.0437 elapsed=2336.5s\n"}
+,{"stream_name":"stdout","time":2457.792663828,"data":"step 2050/15000 lr=3.00e-04 loss=1.0514 elapsed=2391.4s\n"}
+,{"stream_name":"stdout","time":2514.402520435,"data":"step 2100/15000 lr=3.00e-04 loss=1.0464 elapsed=2448.0s\n"}
+,{"stream_name":"stdout","time":2566.957659334,"data":"step 2150/15000 lr=3.00e-04 loss=1.0382 elapsed=2500.5s\n"}
+,{"stream_name":"stdout","time":2623.32394176,"data":"step 2200/15000 lr=3.00e-04 loss=1.0564 elapsed=2556.9s\n"}
+,{"stream_name":"stdout","time":2677.969808561,"data":"step 2250/15000 lr=3.00e-04 loss=1.0482 elapsed=2611.6s\n"}
+,{"stream_name":"stdout","time":2761.312450411,"data":"  [val@2250] overall_acc=0.2007 by_role={'first': 0.2577777777777778, 'last': 0.2477777777777778, 'intermediate': 0.17227272727272727}\n"}
+,{"stream_name":"stdout","time":2817.715957677,"data":"step 2300/15000 lr=3.00e-04 loss=1.0498 elapsed=2751.3s\n"}
+,{"stream_name":"stdout","time":2873.374775714,"data":"step 2350/15000 lr=3.00e-04 loss=1.0522 elapsed=2807.0s\n"}
+,{"stream_name":"stdout","time":2927.676435759,"data":"step 2400/15000 lr=3.00e-04 loss=1.0462 elapsed=2861.3s\n"}
+,{"stream_name":"stdout","time":2978.781829045,"data":"step 2450/15000 lr=3.00e-04 loss=1.0374 elapsed=2912.4s\n"}
+,{"stream_name":"stdout","time":3032.93015043,"data":"step 2500/15000 lr=3.00e-04 loss=1.0585 elapsed=2966.5s\n"}
+,{"stream_name":"stdout","time":3088.512140158,"data":"step 2550/15000 lr=3.00e-04 loss=1.0592 elapsed=3022.1s\n"}
+,{"stream_name":"stdout","time":3144.033459165,"data":"step 2600/15000 lr=3.00e-04 loss=1.0449 elapsed=3077.6s\n"}
+,{"stream_name":"stdout","time":3196.129470902,"data":"step 2650/15000 lr=3.00e-04 loss=1.0275 elapsed=3129.7s\n"}
+,{"stream_name":"stdout","time":3249.396677876,"data":"step 2700/15000 lr=3.00e-04 loss=1.0408 elapsed=3183.0s\n"}
+,{"stream_name":"stdout","time":3301.745379238,"data":"step 2750/15000 lr=3.00e-04 loss=1.0489 elapsed=3235.3s\n"}
+,{"stream_name":"stdout","time":3354.631188942,"data":"step 2800/15000 lr=3.00e-04 loss=1.0245 elapsed=3288.2s\n"}
+,{"stream_name":"stdout","time":3405.908146664,"data":"step 2850/15000 lr=3.00e-04 loss=1.0331 elapsed=3339.5s\n"}
+,{"stream_name":"stdout","time":3462.308661386,"data":"step 2900/15000 lr=3.00e-04 loss=1.0397 elapsed=3395.9s\n"}
+,{"stream_name":"stdout","time":3519.534144386,"data":"step 2950/15000 lr=3.00e-04 loss=1.0567 elapsed=3453.1s\n"}
+,{"stream_name":"stdout","time":3574.051417729,"data":"step 3000/15000 lr=3.00e-04 loss=1.0472 elapsed=3507.6s\n"}
+,{"stream_name":"stdout","time":3657.383850754,"data":"  [val@3000] overall_acc=0.1996 by_role={'first': 0.26555555555555554, 'last': 0.25333333333333335, 'intermediate': 0.16696969696969696}\n"}
+,{"stream_name":"stdout","time":3716.194150715,"data":"step 3050/15000 lr=3.00e-04 loss=1.0587 elapsed=3649.8s\n"}
+,{"stream_name":"stdout","time":3770.914764425,"data":"step 3100/15000 lr=3.00e-04 loss=1.0566 elapsed=3704.5s\n"}
+,{"stream_name":"stdout","time":3823.707936295,"data":"step 3150/15000 lr=3.00e-04 loss=1.0634 elapsed=3757.3s\n"}
+,{"stream_name":"stdout","time":3879.117353313,"data":"step 3200/15000 lr=3.00e-04 loss=1.0558 elapsed=3812.7s\n"}
+,{"stream_name":"stdout","time":3931.287020462,"data":"step 3250/15000 lr=3.00e-04 loss=1.0409 elapsed=3864.9s\n"}
+,{"stream_name":"stdout","time":3983.150881112,"data":"step 3300/15000 lr=3.00e-04 loss=1.0552 elapsed=3916.7s\n"}
+,{"stream_name":"stdout","time":4037.37804452,"data":"step 3350/15000 lr=3.00e-04 loss=1.0505 elapsed=3971.0s\n"}
+,{"stream_name":"stdout","time":4091.036565161,"data":"step 3400/15000 lr=3.00e-04 loss=1.0345 elapsed=4024.6s\n"}
+,{"stream_name":"stdout","time":4145.265752436,"data":"step 3450/15000 lr=3.00e-04 loss=1.0462 elapsed=4078.8s\n"}
+,{"stream_name":"stdout","time":4196.522241749,"data":"step 3500/15000 lr=3.00e-04 loss=1.0411 elapsed=4130.1s\n"}
+,{"stream_name":"stdout","time":4248.203578717,"data":"step 3550/15000 lr=3.00e-04 loss=1.0436 elapsed=4181.8s\n"}
+,{"stream_name":"stdout","time":4301.966418922,"data":"step 3600/15000 lr=3.00e-04 loss=1.0572 elapsed=4235.5s\n"}
+,{"stream_name":"stdout","time":4358.916271478,"data":"step 3650/15000 lr=3.00e-04 loss=1.0535 elapsed=4292.5s\n"}
+,{"stream_name":"stdout","time":4412.749248864,"data":"step 3700/15000 lr=3.00e-04 loss=1.0601 elapsed=4346.3s\n"}
+,{"stream_name":"stdout","time":4466.560618289,"data":"step 3750/15000 lr=3.00e-04 loss=1.0564 elapsed=4400.1s\n"}
+,{"stream_name":"stdout","time":4549.949323614,"data":"  [val@3750] overall_acc=0.1933 by_role={'first': 0.2727777777777778, 'last': 0.23222222222222222, 'intermediate': 0.16106060606060607}\n"}
+,{"stream_name":"stdout","time":4604.3254187,"data":"step 3800/15000 lr=3.00e-04 loss=1.0432 elapsed=4537.9s\n"}
+,{"stream_name":"stdout","time":4660.853364472,"data":"step 3850/15000 lr=3.00e-04 loss=1.0483 elapsed=4594.4s\n"}
+,{"stream_name":"stdout","time":4718.884554702,"data":"step 3900/15000 lr=3.00e-04 loss=1.0516 elapsed=4652.5s\n"}
+,{"stream_name":"stdout","time":4773.325765886,"data":"step 3950/15000 lr=3.00e-04 loss=1.0442 elapsed=4706.9s\n"}
+,{"stream_name":"stdout","time":4828.288495809,"data":"step 4000/15000 lr=3.00e-04 loss=1.0561 elapsed=4761.9s\n"}
+,{"stream_name":"stdout","time":4880.359952383,"data":"step 4050/15000 lr=3.00e-04 loss=1.0569 elapsed=4813.9s\n"}
+,{"stream_name":"stdout","time":4936.300456096,"data":"step 4100/15000 lr=3.00e-04 loss=1.0576 elapsed=4869.9s\n"}
+,{"stream_name":"stdout","time":4989.176227392,"data":"step 4150/15000 lr=3.00e-04 loss=1.0580 elapsed=4922.8s\n"}
+,{"stream_name":"stdout","time":5043.239000452,"data":"step 4200/15000 lr=3.00e-04 loss=1.0613 elapsed=4976.8s\n"}
+,{"stream_name":"stdout","time":5097.983838001,"data":"step 4250/15000 lr=3.00e-04 loss=1.0733 elapsed=5031.6s\n"}
+,{"stream_name":"stdout","time":5151.728497172,"data":"step 4300/15000 lr=3.00e-04 loss=1.0660 elapsed=5085.3s\n"}
+,{"stream_name":"stdout","time":5203.074520438,"data":"step 4350/15000 lr=3.00e-04 loss=1.0556 elapsed=5136.7s\n"}
+,{"stream_name":"stdout","time":5258.334563769,"data":"step 4400/15000 lr=3.00e-04 loss=1.0651 elapsed=5191.9s\n"}
+,{"stream_name":"stdout","time":5316.132072552,"data":"step 4450/15000 lr=3.00e-04 loss=1.0698 elapsed=5249.7s\n"}
+,{"stream_name":"stdout","time":5371.843745131,"data":"step 4500/15000 lr=3.00e-04 loss=1.0711 elapsed=5305.4s\n"}
+,{"stream_name":"stdout","time":5455.25507133,"data":"  [val@4500] overall_acc=0.1938 by_role={'first': 0.2644444444444444, 'last': 0.22055555555555556, 'intermediate': 0.16727272727272727}\n"}
+,{"stream_name":"stdout","time":5511.36639581,"data":"step 4550/15000 lr=3.00e-04 loss=1.0728 elapsed=5444.9s\n"}
+,{"stream_name":"stdout","time":5564.409727112,"data":"step 4600/15000 lr=3.00e-04 loss=1.0656 elapsed=5498.0s\n"}
+,{"stream_name":"stdout","time":5616.366714872,"data":"step 4650/15000 lr=3.00e-04 loss=1.0503 elapsed=5549.9s\n"}
+,{"stream_name":"stdout","time":5674.248268861,"data":"step 4700/15000 lr=3.00e-04 loss=1.0509 elapsed=5607.8s\n"}
+,{"stream_name":"stdout","time":5725.917355068,"data":"step 4750/15000 lr=3.00e-04 loss=1.0504 elapsed=5659.5s\n"}
+,{"stream_name":"stdout","time":5780.129013789,"data":"step 4800/15000 lr=3.00e-04 loss=1.0707 elapsed=5713.7s\n"}
+,{"stream_name":"stdout","time":5835.218377796,"data":"step 4850/15000 lr=3.00e-04 loss=1.0639 elapsed=5768.8s\n"}
+,{"stream_name":"stdout","time":5889.88021681,"data":"step 4900/15000 lr=3.00e-04 loss=1.0663 elapsed=5823.5s\n"}
+,{"stream_name":"stdout","time":5943.729996739,"data":"step 4950/15000 lr=3.00e-04 loss=1.0790 elapsed=5877.3s\n"}
+,{"stream_name":"stdout","time":5996.949158342,"data":"step 5000/15000 lr=3.00e-04 loss=1.0740 elapsed=5930.5s\n"}
+,{"stream_name":"stdout","time":6052.401410479,"data":"step 5050/15000 lr=3.00e-04 loss=1.0643 elapsed=5986.0s\n"}
+,{"stream_name":"stdout","time":6106.51422123,"data":"step 5100/15000 lr=3.00e-04 loss=1.0758 elapsed=6040.1s\n"}
+,{"stream_name":"stdout","time":6160.558802902,"data":"step 5150/15000 lr=3.00e-04 loss=1.0732 elapsed=6094.1s\n"}
+,{"stream_name":"stdout","time":6215.142654153,"data":"step 5200/15000 lr=3.00e-04 loss=1.0709 elapsed=6148.7s\n"}
+,{"stream_name":"stdout","time":6264.661108353,"data":"step 5250/15000 lr=3.00e-04 loss=1.0703 elapsed=6198.2s\n"}
+,{"stream_name":"stdout","time":6348.105956446,"data":"  [val@5250] overall_acc=0.1857 by_role={'first': 0.27111111111111114, 'last': 0.23333333333333334, 'intermediate': 0.14939393939393938}\n"}
+,{"stream_name":"stdout","time":6406.905382845,"data":"step 5300/15000 lr=3.00e-04 loss=1.0902 elapsed=6340.5s\n"}
+,{"stream_name":"stdout","time":6461.700001388,"data":"step 5350/15000 lr=3.00e-04 loss=1.0692 elapsed=6395.3s\n"}
+,{"stream_name":"stdout","time":6513.92023501,"data":"step 5400/15000 lr=3.00e-04 loss=1.0562 elapsed=6447.5s\n"}
+,{"stream_name":"stdout","time":6570.68951514,"data":"step 5450/15000 lr=3.00e-04 loss=1.0594 elapsed=6504.3s\n"}
+,{"stream_name":"stdout","time":6623.633689264,"data":"step 5500/15000 lr=3.00e-04 loss=1.0628 elapsed=6557.2s\n"}
+,{"stream_name":"stdout","time":6678.438574663,"data":"step 5550/15000 lr=3.00e-04 loss=1.0722 elapsed=6612.0s\n"}
+,{"stream_name":"stdout","time":6730.476897316,"data":"step 5600/15000 lr=3.00e-04 loss=1.0663 elapsed=6664.1s\n"}
+,{"stream_name":"stdout","time":6780.502700759,"data":"step 5650/15000 lr=3.00e-04 loss=1.0477 elapsed=6714.1s\n"}
+,{"stream_name":"stdout","time":6834.520593803,"data":"step 5700/15000 lr=3.00e-04 loss=1.0736 elapsed=6768.1s\n"}
+,{"stream_name":"stdout","time":6888.111771924,"data":"step 5750/15000 lr=3.00e-04 loss=1.0720 elapsed=6821.7s\n"}
+,{"stream_name":"stdout","time":6938.004452142,"data":"step 5800/15000 lr=3.00e-04 loss=1.0447 elapsed=6871.6s\n"}
+,{"stream_name":"stdout","time":6992.60314508,"data":"step 5850/15000 lr=3.00e-04 loss=1.0637 elapsed=6926.2s\n"}
+,{"stream_name":"stdout","time":7045.645667635,"data":"step 5900/15000 lr=3.00e-04 loss=1.0779 elapsed=6979.2s\n"}
+,{"stream_name":"stdout","time":7100.560604607,"data":"step 5950/15000 lr=3.00e-04 loss=1.0554 elapsed=7034.1s\n"}
+,{"stream_name":"stdout","time":7153.236435011,"data":"step 6000/15000 lr=3.00e-04 loss=1.0610 elapsed=7086.8s\n"}
+,{"stream_name":"stdout","time":7236.697358657,"data":"  [val@6000] overall_acc=0.1869 by_role={'first': 0.26222222222222225, 'last': 0.23277777777777778, 'intermediate': 0.15378787878787878}\n"}
+,{"stream_name":"stdout","time":7291.6077297,"data":"step 6050/15000 lr=3.00e-04 loss=1.0468 elapsed=7225.2s\n"}
+,{"stream_name":"stdout","time":7347.38061736,"data":"step 6100/15000 lr=3.00e-04 loss=1.0737 elapsed=7281.0s\n"}
+,{"stream_name":"stdout","time":7403.815136505,"data":"step 6150/15000 lr=3.00e-04 loss=1.0820 elapsed=7337.4s\n"}
+,{"stream_name":"stdout","time":7455.983902879,"data":"step 6200/15000 lr=3.00e-04 loss=1.0384 elapsed=7389.6s\n"}
+,{"stream_name":"stdout","time":7511.548382207,"data":"step 6250/15000 lr=3.00e-04 loss=1.0507 elapsed=7445.1s\n"}
+,{"stream_name":"stdout","time":7566.098420222,"data":"step 6300/15000 lr=3.00e-04 loss=1.0577 elapsed=7499.7s\n"}
+,{"stream_name":"stdout","time":7616.782931092,"data":"step 6350/15000 lr=3.00e-04 loss=1.0593 elapsed=7550.4s\n"}
+,{"stream_name":"stdout","time":7670.791044055,"data":"step 6400/15000 lr=3.00e-04 loss=1.0626 elapsed=7604.4s\n"}
+,{"stream_name":"stdout","time":7726.368220952,"data":"step 6450/15000 lr=3.00e-04 loss=1.0620 elapsed=7660.0s\n"}
+,{"stream_name":"stdout","time":7780.831982785,"data":"step 6500/15000 lr=3.00e-04 loss=1.0822 elapsed=7714.4s\n"}
+,{"stream_name":"stdout","time":7832.807130697,"data":"step 6550/15000 lr=3.00e-04 loss=1.0716 elapsed=7766.4s\n"}
+,{"stream_name":"stdout","time":7886.027942509,"data":"step 6600/15000 lr=3.00e-04 loss=1.0475 elapsed=7819.6s\n"}
+,{"stream_name":"stdout","time":7940.138029277,"data":"step 6650/15000 lr=3.00e-04 loss=1.0766 elapsed=7873.7s\n"}
+,{"stream_name":"stdout","time":7992.836151738,"data":"step 6700/15000 lr=3.00e-04 loss=1.0765 elapsed=7926.4s\n"}
+,{"stream_name":"stdout","time":8047.136832095,"data":"step 6750/15000 lr=3.00e-04 loss=1.0591 elapsed=7980.7s\n"}
+,{"stream_name":"stdout","time":8130.693979353,"data":"  [val@6750] overall_acc=0.1810 by_role={'first': 0.25833333333333336, 'last': 0.21055555555555555, 'intermediate': 0.15181818181818182}\n"}
+,{"stream_name":"stdout","time":8186.123737442,"data":"step 6800/15000 lr=3.00e-04 loss=1.0693 elapsed=8119.7s\n"}
+,{"stream_name":"stdout","time":8241.718605499,"data":"step 6850/15000 lr=3.00e-04 loss=1.0638 elapsed=8175.3s\n"}
+,{"stream_name":"stdout","time":8294.005829228,"data":"step 6900/15000 lr=3.00e-04 loss=1.0804 elapsed=8227.6s\n"}
+,{"stream_name":"stdout","time":8348.530224982,"data":"step 6950/15000 lr=3.00e-04 loss=1.0575 elapsed=8282.1s\n"}
+,{"stream_name":"stdout","time":8399.609848167,"data":"step 7000/15000 lr=3.00e-04 loss=1.0737 elapsed=8333.2s\n"}
+,{"stream_name":"stdout","time":8451.789601584,"data":"step 7050/15000 lr=3.00e-04 loss=1.0568 elapsed=8385.4s\n"}
+,{"stream_name":"stdout","time":8503.987860599,"data":"step 7100/15000 lr=3.00e-04 loss=1.0622 elapsed=8437.6s\n"}
+,{"stream_name":"stdout","time":8559.94139852,"data":"step 7150/15000 lr=3.00e-04 loss=1.0809 elapsed=8493.5s\n"}
+,{"stream_name":"stdout","time":8615.191175439,"data":"step 7200/15000 lr=3.00e-04 loss=1.0720 elapsed=8548.8s\n"}
+,{"stream_name":"stdout","time":8670.403922164,"data":"step 7250/15000 lr=3.00e-04 loss=1.0755 elapsed=8604.0s\n"}
+,{"stream_name":"stdout","time":8725.630036366,"data":"step 7300/15000 lr=3.00e-04 loss=1.0812 elapsed=8659.2s\n"}
+,{"stream_name":"stdout","time":8784.844929555,"data":"step 7350/15000 lr=3.00e-04 loss=1.0756 elapsed=8718.4s\n"}
+,{"stream_name":"stdout","time":8839.548927065,"data":"step 7400/15000 lr=3.00e-04 loss=1.0841 elapsed=8773.1s\n"}
+,{"stream_name":"stdout","time":8894.622540924,"data":"step 7450/15000 lr=3.00e-04 loss=1.0783 elapsed=8828.2s\n"}
+,{"stream_name":"stdout","time":8945.17748248,"data":"step 7500/15000 lr=3.00e-04 loss=1.0844 elapsed=8878.8s\n"}
+,{"stream_name":"stdout","time":9028.886804388,"data":"  [val@7500] overall_acc=0.1811 by_role={'first': 0.2733333333333333, 'last': 0.215, 'intermediate': 0.14666666666666667}\n"}
+,{"stream_name":"stdout","time":9081.495475567,"data":"step 7550/15000 lr=3.00e-04 loss=1.0563 elapsed=9015.1s\n"}
+,{"stream_name":"stdout","time":9136.592969819,"data":"step 7600/15000 lr=3.00e-04 loss=1.0731 elapsed=9070.2s\n"}
+,{"stream_name":"stdout","time":9186.714520872,"data":"step 7650/15000 lr=3.00e-04 loss=1.0852 elapsed=9120.3s\n"}
+,{"stream_name":"stdout","time":9243.69017122,"data":"step 7700/15000 lr=3.00e-04 loss=1.0587 elapsed=9177.3s\n"}
+,{"stream_name":"stdout","time":9298.174619261,"data":"step 7750/15000 lr=3.00e-04 loss=1.0613 elapsed=9231.8s\n"}
+,{"stream_name":"stdout","time":9353.697693996,"data":"step 7800/15000 lr=3.00e-04 loss=1.0710 elapsed=9287.3s\n"}
+,{"stream_name":"stdout","time":9409.517516334,"data":"step 7850/15000 lr=3.00e-04 loss=1.0683 elapsed=9343.1s\n"}
+,{"stream_name":"stdout","time":9465.376042727,"data":"step 7900/15000 lr=3.00e-04 loss=1.0657 elapsed=9399.0s\n"}
+,{"stream_name":"stdout","time":9521.534025619,"data":"step 7950/15000 lr=3.00e-04 loss=1.0413 elapsed=9455.1s\n"}
+,{"stream_name":"stdout","time":9575.337297123,"data":"step 8000/15000 lr=3.00e-04 loss=1.0743 elapsed=9508.9s\n"}
+,{"stream_name":"stdout","time":9630.021166696,"data":"step 8050/15000 lr=3.00e-04 loss=1.0807 elapsed=9563.6s\n"}
+,{"stream_name":"stdout","time":9685.049311174,"data":"step 8100/15000 lr=3.00e-04 loss=1.0674 elapsed=9618.6s\n"}
+,{"stream_name":"stdout","time":9737.720375925,"data":"step 8150/15000 lr=3.00e-04 loss=1.0745 elapsed=9671.3s\n"}
+,{"stream_name":"stdout","time":9791.47760252,"data":"step 8200/15000 lr=3.00e-04 loss=1.0896 elapsed=9725.1s\n"}
+,{"stream_name":"stdout","time":9845.169436223,"data":"step 8250/15000 lr=3.00e-04 loss=1.0638 elapsed=9778.8s\n"}
+,{"stream_name":"stdout","time":9928.710750743,"data":"  [val@8250] overall_acc=0.1706 by_role={'first': 0.2511111111111111, 'last': 0.20777777777777778, 'intermediate': 0.1384848484848485}\n"}
+,{"stream_name":"stdout","time":9981.722760041,"data":"step 8300/15000 lr=3.00e-04 loss=1.0603 elapsed=9915.3s\n"}
+,{"stream_name":"stdout","time":10033.946220741,"data":"step 8350/15000 lr=3.00e-04 loss=1.0785 elapsed=9967.5s\n"}
+,{"stream_name":"stdout","time":10087.261591708,"data":"step 8400/15000 lr=3.00e-04 loss=1.0795 elapsed=10020.8s\n"}
+,{"stream_name":"stdout","time":10137.646893365,"data":"step 8450/15000 lr=3.00e-04 loss=1.0607 elapsed=10071.2s\n"}
+,{"stream_name":"stdout","time":10192.458078047,"data":"step 8500/15000 lr=3.00e-04 loss=1.0781 elapsed=10126.0s\n"}
+,{"stream_name":"stdout","time":10249.732470313,"data":"step 8550/15000 lr=3.00e-04 loss=1.0833 elapsed=10183.3s\n"}
+,{"stream_name":"stdout","time":10304.059748035,"data":"step 8600/15000 lr=3.00e-04 loss=1.0815 elapsed=10237.6s\n"}
+,{"stream_name":"stdout","time":10353.94131409,"data":"step 8650/15000 lr=3.00e-04 loss=1.0630 elapsed=10287.5s\n"}
+,{"stream_name":"stdout","time":10410.514365621,"data":"step 8700/15000 lr=3.00e-04 loss=1.0768 elapsed=10344.1s\n"}
+,{"stream_name":"stdout","time":10462.368886612,"data":"step 8750/15000 lr=3.00e-04 loss=1.0644 elapsed=10396.0s\n"}
+,{"stream_name":"stdout","time":10516.843645654,"data":"step 8800/15000 lr=3.00e-04 loss=1.0904 elapsed=10450.4s\n"}
+,{"stream_name":"stdout","time":10574.666969681,"data":"step 8850/15000 lr=3.00e-04 loss=1.0874 elapsed=10508.2s\n"}
+,{"stream_name":"stdout","time":10626.045086414,"data":"step 8900/15000 lr=3.00e-04 loss=1.0698 elapsed=10559.6s\n"}
+,{"stream_name":"stdout","time":10680.823506591,"data":"step 8950/15000 lr=3.00e-04 loss=1.0760 elapsed=10614.4s\n"}
+,{"stream_name":"stdout","time":10737.208837195,"data":"step 9000/15000 lr=3.00e-04 loss=1.0774 elapsed=10670.8s\n"}
+,{"stream_name":"stdout","time":10820.780597069,"data":"  [val@9000] overall_acc=0.1772 by_role={'first': 0.2677777777777778, 'last': 0.205, 'intermediate': 0.14484848484848484}\n"}
+,{"stream_name":"stdout","time":10876.944624863,"data":"step 9050/15000 lr=3.00e-04 loss=1.0847 elapsed=10810.5s\n"}
+,{"stream_name":"stdout","time":10932.706794557,"data":"step 9100/15000 lr=3.00e-04 loss=1.0859 elapsed=10866.3s\n"}
+,{"stream_name":"stdout","time":10985.643397899,"data":"step 9150/15000 lr=3.00e-04 loss=1.0726 elapsed=10919.2s\n"}
+,{"stream_name":"stdout","time":11040.449025353,"data":"step 9200/15000 lr=3.00e-04 loss=1.0757 elapsed=10974.0s\n"}
+,{"stream_name":"stdout","time":11095.12965154,"data":"step 9250/15000 lr=3.00e-04 loss=1.0732 elapsed=11028.7s\n"}
+,{"stream_name":"stdout","time":11149.666318784,"data":"step 9300/15000 lr=3.00e-04 loss=1.0743 elapsed=11083.2s\n"}
+,{"stream_name":"stdout","time":11203.323125944,"data":"step 9350/15000 lr=3.00e-04 loss=1.0758 elapsed=11136.9s\n"}
+,{"stream_name":"stdout","time":11257.166511417,"data":"step 9400/15000 lr=3.00e-04 loss=1.0667 elapsed=11190.7s\n"}
+,{"stream_name":"stdout","time":11310.42762801,"data":"step 9450/15000 lr=3.00e-04 loss=1.0884 elapsed=11244.0s\n"}
+,{"stream_name":"stdout","time":11363.852406733,"data":"step 9500/15000 lr=3.00e-04 loss=1.0785 elapsed=11297.4s\n"}
+,{"stream_name":"stdout","time":11415.192656359,"data":"step 9550/15000 lr=3.00e-04 loss=1.0795 elapsed=11348.8s\n"}
+,{"stream_name":"stdout","time":11468.709153999,"data":"step 9600/15000 lr=3.00e-04 loss=1.0724 elapsed=11402.3s\n"}
+,{"stream_name":"stdout","time":11520.378587509,"data":"step 9650/15000 lr=3.00e-04 loss=1.0500 elapsed=11454.0s\n"}
+,{"stream_name":"stdout","time":11572.363419423,"data":"step 9700/15000 lr=3.00e-04 loss=1.0762 elapsed=11505.9s\n"}
+,{"stream_name":"stdout","time":11628.614032122,"data":"step 9750/15000 lr=3.00e-04 loss=1.0773 elapsed=11562.2s\n"}
+,{"stream_name":"stdout","time":11712.163005655,"data":"  [val@9750] overall_acc=0.1775 by_role={'first': 0.26055555555555554, 'last': 0.19611111111111112, 'intermediate': 0.14984848484848484}\n"}
+,{"stream_name":"stdout","time":11766.77521996,"data":"step 9800/15000 lr=3.00e-04 loss=1.0593 elapsed=11700.4s\n"}
+,{"stream_name":"stdout","time":11819.764397934,"data":"step 9850/15000 lr=3.00e-04 loss=1.0713 elapsed=11753.3s\n"}
+,{"stream_name":"stdout","time":11875.162325531,"data":"step 9900/15000 lr=3.00e-04 loss=1.0745 elapsed=11808.7s\n"}
+,{"stream_name":"stdout","time":11932.17778915,"data":"step 9950/15000 lr=3.00e-04 loss=1.0747 elapsed=11865.8s\n"}
+,{"stream_name":"stdout","time":11986.32170879,"data":"step 10000/15000 lr=3.00e-04 loss=1.0913 elapsed=11919.9s\n"}
+,{"stream_name":"stdout","time":12041.702894492,"data":"step 10050/15000 lr=3.00e-04 loss=1.0755 elapsed=11975.3s\n"}
+,{"stream_name":"stdout","time":12096.591146244,"data":"step 10100/15000 lr=3.00e-04 loss=1.0840 elapsed=12030.2s\n"}
+,{"stream_name":"stdout","time":12151.253085867,"data":"step 10150/15000 lr=3.00e-04 loss=1.0590 elapsed=12084.8s\n"}
+,{"stream_name":"stdout","time":12206.303283477,"data":"step 10200/15000 lr=3.00e-04 loss=1.0868 elapsed=12139.9s\n"}
+,{"stream_name":"stdout","time":12257.81792535,"data":"step 10250/15000 lr=3.00e-04 loss=1.0578 elapsed=12191.4s\n"}
+,{"stream_name":"stdout","time":12310.753602281,"data":"step 10300/15000 lr=3.00e-04 loss=1.0717 elapsed=12244.3s\n"}
+,{"stream_name":"stdout","time":12363.891993948,"data":"step 10350/15000 lr=3.00e-04 loss=1.0777 elapsed=12297.5s\n"}
+,{"stream_name":"stdout","time":12418.090842842,"data":"step 10400/15000 lr=3.00e-04 loss=1.0815 elapsed=12351.7s\n"}
+,{"stream_name":"stdout","time":12472.935489158,"data":"step 10450/15000 lr=3.00e-04 loss=1.0600 elapsed=12406.5s\n"}
+,{"stream_name":"stdout","time":12527.232438194,"data":"step 10500/15000 lr=3.00e-04 loss=1.0670 elapsed=12460.8s\n"}
+,{"stream_name":"stdout","time":12610.762498474,"data":"  [val@10500] overall_acc=0.1835 by_role={'first': 0.27555555555555555, 'last': 0.21833333333333332, 'intermediate': 0.14893939393939393}\n"}
+,{"stream_name":"stdout","time":12667.053327438,"data":"step 10550/15000 lr=3.00e-04 loss=1.0671 elapsed=12600.6s\n"}
+,{"stream_name":"stdout","time":12723.010959164,"data":"step 10600/15000 lr=3.00e-04 loss=1.0750 elapsed=12656.6s\n"}
+,{"stream_name":"stdout","time":12777.849964308,"data":"step 10650/15000 lr=3.00e-04 loss=1.0820 elapsed=12711.4s\n"}
+,{"stream_name":"stdout","time":12829.99224071,"data":"step 10700/15000 lr=3.00e-04 loss=1.0814 elapsed=12763.6s\n"}
+,{"stream_name":"stdout","time":12881.302459489,"data":"step 10750/15000 lr=3.00e-04 loss=1.0600 elapsed=12814.9s\n"}
+,{"stream_name":"stdout","time":12935.169029533,"data":"step 10800/15000 lr=3.00e-04 loss=1.0632 elapsed=12868.8s\n"}
+,{"stream_name":"stdout","time":12988.457304707,"data":"step 10850/15000 lr=3.00e-04 loss=1.0793 elapsed=12922.0s\n"}
+,{"stream_name":"stdout","time":13041.269877878,"data":"step 10900/15000 lr=3.00e-04 loss=1.0820 elapsed=12974.9s\n"}
+,{"stream_name":"stdout","time":13097.224986788,"data":"step 10950/15000 lr=3.00e-04 loss=1.0668 elapsed=13030.8s\n"}
+,{"stream_name":"stdout","time":13151.617087086,"data":"step 11000/15000 lr=3.00e-04 loss=1.0715 elapsed=13085.2s\n"}
+,{"stream_name":"stdout","time":13205.900037517,"data":"step 11050/15000 lr=3.00e-04 loss=1.0764 elapsed=13139.5s\n"}
+,{"stream_name":"stdout","time":13258.321513714,"data":"step 11100/15000 lr=3.00e-04 loss=1.0780 elapsed=13191.9s\n"}
+,{"stream_name":"stdout","time":13313.833721889,"data":"step 11150/15000 lr=3.00e-04 loss=1.0540 elapsed=13247.4s\n"}
+,{"stream_name":"stdout","time":13367.082042438,"data":"step 11200/15000 lr=3.00e-04 loss=1.0659 elapsed=13300.7s\n"}
+,{"stream_name":"stdout","time":13420.269557357,"data":"step 11250/15000 lr=3.00e-04 loss=1.0772 elapsed=13353.9s\n"}
+,{"stream_name":"stdout","time":13503.84539726,"data":"  [val@11250] overall_acc=0.1812 by_role={'first': 0.27111111111111114, 'last': 0.21222222222222223, 'intermediate': 0.1481818181818182}\n"}
+,{"stream_name":"stdout","time":13559.466438506,"data":"step 11300/15000 lr=3.00e-04 loss=1.0640 elapsed=13493.0s\n"}
+,{"stream_name":"stdout","time":13614.249072561,"data":"step 11350/15000 lr=3.00e-04 loss=1.0814 elapsed=13547.8s\n"}
+,{"stream_name":"stdout","time":13668.372367993,"data":"step 11400/15000 lr=3.00e-04 loss=1.0856 elapsed=13602.0s\n"}
+,{"stream_name":"stdout","time":13719.743934268,"data":"step 11450/15000 lr=3.00e-04 loss=1.0693 elapsed=13653.3s\n"}
+,{"stream_name":"stdout","time":13774.084120274,"data":"step 11500/15000 lr=3.00e-04 loss=1.0892 elapsed=13707.7s\n"}
+,{"stream_name":"stdout","time":13827.633225066,"data":"step 11550/15000 lr=3.00e-04 loss=1.0845 elapsed=13761.2s\n"}
+,{"stream_name":"stdout","time":13880.139676784,"data":"step 11600/15000 lr=3.00e-04 loss=1.0787 elapsed=13813.7s\n"}
+,{"stream_name":"stdout","time":13930.434421514,"data":"step 11650/15000 lr=3.00e-04 loss=1.0640 elapsed=13864.0s\n"}
+,{"stream_name":"stdout","time":13980.976259863,"data":"step 11700/15000 lr=3.00e-04 loss=1.0675 elapsed=13914.6s\n"}
+,{"stream_name":"stdout","time":14037.077847558,"data":"step 11750/15000 lr=3.00e-04 loss=1.0720 elapsed=13970.7s\n"}
+,{"stream_name":"stdout","time":14088.552752652,"data":"step 11800/15000 lr=3.00e-04 loss=1.0797 elapsed=14022.1s\n"}
+,{"stream_name":"stdout","time":14141.361314939,"data":"step 11850/15000 lr=3.00e-04 loss=1.0693 elapsed=14074.9s\n"}
+,{"stream_name":"stdout","time":14194.756395746,"data":"step 11900/15000 lr=3.00e-04 loss=1.0705 elapsed=14128.3s\n"}
+,{"stream_name":"stdout","time":14248.62180118,"data":"step 11950/15000 lr=3.00e-04 loss=1.0731 elapsed=14182.2s\n"}
+,{"stream_name":"stdout","time":14302.260014726,"data":"step 12000/15000 lr=3.00e-04 loss=1.0805 elapsed=14235.8s\n"}
+,{"stream_name":"stdout","time":14385.71195754,"data":"  [val@12000] overall_acc=0.1811 by_role={'first': 0.2727777777777778, 'last': 0.2038888888888889, 'intermediate': 0.14984848484848484}\n"}
+,{"stream_name":"stdout","time":14438.451371746,"data":"step 12050/15000 lr=3.00e-04 loss=1.0727 elapsed=14372.0s\n"}
+,{"stream_name":"stdout","time":14495.827031796,"data":"step 12100/15000 lr=3.00e-04 loss=1.0837 elapsed=14429.4s\n"}
+,{"stream_name":"stdout","time":14551.949424264,"data":"step 12150/15000 lr=3.00e-04 loss=1.0823 elapsed=14485.5s\n"}
+,{"stream_name":"stdout","time":14604.510198027,"data":"step 12200/15000 lr=3.00e-04 loss=1.0539 elapsed=14538.1s\n"}
+,{"stream_name":"stdout","time":14657.707541448,"data":"step 12250/15000 lr=3.00e-04 loss=1.0696 elapsed=14591.3s\n"}
+,{"stream_name":"stdout","time":14708.544813412,"data":"step 12300/15000 lr=3.00e-04 loss=1.0685 elapsed=14642.1s\n"}
+,{"stream_name":"stdout","time":14760.073384044,"data":"step 12350/15000 lr=3.00e-04 loss=1.0829 elapsed=14693.7s\n"}
+,{"stream_name":"stdout","time":14815.526220681,"data":"step 12400/15000 lr=3.00e-04 loss=1.0654 elapsed=14749.1s\n"}
+,{"stream_name":"stdout","time":14868.912113919,"data":"step 12450/15000 lr=3.00e-04 loss=1.0768 elapsed=14802.5s\n"}
+,{"stream_name":"stdout","time":14923.14504346,"data":"step 12500/15000 lr=3.00e-04 loss=1.0812 elapsed=14856.7s\n"}
+,{"stream_name":"stdout","time":14975.567442435,"data":"step 12550/15000 lr=3.00e-04 loss=1.0783 elapsed=14909.1s\n"}
+,{"stream_name":"stdout","time":15029.495520748,"data":"step 12600/15000 lr=3.00e-04 loss=1.0724 elapsed=14963.1s\n"}
+,{"stream_name":"stdout","time":15083.889702443,"data":"step 12650/15000 lr=3.00e-04 loss=1.0744 elapsed=15017.5s\n"}
+,{"stream_name":"stdout","time":15137.586024566,"data":"step 12700/15000 lr=3.00e-04 loss=1.0539 elapsed=15071.2s\n"}
+,{"stream_name":"stdout","time":15193.98969679,"data":"step 12750/15000 lr=3.00e-04 loss=1.0688 elapsed=15127.6s\n"}
+,{"stream_name":"stdout","time":15277.578723502,"data":"  [val@12750] overall_acc=0.1819 by_role={'first': 0.27111111111111114, 'last': 0.19111111111111112, 'intermediate': 0.155}\n"}
+,{"stream_name":"stdout","time":15330.391229623,"data":"step 12800/15000 lr=3.00e-04 loss=1.0791 elapsed=15264.0s\n"}
+,{"stream_name":"stdout","time":15383.928505993,"data":"step 12850/15000 lr=3.00e-04 loss=1.0682 elapsed=15317.5s\n"}
+,{"stream_name":"stdout","time":15435.736932559,"data":"step 12900/15000 lr=3.00e-04 loss=1.0614 elapsed=15369.3s\n"}
+,{"stream_name":"stdout","time":15486.500971266,"data":"step 12950/15000 lr=3.00e-04 loss=1.0766 elapsed=15420.1s\n"}
+,{"stream_name":"stdout","time":15540.882695461,"data":"step 13000/15000 lr=3.00e-04 loss=1.0712 elapsed=15474.5s\n"}
+,{"stream_name":"stdout","time":15594.616315873,"data":"step 13050/15000 lr=3.00e-04 loss=1.0700 elapsed=15528.2s\n"}
+,{"stream_name":"stdout","time":15647.839319492,"data":"step 13100/15000 lr=3.00e-04 loss=1.0536 elapsed=15581.4s\n"}
+,{"stream_name":"stdout","time":15701.876968576,"data":"step 13150/15000 lr=3.00e-04 loss=1.0659 elapsed=15635.5s\n"}
+,{"stream_name":"stdout","time":15752.819083048,"data":"step 13200/15000 lr=3.00e-04 loss=1.0691 elapsed=15686.4s\n"}
+,{"stream_name":"stdout","time":15809.443952883,"data":"step 13250/15000 lr=3.00e-04 loss=1.0663 elapsed=15743.0s\n"}
+,{"stream_name":"stdout","time":15864.330389546,"data":"step 13300/15000 lr=3.00e-04 loss=1.0762 elapsed=15797.9s\n"}
+,{"stream_name":"stdout","time":15920.985851456,"data":"step 13350/15000 lr=3.00e-04 loss=1.0800 elapsed=15854.6s\n"}
+,{"stream_name":"stdout","time":15971.894475023,"data":"step 13400/15000 lr=3.00e-04 loss=1.0562 elapsed=15905.5s\n"}
+,{"stream_name":"stdout","time":16024.545858958,"data":"step 13450/15000 lr=3.00e-04 loss=1.0741 elapsed=15958.1s\n"}
+,{"stream_name":"stdout","time":16081.833635859,"data":"step 13500/15000 lr=3.00e-04 loss=1.0743 elapsed=16015.4s\n"}
+,{"stream_name":"stdout","time":16165.416775866,"data":"  [val@13500] overall_acc=0.1734 by_role={'first': 0.26166666666666666, 'last': 0.195, 'intermediate': 0.1434848484848485}\n"}
+,{"stream_name":"stdout","time":16220.508056187,"data":"step 13550/15000 lr=2.99e-04 loss=1.0860 elapsed=16154.1s\n"}
+,{"stream_name":"stdout","time":16274.714897312,"data":"step 13600/15000 lr=2.97e-04 loss=1.0724 elapsed=16208.3s\n"}
+,{"stream_name":"stdout","time":16326.921018103,"data":"step 13650/15000 lr=2.93e-04 loss=1.0624 elapsed=16260.5s\n"}
+,{"stream_name":"stdout","time":16380.682899584,"data":"step 13700/15000 lr=2.88e-04 loss=1.0837 elapsed=16314.3s\n"}
+,{"stream_name":"stdout","time":16438.083627044,"data":"step 13750/15000 lr=2.82e-04 loss=1.0637 elapsed=16371.7s\n"}
+,{"stream_name":"stdout","time":16491.055061805,"data":"step 13800/15000 lr=2.74e-04 loss=1.0569 elapsed=16424.6s\n"}
+,{"stream_name":"stdout","time":16546.042759348,"data":"step 13850/15000 lr=2.65e-04 loss=1.0689 elapsed=16479.6s\n"}
+,{"stream_name":"stdout","time":16600.852014761,"data":"step 13900/15000 lr=2.55e-04 loss=1.0655 elapsed=16534.4s\n"}
+,{"stream_name":"stdout","time":16652.096848459,"data":"step 13950/15000 lr=2.44e-04 loss=1.0696 elapsed=16585.7s\n"}
+,{"stream_name":"stdout","time":16706.462050402,"data":"step 14000/15000 lr=2.32e-04 loss=1.0712 elapsed=16640.0s\n"}
+,{"stream_name":"stdout","time":16758.043891966,"data":"step 14050/15000 lr=2.20e-04 loss=1.0645 elapsed=16691.6s\n"}
+,{"stream_name":"stdout","time":16808.730016619,"data":"step 14100/15000 lr=2.07e-04 loss=1.0559 elapsed=16742.3s\n"}
+,{"stream_name":"stdout","time":16864.45423707,"data":"step 14150/15000 lr=1.93e-04 loss=1.0714 elapsed=16798.0s\n"}
+,{"stream_name":"stdout","time":16918.265620024,"data":"step 14200/15000 lr=1.79e-04 loss=1.0572 elapsed=16851.8s\n"}
+,{"stream_name":"stdout","time":16972.770670327,"data":"step 14250/15000 lr=1.65e-04 loss=1.0460 elapsed=16906.4s\n"}
+,{"stream_name":"stdout","time":17056.488560322,"data":"  [val@14250] overall_acc=0.1794 by_role={'first': 0.275, 'last': 0.20166666666666666, 'intermediate': 0.14727272727272728}\n"}
+,{"stream_name":"stdout","time":17108.264008312,"data":"step 14300/15000 lr=1.51e-04 loss=1.0682 elapsed=17041.8s\n"}
+,{"stream_name":"stdout","time":17161.229007923,"data":"step 14350/15000 lr=1.37e-04 loss=1.0720 elapsed=17094.8s\n"}
+,{"stream_name":"stdout","time":17215.018964135,"data":"step 14400/15000 lr=1.23e-04 loss=1.0634 elapsed=17148.6s\n"}
+,{"stream_name":"stdout","time":17269.537343688,"data":"step 14450/15000 lr=1.10e-04 loss=1.0757 elapsed=17203.1s\n"}
+,{"stream_name":"stdout","time":17324.651274273,"data":"step 14500/15000 lr=9.75e-05 loss=1.0826 elapsed=17258.2s\n"}
+,{"stream_name":"stdout","time":17377.795479029,"data":"step 14550/15000 lr=8.56e-05 loss=1.0559 elapsed=17311.4s\n"}
+,{"stream_name":"stdout","time":17432.813378838,"data":"step 14600/15000 lr=7.47e-05 loss=1.0539 elapsed=17366.4s\n"}
+,{"stream_name":"stdout","time":17488.914404117,"data":"step 14650/15000 lr=6.47e-05 loss=1.0706 elapsed=17422.5s\n"}
+,{"stream_name":"stdout","time":17539.286443723,"data":"step 14700/15000 lr=5.58e-05 loss=1.0521 elapsed=17472.9s\n"}
+,{"stream_name":"stdout","time":17591.820015546,"data":"step 14750/15000 lr=4.81e-05 loss=1.0519 elapsed=17525.4s\n"}
+,{"stream_name":"stdout","time":17644.85555999,"data":"step 14800/15000 lr=4.17e-05 loss=1.0455 elapsed=17578.4s\n"}
+,{"stream_name":"stdout","time":17696.197635681,"data":"step 14850/15000 lr=3.66e-05 loss=1.0579 elapsed=17629.8s\n"}
+,{"stream_name":"stdout","time":17749.186849891,"data":"step 14900/15000 lr=3.30e-05 loss=1.0439 elapsed=17682.8s\n"}
+,{"stream_name":"stdout","time":17802.292564506,"data":"step 14950/15000 lr=3.07e-05 loss=1.0497 elapsed=17735.9s\n"}
+,{"stream_name":"stdout","time":17856.28242565,"data":"step 15000/15000 lr=3.00e-05 loss=1.0422 elapsed=17789.9s\n"}
+,{"stream_name":"stdout","time":17940.008319178,"data":"  [val@15000] overall_acc=0.1903 by_role={'first': 0.285, 'last': 0.215, 'intermediate': 0.15772727272727272}\n"}
+,{"stream_name":"stdout","time":17941.238174244,"data":"training complete. running final held-out eval...\n"}
+,{"stream_name":"stdout","time":18498.833363133,"data":"iid_test overall: 0.2092 (n=40800)\n"}
+,{"stream_name":"stdout","time":18498.833416745,"data":"heldout_test overall: 0.1571 (n=24000)\n"}
+,{"stream_name":"stdout","time":18498.833422382,"data":"iid by_duplicate: {'True': 0.23846555076106027, 'False': 0.17781949165440616}\n"}
+,{"stream_name":"stdout","time":18498.833425841,"data":"heldout by_duplicate: {'True': 0.19236016371077763, 'False': 0.10840861709520501}\n"}
+,{"stream_name":"stdout","time":18498.833444651,"data":"ALL DONE\n"}
+,{"stream_name":"stderr","time":18505.091215865,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":18505.091266427,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":18505.345676495,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":18505.345740644,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":18505.963273545,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":18507.29477065,"data":"[NbConvertApp] Writing 376298 bytes to __results__.html\n"}
+]
