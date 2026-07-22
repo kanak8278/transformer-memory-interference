@@ -99,7 +99,7 @@ SCANS = {
     # Fills the main-adapter interior (IVQ) gap at large configs; endpoints
     # double as a cross-check against the test_id evals.
     "C": [(k, n) for k in (15, 20, 25, 30)
-          for n in (10, 15, 20, 30, 50, 75)],
+          for n in (10, 15, 20, 30, 50)],   # N<=50 (dropped 75: too slow on T4)
 }
 
 # Category-key names for ARB (values come from the shared pool; keys are labels).
@@ -261,9 +261,12 @@ class HFEngine:
         if self.tok.pad_token_id is None:
             self.tok.pad_token = self.tok.eos_token
         model_cls = _model_class_for(base_id)
+        # gemma-3 produces garbage under sdpa on several transformers versions;
+        # eager is the known-safe path. Qwen stays on sdpa (faster).
+        attn = "eager" if "gemma-3" in base_id.lower() else "sdpa"
         model = model_cls.from_pretrained(
             base_id, torch_dtype=torch.bfloat16, device_map="cuda",
-            attn_implementation="sdpa", trust_remote_code=True)
+            attn_implementation=attn, trust_remote_code=True)
         if adapter_path:
             from peft import PeftModel
             model = PeftModel.from_pretrained(model, str(adapter_path))
