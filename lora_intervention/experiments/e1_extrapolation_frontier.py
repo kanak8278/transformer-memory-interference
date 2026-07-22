@@ -77,12 +77,12 @@ def is_correct(predicted, expected):
 DATASET = "ARBITRARY_SINGLE"
 
 # Statistics (match evaluate.py)
-MAX_TRIALS   = 100
-MIN_TRIALS   = 30
-CI_THRESHOLD = 0.07
+MAX_TRIALS   = 30    # T4-tractable (was 100); coarse CIs, fine for the qualitative endpoint-vs-interior pattern
+MIN_TRIALS   = 15
+CI_THRESHOLD = 0.12  # let mid-range conditions early-stop instead of burning the cap
 BATCH_TRIALS = 10
 
-IVQ_DEPTHS = [0.10, 0.25, 0.50, 0.75, 0.90]   # relative positions for intermediate queries
+IVQ_DEPTHS = [0.10, 0.50, 0.90]   # 3 interior probes (was 5) — enough for the curve shape on T4
 
 # Extrapolation grid = MULTIPLES of the LoRA training maxima (K_train<=10, N_train<=20).
 # Both scans emanate from the training corner (K=10, N=20) and push one axis to
@@ -251,7 +251,7 @@ def _model_class_for(base_id):
 
 class HFEngine:
     """transformers backend. Handles base or base+adapter (merged in-memory)."""
-    def __init__(self, base_id, adapter_path=None, micro_batch=4):
+    def __init__(self, base_id, adapter_path=None, micro_batch=6):
         import torch
         from transformers import AutoTokenizer
         self.torch = torch
