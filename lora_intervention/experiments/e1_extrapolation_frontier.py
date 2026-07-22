@@ -335,12 +335,12 @@ def merge_lora(base_id, adapter_path, tmp_dir):
     return tmp_dir
 
 
-def build_engine(backend, base_id, adapter_path=None):
+def build_engine(backend, base_id, adapter_path=None, micro_batch=6):
     if backend == "vllm":
         if adapter_path:
             return VLLMEngine(merge_lora(base_id, adapter_path, "/content/merged_lora"))
         return VLLMEngine(base_id)
-    return HFEngine(base_id, adapter_path)
+    return HFEngine(base_id, adapter_path, micro_batch=micro_batch)
 
 
 # ─── main ─────────────────────────────────────────────────────────────────────
@@ -380,6 +380,9 @@ def main():
     ap.add_argument("--backend", choices=["hf", "vllm"], default="hf",
                     help="hf (default, robust on Colab) or vllm (faster, needs matching CUDA).")
     ap.add_argument("--only", choices=["base", "lora", "both"], default="both")
+    ap.add_argument("--micro-batch", type=int, default=6,
+                    help="HF generation micro-batch. Drop to 1-2 for eager-attention "
+                         "models (gemma-3) on 16GB GPUs — fp32 softmax over seq^2 OOMs at 6.")
     ap.add_argument("--smoke", action="store_true",
                     help="Quick end-to-end check: 8 trials, only the smallest + "
                          "largest cell of each scan (exercises fast + long-context paths).")
@@ -408,11 +411,11 @@ def main():
 
     if args.only in ("base", "both"):
         log(logf, f"Loading base ({args.backend})...")
-        eng = build_engine(args.backend, args.base_model, None)
+        eng = build_engine(args.backend, args.base_model, None, args.micro_batch)
         run_model("base", eng, cells_by_scan, out_dir, tokenizer, stop_file)
     if args.only in ("lora", "both") and not stop_file.exists():
         log(logf, f"Loading LoRA ({args.backend})...")
-        eng = build_engine(args.backend, args.base_model, args.adapter)
+        eng = build_engine(args.backend, args.base_model, args.adapter, args.micro_batch)
         run_model("lora", eng, cells_by_scan, out_dir, tokenizer, stop_file)
 
     log(logf, "E1 done.")
