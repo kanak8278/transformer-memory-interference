@@ -94,6 +94,12 @@ SCANS = {
     "A": [(10, n) for n in (20, 40, 60, 80, 100)],
     # K-scan: hold N=20 (training max), K = 1x..~5x of K_train=10 (46 = category cap).
     "B": [(k, 20) for k in (10, 20, 30, 40, 46)],
+    # C: big-cell interior sweep — K AND N entirely past the training grid
+    # (train was K<=10, N<=20). 24 cells; all K*N <= 2,250 <= 2,300 pool.
+    # Fills the main-adapter interior (IVQ) gap at large configs; endpoints
+    # double as a cross-check against the test_id evals.
+    "C": [(k, n) for k in (15, 20, 25, 30)
+          for n in (10, 15, 20, 30, 50, 75)],
 }
 
 # Category-key names for ARB (values come from the shared pool; keys are labels).
