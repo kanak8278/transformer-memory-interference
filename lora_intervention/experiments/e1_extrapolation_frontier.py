@@ -76,10 +76,10 @@ def is_correct(predicted, expected):
 
 DATASET = "ARBITRARY_SINGLE"
 
-# Statistics (match evaluate.py)
-MAX_TRIALS   = 30    # T4-tractable (was 100); coarse CIs, fine for the qualitative endpoint-vs-interior pattern
-MIN_TRIALS   = 15
-CI_THRESHOLD = 0.12  # let mid-range conditions early-stop instead of burning the cap
+# Statistics (match evaluate.py canonical setup — running on a free H100, not a T4)
+MAX_TRIALS   = 200
+MIN_TRIALS   = 30
+CI_THRESHOLD = 0.07
 BATCH_TRIALS = 10
 
 IVQ_DEPTHS = [0.10, 0.50, 0.90]   # 3 interior probes (was 5) — enough for the curve shape on T4
@@ -237,16 +237,38 @@ def eval_condition(engine, tokenizer, scan, model_tag, k_keys, n_updates,
 # Colab's CUDA runtime (libcudart.so version). vLLM stays available for L40S-class
 # boxes where it installs cleanly and is much faster.
 
-def _model_class_for(base_id):
-    """Gemma-3 ships as a VLM via Auto*; pick the text-only causal head."""
+def _load_base_model(base_id, dtype, attn_implementation, device_map=None,
+                      trust_remote_code=True):
+    """Load a causal LM shaped for PEFT attachment.
+
+    gemma-3's Hub checkpoint is the multimodal Gemma3ForConditionalGeneration
+    one (AutoModelForCausalLM resolves this correctly -- real weights load
+    clean, verified via a raw-generation diagnostic). But its decoder is
+    nested at model.language_model.layers.*, while the checkpointed LoRA
+    adapters (gemma_adapter/) were trained with flat model.layers.* keys
+    (i.e. against a Gemma3ForCausalLM-shaped model) -- attaching them to the
+    ConditionalGeneration wrapper reports 100% missing adapter keys (lora
+    deltas silently never applied, model runs as if unpatched). Fix:
+    transplant the *real* language_model + lm_head into a bare
+    Gemma3ForCausalLM shell so the flat keys line up. Verified zero
+    missing/unexpected keys on attach after this transplant.
+    """
     from transformers import AutoModelForCausalLM
-    if "gemma-3" in base_id.lower():
-        try:
-            from transformers import Gemma3ForCausalLM
-            return Gemma3ForCausalLM
-        except ImportError:
-            pass
-    return AutoModelForCausalLM
+    kwargs = dict(dtype=dtype, attn_implementation=attn_implementation,
+                  trust_remote_code=trust_remote_code)
+    if device_map is not None:
+        kwargs["device_map"] = device_map
+    full = AutoModelForCausalLM.from_pretrained(base_id, **kwargs)
+    if "gemma-3" not in base_id.lower():
+        return full
+    from transformers import Gemma3ForCausalLM
+    causal = Gemma3ForCausalLM(full.config.text_config)
+    causal.model = full.model.language_model
+    causal.lm_head = full.lm_head
+    del full
+    gc.collect()
+    target_device = next(causal.model.parameters()).device
+    return causal.to(device=target_device, dtype=dtype)
 
 
 class HFEngine:
@@ -260,13 +282,13 @@ class HFEngine:
         self.tok.padding_side = "left"          # decoder-only batched generation
         if self.tok.pad_token_id is None:
             self.tok.pad_token = self.tok.eos_token
-        model_cls = _model_class_for(base_id)
-        # gemma-3 produces garbage under sdpa on several transformers versions;
-        # eager is the known-safe path. Qwen stays on sdpa (faster).
-        attn = "eager" if "gemma-3" in base_id.lower() else "sdpa"
-        model = model_cls.from_pretrained(
-            base_id, torch_dtype=torch.bfloat16, device_map="cuda",
-            attn_implementation=attn, trust_remote_code=True)
+        # The gemma-3/sdpa "garbage output" reports were the model-class bug
+        # in _load_base_model's docstring, not an sdpa issue -- verified sdpa
+        # gives identical correct output to eager here, at a fraction of the
+        # memory (eager's fp32 O(seq^2) softmax intermediate OOMs past ~72GB
+        # on the biggest scan-C cell; sdpa peaks at 23GB and releases cleanly
+        # between calls).
+        model = _load_base_model(base_id, torch.bfloat16, "sdpa", device_map="cuda")
         if adapter_path:
             from peft import PeftModel
             model = PeftModel.from_pretrained(model, str(adapter_path))
@@ -324,8 +346,7 @@ def merge_lora(base_id, adapter_path, tmp_dir):
     import torch
     from transformers import AutoTokenizer
     from peft import PeftModel
-    model = _model_class_for(base_id).from_pretrained(base_id, torch_dtype=torch.bfloat16,
-                                                       trust_remote_code=True)
+    model = _load_base_model(base_id, torch.bfloat16, "sdpa")
     model = PeftModel.from_pretrained(model, str(adapter_path))
     model = model.merge_and_unload()
     tok = AutoTokenizer.from_pretrained(base_id, trust_remote_code=True)
@@ -381,8 +402,7 @@ def main():
                     help="hf (default, robust on Colab) or vllm (faster, needs matching CUDA).")
     ap.add_argument("--only", choices=["base", "lora", "both"], default="both")
     ap.add_argument("--micro-batch", type=int, default=6,
-                    help="HF generation micro-batch. Drop to 1-2 for eager-attention "
-                         "models (gemma-3) on 16GB GPUs — fp32 softmax over seq^2 OOMs at 6.")
+                    help="HF generation micro-batch. All models run on sdpa; size to GPU memory.")
     ap.add_argument("--smoke", action="store_true",
                     help="Quick end-to-end check: 8 trials, only the smallest + "
                          "largest cell of each scan (exercises fast + long-context paths).")

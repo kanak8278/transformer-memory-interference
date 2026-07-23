@@ -28,8 +28,9 @@ K,N" story with real numbers instead of inference.
 - **Positions per cell:** FVQ (first), CVQ (last), + 3 interior depths
   (10/50/90 %).
 - **Conditions:** base **vs** the main LoRA adapter, paired (identical seeds).
-- **Trials:** Wilson early-stop, floor 15 / cap 30 (coarse CIs, ±~0.15 — enough
-  for the qualitative pattern, not publication error bars).
+- **Trials:** Wilson early-stop, floor 30 / cap 200, half-width threshold 0.07
+  (canonical `evaluate.py` setup — restored now that this runs on a dedicated
+  H100 instead of a shared Kaggle T4).
 - **Runner:** `lora_intervention/experiments/e1_extrapolation_frontier.py`
   `--scans C` (HF backend, resumable, greedy).
 
@@ -37,51 +38,89 @@ K,N" story with real numbers instead of inference.
 
 | model | base | adapter | notes |
 |---|---|---|---|
-| Qwen2.5-3B-Instruct | `Qwen/Qwen2.5-3B-Instruct` | `checkpoints/adapter` | works; primary result |
-| gemma-3-4b-it | `google/gemma-3-4b-it` | `checkpoints/gemma_adapter` | gated + a live FVQ=0 generation bug (see below) |
+| Qwen2.5-3B-Instruct | `Qwen/Qwen2.5-3B-Instruct` | `checkpoints/adapter` | done |
+| gemma-3-4b-it | `google/gemma-3-4b-it` | `checkpoints/gemma_adapter` | gated (HF_API_KEY); done — see Status for the loader fix required |
 
-## How to run (Kaggle)
+## How to run (local, dedicated GPU)
 
-`kaggle_run.py` is the self-contained kernel. It clones this repo on the VM and
-calls the runner. See its header for the exact steps. Essentials:
+Runs directly on a local CUDA GPU now (no more Kaggle/Colab — those existed
+only because earlier runs had no dedicated GPU). Isolated `uv` venv at repo
+root (`torch==2.5.1+cu121`, `transformers`, `peft`, `accelerate` — cu121 chosen
+to match this box's driver, not cu126). `HF_API_KEY` for the gated Gemma
+weights lives in `lora_intervention/.env` (never commit it).
+
+Use the supervisor scripts (retry-on-crash, resumable, logs to
+`out/{qwen,gemma}/{supervisor.log,run.log,results.jsonl}`):
 
 ```bash
-# edit MODEL = "qwen" | "gemma" at the top of kaggle_run.py, then:
-cd lora_intervention/experiments/bigcell_ivq
-kaggle kernels push -p . --accelerator NvidiaTeslaT4     # T4 is REQUIRED
-kaggle kernels status  kanakraj/<qwen|gemma>-bigcell-ivq
-kaggle kernels output  kanakraj/<qwen|gemma>-bigcell-ivq -p ./out
+lora_intervention/experiments/bigcell_ivq/run_qwen.sh   # micro-batch 32, sdpa
+lora_intervention/experiments/bigcell_ivq/run_gemma.sh  # micro-batch 16, sdpa
 ```
 
-`--accelerator NvidiaTeslaT4` is mandatory: `enable_gpu` alone lets Kaggle
-assign a **P100 (sm_60)**, which the preinstalled PyTorch no longer supports —
-the first CUDA op dies with `no kernel image is available`. `"T4"` is silently
-ignored; the exact enum `NvidiaTeslaT4` is required.
-
-Gemma is gated: add an **HF token as a Kaggle secret named `HF_TOKEN`**
-(Add-ons → Secrets). Never commit the token.
+Both pin `CUDA_VISIBLE_DEVICES=1` (adjust to whichever GPU is free), source
+`HF_API_KEY` from `lora_intervention/.env` into `HUGGING_FACE_HUB_TOKEN`, and
+redirect `HF_HOME` to `.hf_cache/` on the data partition — the home partition's
+HF cache (`~/.cache/huggingface`) is often near-full on shared boxes and too
+small for the ~9 GB Gemma download.
 
 Fold results into the consolidated set with
 `consolidated_results/build/build_04_lora.py` (extend `build_lora_ivq()` to read
 the new `results.jsonl`), producing a scan-C block in `04_lora/lora_ivq.csv`.
 
-## Status (2026-07-23)
+## Status (2026-07-22, local H100 run) — BOTH MODELS DONE
 
-- **Qwen:** partial — an OOM (`micro_batch` too large) cut the last Kaggle run to
-  4 cells, base only. `micro_batch` is now a CLI flag (set to 4 here) so a
-  re-run should complete. **Re-run pending.**
-- **Gemma:** blocked on a **generation bug** — base FVQ = 0.000 (every
-  first-value answer wrong), independent of GPU and attention implementation
-  (seen under both sdpa on Colab and eager on Kaggle). Almost certainly a
-  transformers-version regression in the gemma-3 chat/generation path. Needs a
-  focused diagnostic that **dumps raw generations** (the runner discards them) to
-  see what it emits — then pin transformers or fix the template. The kernel's
-  smoke guard aborts in minutes so this never burns a full run.
+- **Qwen: DONE.** Full scan C (base+LoRA, 20 cells x 5 conditions, n=200 Wilson,
+  floor 30 / half-width 0.07) completed on a dedicated H100 in ~42 min, no
+  crashes. LoRA: FVQ mean 1.000, CVQ mean 0.984 (endpoints hold far past
+  training); IVQ@0.50 mean 0.246, IVQ@0.90 mean 0.196 (interior stays
+  collapsed at large K,N). Base: FVQ mean 0.247, CVQ mean 0.536.
+
+- **Gemma: DONE, after fixing two real bugs in the runner (not env/hardware).**
+  Base FVQ=0.000 was NOT a transformers-version/attention-backend regression:
+  1. `_model_class_for()` forced `Gemma3ForCausalLM` (text-only head), but
+     `google/gemma-3-4b-it`'s Hub checkpoint is the multimodal one (language
+     weights live under `language_model.*`). Loading it into the text-only
+     class silently drops every real weight (confirmed via a raw-generation
+     diagnostic: full MISSING/UNEXPECTED report on load, garbage
+     newline-only output). `AutoModelForCausalLM` already resolves
+     `Gemma3Config` to `Gemma3ForConditionalGeneration` correctly in
+     transformers 5.14 -- switched to that.
+  2. That alone wasn't enough: `gemma_adapter/`'s checkpoint was trained with
+     *flat* `model.layers.N.*` keys (a `Gemma3ForCausalLM`-shaped model), which
+     don't match `Gemma3ForConditionalGeneration`'s nested
+     `model.language_model.layers.N.*` -- attaching the adapter there reports
+     100% missing keys (LoRA deltas silently never applied; "lora" would have
+     just been the unpatched base model). Fixed by transplanting the
+     correctly-loaded `language_model` + `lm_head` into a bare
+     `Gemma3ForCausalLM` shell so the adapter's flat keys line up -- verified
+     zero missing/unexpected keys on attach.
+  3. Bonus: the original "eager attention required for gemma-3" belief was
+     itself a symptom of bug #1 (garbage under both sdpa and eager, since
+     base weights were random either way). With real weights, `sdpa` gives
+     identical output to `eager` at ~1/3 the memory and is faster --
+     switched Gemma to `sdpa`, which also sidesteps an OOM eager's fp32
+     O(seq^2) softmax hit on the biggest cell (K=30,N=50, ~8.5K tokens).
+
+  Full scan C (base+LoRA, n=200 Wilson) completed in ~48 min, no crashes.
+  LoRA: FVQ mean 0.999, CVQ mean 0.976 (endpoints hold); IVQ@0.50 mean 0.247,
+  IVQ@0.90 mean 0.283 (interior collapses) -- confirms the hypothesis
+  cross-family, matching Qwen's pattern closely. Base is interestingly
+  inverted vs Qwen: FVQ mean 0.892 (strong), CVQ mean 0.214 (weak) -- Qwen
+  base is the opposite (FVQ weak, CVQ strong). Worth a note in the paper if
+  this scan-C data gets used: the two base models fail in different
+  directions, but LoRA converges both to the same endpoint-holds pattern.
 
 ## Known constraints (hard-won)
 
-- Kaggle T4 ≈ Colab T4 in speed (no speedup); ~170–270 s per condition at the
-  big cells. Full 20-cell base+LoRA is several hours.
-- 16 GB T4 OOMs at `micro_batch` 6 on N ≥ 30 streams → use 2–4.
-- Colab won't hold two concurrent T4s (2nd gets reclaimed).
-- Kaggle exposes logs/output only after the kernel finishes (no live view).
+- On an 80GB H100 with `sdpa`, `micro_batch` only matters up to `BATCH_TRIALS`
+  (10) — the runner never passes more than 10 prompts to `generate()` per
+  call, so anything >=10 behaves identically. Qwen tuned to 32, Gemma to 16
+  (both far under the ~40-70GB peaks measured; real per-10-trial batches use
+  less). Full 20-cell base+LoRA: ~42 min (Qwen), ~48 min (Gemma).
+- `python-multipart`/HF Hub downloads over a corporate TLS-intercepting proxy
+  (Zscaler) need `SSL_CERT_FILE`/`REQUESTS_CA_BUNDLE`/`CURL_CA_BUNDLE` pointed
+  at the system CA bundle (`/etc/pki/tls/certs/ca-bundle.crt` on this box) —
+  `uv` needs `--system-certs` for the same reason.
+- Historical (Kaggle/Colab T4, no longer used): T4 ≈ 170-270s/condition at
+  big cells; 16GB OOMs at `micro_batch` 6 on N>=30; Colab won't hold two
+  concurrent T4s; Kaggle only exposes logs after the kernel finishes.
