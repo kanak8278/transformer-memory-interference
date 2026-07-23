@@ -1,0 +1,2005 @@
+{
+  "model": "claude-haiku",
+  "dataset_type": "museum_M0",
+  "config": {
+    "trials_per_cell": 200,
+    "workers": 12,
+    "key_levels": [
+      1,
+      2,
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      40,
+      45
+    ],
+    "update_levels": [
+      5,
+      10,
+      15,
+      20,
+      30,
+      50
+    ],
+    "render_mode": "M0",
+    "pool_mode": "disjoint_pool",
+    "seed_formula": "abs(hash((nk,nu,t)))%(2**31)  [== sweep_arbitrary]",
+    "reuses": "sweep_arbitrary.classify_error/wilson/saturation/save",
+    "comparator": "plain sweep_arbitrary ARBITRARY_SINGLE",
+    "near_zero_thresh": 0.015,
+    "recovery_thresh": 0.06,
+    "sat_count": 3
+  },
+  "cells": {
+    "1_5": {
+      "num_keys": 1,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 45.6,
+      "n_trials": 144,
+      "n_observations": 144,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7986,
+          "ci_lower": 0.7359,
+          "ci_upper": 0.8611,
+          "n": 144,
+          "error_types": {
+            "correct": 115,
+            "intermediate_intrusion": 28,
+            "recency_intrusion": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.7639,
+          "ci_lower": 0.6944,
+          "ci_upper": 0.8264,
+          "n": 144,
+          "error_types": {
+            "correct": 110,
+            "intermediate_intrusion": 27,
+            "garbage": 4,
+            "primacy_intrusion": 3
+          }
+        }
+      }
+    },
+    "1_10": {
+      "num_keys": 1,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 28.2,
+      "n_trials": 120,
+      "n_observations": 120,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8833,
+          "ci_lower": 0.825,
+          "ci_upper": 0.9417,
+          "n": 120,
+          "error_types": {
+            "correct": 106,
+            "intermediate_intrusion": 14
+          }
+        },
+        "PI": {
+          "accuracy": 0.8083,
+          "ci_lower": 0.7417,
+          "ci_upper": 0.875,
+          "n": 120,
+          "error_types": {
+            "intermediate_intrusion": 23,
+            "correct": 97
+          }
+        }
+      }
+    },
+    "1_15": {
+      "num_keys": 1,
+      "num_updates": 15,
+      "regime": "A",
+      "elapsed_sec": 30.8,
+      "n_trials": 108,
+      "n_observations": 108,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8704,
+          "ci_lower": 0.8056,
+          "ci_upper": 0.9352,
+          "n": 108,
+          "error_types": {
+            "correct": 94,
+            "intermediate_intrusion": 14
+          }
+        },
+        "PI": {
+          "accuracy": 0.8519,
+          "ci_lower": 0.787,
+          "ci_upper": 0.9167,
+          "n": 108,
+          "error_types": {
+            "correct": 92,
+            "intermediate_intrusion": 16
+          }
+        }
+      }
+    },
+    "1_20": {
+      "num_keys": 1,
+      "num_updates": 20,
+      "regime": "A",
+      "elapsed_sec": 28.6,
+      "n_trials": 84,
+      "n_observations": 84,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.9286,
+          "ci_lower": 0.869,
+          "ci_upper": 0.9762,
+          "n": 84,
+          "error_types": {
+            "correct": 78,
+            "intermediate_intrusion": 6
+          }
+        },
+        "PI": {
+          "accuracy": 0.9048,
+          "ci_lower": 0.8333,
+          "ci_upper": 0.9643,
+          "n": 84,
+          "error_types": {
+            "correct": 76,
+            "intermediate_intrusion": 8
+          }
+        }
+      }
+    },
+    "1_30": {
+      "num_keys": 1,
+      "num_updates": 30,
+      "regime": "A",
+      "elapsed_sec": 29.0,
+      "n_trials": 108,
+      "n_observations": 108,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.9167,
+          "ci_lower": 0.8611,
+          "ci_upper": 0.963,
+          "n": 108,
+          "error_types": {
+            "correct": 99,
+            "intermediate_intrusion": 9
+          }
+        },
+        "PI": {
+          "accuracy": 0.8611,
+          "ci_lower": 0.7963,
+          "ci_upper": 0.9167,
+          "n": 108,
+          "error_types": {
+            "correct": 93,
+            "intermediate_intrusion": 15
+          }
+        }
+      }
+    },
+    "1_50": {
+      "num_keys": 1,
+      "num_updates": 50,
+      "regime": "A",
+      "elapsed_sec": 36.6,
+      "n_trials": 120,
+      "n_observations": 120,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.875,
+          "ci_lower": 0.8167,
+          "ci_upper": 0.9333,
+          "n": 120,
+          "error_types": {
+            "intermediate_intrusion": 15,
+            "correct": 105
+          }
+        },
+        "PI": {
+          "accuracy": 0.8083,
+          "ci_lower": 0.7333,
+          "ci_upper": 0.875,
+          "n": 120,
+          "error_types": {
+            "correct": 97,
+            "intermediate_intrusion": 23
+          }
+        }
+      }
+    },
+    "2_5": {
+      "num_keys": 2,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 35.7,
+      "n_trials": 120,
+      "n_observations": 120,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8167,
+          "ci_lower": 0.7417,
+          "ci_upper": 0.8833,
+          "n": 120,
+          "error_types": {
+            "correct": 98,
+            "intermediate_intrusion": 21,
+            "recency_intrusion": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.8833,
+          "ci_lower": 0.8167,
+          "ci_upper": 0.9335,
+          "n": 120,
+          "error_types": {
+            "correct": 106,
+            "intermediate_intrusion": 14
+          }
+        }
+      }
+    },
+    "2_10": {
+      "num_keys": 2,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 48.6,
+      "n_trials": 168,
+      "n_observations": 168,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.869,
+          "ci_lower": 0.8155,
+          "ci_upper": 0.9167,
+          "n": 168,
+          "error_types": {
+            "intermediate_intrusion": 22,
+            "correct": 146
+          }
+        },
+        "PI": {
+          "accuracy": 0.7024,
+          "ci_lower": 0.631,
+          "ci_upper": 0.7679,
+          "n": 168,
+          "error_types": {
+            "correct": 118,
+            "intermediate_intrusion": 49,
+            "garbage": 1
+          }
+        }
+      }
+    },
+    "2_15": {
+      "num_keys": 2,
+      "num_updates": 15,
+      "regime": "A",
+      "elapsed_sec": 58.9,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7448,
+          "ci_lower": 0.6823,
+          "ci_upper": 0.8021,
+          "n": 192,
+          "error_types": {
+            "intermediate_intrusion": 48,
+            "correct": 143,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.6146,
+          "ci_lower": 0.5469,
+          "ci_upper": 0.6823,
+          "n": 192,
+          "error_types": {
+            "intermediate_intrusion": 72,
+            "correct": 118,
+            "garbage": 2
+          }
+        }
+      }
+    },
+    "2_20": {
+      "num_keys": 2,
+      "num_updates": 20,
+      "regime": "A",
+      "elapsed_sec": 54.2,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8021,
+          "ci_lower": 0.7448,
+          "ci_upper": 0.8542,
+          "n": 192,
+          "error_types": {
+            "correct": 154,
+            "intermediate_intrusion": 37,
+            "recency_intrusion": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.5573,
+          "ci_lower": 0.4844,
+          "ci_upper": 0.625,
+          "n": 192,
+          "error_types": {
+            "correct": 107,
+            "intermediate_intrusion": 76,
+            "garbage": 9
+          }
+        }
+      }
+    },
+    "2_30": {
+      "num_keys": 2,
+      "num_updates": 30,
+      "regime": "A",
+      "elapsed_sec": 53.7,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.6979,
+          "ci_lower": 0.6354,
+          "ci_upper": 0.7604,
+          "n": 192,
+          "error_types": {
+            "correct": 134,
+            "intermediate_intrusion": 57,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.5677,
+          "ci_lower": 0.4948,
+          "ci_upper": 0.6354,
+          "n": 192,
+          "error_types": {
+            "correct": 109,
+            "intermediate_intrusion": 76,
+            "garbage": 7
+          }
+        }
+      }
+    },
+    "2_50": {
+      "num_keys": 2,
+      "num_updates": 50,
+      "regime": "A",
+      "elapsed_sec": 54.0,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7188,
+          "ci_lower": 0.651,
+          "ci_upper": 0.7812,
+          "n": 192,
+          "error_types": {
+            "correct": 138,
+            "intermediate_intrusion": 53,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.5312,
+          "ci_lower": 0.4635,
+          "ci_upper": 0.599,
+          "n": 192,
+          "error_types": {
+            "garbage": 24,
+            "intermediate_intrusion": 66,
+            "correct": 102
+          }
+        }
+      }
+    },
+    "5_5": {
+      "num_keys": 5,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 39.8,
+      "n_trials": 144,
+      "n_observations": 144,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8611,
+          "ci_lower": 0.7986,
+          "ci_upper": 0.9167,
+          "n": 144,
+          "error_types": {
+            "correct": 124,
+            "intermediate_intrusion": 18,
+            "garbage": 1,
+            "recency_intrusion": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.7847,
+          "ci_lower": 0.7153,
+          "ci_upper": 0.8542,
+          "n": 144,
+          "error_types": {
+            "correct": 113,
+            "intermediate_intrusion": 30,
+            "garbage": 1
+          }
+        }
+      }
+    },
+    "5_10": {
+      "num_keys": 5,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 50.5,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7812,
+          "ci_lower": 0.7188,
+          "ci_upper": 0.8385,
+          "n": 192,
+          "error_types": {
+            "correct": 150,
+            "intermediate_intrusion": 40,
+            "garbage": 2
+          }
+        },
+        "PI": {
+          "accuracy": 0.5625,
+          "ci_lower": 0.4896,
+          "ci_upper": 0.6302,
+          "n": 192,
+          "error_types": {
+            "correct": 108,
+            "intermediate_intrusion": 80,
+            "garbage": 4
+          }
+        }
+      }
+    },
+    "5_15": {
+      "num_keys": 5,
+      "num_updates": 15,
+      "regime": "A",
+      "elapsed_sec": 129.4,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.75,
+          "ci_lower": 0.6875,
+          "ci_upper": 0.8125,
+          "n": 192,
+          "error_types": {
+            "correct": 144,
+            "intermediate_intrusion": 43,
+            "garbage": 3,
+            "recency_intrusion": 2
+          }
+        },
+        "PI": {
+          "accuracy": 0.5573,
+          "ci_lower": 0.4896,
+          "ci_upper": 0.625,
+          "n": 192,
+          "error_types": {
+            "correct": 107,
+            "garbage": 6,
+            "intermediate_intrusion": 79
+          }
+        }
+      }
+    },
+    "5_20": {
+      "num_keys": 5,
+      "num_updates": 20,
+      "regime": "B",
+      "elapsed_sec": 51.7,
+      "n_trials": 200,
+      "n_observations": 200,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.75,
+          "ci_lower": 0.69,
+          "ci_upper": 0.81,
+          "n": 200,
+          "error_types": {
+            "correct": 150,
+            "intermediate_intrusion": 47,
+            "garbage": 3
+          }
+        },
+        "PI": {
+          "accuracy": 0.48,
+          "ci_lower": 0.41,
+          "ci_upper": 0.55,
+          "n": 200,
+          "error_types": {
+            "intermediate_intrusion": 81,
+            "correct": 96,
+            "garbage": 23
+          }
+        }
+      }
+    },
+    "5_30": {
+      "num_keys": 5,
+      "num_updates": 30,
+      "regime": "A",
+      "elapsed_sec": 61.1,
+      "n_trials": 200,
+      "n_observations": 200,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.695,
+          "ci_lower": 0.63,
+          "ci_upper": 0.755,
+          "n": 200,
+          "error_types": {
+            "correct": 139,
+            "intermediate_intrusion": 59,
+            "garbage": 2
+          }
+        },
+        "PI": {
+          "accuracy": 0.5,
+          "ci_lower": 0.43,
+          "ci_upper": 0.57,
+          "n": 200,
+          "error_types": {
+            "correct": 100,
+            "garbage": 43,
+            "intermediate_intrusion": 57
+          }
+        }
+      }
+    },
+    "5_50": {
+      "num_keys": 5,
+      "num_updates": 50,
+      "regime": "B",
+      "elapsed_sec": 49.8,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.6458,
+          "ci_lower": 0.5729,
+          "ci_upper": 0.7083,
+          "n": 192,
+          "error_types": {
+            "correct": 124,
+            "intermediate_intrusion": 67,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.4323,
+          "ci_lower": 0.3646,
+          "ci_upper": 0.5,
+          "n": 192,
+          "error_types": {
+            "intermediate_intrusion": 40,
+            "correct": 83,
+            "garbage": 69
+          }
+        }
+      }
+    },
+    "10_5": {
+      "num_keys": 10,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 34.6,
+      "n_trials": 144,
+      "n_observations": 144,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.875,
+          "ci_lower": 0.8194,
+          "ci_upper": 0.9236,
+          "n": 144,
+          "error_types": {
+            "correct": 126,
+            "intermediate_intrusion": 15,
+            "garbage": 3
+          }
+        },
+        "PI": {
+          "accuracy": 0.7708,
+          "ci_lower": 0.6944,
+          "ci_upper": 0.8333,
+          "n": 144,
+          "error_types": {
+            "correct": 111,
+            "intermediate_intrusion": 33
+          }
+        }
+      }
+    },
+    "10_10": {
+      "num_keys": 10,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 52.8,
+      "n_trials": 180,
+      "n_observations": 180,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7778,
+          "ci_lower": 0.7167,
+          "ci_upper": 0.8333,
+          "n": 180,
+          "error_types": {
+            "correct": 140,
+            "intermediate_intrusion": 39,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.6611,
+          "ci_lower": 0.5944,
+          "ci_upper": 0.7278,
+          "n": 180,
+          "error_types": {
+            "intermediate_intrusion": 58,
+            "correct": 119,
+            "garbage": 3
+          }
+        }
+      }
+    },
+    "10_15": {
+      "num_keys": 10,
+      "num_updates": 15,
+      "regime": "A",
+      "elapsed_sec": 57.9,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7865,
+          "ci_lower": 0.7292,
+          "ci_upper": 0.8438,
+          "n": 192,
+          "error_types": {
+            "correct": 151,
+            "intermediate_intrusion": 39,
+            "garbage": 2
+          }
+        },
+        "PI": {
+          "accuracy": 0.5573,
+          "ci_lower": 0.4948,
+          "ci_upper": 0.6251,
+          "n": 192,
+          "error_types": {
+            "correct": 107,
+            "intermediate_intrusion": 64,
+            "garbage": 21
+          }
+        }
+      }
+    },
+    "10_20": {
+      "num_keys": 10,
+      "num_updates": 20,
+      "regime": "A",
+      "elapsed_sec": 69.0,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8021,
+          "ci_lower": 0.7448,
+          "ci_upper": 0.8594,
+          "n": 192,
+          "error_types": {
+            "correct": 154,
+            "intermediate_intrusion": 37,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.5156,
+          "ci_lower": 0.4427,
+          "ci_upper": 0.5833,
+          "n": 192,
+          "error_types": {
+            "correct": 99,
+            "intermediate_intrusion": 59,
+            "garbage": 34
+          }
+        }
+      }
+    },
+    "10_30": {
+      "num_keys": 10,
+      "num_updates": 30,
+      "regime": "B",
+      "elapsed_sec": 58.6,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7292,
+          "ci_lower": 0.6667,
+          "ci_upper": 0.7866,
+          "n": 192,
+          "error_types": {
+            "correct": 140,
+            "intermediate_intrusion": 51,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.4167,
+          "ci_lower": 0.349,
+          "ci_upper": 0.4896,
+          "n": 192,
+          "error_types": {
+            "correct": 80,
+            "intermediate_intrusion": 52,
+            "garbage": 60
+          }
+        }
+      }
+    },
+    "10_50": {
+      "num_keys": 10,
+      "num_updates": 50,
+      "regime": "B",
+      "elapsed_sec": 51.4,
+      "n_trials": 180,
+      "n_observations": 180,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.6389,
+          "ci_lower": 0.5667,
+          "ci_upper": 0.7056,
+          "n": 180,
+          "error_types": {
+            "correct": 115,
+            "intermediate_intrusion": 62,
+            "garbage": 3
+          }
+        },
+        "PI": {
+          "accuracy": 0.3722,
+          "ci_lower": 0.3,
+          "ci_upper": 0.4444,
+          "n": 180,
+          "error_types": {
+            "correct": 67,
+            "garbage": 89,
+            "intermediate_intrusion": 24
+          }
+        }
+      }
+    },
+    "15_5": {
+      "num_keys": 15,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 57.3,
+      "n_trials": 156,
+      "n_observations": 156,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8654,
+          "ci_lower": 0.8077,
+          "ci_upper": 0.9167,
+          "n": 156,
+          "error_types": {
+            "correct": 135,
+            "intermediate_intrusion": 17,
+            "garbage": 3,
+            "recency_intrusion": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.7436,
+          "ci_lower": 0.6731,
+          "ci_upper": 0.8141,
+          "n": 156,
+          "error_types": {
+            "correct": 116,
+            "intermediate_intrusion": 40
+          }
+        }
+      }
+    },
+    "15_10": {
+      "num_keys": 15,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 56.0,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8594,
+          "ci_lower": 0.8073,
+          "ci_upper": 0.9062,
+          "n": 192,
+          "error_types": {
+            "correct": 165,
+            "garbage": 2,
+            "intermediate_intrusion": 24,
+            "recency_intrusion": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.5573,
+          "ci_lower": 0.4844,
+          "ci_upper": 0.6302,
+          "n": 192,
+          "error_types": {
+            "correct": 107,
+            "intermediate_intrusion": 76,
+            "garbage": 9
+          }
+        }
+      }
+    },
+    "15_15": {
+      "num_keys": 15,
+      "num_updates": 15,
+      "regime": "A",
+      "elapsed_sec": 69.3,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8021,
+          "ci_lower": 0.7448,
+          "ci_upper": 0.8594,
+          "n": 192,
+          "error_types": {
+            "correct": 154,
+            "intermediate_intrusion": 36,
+            "garbage": 2
+          }
+        },
+        "PI": {
+          "accuracy": 0.5208,
+          "ci_lower": 0.453,
+          "ci_upper": 0.5885,
+          "n": 192,
+          "error_types": {
+            "intermediate_intrusion": 74,
+            "correct": 100,
+            "garbage": 18
+          }
+        }
+      }
+    },
+    "15_20": {
+      "num_keys": 15,
+      "num_updates": 20,
+      "regime": "B",
+      "elapsed_sec": 61.9,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7865,
+          "ci_lower": 0.7292,
+          "ci_upper": 0.8438,
+          "n": 192,
+          "error_types": {
+            "correct": 151,
+            "intermediate_intrusion": 35,
+            "garbage": 6
+          }
+        },
+        "PI": {
+          "accuracy": 0.4531,
+          "ci_lower": 0.3854,
+          "ci_upper": 0.521,
+          "n": 192,
+          "error_types": {
+            "intermediate_intrusion": 59,
+            "correct": 87,
+            "garbage": 46
+          }
+        }
+      }
+    },
+    "15_30": {
+      "num_keys": 15,
+      "num_updates": 30,
+      "regime": "B",
+      "elapsed_sec": 60.2,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.75,
+          "ci_lower": 0.6875,
+          "ci_upper": 0.8125,
+          "n": 192,
+          "error_types": {
+            "correct": 144,
+            "intermediate_intrusion": 44,
+            "garbage": 4
+          }
+        },
+        "PI": {
+          "accuracy": 0.4635,
+          "ci_lower": 0.3906,
+          "ci_upper": 0.5365,
+          "n": 192,
+          "error_types": {
+            "garbage": 57,
+            "intermediate_intrusion": 46,
+            "correct": 89
+          }
+        }
+      }
+    },
+    "15_50": {
+      "num_keys": 15,
+      "num_updates": 50,
+      "regime": "B",
+      "elapsed_sec": 55.1,
+      "n_trials": 168,
+      "n_observations": 168,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.6845,
+          "ci_lower": 0.6071,
+          "ci_upper": 0.756,
+          "n": 168,
+          "error_types": {
+            "garbage": 5,
+            "correct": 115,
+            "intermediate_intrusion": 48
+          }
+        },
+        "PI": {
+          "accuracy": 0.25,
+          "ci_lower": 0.1845,
+          "ci_upper": 0.3095,
+          "n": 168,
+          "error_types": {
+            "garbage": 94,
+            "correct": 42,
+            "intermediate_intrusion": 32
+          }
+        }
+      }
+    },
+    "20_5": {
+      "num_keys": 20,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 29.4,
+      "n_trials": 120,
+      "n_observations": 120,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8167,
+          "ci_lower": 0.7417,
+          "ci_upper": 0.875,
+          "n": 120,
+          "error_types": {
+            "correct": 98,
+            "intermediate_intrusion": 20,
+            "garbage": 1,
+            "recency_intrusion": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.8167,
+          "ci_lower": 0.75,
+          "ci_upper": 0.8833,
+          "n": 120,
+          "error_types": {
+            "correct": 98,
+            "intermediate_intrusion": 20,
+            "primacy_intrusion": 1,
+            "garbage": 1
+          }
+        }
+      }
+    },
+    "20_10": {
+      "num_keys": 20,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 64.2,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8906,
+          "ci_lower": 0.849,
+          "ci_upper": 0.9323,
+          "n": 192,
+          "error_types": {
+            "correct": 171,
+            "intermediate_intrusion": 18,
+            "garbage": 1,
+            "recency_intrusion": 2
+          }
+        },
+        "PI": {
+          "accuracy": 0.5781,
+          "ci_lower": 0.5104,
+          "ci_upper": 0.651,
+          "n": 192,
+          "error_types": {
+            "correct": 111,
+            "intermediate_intrusion": 73,
+            "garbage": 8
+          }
+        }
+      }
+    },
+    "20_15": {
+      "num_keys": 20,
+      "num_updates": 15,
+      "regime": "B",
+      "elapsed_sec": 60.7,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.776,
+          "ci_lower": 0.7135,
+          "ci_upper": 0.8333,
+          "n": 192,
+          "error_types": {
+            "correct": 149,
+            "intermediate_intrusion": 41,
+            "garbage": 2
+          }
+        },
+        "PI": {
+          "accuracy": 0.4583,
+          "ci_lower": 0.3854,
+          "ci_upper": 0.526,
+          "n": 192,
+          "error_types": {
+            "intermediate_intrusion": 71,
+            "correct": 88,
+            "garbage": 33
+          }
+        }
+      }
+    },
+    "20_20": {
+      "num_keys": 20,
+      "num_updates": 20,
+      "regime": "B",
+      "elapsed_sec": 63.2,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7969,
+          "ci_lower": 0.7396,
+          "ci_upper": 0.849,
+          "n": 192,
+          "error_types": {
+            "correct": 153,
+            "intermediate_intrusion": 37,
+            "garbage": 2
+          }
+        },
+        "PI": {
+          "accuracy": 0.4375,
+          "ci_lower": 0.3698,
+          "ci_upper": 0.5052,
+          "n": 192,
+          "error_types": {
+            "correct": 84,
+            "garbage": 41,
+            "intermediate_intrusion": 67
+          }
+        }
+      }
+    },
+    "20_30": {
+      "num_keys": 20,
+      "num_updates": 30,
+      "regime": "B",
+      "elapsed_sec": 53.2,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.6875,
+          "ci_lower": 0.6198,
+          "ci_upper": 0.75,
+          "n": 192,
+          "error_types": {
+            "correct": 132,
+            "intermediate_intrusion": 56,
+            "garbage": 4
+          }
+        },
+        "PI": {
+          "accuracy": 0.3958,
+          "ci_lower": 0.3281,
+          "ci_upper": 0.4688,
+          "n": 192,
+          "error_types": {
+            "correct": 76,
+            "garbage": 73,
+            "intermediate_intrusion": 43
+          }
+        }
+      }
+    },
+    "20_50": {
+      "num_keys": 20,
+      "num_updates": 50,
+      "regime": "B",
+      "elapsed_sec": 53.3,
+      "n_trials": 168,
+      "n_observations": 168,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7262,
+          "ci_lower": 0.6548,
+          "ci_upper": 0.7917,
+          "n": 168,
+          "error_types": {
+            "intermediate_intrusion": 44,
+            "correct": 122,
+            "garbage": 2
+          }
+        },
+        "PI": {
+          "accuracy": 0.1905,
+          "ci_lower": 0.131,
+          "ci_upper": 0.25,
+          "n": 168,
+          "error_types": {
+            "garbage": 98,
+            "intermediate_intrusion": 38,
+            "correct": 32
+          }
+        }
+      }
+    },
+    "25_5": {
+      "num_keys": 25,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 46.4,
+      "n_trials": 144,
+      "n_observations": 144,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.9306,
+          "ci_lower": 0.8889,
+          "ci_upper": 0.9655,
+          "n": 144,
+          "error_types": {
+            "correct": 134,
+            "garbage": 2,
+            "intermediate_intrusion": 8
+          }
+        },
+        "PI": {
+          "accuracy": 0.7639,
+          "ci_lower": 0.6944,
+          "ci_upper": 0.8333,
+          "n": 144,
+          "error_types": {
+            "correct": 110,
+            "intermediate_intrusion": 34
+          }
+        }
+      }
+    },
+    "25_10": {
+      "num_keys": 25,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 55.5,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8594,
+          "ci_lower": 0.8073,
+          "ci_upper": 0.9062,
+          "n": 192,
+          "error_types": {
+            "correct": 165,
+            "intermediate_intrusion": 25,
+            "garbage": 2
+          }
+        },
+        "PI": {
+          "accuracy": 0.5625,
+          "ci_lower": 0.4896,
+          "ci_upper": 0.6302,
+          "n": 192,
+          "error_types": {
+            "correct": 108,
+            "intermediate_intrusion": 80,
+            "garbage": 4
+          }
+        }
+      }
+    },
+    "25_15": {
+      "num_keys": 25,
+      "num_updates": 15,
+      "regime": "B",
+      "elapsed_sec": 53.0,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8698,
+          "ci_lower": 0.8229,
+          "ci_upper": 0.9167,
+          "n": 192,
+          "error_types": {
+            "correct": 167,
+            "garbage": 2,
+            "intermediate_intrusion": 22,
+            "recency_intrusion": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.474,
+          "ci_lower": 0.401,
+          "ci_upper": 0.5417,
+          "n": 192,
+          "error_types": {
+            "correct": 91,
+            "intermediate_intrusion": 67,
+            "garbage": 34
+          }
+        }
+      }
+    },
+    "25_20": {
+      "num_keys": 25,
+      "num_updates": 20,
+      "regime": "B",
+      "elapsed_sec": 56.4,
+      "n_trials": 180,
+      "n_observations": 180,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8389,
+          "ci_lower": 0.7833,
+          "ci_upper": 0.8944,
+          "n": 180,
+          "error_types": {
+            "correct": 151,
+            "garbage": 3,
+            "intermediate_intrusion": 26
+          }
+        },
+        "PI": {
+          "accuracy": 0.3611,
+          "ci_lower": 0.2944,
+          "ci_upper": 0.4278,
+          "n": 180,
+          "error_types": {
+            "intermediate_intrusion": 74,
+            "garbage": 41,
+            "correct": 65
+          }
+        }
+      }
+    },
+    "25_30": {
+      "num_keys": 25,
+      "num_updates": 30,
+      "regime": "B",
+      "elapsed_sec": 61.2,
+      "n_trials": 180,
+      "n_observations": 180,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7611,
+          "ci_lower": 0.7,
+          "ci_upper": 0.8222,
+          "n": 180,
+          "error_types": {
+            "correct": 137,
+            "intermediate_intrusion": 42,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.3389,
+          "ci_lower": 0.2667,
+          "ci_upper": 0.4111,
+          "n": 180,
+          "error_types": {
+            "correct": 61,
+            "garbage": 66,
+            "intermediate_intrusion": 53
+          }
+        }
+      }
+    },
+    "25_50": {
+      "num_keys": 25,
+      "num_updates": 50,
+      "regime": "B",
+      "elapsed_sec": 62.5,
+      "n_trials": 168,
+      "n_observations": 168,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.6786,
+          "ci_lower": 0.6071,
+          "ci_upper": 0.75,
+          "n": 168,
+          "error_types": {
+            "correct": 114,
+            "intermediate_intrusion": 48,
+            "garbage": 6
+          }
+        },
+        "PI": {
+          "accuracy": 0.256,
+          "ci_lower": 0.1905,
+          "ci_upper": 0.3214,
+          "n": 168,
+          "error_types": {
+            "garbage": 71,
+            "correct": 43,
+            "intermediate_intrusion": 54
+          }
+        }
+      }
+    },
+    "30_5": {
+      "num_keys": 30,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 46.9,
+      "n_trials": 144,
+      "n_observations": 144,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.9306,
+          "ci_lower": 0.8889,
+          "ci_upper": 0.9722,
+          "n": 144,
+          "error_types": {
+            "intermediate_intrusion": 9,
+            "correct": 134,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.7569,
+          "ci_lower": 0.6875,
+          "ci_upper": 0.8264,
+          "n": 144,
+          "error_types": {
+            "intermediate_intrusion": 35,
+            "correct": 109
+          }
+        }
+      }
+    },
+    "30_10": {
+      "num_keys": 30,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 61.7,
+      "n_trials": 200,
+      "n_observations": 200,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.905,
+          "ci_lower": 0.8649,
+          "ci_upper": 0.945,
+          "n": 200,
+          "error_types": {
+            "correct": 181,
+            "intermediate_intrusion": 18,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.505,
+          "ci_lower": 0.44,
+          "ci_upper": 0.575,
+          "n": 200,
+          "error_types": {
+            "correct": 101,
+            "intermediate_intrusion": 91,
+            "garbage": 7,
+            "primacy_intrusion": 1
+          }
+        }
+      }
+    },
+    "30_15": {
+      "num_keys": 30,
+      "num_updates": 15,
+      "regime": "A",
+      "elapsed_sec": 67.1,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.849,
+          "ci_lower": 0.7969,
+          "ci_upper": 0.8958,
+          "n": 192,
+          "error_types": {
+            "correct": 163,
+            "intermediate_intrusion": 27,
+            "garbage": 2
+          }
+        },
+        "PI": {
+          "accuracy": 0.5312,
+          "ci_lower": 0.4635,
+          "ci_upper": 0.6042,
+          "n": 192,
+          "error_types": {
+            "correct": 102,
+            "intermediate_intrusion": 63,
+            "garbage": 27
+          }
+        }
+      }
+    },
+    "30_20": {
+      "num_keys": 30,
+      "num_updates": 20,
+      "regime": "B",
+      "elapsed_sec": 62.5,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7344,
+          "ci_lower": 0.6719,
+          "ci_upper": 0.7969,
+          "n": 192,
+          "error_types": {
+            "correct": 141,
+            "intermediate_intrusion": 50,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.4583,
+          "ci_lower": 0.3906,
+          "ci_upper": 0.526,
+          "n": 192,
+          "error_types": {
+            "intermediate_intrusion": 65,
+            "correct": 88,
+            "garbage": 39
+          }
+        }
+      }
+    },
+    "30_30": {
+      "num_keys": 30,
+      "num_updates": 30,
+      "regime": "B",
+      "elapsed_sec": 62.9,
+      "n_trials": 180,
+      "n_observations": 180,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7556,
+          "ci_lower": 0.6889,
+          "ci_upper": 0.8167,
+          "n": 180,
+          "error_types": {
+            "correct": 136,
+            "intermediate_intrusion": 40,
+            "garbage": 4
+          }
+        },
+        "PI": {
+          "accuracy": 0.35,
+          "ci_lower": 0.2778,
+          "ci_upper": 0.4167,
+          "n": 180,
+          "error_types": {
+            "intermediate_intrusion": 73,
+            "correct": 63,
+            "garbage": 44
+          }
+        }
+      }
+    },
+    "30_50": {
+      "num_keys": 30,
+      "num_updates": 50,
+      "regime": "B",
+      "elapsed_sec": 64.4,
+      "n_trials": 168,
+      "n_observations": 168,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7679,
+          "ci_lower": 0.7024,
+          "ci_upper": 0.8274,
+          "n": 168,
+          "error_types": {
+            "correct": 129,
+            "intermediate_intrusion": 36,
+            "garbage": 3
+          }
+        },
+        "PI": {
+          "accuracy": 0.2976,
+          "ci_lower": 0.2321,
+          "ci_upper": 0.3632,
+          "n": 168,
+          "error_types": {
+            "correct": 50,
+            "intermediate_intrusion": 58,
+            "garbage": 60
+          }
+        }
+      }
+    },
+    "40_5": {
+      "num_keys": 40,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 60.5,
+      "n_trials": 168,
+      "n_observations": 168,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.9286,
+          "ci_lower": 0.8869,
+          "ci_upper": 0.9643,
+          "n": 168,
+          "error_types": {
+            "correct": 156,
+            "intermediate_intrusion": 12
+          }
+        },
+        "PI": {
+          "accuracy": 0.6786,
+          "ci_lower": 0.6071,
+          "ci_upper": 0.75,
+          "n": 168,
+          "error_types": {
+            "intermediate_intrusion": 50,
+            "correct": 114,
+            "garbage": 3,
+            "primacy_intrusion": 1
+          }
+        }
+      }
+    },
+    "40_10": {
+      "num_keys": 40,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 70.4,
+      "n_trials": 200,
+      "n_observations": 200,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.88,
+          "ci_lower": 0.835,
+          "ci_upper": 0.925,
+          "n": 200,
+          "error_types": {
+            "correct": 176,
+            "intermediate_intrusion": 23,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.5,
+          "ci_lower": 0.43,
+          "ci_upper": 0.57,
+          "n": 200,
+          "error_types": {
+            "correct": 100,
+            "intermediate_intrusion": 88,
+            "garbage": 12
+          }
+        }
+      }
+    },
+    "40_15": {
+      "num_keys": 40,
+      "num_updates": 15,
+      "regime": "B",
+      "elapsed_sec": 61.5,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8281,
+          "ci_lower": 0.776,
+          "ci_upper": 0.8802,
+          "n": 192,
+          "error_types": {
+            "correct": 159,
+            "intermediate_intrusion": 30,
+            "garbage": 3
+          }
+        },
+        "PI": {
+          "accuracy": 0.3698,
+          "ci_lower": 0.3073,
+          "ci_upper": 0.4376,
+          "n": 192,
+          "error_types": {
+            "intermediate_intrusion": 87,
+            "correct": 71,
+            "garbage": 34
+          }
+        }
+      }
+    },
+    "40_20": {
+      "num_keys": 40,
+      "num_updates": 20,
+      "regime": "B",
+      "elapsed_sec": 55.8,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8229,
+          "ci_lower": 0.7656,
+          "ci_upper": 0.875,
+          "n": 192,
+          "error_types": {
+            "correct": 158,
+            "intermediate_intrusion": 33,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.4479,
+          "ci_lower": 0.3802,
+          "ci_upper": 0.5156,
+          "n": 192,
+          "error_types": {
+            "correct": 86,
+            "intermediate_intrusion": 68,
+            "garbage": 38
+          }
+        }
+      }
+    },
+    "40_30": {
+      "num_keys": 40,
+      "num_updates": 30,
+      "regime": "B",
+      "elapsed_sec": 53.4,
+      "n_trials": 168,
+      "n_observations": 168,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7798,
+          "ci_lower": 0.7143,
+          "ci_upper": 0.8393,
+          "n": 168,
+          "error_types": {
+            "correct": 131,
+            "intermediate_intrusion": 34,
+            "garbage": 3
+          }
+        },
+        "PI": {
+          "accuracy": 0.3095,
+          "ci_lower": 0.2381,
+          "ci_upper": 0.381,
+          "n": 168,
+          "error_types": {
+            "intermediate_intrusion": 83,
+            "correct": 52,
+            "garbage": 33
+          }
+        }
+      }
+    },
+    "45_5": {
+      "num_keys": 45,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 54.8,
+      "n_trials": 180,
+      "n_observations": 180,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.9278,
+          "ci_lower": 0.8889,
+          "ci_upper": 0.9611,
+          "n": 180,
+          "error_types": {
+            "correct": 167,
+            "intermediate_intrusion": 12,
+            "recency_intrusion": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.6833,
+          "ci_lower": 0.6167,
+          "ci_upper": 0.7501,
+          "n": 180,
+          "error_types": {
+            "correct": 123,
+            "intermediate_intrusion": 57
+          }
+        }
+      }
+    },
+    "45_10": {
+      "num_keys": 45,
+      "num_updates": 10,
+      "regime": "A",
+      "elapsed_sec": 54.0,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8385,
+          "ci_lower": 0.7865,
+          "ci_upper": 0.8854,
+          "n": 192,
+          "error_types": {
+            "correct": 161,
+            "intermediate_intrusion": 30,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.5677,
+          "ci_lower": 0.5,
+          "ci_upper": 0.6406,
+          "n": 192,
+          "error_types": {
+            "intermediate_intrusion": 77,
+            "correct": 109,
+            "garbage": 6
+          }
+        }
+      }
+    },
+    "45_15": {
+      "num_keys": 45,
+      "num_updates": 15,
+      "regime": "B",
+      "elapsed_sec": 61.3,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8438,
+          "ci_lower": 0.7917,
+          "ci_upper": 0.8906,
+          "n": 192,
+          "error_types": {
+            "correct": 162,
+            "intermediate_intrusion": 29,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.4427,
+          "ci_lower": 0.375,
+          "ci_upper": 0.5156,
+          "n": 192,
+          "error_types": {
+            "intermediate_intrusion": 88,
+            "garbage": 19,
+            "correct": 85
+          }
+        }
+      }
+    },
+    "45_20": {
+      "num_keys": 45,
+      "num_updates": 20,
+      "regime": "B",
+      "elapsed_sec": 68.6,
+      "n_trials": 192,
+      "n_observations": 192,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.8542,
+          "ci_lower": 0.8021,
+          "ci_upper": 0.901,
+          "n": 192,
+          "error_types": {
+            "correct": 164,
+            "intermediate_intrusion": 27,
+            "garbage": 1
+          }
+        },
+        "PI": {
+          "accuracy": 0.3906,
+          "ci_lower": 0.3177,
+          "ci_upper": 0.4583,
+          "n": 192,
+          "error_types": {
+            "garbage": 33,
+            "intermediate_intrusion": 84,
+            "correct": 75
+          }
+        }
+      }
+    },
+    "45_30": {
+      "num_keys": 45,
+      "num_updates": 30,
+      "regime": "B",
+      "elapsed_sec": 58.5,
+      "n_trials": 180,
+      "n_observations": 180,
+      "stopped_early": true,
+      "max_trials": 200,
+      "stats": {
+        "RI": {
+          "accuracy": 0.7222,
+          "ci_lower": 0.6611,
+          "ci_upper": 0.7889,
+          "n": 180,
+          "error_types": {
+            "correct": 130,
+            "intermediate_intrusion": 45,
+            "garbage": 5
+          }
+        },
+        "PI": {
+          "accuracy": 0.3278,
+          "ci_lower": 0.2611,
+          "ci_upper": 0.3944,
+          "n": 180,
+          "error_types": {
+            "correct": 59,
+            "garbage": 43,
+            "intermediate_intrusion": 78
+          }
+        }
+      }
+    }
+  },
+  "start_time": "2026-07-22T15:25:32.032802+00:00",
+  "end_time": "2026-07-22T16:18:53.020699+00:00"
+}

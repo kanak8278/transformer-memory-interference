@@ -54,6 +54,14 @@ except Exception as e:
     print(f"✗ ATCTrialGenerator failed: {e}")
     traceback.print_exc()
 
+try:
+    from narrative_generator.museum.generator import MuseumTrialGenerator
+    DOMAINS.append(("museum", MuseumTrialGenerator))
+    print("✓ MuseumTrialGenerator loaded")
+except Exception as e:
+    print(f"✗ MuseumTrialGenerator failed: {e}")
+    traceback.print_exc()
+
 print()
 
 # ─── Test configurations ───────────────────────────────────────────────────

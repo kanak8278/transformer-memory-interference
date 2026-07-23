@@ -1,0 +1,57 @@
+{
+  "model": "claude-haiku",
+  "dataset_type": "museum_M0",
+  "config": {
+    "trials_per_cell": 3,
+    "workers": 6,
+    "key_levels": [
+      3
+    ],
+    "update_levels": [
+      5
+    ],
+    "render_mode": "M0",
+    "pool_mode": "disjoint_pool",
+    "seed_formula": "abs(hash((nk,nu,t)))%(2**31)  [== sweep_arbitrary]",
+    "reuses": "sweep_arbitrary.classify_error/wilson/saturation/save",
+    "comparator": "plain sweep_arbitrary ARBITRARY_SINGLE",
+    "near_zero_thresh": 0.015,
+    "recovery_thresh": 0.06,
+    "sat_count": 3
+  },
+  "cells": {
+    "3_5": {
+      "num_keys": 3,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 3.9,
+      "n_trials": 3,
+      "n_observations": 3,
+      "stopped_early": false,
+      "max_trials": 3,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 3,
+          "error_types": {
+            "correct": 3
+          }
+        },
+        "PI": {
+          "accuracy": 0.6667,
+          "ci_lower": 0.0,
+          "ci_upper": 1.0,
+          "n": 3,
+          "error_types": {
+            "correct": 2,
+            "intermediate_intrusion": 1
+          }
+        }
+      }
+    }
+  },
+  "start_time": "2026-07-22T15:24:25.451568+00:00",
+  "end_time": "2026-07-22T15:24:29.361617+00:00"
+}

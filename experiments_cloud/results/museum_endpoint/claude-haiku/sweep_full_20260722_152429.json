@@ -1,0 +1,233 @@
+{
+  "model": "claude-haiku",
+  "dataset_type": "museum_M0",
+  "config": {
+    "trials_per_cell": 3,
+    "workers": 6,
+    "key_levels": [
+      3
+    ],
+    "update_levels": [
+      5
+    ],
+    "render_mode": "M0",
+    "pool_mode": "disjoint_pool",
+    "seed_formula": "abs(hash((nk,nu,t)))%(2**31)  [== sweep_arbitrary]",
+    "reuses": "sweep_arbitrary.classify_error/wilson/saturation/save",
+    "comparator": "plain sweep_arbitrary ARBITRARY_SINGLE",
+    "near_zero_thresh": 0.015,
+    "recovery_thresh": 0.06,
+    "sat_count": 3
+  },
+  "cells": {
+    "3_5": {
+      "num_keys": 3,
+      "num_updates": 5,
+      "regime": "A",
+      "elapsed_sec": 3.9,
+      "n_trials": 3,
+      "n_observations": 3,
+      "stopped_early": false,
+      "max_trials": 3,
+      "stats": {
+        "RI": {
+          "accuracy": 1.0,
+          "ci_lower": 1.0,
+          "ci_upper": 1.0,
+          "n": 3,
+          "error_types": {
+            "correct": 3
+          }
+        },
+        "PI": {
+          "accuracy": 0.6667,
+          "ci_lower": 0.0,
+          "ci_upper": 1.0,
+          "n": 3,
+          "error_types": {
+            "correct": 2,
+            "intermediate_intrusion": 1
+          }
+        }
+      }
+    }
+  },
+  "start_time": "2026-07-22T15:24:25.451568+00:00",
+  "end_time": "2026-07-22T15:24:29.361617+00:00",
+  "trial_details": {
+    "3_5": {
+      "RI": [
+        {
+          "trial_idx": 0,
+          "seed": 240621063,
+          "condition": "RI",
+          "test_category": "Lukas",
+          "categories_in_sequence": [
+            "Lukas",
+            "Marisol",
+            "Katri"
+          ],
+          "num_keys": 3,
+          "num_updates": 5,
+          "expected": "Large",
+          "predicted": "Large",
+          "raw_output": "Large",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 181,
+            "output_tokens": 4,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 619931086,
+          "condition": "RI",
+          "test_category": "Nuria",
+          "categories_in_sequence": [
+            "Lucia",
+            "Nuria",
+            "Wael"
+          ],
+          "num_keys": 3,
+          "num_updates": 5,
+          "expected": "Apple",
+          "predicted": "Apple",
+          "raw_output": "Apple",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 175,
+            "output_tokens": 4,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 239324455,
+          "condition": "RI",
+          "test_category": "Ines",
+          "categories_in_sequence": [
+            "Suri",
+            "Ines",
+            "Fatima"
+          ],
+          "num_keys": 3,
+          "num_updates": 5,
+          "expected": "Giant",
+          "predicted": "Giant",
+          "raw_output": "Giant",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 0,
+            "predicted_relative_pos": 0.0
+          },
+          "token_usage": {
+            "input_tokens": 178,
+            "output_tokens": 4,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ],
+      "PI": [
+        {
+          "trial_idx": 0,
+          "seed": 240621063,
+          "condition": "PI",
+          "test_category": "Lukas",
+          "categories_in_sequence": [
+            "Lukas",
+            "Marisol",
+            "Katri"
+          ],
+          "num_keys": 3,
+          "num_updates": 5,
+          "expected": "Plunge",
+          "predicted": "Plunge",
+          "raw_output": "Plunge",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 182,
+            "output_tokens": 6,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 2,
+          "seed": 619931086,
+          "condition": "PI",
+          "test_category": "Nuria",
+          "categories_in_sequence": [
+            "Lucia",
+            "Nuria",
+            "Wael"
+          ],
+          "num_keys": 3,
+          "num_updates": 5,
+          "expected": "Peer",
+          "predicted": "Peer",
+          "raw_output": "Peer",
+          "correct": true,
+          "error_type": "correct",
+          "error_detail": {
+            "predicted_idx": 4,
+            "predicted_relative_pos": 1.0
+          },
+          "token_usage": {
+            "input_tokens": 175,
+            "output_tokens": 5,
+            "was_truncated": false,
+            "error": null
+          }
+        },
+        {
+          "trial_idx": 1,
+          "seed": 239324455,
+          "condition": "PI",
+          "test_category": "Ines",
+          "categories_in_sequence": [
+            "Suri",
+            "Ines",
+            "Fatima"
+          ],
+          "num_keys": 3,
+          "num_updates": 5,
+          "expected": "Twist",
+          "predicted": "Silver",
+          "raw_output": "Silver",
+          "correct": false,
+          "error_type": "intermediate_intrusion",
+          "error_detail": {
+            "predicted_idx": 2,
+            "predicted_relative_pos": 0.5
+          },
+          "token_usage": {
+            "input_tokens": 180,
+            "output_tokens": 4,
+            "was_truncated": false,
+            "error": null
+          }
+        }
+      ]
+    }
+  }
+}
