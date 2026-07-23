@@ -1,0 +1,358 @@
+[h100_cosine] gpu=0 schedule=cosine total_steps=30000 micro_bs=256 accum=8 eff_batch=2048
+[h100_cosine] held-out cells (8): [(6, 5), (8, 2), (8, 6), (10, 2), (10, 4), (10, 9), (12, 4), (12, 8)]
+[h100_cosine] params=85,881,600 optim={'n_decay_tensors': 50, 'n_decay_params': 85760256, 'n_nodecay_tensors': 98, 'n_nodecay_params': 121344, 'fused': True}
+[h100_cosine] step 100/30000 lr=1.01e-04 loss=1.2633 0.80 steps/s elapsed=126s
+[h100_cosine] step 200/30000 lr=2.01e-04 loss=1.0619 1.06 steps/s elapsed=188s
+[h100_cosine] step 300/30000 lr=3.01e-04 loss=1.0429 1.18 steps/s elapsed=253s
+[h100_cosine] step 400/30000 lr=4.01e-04 loss=1.0315 1.26 steps/s elapsed=317s
+[h100_cosine] step 500/30000 lr=5.01e-04 loss=1.0326 1.31 steps/s elapsed=382s
+[h100_cosine] step 600/30000 lr=6.00e-04 loss=1.0227 1.35 steps/s elapsed=445s
+[h100_cosine] step 700/30000 lr=6.00e-04 loss=1.0292 1.38 steps/s elapsed=508s
+[h100_cosine] step 800/30000 lr=6.00e-04 loss=1.0209 1.40 steps/s elapsed=573s
+[h100_cosine] step 900/30000 lr=6.00e-04 loss=1.0194 1.41 steps/s elapsed=637s
+[h100_cosine] step 1000/30000 lr=6.00e-04 loss=1.0109 1.43 steps/s elapsed=698s
+[h100_cosine]   val@1000 acc=0.2109 by_role={'first': 0.2611, 'last': 0.2672, 'intermediate': 0.1818}
+[h100_cosine]   new best val_acc=0.2109
+[h100_cosine] step 1100/30000 lr=6.00e-04 loss=1.0139 1.44 steps/s elapsed=766s
+[h100_cosine] step 1200/30000 lr=5.99e-04 loss=1.0163 1.44 steps/s elapsed=832s
+[h100_cosine] step 1300/30000 lr=5.99e-04 loss=1.0133 1.45 steps/s elapsed=896s
+[h100_cosine] step 1400/30000 lr=5.99e-04 loss=1.0124 1.46 steps/s elapsed=960s
+[h100_cosine] step 1500/30000 lr=5.99e-04 loss=1.0190 1.47 steps/s elapsed=1023s
+[h100_cosine] step 1600/30000 lr=5.98e-04 loss=1.0099 1.47 steps/s elapsed=1086s
+[h100_cosine] step 1700/30000 lr=5.98e-04 loss=1.0142 1.48 steps/s elapsed=1150s
+[h100_cosine] step 1800/30000 lr=5.98e-04 loss=1.0196 1.48 steps/s elapsed=1216s
+[h100_cosine] step 1900/30000 lr=5.97e-04 loss=1.0061 1.49 steps/s elapsed=1278s
+[h100_cosine] step 2000/30000 lr=5.97e-04 loss=0.9989 1.49 steps/s elapsed=1339s
+[h100_cosine]   val@2000 acc=0.2179 by_role={'first': 0.2661, 'last': 0.2694, 'intermediate': 0.1908}
+[h100_cosine]   new best val_acc=0.2179
+[h100_cosine] step 2100/30000 lr=5.97e-04 loss=1.0070 1.49 steps/s elapsed=1405s
+[h100_cosine] step 2200/30000 lr=5.96e-04 loss=0.9993 1.50 steps/s elapsed=1468s
+[h100_cosine] step 2300/30000 lr=5.96e-04 loss=1.0043 1.50 steps/s elapsed=1531s
+[h100_cosine] step 2400/30000 lr=5.95e-04 loss=1.0102 1.50 steps/s elapsed=1595s
+[h100_cosine] step 2500/30000 lr=5.94e-04 loss=1.0030 1.51 steps/s elapsed=1659s
+[h100_cosine] step 2600/30000 lr=5.94e-04 loss=1.0120 1.51 steps/s elapsed=1722s
+[h100_cosine] step 2700/30000 lr=5.93e-04 loss=1.0062 1.51 steps/s elapsed=1784s
+[h100_cosine] step 2800/30000 lr=5.93e-04 loss=0.9951 1.52 steps/s elapsed=1844s
+[h100_cosine] step 2900/30000 lr=5.92e-04 loss=0.9989 1.52 steps/s elapsed=1907s
+[h100_cosine] step 3000/30000 lr=5.91e-04 loss=1.0003 1.52 steps/s elapsed=1970s
+[h100_cosine]   val@3000 acc=0.2244 by_role={'first': 0.2817, 'last': 0.2806, 'intermediate': 0.1935}
+[h100_cosine]   new best val_acc=0.2244
+[h100_cosine] step 3100/30000 lr=5.90e-04 loss=1.0046 1.52 steps/s elapsed=2038s
+[h100_cosine] step 3200/30000 lr=5.90e-04 loss=1.0041 1.52 steps/s elapsed=2101s
+[h100_cosine] step 3300/30000 lr=5.89e-04 loss=0.9952 1.53 steps/s elapsed=2164s
+[h100_cosine] step 3400/30000 lr=5.88e-04 loss=0.9962 1.53 steps/s elapsed=2226s
+[h100_cosine] step 3500/30000 lr=5.87e-04 loss=0.9928 1.53 steps/s elapsed=2287s
+[h100_cosine] step 3600/30000 lr=5.86e-04 loss=0.9951 1.53 steps/s elapsed=2351s
+[h100_cosine] step 3700/30000 lr=5.85e-04 loss=1.0011 1.53 steps/s elapsed=2414s
+[h100_cosine] step 3800/30000 lr=5.84e-04 loss=0.9974 1.53 steps/s elapsed=2478s
+[h100_cosine] step 3900/30000 lr=5.83e-04 loss=1.0006 1.53 steps/s elapsed=2542s
+[h100_cosine] step 4000/30000 lr=5.82e-04 loss=1.0046 1.53 steps/s elapsed=2608s
+[h100_cosine]   val@4000 acc=0.2276 by_role={'first': 0.2811, 'last': 0.285, 'intermediate': 0.1974}
+[h100_cosine]   new best val_acc=0.2276
+[h100_cosine] step 4100/30000 lr=5.81e-04 loss=0.9986 1.53 steps/s elapsed=2674s
+[h100_cosine] step 4200/30000 lr=5.80e-04 loss=1.0022 1.53 steps/s elapsed=2738s
+[h100_cosine] step 4300/30000 lr=5.79e-04 loss=1.0011 1.54 steps/s elapsed=2800s
+[h100_cosine] step 4400/30000 lr=5.78e-04 loss=1.0034 1.53 steps/s elapsed=2867s
+[h100_cosine] step 4500/30000 lr=5.77e-04 loss=0.9961 1.54 steps/s elapsed=2929s
+[h100_cosine] step 4600/30000 lr=5.76e-04 loss=0.9942 1.54 steps/s elapsed=2990s
+[h100_cosine] step 4700/30000 lr=5.74e-04 loss=1.0060 1.54 steps/s elapsed=3054s
+[h100_cosine] step 4800/30000 lr=5.73e-04 loss=1.0082 1.54 steps/s elapsed=3119s
+[h100_cosine] step 4900/30000 lr=5.72e-04 loss=0.9952 1.54 steps/s elapsed=3180s
+[h100_cosine] step 5000/30000 lr=5.71e-04 loss=0.9983 1.54 steps/s elapsed=3243s
+[h100_cosine]   val@5000 acc=0.2269 by_role={'first': 0.2861, 'last': 0.2811, 'intermediate': 0.1959}
+[h100_cosine] step 5100/30000 lr=5.69e-04 loss=0.9939 1.54 steps/s elapsed=3309s
+[h100_cosine] step 5200/30000 lr=5.68e-04 loss=0.9995 1.54 steps/s elapsed=3372s
+[h100_cosine] step 5300/30000 lr=5.67e-04 loss=0.9990 1.54 steps/s elapsed=3434s
+[h100_cosine] step 5400/30000 lr=5.65e-04 loss=0.9995 1.54 steps/s elapsed=3496s
+[h100_cosine] step 5500/30000 lr=5.64e-04 loss=0.9977 1.54 steps/s elapsed=3561s
+[h100_cosine] step 5600/30000 lr=5.62e-04 loss=0.9941 1.55 steps/s elapsed=3624s
+[h100_cosine] step 5700/30000 lr=5.61e-04 loss=0.9942 1.55 steps/s elapsed=3689s
+[h100_cosine] step 5800/30000 lr=5.59e-04 loss=0.9974 1.55 steps/s elapsed=3752s
+[h100_cosine] step 5900/30000 lr=5.58e-04 loss=1.0077 1.55 steps/s elapsed=3816s
+[h100_cosine] step 6000/30000 lr=5.56e-04 loss=0.9939 1.55 steps/s elapsed=3880s
+[h100_cosine]   val@6000 acc=0.2333 by_role={'first': 0.2844, 'last': 0.285, 'intermediate': 0.2053}
+[h100_cosine]   new best val_acc=0.2333
+[h100_cosine] step 6100/30000 lr=5.55e-04 loss=0.9891 1.55 steps/s elapsed=3945s
+[h100_cosine] step 6200/30000 lr=5.53e-04 loss=0.9865 1.55 steps/s elapsed=4007s
+[h100_cosine] step 6300/30000 lr=5.51e-04 loss=0.9950 1.55 steps/s elapsed=4070s
+[h100_cosine] step 6400/30000 lr=5.50e-04 loss=0.9943 1.55 steps/s elapsed=4130s
+[h100_cosine] step 6500/30000 lr=5.48e-04 loss=0.9996 1.55 steps/s elapsed=4195s
+[h100_cosine] step 6600/30000 lr=5.46e-04 loss=0.9940 1.55 steps/s elapsed=4257s
+[h100_cosine] step 6700/30000 lr=5.45e-04 loss=0.9856 1.55 steps/s elapsed=4317s
+[h100_cosine] step 6800/30000 lr=5.43e-04 loss=0.9909 1.55 steps/s elapsed=4380s
+[h100_cosine] step 6900/30000 lr=5.41e-04 loss=0.9946 1.55 steps/s elapsed=4444s
+[h100_cosine] step 7000/30000 lr=5.39e-04 loss=0.9976 1.55 steps/s elapsed=4509s
+[h100_cosine]   val@7000 acc=0.2318 by_role={'first': 0.2778, 'last': 0.2878, 'intermediate': 0.2039}
+[h100_cosine] step 7100/30000 lr=5.37e-04 loss=0.9984 1.55 steps/s elapsed=4576s
+[h100_cosine] step 7200/30000 lr=5.36e-04 loss=0.9956 1.55 steps/s elapsed=4640s
+[h100_cosine] step 7300/30000 lr=5.34e-04 loss=0.9956 1.55 steps/s elapsed=4703s
+[h100_cosine] step 7400/30000 lr=5.32e-04 loss=0.9935 1.55 steps/s elapsed=4767s
+[h100_cosine] step 7500/30000 lr=5.30e-04 loss=0.9889 1.55 steps/s elapsed=4829s
+[h100_cosine] step 7600/30000 lr=5.28e-04 loss=0.9973 1.55 steps/s elapsed=4893s
+[h100_cosine] step 7700/30000 lr=5.26e-04 loss=0.9965 1.55 steps/s elapsed=4956s
+[h100_cosine] step 7800/30000 lr=5.24e-04 loss=0.9974 1.55 steps/s elapsed=5019s
+[h100_cosine] step 7900/30000 lr=5.22e-04 loss=0.9999 1.55 steps/s elapsed=5083s
+[h100_cosine] step 8000/30000 lr=5.20e-04 loss=0.9999 1.55 steps/s elapsed=5148s
+[h100_cosine]   val@8000 acc=0.2311 by_role={'first': 0.2828, 'last': 0.2883, 'intermediate': 0.2014}
+[h100_cosine] step 8100/30000 lr=5.18e-04 loss=0.9871 1.55 steps/s elapsed=5213s
+[h100_cosine] step 8200/30000 lr=5.16e-04 loss=0.9962 1.55 steps/s elapsed=5275s
+[h100_cosine] step 8300/30000 lr=5.14e-04 loss=1.0043 1.55 steps/s elapsed=5341s
+[h100_cosine] step 8400/30000 lr=5.12e-04 loss=0.9984 1.55 steps/s elapsed=5407s
+[h100_cosine] step 8500/30000 lr=5.09e-04 loss=0.9958 1.55 steps/s elapsed=5470s
+[h100_cosine] step 8600/30000 lr=5.07e-04 loss=0.9944 1.55 steps/s elapsed=5532s
+[h100_cosine] step 8700/30000 lr=5.05e-04 loss=0.9886 1.56 steps/s elapsed=5593s
+[h100_cosine] step 8800/30000 lr=5.03e-04 loss=0.9949 1.56 steps/s elapsed=5656s
+[h100_cosine] step 8900/30000 lr=5.01e-04 loss=0.9921 1.56 steps/s elapsed=5718s
+[h100_cosine] step 9000/30000 lr=4.98e-04 loss=0.9929 1.56 steps/s elapsed=5780s
+[h100_cosine]   val@9000 acc=0.2292 by_role={'first': 0.2833, 'last': 0.2883, 'intermediate': 0.1983}
+[h100_cosine] step 9100/30000 lr=4.96e-04 loss=0.9942 1.56 steps/s elapsed=5848s
+[h100_cosine] step 9200/30000 lr=4.94e-04 loss=0.9880 1.56 steps/s elapsed=5910s
+[h100_cosine] step 9300/30000 lr=4.91e-04 loss=0.9919 1.56 steps/s elapsed=5973s
+[h100_cosine] step 9400/30000 lr=4.89e-04 loss=0.9883 1.56 steps/s elapsed=6036s
+[h100_cosine] step 9500/30000 lr=4.87e-04 loss=0.9959 1.56 steps/s elapsed=6100s
+[h100_cosine] step 9600/30000 lr=4.84e-04 loss=0.9902 1.56 steps/s elapsed=6162s
+[h100_cosine] step 9700/30000 lr=4.82e-04 loss=0.9944 1.56 steps/s elapsed=6227s
+[h100_cosine] step 9800/30000 lr=4.80e-04 loss=0.9922 1.56 steps/s elapsed=6288s
+[h100_cosine] step 9900/30000 lr=4.77e-04 loss=0.9883 1.56 steps/s elapsed=6351s
+[h100_cosine] step 10000/30000 lr=4.75e-04 loss=0.9841 1.56 steps/s elapsed=6413s
+[h100_cosine]   val@10000 acc=0.2297 by_role={'first': 0.2894, 'last': 0.2822, 'intermediate': 0.1991}
+[h100_cosine] step 10100/30000 lr=4.72e-04 loss=0.9927 1.56 steps/s elapsed=6482s
+[h100_cosine] step 10200/30000 lr=4.70e-04 loss=0.9887 1.56 steps/s elapsed=6544s
+[h100_cosine] step 10300/30000 lr=4.67e-04 loss=0.9875 1.56 steps/s elapsed=6606s
+[h100_cosine] step 10400/30000 lr=4.65e-04 loss=0.9903 1.56 steps/s elapsed=6669s
+[h100_cosine] step 10500/30000 lr=4.62e-04 loss=0.9869 1.56 steps/s elapsed=6733s
+[h100_cosine] step 10600/30000 lr=4.60e-04 loss=0.9838 1.56 steps/s elapsed=6796s
+[h100_cosine] step 10700/30000 lr=4.57e-04 loss=0.9888 1.56 steps/s elapsed=6860s
+[h100_cosine] step 10800/30000 lr=4.55e-04 loss=1.0017 1.56 steps/s elapsed=6925s
+[h100_cosine] step 10900/30000 lr=4.52e-04 loss=0.9787 1.56 steps/s elapsed=6986s
+[h100_cosine] step 11000/30000 lr=4.50e-04 loss=0.9913 1.56 steps/s elapsed=7051s
+[h100_cosine]   val@11000 acc=0.2335 by_role={'first': 0.29, 'last': 0.2733, 'intermediate': 0.2073}
+[h100_cosine]   new best val_acc=0.2335
+[h100_cosine] step 11100/30000 lr=4.47e-04 loss=0.9923 1.56 steps/s elapsed=7119s
+[h100_cosine] step 11200/30000 lr=4.45e-04 loss=0.9939 1.56 steps/s elapsed=7184s
+[h100_cosine] step 11300/30000 lr=4.42e-04 loss=0.9927 1.56 steps/s elapsed=7246s
+[h100_cosine] step 11400/30000 lr=4.39e-04 loss=0.9903 1.56 steps/s elapsed=7311s
+[h100_cosine] step 11500/30000 lr=4.37e-04 loss=0.9824 1.56 steps/s elapsed=7372s
+[h100_cosine] step 11600/30000 lr=4.34e-04 loss=0.9868 1.56 steps/s elapsed=7436s
+[h100_cosine] step 11700/30000 lr=4.31e-04 loss=0.9855 1.56 steps/s elapsed=7499s
+[h100_cosine] step 11800/30000 lr=4.29e-04 loss=0.9886 1.56 steps/s elapsed=7562s
+[h100_cosine] step 11900/30000 lr=4.26e-04 loss=0.9873 1.56 steps/s elapsed=7625s
+[h100_cosine] step 12000/30000 lr=4.23e-04 loss=0.9811 1.56 steps/s elapsed=7686s
+[h100_cosine]   val@12000 acc=0.2312 by_role={'first': 0.2833, 'last': 0.2817, 'intermediate': 0.2032}
+[h100_cosine] step 12100/30000 lr=4.21e-04 loss=0.9821 1.56 steps/s elapsed=7752s
+[h100_cosine] step 12200/30000 lr=4.18e-04 loss=0.9846 1.56 steps/s elapsed=7814s
+[h100_cosine] step 12300/30000 lr=4.15e-04 loss=0.9869 1.56 steps/s elapsed=7878s
+[h100_cosine] step 12400/30000 lr=4.12e-04 loss=0.9848 1.56 steps/s elapsed=7941s
+[h100_cosine] step 12500/30000 lr=4.10e-04 loss=0.9875 1.56 steps/s elapsed=8004s
+[h100_cosine] step 12600/30000 lr=4.07e-04 loss=0.9855 1.56 steps/s elapsed=8067s
+[h100_cosine] step 12700/30000 lr=4.04e-04 loss=0.9839 1.56 steps/s elapsed=8129s
+[h100_cosine] step 12800/30000 lr=4.01e-04 loss=0.9818 1.56 steps/s elapsed=8193s
+[h100_cosine] step 12900/30000 lr=3.98e-04 loss=0.9806 1.56 steps/s elapsed=8255s
+[h100_cosine] step 13000/30000 lr=3.96e-04 loss=0.9795 1.56 steps/s elapsed=8315s
+[h100_cosine]   val@13000 acc=0.2366 by_role={'first': 0.3039, 'last': 0.2928, 'intermediate': 0.2029}
+[h100_cosine]   new best val_acc=0.2366
+[h100_cosine] step 13100/30000 lr=3.93e-04 loss=0.9778 1.56 steps/s elapsed=8382s
+[h100_cosine] step 13200/30000 lr=3.90e-04 loss=0.9748 1.56 steps/s elapsed=8448s
+[h100_cosine] step 13300/30000 lr=3.87e-04 loss=0.9466 1.56 steps/s elapsed=8510s
+[h100_cosine] step 13400/30000 lr=3.84e-04 loss=0.9563 1.56 steps/s elapsed=8573s
+[h100_cosine] step 13500/30000 lr=3.82e-04 loss=0.9424 1.56 steps/s elapsed=8637s
+[h100_cosine] step 13600/30000 lr=3.79e-04 loss=0.9340 1.56 steps/s elapsed=8700s
+[h100_cosine] step 13700/30000 lr=3.76e-04 loss=0.9120 1.56 steps/s elapsed=8762s
+[h100_cosine] step 13800/30000 lr=3.73e-04 loss=0.9157 1.56 steps/s elapsed=8826s
+[h100_cosine] step 13900/30000 lr=3.70e-04 loss=0.9124 1.56 steps/s elapsed=8891s
+[h100_cosine] step 14000/30000 lr=3.67e-04 loss=0.8919 1.56 steps/s elapsed=8954s
+[h100_cosine]   val@14000 acc=0.2951 by_role={'first': 0.6139, 'last': 0.3011, 'intermediate': 0.2065}
+[h100_cosine]   new best val_acc=0.2951
+[h100_cosine] step 14100/30000 lr=3.65e-04 loss=0.9087 1.56 steps/s elapsed=9025s
+[h100_cosine] step 14200/30000 lr=3.62e-04 loss=0.8792 1.56 steps/s elapsed=9086s
+[h100_cosine] step 14300/30000 lr=3.59e-04 loss=0.8726 1.56 steps/s elapsed=9147s
+[h100_cosine] step 14400/30000 lr=3.56e-04 loss=0.8736 1.56 steps/s elapsed=9209s
+[h100_cosine] step 14500/30000 lr=3.53e-04 loss=0.8787 1.56 steps/s elapsed=9274s
+[h100_cosine] step 14600/30000 lr=3.50e-04 loss=0.8768 1.56 steps/s elapsed=9338s
+[h100_cosine] step 14700/30000 lr=3.47e-04 loss=0.8743 1.56 steps/s elapsed=9401s
+[h100_cosine] step 14800/30000 lr=3.44e-04 loss=0.8593 1.56 steps/s elapsed=9462s
+[h100_cosine] step 14900/30000 lr=3.42e-04 loss=0.8610 1.56 steps/s elapsed=9525s
+[h100_cosine] step 15000/30000 lr=3.39e-04 loss=0.8537 1.56 steps/s elapsed=9588s
+[h100_cosine]   val@15000 acc=0.3212 by_role={'first': 0.7178, 'last': 0.3011, 'intermediate': 0.2185}
+[h100_cosine]   new best val_acc=0.3212
+[h100_cosine] step 15100/30000 lr=3.36e-04 loss=0.8407 1.56 steps/s elapsed=9653s
+[h100_cosine] step 15200/30000 lr=3.33e-04 loss=0.8597 1.56 steps/s elapsed=9719s
+[h100_cosine] step 15300/30000 lr=3.30e-04 loss=0.8472 1.56 steps/s elapsed=9782s
+[h100_cosine] step 15400/30000 lr=3.27e-04 loss=0.8414 1.56 steps/s elapsed=9845s
+[h100_cosine] step 15500/30000 lr=3.24e-04 loss=0.8279 1.56 steps/s elapsed=9907s
+[h100_cosine] step 15600/30000 lr=3.21e-04 loss=0.8271 1.56 steps/s elapsed=9972s
+[h100_cosine] step 15700/30000 lr=3.18e-04 loss=0.8265 1.56 steps/s elapsed=10036s
+[h100_cosine] step 15800/30000 lr=3.16e-04 loss=0.8173 1.56 steps/s elapsed=10100s
+[h100_cosine] step 15900/30000 lr=3.13e-04 loss=0.8149 1.56 steps/s elapsed=10163s
+[h100_cosine] step 16000/30000 lr=3.10e-04 loss=0.8086 1.56 steps/s elapsed=10225s
+[h100_cosine]   val@16000 acc=0.3419 by_role={'first': 0.7894, 'last': 0.3133, 'intermediate': 0.2276}
+[h100_cosine]   new best val_acc=0.3419
+[h100_cosine] step 16100/30000 lr=3.07e-04 loss=0.8009 1.56 steps/s elapsed=10291s
+[h100_cosine] step 16200/30000 lr=3.04e-04 loss=0.7987 1.56 steps/s elapsed=10354s
+[h100_cosine] step 16300/30000 lr=3.01e-04 loss=0.8055 1.56 steps/s elapsed=10418s
+[h100_cosine] step 16400/30000 lr=2.98e-04 loss=0.8016 1.56 steps/s elapsed=10483s
+[h100_cosine] step 16500/30000 lr=2.95e-04 loss=0.8089 1.56 steps/s elapsed=10548s
+[h100_cosine] step 16600/30000 lr=2.93e-04 loss=0.7965 1.56 steps/s elapsed=10613s
+[h100_cosine] step 16700/30000 lr=2.90e-04 loss=0.7704 1.56 steps/s elapsed=10673s
+[h100_cosine] step 16800/30000 lr=2.87e-04 loss=0.7789 1.57 steps/s elapsed=10734s
+[h100_cosine] step 16900/30000 lr=2.84e-04 loss=0.7845 1.57 steps/s elapsed=10798s
+[h100_cosine] step 17000/30000 lr=2.81e-04 loss=0.7793 1.56 steps/s elapsed=10864s
+[h100_cosine]   val@17000 acc=0.3596 by_role={'first': 0.8139, 'last': 0.3311, 'intermediate': 0.2435}
+[h100_cosine]   new best val_acc=0.3596
+[h100_cosine] step 17100/30000 lr=2.78e-04 loss=0.7372 1.56 steps/s elapsed=10929s
+[h100_cosine] step 17200/30000 lr=2.76e-04 loss=0.7704 1.56 steps/s elapsed=10990s
+[h100_cosine] step 17300/30000 lr=2.73e-04 loss=0.7765 1.56 steps/s elapsed=11056s
+[h100_cosine] step 17400/30000 lr=2.70e-04 loss=0.7745 1.56 steps/s elapsed=11121s
+[h100_cosine] step 17500/30000 lr=2.67e-04 loss=0.7505 1.57 steps/s elapsed=11181s
+[h100_cosine] step 17600/30000 lr=2.64e-04 loss=0.7482 1.57 steps/s elapsed=11242s
+[h100_cosine] step 17700/30000 lr=2.62e-04 loss=0.7663 1.57 steps/s elapsed=11306s
+[h100_cosine] step 17800/30000 lr=2.59e-04 loss=0.7475 1.57 steps/s elapsed=11367s
+[h100_cosine] step 17900/30000 lr=2.56e-04 loss=0.7367 1.57 steps/s elapsed=11432s
+[h100_cosine] step 18000/30000 lr=2.53e-04 loss=0.7254 1.57 steps/s elapsed=11493s
+[h100_cosine]   val@18000 acc=0.3861 by_role={'first': 0.8506, 'last': 0.345, 'intermediate': 0.2706}
+[h100_cosine]   new best val_acc=0.3861
+[h100_cosine] step 18100/30000 lr=2.50e-04 loss=0.7422 1.57 steps/s elapsed=11561s
+[h100_cosine] step 18200/30000 lr=2.48e-04 loss=0.7264 1.57 steps/s elapsed=11624s
+[h100_cosine] step 18300/30000 lr=2.45e-04 loss=0.7421 1.57 steps/s elapsed=11689s
+[h100_cosine] step 18400/30000 lr=2.42e-04 loss=0.7119 1.57 steps/s elapsed=11752s
+[h100_cosine] step 18500/30000 lr=2.39e-04 loss=0.7289 1.57 steps/s elapsed=11817s
+[h100_cosine] step 18600/30000 lr=2.37e-04 loss=0.7209 1.57 steps/s elapsed=11882s
+[h100_cosine] step 18700/30000 lr=2.34e-04 loss=0.7047 1.57 steps/s elapsed=11945s
+[h100_cosine] step 18800/30000 lr=2.31e-04 loss=0.7198 1.57 steps/s elapsed=12009s
+[h100_cosine] step 18900/30000 lr=2.29e-04 loss=0.7055 1.57 steps/s elapsed=12072s
+[h100_cosine] step 19000/30000 lr=2.26e-04 loss=0.6857 1.57 steps/s elapsed=12135s
+[h100_cosine]   val@19000 acc=0.3992 by_role={'first': 0.8667, 'last': 0.3833, 'intermediate': 0.2761}
+[h100_cosine]   new best val_acc=0.3992
+[h100_cosine] step 19100/30000 lr=2.23e-04 loss=0.6895 1.57 steps/s elapsed=12203s
+[h100_cosine] step 19200/30000 lr=2.21e-04 loss=0.6532 1.57 steps/s elapsed=12263s
+[h100_cosine] step 19300/30000 lr=2.18e-04 loss=0.6592 1.57 steps/s elapsed=12325s
+[h100_cosine] step 19400/30000 lr=2.15e-04 loss=0.6799 1.57 steps/s elapsed=12389s
+[h100_cosine] step 19500/30000 lr=2.13e-04 loss=0.6554 1.57 steps/s elapsed=12452s
+[h100_cosine] step 19600/30000 lr=2.10e-04 loss=0.6417 1.57 steps/s elapsed=12514s
+[h100_cosine] step 19700/30000 lr=2.08e-04 loss=0.6492 1.57 steps/s elapsed=12577s
+[h100_cosine] step 19800/30000 lr=2.05e-04 loss=0.6334 1.57 steps/s elapsed=12640s
+[h100_cosine] step 19900/30000 lr=2.03e-04 loss=0.6017 1.57 steps/s elapsed=12700s
+[h100_cosine] step 20000/30000 lr=2.00e-04 loss=0.6349 1.57 steps/s elapsed=12765s
+[h100_cosine]   val@20000 acc=0.4649 by_role={'first': 0.8833, 'last': 0.4483, 'intermediate': 0.3553}
+[h100_cosine]   new best val_acc=0.4649
+[h100_cosine] step 20100/30000 lr=1.98e-04 loss=0.6102 1.57 steps/s elapsed=12832s
+[h100_cosine] step 20200/30000 lr=1.95e-04 loss=0.5904 1.57 steps/s elapsed=12893s
+[h100_cosine] step 20300/30000 lr=1.93e-04 loss=0.5817 1.57 steps/s elapsed=12954s
+[h100_cosine] step 20400/30000 lr=1.90e-04 loss=0.5801 1.57 steps/s elapsed=13018s
+[h100_cosine] step 20500/30000 lr=1.88e-04 loss=0.5660 1.57 steps/s elapsed=13079s
+[h100_cosine] step 20600/30000 lr=1.85e-04 loss=0.5653 1.57 steps/s elapsed=13142s
+[h100_cosine] step 20700/30000 lr=1.83e-04 loss=0.5606 1.57 steps/s elapsed=13205s
+[h100_cosine] step 20800/30000 lr=1.80e-04 loss=0.5513 1.57 steps/s elapsed=13269s
+[h100_cosine] step 20900/30000 lr=1.78e-04 loss=0.5201 1.57 steps/s elapsed=13330s
+[h100_cosine] step 21000/30000 lr=1.76e-04 loss=0.5251 1.57 steps/s elapsed=13394s
+[h100_cosine]   val@21000 acc=0.5494 by_role={'first': 0.8939, 'last': 0.5444, 'intermediate': 0.4568}
+[h100_cosine]   new best val_acc=0.5494
+[h100_cosine] step 21100/30000 lr=1.73e-04 loss=0.4901 1.57 steps/s elapsed=13461s
+[h100_cosine] step 21200/30000 lr=1.71e-04 loss=0.4889 1.57 steps/s elapsed=13524s
+[h100_cosine] step 21300/30000 lr=1.69e-04 loss=0.4650 1.57 steps/s elapsed=13584s
+[h100_cosine] step 21400/30000 lr=1.66e-04 loss=0.4544 1.57 steps/s elapsed=13646s
+[h100_cosine] step 21500/30000 lr=1.64e-04 loss=0.4453 1.57 steps/s elapsed=13708s
+[h100_cosine] step 21600/30000 lr=1.62e-04 loss=0.4235 1.57 steps/s elapsed=13769s
+[h100_cosine] step 21700/30000 lr=1.59e-04 loss=0.4337 1.57 steps/s elapsed=13833s
+[h100_cosine] step 21800/30000 lr=1.57e-04 loss=0.4246 1.57 steps/s elapsed=13896s
+[h100_cosine] step 21900/30000 lr=1.55e-04 loss=0.4063 1.57 steps/s elapsed=13959s
+[h100_cosine] step 22000/30000 lr=1.53e-04 loss=0.3924 1.57 steps/s elapsed=14022s
+[h100_cosine]   val@22000 acc=0.6331 by_role={'first': 0.8917, 'last': 0.6483, 'intermediate': 0.5585}
+[h100_cosine]   new best val_acc=0.6331
+[h100_cosine] step 22100/30000 lr=1.51e-04 loss=0.3802 1.57 steps/s elapsed=14088s
+[h100_cosine] step 22200/30000 lr=1.48e-04 loss=0.3855 1.57 steps/s elapsed=14151s
+[h100_cosine] step 22300/30000 lr=1.46e-04 loss=0.3733 1.57 steps/s elapsed=14215s
+[h100_cosine] step 22400/30000 lr=1.44e-04 loss=0.3722 1.57 steps/s elapsed=14277s
+[h100_cosine] step 22500/30000 lr=1.42e-04 loss=0.3779 1.57 steps/s elapsed=14341s
+[h100_cosine] step 22600/30000 lr=1.40e-04 loss=0.3605 1.57 steps/s elapsed=14404s
+[h100_cosine] step 22700/30000 lr=1.38e-04 loss=0.3534 1.57 steps/s elapsed=14468s
+[h100_cosine] step 22800/30000 lr=1.36e-04 loss=0.3372 1.57 steps/s elapsed=14530s
+[h100_cosine] step 22900/30000 lr=1.34e-04 loss=0.3252 1.57 steps/s elapsed=14592s
+[h100_cosine] step 23000/30000 lr=1.32e-04 loss=0.3365 1.57 steps/s elapsed=14656s
+[h100_cosine]   val@23000 acc=0.6692 by_role={'first': 0.8978, 'last': 0.7433, 'intermediate': 0.5867}
+[h100_cosine]   new best val_acc=0.6692
+[h100_cosine] step 23100/30000 lr=1.30e-04 loss=0.3448 1.57 steps/s elapsed=14726s
+[h100_cosine] step 23200/30000 lr=1.28e-04 loss=0.3263 1.57 steps/s elapsed=14790s
+[h100_cosine] step 23300/30000 lr=1.26e-04 loss=0.3154 1.57 steps/s elapsed=14854s
+[h100_cosine] step 23400/30000 lr=1.24e-04 loss=0.2996 1.57 steps/s elapsed=14914s
+[h100_cosine] step 23500/30000 lr=1.23e-04 loss=0.3148 1.57 steps/s elapsed=14977s
+[h100_cosine] step 23600/30000 lr=1.21e-04 loss=0.2785 1.57 steps/s elapsed=15038s
+[h100_cosine] step 23700/30000 lr=1.19e-04 loss=0.2775 1.57 steps/s elapsed=15100s
+[h100_cosine] step 23800/30000 lr=1.17e-04 loss=0.3006 1.57 steps/s elapsed=15163s
+[h100_cosine] step 23900/30000 lr=1.15e-04 loss=0.2788 1.57 steps/s elapsed=15225s
+[h100_cosine] step 24000/30000 lr=1.14e-04 loss=0.3142 1.57 steps/s elapsed=15293s
+[h100_cosine]   val@24000 acc=0.7312 by_role={'first': 0.9061, 'last': 0.8011, 'intermediate': 0.6644}
+[h100_cosine]   new best val_acc=0.7312
+[h100_cosine] step 24100/30000 lr=1.12e-04 loss=0.2900 1.57 steps/s elapsed=15361s
+[h100_cosine] step 24200/30000 lr=1.10e-04 loss=0.2706 1.57 steps/s elapsed=15424s
+[h100_cosine] step 24300/30000 lr=1.09e-04 loss=0.2616 1.57 steps/s elapsed=15487s
+[h100_cosine] step 24400/30000 lr=1.07e-04 loss=0.2906 1.57 steps/s elapsed=15552s
+[h100_cosine] step 24500/30000 lr=1.05e-04 loss=0.2576 1.57 steps/s elapsed=15614s
+[h100_cosine] step 24600/30000 lr=1.04e-04 loss=0.2497 1.57 steps/s elapsed=15676s
+[h100_cosine] step 24700/30000 lr=1.02e-04 loss=0.2546 1.57 steps/s elapsed=15740s
+[h100_cosine] step 24800/30000 lr=1.01e-04 loss=0.2574 1.57 steps/s elapsed=15802s
+[h100_cosine] step 24900/30000 lr=9.91e-05 loss=0.2438 1.57 steps/s elapsed=15864s
+[h100_cosine] step 25000/30000 lr=9.76e-05 loss=0.2557 1.57 steps/s elapsed=15928s
+[h100_cosine]   val@25000 acc=0.7580 by_role={'first': 0.8989, 'last': 0.8311, 'intermediate': 0.6997}
+[h100_cosine]   new best val_acc=0.7580
+[h100_cosine] step 25100/30000 lr=9.62e-05 loss=0.2480 1.57 steps/s elapsed=15994s
+[h100_cosine] step 25200/30000 lr=9.47e-05 loss=0.2240 1.57 steps/s elapsed=16056s
+[h100_cosine] step 25300/30000 lr=9.33e-05 loss=0.2786 1.57 steps/s elapsed=16124s
+[h100_cosine] step 25400/30000 lr=9.20e-05 loss=0.2399 1.57 steps/s elapsed=16187s
+[h100_cosine] step 25500/30000 lr=9.06e-05 loss=0.2289 1.57 steps/s elapsed=16249s
+[h100_cosine] step 25600/30000 lr=8.93e-05 loss=0.2419 1.57 steps/s elapsed=16312s
+[h100_cosine] step 25700/30000 lr=8.80e-05 loss=0.2327 1.57 steps/s elapsed=16376s
+[h100_cosine] step 25800/30000 lr=8.67e-05 loss=0.2450 1.57 steps/s elapsed=16440s
+[h100_cosine] step 25900/30000 lr=8.55e-05 loss=0.2233 1.57 steps/s elapsed=16502s
+[h100_cosine] step 26000/30000 lr=8.43e-05 loss=0.2216 1.57 steps/s elapsed=16563s
+[h100_cosine]   val@26000 acc=0.7756 by_role={'first': 0.9067, 'last': 0.8483, 'intermediate': 0.72}
+[h100_cosine]   new best val_acc=0.7756
+[h100_cosine] step 26100/30000 lr=8.31e-05 loss=0.2499 1.57 steps/s elapsed=16635s
+[h100_cosine] step 26200/30000 lr=8.20e-05 loss=0.2479 1.57 steps/s elapsed=16700s
+[h100_cosine] step 26300/30000 lr=8.08e-05 loss=0.2401 1.57 steps/s elapsed=16766s
+[h100_cosine] step 26400/30000 lr=7.97e-05 loss=0.2398 1.57 steps/s elapsed=16831s
+[h100_cosine] step 26500/30000 lr=7.87e-05 loss=0.2048 1.57 steps/s elapsed=16891s
+[h100_cosine] step 26600/30000 lr=7.76e-05 loss=0.2327 1.57 steps/s elapsed=16956s
+[h100_cosine] step 26700/30000 lr=7.66e-05 loss=0.2177 1.57 steps/s elapsed=17017s
+[h100_cosine] step 26800/30000 lr=7.56e-05 loss=0.2046 1.57 steps/s elapsed=17078s
+[h100_cosine] step 26900/30000 lr=7.47e-05 loss=0.2042 1.57 steps/s elapsed=17140s
+[h100_cosine] step 27000/30000 lr=7.38e-05 loss=0.2040 1.57 steps/s elapsed=17201s
+[h100_cosine]   val@27000 acc=0.7871 by_role={'first': 0.9094, 'last': 0.8594, 'intermediate': 0.7339}
+[h100_cosine]   new best val_acc=0.7871
+[h100_cosine] step 27100/30000 lr=7.29e-05 loss=0.1927 1.57 steps/s elapsed=17266s
+[h100_cosine] step 27200/30000 lr=7.20e-05 loss=0.2139 1.57 steps/s elapsed=17330s
+[h100_cosine] step 27300/30000 lr=7.12e-05 loss=0.2053 1.57 steps/s elapsed=17392s
+[h100_cosine] step 27400/30000 lr=7.04e-05 loss=0.1921 1.57 steps/s elapsed=17453s
+[h100_cosine] step 27500/30000 lr=6.96e-05 loss=0.1905 1.57 steps/s elapsed=17514s
+[h100_cosine] step 27600/30000 lr=6.88e-05 loss=0.2013 1.57 steps/s elapsed=17576s
+[h100_cosine] step 27700/30000 lr=6.81e-05 loss=0.1988 1.57 steps/s elapsed=17639s
+[h100_cosine] step 27800/30000 lr=6.74e-05 loss=0.2080 1.57 steps/s elapsed=17702s
+[h100_cosine] step 27900/30000 lr=6.68e-05 loss=0.2111 1.57 steps/s elapsed=17766s
+[h100_cosine] step 28000/30000 lr=6.61e-05 loss=0.2054 1.57 steps/s elapsed=17829s
+[h100_cosine]   val@28000 acc=0.7975 by_role={'first': 0.9067, 'last': 0.86, 'intermediate': 0.7506}
+[h100_cosine]   new best val_acc=0.7975
+[h100_cosine] step 28100/30000 lr=6.55e-05 loss=0.2211 1.57 steps/s elapsed=17899s
+[h100_cosine] step 28200/30000 lr=6.50e-05 loss=0.2138 1.57 steps/s elapsed=17964s
+[h100_cosine] step 28300/30000 lr=6.44e-05 loss=0.1963 1.57 steps/s elapsed=18026s
+[h100_cosine] step 28400/30000 lr=6.39e-05 loss=0.2064 1.57 steps/s elapsed=18089s
+[h100_cosine] step 28500/30000 lr=6.35e-05 loss=0.2059 1.57 steps/s elapsed=18152s
+[h100_cosine] step 28600/30000 lr=6.30e-05 loss=0.1867 1.57 steps/s elapsed=18215s
+[h100_cosine] step 28700/30000 lr=6.26e-05 loss=0.2082 1.57 steps/s elapsed=18280s
+[h100_cosine] step 28800/30000 lr=6.22e-05 loss=0.2091 1.57 steps/s elapsed=18345s
+[h100_cosine] step 28900/30000 lr=6.19e-05 loss=0.2066 1.57 steps/s elapsed=18411s
+[h100_cosine] step 29000/30000 lr=6.15e-05 loss=0.1760 1.57 steps/s elapsed=18470s
+[h100_cosine]   val@29000 acc=0.7970 by_role={'first': 0.9061, 'last': 0.8672, 'intermediate': 0.748}
+[h100_cosine] step 29100/30000 lr=6.12e-05 loss=0.1871 1.57 steps/s elapsed=18537s
+[h100_cosine] step 29200/30000 lr=6.10e-05 loss=0.1851 1.57 steps/s elapsed=18601s
+[h100_cosine] step 29300/30000 lr=6.08e-05 loss=0.2046 1.57 steps/s elapsed=18664s
+[h100_cosine] step 29400/30000 lr=6.06e-05 loss=0.1832 1.57 steps/s elapsed=18727s
+[h100_cosine] step 29500/30000 lr=6.04e-05 loss=0.1874 1.57 steps/s elapsed=18788s
+[h100_cosine] step 29600/30000 lr=6.02e-05 loss=0.2050 1.57 steps/s elapsed=18852s
+[h100_cosine] step 29700/30000 lr=6.01e-05 loss=0.1989 1.57 steps/s elapsed=18916s
+[h100_cosine] step 29800/30000 lr=6.01e-05 loss=0.1830 1.57 steps/s elapsed=18978s
+[h100_cosine] step 29900/30000 lr=6.00e-05 loss=0.2105 1.57 steps/s elapsed=19045s
+[h100_cosine] step 30000/30000 lr=6.00e-05 loss=0.1785 1.57 steps/s elapsed=19107s
+[h100_cosine]   val@30000 acc=0.7883 by_role={'first': 0.9022, 'last': 0.855, 'intermediate': 0.7391}
+[h100_cosine] training done. final eval on best.pt...
+[h100_cosine] FINAL iid_test=0.8005 heldout_test=0.6325
+[h100_cosine] ALL DONE

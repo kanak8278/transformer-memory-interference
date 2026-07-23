@@ -3,6 +3,12 @@
 **/__pycache__/
 *.pyc
 
+# Project-local caches (kept off $HOME, which is nearly full — see env.sh)
+**/.cache/
+
 # Generated data/checkpoints (deterministic, seed=42 — regenerate via build_eval_sets.py / train.py)
 **/data/**/*.pt
 **/checkpoints/**/*.pt
+
+# Local secrets / env files — never commit
+.env
