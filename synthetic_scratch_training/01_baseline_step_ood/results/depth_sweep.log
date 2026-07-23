@@ -1,0 +1,240 @@
+=== depth sweep started Thu Jul 16 20:14:11 IST 2026 ===
+--- training n_layers=2 (tag=L2_d64) Thu Jul 16 20:14:11 IST 2026 ---
+device: mps, tag: L2_d64, accum_steps: 4 (effective batch 1024)
+step 200/12500 lr=1.00e-03 loss=1.9256 elapsed=52.4s
+step 400/12500 lr=1.00e-03 loss=1.1314 elapsed=110.4s
+  [val@500] overall_acc=0.2007 by_role={'first': 0.27, 'last': 0.21388888888888888, 'intermediate': 0.1781818181818182}
+  new best val_acc=0.2007
+step 600/12500 lr=1.00e-03 loss=1.0569 elapsed=190.0s
+step 800/12500 lr=1.00e-03 loss=1.0310 elapsed=281.6s
+step 1000/12500 lr=1.00e-03 loss=1.0306 elapsed=372.6s
+  [val@1000] overall_acc=0.2099 by_role={'first': 0.27111111111111114, 'last': 0.2538888888888889, 'intermediate': 0.1812121212121212}
+  new best val_acc=0.2099
+step 1200/12500 lr=1.00e-03 loss=1.0250 elapsed=446.1s
+step 1400/12500 lr=1.00e-03 loss=1.0198 elapsed=515.7s
+  [val@1500] overall_acc=0.2105 by_role={'first': 0.26944444444444443, 'last': 0.2461111111111111, 'intermediate': 0.1846969696969697}
+  new best val_acc=0.2105
+step 1600/12500 lr=1.00e-03 loss=1.0157 elapsed=590.0s
+step 1800/12500 lr=1.00e-03 loss=1.0242 elapsed=657.9s
+step 2000/12500 lr=1.00e-03 loss=1.0153 elapsed=726.3s
+  [val@2000] overall_acc=0.2108 by_role={'first': 0.27555555555555555, 'last': 0.265, 'intermediate': 0.17833333333333334}
+  new best val_acc=0.2108
+step 2200/12500 lr=1.00e-03 loss=1.0119 elapsed=809.6s
+step 2400/12500 lr=1.00e-03 loss=1.0092 elapsed=887.4s
+  [val@2500] overall_acc=0.2122 by_role={'first': 0.2827777777777778, 'last': 0.25722222222222224, 'intermediate': 0.1806060606060606}
+  new best val_acc=0.2122
+step 2600/12500 lr=1.00e-03 loss=1.0150 elapsed=968.7s
+step 2800/12500 lr=1.00e-03 loss=1.0046 elapsed=1043.2s
+step 3000/12500 lr=1.00e-03 loss=1.0063 elapsed=1118.5s
+  [val@3000] overall_acc=0.2163 by_role={'first': 0.27944444444444444, 'last': 0.2588888888888889, 'intermediate': 0.18742424242424244}
+  new best val_acc=0.2163
+step 3200/12500 lr=1.00e-03 loss=1.0080 elapsed=1196.9s
+step 3400/12500 lr=1.00e-03 loss=1.0057 elapsed=1261.4s
+  [val@3500] overall_acc=0.2194 by_role={'first': 0.27111111111111114, 'last': 0.2577777777777778, 'intermediate': 0.19484848484848485}
+  new best val_acc=0.2194
+step 3600/12500 lr=1.00e-03 loss=1.0135 elapsed=1338.7s
+step 3800/12500 lr=1.00e-03 loss=1.0143 elapsed=1410.8s
+step 4000/12500 lr=1.00e-03 loss=1.0075 elapsed=1478.7s
+  [val@4000] overall_acc=0.2149 by_role={'first': 0.265, 'last': 0.27055555555555555, 'intermediate': 0.18606060606060607}
+step 4200/12500 lr=1.00e-03 loss=0.9912 elapsed=1548.2s
+step 4400/12500 lr=1.00e-03 loss=0.9976 elapsed=1622.0s
+  [val@4500] overall_acc=0.2230 by_role={'first': 0.2827777777777778, 'last': 0.2677777777777778, 'intermediate': 0.19454545454545455}
+  new best val_acc=0.2230
+step 4600/12500 lr=1.00e-03 loss=1.0054 elapsed=1701.0s
+step 4800/12500 lr=1.00e-03 loss=0.9999 elapsed=1768.5s
+step 5000/12500 lr=1.00e-03 loss=1.0057 elapsed=1840.0s
+  [val@5000] overall_acc=0.2213 by_role={'first': 0.275, 'last': 0.27055555555555555, 'intermediate': 0.19318181818181818}
+step 5200/12500 lr=1.00e-03 loss=1.0143 elapsed=1916.9s
+step 5400/12500 lr=1.00e-03 loss=1.0130 elapsed=1985.4s
+  [val@5500] overall_acc=0.2226 by_role={'first': 0.27, 'last': 0.265, 'intermediate': 0.19818181818181818}
+step 5600/12500 lr=1.00e-03 loss=1.0021 elapsed=2064.5s
+step 5800/12500 lr=1.00e-03 loss=1.0121 elapsed=2134.1s
+step 6000/12500 lr=1.00e-03 loss=0.9964 elapsed=2198.6s
+  [val@6000] overall_acc=0.2169 by_role={'first': 0.26166666666666666, 'last': 0.26611111111111113, 'intermediate': 0.19121212121212122}
+step 6200/12500 lr=1.00e-03 loss=1.0026 elapsed=2268.8s
+step 6400/12500 lr=1.00e-03 loss=1.0091 elapsed=2341.0s
+  [val@6500] overall_acc=0.2204 by_role={'first': 0.26666666666666666, 'last': 0.27555555555555555, 'intermediate': 0.19272727272727272}
+step 6600/12500 lr=1.00e-03 loss=0.9934 elapsed=2411.6s
+step 6800/12500 lr=1.00e-03 loss=1.0036 elapsed=2479.8s
+step 7000/12500 lr=1.00e-03 loss=1.0008 elapsed=2553.0s
+  [val@7000] overall_acc=0.2228 by_role={'first': 0.2788888888888889, 'last': 0.2827777777777778, 'intermediate': 0.19121212121212122}
+step 7200/12500 lr=1.00e-03 loss=1.0020 elapsed=2637.7s
+step 7400/12500 lr=1.00e-03 loss=1.0006 elapsed=2708.3s
+  [val@7500] overall_acc=0.2250 by_role={'first': 0.2811111111111111, 'last': 0.26222222222222225, 'intermediate': 0.19954545454545455}
+  new best val_acc=0.2250
+step 7600/12500 lr=1.00e-03 loss=1.0067 elapsed=2789.3s
+step 7800/12500 lr=1.00e-03 loss=1.0007 elapsed=2867.7s
+step 8000/12500 lr=1.00e-03 loss=0.9970 elapsed=2938.0s
+  [val@8000] overall_acc=0.2239 by_role={'first': 0.2783333333333333, 'last': 0.265, 'intermediate': 0.19787878787878788}
+step 8200/12500 lr=1.00e-03 loss=1.0020 elapsed=3024.7s
+step 8400/12500 lr=1.00e-03 loss=1.0058 elapsed=3094.2s
+  [val@8500] overall_acc=0.2237 by_role={'first': 0.28, 'last': 0.2727777777777778, 'intermediate': 0.195}
+step 8600/12500 lr=1.00e-03 loss=1.0070 elapsed=3168.5s
+step 8800/12500 lr=1.00e-03 loss=1.0100 elapsed=3240.4s
+step 9000/12500 lr=1.00e-03 loss=1.0050 elapsed=3304.8s
+  [val@9000] overall_acc=0.2243 by_role={'first': 0.29333333333333333, 'last': 0.26222222222222225, 'intermediate': 0.19515151515151516}
+step 9200/12500 lr=1.00e-03 loss=1.0025 elapsed=3382.8s
+step 9400/12500 lr=1.00e-03 loss=0.9968 elapsed=3448.6s
+  [val@9500] overall_acc=0.2270 by_role={'first': 0.28555555555555556, 'last': 0.27666666666666667, 'intermediate': 0.19742424242424242}
+  new best val_acc=0.2270
+step 9600/12500 lr=1.00e-03 loss=0.9922 elapsed=3523.3s
+step 9800/12500 lr=1.00e-03 loss=0.9946 elapsed=3589.1s
+step 10000/12500 lr=1.00e-03 loss=0.9979 elapsed=3653.7s
+  [val@10000] overall_acc=0.2255 by_role={'first': 0.27444444444444444, 'last': 0.2827777777777778, 'intermediate': 0.1965151515151515}
+step 10200/12500 lr=1.00e-03 loss=1.0052 elapsed=3726.8s
+step 10400/12500 lr=1.00e-03 loss=1.0052 elapsed=3797.1s
+  [val@10500] overall_acc=0.2180 by_role={'first': 0.27111111111111114, 'last': 0.26555555555555554, 'intermediate': 0.1906060606060606}
+step 10600/12500 lr=1.00e-03 loss=0.9996 elapsed=3870.0s
+step 10800/12500 lr=1.00e-03 loss=0.9898 elapsed=3938.8s
+step 11000/12500 lr=1.00e-03 loss=0.9951 elapsed=4010.1s
+  [val@11000] overall_acc=0.2218 by_role={'first': 0.27555555555555555, 'last': 0.27, 'intermediate': 0.19393939393939394}
+step 11200/12500 lr=1.00e-03 loss=0.9955 elapsed=4081.2s
+step 11400/12500 lr=9.68e-04 loss=1.0105 elapsed=4151.3s
+  [val@11500] overall_acc=0.2260 by_role={'first': 0.27666666666666667, 'last': 0.28, 'intermediate': 0.19742424242424242}
+step 11600/12500 lr=8.37e-04 loss=1.0223 elapsed=4224.7s
+step 11800/12500 lr=6.34e-04 loss=1.0176 elapsed=4300.1s
+step 12000/12500 lr=4.11e-04 loss=1.0111 elapsed=4373.4s
+  [val@12000] overall_acc=0.2240 by_role={'first': 0.285, 'last': 0.2811111111111111, 'intermediate': 0.1918181818181818}
+step 12200/12500 lr=2.22e-04 loss=1.0090 elapsed=4449.8s
+step 12400/12500 lr=1.14e-04 loss=0.9983 elapsed=4515.4s
+  [val@12500] overall_acc=0.2255 by_role={'first': 0.2822222222222222, 'last': 0.28055555555555556, 'intermediate': 0.195}
+training complete.
+--- evaluating L2_d64 Thu Jul 16 21:30:07 IST 2026 ---
+loaded ../checkpoints/L2_d64/best.pt (trained to step 9500, train-time val_acc=0.2270)
+iid_test overall: 0.2264 (n=40800)
+heldout_test overall: 0.1774 (n=24000)
+by_role (iid_test): {'first': 0.2931944444444444, 'last': 0.27819444444444447, 'intermediate': 0.1940530303030303}
+generalization gap by held-out step: {
+  "2": {
+    "trained_elsewhere_acc": 0.20972222222222223,
+    "held_out_acc": 0.196
+  },
+  "4": {
+    "trained_elsewhere_acc": 0.18833333333333332,
+    "held_out_acc": 0.1595
+  },
+  "5": {
+    "trained_elsewhere_acc": 0.1725,
+    "held_out_acc": 0.18166666666666667
+  },
+  "6": {
+    "trained_elsewhere_acc": 0.17541666666666667,
+    "held_out_acc": 0.18233333333333332
+  },
+  "8": {
+    "trained_elsewhere_acc": 0.18666666666666668,
+    "held_out_acc": 0.14666666666666667
+  },
+  "9": {
+    "trained_elsewhere_acc": 0.19,
+    "held_out_acc": 0.19766666666666666
+  }
+}
+wrote /Users/kanakraj/workspace/transformer-memory-interference/.claude/worktrees/synthetic-scratch-training/synthetic_scratch_training/01_baseline_step_ood/results/L2_d64/final_eval.json
+wrote /Users/kanakraj/workspace/transformer-memory-interference/.claude/worktrees/synthetic-scratch-training/synthetic_scratch_training/01_baseline_step_ood/results/L2_d64/heldout_samples_readable.txt
+split=heldout_test ckpt=../checkpoints/L2_d64/best.pt sample_acc=11/60=0.183
+
+
+--- done L2_d64 Thu Jul 16 21:30:43 IST 2026 ---
+--- training n_layers=3 (tag=L3_d64) Thu Jul 16 21:30:43 IST 2026 ---
+device: mps, tag: L3_d64, accum_steps: 4 (effective batch 1024)
+step 200/12500 lr=1.00e-03 loss=1.9056 elapsed=110.0s
+step 400/12500 lr=1.00e-03 loss=1.1269 elapsed=205.0s
+  [val@500] overall_acc=0.2031 by_role={'first': 0.2772222222222222, 'last': 0.21666666666666667, 'intermediate': 0.17924242424242423}
+  new best val_acc=0.2031
+step 600/12500 lr=1.00e-03 loss=1.0522 elapsed=312.1s
+step 800/12500 lr=1.00e-03 loss=1.0281 elapsed=411.4s
+step 1000/12500 lr=1.00e-03 loss=1.0296 elapsed=512.2s
+  [val@1000] overall_acc=0.2123 by_role={'first': 0.2838888888888889, 'last': 0.2461111111111111, 'intermediate': 0.18348484848484847}
+  new best val_acc=0.2123
+step 1200/12500 lr=1.00e-03 loss=1.0244 elapsed=627.2s
+step 1400/12500 lr=1.00e-03 loss=1.0201 elapsed=730.8s
+  [val@1500] overall_acc=0.2057 by_role={'first': 0.2688888888888889, 'last': 0.25277777777777777, 'intermediate': 0.1756060606060606}
+step 1600/12500 lr=1.00e-03 loss=1.0155 elapsed=840.2s
+step 1800/12500 lr=1.00e-03 loss=1.0238 elapsed=943.5s
+step 2000/12500 lr=1.00e-03 loss=1.0150 elapsed=1045.0s
+  [val@2000] overall_acc=0.2072 by_role={'first': 0.27166666666666667, 'last': 0.2588888888888889, 'intermediate': 0.17545454545454545}
+step 2200/12500 lr=1.00e-03 loss=1.0115 elapsed=1153.5s
+step 2400/12500 lr=1.00e-03 loss=1.0094 elapsed=1255.7s
+  [val@2500] overall_acc=0.2166 by_role={'first': 0.2816666666666667, 'last': 0.26222222222222225, 'intermediate': 0.18636363636363637}
+  new best val_acc=0.2166
+step 2600/12500 lr=1.00e-03 loss=1.0154 elapsed=1363.4s
+step 2800/12500 lr=1.00e-03 loss=1.0052 elapsed=1456.3s
+step 3000/12500 lr=1.00e-03 loss=1.0068 elapsed=1557.3s
+  [val@3000] overall_acc=0.2144 by_role={'first': 0.2811111111111111, 'last': 0.25833333333333336, 'intermediate': 0.18424242424242424}
+step 3200/12500 lr=1.00e-03 loss=1.0084 elapsed=1670.9s
+step 3400/12500 lr=1.00e-03 loss=1.0062 elapsed=1765.0s
+  [val@3500] overall_acc=0.2167 by_role={'first': 0.27111111111111114, 'last': 0.25833333333333336, 'intermediate': 0.19045454545454546}
+  new best val_acc=0.2167
+step 3600/12500 lr=1.00e-03 loss=1.0138 elapsed=1877.2s
+step 3800/12500 lr=1.00e-03 loss=1.0146 elapsed=1983.5s
+step 4000/12500 lr=1.00e-03 loss=1.0077 elapsed=2084.7s
+  [val@4000] overall_acc=0.2118 by_role={'first': 0.25333333333333335, 'last': 0.26944444444444443, 'intermediate': 0.1846969696969697}
+step 4200/12500 lr=1.00e-03 loss=0.9921 elapsed=2184.4s
+step 4400/12500 lr=1.00e-03 loss=0.9981 elapsed=2285.4s
+  [val@4500] overall_acc=0.2209 by_role={'first': 0.28444444444444444, 'last': 0.2677777777777778, 'intermediate': 0.19075757575757576}
+  new best val_acc=0.2209
+step 4600/12500 lr=1.00e-03 loss=1.0059 elapsed=2395.4s
+step 4800/12500 lr=1.00e-03 loss=1.0003 elapsed=2493.8s
+step 5000/12500 lr=1.00e-03 loss=1.0057 elapsed=2594.9s
+  [val@5000] overall_acc=0.2174 by_role={'first': 0.2688888888888889, 'last': 0.2688888888888889, 'intermediate': 0.18924242424242424}
+step 5200/12500 lr=1.00e-03 loss=1.0145 elapsed=2707.0s
+step 5400/12500 lr=1.00e-03 loss=1.0138 elapsed=2807.5s
+  [val@5500] overall_acc=0.2232 by_role={'first': 0.2727777777777778, 'last': 0.26611111111111113, 'intermediate': 0.19803030303030303}
+  new best val_acc=0.2232
+step 5600/12500 lr=1.00e-03 loss=1.0027 elapsed=2921.0s
+step 5800/12500 lr=1.00e-03 loss=1.0124 elapsed=3029.4s
+step 6000/12500 lr=1.00e-03 loss=0.9970 elapsed=3129.6s
+  [val@6000] overall_acc=0.2214 by_role={'first': 0.2677777777777778, 'last': 0.2761111111111111, 'intermediate': 0.1937878787878788}
+step 6200/12500 lr=1.00e-03 loss=1.0030 elapsed=3236.0s
+step 6400/12500 lr=1.00e-03 loss=1.0094 elapsed=3342.5s
+  [val@6500] overall_acc=0.2170 by_role={'first': 0.26055555555555554, 'last': 0.2738888888888889, 'intermediate': 0.18954545454545454}
+step 6600/12500 lr=1.00e-03 loss=0.9941 elapsed=3446.1s
+step 6800/12500 lr=1.00e-03 loss=1.0039 elapsed=3548.0s
+step 7000/12500 lr=1.00e-03 loss=1.0011 elapsed=3650.3s
+  [val@7000] overall_acc=0.2218 by_role={'first': 0.27666666666666667, 'last': 0.28555555555555556, 'intermediate': 0.1893939393939394}
+step 7200/12500 lr=1.00e-03 loss=1.0024 elapsed=3759.4s
+step 7400/12500 lr=1.00e-03 loss=1.0007 elapsed=3865.5s
+  [val@7500] overall_acc=0.2242 by_role={'first': 0.2822222222222222, 'last': 0.26722222222222225, 'intermediate': 0.19666666666666666}
+  new best val_acc=0.2242
+step 7600/12500 lr=1.00e-03 loss=1.0066 elapsed=3991.1s
+step 7800/12500 lr=1.00e-03 loss=1.0011 elapsed=4102.2s
+step 8000/12500 lr=1.00e-03 loss=0.9968 elapsed=4208.8s
+  [val@8000] overall_acc=0.2233 by_role={'first': 0.27055555555555555, 'last': 0.26722222222222225, 'intermediate': 0.1984848484848485}
+step 8200/12500 lr=1.00e-03 loss=1.0022 elapsed=4330.4s
+step 8400/12500 lr=1.00e-03 loss=1.0061 elapsed=4449.7s
+  [val@8500] overall_acc=0.2231 by_role={'first': 0.2827777777777778, 'last': 0.27666666666666667, 'intermediate': 0.19227272727272726}
+step 8600/12500 lr=1.00e-03 loss=1.0074 elapsed=4581.0s
+step 8800/12500 lr=1.00e-03 loss=1.0106 elapsed=4721.8s
+step 9000/12500 lr=1.00e-03 loss=1.0061 elapsed=4834.0s
+  [val@9000] overall_acc=0.2255 by_role={'first': 0.2866666666666667, 'last': 0.27166666666666667, 'intermediate': 0.1962121212121212}
+  new best val_acc=0.2255
+step 9200/12500 lr=1.00e-03 loss=1.0035 elapsed=4965.7s
+step 9400/12500 lr=1.00e-03 loss=0.9975 elapsed=5084.7s
+  [val@9500] overall_acc=0.2268 by_role={'first': 0.2788888888888889, 'last': 0.27444444444444444, 'intermediate': 0.19954545454545455}
+  new best val_acc=0.2268
+step 9600/12500 lr=1.00e-03 loss=0.9933 elapsed=5213.0s
+step 9800/12500 lr=1.00e-03 loss=0.9951 elapsed=5328.2s
+step 10000/12500 lr=1.00e-03 loss=0.9992 elapsed=5435.0s
+  [val@10000] overall_acc=0.2273 by_role={'first': 0.2861111111111111, 'last': 0.2783333333333333, 'intermediate': 0.19727272727272727}
+  new best val_acc=0.2273
+step 10200/12500 lr=1.00e-03 loss=1.0113 elapsed=5551.3s
+step 10400/12500 lr=1.00e-03 loss=1.0113 elapsed=5664.1s
+  [val@10500] overall_acc=0.2175 by_role={'first': 0.2822222222222222, 'last': 0.2644444444444444, 'intermediate': 0.18712121212121213}
+step 10600/12500 lr=1.00e-03 loss=1.0018 elapsed=5779.8s
+step 10800/12500 lr=1.00e-03 loss=0.9918 elapsed=5894.4s
+step 11000/12500 lr=1.00e-03 loss=0.9968 elapsed=6011.6s
+  [val@11000] overall_acc=0.2223 by_role={'first': 0.28, 'last': 0.2727777777777778, 'intermediate': 0.19272727272727272}
+step 11200/12500 lr=1.00e-03 loss=0.9968 elapsed=6117.4s
+step 11400/12500 lr=9.68e-04 loss=1.0113 elapsed=6222.4s
+  [val@11500] overall_acc=0.2231 by_role={'first': 0.2772222222222222, 'last': 0.2733333333333333, 'intermediate': 0.1946969696969697}
+step 11600/12500 lr=8.37e-04 loss=1.0046 elapsed=6330.6s
+step 11800/12500 lr=6.34e-04 loss=1.0067 elapsed=6438.8s
+step 12000/12500 lr=4.11e-04 loss=1.0054 elapsed=6542.8s
+  [val@12000] overall_acc=0.2290 by_role={'first': 0.2827777777777778, 'last': 0.2833333333333333, 'intermediate': 0.19954545454545455}
+  new best val_acc=0.2290
+step 12200/12500 lr=2.22e-04 loss=1.0039 elapsed=6656.1s
+step 12400/12500 lr=1.14e-04 loss=0.9944 elapsed=6754.2s
+  [val@12500] overall_acc=0.2308 by_role={'first': 0.29055555555555557, 'last': 0.28444444444444444, 'intermediate': 0.19984848484848486}
+  new best val_acc=0.2308
+training complete.

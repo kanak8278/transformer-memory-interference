@@ -1,0 +1,348 @@
+[h100_plateau] gpu=1 schedule=plateau total_steps=30000 micro_bs=256 accum=8 eff_batch=2048
+[h100_plateau] held-out cells (8): [(6, 5), (8, 2), (8, 6), (10, 2), (10, 4), (10, 9), (12, 4), (12, 8)]
+[h100_plateau] params=85,881,600 optim={'n_decay_tensors': 50, 'n_decay_params': 85760256, 'n_nodecay_tensors': 98, 'n_nodecay_params': 121344, 'fused': True}
+[h100_plateau] step 100/30000 lr=1.01e-04 loss=1.2634 0.80 steps/s elapsed=125s
+[h100_plateau] step 200/30000 lr=2.01e-04 loss=1.0604 1.07 steps/s elapsed=187s
+[h100_plateau] step 300/30000 lr=3.01e-04 loss=1.0432 1.19 steps/s elapsed=252s
+[h100_plateau] step 400/30000 lr=4.01e-04 loss=1.0333 1.27 steps/s elapsed=315s
+[h100_plateau] step 500/30000 lr=5.01e-04 loss=1.0311 1.32 steps/s elapsed=380s
+[h100_plateau] step 600/30000 lr=6.00e-04 loss=1.0239 1.36 steps/s elapsed=443s
+[h100_plateau] step 700/30000 lr=6.00e-04 loss=1.0309 1.38 steps/s elapsed=506s
+[h100_plateau] step 800/30000 lr=6.00e-04 loss=1.0211 1.40 steps/s elapsed=570s
+[h100_plateau] step 900/30000 lr=6.00e-04 loss=1.0184 1.42 steps/s elapsed=633s
+[h100_plateau] step 1000/30000 lr=6.00e-04 loss=1.0084 1.44 steps/s elapsed=694s
+[h100_plateau]   val@1000 acc=0.2136 by_role={'first': 0.2628, 'last': 0.2594, 'intermediate': 0.1877}
+[h100_plateau]   new best val_acc=0.2136
+[h100_plateau] step 1100/30000 lr=6.00e-04 loss=1.0150 1.44 steps/s elapsed=762s
+[h100_plateau] step 1200/30000 lr=6.00e-04 loss=1.0168 1.45 steps/s elapsed=827s
+[h100_plateau] step 1300/30000 lr=6.00e-04 loss=1.0144 1.46 steps/s elapsed=891s
+[h100_plateau] step 1400/30000 lr=6.00e-04 loss=1.0132 1.47 steps/s elapsed=954s
+[h100_plateau] step 1500/30000 lr=6.00e-04 loss=1.0162 1.48 steps/s elapsed=1017s
+[h100_plateau] step 1600/30000 lr=6.00e-04 loss=1.0098 1.48 steps/s elapsed=1080s
+[h100_plateau] step 1700/30000 lr=6.00e-04 loss=1.0147 1.49 steps/s elapsed=1143s
+[h100_plateau] step 1800/30000 lr=6.00e-04 loss=1.0205 1.49 steps/s elapsed=1209s
+[h100_plateau] step 1900/30000 lr=6.00e-04 loss=1.0062 1.49 steps/s elapsed=1271s
+[h100_plateau] step 2000/30000 lr=6.00e-04 loss=0.9979 1.50 steps/s elapsed=1331s
+[h100_plateau]   val@2000 acc=0.2218 by_role={'first': 0.2767, 'last': 0.2756, 'intermediate': 0.1921}
+[h100_plateau]   new best val_acc=0.2218
+[h100_plateau] step 2100/30000 lr=6.00e-04 loss=1.0081 1.50 steps/s elapsed=1397s
+[h100_plateau] step 2200/30000 lr=6.00e-04 loss=0.9990 1.51 steps/s elapsed=1460s
+[h100_plateau] step 2300/30000 lr=6.00e-04 loss=1.0040 1.51 steps/s elapsed=1523s
+[h100_plateau] step 2400/30000 lr=6.00e-04 loss=1.0108 1.51 steps/s elapsed=1587s
+[h100_plateau] step 2500/30000 lr=6.00e-04 loss=1.0037 1.51 steps/s elapsed=1651s
+[h100_plateau] step 2600/30000 lr=6.00e-04 loss=1.0121 1.52 steps/s elapsed=1713s
+[h100_plateau] step 2700/30000 lr=6.00e-04 loss=1.0064 1.52 steps/s elapsed=1775s
+[h100_plateau] step 2800/30000 lr=6.00e-04 loss=0.9951 1.53 steps/s elapsed=1835s
+[h100_plateau] step 2900/30000 lr=6.00e-04 loss=1.0019 1.53 steps/s elapsed=1897s
+[h100_plateau] step 3000/30000 lr=6.00e-04 loss=1.0005 1.53 steps/s elapsed=1960s
+[h100_plateau]   val@3000 acc=0.2226 by_role={'first': 0.2806, 'last': 0.2728, 'intermediate': 0.1932}
+[h100_plateau]   new best val_acc=0.2226
+[h100_plateau] step 3100/30000 lr=6.00e-04 loss=1.0056 1.53 steps/s elapsed=2028s
+[h100_plateau] step 3200/30000 lr=6.00e-04 loss=1.0043 1.53 steps/s elapsed=2091s
+[h100_plateau] step 3300/30000 lr=6.00e-04 loss=0.9950 1.53 steps/s elapsed=2153s
+[h100_plateau] step 3400/30000 lr=6.00e-04 loss=0.9958 1.54 steps/s elapsed=2215s
+[h100_plateau] step 3500/30000 lr=6.00e-04 loss=0.9929 1.54 steps/s elapsed=2276s
+[h100_plateau] step 3600/30000 lr=6.00e-04 loss=0.9956 1.54 steps/s elapsed=2340s
+[h100_plateau] step 3700/30000 lr=6.00e-04 loss=1.0011 1.54 steps/s elapsed=2402s
+[h100_plateau] step 3800/30000 lr=6.00e-04 loss=0.9972 1.54 steps/s elapsed=2466s
+[h100_plateau] step 3900/30000 lr=6.00e-04 loss=1.0005 1.54 steps/s elapsed=2530s
+[h100_plateau] step 4000/30000 lr=6.00e-04 loss=1.0044 1.54 steps/s elapsed=2595s
+[h100_plateau]   val@4000 acc=0.2264 by_role={'first': 0.2794, 'last': 0.2761, 'intermediate': 0.1983}
+[h100_plateau]   new best val_acc=0.2264
+[h100_plateau] step 4100/30000 lr=6.00e-04 loss=0.9983 1.54 steps/s elapsed=2661s
+[h100_plateau] step 4200/30000 lr=6.00e-04 loss=1.0017 1.54 steps/s elapsed=2725s
+[h100_plateau] step 4300/30000 lr=6.00e-04 loss=1.0006 1.54 steps/s elapsed=2787s
+[h100_plateau] step 4400/30000 lr=6.00e-04 loss=1.0031 1.54 steps/s elapsed=2853s
+[h100_plateau] step 4500/30000 lr=6.00e-04 loss=0.9957 1.54 steps/s elapsed=2915s
+[h100_plateau] step 4600/30000 lr=6.00e-04 loss=0.9937 1.55 steps/s elapsed=2976s
+[h100_plateau] step 4700/30000 lr=6.00e-04 loss=1.0056 1.55 steps/s elapsed=3040s
+[h100_plateau] step 4800/30000 lr=6.00e-04 loss=1.0074 1.55 steps/s elapsed=3105s
+[h100_plateau] step 4900/30000 lr=6.00e-04 loss=0.9944 1.55 steps/s elapsed=3166s
+[h100_plateau] step 5000/30000 lr=6.00e-04 loss=0.9978 1.55 steps/s elapsed=3227s
+[h100_plateau]   val@5000 acc=0.2306 by_role={'first': 0.2906, 'last': 0.2767, 'intermediate': 0.2017}
+[h100_plateau]   new best val_acc=0.2306
+[h100_plateau] step 5100/30000 lr=6.00e-04 loss=0.9929 1.55 steps/s elapsed=3294s
+[h100_plateau] step 5200/30000 lr=6.00e-04 loss=0.9988 1.55 steps/s elapsed=3356s
+[h100_plateau] step 5300/30000 lr=6.00e-04 loss=0.9985 1.55 steps/s elapsed=3419s
+[h100_plateau] step 5400/30000 lr=6.00e-04 loss=0.9988 1.55 steps/s elapsed=3481s
+[h100_plateau] step 5500/30000 lr=6.00e-04 loss=0.9969 1.55 steps/s elapsed=3545s
+[h100_plateau] step 5600/30000 lr=6.00e-04 loss=0.9930 1.55 steps/s elapsed=3608s
+[h100_plateau] step 5700/30000 lr=6.00e-04 loss=0.9929 1.55 steps/s elapsed=3673s
+[h100_plateau] step 5800/30000 lr=6.00e-04 loss=0.9961 1.55 steps/s elapsed=3736s
+[h100_plateau] step 5900/30000 lr=6.00e-04 loss=1.0066 1.55 steps/s elapsed=3800s
+[h100_plateau] step 6000/30000 lr=6.00e-04 loss=0.9918 1.55 steps/s elapsed=3863s
+[h100_plateau]   val@6000 acc=0.2346 by_role={'first': 0.2906, 'last': 0.2839, 'intermediate': 0.2059}
+[h100_plateau]   new best val_acc=0.2346
+[h100_plateau] step 6100/30000 lr=6.00e-04 loss=0.9869 1.55 steps/s elapsed=3928s
+[h100_plateau] step 6200/30000 lr=6.00e-04 loss=0.9844 1.55 steps/s elapsed=3990s
+[h100_plateau] step 6300/30000 lr=6.00e-04 loss=0.9923 1.55 steps/s elapsed=4052s
+[h100_plateau] step 6400/30000 lr=6.00e-04 loss=0.9917 1.56 steps/s elapsed=4112s
+[h100_plateau] step 6500/30000 lr=6.00e-04 loss=0.9967 1.56 steps/s elapsed=4176s
+[h100_plateau] step 6600/30000 lr=6.00e-04 loss=0.9905 1.56 steps/s elapsed=4238s
+[h100_plateau] step 6700/30000 lr=6.00e-04 loss=0.9809 1.56 steps/s elapsed=4298s
+[h100_plateau] step 6800/30000 lr=6.00e-04 loss=0.9852 1.56 steps/s elapsed=4361s
+[h100_plateau] step 6900/30000 lr=6.00e-04 loss=0.9867 1.56 steps/s elapsed=4424s
+[h100_plateau] step 7000/30000 lr=6.00e-04 loss=0.9886 1.56 steps/s elapsed=4489s
+[h100_plateau]   val@7000 acc=0.2437 by_role={'first': 0.3406, 'last': 0.2856, 'intermediate': 0.2059}
+[h100_plateau]   new best val_acc=0.2437
+[h100_plateau] step 7100/30000 lr=6.00e-04 loss=0.9883 1.56 steps/s elapsed=4556s
+[h100_plateau] step 7200/30000 lr=6.00e-04 loss=0.9827 1.56 steps/s elapsed=4620s
+[h100_plateau] step 7300/30000 lr=6.00e-04 loss=0.9786 1.56 steps/s elapsed=4683s
+[h100_plateau] step 7400/30000 lr=6.00e-04 loss=0.9719 1.56 steps/s elapsed=4746s
+[h100_plateau] step 7500/30000 lr=6.00e-04 loss=0.9621 1.56 steps/s elapsed=4808s
+[h100_plateau] step 7600/30000 lr=6.00e-04 loss=0.9692 1.56 steps/s elapsed=4871s
+[h100_plateau] step 7700/30000 lr=6.00e-04 loss=0.9668 1.56 steps/s elapsed=4934s
+[h100_plateau] step 7800/30000 lr=6.00e-04 loss=0.9656 1.56 steps/s elapsed=4997s
+[h100_plateau] step 7900/30000 lr=6.00e-04 loss=0.9686 1.56 steps/s elapsed=5061s
+[h100_plateau] step 8000/30000 lr=6.00e-04 loss=0.9675 1.56 steps/s elapsed=5126s
+[h100_plateau]   val@8000 acc=0.2542 by_role={'first': 0.4128, 'last': 0.2856, 'intermediate': 0.2024}
+[h100_plateau]   new best val_acc=0.2542
+[h100_plateau] step 8100/30000 lr=6.00e-04 loss=0.9507 1.56 steps/s elapsed=5191s
+[h100_plateau] step 8200/30000 lr=6.00e-04 loss=0.9636 1.56 steps/s elapsed=5252s
+[h100_plateau] step 8300/30000 lr=6.00e-04 loss=0.9733 1.56 steps/s elapsed=5318s
+[h100_plateau] step 8400/30000 lr=6.00e-04 loss=0.9678 1.56 steps/s elapsed=5383s
+[h100_plateau] step 8500/30000 lr=6.00e-04 loss=0.9621 1.56 steps/s elapsed=5446s
+[h100_plateau] step 8600/30000 lr=6.00e-04 loss=0.9597 1.56 steps/s elapsed=5508s
+[h100_plateau] step 8700/30000 lr=6.00e-04 loss=0.9547 1.56 steps/s elapsed=5568s
+[h100_plateau] step 8800/30000 lr=6.00e-04 loss=0.9616 1.56 steps/s elapsed=5631s
+[h100_plateau] step 8900/30000 lr=6.00e-04 loss=0.9574 1.56 steps/s elapsed=5692s
+[h100_plateau] step 9000/30000 lr=6.00e-04 loss=0.9568 1.56 steps/s elapsed=5754s
+[h100_plateau]   val@9000 acc=0.2532 by_role={'first': 0.425, 'last': 0.2867, 'intermediate': 0.1973}
+[h100_plateau] step 9100/30000 lr=6.00e-04 loss=0.9586 1.56 steps/s elapsed=5823s
+[h100_plateau] step 9200/30000 lr=6.00e-04 loss=0.9526 1.56 steps/s elapsed=5884s
+[h100_plateau] step 9300/30000 lr=6.00e-04 loss=0.9559 1.56 steps/s elapsed=5947s
+[h100_plateau] step 9400/30000 lr=6.00e-04 loss=0.9500 1.56 steps/s elapsed=6010s
+[h100_plateau] step 9500/30000 lr=6.00e-04 loss=0.9610 1.56 steps/s elapsed=6073s
+[h100_plateau] step 9600/30000 lr=6.00e-04 loss=0.9538 1.56 steps/s elapsed=6135s
+[h100_plateau] step 9700/30000 lr=6.00e-04 loss=0.9587 1.56 steps/s elapsed=6199s
+[h100_plateau] step 9800/30000 lr=6.00e-04 loss=0.9554 1.57 steps/s elapsed=6260s
+[h100_plateau] step 9900/30000 lr=6.00e-04 loss=0.9526 1.57 steps/s elapsed=6322s
+[h100_plateau] step 10000/30000 lr=6.00e-04 loss=0.9459 1.57 steps/s elapsed=6384s
+[h100_plateau]   val@10000 acc=0.2570 by_role={'first': 0.4378, 'last': 0.285, 'intermediate': 0.2}
+[h100_plateau]   new best val_acc=0.2570
+[h100_plateau] step 10100/30000 lr=6.00e-04 loss=0.9554 1.57 steps/s elapsed=6454s
+[h100_plateau] step 10200/30000 lr=6.00e-04 loss=0.9493 1.57 steps/s elapsed=6515s
+[h100_plateau] step 10300/30000 lr=6.00e-04 loss=0.9476 1.57 steps/s elapsed=6577s
+[h100_plateau] step 10400/30000 lr=6.00e-04 loss=0.9503 1.57 steps/s elapsed=6640s
+[h100_plateau] step 10500/30000 lr=6.00e-04 loss=0.9449 1.57 steps/s elapsed=6703s
+[h100_plateau] step 10600/30000 lr=6.00e-04 loss=0.9422 1.57 steps/s elapsed=6766s
+[h100_plateau] step 10700/30000 lr=6.00e-04 loss=0.9468 1.57 steps/s elapsed=6829s
+[h100_plateau] step 10800/30000 lr=6.00e-04 loss=0.9628 1.57 steps/s elapsed=6894s
+[h100_plateau] step 10900/30000 lr=6.00e-04 loss=0.9295 1.57 steps/s elapsed=6954s
+[h100_plateau] step 11000/30000 lr=6.00e-04 loss=0.9485 1.57 steps/s elapsed=7019s
+[h100_plateau]   val@11000 acc=0.2661 by_role={'first': 0.4311, 'last': 0.2967, 'intermediate': 0.2127}
+[h100_plateau]   new best val_acc=0.2661
+[h100_plateau] step 11100/30000 lr=6.00e-04 loss=0.9462 1.57 steps/s elapsed=7087s
+[h100_plateau] step 11200/30000 lr=6.00e-04 loss=0.9468 1.57 steps/s elapsed=7151s
+[h100_plateau] step 11300/30000 lr=6.00e-04 loss=0.9444 1.57 steps/s elapsed=7214s
+[h100_plateau] step 11400/30000 lr=6.00e-04 loss=0.9399 1.57 steps/s elapsed=7277s
+[h100_plateau] step 11500/30000 lr=6.00e-04 loss=0.9256 1.57 steps/s elapsed=7339s
+[h100_plateau] step 11600/30000 lr=6.00e-04 loss=0.9354 1.57 steps/s elapsed=7403s
+[h100_plateau] step 11700/30000 lr=6.00e-04 loss=0.9303 1.57 steps/s elapsed=7465s
+[h100_plateau] step 11800/30000 lr=6.00e-04 loss=0.9329 1.57 steps/s elapsed=7528s
+[h100_plateau] step 11900/30000 lr=6.00e-04 loss=0.9353 1.57 steps/s elapsed=7590s
+[h100_plateau] step 12000/30000 lr=6.00e-04 loss=0.9212 1.57 steps/s elapsed=7650s
+[h100_plateau]   val@12000 acc=0.2753 by_role={'first': 0.4533, 'last': 0.3133, 'intermediate': 0.2164}
+[h100_plateau]   new best val_acc=0.2753
+[h100_plateau] step 12100/30000 lr=6.00e-04 loss=0.9239 1.57 steps/s elapsed=7716s
+[h100_plateau] step 12200/30000 lr=6.00e-04 loss=0.9260 1.57 steps/s elapsed=7778s
+[h100_plateau] step 12300/30000 lr=6.00e-04 loss=0.9308 1.57 steps/s elapsed=7841s
+[h100_plateau] step 12400/30000 lr=6.00e-04 loss=0.9273 1.57 steps/s elapsed=7904s
+[h100_plateau] step 12500/30000 lr=6.00e-04 loss=0.9350 1.57 steps/s elapsed=7967s
+[h100_plateau] step 12600/30000 lr=6.00e-04 loss=0.9269 1.57 steps/s elapsed=8029s
+[h100_plateau] step 12700/30000 lr=6.00e-04 loss=0.9254 1.57 steps/s elapsed=8091s
+[h100_plateau] step 12800/30000 lr=6.00e-04 loss=0.9200 1.57 steps/s elapsed=8154s
+[h100_plateau] step 12900/30000 lr=6.00e-04 loss=0.9211 1.57 steps/s elapsed=8215s
+[h100_plateau] step 13000/30000 lr=6.00e-04 loss=0.9158 1.57 steps/s elapsed=8275s
+[h100_plateau]   val@13000 acc=0.2828 by_role={'first': 0.4478, 'last': 0.3056, 'intermediate': 0.2317}
+[h100_plateau]   new best val_acc=0.2828
+[h100_plateau] step 13100/30000 lr=6.00e-04 loss=0.9329 1.57 steps/s elapsed=8342s
+[h100_plateau] step 13200/30000 lr=6.00e-04 loss=0.9443 1.57 steps/s elapsed=8407s
+[h100_plateau] step 13300/30000 lr=6.00e-04 loss=0.9249 1.57 steps/s elapsed=8468s
+[h100_plateau] step 13400/30000 lr=6.00e-04 loss=0.9440 1.57 steps/s elapsed=8530s
+[h100_plateau] step 13500/30000 lr=6.00e-04 loss=0.9325 1.57 steps/s elapsed=8594s
+[h100_plateau] step 13600/30000 lr=6.00e-04 loss=0.9410 1.57 steps/s elapsed=8656s
+[h100_plateau] step 13700/30000 lr=6.00e-04 loss=0.9164 1.57 steps/s elapsed=8718s
+[h100_plateau] step 13800/30000 lr=6.00e-04 loss=0.9325 1.57 steps/s elapsed=8781s
+[h100_plateau] step 13900/30000 lr=6.00e-04 loss=0.9483 1.57 steps/s elapsed=8846s
+[h100_plateau] step 14000/30000 lr=6.00e-04 loss=0.9606 1.57 steps/s elapsed=8908s
+[h100_plateau]   val@14000 acc=0.2708 by_role={'first': 0.4283, 'last': 0.3139, 'intermediate': 0.2161}
+[h100_plateau] step 14100/30000 lr=6.00e-04 loss=0.9617 1.57 steps/s elapsed=8977s
+[h100_plateau] step 14200/30000 lr=6.00e-04 loss=0.9477 1.57 steps/s elapsed=9038s
+[h100_plateau] step 14300/30000 lr=6.00e-04 loss=0.9639 1.57 steps/s elapsed=9099s
+[h100_plateau] step 14400/30000 lr=6.00e-04 loss=0.9661 1.57 steps/s elapsed=9160s
+[h100_plateau] step 14500/30000 lr=6.00e-04 loss=0.9539 1.57 steps/s elapsed=9225s
+[h100_plateau] step 14600/30000 lr=6.00e-04 loss=0.9555 1.57 steps/s elapsed=9288s
+[h100_plateau] step 14700/30000 lr=6.00e-04 loss=0.9472 1.57 steps/s elapsed=9349s
+[h100_plateau] step 14800/30000 lr=6.00e-04 loss=0.9399 1.57 steps/s elapsed=9410s
+[h100_plateau] step 14900/30000 lr=6.00e-04 loss=0.9451 1.57 steps/s elapsed=9473s
+[h100_plateau] step 15000/30000 lr=6.00e-04 loss=0.9518 1.57 steps/s elapsed=9534s
+[h100_plateau]   val@15000 acc=0.2618 by_role={'first': 0.4289, 'last': 0.2939, 'intermediate': 0.2074}
+[h100_plateau] step 15100/30000 lr=6.00e-04 loss=0.9584 1.57 steps/s elapsed=9599s
+[h100_plateau] step 15200/30000 lr=6.00e-04 loss=0.9686 1.57 steps/s elapsed=9664s
+[h100_plateau] step 15300/30000 lr=6.00e-04 loss=0.9606 1.57 steps/s elapsed=9725s
+[h100_plateau] step 15400/30000 lr=6.00e-04 loss=0.9696 1.57 steps/s elapsed=9788s
+[h100_plateau] step 15500/30000 lr=6.00e-04 loss=0.9654 1.57 steps/s elapsed=9849s
+[h100_plateau] step 15600/30000 lr=6.00e-04 loss=0.9607 1.57 steps/s elapsed=9912s
+[h100_plateau] step 15700/30000 lr=6.00e-04 loss=0.9675 1.57 steps/s elapsed=9976s
+[h100_plateau] step 15800/30000 lr=6.00e-04 loss=0.9605 1.57 steps/s elapsed=10039s
+[h100_plateau] step 15900/30000 lr=6.00e-04 loss=0.9682 1.57 steps/s elapsed=10101s
+[h100_plateau] step 16000/30000 lr=6.00e-04 loss=0.9642 1.57 steps/s elapsed=10162s
+[h100_plateau]   val@16000 acc=0.2446 by_role={'first': 0.3683, 'last': 0.2817, 'intermediate': 0.2008}
+[h100_plateau] step 16100/30000 lr=1.95e-04 loss=0.9591 1.57 steps/s elapsed=10226s
+[h100_plateau] step 16200/30000 lr=1.95e-04 loss=0.9523 1.57 steps/s elapsed=10289s
+[h100_plateau] step 16300/30000 lr=1.95e-04 loss=0.9625 1.57 steps/s elapsed=10353s
+[h100_plateau] step 16400/30000 lr=1.95e-04 loss=0.9554 1.57 steps/s elapsed=10416s
+[h100_plateau] step 16500/30000 lr=1.95e-04 loss=0.9574 1.57 steps/s elapsed=10481s
+[h100_plateau] step 16600/30000 lr=1.95e-04 loss=0.9481 1.57 steps/s elapsed=10544s
+[h100_plateau] step 16700/30000 lr=1.95e-04 loss=0.9273 1.57 steps/s elapsed=10604s
+[h100_plateau] step 16800/30000 lr=1.95e-04 loss=0.9367 1.58 steps/s elapsed=10664s
+[h100_plateau] step 16900/30000 lr=1.95e-04 loss=0.9349 1.58 steps/s elapsed=10728s
+[h100_plateau] step 17000/30000 lr=1.95e-04 loss=0.9431 1.58 steps/s elapsed=10792s
+[h100_plateau]   val@17000 acc=0.2786 by_role={'first': 0.4578, 'last': 0.3189, 'intermediate': 0.2188}
+[h100_plateau] step 17100/30000 lr=4.65e-04 loss=0.9156 1.58 steps/s elapsed=10856s
+[h100_plateau] step 17200/30000 lr=4.65e-04 loss=0.9458 1.58 steps/s elapsed=10917s
+[h100_plateau] step 17300/30000 lr=4.65e-04 loss=0.9571 1.58 steps/s elapsed=10981s
+[h100_plateau] step 17400/30000 lr=4.65e-04 loss=0.9599 1.58 steps/s elapsed=11045s
+[h100_plateau] step 17500/30000 lr=4.65e-04 loss=0.9521 1.58 steps/s elapsed=11105s
+[h100_plateau] step 17600/30000 lr=4.65e-04 loss=0.9537 1.58 steps/s elapsed=11165s
+[h100_plateau] step 17700/30000 lr=4.65e-04 loss=0.9610 1.58 steps/s elapsed=11228s
+[h100_plateau] step 17800/30000 lr=4.65e-04 loss=0.9509 1.58 steps/s elapsed=11288s
+[h100_plateau] step 17900/30000 lr=4.65e-04 loss=0.9355 1.58 steps/s elapsed=11352s
+[h100_plateau] step 18000/30000 lr=4.65e-04 loss=0.9327 1.58 steps/s elapsed=11413s
+[h100_plateau]   val@18000 acc=0.2727 by_role={'first': 0.4483, 'last': 0.2994, 'intermediate': 0.2176}
+[h100_plateau] step 18100/30000 lr=6.00e-04 loss=0.9493 1.58 steps/s elapsed=11479s
+[h100_plateau] step 18200/30000 lr=6.00e-04 loss=0.9418 1.58 steps/s elapsed=11541s
+[h100_plateau] step 18300/30000 lr=6.00e-04 loss=0.9572 1.58 steps/s elapsed=11605s
+[h100_plateau] step 18400/30000 lr=6.00e-04 loss=0.9416 1.58 steps/s elapsed=11667s
+[h100_plateau] step 18500/30000 lr=6.00e-04 loss=0.9521 1.58 steps/s elapsed=11731s
+[h100_plateau] step 18600/30000 lr=6.00e-04 loss=0.9444 1.58 steps/s elapsed=11795s
+[h100_plateau] step 18700/30000 lr=6.00e-04 loss=0.9290 1.58 steps/s elapsed=11857s
+[h100_plateau] step 18800/30000 lr=6.00e-04 loss=0.9467 1.58 steps/s elapsed=11920s
+[h100_plateau] step 18900/30000 lr=6.00e-04 loss=0.9589 1.58 steps/s elapsed=11982s
+[h100_plateau] step 19000/30000 lr=6.00e-04 loss=0.9597 1.58 steps/s elapsed=12044s
+[h100_plateau]   val@19000 acc=0.2683 by_role={'first': 0.425, 'last': 0.3, 'intermediate': 0.217}
+[h100_plateau] step 19100/30000 lr=6.00e-04 loss=0.9661 1.58 steps/s elapsed=12110s
+[h100_plateau] step 19200/30000 lr=6.00e-04 loss=0.9590 1.58 steps/s elapsed=12169s
+[h100_plateau] step 19300/30000 lr=6.00e-04 loss=0.9601 1.58 steps/s elapsed=12230s
+[h100_plateau] step 19400/30000 lr=6.00e-04 loss=0.9708 1.58 steps/s elapsed=12293s
+[h100_plateau] step 19500/30000 lr=6.00e-04 loss=0.9567 1.58 steps/s elapsed=12355s
+[h100_plateau] step 19600/30000 lr=6.00e-04 loss=0.9390 1.58 steps/s elapsed=12415s
+[h100_plateau] step 19700/30000 lr=6.00e-04 loss=0.9572 1.58 steps/s elapsed=12478s
+[h100_plateau] step 19800/30000 lr=6.00e-04 loss=0.9716 1.58 steps/s elapsed=12539s
+[h100_plateau] step 19900/30000 lr=6.00e-04 loss=0.9632 1.58 steps/s elapsed=12598s
+[h100_plateau] step 20000/30000 lr=6.00e-04 loss=0.9784 1.58 steps/s elapsed=12662s
+[h100_plateau]   val@20000 acc=0.2563 by_role={'first': 0.4189, 'last': 0.2839, 'intermediate': 0.2044}
+[h100_plateau] step 20100/30000 lr=1.95e-04 loss=0.9585 1.58 steps/s elapsed=12727s
+[h100_plateau] step 20200/30000 lr=1.95e-04 loss=0.9505 1.58 steps/s elapsed=12787s
+[h100_plateau] step 20300/30000 lr=1.95e-04 loss=0.9473 1.58 steps/s elapsed=12847s
+[h100_plateau] step 20400/30000 lr=1.95e-04 loss=0.9375 1.58 steps/s elapsed=12910s
+[h100_plateau] step 20500/30000 lr=1.95e-04 loss=0.9344 1.58 steps/s elapsed=12971s
+[h100_plateau] step 20600/30000 lr=1.95e-04 loss=0.9520 1.58 steps/s elapsed=13032s
+[h100_plateau] step 20700/30000 lr=1.95e-04 loss=0.9440 1.58 steps/s elapsed=13094s
+[h100_plateau] step 20800/30000 lr=1.95e-04 loss=0.9397 1.58 steps/s elapsed=13157s
+[h100_plateau] step 20900/30000 lr=1.95e-04 loss=0.9333 1.58 steps/s elapsed=13217s
+[h100_plateau] step 21000/30000 lr=1.95e-04 loss=0.9359 1.58 steps/s elapsed=13280s
+[h100_plateau]   val@21000 acc=0.2670 by_role={'first': 0.45, 'last': 0.3011, 'intermediate': 0.2077}
+[h100_plateau] step 21100/30000 lr=4.65e-04 loss=0.9451 1.58 steps/s elapsed=13345s
+[h100_plateau] step 21200/30000 lr=4.65e-04 loss=0.9612 1.58 steps/s elapsed=13407s
+[h100_plateau] step 21300/30000 lr=4.65e-04 loss=0.9475 1.58 steps/s elapsed=13466s
+[h100_plateau] step 21400/30000 lr=4.65e-04 loss=0.9498 1.58 steps/s elapsed=13527s
+[h100_plateau] step 21500/30000 lr=4.65e-04 loss=0.9525 1.58 steps/s elapsed=13588s
+[h100_plateau] step 21600/30000 lr=4.65e-04 loss=0.9356 1.58 steps/s elapsed=13648s
+[h100_plateau] step 21700/30000 lr=4.65e-04 loss=0.9452 1.58 steps/s elapsed=13711s
+[h100_plateau] step 21800/30000 lr=4.65e-04 loss=0.9516 1.58 steps/s elapsed=13773s
+[h100_plateau] step 21900/30000 lr=4.65e-04 loss=0.9431 1.58 steps/s elapsed=13834s
+[h100_plateau] step 22000/30000 lr=4.65e-04 loss=0.9472 1.58 steps/s elapsed=13896s
+[h100_plateau]   val@22000 acc=0.2611 by_role={'first': 0.4367, 'last': 0.3033, 'intermediate': 0.2017}
+[h100_plateau] step 22100/30000 lr=6.00e-04 loss=0.9500 1.58 steps/s elapsed=13960s
+[h100_plateau] step 22200/30000 lr=6.00e-04 loss=0.9665 1.58 steps/s elapsed=14023s
+[h100_plateau] step 22300/30000 lr=6.00e-04 loss=0.9521 1.58 steps/s elapsed=14085s
+[h100_plateau] step 22400/30000 lr=6.00e-04 loss=0.9517 1.58 steps/s elapsed=14147s
+[h100_plateau] step 22500/30000 lr=6.00e-04 loss=0.9587 1.58 steps/s elapsed=14210s
+[h100_plateau] step 22600/30000 lr=6.00e-04 loss=0.9726 1.58 steps/s elapsed=14272s
+[h100_plateau] step 22700/30000 lr=6.00e-04 loss=0.9862 1.58 steps/s elapsed=14335s
+[h100_plateau] step 22800/30000 lr=6.00e-04 loss=0.9766 1.58 steps/s elapsed=14397s
+[h100_plateau] step 22900/30000 lr=6.00e-04 loss=0.9666 1.58 steps/s elapsed=14458s
+[h100_plateau] step 23000/30000 lr=6.00e-04 loss=0.9749 1.58 steps/s elapsed=14522s
+[h100_plateau]   val@23000 acc=0.2570 by_role={'first': 0.4278, 'last': 0.2811, 'intermediate': 0.2038}
+[h100_plateau] step 23100/30000 lr=6.00e-04 loss=0.9854 1.58 steps/s elapsed=14591s
+[h100_plateau] step 23200/30000 lr=6.00e-04 loss=0.9716 1.58 steps/s elapsed=14653s
+[h100_plateau] step 23300/30000 lr=6.00e-04 loss=0.9675 1.58 steps/s elapsed=14716s
+[h100_plateau] step 23400/30000 lr=6.00e-04 loss=0.9643 1.58 steps/s elapsed=14776s
+[h100_plateau] step 23500/30000 lr=6.00e-04 loss=0.9616 1.58 steps/s elapsed=14837s
+[h100_plateau] step 23600/30000 lr=6.00e-04 loss=0.9499 1.58 steps/s elapsed=14897s
+[h100_plateau] step 23700/30000 lr=6.00e-04 loss=0.9640 1.58 steps/s elapsed=14958s
+[h100_plateau] step 23800/30000 lr=6.00e-04 loss=0.9604 1.58 steps/s elapsed=15021s
+[h100_plateau] step 23900/30000 lr=6.00e-04 loss=0.9602 1.58 steps/s elapsed=15082s
+[h100_plateau] step 24000/30000 lr=6.00e-04 loss=0.9785 1.58 steps/s elapsed=15149s
+[h100_plateau]   val@24000 acc=0.2549 by_role={'first': 0.4228, 'last': 0.2767, 'intermediate': 0.2032}
+[h100_plateau] step 24100/30000 lr=1.95e-04 loss=0.9559 1.58 steps/s elapsed=15216s
+[h100_plateau] step 24200/30000 lr=1.95e-04 loss=0.9588 1.58 steps/s elapsed=15278s
+[h100_plateau] step 24300/30000 lr=1.95e-04 loss=0.9510 1.58 steps/s elapsed=15339s
+[h100_plateau] step 24400/30000 lr=1.95e-04 loss=0.9533 1.58 steps/s elapsed=15403s
+[h100_plateau] step 24500/30000 lr=1.95e-04 loss=0.9449 1.58 steps/s elapsed=15465s
+[h100_plateau] step 24600/30000 lr=1.95e-04 loss=0.9463 1.58 steps/s elapsed=15526s
+[h100_plateau] step 24700/30000 lr=1.95e-04 loss=0.9427 1.58 steps/s elapsed=15589s
+[h100_plateau] step 24800/30000 lr=1.95e-04 loss=0.9509 1.58 steps/s elapsed=15651s
+[h100_plateau] step 24900/30000 lr=1.95e-04 loss=0.9338 1.58 steps/s elapsed=15712s
+[h100_plateau] step 25000/30000 lr=1.95e-04 loss=0.9337 1.58 steps/s elapsed=15775s
+[h100_plateau]   val@25000 acc=0.2741 by_role={'first': 0.4522, 'last': 0.3006, 'intermediate': 0.2183}
+[h100_plateau] step 25100/30000 lr=4.65e-04 loss=0.9392 1.58 steps/s elapsed=15840s
+[h100_plateau] step 25200/30000 lr=4.65e-04 loss=0.9384 1.58 steps/s elapsed=15900s
+[h100_plateau] step 25300/30000 lr=4.65e-04 loss=0.9635 1.58 steps/s elapsed=15967s
+[h100_plateau] step 25400/30000 lr=4.65e-04 loss=0.9548 1.58 steps/s elapsed=16029s
+[h100_plateau] step 25500/30000 lr=4.65e-04 loss=0.9452 1.58 steps/s elapsed=16091s
+[h100_plateau] step 25600/30000 lr=4.65e-04 loss=0.9504 1.58 steps/s elapsed=16153s
+[h100_plateau] step 25700/30000 lr=4.65e-04 loss=0.9539 1.58 steps/s elapsed=16216s
+[h100_plateau] step 25800/30000 lr=4.65e-04 loss=0.9541 1.58 steps/s elapsed=16279s
+[h100_plateau] step 25900/30000 lr=4.65e-04 loss=0.9493 1.59 steps/s elapsed=16340s
+[h100_plateau] step 26000/30000 lr=4.65e-04 loss=0.9457 1.59 steps/s elapsed=16400s
+[h100_plateau]   val@26000 acc=0.2676 by_role={'first': 0.45, 'last': 0.2878, 'intermediate': 0.2124}
+[h100_plateau] step 26100/30000 lr=6.00e-04 loss=0.9759 1.58 steps/s elapsed=16471s
+[h100_plateau] step 26200/30000 lr=6.00e-04 loss=0.9632 1.58 steps/s elapsed=16535s
+[h100_plateau] step 26300/30000 lr=6.00e-04 loss=0.9677 1.58 steps/s elapsed=16599s
+[h100_plateau] step 26400/30000 lr=6.00e-04 loss=0.9796 1.58 steps/s elapsed=16664s
+[h100_plateau] step 26500/30000 lr=6.00e-04 loss=0.9551 1.58 steps/s elapsed=16723s
+[h100_plateau] step 26600/30000 lr=6.00e-04 loss=0.9670 1.58 steps/s elapsed=16787s
+[h100_plateau] step 26700/30000 lr=6.00e-04 loss=0.9483 1.58 steps/s elapsed=16847s
+[h100_plateau] step 26800/30000 lr=6.00e-04 loss=0.9436 1.59 steps/s elapsed=16907s
+[h100_plateau] step 26900/30000 lr=6.00e-04 loss=0.9482 1.59 steps/s elapsed=16968s
+[h100_plateau] step 27000/30000 lr=6.00e-04 loss=0.9270 1.59 steps/s elapsed=17028s
+[h100_plateau]   val@27000 acc=0.2690 by_role={'first': 0.4511, 'last': 0.2956, 'intermediate': 0.2121}
+[h100_plateau] step 27100/30000 lr=6.00e-04 loss=0.9322 1.59 steps/s elapsed=17092s
+[h100_plateau] step 27200/30000 lr=6.00e-04 loss=0.9717 1.59 steps/s elapsed=17155s
+[h100_plateau] step 27300/30000 lr=6.00e-04 loss=0.9424 1.59 steps/s elapsed=17215s
+[h100_plateau] step 27400/30000 lr=6.00e-04 loss=0.9536 1.59 steps/s elapsed=17276s
+[h100_plateau] step 27500/30000 lr=6.00e-04 loss=0.9421 1.59 steps/s elapsed=17335s
+[h100_plateau] step 27600/30000 lr=6.00e-04 loss=0.9686 1.59 steps/s elapsed=17397s
+[h100_plateau] step 27700/30000 lr=6.00e-04 loss=0.9660 1.59 steps/s elapsed=17459s
+[h100_plateau] step 27800/30000 lr=6.00e-04 loss=0.9656 1.59 steps/s elapsed=17520s
+[h100_plateau] step 27900/30000 lr=6.00e-04 loss=0.9658 1.59 steps/s elapsed=17584s
+[h100_plateau] step 28000/30000 lr=6.00e-04 loss=0.9655 1.59 steps/s elapsed=17646s
+[h100_plateau]   val@28000 acc=0.2577 by_role={'first': 0.4244, 'last': 0.2828, 'intermediate': 0.2055}
+[h100_plateau] step 28100/30000 lr=1.95e-04 loss=0.9542 1.59 steps/s elapsed=17716s
+[h100_plateau] step 28200/30000 lr=1.95e-04 loss=0.9465 1.59 steps/s elapsed=17780s
+[h100_plateau] step 28300/30000 lr=1.95e-04 loss=0.9316 1.59 steps/s elapsed=17840s
+[h100_plateau] step 28400/30000 lr=1.95e-04 loss=0.9418 1.59 steps/s elapsed=17903s
+[h100_plateau] step 28500/30000 lr=1.95e-04 loss=0.9244 1.59 steps/s elapsed=17965s
+[h100_plateau] step 28600/30000 lr=1.95e-04 loss=0.9348 1.59 steps/s elapsed=18027s
+[h100_plateau] step 28700/30000 lr=1.95e-04 loss=0.9602 1.59 steps/s elapsed=18092s
+[h100_plateau] step 28800/30000 lr=1.95e-04 loss=0.9329 1.59 steps/s elapsed=18156s
+[h100_plateau] step 28900/30000 lr=1.95e-04 loss=0.9450 1.59 steps/s elapsed=18220s
+[h100_plateau] step 29000/30000 lr=1.95e-04 loss=0.9184 1.59 steps/s elapsed=18279s
+[h100_plateau]   val@29000 acc=0.2745 by_role={'first': 0.4544, 'last': 0.3044, 'intermediate': 0.2173}
+[h100_plateau] step 29100/30000 lr=4.65e-04 loss=0.9342 1.59 steps/s elapsed=18345s
+[h100_plateau] step 29200/30000 lr=4.65e-04 loss=0.9323 1.59 steps/s elapsed=18408s
+[h100_plateau] step 29300/30000 lr=4.65e-04 loss=0.9350 1.59 steps/s elapsed=18471s
+[h100_plateau] step 29400/30000 lr=4.65e-04 loss=0.9350 1.59 steps/s elapsed=18532s
+[h100_plateau] step 29500/30000 lr=4.65e-04 loss=0.9305 1.59 steps/s elapsed=18593s
+[h100_plateau] step 29600/30000 lr=4.65e-04 loss=0.9234 1.59 steps/s elapsed=18656s
+[h100_plateau] step 29700/30000 lr=4.65e-04 loss=0.9311 1.59 steps/s elapsed=18718s
+[h100_plateau] step 29800/30000 lr=4.65e-04 loss=0.9336 1.59 steps/s elapsed=18780s
+[h100_plateau] step 29900/30000 lr=4.65e-04 loss=0.9437 1.59 steps/s elapsed=18844s
+[h100_plateau] step 30000/30000 lr=4.65e-04 loss=0.9326 1.59 steps/s elapsed=18906s
+[h100_plateau]   val@30000 acc=0.2807 by_role={'first': 0.4678, 'last': 0.2972, 'intermediate': 0.2252}
+[h100_plateau] training done. final eval on best.pt...
+[h100_plateau] FINAL iid_test=0.2833 heldout_test=0.2084
+[h100_plateau] ALL DONE
