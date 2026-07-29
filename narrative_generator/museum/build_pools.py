@@ -15,7 +15,7 @@ Design rationale (see 36_museum_ATEMPORAL_DESIGN.md §5.1):
   are idiomatic titling.
 
 Substring safety is required because the behavioural scorer at
-v3/scripts/experiments/narrative_new_domains.py:88-130 grades with
+legacy/v3/scripts/experiments/narrative_new_domains.py:88-130 grades with
 case-insensitive substring containment. If one value contains another, a wrong
 answer can be graded correct.
 
