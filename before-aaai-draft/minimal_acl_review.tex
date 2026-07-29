@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+
+% Minimal ACL review baseline: keep only the official template packages.
+\usepackage[review]{acl}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+
+\begin{document}
+\section{Introduction}
+
+Language models are increasingly deployed in settings where the value
+of a variable changes over time and the model must use the current
+value, not an earlier one.
+Multi-turn assistants must respect the most recent user correction;
+retrieval-augmented systems must use the latest version of a document;
+tool-augmented agents must read the current contents of a variable
+after a sequence of writes.
+Failures of this skill have been documented at the application level,
+but the underlying mechanism, and whether the failure is intrinsic to
+current models, is not understood.
+
+The task uses $K$ interleaved keys, each receiving $N$ updates, with
+the model asked for either the first (FVQ) or current (CVQ) value of
+a target key. Both queries are trivially solvable from context, so
+failure indicates a retrieval problem, not a length or memory limit.
+
+We evaluate 20 pretrained models spanning 14 open-weight checkpoints
+(270M--9B parameters) and 6 proprietary frontier models.
+At a representative cell per model block, FVQ$-$CVQ gaps range from
++6 to +53 percentage points, with the majority exceeding +20 pp.
+The gap takes two shapes: primacy (FVQ exceeds CVQ; majority of
+cells) and reversal (CVQ exceeds FVQ but both below ceiling; smaller
+open-weight models at high load).
+When we ask for any intermediate position $k$ of a target key
+($1 < k < N$), baseline accuracy drops below 5\% within two positions
+of the stream start, indicating a general loss of position-indexed
+retrieval rather than a first-vs-current confusion.
+
+The failure is not an architectural limit: a small 0.24\%-parameter
+LoRA and a training-free format change both restore accuracy to
+93--100\% on harder held-out cells.
+
+\end{document}

@@ -1,0 +1,747 @@
+\documentclass[letterpaper]{article} % DO NOT CHANGE THIS
+\usepackage[submission]{aaai2027}  % DO NOT CHANGE THIS
+\usepackage[hyphens]{url}  % DO NOT CHANGE THIS
+\usepackage{graphicx} % DO NOT CHANGE THIS
+\urlstyle{rm} % DO NOT CHANGE THIS
+\def\UrlFont{\rm}  % DO NOT CHANGE THIS
+\usepackage{natbib}  % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
+\usepackage{caption} % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
+\frenchspacing  % DO NOT CHANGE THIS
+\setlength{\pdfpagewidth}{8.5in} % DO NOT CHANGE THIS
+\setlength{\pdfpageheight}{11in} % DO NOT CHANGE THIS
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+
+\pdfinfo{
+/TemplateVersion (2027.1)
+}
+
+\setcounter{secnumdepth}{2}
+
+\title{Tracked but Suppressed:\\How LLMs Fail State Tracking}
+\author{Anonymous Submission}
+\affiliations{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Language models pretrained on trillions of tokens cannot reliably
+retrieve the current value of a variable that has been overwritten
+multiple times in their own input --- a skill that underpins
+multi-turn dialogue, retrieval-augmented systems, and tool-augmented
+agents.
+Across 20 pretrained models (14 open-weight from 270M to 9B
+parameters, 6 proprietary frontier), this failure manifests as a
+general loss of position-indexed retrieval: consistently higher
+accuracy on the first value than on the current value (mean gap
+$+27$ percentage points, range $+6$ to $+53$ pp at representative
+cells), and
+near-zero accuracy on intermediate positions of the update stream.
+The failure is not architectural.
+A 7.4-million-parameter LoRA --- 0.24\% of one model's weights ---
+restores accuracy to 93--100\% on harder held-out cells; a
+training-free format change produces similar recovery.
+Across 79 published checkpoints from two model families, the failure
+is present at the earliest pretraining checkpoint we can evaluate and
+survives every post-training stage.
+The capability is tracked in pretrained models but suppressed
+downstream --- present in mid-layer representations, absent from the
+output.
+Mechanistically, LoRA amplifies an attention-head circuit that
+already attends partially to the latest value in the pretrained
+model and installs downstream redundancy that absorbs upstream
+perturbations.
+\end{abstract}
+
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+% ============================================================
+
+Language models are deployed in settings where the value of a
+variable changes over time and the model must use the current
+value, not an earlier one.
+A multi-turn assistant must respect the most recent user
+correction; a tool-augmented agent must read the current contents
+of a variable after a sequence of writes.
+Failures of this skill have been documented at the application level
+--- \citet{laban2025multiturn} report sharp degradation in
+multi-turn dialogues as state updates cascade --- but the underlying
+mechanism, and whether the failure is intrinsic to current models, is
+not understood.
+
+\begin{figure}[t]
+\centering
+{\small
+\fbox{\parbox{\dimexpr\columnwidth-2\fboxsep-2\fboxrule\relax}{\vspace{2pt}
+\textbf{Stream} ($K{=}3$, $N{=}3$, randomly interleaved):\\[4pt]
+\texttt{color: red} \quad \texttt{size: large} \quad \texttt{shape: round}\\
+\texttt{size: small} \quad \texttt{color: blue} \quad \texttt{shape: square}\\
+\texttt{shape: triangle} \quad \texttt{color: green} \quad \texttt{size: medium}\\[6pt]
+\textbf{FVQ:} What was the \textit{first} value of \texttt{color}? $\rightarrow$ \textbf{red}\\
+\textbf{CVQ:} What is the \textit{current} value of \texttt{color}? $\rightarrow$ \textbf{green}
+\vspace{2pt}}}
+}
+\caption{Task illustration ($K{=}3$, $N{=}3$). The stream randomly
+interleaves updates for all $K$ keys. To answer CVQ correctly, a
+model must isolate \texttt{color} entries from competing keys and
+identify the most recent one among them.}
+\label{fig:task}
+\end{figure}
+
+Figure~\ref{fig:task} illustrates the task: $K$ interleaved keys
+each receiving $N$ updates, with the model asked for either the
+first (FVQ) or current (CVQ) value of a target key (formal setup in
+\S\ref{sec:setup}). Both queries are trivially solvable from
+context, so failure indicates a retrieval problem, not a length or
+memory limit.
+
+We evaluate 20 pretrained models spanning 14 open-weight checkpoints
+(270M--9B parameters) and 6 proprietary frontier models.
+At a representative cell per model block, FVQ$-$CVQ gaps range from
++6 to +53 percentage points, with the majority exceeding +20 pp
+(Table~\ref{tab:main_results}, 12 models shown;
+Figure~\ref{fig:main_results}).
+The gap takes two shapes: \textbf{primacy} (FVQ exceeds CVQ;
+majority of cells) and \textbf{reversal} (CVQ exceeds FVQ but both
+below ceiling; smaller open-weight models at high load).
+When we ask for any intermediate position $k$ of a target key
+($1 < k < N$), baseline accuracy drops below 5\% within two
+positions of the stream start
+(Figure~\ref{fig:dense_ivq}; full sweep across six cells in
+Appendix~F), indicating a general loss of
+position-indexed retrieval rather than a first-vs-current confusion.
+
+The failure is not an architectural limit: a small
+0.24\%-parameter LoRA and a training-free format change both
+restore accuracy to 93--100\% on harder held-out cells.
+
+We make the following contributions:
+
+\begin{itemize}
+\item \textbf{Behavioural characterisation:} FVQ--CVQ gap across 20
+  models, including a previously undocumented reversal regime
+  (\S\ref{sec:failure}).
+\item \textbf{Two recoveries:} task-specific LoRA and training-free
+  format change both close the gap
+  (\S\ref{sec:recoveries}).
+\item \textbf{Training-dynamics analysis} across 79 checkpoints from
+  two model families; failure persists at every documented stage
+  (\S\ref{sec:dynamics}).
+\item \textbf{Mechanism:} LoRA amplifies a partial
+  $v_{\text{last}}$-attending circuit already present in pretraining
+  and installs downstream redundancy; signatures replicate on
+  Gemma-3-4b-it (\S\ref{sec:mechanism}).
+\end{itemize}
+
+% ============================================================
+\section{Related Work}
+\label{sec:related}
+% ============================================================
+
+\paragraph{Retrieval failures in LLMs.}
+Application-level work documents that LLMs struggle as in-context
+state changes: multi-turn dialogues degrade as state updates cascade
+\citep{laban2025multiturn}; entity-state tracking is unevenly present
+across models \citep{kim2023entity, kim2024code, rezaee2025state};
+and most closely, \citet{unable2forget2025} construct a 46-key stream
+with up to 400 updates and a single current-value query, reporting
+a log-linear accuracy decline they conclude is fundamental. The
+position-dependent failure parallels the static-context ``lost in
+the middle'' pattern \citep{lostinthemiddle}, here arising under
+in-context updates rather than retrieval from a fixed document.
+\citet{barbero2024glasses} give a theoretical account of a related
+limit: signal propagation in decoder-only Transformers can map
+distinct input sequences to arbitrarily close final-token
+representations, which they show provably impairs counting and
+copying.
+Format sensitivity can shift accuracy by up to 76 percentage points
+\citep{sclar2024}; our format intervention is a controlled instance.
+Knowledge-editing methods \citep{meng2022rome, meng2023memit} address
+an adjacent failure --- updating \emph{parametric} facts stored in
+weights --- whereas our setting requires tracking \emph{in-context}
+updates without any weight change.
+This line of work characterises the failure; we show it is
+recoverable from the pretrained architecture by either a
+0.24\%-parameter LoRA or a training-free format change, and trace
+the recovery to specific attention-head circuits.
+
+\paragraph{Fine-tuning surfaces latent capacity.}
+Recent work has shown that capabilities not visible in pretrained
+models can be surfaced with minimal supervision.
+\citet{zhou2023lima} demonstrate that 1{,}000 curated dialogues are
+sufficient to teach a pretrained model to follow chat-style
+instructions, attributing this to pretraining having already done
+the work of knowledge acquisition.
+\citet{amuro2024finetuning} make a more general claim across 18
+datasets: pretraining improves models in latent ways only visible
+after fine-tuning.
+We use standard low-rank adaptation \citep{hu2021lora,
+aghajanyan2021intrinsic}.
+Our contribution is the concrete instance with mechanism: a
+capability pretrained LLMs systematically fail at, surfaced by an
+18{,}000-example LoRA across held-out cells, datasets, and
+$\sim$10$\times$ context lengths, and traced to upper-middle-layer
+attention heads.
+
+\paragraph{Mechanism and pretraining dynamics.}
+Mechanistic interpretability has identified circuits for specific
+capabilities \citep{olsson2022induction, wang2022ioi, conmy2023acdc,
+li2025state}, including how LMs bind entities to attributes and
+retrieve those bindings \citep{feng2024binding, gurarieh2025mixing};
+our task isolates failure of the positional retrieval path under
+destructive in-context updates.
+\citet{barbero2025firsttoken} analyse the first-token attention sink
+as a mechanism that limits over-mixing of representations across
+depth; we instead localise heads that route attention to the most
+recent value of a key. Closest on method, \citet{mishra2025summarization} report that
+summarization fine-tuning shifts the function of 62\% of attention
+heads; we apply the same approach to a mechanistic capability
+rather than a style task.
+On the pretraining-capability side, \citet{wei2022emergent} and
+\citet{schaeffer2023mirage} debate whether abilities emerge at
+scale; we ask the \emph{non-emergence} question --- this skill
+does not emerge at any scale we test. \citet{allenzhu2024knowledge}
+parallel our claim for memorised knowledge: pretrained models store
+the information but do not develop a sufficient retrieval pathway
+by default. We add the mechanistic counterpart for an
+in-context capability: when the retrieval pathway is surfaced by a
+small fine-tune, it operates by amplifying a partial circuit
+already present in pretraining.
+
+% ============================================================
+\section{Task and Setup}
+\label{sec:setup}
+% ============================================================
+
+\paragraph{Task.}
+Let $\mathcal{K} = \{k_1, \ldots, k_K\}$ be a set of keys and let
+$V_i = (v_{i,1}, \ldots, v_{i,N})$ be an ordered update sequence for
+key $k_i$.
+The input stream $\sigma$ is a random interleaving of all
+$K \times N$ pairs $\{(k_i, v_{i,j})\}$, subject to the constraint
+that no two consecutive entries share the same key.
+The model receives $\sigma$ and a target key $k_t$ and is asked one
+of three queries: \textbf{FVQ} (first-value, expected answer
+$v_{t,1}$); \textbf{CVQ} (current-value, expected answer $v_{t,N}$);
+or \textbf{IVQ} (intermediate-value, expected answer $v_{t,k}$ for
+some $1 < k < N$).
+Figure~\ref{fig:task} shows a small instance. The intermediate-value
+query is used in the multi-model sweep (\S\ref{sec:failure};
+Appendix~E) and the dense-retrieval analysis
+(\S\ref{sec:recoveries}; Appendix~F).
+
+\paragraph{Datasets.}
+\textbf{Arbitrary-Single (ARB)} uses a pool of 2{,}300 single-token
+English words across 46 semantic categories;
+single-token values keep cross-entropy and probing computations
+clean and make it the dataset for the mechanistic analysis
+(\S\ref{sec:mechanism}).
+\textbf{Semantic-Multi (SEM)} uses real category members as
+multi-token values across the same 46 categories (2{,}403 entries
+total) and is our primary behavioural dataset --- semantic coherence
+between key and value limits template-matching shortcuts.
+Full construction details are in Appendix~A.
+
+\paragraph{Grid and trials.}
+We evaluate models on a unified grid
+$K \in \{2, 3, 5, 7, 10, 15, 20, 25, 30\}$,
+$N \in \{5, 7, 10, 15, 20, 30, 50, 75, 100\}$, with up to 200 trials
+per $(K, N)$ cell per query type.
+Cells where the prompt exceeds a model's context limit or where the
+dataset pool cannot supply $N$ distinct values per key are excluded
+(specifics in Appendix~A).
+
+\paragraph{Metric.}
+For each $(K, N)$ cell we report FVQ and CVQ accuracy as
+string-match proportions (matching rule in
+Appendix~B) with Wilson 95\% confidence intervals
+\citep{wilson1927}.
+The primary metric is the \textbf{gap}
+$\Delta = \text{FVQ accuracy} - \text{CVQ accuracy}$; we call a gap
+\textbf{substantial} when $|\Delta| > 0.05$.
+All inferences use greedy decoding (temperature~0) to eliminate
+sampling variance.
+
+\paragraph{Models.}
+We evaluate \textbf{11 open-weight models} from three major
+families --- Qwen2.5 (0.5B--3B; instruct and base), Qwen3.5
+(0.8B--9B; instruct), Gemma-3 (270M--4B; instruct) --- and \textbf{6
+proprietary frontier models} from OpenAI (GPT-4.1, GPT-4.1-mini),
+Anthropic (Claude-4.5-Haiku, Claude-4.5-Sonnet), and Google
+(Gemini-2.5-Flash, Gemini-2.5-Pro).
+Three additional smaller models --- TinyLlama-1.1B, StableLM-2-1.6B,
+Pythia-410M --- appear only in the appendix.
+The full model list is in Appendix~C.
+
+% ============================================================
+\section{Pretraining Fails at In-Context Update Retrieval}
+\label{sec:failure}
+% ============================================================
+
+Every model we evaluate exhibits a substantial FVQ--CVQ gap.
+Table~\ref{tab:main_results} reports, for each model block, the
+smallest cell at which every model's gap exceeds $+0.05$; gaps
+there reach $+0.53$, and no model uses more than 3.3\% of its
+context window.
+Per-cell evidence across the full $(K, N)$ grid for all 20 models is
+in Appendix~D.
+Figure~\ref{fig:main_results} shows the trajectory in two open-weight
+models under three axis scans, including one that reaches the
+reversal regime.
+
+Both shapes appear (Fig.~\ref{fig:main_results}).
+\textbf{Primacy} holds in every cell of
+Table~\ref{tab:main_results}. Under \textbf{reversal} CVQ exceeds
+FVQ but both sit well below ceiling, CVQ in the 50--65\% range, in
+smaller open-weight models at high load. Neither is correct
+retrieval.
+
+Intermediate-position queries ($1 < k < N$) collapse uniformly:
+at $K{=}10, N{=}50$ under the default Plain format, accuracy drops
+below 5\% within two positions of the stream start across all
+five open-weight models and three of six proprietary models tested
+(Appendix~E). Gemini-2.5-Pro is the only model at
+near-ceiling on this cell --- but even it exhibits a $+0.13$
+FVQ--CVQ gap at the harder $K{=}20, N{=}50$ cell
+(Table~\ref{tab:main_results}). The failure is universal; what
+differs is the operating point at which it becomes visible.
+
+\begin{table}[t]
+\centering
+{\small
+\input{figures/tab_main.tex}
+}\caption{FVQ and CVQ at the smallest cell per block where every
+model has gap $> {+}0.05$ ($K{=}20, N{=}50$ proprietary;
+$K{=}5, N{=}30$ open-weight). \textbf{\% Ctx} is the prompt's share
+of the model's advertised context window. No model uses more than
+\textbf{3.3\%} of its window at the cell it fails on.}
+\label{tab:main_results}
+\end{table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig2_main_results.pdf}
+\caption{Qwen2.5-3B-Instruct (top) and Gemma-3-4b-it (bottom)
+across three axis scans on Semantic-Multi. Qwen crosses into the
+reversal regime at $K \approx 7$ (right column); Gemma stays in
+primacy throughout.}
+\label{fig:main_results}
+\end{figure*}
+
+% ============================================================
+\section{Two Recoveries: Format and LoRA}
+\label{sec:recoveries}
+% ============================================================
+
+\subsection{Format intervention}
+\label{sec:recoveries:format}
+
+If the failure is about \emph{locating} the relevant entries in
+the stream, making positions explicit at the surface should make
+the lookup easier. We test four formats: \textbf{Plain} (default,
+no markers); \textbf{Labeled} (per-entry index); \textbf{Block}
+(round headers); \textbf{Landmark} (round separators). Worked
+examples in App.~B. Table~\ref{tab:format} reports
+$K{=}10, N{=}50$ --- the hardest cell in the format sweep --- across
+10 models (4 open-weight, 6 proprietary).
+
+\begin{table*}[t]
+\centering
+{\small
+\input{figures/tab_format.tex}
+}\caption{Format-intervention results on Semantic-Multi
+($K{=}10, N{=}50$). Each cell shows \textbf{FVQ / CVQ accuracy};
+gap $\Delta = $ FVQ $-$ CVQ. Plain is the default condition from
+\S\ref{sec:failure}. Wilson half-widths in
+Appendix~E.}
+\label{tab:format}
+\end{table*}
+
+\textbf{Block} format closes almost all of the FVQ--CVQ gap on every
+open-weight model in Table~\ref{tab:format}: gaps of $+0.26$ to
+$+0.99$ under Plain fall to between $-0.08$ and $+0.10$ under Block.
+The recovery is genuine, not equalisation: under Block both queries
+reach $0.84$ or above for every open-weight model, whereas under
+Plain CVQ falls to $\le 0.23$ in all four while FVQ stays well
+above it.
+Proprietary models follow the same pattern at smaller magnitudes;
+Gemini-2.5-Pro is the only model at ceiling on both queries under
+Plain, consistent with its non-collapse in \S\ref{sec:failure}.
+
+Labeled and Landmark produce mixed recoveries
+(Table~\ref{tab:format}; per-model breakdown + 2$\times$2 decomposition in
+App.~E): round-grouping and numbering each
+contribute to CVQ recovery, but no single property alone restores
+both queries.
+
+\subsection{LoRA intervention}
+\label{sec:recoveries:lora}
+
+We fit a LoRA adapter \citep{hu2021lora} to Qwen2.5-3B-Instruct on
+18{,}000 examples from a small training grid ($K \le 10$,
+$N \le 20$). The adapter adds 7.4M trainable parameters ---
+0.24\% of model weights. We evaluate on a held-out grid extending
+to $K{=}30, N{=}75$, on held-out categories, and cross-distribution
+on Semantic-Multi (full configuration in Appendix~G).
+
+On the 28 held-out Arbitrary-Single cells, both FVQ and CVQ
+accuracy reach 93--100\% post-adapter (gaps in
+Table~\ref{tab:lora_arb}; per-query accuracies in App.~G),
+roughly $10\times$ beyond the training grid in stream length.
+The same adapter transfers to Semantic-Multi without modification
+(Table~\ref{tab:lora_sem}): at four held-out SEM cells, both
+queries reach 100\% --- including cells in the deep reversal
+regime with baseline gap up to $-0.45$.
+The dense intermediate-position queries that collapsed under the
+base model in \S\ref{sec:failure} also recover to near-ceiling at
+every queried position across six cells (Figure~\ref{fig:dense_ivq};
+Appendix~F); simultaneous recovery across
+positions, not just the last, rules out a pure
+recency-amplification account.
+
+\paragraph{Family control.} The same recipe applied to
+Gemma-3-4b-it --- a different model family with the opposite
+baseline regime ($\le {+}87$ pp primacy vs Qwen's reversal) ---
+closes the gap on $28/28$ held-out ARB cells (mean FVQ 99.4\%,
+CVQ 97.0\%) and 16/16 SEM OOD cells (mean FVQ 100\%,
+CVQ 96.8\%; Appendix~G.1). The recovery is
+neither Qwen-specific nor regime-specific.
+
+\paragraph{Negative control.} The same recipe trained on GSM8K
+with identical hyperparameters learns arithmetic
+($16\% \to 70\%$ GSM8K accuracy) but leaves the FVQ--CVQ gap
+unchanged on every held-out cell (Appendix~G): the
+recovery is task-specific.
+
+\paragraph{Two loci, one outcome.}
+Format and LoRA produce the same behavioural outcome via
+\emph{operationally distinct internal loci}: pooled
+$\Pr(\text{attend to }v_{\text{last}})$ on the 15 LoRA-promoter
+heads is $0.16$ under Block versus $0.68$ under LoRA, with $0$ of
+$15$ heads reaching LoRA-level activation
+(App.~J). Both restore intermediate-position
+retrieval (App.~E;
+Figure~\ref{fig:dense_ivq}). Together they demonstrate the
+capability is \emph{latent}: present in the pretrained architecture
+but not surfaced by default.\footnote{We treat a capability as latent when
+(i) a small, task-matched fine-tune restores it and (ii) the
+mechanism amplifies pre-existing structure rather than installing it
+from scratch. The arithmetic LoRA control (App.~G)
+fails (i); a model whose L30--L33 promoter heads had zero pre-LoRA
+$\Pr(\text{attend to }v_{\text{last}})$ would fail (ii) and falsify
+the claim for this task.}
+\S\ref{sec:dynamics} asks whether any stage of training surfaces it
+without help; \S\ref{sec:mechanism} asks what changes
+mechanistically when LoRA recovers it.
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}[t]{0.36\textwidth}
+\centering
+{\small
+\input{figures/tab_lora_arb.tex}
+}\captionof{table}{Base vs +LoRA gap on 16 of the 28 held-out cells,
+extending to $K{=}30, N{=}75$ (adapter trained on $K \le 10,
+N \le 20$). Both queries reach 93--100\% post-adapter; all 28
+cells with FVQ/CVQ breakdown in App.~G.}
+\label{tab:lora_arb}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.62\textwidth}
+\centering
+{\small
+\input{figures/tab_lora_sem.tex}
+}\captionof{table}{Same LoRA, evaluated on Semantic-Multi
+(multi-token semantic values, never seen in training). All four
+held-out cells go from baseline reversal regime to gap 0\%.}
+\label{tab:lora_sem}
+
+\vspace{0.5em}
+
+\includegraphics[width=0.95\linewidth]{figures/fig_dense_ivq.pdf}
+\captionof{figure}{Per-position retrieval at $K{=}5, N{=}10$ on
+Arbitrary-Single, positions $k \in [1, N{-}1]$. Base collapses on
+intermediate positions; LoRA holds near ceiling at every position
+queried.}
+\label{fig:dense_ivq}
+\end{minipage}
+\end{figure*}
+
+% ============================================================
+\section{Does Any Training Stage Fix It?}
+\label{sec:dynamics}
+% ============================================================
+
+We ask whether emergence is hiding at any training stage we have
+not yet evaluated. We track the FVQ--CVQ gap across 32 published
+SmolLM3-3B pretraining checkpoints \citep{smollm3} spanning all three
+documented stages, plus its five post-training stages (mid-training,
+SFT, APO, LC-expert, final). Every checkpoint is evaluated on the
+same 32-cell $(K, N)$ Arbitrary-Single grid, partitioned by
+stream-load (\textbf{low}:
+$K{\leq}3$; \textbf{medium}: $K{\geq}5, N{<}20$; \textbf{high}:
+$K{\geq}5, N{\geq}20$); SmolLM2-1.7B
+\citep{allal2025smollm2} contributes a further 42 checkpoints as a
+second family (App.~H), for 79 in total.
+
+Figure~\ref{fig:training_dynamics} answers the question: no. The gap
+is directionally biased at every checkpoint in every regime; no
+regime stabilises at zero. The five post-training stages do not
+close it; SmolLM2 shows the same picture across its four-stage
+curriculum.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig_training_dynamics_smollm3.pdf}
+\caption{Mean FVQ$-$CVQ gap on Arbitrary-Single across the
+SmolLM3-3B \citep{smollm3} training trajectory. Three load regimes:
+\textbf{Low} ($K{\leq}3$, blue), \textbf{Medium}
+($K{\geq}5, N{<}20$, grey), \textbf{High} ($K{\geq}5, N{\geq}20$,
+red). Pink band on the right: five post-training stages
+(mid-training, SFT, APO, LC-expert, final). No regime closes the
+gap at any documented checkpoint; SmolLM2-1.7B shows the same
+pattern (App.~H).}
+\label{fig:training_dynamics}
+\end{figure*}
+
+We evaluate in completion format for cross-checkpoint comparability
+--- the earliest pretraining checkpoints predate chat-template
+training. Re-running SmolLM3's post-training stages under the
+model's released chat template preserves the direction and ordering
+of the gap at every stage (Appendix~H); the failure is not a
+completion-format artifact.
+
+The same checkpoints are documented to succeed at multi-step
+reasoning, code synthesis, and long-context retrieval at scales
+that exceed this task (\citealp{smollm3, allal2025smollm2}). The
+capability is recoverable by a small adapter
+(\S\ref{sec:recoveries:lora}); pretraining does not surface it at
+any checkpoint we measure, motivating the circuit-level explanation
+in \S\ref{sec:mechanism}.
+
+% ============================================================
+\section{Mechanism: What LoRA Changes}
+\label{sec:mechanism}
+% ============================================================
+
+The recovery in \S\ref{sec:recoveries:lora} shows the capability
+is in the pretrained architecture; \S\ref{sec:dynamics} shows it
+remains unsurfaced through every documented training stage. We ask
+what changes inside the model when LoRA surfaces it. All
+measurements use Qwen2.5-3B-Instruct on Arbitrary-Single at
+$K{=}2, N{=}5$ unless noted (layer indexing 0-based,
+L0--L35; Table~\ref{tab:mechanism} for bootstrap 95\% CIs,
+Figure~\ref{fig:mechanism} for per-layer trajectories and spatial
+localisation).
+
+\subsection{The substrate already exists in baseline}
+\label{sec:mechanism:substrate}
+
+Three linear probes characterise what the pretrained model already
+represents. A condition-discrimination probe (FVQ vs CVQ prompt)
+reaches 100\% accuracy from layer~6 onward in \emph{both} models;
+LoRA adds nothing. A FVQ-correctness probe reaches 77--81\% at
+L27--L33 in baseline --- the model internally tracks its FVQ
+success. At the same layers a CVQ-correctness probe reaches only
+57--65\%, rising to 84--94\% after LoRA
+(\S\ref{sec:mechanism:promoter}): whatever lets the baseline
+anticipate its FVQ success is largely absent for CVQ.
+
+Logit lens shows the parallel pattern at the token level. At L32
+of the baseline, $\Pr(v_{\text{last}}){=}0.34$ --- the answer
+surfaces briefly --- then decays to $0.25$ at L35.
+\emph{Found then suppressed.} At a harder cell ($K{=}2, N{=}50$)
+the answer barely surfaces ($0.02$ at L32, $0.11$ at L35),
+tracking the behavioural failure. The readout machinery in layers
+34--35 is intact (attention patterns nearly identical pre/post-LoRA,
+Figure~\ref{fig:mechanism}b); what the model lacks is propagation
+from the partial L32 answer to the final layer.
+
+\subsection{LoRA amplifies a partial v\textsubscript{last} promoter
+circuit in layers 30--33}
+\label{sec:mechanism:promoter}
+
+Attention routing locates the change. Fifteen heads in the
+L30--L33 band gain large $v_{\text{last}}$ attention:
+pre-LoRA values of 0.05--0.23 rise to 0.60--0.86 post-LoRA --- a
+roughly 4--12$\times$ increase per head
+(Figure~\ref{fig:mechanism}b). The
+largest shifts are L32H3 (0.11~$\to$~0.78), L32H7
+(0.13~$\to$~0.78), L31H12 (0.17~$\to$~0.81), and L31H15
+(0.23~$\to$~0.86). Layers 0--20 and 34--35 are essentially
+unchanged; the rewiring is spatially confined to a four-layer band.
+
+The pre-LoRA values are not noise: the 15 promoters all sit above
+the 95th percentile of $\Pr(\text{attend to }v_{\text{last}})$
+across all 576 baseline heads (median $0.001$; fewer than $3\%$ of
+heads exceed $0.05$).
+\S\ref{sec:mechanism:causal} confirms causally that the heads
+carry $v_{\text{last}}$ signal pre-LoRA: ablating the eight
+highest-attribution heads in the baseline drops L32
+$\Pr(v_{\text{last}})$ by $-0.28$ (CI excludes zero).
+
+The token-level consequence is immediate: post-LoRA L32 has
+$\Pr(v_{\text{last}}) {=} 0.99$ at $K{=}2, N{=}5$ and $0.62$ at
+$K{=}2, N{=}50$, saturating to $\sim 1.0$ by L33--L35 at both.
+The representational consequence is parallel: the CVQ-correctness
+probe at L27--L33 rises from 57--65\% to 84--94\% ($\Delta
+{=} {+}0.36$, 95\% CI $[+0.21, +0.50]$ at L33), installed in the
+same late layers that already carried the FVQ-correctness signal.
+
+LoRA does not act by removing suppression: ablating the five
+baseline suppressor heads (L26H3, L27H3, L29H3, L29H4, L30H3) in
+the LoRA model releases $v_{\text{last}}$ at L31 \emph{more} than
+in baseline ($\Delta{=}{+}0.150$ vs $+0.078$). The suppressors
+keep firing post-LoRA; LoRA strengthens a parallel promoter
+pathway that overpowers them.
+
+\subsection{Two LoRA changes: amplification and downstream
+redundancy}
+\label{sec:mechanism:causal}
+
+To distinguish what LoRA \emph{installs} from what it
+\emph{amplifies}, we ablate the eight highest-attribution promoter
+heads in both models with paired trial seeds; the within-trial
+$\Delta$s are directly comparable (Table~\ref{tab:ablation_fourway}).
+Paired differences below are reported as baseline $-$ LoRA.
+
+Two findings emerge. First, the heads are partial pre-LoRA
+carriers, and LoRA amplifies them: ablation drops L32
+$\Pr(v_{\text{last}})$ by $-0.28$ in baseline (95\% CI
+$[-0.34, -0.22]$, $n{=}200$) and by $-0.40$ in LoRA (95\% CI
+$[-0.46, -0.33]$). The paired difference is $+0.12$ (95\% CI
+$[+0.02, +0.21]$, excludes zero) --- post-LoRA the same eight
+heads carry $\sim 40\%$ more causal effect at L32.
+
+Second, propagation to the final layer differs. In baseline, the
+ablation leaves a small detectable residue at L35
+($\Delta {=} {-}0.05$, 95\% CI $[-0.10, -0.00]$). In LoRA, the
+same ablation is absorbed by L35 ($\Delta {=} {+}0.00$, CI
+$[0, 0]$); paired difference $-0.05$ (CI $[-0.10, -0.00]$,
+excludes zero). LoRA has installed compensatory pathways at L33+
+that re-stabilise $\Pr(v_{\text{last}})$ when the upstream signal
+is partially knocked out --- redundancy that does not pre-exist in
+baseline.
+
+\paragraph{Cross-family replication.}
+Probing, logit-lens, and attention-routing signatures replicate on
+Gemma-3-4b-it (different family, opposite baseline regime). The
+CVQ-correctness probe at L26--L33 rises from $0.70$--$0.73$ to
+$0.82$--$0.89$ ($\Delta$ between $+0.11$ and $+0.19$, all eight
+layers with CI excluding zero); logit lens at L33 shows
+$\Pr(v_{\text{last}})$ rising from $0.50$--$0.80$ to $\approx 1.00$
+across three cells; attention routing identifies a top-15
+promoter cluster spread across L14--L32 ($\Delta$ $+0.33$ to
+$+0.47$) --- same late-layer functional pattern as Qwen, with a
+distributed rather than concentrated topology
+(App.~I). Paired causal ablation on Gemma
+is left to future work.
+
+\paragraph{Synthesis.}
+The four methods form a closed causal chain: heads in L30--L33
+attend to $v_{\text{last}}$ (routing) $\to$ $v_{\text{last}}$
+builds at L32 (logit lens) $\to$ a CVQ-correctness feature becomes
+linearly decodable (probing) $\to$ behaviour recovers. LoRA does
+two things in this chain: it amplifies a pre-existing partial
+promoter circuit (roughly $4$--$12\times$ in 15 heads of L30--L33) and
+installs compensatory pathways at L33+ that absorb upstream
+perturbations. The pretraining failure is a gain and robustness
+failure, not a representational one --- \S\ref{sec:discussion}
+discusses what this implies.
+
+\begin{table*}[t]
+\centering
+{\small
+\input{figures/tab_mechanism.tex}
+}\caption{Bootstrap 95\% CIs on key mechanistic $\Delta$s at
+L30--L33, baseline vs +LoRA. Probing and attention-routing rows
+aggregate within the band; logit-lens rows give
+$\Pr(v_{\text{last}})$ at L32. Trial counts: probing 200 trials at
+$K{=}2, N{=}5$; logit lens 100 trials per cell; attention routing
+50 trials at $K{=}2, N{=}30$. Bootstrap $n_{\text{boot}}{=}2000$,
+seed 17.}
+\label{tab:mechanism}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+{\small
+\input{figures/tab_ablation_fourway.tex}
+}\caption{Stage~3C four-way causal-ablation summary. Each row:
+paired within-run $\Delta {=}$ ablated $-$ normal at four layers
+($K{=}2, N{=}5$, CVQ; promoter rows $n{=}200$, suppressor rows
+$n{=}50$). \textbf{Bold row} is the baseline control --- the eight
+LoRA-promoter heads carry a large L32 effect already in
+baseline, establishing them as partial $v_{\text{last}}$ carriers
+pre-LoRA. The L33--L35 columns show LoRA's new downstream
+redundancy: baseline leaks to the readout, LoRA absorbs it.}
+\label{tab:ablation_fourway}
+\end{table*}
+
+\begin{figure*}[!ht]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig_mechanism.pdf}
+\caption{Mechanism summary for Qwen2.5-3B-Instruct ($K{=}2, N{=}5$).
+\textbf{(a)} Per-layer $\Pr(v_{\text{last}})$ (logit lens) and
+CVQ-correctness probe accuracy, baseline vs +LoRA --- both signals
+converge on the L27--L33 band (shaded).
+\textbf{(b)} Per-head $\Delta$ in $\Pr(\text{attend to }
+v_{\text{last}})$ across all 576 heads; the bright band at L30--L33
+(dashed) contains the 15 promoter heads.
+\textbf{(c)} Stage~3C ablation of the eight top-attribution
+promoter heads drops $\Pr(v_{\text{last}})$ at L32 in \emph{both}
+baseline and LoRA models; baseline ablation propagates to the
+readout, LoRA absorbs by L33+.}
+\label{fig:mechanism}
+\end{figure*}
+
+% ============================================================
+\section{Discussion}
+\label{sec:discussion}
+% ============================================================
+
+\paragraph{When each recovery is usable.}
+Format intervention works at inference time but requires the
+deployer to control the prompt --- agent harnesses with structured
+state, or instrumented multi-turn dialogue --- and does not apply
+when prompt structure comes from user input or upstream components
+the deployer does not control.
+LoRA requires weight access, so it applies to open-weight or
+in-house fine-tuneable models but not to frontier inference behind
+a query interface.
+For frontier-only deployment paths neither recovery is available;
+our results predict the current-value retrieval failure persists.
+
+\paragraph{Implications for pretraining.}
+The next-token loss never requires overwriting an earlier binding:
+nothing in the objective rewards the current value over a valid
+earlier one. The 79-checkpoint sweep (\S\ref{sec:dynamics}) is what
+that predicts. A training signal targeting in-context update
+tracking is the natural next step.
+
+% ============================================================
+\section{Conclusion}
+% ============================================================
+
+Twenty pretrained models, from 270M to frontier scale, fail to
+report the current value of a variable they have watched being
+overwritten --- on prompts using under 4\% of their context
+windows. The capability is nonetheless there: a 7.4M-parameter
+adapter lifts both first-value and current-value queries to
+93--100\%, and a format change recovers them with no weight update
+at all. The adapter amplifies attention heads that already carry
+the signal before it is trained, and across 79 checkpoints spanning
+two families, no stage of training surfaces it unaided. What
+pretraining fails to build here is not the representation but the
+path from it to the output.
+
+% ============================================================
+
+\bibliography{references}
+
+\end{document}
