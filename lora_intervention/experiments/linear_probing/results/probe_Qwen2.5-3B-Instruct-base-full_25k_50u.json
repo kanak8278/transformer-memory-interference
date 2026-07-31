@@ -1,0 +1,4336 @@
+{
+  "state": "base",
+  "base_model": "Qwen/Qwen2.5-3B-Instruct",
+  "adapter_path": null,
+  "cell": {
+    "keys": 25,
+    "updates": 50
+  },
+  "scoring": "generate",
+  "mode": "full",
+  "conditions": {
+    "FVQ": {
+      "behavioral_accuracy": 0.13,
+      "n": 100,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": false,
+          "cv_accuracy": 0.76,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "1": {
+          "degenerate": false,
+          "cv_accuracy": 0.85,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "2": {
+          "degenerate": false,
+          "cv_accuracy": 0.86,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "3": {
+          "degenerate": false,
+          "cv_accuracy": 0.8400000000000001,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "4": {
+          "degenerate": false,
+          "cv_accuracy": 0.82,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "5": {
+          "degenerate": false,
+          "cv_accuracy": 0.82,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "6": {
+          "degenerate": false,
+          "cv_accuracy": 0.8400000000000001,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "7": {
+          "degenerate": false,
+          "cv_accuracy": 0.86,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "8": {
+          "degenerate": false,
+          "cv_accuracy": 0.8300000000000001,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "9": {
+          "degenerate": false,
+          "cv_accuracy": 0.82,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "10": {
+          "degenerate": false,
+          "cv_accuracy": 0.8300000000000001,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "11": {
+          "degenerate": false,
+          "cv_accuracy": 0.85,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "12": {
+          "degenerate": false,
+          "cv_accuracy": 0.86,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "13": {
+          "degenerate": false,
+          "cv_accuracy": 0.8400000000000001,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "14": {
+          "degenerate": false,
+          "cv_accuracy": 0.8300000000000001,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "15": {
+          "degenerate": false,
+          "cv_accuracy": 0.8300000000000001,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "16": {
+          "degenerate": false,
+          "cv_accuracy": 0.8099999999999999,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "17": {
+          "degenerate": false,
+          "cv_accuracy": 0.8,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "18": {
+          "degenerate": false,
+          "cv_accuracy": 0.82,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "19": {
+          "degenerate": false,
+          "cv_accuracy": 0.8400000000000001,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "20": {
+          "degenerate": false,
+          "cv_accuracy": 0.85,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "21": {
+          "degenerate": false,
+          "cv_accuracy": 0.8299999999999998,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "22": {
+          "degenerate": false,
+          "cv_accuracy": 0.8299999999999998,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "23": {
+          "degenerate": false,
+          "cv_accuracy": 0.86,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "24": {
+          "degenerate": false,
+          "cv_accuracy": 0.89,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "25": {
+          "degenerate": false,
+          "cv_accuracy": 0.89,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "26": {
+          "degenerate": false,
+          "cv_accuracy": 0.89,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "27": {
+          "degenerate": false,
+          "cv_accuracy": 0.9099999999999999,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "28": {
+          "degenerate": false,
+          "cv_accuracy": 0.9,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "29": {
+          "degenerate": false,
+          "cv_accuracy": 0.89,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "30": {
+          "degenerate": false,
+          "cv_accuracy": 0.9,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "31": {
+          "degenerate": false,
+          "cv_accuracy": 0.9199999999999999,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "32": {
+          "degenerate": false,
+          "cv_accuracy": 0.9,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "33": {
+          "degenerate": false,
+          "cv_accuracy": 0.9099999999999999,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "34": {
+          "degenerate": false,
+          "cv_accuracy": 0.9099999999999999,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        },
+        "35": {
+          "degenerate": false,
+          "cv_accuracy": 0.9099999999999999,
+          "majority_baseline": 0.87,
+          "n_pos": 13,
+          "n_neg": 87
+        }
+      },
+      "trials": [
+        {
+          "expected": "invent",
+          "pred_text": "bar",
+          "correct": false
+        },
+        {
+          "expected": "scarf",
+          "pred_text": "behind",
+          "correct": false
+        },
+        {
+          "expected": "grief",
+          "pred_text": "flower species: grief",
+          "correct": true
+        },
+        {
+          "expected": "comb",
+          "pred_text": "thing",
+          "correct": false
+        },
+        {
+          "expected": "ankle",
+          "pred_text": "embrace",
+          "correct": false
+        },
+        {
+          "expected": "cast",
+          "pred_text": "snap",
+          "correct": false
+        },
+        {
+          "expected": "forum",
+          "pred_text": "garlic",
+          "correct": false
+        },
+        {
+          "expected": "habit",
+          "pred_text": "knife",
+          "correct": false
+        },
+        {
+          "expected": "salute",
+          "pred_text": "essay",
+          "correct": false
+        },
+        {
+          "expected": "pod",
+          "pred_text": "lazy",
+          "correct": false
+        },
+        {
+          "expected": "pocket",
+          "pred_text": "dock",
+          "correct": false
+        },
+        {
+          "expected": "savage",
+          "pred_text": "fabric",
+          "correct": false
+        },
+        {
+          "expected": "sole",
+          "pred_text": "hike",
+          "correct": false
+        },
+        {
+          "expected": "bold",
+          "pred_text": "reside",
+          "correct": false
+        },
+        {
+          "expected": "pump",
+          "pred_text": "opera",
+          "correct": false
+        },
+        {
+          "expected": "gum",
+          "pred_text": "gauche",
+          "correct": false
+        },
+        {
+          "expected": "tack",
+          "pred_text": "tack",
+          "correct": true
+        },
+        {
+          "expected": "hen",
+          "pred_text": "earn",
+          "correct": false
+        },
+        {
+          "expected": "annual",
+          "pred_text": "heat",
+          "correct": false
+        },
+        {
+          "expected": "clap",
+          "pred_text": "slug",
+          "correct": false
+        },
+        {
+          "expected": "rear",
+          "pred_text": "gemstone: rear",
+          "correct": true
+        },
+        {
+          "expected": "autumn",
+          "pred_text": "evolve",
+          "correct": false
+        },
+        {
+          "expected": "mobile",
+          "pred_text": "melt",
+          "correct": false
+        },
+        {
+          "expected": "ramp",
+          "pred_text": "haze",
+          "correct": false
+        },
+        {
+          "expected": "appear",
+          "pred_text": "fade",
+          "correct": false
+        },
+        {
+          "expected": "span",
+          "pred_text": "heap",
+          "correct": false
+        },
+        {
+          "expected": "agent",
+          "pred_text": "scared",
+          "correct": false
+        },
+        {
+          "expected": "tire",
+          "pred_text": "tire",
+          "correct": true
+        },
+        {
+          "expected": "pool",
+          "pred_text": "flask",
+          "correct": false
+        },
+        {
+          "expected": "work",
+          "pred_text": "value: work",
+          "correct": true
+        },
+        {
+          "expected": "maze",
+          "pred_text": "zap",
+          "correct": false
+        },
+        {
+          "expected": "belt",
+          "pred_text": "slug",
+          "correct": false
+        },
+        {
+          "expected": "dish",
+          "pred_text": "chore",
+          "correct": false
+        },
+        {
+          "expected": "full",
+          "pred_text": "lit",
+          "correct": false
+        },
+        {
+          "expected": "lava",
+          "pred_text": "paw",
+          "correct": false
+        },
+        {
+          "expected": "lab",
+          "pred_text": "signal",
+          "correct": false
+        },
+        {
+          "expected": "eye",
+          "pred_text": "eye",
+          "correct": true
+        },
+        {
+          "expected": "engine",
+          "pred_text": "tree species: cane",
+          "correct": false
+        },
+        {
+          "expected": "pasta",
+          "pred_text": "bull",
+          "correct": false
+        },
+        {
+          "expected": "wheel",
+          "pred_text": "fast",
+          "correct": false
+        },
+        {
+          "expected": "ham",
+          "pred_text": "ham",
+          "correct": true
+        },
+        {
+          "expected": "optic",
+          "pred_text": "tuna",
+          "correct": false
+        },
+        {
+          "expected": "poster",
+          "pred_text": "tact",
+          "correct": false
+        },
+        {
+          "expected": "accuse",
+          "pred_text": "peek",
+          "correct": false
+        },
+        {
+          "expected": "barely",
+          "pred_text": "ancient civilization: role",
+          "correct": false
+        },
+        {
+          "expected": "dragon",
+          "pred_text": "dragon",
+          "correct": true
+        },
+        {
+          "expected": "firm",
+          "pred_text": "bath",
+          "correct": false
+        },
+        {
+          "expected": "cigar",
+          "pred_text": "excess",
+          "correct": false
+        },
+        {
+          "expected": "phase",
+          "pred_text": "landform: third",
+          "correct": false
+        },
+        {
+          "expected": "bait",
+          "pred_text": "amber",
+          "correct": false
+        },
+        {
+          "expected": "random",
+          "pred_text": "dodge",
+          "correct": false
+        },
+        {
+          "expected": "iron",
+          "pred_text": "iron",
+          "correct": true
+        },
+        {
+          "expected": "tea",
+          "pred_text": "sandy",
+          "correct": false
+        },
+        {
+          "expected": "slope",
+          "pred_text": "deep",
+          "correct": false
+        },
+        {
+          "expected": "ridge",
+          "pred_text": "ridge",
+          "correct": true
+        },
+        {
+          "expected": "gown",
+          "pred_text": "pause",
+          "correct": false
+        },
+        {
+          "expected": "wait",
+          "pred_text": "hive",
+          "correct": false
+        },
+        {
+          "expected": "grind",
+          "pred_text": "blown",
+          "correct": false
+        },
+        {
+          "expected": "class",
+          "pred_text": "tour",
+          "correct": false
+        },
+        {
+          "expected": "jail",
+          "pred_text": "haze",
+          "correct": false
+        },
+        {
+          "expected": "cage",
+          "pred_text": "camel",
+          "correct": false
+        },
+        {
+          "expected": "figure",
+          "pred_text": "orbit",
+          "correct": false
+        },
+        {
+          "expected": "rare",
+          "pred_text": "extra",
+          "correct": false
+        },
+        {
+          "expected": "emerge",
+          "pred_text": "market",
+          "correct": false
+        },
+        {
+          "expected": "dark",
+          "pred_text": "shine",
+          "correct": false
+        },
+        {
+          "expected": "gust",
+          "pred_text": "rather",
+          "correct": false
+        },
+        {
+          "expected": "trace",
+          "pred_text": "fluffy",
+          "correct": false
+        },
+        {
+          "expected": "young",
+          "pred_text": "young",
+          "correct": true
+        },
+        {
+          "expected": "half",
+          "pred_text": "shell",
+          "correct": false
+        },
+        {
+          "expected": "rod",
+          "pred_text": "signal",
+          "correct": false
+        },
+        {
+          "expected": "smoke",
+          "pred_text": "jet",
+          "correct": false
+        },
+        {
+          "expected": "knew",
+          "pred_text": "architectural style: ball",
+          "correct": false
+        },
+        {
+          "expected": "tray",
+          "pred_text": "accept",
+          "correct": false
+        },
+        {
+          "expected": "bone",
+          "pred_text": "steel",
+          "correct": false
+        },
+        {
+          "expected": "bare",
+          "pred_text": "crack",
+          "correct": false
+        },
+        {
+          "expected": "itch",
+          "pred_text": "city",
+          "correct": false
+        },
+        {
+          "expected": "break",
+          "pred_text": "board game: break",
+          "correct": true
+        },
+        {
+          "expected": "bay",
+          "pred_text": "work",
+          "correct": false
+        },
+        {
+          "expected": "rat",
+          "pred_text": "insist",
+          "correct": false
+        },
+        {
+          "expected": "will",
+          "pred_text": "ancient civilization: alien",
+          "correct": false
+        },
+        {
+          "expected": "brick",
+          "pred_text": "bag",
+          "correct": false
+        },
+        {
+          "expected": "pulp",
+          "pred_text": "enough",
+          "correct": false
+        },
+        {
+          "expected": "retire",
+          "pred_text": "retire",
+          "correct": true
+        },
+        {
+          "expected": "rouge",
+          "pred_text": "dean",
+          "correct": false
+        },
+        {
+          "expected": "coach",
+          "pred_text": "drive",
+          "correct": false
+        },
+        {
+          "expected": "pass",
+          "pred_text": "read_game",
+          "correct": false
+        },
+        {
+          "expected": "bronze",
+          "pred_text": "depot",
+          "correct": false
+        },
+        {
+          "expected": "squad",
+          "pred_text": "keen",
+          "correct": false
+        },
+        {
+          "expected": "grape",
+          "pred_text": "tribe",
+          "correct": false
+        },
+        {
+          "expected": "glory",
+          "pred_text": "bring",
+          "correct": false
+        },
+        {
+          "expected": "cyst",
+          "pred_text": "bolt",
+          "correct": false
+        },
+        {
+          "expected": "poke",
+          "pred_text": "tape",
+          "correct": false
+        },
+        {
+          "expected": "rum",
+          "pred_text": "tick",
+          "correct": false
+        },
+        {
+          "expected": "stain",
+          "pred_text": "att",
+          "correct": false
+        },
+        {
+          "expected": "oat",
+          "pred_text": "hull",
+          "correct": false
+        },
+        {
+          "expected": "seam",
+          "pred_text": "sixty",
+          "correct": false
+        },
+        {
+          "expected": "field",
+          "pred_text": "shirt",
+          "correct": false
+        },
+        {
+          "expected": "speak",
+          "pred_text": "image",
+          "correct": false
+        },
+        {
+          "expected": "ferry",
+          "pred_text": "trail",
+          "correct": false
+        },
+        {
+          "expected": "vest",
+          "pred_text": "apple",
+          "correct": false
+        }
+      ]
+    },
+    "CVQ": {
+      "behavioral_accuracy": 0.45,
+      "n": 200,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": false,
+          "cv_accuracy": 0.465,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "1": {
+          "degenerate": false,
+          "cv_accuracy": 0.4600000000000001,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "2": {
+          "degenerate": false,
+          "cv_accuracy": 0.45999999999999996,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "3": {
+          "degenerate": false,
+          "cv_accuracy": 0.51,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "4": {
+          "degenerate": false,
+          "cv_accuracy": 0.5200000000000001,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "5": {
+          "degenerate": false,
+          "cv_accuracy": 0.5149999999999999,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "6": {
+          "degenerate": false,
+          "cv_accuracy": 0.585,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "7": {
+          "degenerate": false,
+          "cv_accuracy": 0.5650000000000001,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "8": {
+          "degenerate": false,
+          "cv_accuracy": 0.5700000000000001,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "9": {
+          "degenerate": false,
+          "cv_accuracy": 0.58,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "10": {
+          "degenerate": false,
+          "cv_accuracy": 0.6100000000000001,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "11": {
+          "degenerate": false,
+          "cv_accuracy": 0.63,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "12": {
+          "degenerate": false,
+          "cv_accuracy": 0.615,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "13": {
+          "degenerate": false,
+          "cv_accuracy": 0.625,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "14": {
+          "degenerate": false,
+          "cv_accuracy": 0.5850000000000001,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "15": {
+          "degenerate": false,
+          "cv_accuracy": 0.575,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "16": {
+          "degenerate": false,
+          "cv_accuracy": 0.575,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "17": {
+          "degenerate": false,
+          "cv_accuracy": 0.58,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "18": {
+          "degenerate": false,
+          "cv_accuracy": 0.5700000000000001,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "19": {
+          "degenerate": false,
+          "cv_accuracy": 0.58,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "20": {
+          "degenerate": false,
+          "cv_accuracy": 0.5800000000000001,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "21": {
+          "degenerate": false,
+          "cv_accuracy": 0.5599999999999999,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "22": {
+          "degenerate": false,
+          "cv_accuracy": 0.54,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "23": {
+          "degenerate": false,
+          "cv_accuracy": 0.5,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "24": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "25": {
+          "degenerate": false,
+          "cv_accuracy": 0.53,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "26": {
+          "degenerate": false,
+          "cv_accuracy": 0.58,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "27": {
+          "degenerate": false,
+          "cv_accuracy": 0.5900000000000001,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "28": {
+          "degenerate": false,
+          "cv_accuracy": 0.5900000000000001,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "29": {
+          "degenerate": false,
+          "cv_accuracy": 0.555,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "30": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "31": {
+          "degenerate": false,
+          "cv_accuracy": 0.585,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "32": {
+          "degenerate": false,
+          "cv_accuracy": 0.5599999999999999,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "33": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "34": {
+          "degenerate": false,
+          "cv_accuracy": 0.5700000000000001,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        },
+        "35": {
+          "degenerate": false,
+          "cv_accuracy": 0.575,
+          "majority_baseline": 0.55,
+          "n_pos": 90,
+          "n_neg": 110
+        }
+      },
+      "trials": [
+        {
+          "expected": "recall",
+          "pred_text": "recall",
+          "correct": true
+        },
+        {
+          "expected": "due",
+          "pred_text": "due",
+          "correct": true
+        },
+        {
+          "expected": "coat",
+          "pred_text": "evolve",
+          "correct": false
+        },
+        {
+          "expected": "icon",
+          "pred_text": "icon",
+          "correct": true
+        },
+        {
+          "expected": "allied",
+          "pred_text": "prison",
+          "correct": false
+        },
+        {
+          "expected": "stew",
+          "pred_text": "stew",
+          "correct": true
+        },
+        {
+          "expected": "witch",
+          "pred_text": "worm",
+          "correct": false
+        },
+        {
+          "expected": "glue",
+          "pred_text": "scrap",
+          "correct": false
+        },
+        {
+          "expected": "fold",
+          "pred_text": "fold",
+          "correct": true
+        },
+        {
+          "expected": "random",
+          "pred_text": "random",
+          "correct": true
+        },
+        {
+          "expected": "annual",
+          "pred_text": "annual",
+          "correct": true
+        },
+        {
+          "expected": "trust",
+          "pred_text": "weed",
+          "correct": false
+        },
+        {
+          "expected": "relay",
+          "pred_text": "relay",
+          "correct": true
+        },
+        {
+          "expected": "chord",
+          "pred_text": "bout",
+          "correct": false
+        },
+        {
+          "expected": "loft",
+          "pred_text": "loft",
+          "correct": true
+        },
+        {
+          "expected": "friday",
+          "pred_text": "prem",
+          "correct": false
+        },
+        {
+          "expected": "aside",
+          "pred_text": "aside",
+          "correct": true
+        },
+        {
+          "expected": "stand",
+          "pred_text": "mighty",
+          "correct": false
+        },
+        {
+          "expected": "faucet",
+          "pred_text": "attack",
+          "correct": false
+        },
+        {
+          "expected": "door",
+          "pred_text": "door",
+          "correct": true
+        },
+        {
+          "expected": "drill",
+          "pred_text": "drill",
+          "correct": true
+        },
+        {
+          "expected": "bite",
+          "pred_text": "bite",
+          "correct": true
+        },
+        {
+          "expected": "climb",
+          "pred_text": "slot",
+          "correct": false
+        },
+        {
+          "expected": "cyst",
+          "pred_text": "cyst",
+          "correct": true
+        },
+        {
+          "expected": "cut",
+          "pred_text": "cut",
+          "correct": true
+        },
+        {
+          "expected": "latter",
+          "pred_text": "bundle",
+          "correct": false
+        },
+        {
+          "expected": "climb",
+          "pred_text": "fuel",
+          "correct": false
+        },
+        {
+          "expected": "faucet",
+          "pred_text": "bail",
+          "correct": false
+        },
+        {
+          "expected": "pup",
+          "pred_text": "vote",
+          "correct": false
+        },
+        {
+          "expected": "cope",
+          "pred_text": "cope",
+          "correct": true
+        },
+        {
+          "expected": "novice",
+          "pred_text": "novice",
+          "correct": true
+        },
+        {
+          "expected": "magnet",
+          "pred_text": "magnet",
+          "correct": true
+        },
+        {
+          "expected": "fact",
+          "pred_text": "reef",
+          "correct": false
+        },
+        {
+          "expected": "ankle",
+          "pred_text": "beam",
+          "correct": false
+        },
+        {
+          "expected": "media",
+          "pred_text": "media",
+          "correct": true
+        },
+        {
+          "expected": "tan",
+          "pred_text": "tan",
+          "correct": true
+        },
+        {
+          "expected": "wand",
+          "pred_text": "wand",
+          "correct": true
+        },
+        {
+          "expected": "fluffy",
+          "pred_text": "fluffy",
+          "correct": true
+        },
+        {
+          "expected": "awe",
+          "pred_text": "wish",
+          "correct": false
+        },
+        {
+          "expected": "gloss",
+          "pred_text": "gloss",
+          "correct": true
+        },
+        {
+          "expected": "wheel",
+          "pred_text": "wheel",
+          "correct": true
+        },
+        {
+          "expected": "poetry",
+          "pred_text": "poetry",
+          "correct": true
+        },
+        {
+          "expected": "wave",
+          "pred_text": "wave",
+          "correct": true
+        },
+        {
+          "expected": "media",
+          "pred_text": "lush",
+          "correct": false
+        },
+        {
+          "expected": "find",
+          "pred_text": "find",
+          "correct": true
+        },
+        {
+          "expected": "market",
+          "pred_text": "market",
+          "correct": true
+        },
+        {
+          "expected": "hive",
+          "pred_text": "hive",
+          "correct": true
+        },
+        {
+          "expected": "ore",
+          "pred_text": "commit",
+          "correct": false
+        },
+        {
+          "expected": "vacuum",
+          "pred_text": "vacuum",
+          "correct": true
+        },
+        {
+          "expected": "type",
+          "pred_text": "pasta",
+          "correct": false
+        },
+        {
+          "expected": "toe",
+          "pred_text": "toe",
+          "correct": true
+        },
+        {
+          "expected": "slot",
+          "pred_text": "assure",
+          "correct": false
+        },
+        {
+          "expected": "hive",
+          "pred_text": "hive",
+          "correct": true
+        },
+        {
+          "expected": "potato",
+          "pred_text": "potato",
+          "correct": true
+        },
+        {
+          "expected": "amount",
+          "pred_text": "mouth",
+          "correct": false
+        },
+        {
+          "expected": "bluff",
+          "pred_text": "bluff",
+          "correct": true
+        },
+        {
+          "expected": "sane",
+          "pred_text": "dew",
+          "correct": false
+        },
+        {
+          "expected": "poetry",
+          "pred_text": "heat",
+          "correct": false
+        },
+        {
+          "expected": "down",
+          "pred_text": "down",
+          "correct": true
+        },
+        {
+          "expected": "warn",
+          "pred_text": "warn",
+          "correct": true
+        },
+        {
+          "expected": "fond",
+          "pred_text": "reduce",
+          "correct": false
+        },
+        {
+          "expected": "stag",
+          "pred_text": "tone",
+          "correct": false
+        },
+        {
+          "expected": "rise",
+          "pred_text": "insect",
+          "correct": false
+        },
+        {
+          "expected": "rugby",
+          "pred_text": "mare",
+          "correct": false
+        },
+        {
+          "expected": "mint",
+          "pred_text": "begin",
+          "correct": false
+        },
+        {
+          "expected": "meal",
+          "pred_text": "breeze",
+          "correct": false
+        },
+        {
+          "expected": "shift",
+          "pred_text": "least",
+          "correct": false
+        },
+        {
+          "expected": "flight",
+          "pred_text": "flight",
+          "correct": true
+        },
+        {
+          "expected": "assure",
+          "pred_text": "tone",
+          "correct": false
+        },
+        {
+          "expected": "disc",
+          "pred_text": "disc",
+          "correct": true
+        },
+        {
+          "expected": "booth",
+          "pred_text": "tablet",
+          "correct": false
+        },
+        {
+          "expected": "lessen",
+          "pred_text": "lessen",
+          "correct": true
+        },
+        {
+          "expected": "trial",
+          "pred_text": "shine",
+          "correct": false
+        },
+        {
+          "expected": "colony",
+          "pred_text": "trail",
+          "correct": false
+        },
+        {
+          "expected": "polar",
+          "pred_text": "quest",
+          "correct": false
+        },
+        {
+          "expected": "dig",
+          "pred_text": "badge",
+          "correct": false
+        },
+        {
+          "expected": "reign",
+          "pred_text": "reduce",
+          "correct": false
+        },
+        {
+          "expected": "glory",
+          "pred_text": "drama",
+          "correct": false
+        },
+        {
+          "expected": "leap",
+          "pred_text": "leap",
+          "correct": true
+        },
+        {
+          "expected": "park",
+          "pred_text": "park",
+          "correct": true
+        },
+        {
+          "expected": "eye",
+          "pred_text": "hide",
+          "correct": false
+        },
+        {
+          "expected": "poet",
+          "pred_text": "check",
+          "correct": false
+        },
+        {
+          "expected": "tribe",
+          "pred_text": "tribe",
+          "correct": true
+        },
+        {
+          "expected": "tact",
+          "pred_text": "tact",
+          "correct": true
+        },
+        {
+          "expected": "maze",
+          "pred_text": "maze",
+          "correct": true
+        },
+        {
+          "expected": "avenue",
+          "pred_text": "step",
+          "correct": false
+        },
+        {
+          "expected": "clue",
+          "pred_text": "clue",
+          "correct": true
+        },
+        {
+          "expected": "bow",
+          "pred_text": "haze",
+          "correct": false
+        },
+        {
+          "expected": "zoo",
+          "pred_text": "zoo",
+          "correct": true
+        },
+        {
+          "expected": "fever",
+          "pred_text": "deploy",
+          "correct": false
+        },
+        {
+          "expected": "touch",
+          "pred_text": "clown",
+          "correct": false
+        },
+        {
+          "expected": "tub",
+          "pred_text": "spree",
+          "correct": false
+        },
+        {
+          "expected": "fruit",
+          "pred_text": "forest",
+          "correct": false
+        },
+        {
+          "expected": "sled",
+          "pred_text": "shoe",
+          "correct": false
+        },
+        {
+          "expected": "latch",
+          "pred_text": "latch",
+          "correct": true
+        },
+        {
+          "expected": "loft",
+          "pred_text": "scenic",
+          "correct": false
+        },
+        {
+          "expected": "plead",
+          "pred_text": "plead",
+          "correct": true
+        },
+        {
+          "expected": "earth",
+          "pred_text": "earth",
+          "correct": true
+        },
+        {
+          "expected": "lance",
+          "pred_text": "tongue",
+          "correct": false
+        },
+        {
+          "expected": "forest",
+          "pred_text": "wide",
+          "correct": false
+        },
+        {
+          "expected": "escape",
+          "pred_text": "escape",
+          "correct": true
+        },
+        {
+          "expected": "beach",
+          "pred_text": "always",
+          "correct": false
+        },
+        {
+          "expected": "stab",
+          "pred_text": "voter",
+          "correct": false
+        },
+        {
+          "expected": "table",
+          "pred_text": "tip",
+          "correct": false
+        },
+        {
+          "expected": "sight",
+          "pred_text": "sight",
+          "correct": true
+        },
+        {
+          "expected": "nip",
+          "pred_text": "paper",
+          "correct": false
+        },
+        {
+          "expected": "sixty",
+          "pred_text": "dying",
+          "correct": false
+        },
+        {
+          "expected": "assure",
+          "pred_text": "stall",
+          "correct": false
+        },
+        {
+          "expected": "extend",
+          "pred_text": "extend",
+          "correct": true
+        },
+        {
+          "expected": "fur",
+          "pred_text": "fur",
+          "correct": true
+        },
+        {
+          "expected": "swept",
+          "pred_text": "proven",
+          "correct": false
+        },
+        {
+          "expected": "stood",
+          "pred_text": "stood",
+          "correct": true
+        },
+        {
+          "expected": "repeat",
+          "pred_text": "repeat",
+          "correct": true
+        },
+        {
+          "expected": "shave",
+          "pred_text": "exceed",
+          "correct": false
+        },
+        {
+          "expected": "motor",
+          "pred_text": "party",
+          "correct": false
+        },
+        {
+          "expected": "butter",
+          "pred_text": "clue",
+          "correct": false
+        },
+        {
+          "expected": "scope",
+          "pred_text": "ramp",
+          "correct": false
+        },
+        {
+          "expected": "bless",
+          "pred_text": "loan",
+          "correct": false
+        },
+        {
+          "expected": "period",
+          "pred_text": "lime",
+          "correct": false
+        },
+        {
+          "expected": "real",
+          "pred_text": "van",
+          "correct": false
+        },
+        {
+          "expected": "power",
+          "pred_text": "brute",
+          "correct": false
+        },
+        {
+          "expected": "midst",
+          "pred_text": "apple",
+          "correct": false
+        },
+        {
+          "expected": "giant",
+          "pred_text": "trail",
+          "correct": false
+        },
+        {
+          "expected": "elder",
+          "pred_text": "close",
+          "correct": false
+        },
+        {
+          "expected": "pomp",
+          "pred_text": "pomp",
+          "correct": true
+        },
+        {
+          "expected": "ramp",
+          "pred_text": "female",
+          "correct": false
+        },
+        {
+          "expected": "oven",
+          "pred_text": "union",
+          "correct": false
+        },
+        {
+          "expected": "carpet",
+          "pred_text": "scene",
+          "correct": false
+        },
+        {
+          "expected": "nose",
+          "pred_text": "sway",
+          "correct": false
+        },
+        {
+          "expected": "lever",
+          "pred_text": "lever",
+          "correct": true
+        },
+        {
+          "expected": "colony",
+          "pred_text": "cyst",
+          "correct": false
+        },
+        {
+          "expected": "fall",
+          "pred_text": "fall",
+          "correct": true
+        },
+        {
+          "expected": "ladder",
+          "pred_text": "ladder",
+          "correct": true
+        },
+        {
+          "expected": "ark",
+          "pred_text": "ark",
+          "correct": true
+        },
+        {
+          "expected": "hide",
+          "pred_text": "hide",
+          "correct": true
+        },
+        {
+          "expected": "answer",
+          "pred_text": "answer: answer",
+          "correct": true
+        },
+        {
+          "expected": "author",
+          "pred_text": "author",
+          "correct": true
+        },
+        {
+          "expected": "club",
+          "pred_text": "club",
+          "correct": true
+        },
+        {
+          "expected": "rode",
+          "pred_text": "waist",
+          "correct": false
+        },
+        {
+          "expected": "dean",
+          "pred_text": "plate",
+          "correct": false
+        },
+        {
+          "expected": "indoor",
+          "pred_text": "indoor",
+          "correct": true
+        },
+        {
+          "expected": "couple",
+          "pred_text": "gate",
+          "correct": false
+        },
+        {
+          "expected": "origin",
+          "pred_text": "alloy",
+          "correct": false
+        },
+        {
+          "expected": "simple",
+          "pred_text": "simple",
+          "correct": true
+        },
+        {
+          "expected": "dull",
+          "pred_text": "peak",
+          "correct": false
+        },
+        {
+          "expected": "desk",
+          "pred_text": "virtue",
+          "correct": false
+        },
+        {
+          "expected": "pry",
+          "pred_text": "pride",
+          "correct": false
+        },
+        {
+          "expected": "coral",
+          "pred_text": "coral",
+          "correct": true
+        },
+        {
+          "expected": "line",
+          "pred_text": "rusted",
+          "correct": false
+        },
+        {
+          "expected": "urge",
+          "pred_text": "output: output: output: output:",
+          "correct": false
+        },
+        {
+          "expected": "brick",
+          "pred_text": "altar",
+          "correct": false
+        },
+        {
+          "expected": "museum",
+          "pred_text": "paid",
+          "correct": false
+        },
+        {
+          "expected": "held",
+          "pred_text": "leak",
+          "correct": false
+        },
+        {
+          "expected": "humble",
+          "pred_text": "brush",
+          "correct": false
+        },
+        {
+          "expected": "price",
+          "pred_text": "tag",
+          "correct": false
+        },
+        {
+          "expected": "bluff",
+          "pred_text": "patch",
+          "correct": false
+        },
+        {
+          "expected": "mist",
+          "pred_text": "fine",
+          "correct": false
+        },
+        {
+          "expected": "low",
+          "pred_text": "simple",
+          "correct": false
+        },
+        {
+          "expected": "hop",
+          "pred_text": "hop",
+          "correct": true
+        },
+        {
+          "expected": "false",
+          "pred_text": "false",
+          "correct": true
+        },
+        {
+          "expected": "fuzz",
+          "pred_text": "fuzz",
+          "correct": true
+        },
+        {
+          "expected": "grasp",
+          "pred_text": "graze",
+          "correct": false
+        },
+        {
+          "expected": "expect",
+          "pred_text": "expect",
+          "correct": true
+        },
+        {
+          "expected": "verb",
+          "pred_text": "verb",
+          "correct": true
+        },
+        {
+          "expected": "pod",
+          "pred_text": "tan",
+          "correct": false
+        },
+        {
+          "expected": "blown",
+          "pred_text": "jewel",
+          "correct": false
+        },
+        {
+          "expected": "honey",
+          "pred_text": "honey",
+          "correct": true
+        },
+        {
+          "expected": "number",
+          "pred_text": "number",
+          "correct": true
+        },
+        {
+          "expected": "attic",
+          "pred_text": "attic",
+          "correct": true
+        },
+        {
+          "expected": "linger",
+          "pred_text": "linger",
+          "correct": true
+        },
+        {
+          "expected": "earth",
+          "pred_text": "pot",
+          "correct": false
+        },
+        {
+          "expected": "lovely",
+          "pred_text": "lovely",
+          "correct": true
+        },
+        {
+          "expected": "expert",
+          "pred_text": "expert",
+          "correct": true
+        },
+        {
+          "expected": "seldom",
+          "pred_text": "panel",
+          "correct": false
+        },
+        {
+          "expected": "rid",
+          "pred_text": "rid",
+          "correct": true
+        },
+        {
+          "expected": "degree",
+          "pred_text": "swap",
+          "correct": false
+        },
+        {
+          "expected": "loud",
+          "pred_text": "note",
+          "correct": false
+        },
+        {
+          "expected": "flea",
+          "pred_text": "spice blend: modest",
+          "correct": false
+        },
+        {
+          "expected": "steam",
+          "pred_text": "pie",
+          "correct": false
+        },
+        {
+          "expected": "dump",
+          "pred_text": "prior",
+          "correct": false
+        },
+        {
+          "expected": "crowd",
+          "pred_text": "crowd",
+          "correct": true
+        },
+        {
+          "expected": "budget",
+          "pred_text": "budget",
+          "correct": true
+        },
+        {
+          "expected": "refine",
+          "pred_text": "refine",
+          "correct": true
+        },
+        {
+          "expected": "intend",
+          "pred_text": "intend",
+          "correct": true
+        },
+        {
+          "expected": "tie",
+          "pred_text": "tie",
+          "correct": true
+        },
+        {
+          "expected": "breed",
+          "pred_text": "breed",
+          "correct": true
+        },
+        {
+          "expected": "grave",
+          "pred_text": "stamp",
+          "correct": false
+        },
+        {
+          "expected": "brain",
+          "pred_text": "revolt",
+          "correct": false
+        },
+        {
+          "expected": "bacon",
+          "pred_text": "month",
+          "correct": false
+        },
+        {
+          "expected": "noise",
+          "pred_text": "noise",
+          "correct": true
+        },
+        {
+          "expected": "mast",
+          "pred_text": "total",
+          "correct": false
+        },
+        {
+          "expected": "harm",
+          "pred_text": "income",
+          "correct": false
+        },
+        {
+          "expected": "ticket",
+          "pred_text": "chaos",
+          "correct": false
+        },
+        {
+          "expected": "color",
+          "pred_text": "color",
+          "correct": true
+        },
+        {
+          "expected": "detail",
+          "pred_text": "fee",
+          "correct": false
+        },
+        {
+          "expected": "ease",
+          "pred_text": "sweat",
+          "correct": false
+        },
+        {
+          "expected": "match",
+          "pred_text": "match",
+          "correct": true
+        },
+        {
+          "expected": "clutch",
+          "pred_text": "clutch",
+          "correct": true
+        },
+        {
+          "expected": "elk",
+          "pred_text": "pub",
+          "correct": false
+        },
+        {
+          "expected": "hat",
+          "pred_text": "hat",
+          "correct": true
+        }
+      ]
+    },
+    "IVQ_d10": {
+      "behavioral_accuracy": 0.0,
+      "n": 30,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "1": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "2": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "3": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "4": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "5": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "6": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "7": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "8": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "9": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "10": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "11": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "12": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "13": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "14": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "15": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "16": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "17": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "18": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "19": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "20": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "21": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "22": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "23": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "24": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "25": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "26": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "27": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "28": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "29": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "30": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "31": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "32": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "33": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "34": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "35": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        }
+      },
+      "trials": [
+        {
+          "expected": "war",
+          "pred_text": "hook",
+          "correct": false
+        },
+        {
+          "expected": "canyon",
+          "pred_text": "mound",
+          "correct": false
+        },
+        {
+          "expected": "animal",
+          "pred_text": "climb",
+          "correct": false
+        },
+        {
+          "expected": "duty",
+          "pred_text": "enormous",
+          "correct": false
+        },
+        {
+          "expected": "vivid",
+          "pred_text": "seldom",
+          "correct": false
+        },
+        {
+          "expected": "sixty",
+          "pred_text": "bar",
+          "correct": false
+        },
+        {
+          "expected": "mighty",
+          "pred_text": "grind",
+          "correct": false
+        },
+        {
+          "expected": "oil",
+          "pred_text": "above",
+          "correct": false
+        },
+        {
+          "expected": "raise",
+          "pred_text": "block",
+          "correct": false
+        },
+        {
+          "expected": "mingle",
+          "pred_text": "unit",
+          "correct": false
+        },
+        {
+          "expected": "father",
+          "pred_text": "pane",
+          "correct": false
+        },
+        {
+          "expected": "driven",
+          "pred_text": "cheer",
+          "correct": false
+        },
+        {
+          "expected": "raft",
+          "pred_text": "marble",
+          "correct": false
+        },
+        {
+          "expected": "charm",
+          "pred_text": "mad",
+          "correct": false
+        },
+        {
+          "expected": "bear",
+          "pred_text": "layer",
+          "correct": false
+        },
+        {
+          "expected": "causal",
+          "pred_text": "zero",
+          "correct": false
+        },
+        {
+          "expected": "empty",
+          "pred_text": "task",
+          "correct": false
+        },
+        {
+          "expected": "bakery",
+          "pred_text": "polish",
+          "correct": false
+        },
+        {
+          "expected": "liver",
+          "pred_text": "sit",
+          "correct": false
+        },
+        {
+          "expected": "dun",
+          "pred_text": "weed",
+          "correct": false
+        },
+        {
+          "expected": "import",
+          "pred_text": "zoo",
+          "correct": false
+        },
+        {
+          "expected": "fame",
+          "pred_text": "stream",
+          "correct": false
+        },
+        {
+          "expected": "trophy",
+          "pred_text": "agent",
+          "correct": false
+        },
+        {
+          "expected": "worker",
+          "pred_text": "quartz",
+          "correct": false
+        },
+        {
+          "expected": "bark",
+          "pred_text": "rusty",
+          "correct": false
+        },
+        {
+          "expected": "pad",
+          "pred_text": "slice",
+          "correct": false
+        },
+        {
+          "expected": "blend",
+          "pred_text": "saddle",
+          "correct": false
+        },
+        {
+          "expected": "toxic",
+          "pred_text": "ton",
+          "correct": false
+        },
+        {
+          "expected": "lint",
+          "pred_text": "hello",
+          "correct": false
+        },
+        {
+          "expected": "idle",
+          "pred_text": "scarf",
+          "correct": false
+        }
+      ]
+    },
+    "IVQ_d25": {
+      "behavioral_accuracy": 0.0,
+      "n": 30,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "1": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "2": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "3": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "4": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "5": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "6": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "7": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "8": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "9": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "10": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "11": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "12": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "13": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "14": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "15": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "16": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "17": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "18": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "19": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "20": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "21": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "22": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "23": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "24": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "25": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "26": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "27": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "28": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "29": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "30": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "31": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "32": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "33": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "34": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "35": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        }
+      },
+      "trials": [
+        {
+          "expected": "water",
+          "pred_text": "wit",
+          "correct": false
+        },
+        {
+          "expected": "unity",
+          "pred_text": "alien",
+          "correct": false
+        },
+        {
+          "expected": "leader",
+          "pred_text": "sage",
+          "correct": false
+        },
+        {
+          "expected": "bank",
+          "pred_text": "scent",
+          "correct": false
+        },
+        {
+          "expected": "haste",
+          "pred_text": "ride",
+          "correct": false
+        },
+        {
+          "expected": "regret",
+          "pred_text": "herbal",
+          "correct": false
+        },
+        {
+          "expected": "jacket",
+          "pred_text": "foot",
+          "correct": false
+        },
+        {
+          "expected": "dress",
+          "pred_text": "demand",
+          "correct": false
+        },
+        {
+          "expected": "hello",
+          "pred_text": "bike",
+          "correct": false
+        },
+        {
+          "expected": "hike",
+          "pred_text": "gear",
+          "correct": false
+        },
+        {
+          "expected": "stolen",
+          "pred_text": "crash",
+          "correct": false
+        },
+        {
+          "expected": "rap",
+          "pred_text": "pop",
+          "correct": false
+        },
+        {
+          "expected": "fort",
+          "pred_text": "bounce",
+          "correct": false
+        },
+        {
+          "expected": "type",
+          "pred_text": "throw",
+          "correct": false
+        },
+        {
+          "expected": "maiden",
+          "pred_text": "shield",
+          "correct": false
+        },
+        {
+          "expected": "cold",
+          "pred_text": "scene",
+          "correct": false
+        },
+        {
+          "expected": "sword",
+          "pred_text": "harsh",
+          "correct": false
+        },
+        {
+          "expected": "riot",
+          "pred_text": "extend",
+          "correct": false
+        },
+        {
+          "expected": "climb",
+          "pred_text": "hole",
+          "correct": false
+        },
+        {
+          "expected": "knock",
+          "pred_text": "font",
+          "correct": false
+        },
+        {
+          "expected": "beside",
+          "pred_text": "ride",
+          "correct": false
+        },
+        {
+          "expected": "lever",
+          "pred_text": "peak",
+          "correct": false
+        },
+        {
+          "expected": "vapor",
+          "pred_text": "depart",
+          "correct": false
+        },
+        {
+          "expected": "optic",
+          "pred_text": "comedy",
+          "correct": false
+        },
+        {
+          "expected": "market",
+          "pred_text": "bout",
+          "correct": false
+        },
+        {
+          "expected": "sonic",
+          "pred_text": "trail",
+          "correct": false
+        },
+        {
+          "expected": "cave",
+          "pred_text": "smooth",
+          "correct": false
+        },
+        {
+          "expected": "save",
+          "pred_text": "number",
+          "correct": false
+        },
+        {
+          "expected": "storm",
+          "pred_text": "forum",
+          "correct": false
+        },
+        {
+          "expected": "dare",
+          "pred_text": "hide",
+          "correct": false
+        }
+      ]
+    },
+    "IVQ_d50": {
+      "behavioral_accuracy": 0.025,
+      "n": 40,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "1": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "2": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "3": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "4": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "5": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "6": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "7": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "8": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "9": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "10": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "11": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "12": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "13": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "14": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "15": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "16": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "17": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "18": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "19": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "20": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "21": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "22": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "23": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "24": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "25": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "26": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "27": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "28": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "29": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "30": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "31": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "32": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "33": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "34": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        },
+        "35": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.975,
+          "n_pos": 1,
+          "n_neg": 39,
+          "note": "too few minority-class samples for CV"
+        }
+      },
+      "trials": [
+        {
+          "expected": "cedar",
+          "pred_text": "run",
+          "correct": false
+        },
+        {
+          "expected": "chest",
+          "pred_text": "gold",
+          "correct": false
+        },
+        {
+          "expected": "meter",
+          "pred_text": "rip",
+          "correct": false
+        },
+        {
+          "expected": "doom",
+          "pred_text": "flare",
+          "correct": false
+        },
+        {
+          "expected": "knack",
+          "pred_text": "steak",
+          "correct": false
+        },
+        {
+          "expected": "throne",
+          "pred_text": "plaza",
+          "correct": false
+        },
+        {
+          "expected": "smell",
+          "pred_text": "regret",
+          "correct": false
+        },
+        {
+          "expected": "cheese",
+          "pred_text": "tight",
+          "correct": false
+        },
+        {
+          "expected": "gentle",
+          "pred_text": "ode",
+          "correct": false
+        },
+        {
+          "expected": "rocket",
+          "pred_text": "brick",
+          "correct": false
+        },
+        {
+          "expected": "brick",
+          "pred_text": "quaint",
+          "correct": false
+        },
+        {
+          "expected": "uncle",
+          "pred_text": "attack",
+          "correct": false
+        },
+        {
+          "expected": "cereal",
+          "pred_text": "agent",
+          "correct": false
+        },
+        {
+          "expected": "tooth",
+          "pred_text": "steam",
+          "correct": false
+        },
+        {
+          "expected": "party",
+          "pred_text": "party",
+          "correct": true
+        },
+        {
+          "expected": "fit",
+          "pred_text": "hair",
+          "correct": false
+        },
+        {
+          "expected": "cycle",
+          "pred_text": "lane",
+          "correct": false
+        },
+        {
+          "expected": "man",
+          "pred_text": "export",
+          "correct": false
+        },
+        {
+          "expected": "style",
+          "pred_text": "spray",
+          "correct": false
+        },
+        {
+          "expected": "scan",
+          "pred_text": "duck",
+          "correct": false
+        },
+        {
+          "expected": "flood",
+          "pred_text": "cool",
+          "correct": false
+        },
+        {
+          "expected": "trot",
+          "pred_text": "mud",
+          "correct": false
+        },
+        {
+          "expected": "evolve",
+          "pred_text": "wig",
+          "correct": false
+        },
+        {
+          "expected": "fond",
+          "pred_text": "duck",
+          "correct": false
+        },
+        {
+          "expected": "hoodie",
+          "pred_text": "audio",
+          "correct": false
+        },
+        {
+          "expected": "stop",
+          "pred_text": "badge",
+          "correct": false
+        },
+        {
+          "expected": "upset",
+          "pred_text": "blink",
+          "correct": false
+        },
+        {
+          "expected": "print",
+          "pred_text": "peek",
+          "correct": false
+        },
+        {
+          "expected": "stiff",
+          "pred_text": "fine",
+          "correct": false
+        },
+        {
+          "expected": "milk",
+          "pred_text": "olive",
+          "correct": false
+        },
+        {
+          "expected": "patron",
+          "pred_text": "inject",
+          "correct": false
+        },
+        {
+          "expected": "drill",
+          "pred_text": "attach",
+          "correct": false
+        },
+        {
+          "expected": "lush",
+          "pred_text": "axe",
+          "correct": false
+        },
+        {
+          "expected": "grip",
+          "pred_text": "bean",
+          "correct": false
+        },
+        {
+          "expected": "dirt",
+          "pred_text": "dull",
+          "correct": false
+        },
+        {
+          "expected": "tree",
+          "pred_text": "bead",
+          "correct": false
+        },
+        {
+          "expected": "value",
+          "pred_text": "carbon",
+          "correct": false
+        },
+        {
+          "expected": "shed",
+          "pred_text": "horn",
+          "correct": false
+        },
+        {
+          "expected": "gravel",
+          "pred_text": "can",
+          "correct": false
+        },
+        {
+          "expected": "lent",
+          "pred_text": "laser",
+          "correct": false
+        }
+      ]
+    },
+    "IVQ_d75": {
+      "behavioral_accuracy": 0.0,
+      "n": 30,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "1": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "2": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "3": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "4": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "5": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "6": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "7": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "8": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "9": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "10": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "11": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "12": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "13": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "14": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "15": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "16": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "17": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "18": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "19": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "20": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "21": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "22": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "23": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "24": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "25": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "26": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "27": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "28": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "29": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "30": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "31": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "32": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "33": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "34": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "35": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        }
+      },
+      "trials": [
+        {
+          "expected": "dip",
+          "pred_text": "fabric",
+          "correct": false
+        },
+        {
+          "expected": "skate",
+          "pred_text": "flow",
+          "correct": false
+        },
+        {
+          "expected": "four",
+          "pred_text": "notice",
+          "correct": false
+        },
+        {
+          "expected": "lab",
+          "pred_text": "bug",
+          "correct": false
+        },
+        {
+          "expected": "ultra",
+          "pred_text": "foot",
+          "correct": false
+        },
+        {
+          "expected": "ease",
+          "pred_text": "handle",
+          "correct": false
+        },
+        {
+          "expected": "loose",
+          "pred_text": "civic",
+          "correct": false
+        },
+        {
+          "expected": "meet",
+          "pred_text": "lawn",
+          "correct": false
+        },
+        {
+          "expected": "ease",
+          "pred_text": "chain",
+          "correct": false
+        },
+        {
+          "expected": "relate",
+          "pred_text": "text",
+          "correct": false
+        },
+        {
+          "expected": "tide",
+          "pred_text": "duo",
+          "correct": false
+        },
+        {
+          "expected": "staff",
+          "pred_text": "witch",
+          "correct": false
+        },
+        {
+          "expected": "yaw",
+          "pred_text": "bean",
+          "correct": false
+        },
+        {
+          "expected": "wave",
+          "pred_text": "bolt",
+          "correct": false
+        },
+        {
+          "expected": "prune",
+          "pred_text": "chain",
+          "correct": false
+        },
+        {
+          "expected": "fly",
+          "pred_text": "clown",
+          "correct": false
+        },
+        {
+          "expected": "tub",
+          "pred_text": "haze",
+          "correct": false
+        },
+        {
+          "expected": "drove",
+          "pred_text": "bit",
+          "correct": false
+        },
+        {
+          "expected": "bright",
+          "pred_text": "field",
+          "correct": false
+        },
+        {
+          "expected": "pay",
+          "pred_text": "begin",
+          "correct": false
+        },
+        {
+          "expected": "danger",
+          "pred_text": "room",
+          "correct": false
+        },
+        {
+          "expected": "badge",
+          "pred_text": "lonely",
+          "correct": false
+        },
+        {
+          "expected": "clutch",
+          "pred_text": "row",
+          "correct": false
+        },
+        {
+          "expected": "swap",
+          "pred_text": "slam",
+          "correct": false
+        },
+        {
+          "expected": "straw",
+          "pred_text": "matter",
+          "correct": false
+        },
+        {
+          "expected": "earth",
+          "pred_text": "naval",
+          "correct": false
+        },
+        {
+          "expected": "moss",
+          "pred_text": "gum",
+          "correct": false
+        },
+        {
+          "expected": "lift",
+          "pred_text": "peek",
+          "correct": false
+        },
+        {
+          "expected": "calf",
+          "pred_text": "relax",
+          "correct": false
+        },
+        {
+          "expected": "serve",
+          "pred_text": "past",
+          "correct": false
+        }
+      ]
+    },
+    "IVQ_d90": {
+      "behavioral_accuracy": 0.06666666666666667,
+      "n": 60,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": false,
+          "cv_accuracy": 0.9000000000000001,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "1": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "2": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "3": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "4": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "5": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "6": {
+          "degenerate": false,
+          "cv_accuracy": 0.9000000000000001,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "7": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "8": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "9": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "10": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "11": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "12": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "13": {
+          "degenerate": false,
+          "cv_accuracy": 0.8833333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "14": {
+          "degenerate": false,
+          "cv_accuracy": 0.8666666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "15": {
+          "degenerate": false,
+          "cv_accuracy": 0.8666666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "16": {
+          "degenerate": false,
+          "cv_accuracy": 0.8833333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "17": {
+          "degenerate": false,
+          "cv_accuracy": 0.9000000000000001,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "18": {
+          "degenerate": false,
+          "cv_accuracy": 0.8833333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "19": {
+          "degenerate": false,
+          "cv_accuracy": 0.9,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "20": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "21": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "22": {
+          "degenerate": false,
+          "cv_accuracy": 0.9,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "23": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "24": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "25": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "26": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "27": {
+          "degenerate": false,
+          "cv_accuracy": 0.9000000000000001,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "28": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "29": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "30": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666667,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "31": {
+          "degenerate": false,
+          "cv_accuracy": 0.9,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "32": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "33": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "34": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        },
+        "35": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333333,
+          "majority_baseline": 0.9333333333333333,
+          "n_pos": 4,
+          "n_neg": 56
+        }
+      },
+      "trials": [
+        {
+          "expected": "gown",
+          "pred_text": "coil",
+          "correct": false
+        },
+        {
+          "expected": "blot",
+          "pred_text": "gauge",
+          "correct": false
+        },
+        {
+          "expected": "glare",
+          "pred_text": "exceed",
+          "correct": false
+        },
+        {
+          "expected": "deploy",
+          "pred_text": "deploy",
+          "correct": true
+        },
+        {
+          "expected": "birth",
+          "pred_text": "boom",
+          "correct": false
+        },
+        {
+          "expected": "worm",
+          "pred_text": "loom",
+          "correct": false
+        },
+        {
+          "expected": "cloth",
+          "pred_text": "lean",
+          "correct": false
+        },
+        {
+          "expected": "essay",
+          "pred_text": "essay",
+          "correct": true
+        },
+        {
+          "expected": "odds",
+          "pred_text": "vodka",
+          "correct": false
+        },
+        {
+          "expected": "scout",
+          "pred_text": "hidden",
+          "correct": false
+        },
+        {
+          "expected": "mask",
+          "pred_text": "extent",
+          "correct": false
+        },
+        {
+          "expected": "duplex",
+          "pred_text": "mock",
+          "correct": false
+        },
+        {
+          "expected": "sane",
+          "pred_text": "sugar",
+          "correct": false
+        },
+        {
+          "expected": "phase",
+          "pred_text": "pancake",
+          "correct": false
+        },
+        {
+          "expected": "maze",
+          "pred_text": "pearl",
+          "correct": false
+        },
+        {
+          "expected": "ivory",
+          "pred_text": "panic",
+          "correct": false
+        },
+        {
+          "expected": "museum",
+          "pred_text": "clone",
+          "correct": false
+        },
+        {
+          "expected": "vacuum",
+          "pred_text": "batch",
+          "correct": false
+        },
+        {
+          "expected": "chord",
+          "pred_text": "polish",
+          "correct": false
+        },
+        {
+          "expected": "farmer",
+          "pred_text": "kite",
+          "correct": false
+        },
+        {
+          "expected": "tissue",
+          "pred_text": "better",
+          "correct": false
+        },
+        {
+          "expected": "steam",
+          "pred_text": "assign",
+          "correct": false
+        },
+        {
+          "expected": "event",
+          "pred_text": "easy",
+          "correct": false
+        },
+        {
+          "expected": "wig",
+          "pred_text": "monkey",
+          "correct": false
+        },
+        {
+          "expected": "sun",
+          "pred_text": "slab",
+          "correct": false
+        },
+        {
+          "expected": "knee",
+          "pred_text": "kayak",
+          "correct": false
+        },
+        {
+          "expected": "roller",
+          "pred_text": "bar",
+          "correct": false
+        },
+        {
+          "expected": "sweep",
+          "pred_text": "thing",
+          "correct": false
+        },
+        {
+          "expected": "admire",
+          "pred_text": "roam",
+          "correct": false
+        },
+        {
+          "expected": "good",
+          "pred_text": "crop",
+          "correct": false
+        },
+        {
+          "expected": "divine",
+          "pred_text": "vessel",
+          "correct": false
+        },
+        {
+          "expected": "human",
+          "pred_text": "coin",
+          "correct": false
+        },
+        {
+          "expected": "ramp",
+          "pred_text": "lovely",
+          "correct": false
+        },
+        {
+          "expected": "chapel",
+          "pred_text": "deploy",
+          "correct": false
+        },
+        {
+          "expected": "comb",
+          "pred_text": "kernel",
+          "correct": false
+        },
+        {
+          "expected": "cash",
+          "pred_text": "plague",
+          "correct": false
+        },
+        {
+          "expected": "charge",
+          "pred_text": "egg",
+          "correct": false
+        },
+        {
+          "expected": "bolster",
+          "pred_text": "donut",
+          "correct": false
+        },
+        {
+          "expected": "pure",
+          "pred_text": "zoo",
+          "correct": false
+        },
+        {
+          "expected": "maiden",
+          "pred_text": "radio",
+          "correct": false
+        },
+        {
+          "expected": "glue",
+          "pred_text": "depot",
+          "correct": false
+        },
+        {
+          "expected": "candle",
+          "pred_text": "expand",
+          "correct": false
+        },
+        {
+          "expected": "atlas",
+          "pred_text": "rub",
+          "correct": false
+        },
+        {
+          "expected": "watch",
+          "pred_text": "nude",
+          "correct": false
+        },
+        {
+          "expected": "charge",
+          "pred_text": "charge",
+          "correct": true
+        },
+        {
+          "expected": "fill",
+          "pred_text": "table",
+          "correct": false
+        },
+        {
+          "expected": "blood",
+          "pred_text": "zap",
+          "correct": false
+        },
+        {
+          "expected": "wish",
+          "pred_text": "wish",
+          "correct": true
+        },
+        {
+          "expected": "hear",
+          "pred_text": "decay",
+          "correct": false
+        },
+        {
+          "expected": "submit",
+          "pred_text": "lip",
+          "correct": false
+        },
+        {
+          "expected": "law",
+          "pred_text": "vacuum",
+          "correct": false
+        },
+        {
+          "expected": "rage",
+          "pred_text": "attack",
+          "correct": false
+        },
+        {
+          "expected": "rut",
+          "pred_text": "gun",
+          "correct": false
+        },
+        {
+          "expected": "vest",
+          "pred_text": "beyond",
+          "correct": false
+        },
+        {
+          "expected": "west",
+          "pred_text": "nest",
+          "correct": false
+        },
+        {
+          "expected": "fee",
+          "pred_text": "flee",
+          "correct": false
+        },
+        {
+          "expected": "wonder",
+          "pred_text": "tug",
+          "correct": false
+        },
+        {
+          "expected": "urge",
+          "pred_text": "refine",
+          "correct": false
+        },
+        {
+          "expected": "carbon",
+          "pred_text": "reward",
+          "correct": false
+        },
+        {
+          "expected": "cross",
+          "pred_text": "tart",
+          "correct": false
+        }
+      ]
+    }
+  },
+  "device": "cuda",
+  "dtype": "torch.bfloat16",
+  "elapsed_sec": 232.66826677322388
+}

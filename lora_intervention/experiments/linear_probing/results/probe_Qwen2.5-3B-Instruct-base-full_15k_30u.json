@@ -1,0 +1,4700 @@
+{
+  "state": "base",
+  "base_model": "Qwen/Qwen2.5-3B-Instruct",
+  "adapter_path": null,
+  "cell": {
+    "keys": 15,
+    "updates": 30
+  },
+  "scoring": "generate",
+  "mode": "full",
+  "conditions": {
+    "FVQ": {
+      "behavioral_accuracy": 0.31176470588235294,
+      "n": 170,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": false,
+          "cv_accuracy": 0.5411764705882354,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "1": {
+          "degenerate": false,
+          "cv_accuracy": 0.5882352941176471,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "2": {
+          "degenerate": false,
+          "cv_accuracy": 0.588235294117647,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "3": {
+          "degenerate": false,
+          "cv_accuracy": 0.5882352941176471,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "4": {
+          "degenerate": false,
+          "cv_accuracy": 0.5823529411764706,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "5": {
+          "degenerate": false,
+          "cv_accuracy": 0.5705882352941176,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "6": {
+          "degenerate": false,
+          "cv_accuracy": 0.5352941176470588,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "7": {
+          "degenerate": false,
+          "cv_accuracy": 0.5941176470588236,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "8": {
+          "degenerate": false,
+          "cv_accuracy": 0.6470588235294118,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "9": {
+          "degenerate": false,
+          "cv_accuracy": 0.6411764705882353,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "10": {
+          "degenerate": false,
+          "cv_accuracy": 0.6176470588235294,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "11": {
+          "degenerate": false,
+          "cv_accuracy": 0.6294117647058823,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "12": {
+          "degenerate": false,
+          "cv_accuracy": 0.6294117647058823,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "13": {
+          "degenerate": false,
+          "cv_accuracy": 0.6588235294117648,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "14": {
+          "degenerate": false,
+          "cv_accuracy": 0.6823529411764706,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "15": {
+          "degenerate": false,
+          "cv_accuracy": 0.6529411764705882,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "16": {
+          "degenerate": false,
+          "cv_accuracy": 0.6411764705882353,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "17": {
+          "degenerate": false,
+          "cv_accuracy": 0.6411764705882353,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "18": {
+          "degenerate": false,
+          "cv_accuracy": 0.6352941176470589,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "19": {
+          "degenerate": false,
+          "cv_accuracy": 0.6352941176470588,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "20": {
+          "degenerate": false,
+          "cv_accuracy": 0.6588235294117647,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "21": {
+          "degenerate": false,
+          "cv_accuracy": 0.6470588235294118,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "22": {
+          "degenerate": false,
+          "cv_accuracy": 0.6647058823529413,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "23": {
+          "degenerate": false,
+          "cv_accuracy": 0.6764705882352942,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "24": {
+          "degenerate": false,
+          "cv_accuracy": 0.6823529411764706,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "25": {
+          "degenerate": false,
+          "cv_accuracy": 0.6882352941176471,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "26": {
+          "degenerate": false,
+          "cv_accuracy": 0.6882352941176471,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "27": {
+          "degenerate": false,
+          "cv_accuracy": 0.7411764705882352,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "28": {
+          "degenerate": false,
+          "cv_accuracy": 0.7117647058823529,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "29": {
+          "degenerate": false,
+          "cv_accuracy": 0.7058823529411764,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "30": {
+          "degenerate": false,
+          "cv_accuracy": 0.7294117647058822,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "31": {
+          "degenerate": false,
+          "cv_accuracy": 0.7294117647058823,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "32": {
+          "degenerate": false,
+          "cv_accuracy": 0.7529411764705882,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "33": {
+          "degenerate": false,
+          "cv_accuracy": 0.7823529411764707,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "34": {
+          "degenerate": false,
+          "cv_accuracy": 0.7823529411764706,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        },
+        "35": {
+          "degenerate": false,
+          "cv_accuracy": 0.7882352941176469,
+          "majority_baseline": 0.6882352941176471,
+          "n_pos": 53,
+          "n_neg": 117
+        }
+      },
+      "trials": [
+        {
+          "expected": "war",
+          "pred_text": "shape",
+          "correct": false
+        },
+        {
+          "expected": "arrest",
+          "pred_text": "tale",
+          "correct": false
+        },
+        {
+          "expected": "pause",
+          "pred_text": "shove",
+          "correct": false
+        },
+        {
+          "expected": "dead",
+          "pred_text": "ancient civilization: ancient civilization: dead",
+          "correct": true
+        },
+        {
+          "expected": "flip",
+          "pred_text": "flip",
+          "correct": true
+        },
+        {
+          "expected": "likely",
+          "pred_text": "load",
+          "correct": false
+        },
+        {
+          "expected": "bless",
+          "pred_text": "bless",
+          "correct": true
+        },
+        {
+          "expected": "depart",
+          "pred_text": "epic",
+          "correct": false
+        },
+        {
+          "expected": "refine",
+          "pred_text": "refine",
+          "correct": true
+        },
+        {
+          "expected": "kidney",
+          "pred_text": "doubt",
+          "correct": false
+        },
+        {
+          "expected": "guide",
+          "pred_text": "enzyme",
+          "correct": false
+        },
+        {
+          "expected": "oppose",
+          "pred_text": "worry",
+          "correct": false
+        },
+        {
+          "expected": "board",
+          "pred_text": "board",
+          "correct": true
+        },
+        {
+          "expected": "pest",
+          "pred_text": "pest",
+          "correct": true
+        },
+        {
+          "expected": "freak",
+          "pred_text": "clad",
+          "correct": false
+        },
+        {
+          "expected": "flop",
+          "pred_text": "blast",
+          "correct": false
+        },
+        {
+          "expected": "gray",
+          "pred_text": "gray",
+          "correct": true
+        },
+        {
+          "expected": "shock",
+          "pred_text": "badge",
+          "correct": false
+        },
+        {
+          "expected": "reckon",
+          "pred_text": "chose",
+          "correct": false
+        },
+        {
+          "expected": "honest",
+          "pred_text": "link",
+          "correct": false
+        },
+        {
+          "expected": "full",
+          "pred_text": "yard",
+          "correct": false
+        },
+        {
+          "expected": "teeth",
+          "pred_text": "attend",
+          "correct": false
+        },
+        {
+          "expected": "ash",
+          "pred_text": "ash",
+          "correct": true
+        },
+        {
+          "expected": "cable",
+          "pred_text": "tree species: island",
+          "correct": false
+        },
+        {
+          "expected": "clad",
+          "pred_text": "haul",
+          "correct": false
+        },
+        {
+          "expected": "sixty",
+          "pred_text": "worth",
+          "correct": false
+        },
+        {
+          "expected": "cotton",
+          "pred_text": "reed",
+          "correct": false
+        },
+        {
+          "expected": "pest",
+          "pred_text": "trout",
+          "correct": false
+        },
+        {
+          "expected": "affirm",
+          "pred_text": "nearby",
+          "correct": false
+        },
+        {
+          "expected": "unity",
+          "pred_text": "duel",
+          "correct": false
+        },
+        {
+          "expected": "flora",
+          "pred_text": "flora",
+          "correct": true
+        },
+        {
+          "expected": "wet",
+          "pred_text": "landform: tiny",
+          "correct": false
+        },
+        {
+          "expected": "ranger",
+          "pred_text": "mirror",
+          "correct": false
+        },
+        {
+          "expected": "three",
+          "pred_text": "ice",
+          "correct": false
+        },
+        {
+          "expected": "eat",
+          "pred_text": "garage",
+          "correct": false
+        },
+        {
+          "expected": "small",
+          "pred_text": "stadium name: small",
+          "correct": true
+        },
+        {
+          "expected": "burden",
+          "pred_text": "snap",
+          "correct": false
+        },
+        {
+          "expected": "lessen",
+          "pred_text": "lessen",
+          "correct": true
+        },
+        {
+          "expected": "reason",
+          "pred_text": "claim",
+          "correct": false
+        },
+        {
+          "expected": "belt",
+          "pred_text": "belt",
+          "correct": true
+        },
+        {
+          "expected": "wax",
+          "pred_text": "arc",
+          "correct": false
+        },
+        {
+          "expected": "local",
+          "pred_text": "local",
+          "correct": true
+        },
+        {
+          "expected": "magic",
+          "pred_text": "crane",
+          "correct": false
+        },
+        {
+          "expected": "peek",
+          "pred_text": "degree",
+          "correct": false
+        },
+        {
+          "expected": "period",
+          "pred_text": "period",
+          "correct": true
+        },
+        {
+          "expected": "runner",
+          "pred_text": "thief",
+          "correct": false
+        },
+        {
+          "expected": "fluid",
+          "pred_text": "cable",
+          "correct": false
+        },
+        {
+          "expected": "famine",
+          "pred_text": "tale",
+          "correct": false
+        },
+        {
+          "expected": "leap",
+          "pred_text": "leap",
+          "correct": true
+        },
+        {
+          "expected": "bomb",
+          "pred_text": "gone",
+          "correct": false
+        },
+        {
+          "expected": "prayer",
+          "pred_text": "driven",
+          "correct": false
+        },
+        {
+          "expected": "maid",
+          "pred_text": "maid",
+          "correct": true
+        },
+        {
+          "expected": "fog",
+          "pred_text": "audio",
+          "correct": false
+        },
+        {
+          "expected": "foot",
+          "pred_text": "basin",
+          "correct": false
+        },
+        {
+          "expected": "breed",
+          "pred_text": "lug",
+          "correct": false
+        },
+        {
+          "expected": "cost",
+          "pred_text": "coffee art",
+          "correct": false
+        },
+        {
+          "expected": "leader",
+          "pred_text": "clap",
+          "correct": false
+        },
+        {
+          "expected": "deer",
+          "pred_text": "camel",
+          "correct": false
+        },
+        {
+          "expected": "check",
+          "pred_text": "check",
+          "correct": true
+        },
+        {
+          "expected": "sin",
+          "pred_text": "hidden",
+          "correct": false
+        },
+        {
+          "expected": "review",
+          "pred_text": "review",
+          "correct": true
+        },
+        {
+          "expected": "civic",
+          "pred_text": "fate",
+          "correct": false
+        },
+        {
+          "expected": "bin",
+          "pred_text": "crab",
+          "correct": false
+        },
+        {
+          "expected": "darn",
+          "pred_text": "foster",
+          "correct": false
+        },
+        {
+          "expected": "sag",
+          "pred_text": "extra",
+          "correct": false
+        },
+        {
+          "expected": "focus",
+          "pred_text": "admire",
+          "correct": false
+        },
+        {
+          "expected": "vote",
+          "pred_text": "chalk",
+          "correct": false
+        },
+        {
+          "expected": "proven",
+          "pred_text": "wise",
+          "correct": false
+        },
+        {
+          "expected": "spill",
+          "pred_text": "urge",
+          "correct": false
+        },
+        {
+          "expected": "patron",
+          "pred_text": "duty",
+          "correct": false
+        },
+        {
+          "expected": "banner",
+          "pred_text": "sixty",
+          "correct": false
+        },
+        {
+          "expected": "trout",
+          "pred_text": "trout",
+          "correct": true
+        },
+        {
+          "expected": "nude",
+          "pred_text": "loom",
+          "correct": false
+        },
+        {
+          "expected": "offend",
+          "pred_text": "firm",
+          "correct": false
+        },
+        {
+          "expected": "rapid",
+          "pred_text": "rapid",
+          "correct": true
+        },
+        {
+          "expected": "demand",
+          "pred_text": "blob",
+          "correct": false
+        },
+        {
+          "expected": "pad",
+          "pred_text": "voyage",
+          "correct": false
+        },
+        {
+          "expected": "advent",
+          "pred_text": "layer",
+          "correct": false
+        },
+        {
+          "expected": "gut",
+          "pred_text": "wipe",
+          "correct": false
+        },
+        {
+          "expected": "lump",
+          "pred_text": "lump",
+          "correct": true
+        },
+        {
+          "expected": "moon",
+          "pred_text": "orange",
+          "correct": false
+        },
+        {
+          "expected": "male",
+          "pred_text": "tough",
+          "correct": false
+        },
+        {
+          "expected": "clip",
+          "pred_text": "wreck",
+          "correct": false
+        },
+        {
+          "expected": "afford",
+          "pred_text": "pre",
+          "correct": false
+        },
+        {
+          "expected": "token",
+          "pred_text": "token",
+          "correct": true
+        },
+        {
+          "expected": "sub",
+          "pred_text": "likely",
+          "correct": false
+        },
+        {
+          "expected": "lime",
+          "pred_text": "steel",
+          "correct": false
+        },
+        {
+          "expected": "combat",
+          "pred_text": "dim",
+          "correct": false
+        },
+        {
+          "expected": "shop",
+          "pred_text": "shop",
+          "correct": true
+        },
+        {
+          "expected": "lean",
+          "pred_text": "spit",
+          "correct": false
+        },
+        {
+          "expected": "token",
+          "pred_text": "muzzle",
+          "correct": false
+        },
+        {
+          "expected": "vim",
+          "pred_text": "bay",
+          "correct": false
+        },
+        {
+          "expected": "stare",
+          "pred_text": "dough",
+          "correct": false
+        },
+        {
+          "expected": "gun",
+          "pred_text": "visual art: gun",
+          "correct": true
+        },
+        {
+          "expected": "snack",
+          "pred_text": "bail",
+          "correct": false
+        },
+        {
+          "expected": "trade",
+          "pred_text": "scene",
+          "correct": false
+        },
+        {
+          "expected": "urn",
+          "pred_text": "costly",
+          "correct": false
+        },
+        {
+          "expected": "rugby",
+          "pred_text": "rally",
+          "correct": false
+        },
+        {
+          "expected": "kin",
+          "pred_text": "kin",
+          "correct": true
+        },
+        {
+          "expected": "deep",
+          "pred_text": "architectural style: deep",
+          "correct": true
+        },
+        {
+          "expected": "stem",
+          "pred_text": "degree",
+          "correct": false
+        },
+        {
+          "expected": "colony",
+          "pred_text": "freeze",
+          "correct": false
+        },
+        {
+          "expected": "trash",
+          "pred_text": "stripe",
+          "correct": false
+        },
+        {
+          "expected": "verbal",
+          "pred_text": "verbal",
+          "correct": true
+        },
+        {
+          "expected": "pledge",
+          "pred_text": "helper",
+          "correct": false
+        },
+        {
+          "expected": "ocean",
+          "pred_text": "ocean",
+          "correct": true
+        },
+        {
+          "expected": "wife",
+          "pred_text": "wife",
+          "correct": true
+        },
+        {
+          "expected": "carrot",
+          "pred_text": "mole",
+          "correct": false
+        },
+        {
+          "expected": "assert",
+          "pred_text": "assert",
+          "correct": true
+        },
+        {
+          "expected": "minus",
+          "pred_text": "wooden",
+          "correct": false
+        },
+        {
+          "expected": "bear",
+          "pred_text": "eye",
+          "correct": false
+        },
+        {
+          "expected": "ticket",
+          "pred_text": "causal",
+          "correct": false
+        },
+        {
+          "expected": "land",
+          "pred_text": "dinner",
+          "correct": false
+        },
+        {
+          "expected": "buffet",
+          "pred_text": "buffet",
+          "correct": true
+        },
+        {
+          "expected": "wrist",
+          "pred_text": "architectural style: verbal",
+          "correct": false
+        },
+        {
+          "expected": "boom",
+          "pred_text": "boom",
+          "correct": true
+        },
+        {
+          "expected": "bunk",
+          "pred_text": "flank",
+          "correct": false
+        },
+        {
+          "expected": "egg",
+          "pred_text": "tire",
+          "correct": false
+        },
+        {
+          "expected": "floor",
+          "pred_text": "floor",
+          "correct": true
+        },
+        {
+          "expected": "agent",
+          "pred_text": "habit",
+          "correct": false
+        },
+        {
+          "expected": "disc",
+          "pred_text": "stand",
+          "correct": false
+        },
+        {
+          "expected": "risen",
+          "pred_text": "rise",
+          "correct": false
+        },
+        {
+          "expected": "glide",
+          "pred_text": "glide",
+          "correct": true
+        },
+        {
+          "expected": "sky",
+          "pred_text": "sky",
+          "correct": true
+        },
+        {
+          "expected": "ride",
+          "pred_text": "sunny",
+          "correct": false
+        },
+        {
+          "expected": "hand",
+          "pred_text": "lane",
+          "correct": false
+        },
+        {
+          "expected": "player",
+          "pred_text": "pledge",
+          "correct": false
+        },
+        {
+          "expected": "drip",
+          "pred_text": "tree species: drip",
+          "correct": true
+        },
+        {
+          "expected": "breath",
+          "pred_text": "breath",
+          "correct": true
+        },
+        {
+          "expected": "board",
+          "pred_text": "board game: deem",
+          "correct": true
+        },
+        {
+          "expected": "crude",
+          "pred_text": "laid",
+          "correct": false
+        },
+        {
+          "expected": "scent",
+          "pred_text": "scent",
+          "correct": true
+        },
+        {
+          "expected": "insect",
+          "pred_text": "yak",
+          "correct": false
+        },
+        {
+          "expected": "pork",
+          "pred_text": "pork",
+          "correct": true
+        },
+        {
+          "expected": "lush",
+          "pred_text": "ghost",
+          "correct": false
+        },
+        {
+          "expected": "access",
+          "pred_text": "access",
+          "correct": true
+        },
+        {
+          "expected": "tight",
+          "pred_text": "quest",
+          "correct": false
+        },
+        {
+          "expected": "pen",
+          "pred_text": "pen",
+          "correct": true
+        },
+        {
+          "expected": "wait",
+          "pred_text": "fall",
+          "correct": false
+        },
+        {
+          "expected": "bud",
+          "pred_text": "wire",
+          "correct": false
+        },
+        {
+          "expected": "rope",
+          "pred_text": "cane",
+          "correct": false
+        },
+        {
+          "expected": "carved",
+          "pred_text": "sky",
+          "correct": false
+        },
+        {
+          "expected": "excess",
+          "pred_text": "bend",
+          "correct": false
+        },
+        {
+          "expected": "youth",
+          "pred_text": "shot",
+          "correct": false
+        },
+        {
+          "expected": "staff",
+          "pred_text": "landform: staff",
+          "correct": true
+        },
+        {
+          "expected": "upset",
+          "pred_text": "landform: ghost",
+          "correct": false
+        },
+        {
+          "expected": "leash",
+          "pred_text": "leash",
+          "correct": true
+        },
+        {
+          "expected": "hurl",
+          "pred_text": "log",
+          "correct": false
+        },
+        {
+          "expected": "aside",
+          "pred_text": "bald",
+          "correct": false
+        },
+        {
+          "expected": "blur",
+          "pred_text": "blur",
+          "correct": true
+        },
+        {
+          "expected": "rarely",
+          "pred_text": "frost",
+          "correct": false
+        },
+        {
+          "expected": "box",
+          "pred_text": "box",
+          "correct": true
+        },
+        {
+          "expected": "tray",
+          "pred_text": "tray",
+          "correct": true
+        },
+        {
+          "expected": "cope",
+          "pred_text": "cope",
+          "correct": true
+        },
+        {
+          "expected": "brain",
+          "pred_text": "wooden",
+          "correct": false
+        },
+        {
+          "expected": "babe",
+          "pred_text": "dwell",
+          "correct": false
+        },
+        {
+          "expected": "inside",
+          "pred_text": "bonus",
+          "correct": false
+        },
+        {
+          "expected": "dizzy",
+          "pred_text": "dizzy",
+          "correct": true
+        },
+        {
+          "expected": "zero",
+          "pred_text": "zero",
+          "correct": true
+        },
+        {
+          "expected": "siege",
+          "pred_text": "garage",
+          "correct": false
+        },
+        {
+          "expected": "drop",
+          "pred_text": "copper",
+          "correct": false
+        },
+        {
+          "expected": "aunt",
+          "pred_text": "cigar",
+          "correct": false
+        },
+        {
+          "expected": "proof",
+          "pred_text": "proof",
+          "correct": true
+        },
+        {
+          "expected": "tidy",
+          "pred_text": "prune",
+          "correct": false
+        },
+        {
+          "expected": "player",
+          "pred_text": "player",
+          "correct": true
+        },
+        {
+          "expected": "violet",
+          "pred_text": "violet",
+          "correct": true
+        },
+        {
+          "expected": "color",
+          "pred_text": "swift",
+          "correct": false
+        },
+        {
+          "expected": "forum",
+          "pred_text": "climb",
+          "correct": false
+        },
+        {
+          "expected": "yacht",
+          "pred_text": "fish",
+          "correct": false
+        },
+        {
+          "expected": "demand",
+          "pred_text": "empty",
+          "correct": false
+        }
+      ]
+    },
+    "CVQ": {
+      "behavioral_accuracy": 0.3894736842105263,
+      "n": 190,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "1": {
+          "degenerate": false,
+          "cv_accuracy": 0.5842105263157895,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "2": {
+          "degenerate": false,
+          "cv_accuracy": 0.5684210526315789,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "3": {
+          "degenerate": false,
+          "cv_accuracy": 0.5368421052631579,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "4": {
+          "degenerate": false,
+          "cv_accuracy": 0.536842105263158,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "5": {
+          "degenerate": false,
+          "cv_accuracy": 0.568421052631579,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "6": {
+          "degenerate": false,
+          "cv_accuracy": 0.5894736842105264,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "7": {
+          "degenerate": false,
+          "cv_accuracy": 0.5578947368421052,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "8": {
+          "degenerate": false,
+          "cv_accuracy": 0.5894736842105264,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "9": {
+          "degenerate": false,
+          "cv_accuracy": 0.5947368421052632,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "10": {
+          "degenerate": false,
+          "cv_accuracy": 0.5842105263157895,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "11": {
+          "degenerate": false,
+          "cv_accuracy": 0.5947368421052632,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "12": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "13": {
+          "degenerate": false,
+          "cv_accuracy": 0.6157894736842106,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "14": {
+          "degenerate": false,
+          "cv_accuracy": 0.6368421052631579,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "15": {
+          "degenerate": false,
+          "cv_accuracy": 0.6105263157894736,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "16": {
+          "degenerate": false,
+          "cv_accuracy": 0.631578947368421,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "17": {
+          "degenerate": false,
+          "cv_accuracy": 0.6157894736842106,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "18": {
+          "degenerate": false,
+          "cv_accuracy": 0.6210526315789474,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "19": {
+          "degenerate": false,
+          "cv_accuracy": 0.6263157894736843,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "20": {
+          "degenerate": false,
+          "cv_accuracy": 0.631578947368421,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "21": {
+          "degenerate": false,
+          "cv_accuracy": 0.6631578947368422,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "22": {
+          "degenerate": false,
+          "cv_accuracy": 0.6578947368421053,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "23": {
+          "degenerate": false,
+          "cv_accuracy": 0.6578947368421052,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "24": {
+          "degenerate": false,
+          "cv_accuracy": 0.6421052631578947,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "25": {
+          "degenerate": false,
+          "cv_accuracy": 0.6789473684210526,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "26": {
+          "degenerate": false,
+          "cv_accuracy": 0.7105263157894737,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "27": {
+          "degenerate": false,
+          "cv_accuracy": 0.6631578947368422,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "28": {
+          "degenerate": false,
+          "cv_accuracy": 0.6473684210526316,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "29": {
+          "degenerate": false,
+          "cv_accuracy": 0.7000000000000001,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "30": {
+          "degenerate": false,
+          "cv_accuracy": 0.7157894736842105,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "31": {
+          "degenerate": false,
+          "cv_accuracy": 0.7263157894736842,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "32": {
+          "degenerate": false,
+          "cv_accuracy": 0.6421052631578947,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "33": {
+          "degenerate": false,
+          "cv_accuracy": 0.6210526315789473,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "34": {
+          "degenerate": false,
+          "cv_accuracy": 0.6052631578947368,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        },
+        "35": {
+          "degenerate": false,
+          "cv_accuracy": 0.6157894736842106,
+          "majority_baseline": 0.6105263157894737,
+          "n_pos": 74,
+          "n_neg": 116
+        }
+      },
+      "trials": [
+        {
+          "expected": "clap",
+          "pred_text": "pasta shape: nail",
+          "correct": false
+        },
+        {
+          "expected": "heap",
+          "pred_text": "beard",
+          "correct": false
+        },
+        {
+          "expected": "freeze",
+          "pred_text": "yield",
+          "correct": false
+        },
+        {
+          "expected": "sore",
+          "pred_text": "note",
+          "correct": false
+        },
+        {
+          "expected": "tow",
+          "pred_text": "tow",
+          "correct": true
+        },
+        {
+          "expected": "waste",
+          "pred_text": "waste",
+          "correct": true
+        },
+        {
+          "expected": "force",
+          "pred_text": "heart",
+          "correct": false
+        },
+        {
+          "expected": "forest",
+          "pred_text": "peek",
+          "correct": false
+        },
+        {
+          "expected": "rear",
+          "pred_text": "odd",
+          "correct": false
+        },
+        {
+          "expected": "hint",
+          "pred_text": "hint",
+          "correct": true
+        },
+        {
+          "expected": "rather",
+          "pred_text": "rather",
+          "correct": true
+        },
+        {
+          "expected": "farm",
+          "pred_text": "yield",
+          "correct": false
+        },
+        {
+          "expected": "dress",
+          "pred_text": "arrive",
+          "correct": false
+        },
+        {
+          "expected": "denied",
+          "pred_text": "meet",
+          "correct": false
+        },
+        {
+          "expected": "insist",
+          "pred_text": "expand",
+          "correct": false
+        },
+        {
+          "expected": "scar",
+          "pred_text": "cash",
+          "correct": false
+        },
+        {
+          "expected": "groom",
+          "pred_text": "groom",
+          "correct": true
+        },
+        {
+          "expected": "dying",
+          "pred_text": "dying",
+          "correct": true
+        },
+        {
+          "expected": "market",
+          "pred_text": "tab",
+          "correct": false
+        },
+        {
+          "expected": "pay",
+          "pred_text": "yield",
+          "correct": false
+        },
+        {
+          "expected": "sky",
+          "pred_text": "indoor",
+          "correct": false
+        },
+        {
+          "expected": "cube",
+          "pred_text": "crude",
+          "correct": false
+        },
+        {
+          "expected": "wag",
+          "pred_text": "revolt",
+          "correct": false
+        },
+        {
+          "expected": "hone",
+          "pred_text": "hone",
+          "correct": true
+        },
+        {
+          "expected": "start",
+          "pred_text": "start",
+          "correct": true
+        },
+        {
+          "expected": "towel",
+          "pred_text": "urban",
+          "correct": false
+        },
+        {
+          "expected": "detect",
+          "pred_text": "ultra",
+          "correct": false
+        },
+        {
+          "expected": "mobile",
+          "pred_text": "mobile",
+          "correct": true
+        },
+        {
+          "expected": "boiler",
+          "pred_text": "boating",
+          "correct": false
+        },
+        {
+          "expected": "wooden",
+          "pred_text": "wooden",
+          "correct": true
+        },
+        {
+          "expected": "jazz",
+          "pred_text": "budget",
+          "correct": false
+        },
+        {
+          "expected": "hunger",
+          "pred_text": "trend",
+          "correct": false
+        },
+        {
+          "expected": "bed",
+          "pred_text": "proud",
+          "correct": false
+        },
+        {
+          "expected": "blot",
+          "pred_text": "batch",
+          "correct": false
+        },
+        {
+          "expected": "deploy",
+          "pred_text": "deploy",
+          "correct": true
+        },
+        {
+          "expected": "awe",
+          "pred_text": "awe",
+          "correct": true
+        },
+        {
+          "expected": "tenant",
+          "pred_text": "junk",
+          "correct": false
+        },
+        {
+          "expected": "mask",
+          "pred_text": "zone",
+          "correct": false
+        },
+        {
+          "expected": "volt",
+          "pred_text": "volt",
+          "correct": true
+        },
+        {
+          "expected": "ease",
+          "pred_text": "mixer",
+          "correct": false
+        },
+        {
+          "expected": "bridge",
+          "pred_text": "bland",
+          "correct": false
+        },
+        {
+          "expected": "flask",
+          "pred_text": "flask",
+          "correct": true
+        },
+        {
+          "expected": "stain",
+          "pred_text": "stain",
+          "correct": true
+        },
+        {
+          "expected": "inward",
+          "pred_text": "tire",
+          "correct": false
+        },
+        {
+          "expected": "hence",
+          "pred_text": "hence",
+          "correct": true
+        },
+        {
+          "expected": "tiny",
+          "pred_text": "tiny",
+          "correct": true
+        },
+        {
+          "expected": "oxygen",
+          "pred_text": "tooth",
+          "correct": false
+        },
+        {
+          "expected": "cloud",
+          "pred_text": "shine",
+          "correct": false
+        },
+        {
+          "expected": "brake",
+          "pred_text": "brake",
+          "correct": true
+        },
+        {
+          "expected": "month",
+          "pred_text": "reduce",
+          "correct": false
+        },
+        {
+          "expected": "bit",
+          "pred_text": "bureau",
+          "correct": false
+        },
+        {
+          "expected": "must",
+          "pred_text": "expand",
+          "correct": false
+        },
+        {
+          "expected": "cart",
+          "pred_text": "fax",
+          "correct": false
+        },
+        {
+          "expected": "hen",
+          "pred_text": "brave",
+          "correct": false
+        },
+        {
+          "expected": "jug",
+          "pred_text": "jug",
+          "correct": true
+        },
+        {
+          "expected": "heel",
+          "pred_text": "heel",
+          "correct": true
+        },
+        {
+          "expected": "wild",
+          "pred_text": "wild",
+          "correct": true
+        },
+        {
+          "expected": "month",
+          "pred_text": "clean",
+          "correct": false
+        },
+        {
+          "expected": "rant",
+          "pred_text": "sac",
+          "correct": false
+        },
+        {
+          "expected": "absorb",
+          "pred_text": "swear",
+          "correct": false
+        },
+        {
+          "expected": "wool",
+          "pred_text": "shirt",
+          "correct": false
+        },
+        {
+          "expected": "meter",
+          "pred_text": "meter",
+          "correct": true
+        },
+        {
+          "expected": "ultra",
+          "pred_text": "twin",
+          "correct": false
+        },
+        {
+          "expected": "cheap",
+          "pred_text": "cheap",
+          "correct": true
+        },
+        {
+          "expected": "hive",
+          "pred_text": "photography technique: myth",
+          "correct": false
+        },
+        {
+          "expected": "shout",
+          "pred_text": "shout",
+          "correct": true
+        },
+        {
+          "expected": "reef",
+          "pred_text": "floral",
+          "correct": false
+        },
+        {
+          "expected": "slave",
+          "pred_text": "slave",
+          "correct": true
+        },
+        {
+          "expected": "time",
+          "pred_text": "time",
+          "correct": true
+        },
+        {
+          "expected": "sweat",
+          "pred_text": "paper",
+          "correct": false
+        },
+        {
+          "expected": "pomp",
+          "pred_text": "creek",
+          "correct": false
+        },
+        {
+          "expected": "demon",
+          "pred_text": "demon",
+          "correct": true
+        },
+        {
+          "expected": "wand",
+          "pred_text": "drunk",
+          "correct": false
+        },
+        {
+          "expected": "mirror",
+          "pred_text": "punch",
+          "correct": false
+        },
+        {
+          "expected": "blend",
+          "pred_text": "blend",
+          "correct": true
+        },
+        {
+          "expected": "think",
+          "pred_text": "think",
+          "correct": true
+        },
+        {
+          "expected": "gaze",
+          "pred_text": "gaze",
+          "correct": true
+        },
+        {
+          "expected": "dialog",
+          "pred_text": "prior",
+          "correct": false
+        },
+        {
+          "expected": "chart",
+          "pred_text": "reject",
+          "correct": false
+        },
+        {
+          "expected": "lid",
+          "pred_text": "lid",
+          "correct": true
+        },
+        {
+          "expected": "sage",
+          "pred_text": "savage",
+          "correct": false
+        },
+        {
+          "expected": "cam",
+          "pred_text": "resign",
+          "correct": false
+        },
+        {
+          "expected": "serve",
+          "pred_text": "serve",
+          "correct": true
+        },
+        {
+          "expected": "keep",
+          "pred_text": "keep",
+          "correct": true
+        },
+        {
+          "expected": "notch",
+          "pred_text": "toast",
+          "correct": false
+        },
+        {
+          "expected": "banana",
+          "pred_text": "exempt",
+          "correct": false
+        },
+        {
+          "expected": "proud",
+          "pred_text": "proud",
+          "correct": true
+        },
+        {
+          "expected": "thumb",
+          "pred_text": "bluff",
+          "correct": false
+        },
+        {
+          "expected": "peek",
+          "pred_text": "peek",
+          "correct": true
+        },
+        {
+          "expected": "stop",
+          "pred_text": "stop",
+          "correct": true
+        },
+        {
+          "expected": "devil",
+          "pred_text": "pray",
+          "correct": false
+        },
+        {
+          "expected": "wake",
+          "pred_text": "snap",
+          "correct": false
+        },
+        {
+          "expected": "mesh",
+          "pred_text": "amazed",
+          "correct": false
+        },
+        {
+          "expected": "peel",
+          "pred_text": "peel",
+          "correct": true
+        },
+        {
+          "expected": "ride",
+          "pred_text": "ride",
+          "correct": true
+        },
+        {
+          "expected": "yield",
+          "pred_text": "yield",
+          "correct": true
+        },
+        {
+          "expected": "prayer",
+          "pred_text": "prayer",
+          "correct": true
+        },
+        {
+          "expected": "glove",
+          "pred_text": "glove",
+          "correct": true
+        },
+        {
+          "expected": "merger",
+          "pred_text": "export",
+          "correct": false
+        },
+        {
+          "expected": "scar",
+          "pred_text": "scar",
+          "correct": true
+        },
+        {
+          "expected": "tray",
+          "pred_text": "drift",
+          "correct": false
+        },
+        {
+          "expected": "revolt",
+          "pred_text": "revolt",
+          "correct": true
+        },
+        {
+          "expected": "solid",
+          "pred_text": "solid",
+          "correct": true
+        },
+        {
+          "expected": "woo",
+          "pred_text": "resort",
+          "correct": false
+        },
+        {
+          "expected": "clear",
+          "pred_text": "clear",
+          "correct": true
+        },
+        {
+          "expected": "drown",
+          "pred_text": "jacket",
+          "correct": false
+        },
+        {
+          "expected": "option",
+          "pred_text": "blob",
+          "correct": false
+        },
+        {
+          "expected": "knife",
+          "pred_text": "scarce",
+          "correct": false
+        },
+        {
+          "expected": "rug",
+          "pred_text": "rug",
+          "correct": true
+        },
+        {
+          "expected": "claim",
+          "pred_text": "claim",
+          "correct": true
+        },
+        {
+          "expected": "impact",
+          "pred_text": "ruin",
+          "correct": false
+        },
+        {
+          "expected": "palace",
+          "pred_text": "halves",
+          "correct": false
+        },
+        {
+          "expected": "create",
+          "pred_text": "create",
+          "correct": true
+        },
+        {
+          "expected": "hug",
+          "pred_text": "hug",
+          "correct": true
+        },
+        {
+          "expected": "valid",
+          "pred_text": "valid",
+          "correct": true
+        },
+        {
+          "expected": "slim",
+          "pred_text": "slim",
+          "correct": true
+        },
+        {
+          "expected": "seat",
+          "pred_text": "belong",
+          "correct": false
+        },
+        {
+          "expected": "clean",
+          "pred_text": "driven",
+          "correct": false
+        },
+        {
+          "expected": "wash",
+          "pred_text": "tab",
+          "correct": false
+        },
+        {
+          "expected": "deaf",
+          "pred_text": "deaf",
+          "correct": true
+        },
+        {
+          "expected": "clear",
+          "pred_text": "clear",
+          "correct": true
+        },
+        {
+          "expected": "sag",
+          "pred_text": "sag",
+          "correct": true
+        },
+        {
+          "expected": "booth",
+          "pred_text": "virus",
+          "correct": false
+        },
+        {
+          "expected": "female",
+          "pred_text": "female",
+          "correct": true
+        },
+        {
+          "expected": "hack",
+          "pred_text": "tilt",
+          "correct": false
+        },
+        {
+          "expected": "boom",
+          "pred_text": "essay",
+          "correct": false
+        },
+        {
+          "expected": "permit",
+          "pred_text": "supply",
+          "correct": false
+        },
+        {
+          "expected": "shave",
+          "pred_text": "fee",
+          "correct": false
+        },
+        {
+          "expected": "mute",
+          "pred_text": "mute",
+          "correct": true
+        },
+        {
+          "expected": "basic",
+          "pred_text": "week",
+          "correct": false
+        },
+        {
+          "expected": "lint",
+          "pred_text": "trail",
+          "correct": false
+        },
+        {
+          "expected": "share",
+          "pred_text": "share",
+          "correct": true
+        },
+        {
+          "expected": "prayer",
+          "pred_text": "prayer",
+          "correct": true
+        },
+        {
+          "expected": "behalf",
+          "pred_text": "wish",
+          "correct": false
+        },
+        {
+          "expected": "hoodie",
+          "pred_text": "hoodie",
+          "correct": true
+        },
+        {
+          "expected": "fog",
+          "pred_text": "socket",
+          "correct": false
+        },
+        {
+          "expected": "scene",
+          "pred_text": "across",
+          "correct": false
+        },
+        {
+          "expected": "vanish",
+          "pred_text": "vanish",
+          "correct": true
+        },
+        {
+          "expected": "fence",
+          "pred_text": "thief",
+          "correct": false
+        },
+        {
+          "expected": "hike",
+          "pred_text": "hike",
+          "correct": true
+        },
+        {
+          "expected": "least",
+          "pred_text": "drive",
+          "correct": false
+        },
+        {
+          "expected": "blaze",
+          "pred_text": "blaze",
+          "correct": true
+        },
+        {
+          "expected": "trash",
+          "pred_text": "decay",
+          "correct": false
+        },
+        {
+          "expected": "regard",
+          "pred_text": "regard",
+          "correct": true
+        },
+        {
+          "expected": "gag",
+          "pred_text": "stitch",
+          "correct": false
+        },
+        {
+          "expected": "farmer",
+          "pred_text": "spit",
+          "correct": false
+        },
+        {
+          "expected": "blood",
+          "pred_text": "blood",
+          "correct": true
+        },
+        {
+          "expected": "urn",
+          "pred_text": "regret",
+          "correct": false
+        },
+        {
+          "expected": "sigh",
+          "pred_text": "spit",
+          "correct": false
+        },
+        {
+          "expected": "part",
+          "pred_text": "ultra",
+          "correct": false
+        },
+        {
+          "expected": "unite",
+          "pred_text": "relay",
+          "correct": false
+        },
+        {
+          "expected": "herb",
+          "pred_text": "verb",
+          "correct": false
+        },
+        {
+          "expected": "cotton",
+          "pred_text": "lay",
+          "correct": false
+        },
+        {
+          "expected": "mercy",
+          "pred_text": "cam",
+          "correct": false
+        },
+        {
+          "expected": "fist",
+          "pred_text": "ran",
+          "correct": false
+        },
+        {
+          "expected": "sun",
+          "pred_text": "acid",
+          "correct": false
+        },
+        {
+          "expected": "third",
+          "pred_text": "third",
+          "correct": true
+        },
+        {
+          "expected": "hour",
+          "pred_text": "exempt",
+          "correct": false
+        },
+        {
+          "expected": "unfold",
+          "pred_text": "exceed",
+          "correct": false
+        },
+        {
+          "expected": "bounty",
+          "pred_text": "ocean",
+          "correct": false
+        },
+        {
+          "expected": "quartz",
+          "pred_text": "quartz",
+          "correct": true
+        },
+        {
+          "expected": "rental",
+          "pred_text": "throw",
+          "correct": false
+        },
+        {
+          "expected": "excess",
+          "pred_text": "excess",
+          "correct": true
+        },
+        {
+          "expected": "agenda",
+          "pred_text": "agenda",
+          "correct": true
+        },
+        {
+          "expected": "style",
+          "pred_text": "raid",
+          "correct": false
+        },
+        {
+          "expected": "dying",
+          "pred_text": "dying",
+          "correct": true
+        },
+        {
+          "expected": "staff",
+          "pred_text": "severe",
+          "correct": false
+        },
+        {
+          "expected": "slate",
+          "pred_text": "afford",
+          "correct": false
+        },
+        {
+          "expected": "pear",
+          "pred_text": "pear",
+          "correct": true
+        },
+        {
+          "expected": "vein",
+          "pred_text": "bear",
+          "correct": false
+        },
+        {
+          "expected": "cooler",
+          "pred_text": "wander",
+          "correct": false
+        },
+        {
+          "expected": "puzzle",
+          "pred_text": "puzzle",
+          "correct": true
+        },
+        {
+          "expected": "cheek",
+          "pred_text": "irresistible",
+          "correct": false
+        },
+        {
+          "expected": "net",
+          "pred_text": "scarf",
+          "correct": false
+        },
+        {
+          "expected": "array",
+          "pred_text": "jewel",
+          "correct": false
+        },
+        {
+          "expected": "stem",
+          "pred_text": "sub",
+          "correct": false
+        },
+        {
+          "expected": "halt",
+          "pred_text": "cave",
+          "correct": false
+        },
+        {
+          "expected": "chrome",
+          "pred_text": "chrome",
+          "correct": true
+        },
+        {
+          "expected": "ruin",
+          "pred_text": "orange",
+          "correct": false
+        },
+        {
+          "expected": "war",
+          "pred_text": "easier",
+          "correct": false
+        },
+        {
+          "expected": "spill",
+          "pred_text": "manage",
+          "correct": false
+        },
+        {
+          "expected": "dream",
+          "pred_text": "urge",
+          "correct": false
+        },
+        {
+          "expected": "bush",
+          "pred_text": "hop",
+          "correct": false
+        },
+        {
+          "expected": "clad",
+          "pred_text": "clad",
+          "correct": true
+        },
+        {
+          "expected": "pen",
+          "pred_text": "refine",
+          "correct": false
+        },
+        {
+          "expected": "steam",
+          "pred_text": "frost",
+          "correct": false
+        },
+        {
+          "expected": "ham",
+          "pred_text": "ocean current",
+          "correct": false
+        },
+        {
+          "expected": "flavor",
+          "pred_text": "smoke",
+          "correct": false
+        },
+        {
+          "expected": "quartz",
+          "pred_text": "quartz",
+          "correct": true
+        },
+        {
+          "expected": "team",
+          "pred_text": "fair",
+          "correct": false
+        }
+      ]
+    },
+    "IVQ_d10": {
+      "behavioral_accuracy": 0.05,
+      "n": 60,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "1": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "2": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "3": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "4": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "5": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "6": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "7": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "8": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "9": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "10": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "11": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "12": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "13": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "14": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "15": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "16": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "17": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "18": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "19": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "20": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "21": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "22": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "23": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "24": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "25": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "26": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "27": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "28": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "29": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "30": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "31": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "32": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "33": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "34": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "35": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        }
+      },
+      "trials": [
+        {
+          "expected": "arch",
+          "pred_text": "cigar",
+          "correct": false
+        },
+        {
+          "expected": "type",
+          "pred_text": "drift",
+          "correct": false
+        },
+        {
+          "expected": "safari",
+          "pred_text": "depart",
+          "correct": false
+        },
+        {
+          "expected": "port",
+          "pred_text": "minor",
+          "correct": false
+        },
+        {
+          "expected": "jar",
+          "pred_text": "jar",
+          "correct": true
+        },
+        {
+          "expected": "vow",
+          "pred_text": "eight",
+          "correct": false
+        },
+        {
+          "expected": "shell",
+          "pred_text": "dam",
+          "correct": false
+        },
+        {
+          "expected": "prime",
+          "pred_text": "line",
+          "correct": false
+        },
+        {
+          "expected": "unfair",
+          "pred_text": "oat",
+          "correct": false
+        },
+        {
+          "expected": "excess",
+          "pred_text": "toward",
+          "correct": false
+        },
+        {
+          "expected": "jean",
+          "pred_text": "cone",
+          "correct": false
+        },
+        {
+          "expected": "cotton",
+          "pred_text": "cheap",
+          "correct": false
+        },
+        {
+          "expected": "sap",
+          "pred_text": "span",
+          "correct": false
+        },
+        {
+          "expected": "doom",
+          "pred_text": "trait",
+          "correct": false
+        },
+        {
+          "expected": "ranch",
+          "pred_text": "ranch",
+          "correct": true
+        },
+        {
+          "expected": "ticket",
+          "pred_text": "jam",
+          "correct": false
+        },
+        {
+          "expected": "shelf",
+          "pred_text": "gutter",
+          "correct": false
+        },
+        {
+          "expected": "spine",
+          "pred_text": "cipher",
+          "correct": false
+        },
+        {
+          "expected": "pilot",
+          "pred_text": "sail",
+          "correct": false
+        },
+        {
+          "expected": "dun",
+          "pred_text": "wound",
+          "correct": false
+        },
+        {
+          "expected": "cigar",
+          "pred_text": "candy",
+          "correct": false
+        },
+        {
+          "expected": "needle",
+          "pred_text": "four",
+          "correct": false
+        },
+        {
+          "expected": "rock",
+          "pred_text": "rock",
+          "correct": true
+        },
+        {
+          "expected": "think",
+          "pred_text": "scenic",
+          "correct": false
+        },
+        {
+          "expected": "vinyl",
+          "pred_text": "move",
+          "correct": false
+        },
+        {
+          "expected": "base",
+          "pred_text": "clamp",
+          "correct": false
+        },
+        {
+          "expected": "poster",
+          "pred_text": "carrot",
+          "correct": false
+        },
+        {
+          "expected": "rubber",
+          "pred_text": "prime",
+          "correct": false
+        },
+        {
+          "expected": "south",
+          "pred_text": "print",
+          "correct": false
+        },
+        {
+          "expected": "undone",
+          "pred_text": "disc",
+          "correct": false
+        },
+        {
+          "expected": "vain",
+          "pred_text": "maiden",
+          "correct": false
+        },
+        {
+          "expected": "fig",
+          "pred_text": "drive",
+          "correct": false
+        },
+        {
+          "expected": "stroke",
+          "pred_text": "alert",
+          "correct": false
+        },
+        {
+          "expected": "limb",
+          "pred_text": "puzzle",
+          "correct": false
+        },
+        {
+          "expected": "fool",
+          "pred_text": "line",
+          "correct": false
+        },
+        {
+          "expected": "cousin",
+          "pred_text": "month",
+          "correct": false
+        },
+        {
+          "expected": "chest",
+          "pred_text": "narrow",
+          "correct": false
+        },
+        {
+          "expected": "smile",
+          "pred_text": "dove",
+          "correct": false
+        },
+        {
+          "expected": "clown",
+          "pred_text": "steal",
+          "correct": false
+        },
+        {
+          "expected": "card",
+          "pred_text": "bounce",
+          "correct": false
+        },
+        {
+          "expected": "formal",
+          "pred_text": "lap",
+          "correct": false
+        },
+        {
+          "expected": "center",
+          "pred_text": "chalk",
+          "correct": false
+        },
+        {
+          "expected": "happen",
+          "pred_text": "dead",
+          "correct": false
+        },
+        {
+          "expected": "extra",
+          "pred_text": "hole",
+          "correct": false
+        },
+        {
+          "expected": "jean",
+          "pred_text": "pose",
+          "correct": false
+        },
+        {
+          "expected": "voter",
+          "pred_text": "folk",
+          "correct": false
+        },
+        {
+          "expected": "outer",
+          "pred_text": "pinch",
+          "correct": false
+        },
+        {
+          "expected": "blob",
+          "pred_text": "eager",
+          "correct": false
+        },
+        {
+          "expected": "veil",
+          "pred_text": "reef",
+          "correct": false
+        },
+        {
+          "expected": "cross",
+          "pred_text": "excess",
+          "correct": false
+        },
+        {
+          "expected": "manner",
+          "pred_text": "tar",
+          "correct": false
+        },
+        {
+          "expected": "sponge",
+          "pred_text": "edge",
+          "correct": false
+        },
+        {
+          "expected": "knob",
+          "pred_text": "pour",
+          "correct": false
+        },
+        {
+          "expected": "degree",
+          "pred_text": "peach",
+          "correct": false
+        },
+        {
+          "expected": "round",
+          "pred_text": "corner",
+          "correct": false
+        },
+        {
+          "expected": "relate",
+          "pred_text": "lean",
+          "correct": false
+        },
+        {
+          "expected": "trim",
+          "pred_text": "flat",
+          "correct": false
+        },
+        {
+          "expected": "output",
+          "pred_text": "hook",
+          "correct": false
+        },
+        {
+          "expected": "divine",
+          "pred_text": "moss",
+          "correct": false
+        },
+        {
+          "expected": "hole",
+          "pred_text": "vocal",
+          "correct": false
+        }
+      ]
+    },
+    "IVQ_d25": {
+      "behavioral_accuracy": 0.0,
+      "n": 30,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "1": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "2": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "3": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "4": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "5": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "6": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "7": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "8": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "9": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "10": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "11": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "12": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "13": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "14": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "15": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "16": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "17": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "18": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "19": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "20": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "21": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "22": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "23": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "24": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "25": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "26": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "27": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "28": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "29": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "30": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "31": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "32": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "33": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "34": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "35": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        }
+      },
+      "trials": [
+        {
+          "expected": "harbor",
+          "pred_text": "score",
+          "correct": false
+        },
+        {
+          "expected": "broad",
+          "pred_text": "revolt",
+          "correct": false
+        },
+        {
+          "expected": "weekly",
+          "pred_text": "dinner",
+          "correct": false
+        },
+        {
+          "expected": "differ",
+          "pred_text": "rise",
+          "correct": false
+        },
+        {
+          "expected": "tick",
+          "pred_text": "bug",
+          "correct": false
+        },
+        {
+          "expected": "trial",
+          "pred_text": "indoor",
+          "correct": false
+        },
+        {
+          "expected": "resign",
+          "pred_text": "deaf",
+          "correct": false
+        },
+        {
+          "expected": "tug",
+          "pred_text": "steep",
+          "correct": false
+        },
+        {
+          "expected": "useful",
+          "pred_text": "fast",
+          "correct": false
+        },
+        {
+          "expected": "joy",
+          "pred_text": "ferry",
+          "correct": false
+        },
+        {
+          "expected": "tank",
+          "pred_text": "ramp",
+          "correct": false
+        },
+        {
+          "expected": "sag",
+          "pred_text": "park",
+          "correct": false
+        },
+        {
+          "expected": "jazz",
+          "pred_text": "rise",
+          "correct": false
+        },
+        {
+          "expected": "cruise",
+          "pred_text": "figure",
+          "correct": false
+        },
+        {
+          "expected": "verbal",
+          "pred_text": "dew",
+          "correct": false
+        },
+        {
+          "expected": "escape",
+          "pred_text": "arch",
+          "correct": false
+        },
+        {
+          "expected": "moon",
+          "pred_text": "zeal",
+          "correct": false
+        },
+        {
+          "expected": "size",
+          "pred_text": "cloud",
+          "correct": false
+        },
+        {
+          "expected": "gray",
+          "pred_text": "lamb",
+          "correct": false
+        },
+        {
+          "expected": "bold",
+          "pred_text": "axe",
+          "correct": false
+        },
+        {
+          "expected": "silver",
+          "pred_text": "dawn",
+          "correct": false
+        },
+        {
+          "expected": "eye",
+          "pred_text": "zero",
+          "correct": false
+        },
+        {
+          "expected": "trek",
+          "pred_text": "roam",
+          "correct": false
+        },
+        {
+          "expected": "ten",
+          "pred_text": "insult",
+          "correct": false
+        },
+        {
+          "expected": "resort",
+          "pred_text": "forge",
+          "correct": false
+        },
+        {
+          "expected": "grind",
+          "pred_text": "mute",
+          "correct": false
+        },
+        {
+          "expected": "nearly",
+          "pred_text": "dose",
+          "correct": false
+        },
+        {
+          "expected": "bowl",
+          "pred_text": "peek",
+          "correct": false
+        },
+        {
+          "expected": "exist",
+          "pred_text": "outer",
+          "correct": false
+        },
+        {
+          "expected": "proof",
+          "pred_text": "hazard",
+          "correct": false
+        }
+      ]
+    },
+    "IVQ_d50": {
+      "behavioral_accuracy": 0.0,
+      "n": 30,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "1": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "2": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "3": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "4": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "5": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "6": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "7": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "8": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "9": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "10": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "11": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "12": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "13": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "14": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "15": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "16": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "17": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "18": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "19": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "20": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "21": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "22": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "23": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "24": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "25": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "26": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "27": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "28": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "29": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "30": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "31": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "32": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "33": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "34": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "35": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        }
+      },
+      "trials": [
+        {
+          "expected": "moment",
+          "pred_text": "rear",
+          "correct": false
+        },
+        {
+          "expected": "resign",
+          "pred_text": "online",
+          "correct": false
+        },
+        {
+          "expected": "rut",
+          "pred_text": "treat",
+          "correct": false
+        },
+        {
+          "expected": "cap",
+          "pred_text": "job",
+          "correct": false
+        },
+        {
+          "expected": "torch",
+          "pred_text": "claim",
+          "correct": false
+        },
+        {
+          "expected": "harbor",
+          "pred_text": "verbal",
+          "correct": false
+        },
+        {
+          "expected": "sixty",
+          "pred_text": "hug",
+          "correct": false
+        },
+        {
+          "expected": "rusty",
+          "pred_text": "causal",
+          "correct": false
+        },
+        {
+          "expected": "nit",
+          "pred_text": "media",
+          "correct": false
+        },
+        {
+          "expected": "peak",
+          "pred_text": "snack",
+          "correct": false
+        },
+        {
+          "expected": "group",
+          "pred_text": "dog",
+          "correct": false
+        },
+        {
+          "expected": "worm",
+          "pred_text": "urban",
+          "correct": false
+        },
+        {
+          "expected": "pact",
+          "pred_text": "calf",
+          "correct": false
+        },
+        {
+          "expected": "made",
+          "pred_text": "badge",
+          "correct": false
+        },
+        {
+          "expected": "grass",
+          "pred_text": "dove",
+          "correct": false
+        },
+        {
+          "expected": "ranch",
+          "pred_text": "bark",
+          "correct": false
+        },
+        {
+          "expected": "oppose",
+          "pred_text": "ease",
+          "correct": false
+        },
+        {
+          "expected": "stern",
+          "pred_text": "trial",
+          "correct": false
+        },
+        {
+          "expected": "pave",
+          "pred_text": "hive",
+          "correct": false
+        },
+        {
+          "expected": "peek",
+          "pred_text": "chip",
+          "correct": false
+        },
+        {
+          "expected": "bench",
+          "pred_text": "skill",
+          "correct": false
+        },
+        {
+          "expected": "butter",
+          "pred_text": "pool",
+          "correct": false
+        },
+        {
+          "expected": "jungle",
+          "pred_text": "jacket",
+          "correct": false
+        },
+        {
+          "expected": "beach",
+          "pred_text": "stick",
+          "correct": false
+        },
+        {
+          "expected": "bill",
+          "pred_text": "ape",
+          "correct": false
+        },
+        {
+          "expected": "fiber",
+          "pred_text": "charm",
+          "correct": false
+        },
+        {
+          "expected": "gut",
+          "pred_text": "candle",
+          "correct": false
+        },
+        {
+          "expected": "direct",
+          "pred_text": "driven",
+          "correct": false
+        },
+        {
+          "expected": "wilt",
+          "pred_text": "slit",
+          "correct": false
+        },
+        {
+          "expected": "nasal",
+          "pred_text": "voyage",
+          "correct": false
+        }
+      ]
+    },
+    "IVQ_d75": {
+      "behavioral_accuracy": 0.0,
+      "n": 30,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "1": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "2": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "3": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "4": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "5": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "6": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "7": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "8": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "9": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "10": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "11": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "12": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "13": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "14": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "15": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "16": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "17": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "18": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "19": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "20": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "21": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "22": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "23": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "24": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "25": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "26": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "27": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "28": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "29": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "30": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "31": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "32": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "33": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "34": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        },
+        "35": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 1.0,
+          "n_pos": 0,
+          "n_neg": 30
+        }
+      },
+      "trials": [
+        {
+          "expected": "heir",
+          "pred_text": "patch",
+          "correct": false
+        },
+        {
+          "expected": "diary",
+          "pred_text": "rider",
+          "correct": false
+        },
+        {
+          "expected": "lag",
+          "pred_text": "treatise",
+          "correct": false
+        },
+        {
+          "expected": "grief",
+          "pred_text": "music",
+          "correct": false
+        },
+        {
+          "expected": "bus",
+          "pred_text": "sunny",
+          "correct": false
+        },
+        {
+          "expected": "sit",
+          "pred_text": "marble",
+          "correct": false
+        },
+        {
+          "expected": "design",
+          "pred_text": "cheese",
+          "correct": false
+        },
+        {
+          "expected": "intern",
+          "pred_text": "decay",
+          "correct": false
+        },
+        {
+          "expected": "seal",
+          "pred_text": "nearby",
+          "correct": false
+        },
+        {
+          "expected": "fig",
+          "pred_text": "derby",
+          "correct": false
+        },
+        {
+          "expected": "heat",
+          "pred_text": "voyage",
+          "correct": false
+        },
+        {
+          "expected": "drown",
+          "pred_text": "maze",
+          "correct": false
+        },
+        {
+          "expected": "solar",
+          "pred_text": "flesh",
+          "correct": false
+        },
+        {
+          "expected": "coin",
+          "pred_text": "vigor",
+          "correct": false
+        },
+        {
+          "expected": "worst",
+          "pred_text": "bend",
+          "correct": false
+        },
+        {
+          "expected": "unique",
+          "pred_text": "candy",
+          "correct": false
+        },
+        {
+          "expected": "idle",
+          "pred_text": "token",
+          "correct": false
+        },
+        {
+          "expected": "mad",
+          "pred_text": "warp",
+          "correct": false
+        },
+        {
+          "expected": "nod",
+          "pred_text": "shrink",
+          "correct": false
+        },
+        {
+          "expected": "guide",
+          "pred_text": "giant",
+          "correct": false
+        },
+        {
+          "expected": "bend",
+          "pred_text": "pine",
+          "correct": false
+        },
+        {
+          "expected": "dung",
+          "pred_text": "lodge",
+          "correct": false
+        },
+        {
+          "expected": "claw",
+          "pred_text": "inch",
+          "correct": false
+        },
+        {
+          "expected": "blanket",
+          "pred_text": "bump",
+          "correct": false
+        },
+        {
+          "expected": "grab",
+          "pred_text": "shave",
+          "correct": false
+        },
+        {
+          "expected": "basket",
+          "pred_text": "bat",
+          "correct": false
+        },
+        {
+          "expected": "cross",
+          "pred_text": "due",
+          "correct": false
+        },
+        {
+          "expected": "tear",
+          "pred_text": "hurt",
+          "correct": false
+        },
+        {
+          "expected": "pastry",
+          "pred_text": "trap",
+          "correct": false
+        },
+        {
+          "expected": "oak",
+          "pred_text": "pound",
+          "correct": false
+        }
+      ]
+    },
+    "IVQ_d90": {
+      "behavioral_accuracy": 0.05,
+      "n": 60,
+      "stopped_early": true,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "1": {
+          "degenerate": false,
+          "cv_accuracy": 0.8999999999999999,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "2": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "3": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "4": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "5": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "6": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "7": {
+          "degenerate": false,
+          "cv_accuracy": 0.9,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "8": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "9": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "10": {
+          "degenerate": false,
+          "cv_accuracy": 0.9166666666666666,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "11": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "12": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "13": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "14": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "15": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "16": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "17": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "18": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "19": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "20": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "21": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "22": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "23": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "24": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "25": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "26": {
+          "degenerate": false,
+          "cv_accuracy": 0.9333333333333332,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "27": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "28": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "29": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "30": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "31": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "32": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "33": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "34": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        },
+        "35": {
+          "degenerate": false,
+          "cv_accuracy": 0.9499999999999998,
+          "majority_baseline": 0.95,
+          "n_pos": 3,
+          "n_neg": 57
+        }
+      },
+      "trials": [
+        {
+          "expected": "hook",
+          "pred_text": "bother",
+          "correct": false
+        },
+        {
+          "expected": "circus",
+          "pred_text": "turf",
+          "correct": false
+        },
+        {
+          "expected": "tore",
+          "pred_text": "dove",
+          "correct": false
+        },
+        {
+          "expected": "hood",
+          "pred_text": "hood",
+          "correct": true
+        },
+        {
+          "expected": "breath",
+          "pred_text": "rein",
+          "correct": false
+        },
+        {
+          "expected": "hybrid",
+          "pred_text": "dense",
+          "correct": false
+        },
+        {
+          "expected": "well",
+          "pred_text": "wash",
+          "correct": false
+        },
+        {
+          "expected": "chill",
+          "pred_text": "sink",
+          "correct": false
+        },
+        {
+          "expected": "stripe",
+          "pred_text": "switch",
+          "correct": false
+        },
+        {
+          "expected": "autumn",
+          "pred_text": "bean",
+          "correct": false
+        },
+        {
+          "expected": "shear",
+          "pred_text": "zen",
+          "correct": false
+        },
+        {
+          "expected": "fringe",
+          "pred_text": "ace",
+          "correct": false
+        },
+        {
+          "expected": "blind",
+          "pred_text": "dub",
+          "correct": false
+        },
+        {
+          "expected": "greet",
+          "pred_text": "oasis",
+          "correct": false
+        },
+        {
+          "expected": "shelf",
+          "pred_text": "bolt",
+          "correct": false
+        },
+        {
+          "expected": "two",
+          "pred_text": "tire",
+          "correct": false
+        },
+        {
+          "expected": "prime",
+          "pred_text": "famine",
+          "correct": false
+        },
+        {
+          "expected": "site",
+          "pred_text": "elm",
+          "correct": false
+        },
+        {
+          "expected": "mark",
+          "pred_text": "hurry",
+          "correct": false
+        },
+        {
+          "expected": "pew",
+          "pred_text": "ghost",
+          "correct": false
+        },
+        {
+          "expected": "foul",
+          "pred_text": "cap",
+          "correct": false
+        },
+        {
+          "expected": "palm",
+          "pred_text": "plaque",
+          "correct": false
+        },
+        {
+          "expected": "chrome",
+          "pred_text": "hop",
+          "correct": false
+        },
+        {
+          "expected": "player",
+          "pred_text": "tire",
+          "correct": false
+        },
+        {
+          "expected": "forget",
+          "pred_text": "grade",
+          "correct": false
+        },
+        {
+          "expected": "shine",
+          "pred_text": "darn",
+          "correct": false
+        },
+        {
+          "expected": "inject",
+          "pred_text": "parcel",
+          "correct": false
+        },
+        {
+          "expected": "arrow",
+          "pred_text": "people",
+          "correct": false
+        },
+        {
+          "expected": "blow",
+          "pred_text": "engage",
+          "correct": false
+        },
+        {
+          "expected": "bare",
+          "pred_text": "valve",
+          "correct": false
+        },
+        {
+          "expected": "tale",
+          "pred_text": "flee",
+          "correct": false
+        },
+        {
+          "expected": "wound",
+          "pred_text": "online",
+          "correct": false
+        },
+        {
+          "expected": "nose",
+          "pred_text": "fold",
+          "correct": false
+        },
+        {
+          "expected": "pantry",
+          "pred_text": "time",
+          "correct": false
+        },
+        {
+          "expected": "man",
+          "pred_text": "clue",
+          "correct": false
+        },
+        {
+          "expected": "corner",
+          "pred_text": "ape",
+          "correct": false
+        },
+        {
+          "expected": "rip",
+          "pred_text": "shine",
+          "correct": false
+        },
+        {
+          "expected": "torn",
+          "pred_text": "torn",
+          "correct": true
+        },
+        {
+          "expected": "burn",
+          "pred_text": "guest",
+          "correct": false
+        },
+        {
+          "expected": "enough",
+          "pred_text": "minus",
+          "correct": false
+        },
+        {
+          "expected": "invite",
+          "pred_text": "lap",
+          "correct": false
+        },
+        {
+          "expected": "point",
+          "pred_text": "flask",
+          "correct": false
+        },
+        {
+          "expected": "cliff",
+          "pred_text": "cliff",
+          "correct": true
+        },
+        {
+          "expected": "grit",
+          "pred_text": "fancy",
+          "correct": false
+        },
+        {
+          "expected": "knew",
+          "pred_text": "skull",
+          "correct": false
+        },
+        {
+          "expected": "poster",
+          "pred_text": "garlic",
+          "correct": false
+        },
+        {
+          "expected": "freak",
+          "pred_text": "oasis",
+          "correct": false
+        },
+        {
+          "expected": "loved",
+          "pred_text": "minded",
+          "correct": false
+        },
+        {
+          "expected": "power",
+          "pred_text": "vodka",
+          "correct": false
+        },
+        {
+          "expected": "trust",
+          "pred_text": "blur",
+          "correct": false
+        },
+        {
+          "expected": "raw",
+          "pred_text": "attend",
+          "correct": false
+        },
+        {
+          "expected": "silk",
+          "pred_text": "charge",
+          "correct": false
+        },
+        {
+          "expected": "honor",
+          "pred_text": "leak",
+          "correct": false
+        },
+        {
+          "expected": "vessel",
+          "pred_text": "jet",
+          "correct": false
+        },
+        {
+          "expected": "dean",
+          "pred_text": "saddle",
+          "correct": false
+        },
+        {
+          "expected": "mod",
+          "pred_text": "around",
+          "correct": false
+        },
+        {
+          "expected": "prose",
+          "pred_text": "optic",
+          "correct": false
+        },
+        {
+          "expected": "grasp",
+          "pred_text": "gem",
+          "correct": false
+        },
+        {
+          "expected": "gown",
+          "pred_text": "ink",
+          "correct": false
+        },
+        {
+          "expected": "chance",
+          "pred_text": "plain",
+          "correct": false
+        }
+      ]
+    }
+  },
+  "device": "cuda",
+  "dtype": "torch.bfloat16",
+  "elapsed_sec": 102.19229054450989
+}

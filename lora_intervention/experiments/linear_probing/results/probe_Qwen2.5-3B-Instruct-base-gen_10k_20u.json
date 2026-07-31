@@ -1,0 +1,827 @@
+{
+  "state": "base",
+  "base_model": "Qwen/Qwen2.5-3B-Instruct",
+  "adapter_path": null,
+  "cell": {
+    "keys": 10,
+    "updates": 20
+  },
+  "conditions": {
+    "FVQ": {
+      "behavioral_accuracy": 0.35,
+      "n": 20,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "1": {
+          "degenerate": false,
+          "cv_accuracy": 0.65,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "2": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "3": {
+          "degenerate": false,
+          "cv_accuracy": 0.4,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "4": {
+          "degenerate": false,
+          "cv_accuracy": 0.4,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "5": {
+          "degenerate": false,
+          "cv_accuracy": 0.4,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "6": {
+          "degenerate": false,
+          "cv_accuracy": 0.4,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "7": {
+          "degenerate": false,
+          "cv_accuracy": 0.35,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "8": {
+          "degenerate": false,
+          "cv_accuracy": 0.4,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "9": {
+          "degenerate": false,
+          "cv_accuracy": 0.4,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "10": {
+          "degenerate": false,
+          "cv_accuracy": 0.5,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "11": {
+          "degenerate": false,
+          "cv_accuracy": 0.45,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "12": {
+          "degenerate": false,
+          "cv_accuracy": 0.45,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "13": {
+          "degenerate": false,
+          "cv_accuracy": 0.5,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "14": {
+          "degenerate": false,
+          "cv_accuracy": 0.4,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "15": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "16": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "17": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "18": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "19": {
+          "degenerate": false,
+          "cv_accuracy": 0.65,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "20": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "21": {
+          "degenerate": false,
+          "cv_accuracy": 0.5,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "22": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "23": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "24": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "25": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "26": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "27": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "28": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "29": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "30": {
+          "degenerate": false,
+          "cv_accuracy": 0.5,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "31": {
+          "degenerate": false,
+          "cv_accuracy": 0.55,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "32": {
+          "degenerate": false,
+          "cv_accuracy": 0.65,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "33": {
+          "degenerate": false,
+          "cv_accuracy": 0.65,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "34": {
+          "degenerate": false,
+          "cv_accuracy": 0.65,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        },
+        "35": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.65,
+          "n_pos": 7,
+          "n_neg": 13
+        }
+      }
+    },
+    "CVQ": {
+      "behavioral_accuracy": 0.25,
+      "n": 20,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "1": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "2": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "3": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "4": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "5": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "6": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "7": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "8": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "9": {
+          "degenerate": false,
+          "cv_accuracy": 0.8,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "10": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "11": {
+          "degenerate": false,
+          "cv_accuracy": 0.8,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "12": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "13": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "14": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "15": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "16": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "17": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "18": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "19": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "20": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "21": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "22": {
+          "degenerate": false,
+          "cv_accuracy": 0.65,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "23": {
+          "degenerate": false,
+          "cv_accuracy": 0.65,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "24": {
+          "degenerate": false,
+          "cv_accuracy": 0.6,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "25": {
+          "degenerate": false,
+          "cv_accuracy": 0.65,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "26": {
+          "degenerate": false,
+          "cv_accuracy": 0.65,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "27": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "28": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "29": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "30": {
+          "degenerate": false,
+          "cv_accuracy": 0.8,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "31": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "32": {
+          "degenerate": false,
+          "cv_accuracy": 0.7,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "33": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "34": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        },
+        "35": {
+          "degenerate": false,
+          "cv_accuracy": 0.75,
+          "majority_baseline": 0.75,
+          "n_pos": 5,
+          "n_neg": 15
+        }
+      }
+    },
+    "IVQ_d50": {
+      "behavioral_accuracy": 0.05,
+      "n": 20,
+      "n_layers": 36,
+      "layers": {
+        "0": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "1": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "2": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "3": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "4": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "5": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "6": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "7": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "8": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "9": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "10": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "11": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "12": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "13": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "14": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "15": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "16": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "17": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "18": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "19": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "20": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "21": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "22": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "23": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "24": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "25": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "26": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "27": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "28": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "29": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "30": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "31": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "32": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "33": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "34": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        },
+        "35": {
+          "degenerate": true,
+          "cv_accuracy": null,
+          "majority_baseline": 0.95,
+          "n_pos": 1,
+          "n_neg": 19,
+          "note": "too few minority-class samples for CV"
+        }
+      }
+    }
+  },
+  "device": "cuda",
+  "dtype": "torch.bfloat16",
+  "elapsed_sec": 7.9744696617126465
+}

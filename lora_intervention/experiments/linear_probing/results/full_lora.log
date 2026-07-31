@@ -1,0 +1,181 @@
+Loading base Qwen/Qwen2.5-3B-Instruct (device=cuda, dtype=torch.bfloat16)...
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:   6%|▋         | 28/434 [00:00<00:01, 273.76it/s]Loading weights:  20%|██        | 88/434 [00:00<00:00, 459.26it/s]Loading weights:  35%|███▌      | 153/434 [00:00<00:00, 542.50it/s]Loading weights:  51%|█████     | 220/434 [00:00<00:00, 587.74it/s]Loading weights:  65%|██████▍   | 281/434 [00:00<00:00, 590.48it/s]Loading weights:  81%|████████  | 351/434 [00:00<00:00, 606.84it/s]Loading weights:  97%|█████████▋| 419/434 [00:00<00:00, 629.99it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 588.05it/s]
+Loading adapter lora_intervention/checkpoints/adapter (no merge — PEFT-wrapped forward pass)...
+Value pool: 2300 values (scoring=generate)
+
+============================================================
+Cell K=5 N=10  (state=lora)
+============================================================
+  FVQ: behavioral_acc=98% (n_pos=39, n_neg=1, n=40, stopped_early), majority_baseline=98%, 36/36 layers degenerate
+  CVQ: behavioral_acc=100% (n_pos=30, n_neg=0, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d10: behavioral_acc=100% (n_pos=30, n_neg=0, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d25: behavioral_acc=100% (n_pos=30, n_neg=0, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d50: behavioral_acc=85% (n_pos=93, n_neg=17, n=110, stopped_early), majority_baseline=85%, 0/36 layers degenerate
+    L 31: probe_acc=81% (baseline 85%)
+    L 32: probe_acc=79% (baseline 85%)
+    L 33: probe_acc=82% (baseline 85%)
+    L 34: probe_acc=82% (baseline 85%)
+    L 35: probe_acc=82% (baseline 85%)
+  IVQ_d75: behavioral_acc=78% (n_pos=109, n_neg=31, n=140, stopped_early), majority_baseline=78%, 0/36 layers degenerate
+    L 31: probe_acc=63% (baseline 78%)
+    L 32: probe_acc=68% (baseline 78%)
+    L 33: probe_acc=68% (baseline 78%)
+    L 34: probe_acc=66% (baseline 78%)
+    L 35: probe_acc=65% (baseline 78%)
+  IVQ_d90: behavioral_acc=76% (n_pos=107, n_neg=33, n=140, stopped_early), majority_baseline=76%, 0/36 layers degenerate
+    L 31: probe_acc=68% (baseline 76%)
+    L 32: probe_acc=77% (baseline 76%)
+    L 33: probe_acc=78% (baseline 76%)
+    L 34: probe_acc=76% (baseline 76%)
+    L 35: probe_acc=74% (baseline 76%)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_Qwen2.5-3B-Instruct-lora-full_5k_10u.json  (elapsed 58.6s)
+
+============================================================
+Cell K=10 N=20  (state=lora)
+============================================================
+  FVQ: behavioral_acc=100% (n_pos=30, n_neg=0, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  CVQ: behavioral_acc=100% (n_pos=30, n_neg=0, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d10: behavioral_acc=100% (n_pos=30, n_neg=0, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d25: behavioral_acc=81% (n_pos=97, n_neg=23, n=120, stopped_early), majority_baseline=81%, 0/36 layers degenerate
+    L 31: probe_acc=77% (baseline 81%)
+    L 32: probe_acc=78% (baseline 81%)
+    L 33: probe_acc=78% (baseline 81%)
+    L 34: probe_acc=76% (baseline 81%)
+    L 35: probe_acc=75% (baseline 81%)
+  IVQ_d50: behavioral_acc=42% (n_pos=80, n_neg=110, n=190, stopped_early), majority_baseline=58%, 0/36 layers degenerate
+    L 31: probe_acc=56% (baseline 58%)
+    L 32: probe_acc=55% (baseline 58%)
+    L 33: probe_acc=55% (baseline 58%)
+    L 34: probe_acc=54% (baseline 58%)
+    L 35: probe_acc=53% (baseline 58%)
+  IVQ_d75: behavioral_acc=19% (n_pos=23, n_neg=97, n=120, stopped_early), majority_baseline=81%, 0/36 layers degenerate
+    L 31: probe_acc=71% (baseline 81%)
+    L 32: probe_acc=76% (baseline 81%)
+    L 33: probe_acc=81% (baseline 81%)
+    L 34: probe_acc=78% (baseline 81%)
+    L 35: probe_acc=77% (baseline 81%)
+  IVQ_d90: behavioral_acc=31% (n_pos=52, n_neg=118, n=170, stopped_early), majority_baseline=69%, 0/36 layers degenerate
+    L 31: probe_acc=54% (baseline 69%)
+    L 32: probe_acc=58% (baseline 69%)
+    L 33: probe_acc=58% (baseline 69%)
+    L 34: probe_acc=58% (baseline 69%)
+    L 35: probe_acc=61% (baseline 69%)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_Qwen2.5-3B-Instruct-lora-full_10k_20u.json  (elapsed 100.2s)
+
+============================================================
+Cell K=10 N=30  (state=lora)
+============================================================
+  FVQ: behavioral_acc=100% (n_pos=30, n_neg=0, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  CVQ: behavioral_acc=98% (n_pos=39, n_neg=1, n=40, stopped_early), majority_baseline=98%, 36/36 layers degenerate
+  IVQ_d10: behavioral_acc=90% (n_pos=72, n_neg=8, n=80, stopped_early), majority_baseline=90%, 0/36 layers degenerate
+    L 31: probe_acc=88% (baseline 90%)
+    L 32: probe_acc=86% (baseline 90%)
+    L 33: probe_acc=91% (baseline 90%)
+    L 34: probe_acc=91% (baseline 90%)
+    L 35: probe_acc=90% (baseline 90%)
+  IVQ_d25: behavioral_acc=39% (n_pos=74, n_neg=116, n=190, stopped_early), majority_baseline=61%, 0/36 layers degenerate
+    L 31: probe_acc=55% (baseline 61%)
+    L 32: probe_acc=59% (baseline 61%)
+    L 33: probe_acc=59% (baseline 61%)
+    L 34: probe_acc=61% (baseline 61%)
+    L 35: probe_acc=59% (baseline 61%)
+  IVQ_d50: behavioral_acc=7% (n_pos=5, n_neg=65, n=70, stopped_early), majority_baseline=93%, 0/36 layers degenerate
+    L 31: probe_acc=93% (baseline 93%)
+    L 32: probe_acc=93% (baseline 93%)
+    L 33: probe_acc=93% (baseline 93%)
+    L 34: probe_acc=93% (baseline 93%)
+    L 35: probe_acc=93% (baseline 93%)
+  IVQ_d75: behavioral_acc=4% (n_pos=2, n_neg=48, n=50, stopped_early), majority_baseline=96%, 0/36 layers degenerate
+    L 31: probe_acc=96% (baseline 96%)
+    L 32: probe_acc=96% (baseline 96%)
+    L 33: probe_acc=96% (baseline 96%)
+    L 34: probe_acc=96% (baseline 96%)
+    L 35: probe_acc=96% (baseline 96%)
+  IVQ_d90: behavioral_acc=23% (n_pos=32, n_neg=108, n=140, stopped_early), majority_baseline=77%, 0/36 layers degenerate
+    L 31: probe_acc=71% (baseline 77%)
+    L 32: probe_acc=71% (baseline 77%)
+    L 33: probe_acc=74% (baseline 77%)
+    L 34: probe_acc=72% (baseline 77%)
+    L 35: probe_acc=71% (baseline 77%)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_Qwen2.5-3B-Instruct-lora-full_10k_30u.json  (elapsed 102.3s)
+
+============================================================
+Cell K=15 N=30  (state=lora)
+============================================================
+  FVQ: behavioral_acc=98% (n_pos=39, n_neg=1, n=40, stopped_early), majority_baseline=98%, 36/36 layers degenerate
+  CVQ: behavioral_acc=100% (n_pos=30, n_neg=0, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d10: behavioral_acc=88% (n_pos=79, n_neg=11, n=90, stopped_early), majority_baseline=88%, 0/36 layers degenerate
+    L 31: probe_acc=83% (baseline 88%)
+    L 32: probe_acc=84% (baseline 88%)
+    L 33: probe_acc=86% (baseline 88%)
+    L 34: probe_acc=87% (baseline 88%)
+    L 35: probe_acc=84% (baseline 88%)
+  IVQ_d25: behavioral_acc=41% (n_pos=77, n_neg=113, n=190, stopped_early), majority_baseline=59%, 0/36 layers degenerate
+    L 31: probe_acc=49% (baseline 59%)
+    L 32: probe_acc=50% (baseline 59%)
+    L 33: probe_acc=51% (baseline 59%)
+    L 34: probe_acc=53% (baseline 59%)
+    L 35: probe_acc=48% (baseline 59%)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=30, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=30, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d90: behavioral_acc=20% (n_pos=26, n_neg=104, n=130, stopped_early), majority_baseline=80%, 0/36 layers degenerate
+    L 31: probe_acc=63% (baseline 80%)
+    L 32: probe_acc=75% (baseline 80%)
+    L 33: probe_acc=75% (baseline 80%)
+    L 34: probe_acc=75% (baseline 80%)
+    L 35: probe_acc=75% (baseline 80%)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_Qwen2.5-3B-Instruct-lora-full_15k_30u.json  (elapsed 155.3s)
+
+============================================================
+Cell K=20 N=30  (state=lora)
+============================================================
+  FVQ: behavioral_acc=100% (n_pos=30, n_neg=0, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  CVQ: behavioral_acc=98% (n_pos=39, n_neg=1, n=40, stopped_early), majority_baseline=98%, 36/36 layers degenerate
+  IVQ_d10: behavioral_acc=89% (n_pos=71, n_neg=9, n=80, stopped_early), majority_baseline=89%, 0/36 layers degenerate
+    L 31: probe_acc=81% (baseline 89%)
+    L 32: probe_acc=82% (baseline 89%)
+    L 33: probe_acc=88% (baseline 89%)
+    L 34: probe_acc=85% (baseline 89%)
+    L 35: probe_acc=85% (baseline 89%)
+  IVQ_d25: behavioral_acc=34% (n_pos=61, n_neg=119, n=180, stopped_early), majority_baseline=66%, 0/36 layers degenerate
+    L 31: probe_acc=59% (baseline 66%)
+    L 32: probe_acc=64% (baseline 66%)
+    L 33: probe_acc=61% (baseline 66%)
+    L 34: probe_acc=62% (baseline 66%)
+    L 35: probe_acc=61% (baseline 66%)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=30, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=30, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d90: behavioral_acc=12% (n_pos=11, n_neg=79, n=90, stopped_early), majority_baseline=88%, 0/36 layers degenerate
+    L 31: probe_acc=88% (baseline 88%)
+    L 32: probe_acc=87% (baseline 88%)
+    L 33: probe_acc=87% (baseline 88%)
+    L 34: probe_acc=86% (baseline 88%)
+    L 35: probe_acc=86% (baseline 88%)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_Qwen2.5-3B-Instruct-lora-full_20k_30u.json  (elapsed 261.1s)
+
+============================================================
+Cell K=25 N=50  (state=lora)
+============================================================
+  FVQ: behavioral_acc=98% (n_pos=39, n_neg=1, n=40, stopped_early), majority_baseline=98%, 36/36 layers degenerate
+  CVQ: behavioral_acc=85% (n_pos=94, n_neg=16, n=110, stopped_early), majority_baseline=85%, 0/36 layers degenerate
+    L 31: probe_acc=78% (baseline 85%)
+    L 32: probe_acc=83% (baseline 85%)
+    L 33: probe_acc=82% (baseline 85%)
+    L 34: probe_acc=84% (baseline 85%)
+    L 35: probe_acc=83% (baseline 85%)
+  IVQ_d10: behavioral_acc=29% (n_pos=47, n_neg=113, n=160, stopped_early), majority_baseline=71%, 0/36 layers degenerate
+    L 31: probe_acc=69% (baseline 71%)
+    L 32: probe_acc=62% (baseline 71%)
+    L 33: probe_acc=61% (baseline 71%)
+    L 34: probe_acc=64% (baseline 71%)
+    L 35: probe_acc=64% (baseline 71%)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=30, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=30, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=30, n=30, stopped_early), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d90: behavioral_acc=7% (n_pos=4, n_neg=56, n=60, stopped_early), majority_baseline=93%, 0/36 layers degenerate
+    L 31: probe_acc=88% (baseline 93%)
+    L 32: probe_acc=93% (baseline 93%)
+    L 33: probe_acc=93% (baseline 93%)
+    L 34: probe_acc=93% (baseline 93%)
+    L 35: probe_acc=93% (baseline 93%)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_Qwen2.5-3B-Instruct-lora-full_25k_50u.json  (elapsed 377.8s)
