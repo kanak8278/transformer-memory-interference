@@ -1,0 +1,36 @@
+
+=== Entropy-Lens: model=base device=cuda:0 grid=30 cells x 5 conditions x 3 trials ===
+Loading base Qwen/Qwen2.5-3B-Instruct (device=cuda:0, dtype=torch.bfloat16)...
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:   9%|▉         | 38/434 [00:00<00:01, 359.74it/s]Loading weights:  23%|██▎       | 101/434 [00:00<00:00, 507.17it/s]Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 587.58it/s]Loading weights:  55%|█████▌    | 240/434 [00:00<00:00, 623.14it/s]Loading weights:  70%|██████▉   | 303/434 [00:00<00:00, 432.19it/s]Loading weights:  85%|████████▌ | 371/434 [00:00<00:00, 496.37it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 524.19it/s]
+Generation-safe single-token pool: 1292/2300 values survive the with-space AND no-space check
+  K2_N4: mean acc 0.53  (1s elapsed)
+  K2_N6: mean acc 0.40  (1s elapsed)
+  K2_N8: mean acc 0.40  (2s elapsed)
+  K2_N10: mean acc 0.33  (2s elapsed)
+  K2_N12: mean acc 0.20  (3s elapsed)
+  K4_N4: mean acc 0.67  (3s elapsed)
+  K4_N6: mean acc 0.27  (4s elapsed)
+  K4_N8: mean acc 0.27  (4s elapsed)
+  K4_N10: mean acc 0.33  (5s elapsed)
+  K4_N12: mean acc 0.13  (5s elapsed)
+  K6_N4: mean acc 0.47  (6s elapsed)
+  K6_N6: mean acc 0.40  (6s elapsed)
+  K6_N8: mean acc 0.27  (7s elapsed)
+  K6_N10: mean acc 0.13  (7s elapsed)
+  K6_N12: mean acc 0.20  (8s elapsed)
+  K8_N4: mean acc 0.33  (8s elapsed)
+  K8_N6: mean acc 0.40  (9s elapsed)
+  K8_N8: mean acc 0.33  (9s elapsed)
+  K8_N10: mean acc 0.13  (10s elapsed)
+  K8_N12: mean acc 0.13  (11s elapsed)
+  K10_N4: mean acc 0.53  (11s elapsed)
+  K10_N6: mean acc 0.20  (12s elapsed)
+  K10_N8: mean acc 0.27  (12s elapsed)
+  K10_N10: mean acc 0.33  (13s elapsed)
+  K10_N12: mean acc 0.13  (14s elapsed)
+  K12_N4: mean acc 0.33  (14s elapsed)
+  K12_N6: mean acc 0.13  (15s elapsed)
+  K12_N8: mean acc 0.20  (15s elapsed)
+  K12_N10: mean acc 0.13  (16s elapsed)
+  K12_N12: mean acc 0.13  (17s elapsed)
+Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/entropy_lens/results/entropy_base_smoke.json  (elapsed 17s)

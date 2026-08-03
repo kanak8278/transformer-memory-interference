@@ -1,0 +1,12 @@
+Loading base Qwen/Qwen2.5-3B-Instruct (device=cuda:1, dtype=torch.bfloat16)...
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:   9%|▉         | 40/434 [00:00<00:01, 384.76it/s]Loading weights:  26%|██▌       | 111/434 [00:00<00:00, 563.62it/s]Loading weights:  39%|███▉      | 169/434 [00:00<00:00, 472.31it/s]Loading weights:  50%|█████     | 218/434 [00:00<00:00, 441.95it/s]Loading weights:  67%|██████▋   | 290/434 [00:00<00:00, 519.09it/s]Loading weights:  84%|████████▍ | 364/434 [00:00<00:00, 583.80it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 558.43it/s]
+Loading adapter lora_intervention/checkpoints/adapter (no merge — PEFT-wrapped forward pass)...
+Value pool: 2300 values (scoring=generate)
+
+============================================================
+Cell K=5 N=10  (state=lora)
+============================================================
+  FVQ: behavioral_acc=100% (n_pos=60, n_neg=0, n=60, stop=saturated), majority_baseline=100%, 36/36 layers degenerate
+  CVQ: behavioral_acc=100% (n_pos=60, n_neg=0, n=60, stop=saturated), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d10: behavioral_acc=100% (n_pos=60, n_neg=0, n=60, stop=saturated), majority_baseline=100%, 36/36 layers degenerate
+  IVQ_d25: behavioral_acc=100% (n_pos=60, n_neg=0, n=60, stop=saturated), majority_baseline=100%, 36/36 layers degenerate

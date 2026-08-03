@@ -1,0 +1,28 @@
+Loaded: ['base', 'lora', 'scratch']
+Saved /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/entropy_lens/results/entropy_profiles.png
+Saved /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/entropy_lens/results/entropy_confusion.png
+
+=== summary (normalised entropy) ===
+
+base (36L, V=151936):
+  FVQ       output=0.02 peak=0.76@d0.89 expansion=+0.17 pruning=0.73
+  CVQ       output=0.05 peak=0.78@d0.89 expansion=+0.20 pruning=0.73
+  IVQ_d25   output=0.04 peak=0.77@d0.89 expansion=+0.18 pruning=0.73
+  IVQ_d50   output=0.05 peak=0.78@d0.89 expansion=+0.19 pruning=0.73
+  IVQ_d75   output=0.06 peak=0.78@d0.89 expansion=+0.20 pruning=0.73
+
+lora (36L, V=151936):
+  FVQ       output=0.00 peak=0.76@d0.89 expansion=+0.17 pruning=0.76
+  CVQ       output=0.00 peak=0.77@d0.89 expansion=+0.19 pruning=0.77
+  IVQ_d25   output=0.00 peak=0.76@d0.64 expansion=+0.17 pruning=0.75
+  IVQ_d50   output=0.01 peak=0.75@d0.64 expansion=+0.17 pruning=0.74
+  IVQ_d75   output=0.03 peak=0.77@d0.89 expansion=+0.18 pruning=0.74
+
+scratch (12L, V=51):
+  FVQ       output=0.07 peak=0.62@d0.83 expansion=+0.05 pruning=0.55
+  CVQ       output=0.11 peak=0.57@d0.75 expansion=+0.01 pruning=0.45
+  IVQ_d25   output=0.08 peak=0.58@d0.92 expansion=+0.01 pruning=0.50
+  IVQ_d50   output=0.12 peak=0.58@d0.92 expansion=+0.01 pruning=0.46
+  IVQ_d75   output=0.15 peak=0.58@d0.83 expansion=+0.01 pruning=0.42
+
+Saved /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/entropy_lens/results/entropy_summary.json

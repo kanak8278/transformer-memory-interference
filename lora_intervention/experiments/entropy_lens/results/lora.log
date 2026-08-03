@@ -1,0 +1,37 @@
+
+=== Entropy-Lens: model=lora device=cuda:1 grid=30 cells x 5 conditions x 150 trials ===
+Loading base Qwen/Qwen2.5-3B-Instruct (device=cuda:1, dtype=torch.bfloat16)...
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:   1%|          | 5/434 [00:00<00:08, 48.99it/s]Loading weights:  11%|█         | 47/434 [00:00<00:01, 264.22it/s]Loading weights:  21%|██        | 89/434 [00:00<00:01, 330.29it/s]Loading weights:  36%|███▌      | 157/434 [00:00<00:00, 459.40it/s]Loading weights:  47%|████▋     | 203/434 [00:00<00:00, 332.99it/s]Loading weights:  62%|██████▏   | 269/434 [00:00<00:00, 415.82it/s]Loading weights:  79%|███████▊  | 341/434 [00:00<00:00, 492.87it/s]Loading weights:  95%|█████████▌| 413/434 [00:00<00:00, 552.45it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 457.37it/s]
+Loading adapter lora_intervention/checkpoints/adapter (no merge — PEFT-wrapped forward pass)...
+Generation-safe single-token pool: 1292/2300 values survive the with-space AND no-space check
+  K2_N4: mean acc 1.00  (31s elapsed)
+  K2_N6: mean acc 1.00  (61s elapsed)
+  K2_N8: mean acc 0.99  (91s elapsed)
+  K2_N10: mean acc 0.96  (122s elapsed)
+  K2_N12: mean acc 0.90  (152s elapsed)
+  K4_N4: mean acc 1.00  (183s elapsed)
+  K4_N6: mean acc 1.00  (213s elapsed)
+  K4_N8: mean acc 0.98  (244s elapsed)
+  K4_N10: mean acc 0.93  (275s elapsed)
+  K4_N12: mean acc 0.87  (307s elapsed)
+  K6_N4: mean acc 1.00  (337s elapsed)
+  K6_N6: mean acc 1.00  (368s elapsed)
+  K6_N8: mean acc 0.96  (399s elapsed)
+  K6_N10: mean acc 0.91  (431s elapsed)
+  K6_N12: mean acc 0.87  (462s elapsed)
+  K8_N4: mean acc 1.00  (493s elapsed)
+  K8_N6: mean acc 1.00  (524s elapsed)
+  K8_N8: mean acc 0.96  (555s elapsed)
+  K8_N10: mean acc 0.91  (588s elapsed)
+  K8_N12: mean acc 0.85  (623s elapsed)
+  K10_N4: mean acc 1.00  (654s elapsed)
+  K10_N6: mean acc 0.99  (686s elapsed)
+  K10_N8: mean acc 0.95  (720s elapsed)
+  K10_N10: mean acc 0.89  (755s elapsed)
+  K10_N12: mean acc 0.86  (794s elapsed)
+  K12_N4: mean acc 0.99  (825s elapsed)
+  K12_N6: mean acc 0.99  (856s elapsed)
+  K12_N8: mean acc 0.95  (891s elapsed)
+  K12_N10: mean acc 0.88  (930s elapsed)
+  K12_N12: mean acc 0.81  (971s elapsed)
+Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/entropy_lens/results/entropy_lora.json  (elapsed 971s)

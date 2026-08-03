@@ -1,0 +1,15 @@
+Loading base Qwen/Qwen2.5-3B-Instruct (device=cuda:0, dtype=torch.bfloat16)...
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:   9%|▉         | 40/434 [00:00<00:01, 389.29it/s]Loading weights:  26%|██▌       | 111/434 [00:00<00:00, 558.41it/s]Loading weights:  39%|███▉      | 169/434 [00:00<00:00, 377.34it/s]Loading weights:  56%|█████▌    | 243/434 [00:00<00:00, 479.22it/s]Loading weights:  72%|███████▏  | 311/434 [00:00<00:00, 537.77it/s]Loading weights:  87%|████████▋ | 377/434 [00:00<00:00, 570.40it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 543.20it/s]
+Value pool: 2300 values (scoring=generate)
+
+============================================================
+Cell K=5 N=10  (state=base)
+============================================================
+  FVQ: behavioral_acc=72% (n_pos=108, n_neg=42, n=150, stop=balanced), majority_baseline=72%, 0/36 layers degenerate
+    best AUC: L31=0.76 (acc=75% vs baseline 72%, bal_acc=73%)
+  CVQ: behavioral_acc=24% (n_pos=40, n_neg=130, n=170, stop=balanced), majority_baseline=76%, 0/36 layers degenerate
+    best AUC: L28=0.67 (acc=71% vs baseline 76%, bal_acc=60%)
+  IVQ_d10: behavioral_acc=37% (n_pos=44, n_neg=76, n=120, stop=balanced), majority_baseline=63%, 0/36 layers degenerate
+    best AUC: L27=0.51 (acc=51% vs baseline 63%, bal_acc=46%)
+  IVQ_d25: behavioral_acc=29% (n_pos=43, n_neg=107, n=150, stop=balanced), majority_baseline=71%, 0/36 layers degenerate
+    best AUC: L27=0.66 (acc=67% vs baseline 71%, bal_acc=56%)

@@ -1,0 +1,1130 @@
+Loading base google/gemma-3-4b-it (device=cuda:0, dtype=torch.bfloat16)...
+Loading weights:   0%|          | 0/883 [00:00<?, ?it/s]Loading weights: 100%|██████████| 883/883 [00:00<00:00, 12808.56it/s]
+Value pool: 2300 values (scoring=generate)
+Unembedding for retrieval probe: (262208, 2560)
+
+============================================================
+Cell K=2 N=5  (state=base)
+============================================================
+  FVQ: behavioral_acc=100% (n_pos=60, n_neg=0, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L28=1.00
+    retrieval[wrong  ] n=  0: (too few usable trials)
+    retrieval[correct] n= 60: best AUC L32=1.00
+  CVQ: behavioral_acc=80% (n_pos=160, n_neg=40, n=200, stop=balanced), majority_baseline=80%, 0/34 layers degenerate
+    best AUC: L19=0.62 (acc=72% vs baseline 80%, bal_acc=53%)
+    retrieval[all    ] n=200: best AUC L30=0.97
+    retrieval[wrong  ] n= 40: best AUC L30=0.85 <-- suppression test
+    retrieval[correct] n=160: best AUC L31=0.99
+  IVQ_d10: behavioral_acc=89% (n_pos=320, n_neg=40, n=360, stop=balanced), majority_baseline=89%, 0/34 layers degenerate
+    best AUC: L21=0.82 (acc=88% vs baseline 89%, bal_acc=65%)
+    retrieval[all    ] n=360: best AUC L29=0.97
+    retrieval[wrong  ] n= 40: best AUC L31=0.74 <-- suppression test
+    retrieval[correct] n=320: best AUC L32=1.00
+  IVQ_d25: behavioral_acc=85% (n_pos=230, n_neg=40, n=270, stop=balanced), majority_baseline=85%, 0/34 layers degenerate
+    best AUC: L22=0.90 (acc=87% vs baseline 85%, bal_acc=73%)
+    retrieval[all    ] n=270: best AUC L32=0.98
+    retrieval[wrong  ] n= 40: best AUC L23=0.71 <-- suppression test
+    retrieval[correct] n=230: best AUC L30=1.00
+  IVQ_d50: behavioral_acc=85% (n_pos=220, n_neg=40, n=260, stop=balanced), majority_baseline=85%, 0/34 layers degenerate
+    best AUC: L21=0.88 (acc=86% vs baseline 85%, bal_acc=73%)
+    retrieval[all    ] n=260: best AUC L30=0.96
+    retrieval[wrong  ] n= 40: best AUC L32=0.68 <-- suppression test
+    retrieval[correct] n=220: best AUC L26=0.99
+  IVQ_d75: behavioral_acc=12% (n_pos=40, n_neg=300, n=340, stop=balanced), majority_baseline=88%, 0/34 layers degenerate
+    best AUC: L20=0.68 (acc=83% vs baseline 88%, bal_acc=55%)
+    retrieval[all    ] n=340: best AUC L18=0.55
+    retrieval[wrong  ] n=300: best AUC L9=0.56 <-- suppression test
+    retrieval[correct] n= 40: best AUC L29=0.93
+  IVQ_d90: behavioral_acc=14% (n_pos=42, n_neg=258, n=300, stop=balanced), majority_baseline=86%, 0/34 layers degenerate
+    best AUC: L20=0.68 (acc=80% vs baseline 86%, bal_acc=55%)
+    retrieval[all    ] n=300: best AUC L33=0.49
+    retrieval[wrong  ] n=258: best AUC L20=0.50 <-- suppression test
+    retrieval[correct] n= 42: best AUC L30=0.84
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_2k_5u.json  (elapsed 683.6s)
+
+============================================================
+Cell K=5 N=10  (state=base)
+============================================================
+  FVQ: behavioral_acc=100% (n_pos=60, n_neg=0, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L26=1.00
+    retrieval[wrong  ] n=  0: (too few usable trials)
+    retrieval[correct] n= 60: best AUC L23=1.00
+  CVQ: behavioral_acc=71% (n_pos=107, n_neg=43, n=150, stop=balanced), majority_baseline=71%, 0/34 layers degenerate
+    best AUC: L31=0.61 (acc=66% vs baseline 71%, bal_acc=52%)
+    retrieval[all    ] n=150: best AUC L30=0.93
+    retrieval[wrong  ] n= 43: best AUC L31=0.78 <-- suppression test
+    retrieval[correct] n=107: best AUC L30=0.99
+  IVQ_d10: behavioral_acc=52% (n_pos=47, n_neg=43, n=90, stop=balanced), majority_baseline=52%, 0/34 layers degenerate
+    best AUC: L22=0.68 (acc=60% vs baseline 52%, bal_acc=60%)
+    retrieval[all    ] n= 90: best AUC L30=0.93
+    retrieval[wrong  ] n= 43: best AUC L29=0.81 <-- suppression test
+    retrieval[correct] n= 47: best AUC L31=0.99
+  IVQ_d25: behavioral_acc=51% (n_pos=46, n_neg=44, n=90, stop=balanced), majority_baseline=51%, 0/34 layers degenerate
+    best AUC: L14=0.81 (acc=73% vs baseline 51%, bal_acc=74%)
+    retrieval[all    ] n= 90: best AUC L29=0.90
+    retrieval[wrong  ] n= 44: best AUC L29=0.64 <-- suppression test
+    retrieval[correct] n= 46: best AUC L31=0.99
+  IVQ_d50: behavioral_acc=2% (n_pos=6, n_neg=394, n=400, stop=max_trials), majority_baseline=98%, 0/34 layers degenerate
+    best AUC: L11=0.90 (acc=98% vs baseline 98%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L28=0.55
+    retrieval[wrong  ] n=394: best AUC L26=0.57 <-- suppression test
+    retrieval[correct] n=  6: (too few usable trials)
+  IVQ_d75: behavioral_acc=3% (n_pos=12, n_neg=388, n=400, stop=max_trials), majority_baseline=97%, 0/34 layers degenerate
+    best AUC: L18=0.84 (acc=96% vs baseline 97%, bal_acc=49%)
+    retrieval[all    ] n=400: best AUC L28=0.53
+    retrieval[wrong  ] n=388: best AUC L23=0.55 <-- suppression test
+    retrieval[correct] n= 12: (too few usable trials)
+  IVQ_d90: behavioral_acc=3% (n_pos=11, n_neg=389, n=400, stop=max_trials), majority_baseline=97%, 0/34 layers degenerate
+    best AUC: L18=0.77 (acc=97% vs baseline 97%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L29=0.62
+    retrieval[wrong  ] n=389: best AUC L32=0.58 <-- suppression test
+    retrieval[correct] n= 11: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_5k_10u.json  (elapsed 685.3s)
+
+============================================================
+Cell K=10 N=20  (state=base)
+============================================================
+  FVQ: behavioral_acc=98% (n_pos=392, n_neg=8, n=400, stop=max_trials), majority_baseline=98%, 0/34 layers degenerate
+    best AUC: L7=0.94 (acc=98% vs baseline 98%, bal_acc=70%)
+    retrieval[all    ] n=400: best AUC L31=1.00
+    retrieval[wrong  ] n=  8: (too few usable trials)
+    retrieval[correct] n=392: best AUC L32=1.00
+  CVQ: behavioral_acc=53% (n_pos=48, n_neg=42, n=90, stop=balanced), majority_baseline=53%, 0/34 layers degenerate
+    best AUC: L13=0.61 (acc=58% vs baseline 53%, bal_acc=57%)
+    retrieval[all    ] n= 90: best AUC L30=0.88
+    retrieval[wrong  ] n= 42: best AUC L23=0.61 <-- suppression test
+    retrieval[correct] n= 48: best AUC L31=0.96
+  IVQ_d10: behavioral_acc=29% (n_pos=40, n_neg=100, n=140, stop=balanced), majority_baseline=71%, 0/34 layers degenerate
+    best AUC: L20=0.71 (acc=69% vs baseline 71%, bal_acc=62%)
+    retrieval[all    ] n=140: best AUC L31=0.91
+    retrieval[wrong  ] n=100: best AUC L32=0.82 <-- suppression test
+    retrieval[correct] n= 40: best AUC L31=0.98
+  IVQ_d25: behavioral_acc=1% (n_pos=3, n_neg=397, n=400, stop=max_trials), majority_baseline=99%, 0/34 layers degenerate
+    best AUC: L25=0.90 (acc=99% vs baseline 99%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L6=0.52
+    retrieval[wrong  ] n=397: best AUC L7=0.53 <-- suppression test
+    retrieval[correct] n=  3: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L33=0.56
+    retrieval[wrong  ] n= 60: best AUC L31=0.69 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L1=0.56
+    retrieval[wrong  ] n= 60: best AUC L26=0.63 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=1% (n_pos=3, n_neg=397, n=400, stop=max_trials), majority_baseline=99%, 0/34 layers degenerate
+    best AUC: L24=0.95 (acc=99% vs baseline 99%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L25=0.58
+    retrieval[wrong  ] n=397: best AUC L25=0.57 <-- suppression test
+    retrieval[correct] n=  3: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_10k_20u.json  (elapsed 824.5s)
+
+============================================================
+Cell K=7 N=30  (state=base)
+============================================================
+  FVQ: behavioral_acc=97% (n_pos=389, n_neg=11, n=400, stop=max_trials), majority_baseline=97%, 0/34 layers degenerate
+    best AUC: L25=0.80 (acc=96% vs baseline 97%, bal_acc=52%)
+    retrieval[all    ] n=400: best AUC L32=1.00
+    retrieval[wrong  ] n= 11: (too few usable trials)
+    retrieval[correct] n=389: best AUC L32=1.00
+  CVQ: behavioral_acc=50% (n_pos=45, n_neg=45, n=90, stop=balanced), majority_baseline=50%, 0/34 layers degenerate
+    best AUC: L23=0.73 (acc=66% vs baseline 50%, bal_acc=66%)
+    retrieval[all    ] n= 90: best AUC L31=0.89
+    retrieval[wrong  ] n= 45: best AUC L31=0.83 <-- suppression test
+    retrieval[correct] n= 45: best AUC L31=0.93
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L32=0.75
+    retrieval[wrong  ] n= 60: best AUC L29=0.68 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L21=0.67
+    retrieval[wrong  ] n= 60: best AUC L17=0.68 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=1, n_neg=399, n=400, stop=max_trials), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n=400: best AUC L17=0.52
+    retrieval[wrong  ] n=399: best AUC L24=0.54 <-- suppression test
+    retrieval[correct] n=  1: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L0=0.64
+    retrieval[wrong  ] n= 60: best AUC L18=0.53 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=2, n_neg=398, n=400, stop=max_trials), majority_baseline=100%, 0/34 layers degenerate
+    best AUC: L9=0.99 (acc=100% vs baseline 100%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L32=0.56
+    retrieval[wrong  ] n=398: best AUC L32=0.58 <-- suppression test
+    retrieval[correct] n=  2: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_7k_30u.json  (elapsed 778.1s)
+
+============================================================
+Cell K=7 N=50  (state=base)
+============================================================
+  FVQ: behavioral_acc=92% (n_pos=367, n_neg=33, n=400, stop=max_trials), majority_baseline=92%, 0/34 layers degenerate
+    best AUC: L31=0.89 (acc=92% vs baseline 92%, bal_acc=69%)
+    retrieval[all    ] n=400: best AUC L31=1.00
+    retrieval[wrong  ] n= 33: best AUC L31=0.66 <-- suppression test
+    retrieval[correct] n=367: best AUC L32=1.00
+  CVQ: behavioral_acc=36% (n_pos=40, n_neg=70, n=110, stop=balanced), majority_baseline=64%, 0/34 layers degenerate
+    best AUC: L8=0.70 (acc=67% vs baseline 64%, bal_acc=65%)
+    retrieval[all    ] n=110: best AUC L31=0.86
+    retrieval[wrong  ] n= 70: best AUC L31=0.73 <-- suppression test
+    retrieval[correct] n= 40: best AUC L31=0.99
+  IVQ_d10: behavioral_acc=0% (n_pos=2, n_neg=398, n=400, stop=max_trials), majority_baseline=100%, 0/34 layers degenerate
+    best AUC: L29=0.95 (acc=100% vs baseline 100%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L31=0.59
+    retrieval[wrong  ] n=398: best AUC L33=0.60 <-- suppression test
+    retrieval[correct] n=  2: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L23=0.54
+    retrieval[wrong  ] n= 60: best AUC L22=0.46 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L31=0.53
+    retrieval[wrong  ] n= 60: best AUC L7=0.54 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L31=0.60
+    retrieval[wrong  ] n= 60: best AUC L29=0.65 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L25=0.69
+    retrieval[wrong  ] n= 60: best AUC L23=0.65 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_7k_50u.json  (elapsed 811.7s)
+
+============================================================
+Cell K=7 N=75  (state=base)
+============================================================
+  FVQ: behavioral_acc=85% (n_pos=230, n_neg=40, n=270, stop=balanced), majority_baseline=85%, 0/34 layers degenerate
+    best AUC: L27=0.87 (acc=86% vs baseline 85%, bal_acc=72%)
+    retrieval[all    ] n=270: best AUC L32=0.98
+    retrieval[wrong  ] n= 40: best AUC L26=0.82 <-- suppression test
+    retrieval[correct] n=230: best AUC L32=1.00
+  CVQ: behavioral_acc=24% (n_pos=40, n_neg=130, n=170, stop=balanced), majority_baseline=76%, 0/34 layers degenerate
+    best AUC: L14=0.71 (acc=73% vs baseline 76%, bal_acc=59%)
+    retrieval[all    ] n=170: best AUC L32=0.73
+    retrieval[wrong  ] n=130: best AUC L30=0.68 <-- suppression test
+    retrieval[correct] n= 40: best AUC L31=0.95
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L12=0.51
+    retrieval[wrong  ] n= 60: best AUC L20=0.60 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L23=0.64
+    retrieval[wrong  ] n= 60: best AUC L19=0.68 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L18=0.53
+    retrieval[wrong  ] n= 60: best AUC L13=0.54 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L19=0.53
+    retrieval[wrong  ] n= 60: best AUC L21=0.67 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L31=0.47
+    retrieval[wrong  ] n= 60: best AUC L21=0.59 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_7k_75u.json  (elapsed 630.3s)
+
+============================================================
+Cell K=10 N=30  (state=base)
+============================================================
+  FVQ: behavioral_acc=92% (n_pos=366, n_neg=34, n=400, stop=max_trials), majority_baseline=92%, 0/34 layers degenerate
+    best AUC: L23=0.90 (acc=90% vs baseline 92%, bal_acc=71%)
+    retrieval[all    ] n=400: best AUC L29=1.00
+    retrieval[wrong  ] n= 34: best AUC L25=0.71 <-- suppression test
+    retrieval[correct] n=366: best AUC L32=1.00
+  CVQ: behavioral_acc=36% (n_pos=40, n_neg=70, n=110, stop=balanced), majority_baseline=64%, 0/34 layers degenerate
+    best AUC: L18=0.67 (acc=71% vs baseline 64%, bal_acc=68%)
+    retrieval[all    ] n=110: best AUC L30=0.84
+    retrieval[wrong  ] n= 70: best AUC L30=0.58 <-- suppression test
+    retrieval[correct] n= 40: best AUC L31=0.95
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L29=0.68
+    retrieval[wrong  ] n= 60: best AUC L30=0.69 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L17=0.55
+    retrieval[wrong  ] n= 60: best AUC L21=0.52 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L16=0.65
+    retrieval[wrong  ] n= 60: best AUC L21=0.54 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L26=0.63
+    retrieval[wrong  ] n= 60: best AUC L25=0.61 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L18=0.62
+    retrieval[wrong  ] n= 60: best AUC L33=0.55 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_10k_30u.json  (elapsed 473.4s)
+
+============================================================
+Cell K=10 N=50  (state=base)
+============================================================
+  FVQ: behavioral_acc=83% (n_pos=200, n_neg=40, n=240, stop=balanced), majority_baseline=83%, 0/34 layers degenerate
+    best AUC: L17=0.87 (acc=82% vs baseline 83%, bal_acc=69%)
+    retrieval[all    ] n=240: best AUC L32=0.98
+    retrieval[wrong  ] n= 40: best AUC L33=0.72 <-- suppression test
+    retrieval[correct] n=200: best AUC L32=1.00
+  CVQ: behavioral_acc=14% (n_pos=40, n_neg=240, n=280, stop=balanced), majority_baseline=86%, 0/34 layers degenerate
+    best AUC: L20=0.74 (acc=83% vs baseline 86%, bal_acc=65%)
+    retrieval[all    ] n=280: best AUC L33=0.69
+    retrieval[wrong  ] n=240: best AUC L32=0.61 <-- suppression test
+    retrieval[correct] n= 40: best AUC L30=0.96
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L29=0.55
+    retrieval[wrong  ] n= 60: best AUC L21=0.56 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L19=0.69
+    retrieval[wrong  ] n= 60: best AUC L33=0.63 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L23=0.62
+    retrieval[wrong  ] n= 60: best AUC L17=0.53 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L29=0.59
+    retrieval[wrong  ] n= 60: best AUC L21=0.58 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L27=0.55
+    retrieval[wrong  ] n= 60: best AUC L3=0.55 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_10k_50u.json  (elapsed 641.3s)
+
+============================================================
+Cell K=10 N=75  (state=base)
+============================================================
+  FVQ: behavioral_acc=82% (n_pos=188, n_neg=42, n=230, stop=balanced), majority_baseline=82%, 0/34 layers degenerate
+    best AUC: L32=0.90 (acc=87% vs baseline 82%, bal_acc=77%)
+    retrieval[all    ] n=230: best AUC L33=0.98
+    retrieval[wrong  ] n= 42: best AUC L20=0.61 <-- suppression test
+    retrieval[correct] n=188: best AUC L33=1.00
+  CVQ: behavioral_acc=11% (n_pos=41, n_neg=349, n=390, stop=balanced), majority_baseline=89%, 0/34 layers degenerate
+    best AUC: L22=0.81 (acc=88% vs baseline 89%, bal_acc=63%)
+    retrieval[all    ] n=390: best AUC L31=0.72
+    retrieval[wrong  ] n=349: best AUC L33=0.65 <-- suppression test
+    retrieval[correct] n= 41: best AUC L32=0.94
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L21=0.60
+    retrieval[wrong  ] n= 60: best AUC L32=0.64 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L28=0.59
+    retrieval[wrong  ] n= 60: best AUC L19=0.54 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L12=0.46
+    retrieval[wrong  ] n= 60: best AUC L33=0.50 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L11=0.53
+    retrieval[wrong  ] n= 60: best AUC L18=0.70 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L29=0.52
+    retrieval[wrong  ] n= 60: best AUC L29=0.60 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_10k_75u.json  (elapsed 1015.8s)
+
+============================================================
+Cell K=15 N=15  (state=base)
+============================================================
+  FVQ: behavioral_acc=95% (n_pos=380, n_neg=20, n=400, stop=max_trials), majority_baseline=95%, 0/34 layers degenerate
+    best AUC: L25=0.76 (acc=90% vs baseline 95%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L32=1.00
+    retrieval[wrong  ] n= 20: best AUC L33=0.65 <-- suppression test
+    retrieval[correct] n=380: best AUC L32=1.00
+  CVQ: behavioral_acc=26% (n_pos=42, n_neg=118, n=160, stop=balanced), majority_baseline=74%, 0/34 layers degenerate
+    best AUC: L15=0.67 (acc=73% vs baseline 74%, bal_acc=62%)
+    retrieval[all    ] n=160: best AUC L31=0.74
+    retrieval[wrong  ] n=118: best AUC L30=0.65 <-- suppression test
+    retrieval[correct] n= 42: best AUC L31=0.99
+  IVQ_d10: behavioral_acc=29% (n_pos=41, n_neg=99, n=140, stop=balanced), majority_baseline=71%, 0/34 layers degenerate
+    best AUC: L20=0.72 (acc=68% vs baseline 71%, bal_acc=60%)
+    retrieval[all    ] n=140: best AUC L29=0.90
+    retrieval[wrong  ] n= 99: best AUC L29=0.73 <-- suppression test
+    retrieval[correct] n= 41: best AUC L32=0.98
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L30=0.53
+    retrieval[wrong  ] n= 60: best AUC L30=0.62 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L8=0.60
+    retrieval[wrong  ] n= 60: best AUC L26=0.61 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L31=0.54
+    retrieval[wrong  ] n= 60: best AUC L31=0.58 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L28=0.69
+    retrieval[wrong  ] n= 60: best AUC L23=0.67 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_15k_15u.json  (elapsed 552.0s)
+
+============================================================
+Cell K=15 N=20  (state=base)
+============================================================
+  FVQ: behavioral_acc=93% (n_pos=373, n_neg=27, n=400, stop=max_trials), majority_baseline=93%, 0/34 layers degenerate
+    best AUC: L24=0.90 (acc=92% vs baseline 93%, bal_acc=68%)
+    retrieval[all    ] n=400: best AUC L32=1.00
+    retrieval[wrong  ] n= 27: best AUC L32=0.75 <-- suppression test
+    retrieval[correct] n=373: best AUC L32=1.00
+  CVQ: behavioral_acc=26% (n_pos=41, n_neg=119, n=160, stop=balanced), majority_baseline=74%, 0/34 layers degenerate
+    best AUC: L22=0.68 (acc=72% vs baseline 74%, bal_acc=63%)
+    retrieval[all    ] n=160: best AUC L30=0.73
+    retrieval[wrong  ] n=119: best AUC L30=0.67 <-- suppression test
+    retrieval[correct] n= 41: best AUC L31=0.97
+  IVQ_d10: behavioral_acc=31% (n_pos=43, n_neg=97, n=140, stop=balanced), majority_baseline=69%, 0/34 layers degenerate
+    best AUC: L19=0.65 (acc=66% vs baseline 69%, bal_acc=59%)
+    retrieval[all    ] n=140: best AUC L29=0.87
+    retrieval[wrong  ] n= 97: best AUC L29=0.80 <-- suppression test
+    retrieval[correct] n= 43: best AUC L31=0.99
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L26=0.64
+    retrieval[wrong  ] n= 60: best AUC L32=0.55 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L29=0.62
+    retrieval[wrong  ] n= 60: best AUC L30=0.60 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L33=0.50
+    retrieval[wrong  ] n= 60: best AUC L27=0.53 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L31=0.59
+    retrieval[wrong  ] n= 60: best AUC L33=0.49 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_15k_20u.json  (elapsed 609.7s)
+
+============================================================
+Cell K=15 N=30  (state=base)
+============================================================
+  FVQ: behavioral_acc=86% (n_pos=250, n_neg=40, n=290, stop=balanced), majority_baseline=86%, 0/34 layers degenerate
+    best AUC: L30=0.88 (acc=88% vs baseline 86%, bal_acc=73%)
+    retrieval[all    ] n=290: best AUC L32=0.98
+    retrieval[wrong  ] n= 40: best AUC L29=0.54 <-- suppression test
+    retrieval[correct] n=250: best AUC L32=1.00
+  CVQ: behavioral_acc=12% (n_pos=40, n_neg=300, n=340, stop=balanced), majority_baseline=88%, 0/34 layers degenerate
+    best AUC: L28=0.76 (acc=85% vs baseline 88%, bal_acc=56%)
+    retrieval[all    ] n=340: best AUC L31=0.62
+    retrieval[wrong  ] n=300: best AUC L15=0.53 <-- suppression test
+    retrieval[correct] n= 40: best AUC L31=0.89
+  IVQ_d10: behavioral_acc=1% (n_pos=5, n_neg=395, n=400, stop=max_trials), majority_baseline=99%, 0/34 layers degenerate
+    best AUC: L9=0.96 (acc=98% vs baseline 99%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L29=0.56
+    retrieval[wrong  ] n=395: best AUC L21=0.54 <-- suppression test
+    retrieval[correct] n=  5: (too few usable trials)
+  IVQ_d25: behavioral_acc=2% (n_pos=6, n_neg=394, n=400, stop=max_trials), majority_baseline=98%, 0/34 layers degenerate
+    best AUC: L5=0.73 (acc=98% vs baseline 98%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L18=0.57
+    retrieval[wrong  ] n=394: best AUC L8=0.57 <-- suppression test
+    retrieval[correct] n=  6: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L14=0.57
+    retrieval[wrong  ] n= 60: best AUC L5=0.56 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L21=0.68
+    retrieval[wrong  ] n= 60: best AUC L11=0.71 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L20=0.61
+    retrieval[wrong  ] n= 60: best AUC L23=0.63 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_15k_30u.json  (elapsed 1283.7s)
+
+============================================================
+Cell K=15 N=50  (state=base)
+============================================================
+  FVQ: behavioral_acc=75% (n_pos=127, n_neg=43, n=170, stop=balanced), majority_baseline=75%, 0/34 layers degenerate
+    best AUC: L31=0.88 (acc=83% vs baseline 75%, bal_acc=79%)
+    retrieval[all    ] n=170: best AUC L32=0.96
+    retrieval[wrong  ] n= 43: best AUC L33=0.68 <-- suppression test
+    retrieval[correct] n=127: best AUC L33=1.00
+  CVQ: behavioral_acc=6% (n_pos=22, n_neg=378, n=400, stop=max_trials), majority_baseline=94%, 0/34 layers degenerate
+    best AUC: L30=0.70 (acc=94% vs baseline 94%, bal_acc=52%)
+    retrieval[all    ] n=400: best AUC L31=0.61
+    retrieval[wrong  ] n=378: best AUC L31=0.54 <-- suppression test
+    retrieval[correct] n= 22: best AUC L31=0.90
+  IVQ_d10: behavioral_acc=0% (n_pos=2, n_neg=398, n=400, stop=max_trials), majority_baseline=100%, 0/34 layers degenerate
+    best AUC: L32=0.94 (acc=100% vs baseline 100%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L33=0.57
+    retrieval[wrong  ] n=398: best AUC L33=0.57 <-- suppression test
+    retrieval[correct] n=  2: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L11=0.59
+    retrieval[wrong  ] n= 60: best AUC L7=0.61 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L15=0.48
+    retrieval[wrong  ] n= 60: best AUC L31=0.52 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L23=0.57
+    retrieval[wrong  ] n= 60: best AUC L32=0.63 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L31=0.61
+    retrieval[wrong  ] n= 60: best AUC L31=0.63 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_15k_50u.json  (elapsed 1258.1s)
+
+============================================================
+Cell K=15 N=75  (state=base)
+============================================================
+  FVQ: behavioral_acc=77% (n_pos=139, n_neg=41, n=180, stop=balanced), majority_baseline=77%, 0/34 layers degenerate
+    best AUC: L28=0.84 (acc=82% vs baseline 77%, bal_acc=79%)
+    retrieval[all    ] n=180: best AUC L33=0.97
+    retrieval[wrong  ] n= 41: best AUC L29=0.61 <-- suppression test
+    retrieval[correct] n=139: best AUC L33=1.00
+  CVQ: behavioral_acc=6% (n_pos=23, n_neg=377, n=400, stop=max_trials), majority_baseline=94%, 0/34 layers degenerate
+    best AUC: L28=0.86 (acc=94% vs baseline 94%, bal_acc=56%)
+    retrieval[all    ] n=400: best AUC L31=0.64
+    retrieval[wrong  ] n=377: best AUC L31=0.63 <-- suppression test
+    retrieval[correct] n= 23: best AUC L31=0.89
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L20=0.60
+    retrieval[wrong  ] n= 60: best AUC L24=0.66 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L20=0.70
+    retrieval[wrong  ] n= 60: best AUC L7=0.65 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L17=0.58
+    retrieval[wrong  ] n= 60: best AUC L16=0.56 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L15=0.58
+    retrieval[wrong  ] n= 60: best AUC L33=0.63 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L23=0.61
+    retrieval[wrong  ] n= 60: best AUC L19=0.59 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_15k_75u.json  (elapsed 1389.4s)
+
+============================================================
+Cell K=20 N=15  (state=base)
+============================================================
+  FVQ: behavioral_acc=94% (n_pos=376, n_neg=24, n=400, stop=max_trials), majority_baseline=94%, 0/34 layers degenerate
+    best AUC: L30=0.85 (acc=94% vs baseline 94%, bal_acc=59%)
+    retrieval[all    ] n=400: best AUC L32=1.00
+    retrieval[wrong  ] n= 24: best AUC L32=0.58 <-- suppression test
+    retrieval[correct] n=376: best AUC L32=1.00
+  CVQ: behavioral_acc=16% (n_pos=41, n_neg=209, n=250, stop=balanced), majority_baseline=84%, 0/34 layers degenerate
+    best AUC: L27=0.76 (acc=84% vs baseline 84%, bal_acc=64%)
+    retrieval[all    ] n=250: best AUC L30=0.63
+    retrieval[wrong  ] n=209: best AUC L33=0.59 <-- suppression test
+    retrieval[correct] n= 41: best AUC L31=0.96
+  IVQ_d10: behavioral_acc=19% (n_pos=41, n_neg=179, n=220, stop=balanced), majority_baseline=81%, 0/34 layers degenerate
+    best AUC: L21=0.70 (acc=75% vs baseline 81%, bal_acc=62%)
+    retrieval[all    ] n=220: best AUC L29=0.78
+    retrieval[wrong  ] n=179: best AUC L29=0.67 <-- suppression test
+    retrieval[correct] n= 41: best AUC L25=0.99
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L22=0.61
+    retrieval[wrong  ] n= 60: best AUC L7=0.58 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L33=0.48
+    retrieval[wrong  ] n= 60: best AUC L16=0.49 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L8=0.53
+    retrieval[wrong  ] n= 60: best AUC L26=0.55 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L30=0.51
+    retrieval[wrong  ] n= 60: best AUC L19=0.67 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_20k_15u.json  (elapsed 737.3s)
+
+============================================================
+Cell K=20 N=20  (state=base)
+============================================================
+  FVQ: behavioral_acc=86% (n_pos=240, n_neg=40, n=280, stop=balanced), majority_baseline=86%, 0/34 layers degenerate
+    best AUC: L23=0.84 (acc=82% vs baseline 86%, bal_acc=64%)
+    retrieval[all    ] n=280: best AUC L31=0.97
+    retrieval[wrong  ] n= 40: best AUC L29=0.63 <-- suppression test
+    retrieval[correct] n=240: best AUC L32=1.00
+  CVQ: behavioral_acc=11% (n_pos=41, n_neg=349, n=390, stop=balanced), majority_baseline=89%, 0/34 layers degenerate
+    best AUC: L27=0.83 (acc=90% vs baseline 89%, bal_acc=62%)
+    retrieval[all    ] n=390: best AUC L30=0.59
+    retrieval[wrong  ] n=349: best AUC L26=0.55 <-- suppression test
+    retrieval[correct] n= 41: best AUC L30=0.92
+  IVQ_d10: behavioral_acc=24% (n_pos=43, n_neg=137, n=180, stop=balanced), majority_baseline=76%, 0/34 layers degenerate
+    best AUC: L17=0.65 (acc=72% vs baseline 76%, bal_acc=61%)
+    retrieval[all    ] n=180: best AUC L32=0.83
+    retrieval[wrong  ] n=137: best AUC L29=0.71 <-- suppression test
+    retrieval[correct] n= 43: best AUC L30=0.97
+  IVQ_d25: behavioral_acc=2% (n_pos=9, n_neg=391, n=400, stop=max_trials), majority_baseline=98%, 0/34 layers degenerate
+    best AUC: L13=0.84 (acc=98% vs baseline 98%, bal_acc=60%)
+    retrieval[all    ] n=400: best AUC L6=0.51
+    retrieval[wrong  ] n=391: best AUC L28=0.56 <-- suppression test
+    retrieval[correct] n=  9: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L28=0.50
+    retrieval[wrong  ] n= 60: best AUC L32=0.49 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=1, n_neg=399, n=400, stop=max_trials), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n=400: best AUC L31=0.58
+    retrieval[wrong  ] n=399: best AUC L30=0.57 <-- suppression test
+    retrieval[correct] n=  1: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L26=0.60
+    retrieval[wrong  ] n= 60: best AUC L27=0.60 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_20k_20u.json  (elapsed 1346.0s)
+
+============================================================
+Cell K=20 N=30  (state=base)
+============================================================
+  FVQ: behavioral_acc=84% (n_pos=209, n_neg=41, n=250, stop=balanced), majority_baseline=84%, 0/34 layers degenerate
+    best AUC: L23=0.81 (acc=82% vs baseline 84%, bal_acc=69%)
+    retrieval[all    ] n=250: best AUC L32=0.98
+    retrieval[wrong  ] n= 41: best AUC L23=0.59 <-- suppression test
+    retrieval[correct] n=209: best AUC L32=1.00
+  CVQ: behavioral_acc=6% (n_pos=26, n_neg=374, n=400, stop=max_trials), majority_baseline=94%, 0/34 layers degenerate
+    best AUC: L29=0.77 (acc=92% vs baseline 94%, bal_acc=51%)
+    retrieval[all    ] n=400: best AUC L31=0.60
+    retrieval[wrong  ] n=374: best AUC L31=0.55 <-- suppression test
+    retrieval[correct] n= 26: best AUC L33=0.86
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L33=0.67
+    retrieval[wrong  ] n= 60: best AUC L30=0.75 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L24=0.53
+    retrieval[wrong  ] n= 60: best AUC L20=0.63 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L33=0.59
+    retrieval[wrong  ] n= 60: best AUC L33=0.57 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L5=0.62
+    retrieval[wrong  ] n= 60: best AUC L32=0.55 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L3=0.68
+    retrieval[wrong  ] n= 60: best AUC L21=0.53 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_20k_30u.json  (elapsed 972.0s)
+
+============================================================
+Cell K=20 N=50  (state=base)
+============================================================
+  FVQ: behavioral_acc=82% (n_pos=188, n_neg=42, n=230, stop=balanced), majority_baseline=82%, 0/34 layers degenerate
+    best AUC: L30=0.90 (acc=87% vs baseline 82%, bal_acc=76%)
+    retrieval[all    ] n=230: best AUC L32=0.98
+    retrieval[wrong  ] n= 42: best AUC L32=0.75 <-- suppression test
+    retrieval[correct] n=188: best AUC L32=1.00
+  CVQ: behavioral_acc=6% (n_pos=23, n_neg=377, n=400, stop=max_trials), majority_baseline=94%, 0/34 layers degenerate
+    best AUC: L21=0.94 (acc=94% vs baseline 94%, bal_acc=70%)
+    retrieval[all    ] n=400: best AUC L31=0.55
+    retrieval[wrong  ] n=377: best AUC L31=0.54 <-- suppression test
+    retrieval[correct] n= 23: best AUC L31=0.98
+  IVQ_d10: behavioral_acc=1% (n_pos=5, n_neg=395, n=400, stop=max_trials), majority_baseline=99%, 0/34 layers degenerate
+    best AUC: L27=0.97 (acc=99% vs baseline 99%, bal_acc=60%)
+    retrieval[all    ] n=400: best AUC L32=0.61
+    retrieval[wrong  ] n=395: best AUC L33=0.57 <-- suppression test
+    retrieval[correct] n=  5: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L28=0.56
+    retrieval[wrong  ] n= 60: best AUC L19=0.59 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L33=0.68
+    retrieval[wrong  ] n= 60: best AUC L31=0.60 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L22=0.64
+    retrieval[wrong  ] n= 60: best AUC L28=0.59 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L18=0.66
+    retrieval[wrong  ] n= 60: best AUC L4=0.60 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_20k_50u.json  (elapsed 1811.9s)
+
+============================================================
+Cell K=20 N=75  (state=base)
+============================================================
+  FVQ: behavioral_acc=75% (n_pos=128, n_neg=42, n=170, stop=balanced), majority_baseline=75%, 0/34 layers degenerate
+    best AUC: L29=0.84 (acc=77% vs baseline 75%, bal_acc=68%)
+    retrieval[all    ] n=170: best AUC L32=0.97
+    retrieval[wrong  ] n= 42: best AUC L32=0.70 <-- suppression test
+    retrieval[correct] n=128: best AUC L32=1.00
+  CVQ: behavioral_acc=2% (n_pos=9, n_neg=391, n=400, stop=max_trials), majority_baseline=98%, 0/34 layers degenerate
+    best AUC: L26=0.87 (acc=98% vs baseline 98%, bal_acc=55%)
+    retrieval[all    ] n=400: best AUC L32=0.58
+    retrieval[wrong  ] n=391: best AUC L32=0.55 <-- suppression test
+    retrieval[correct] n=  9: (too few usable trials)
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L31=0.61
+    retrieval[wrong  ] n= 60: best AUC L3=0.68 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L31=0.66
+    retrieval[wrong  ] n= 60: best AUC L30=0.57 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L17=0.55
+    retrieval[wrong  ] n= 60: best AUC L24=0.68 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L21=0.58
+    retrieval[wrong  ] n= 60: best AUC L29=0.47 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L27=0.53
+    retrieval[wrong  ] n= 60: best AUC L19=0.49 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_20k_75u.json  (elapsed 1837.3s)
+
+============================================================
+Cell K=25 N=10  (state=base)
+============================================================
+  FVQ: behavioral_acc=90% (n_pos=362, n_neg=38, n=400, stop=max_trials), majority_baseline=90%, 0/34 layers degenerate
+    best AUC: L28=0.85 (acc=89% vs baseline 90%, bal_acc=62%)
+    retrieval[all    ] n=400: best AUC L32=0.99
+    retrieval[wrong  ] n= 38: best AUC L33=0.59 <-- suppression test
+    retrieval[correct] n=362: best AUC L32=1.00
+  CVQ: behavioral_acc=20% (n_pos=42, n_neg=168, n=210, stop=balanced), majority_baseline=80%, 0/34 layers degenerate
+    best AUC: L21=0.79 (acc=78% vs baseline 80%, bal_acc=64%)
+    retrieval[all    ] n=210: best AUC L31=0.63
+    retrieval[wrong  ] n=168: best AUC L33=0.61 <-- suppression test
+    retrieval[correct] n= 42: best AUC L30=0.91
+  IVQ_d10: behavioral_acc=18% (n_pos=42, n_neg=188, n=230, stop=balanced), majority_baseline=82%, 0/34 layers degenerate
+    best AUC: L18=0.74 (acc=81% vs baseline 82%, bal_acc=64%)
+    retrieval[all    ] n=230: best AUC L31=0.63
+    retrieval[wrong  ] n=188: best AUC L29=0.61 <-- suppression test
+    retrieval[correct] n= 42: best AUC L30=0.98
+  IVQ_d25: behavioral_acc=25% (n_pos=40, n_neg=120, n=160, stop=balanced), majority_baseline=75%, 0/34 layers degenerate
+    best AUC: L19=0.75 (acc=76% vs baseline 75%, bal_acc=64%)
+    retrieval[all    ] n=160: best AUC L29=0.75
+    retrieval[wrong  ] n=120: best AUC L6=0.61 <-- suppression test
+    retrieval[correct] n= 40: best AUC L29=1.00
+  IVQ_d50: behavioral_acc=1% (n_pos=5, n_neg=395, n=400, stop=max_trials), majority_baseline=99%, 0/34 layers degenerate
+    best AUC: L32=0.99 (acc=99% vs baseline 99%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L32=0.54
+    retrieval[wrong  ] n=395: best AUC L23=0.56 <-- suppression test
+    retrieval[correct] n=  5: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=2, n_neg=398, n=400, stop=max_trials), majority_baseline=100%, 0/34 layers degenerate
+    best AUC: L20=0.94 (acc=100% vs baseline 100%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L32=0.62
+    retrieval[wrong  ] n=398: best AUC L29=0.63 <-- suppression test
+    retrieval[correct] n=  2: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L16=0.70
+    retrieval[wrong  ] n= 60: best AUC L29=0.57 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_25k_10u.json  (elapsed 1121.3s)
+
+============================================================
+Cell K=25 N=15  (state=base)
+============================================================
+  FVQ: behavioral_acc=89% (n_pos=340, n_neg=40, n=380, stop=balanced), majority_baseline=89%, 0/34 layers degenerate
+    best AUC: L28=0.91 (acc=90% vs baseline 89%, bal_acc=71%)
+    retrieval[all    ] n=380: best AUC L32=0.99
+    retrieval[wrong  ] n= 40: best AUC L29=0.85 <-- suppression test
+    retrieval[correct] n=340: best AUC L32=1.00
+  CVQ: behavioral_acc=12% (n_pos=40, n_neg=300, n=340, stop=balanced), majority_baseline=88%, 0/34 layers degenerate
+    best AUC: L4=0.68 (acc=83% vs baseline 88%, bal_acc=57%)
+    retrieval[all    ] n=340: best AUC L33=0.53
+    retrieval[wrong  ] n=300: best AUC L23=0.56 <-- suppression test
+    retrieval[correct] n= 40: best AUC L30=0.96
+  IVQ_d10: behavioral_acc=22% (n_pos=40, n_neg=140, n=180, stop=balanced), majority_baseline=78%, 0/34 layers degenerate
+    best AUC: L21=0.60 (acc=69% vs baseline 78%, bal_acc=56%)
+    retrieval[all    ] n=180: best AUC L32=0.76
+    retrieval[wrong  ] n=140: best AUC L33=0.71 <-- suppression test
+    retrieval[correct] n= 40: best AUC L29=0.99
+  IVQ_d25: behavioral_acc=1% (n_pos=5, n_neg=395, n=400, stop=max_trials), majority_baseline=99%, 0/34 layers degenerate
+    best AUC: L28=0.81 (acc=99% vs baseline 99%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L28=0.53
+    retrieval[wrong  ] n=395: best AUC L22=0.56 <-- suppression test
+    retrieval[correct] n=  5: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L3=0.59
+    retrieval[wrong  ] n= 60: best AUC L29=0.58 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=1, n_neg=399, n=400, stop=max_trials), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n=400: best AUC L29=0.60
+    retrieval[wrong  ] n=399: best AUC L29=0.61 <-- suppression test
+    retrieval[correct] n=  1: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L19=0.60
+    retrieval[wrong  ] n= 60: best AUC L31=0.66 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_25k_15u.json  (elapsed 1462.8s)
+
+============================================================
+Cell K=25 N=20  (state=base)
+============================================================
+  FVQ: behavioral_acc=87% (n_pos=279, n_neg=41, n=320, stop=balanced), majority_baseline=87%, 0/34 layers degenerate
+    best AUC: L24=0.82 (acc=85% vs baseline 87%, bal_acc=66%)
+    retrieval[all    ] n=320: best AUC L32=0.98
+    retrieval[wrong  ] n= 41: best AUC L29=0.68 <-- suppression test
+    retrieval[correct] n=279: best AUC L33=1.00
+  CVQ: behavioral_acc=8% (n_pos=34, n_neg=366, n=400, stop=max_trials), majority_baseline=92%, 0/34 layers degenerate
+    best AUC: L22=0.80 (acc=90% vs baseline 92%, bal_acc=61%)
+    retrieval[all    ] n=400: best AUC L31=0.56
+    retrieval[wrong  ] n=366: best AUC L27=0.54 <-- suppression test
+    retrieval[correct] n= 34: best AUC L30=0.89
+  IVQ_d10: behavioral_acc=21% (n_pos=40, n_neg=150, n=190, stop=balanced), majority_baseline=79%, 0/34 layers degenerate
+    best AUC: L11=0.64 (acc=74% vs baseline 79%, bal_acc=59%)
+    retrieval[all    ] n=190: best AUC L29=0.84
+    retrieval[wrong  ] n=150: best AUC L29=0.67 <-- suppression test
+    retrieval[correct] n= 40: best AUC L31=0.99
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L33=0.53
+    retrieval[wrong  ] n= 60: best AUC L27=0.50 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L31=0.66
+    retrieval[wrong  ] n= 60: best AUC L33=0.54 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L10=0.59
+    retrieval[wrong  ] n= 60: best AUC L20=0.58 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L20=0.69
+    retrieval[wrong  ] n= 60: best AUC L14=0.58 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_25k_20u.json  (elapsed 981.2s)
+
+============================================================
+Cell K=25 N=30  (state=base)
+============================================================
+  FVQ: behavioral_acc=81% (n_pos=178, n_neg=42, n=220, stop=balanced), majority_baseline=81%, 0/34 layers degenerate
+    best AUC: L27=0.84 (acc=81% vs baseline 81%, bal_acc=72%)
+    retrieval[all    ] n=220: best AUC L32=0.98
+    retrieval[wrong  ] n= 42: best AUC L33=0.72 <-- suppression test
+    retrieval[correct] n=178: best AUC L32=1.00
+  CVQ: behavioral_acc=4% (n_pos=18, n_neg=382, n=400, stop=max_trials), majority_baseline=96%, 0/34 layers degenerate
+    best AUC: L22=0.73 (acc=94% vs baseline 96%, bal_acc=51%)
+    retrieval[all    ] n=400: best AUC L32=0.54
+    retrieval[wrong  ] n=382: best AUC L27=0.52 <-- suppression test
+    retrieval[correct] n= 18: (too few usable trials)
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L16=0.64
+    retrieval[wrong  ] n= 60: best AUC L31=0.69 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L32=0.62
+    retrieval[wrong  ] n= 60: best AUC L27=0.60 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L20=0.62
+    retrieval[wrong  ] n= 60: best AUC L30=0.63 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L31=0.64
+    retrieval[wrong  ] n= 60: best AUC L31=0.61 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L24=0.52
+    retrieval[wrong  ] n= 60: best AUC L14=0.56 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_25k_30u.json  (elapsed 1115.5s)
+
+============================================================
+Cell K=25 N=50  (state=base)
+============================================================
+  FVQ: behavioral_acc=84% (n_pos=209, n_neg=41, n=250, stop=balanced), majority_baseline=84%, 0/34 layers degenerate
+    best AUC: L32=0.80 (acc=81% vs baseline 84%, bal_acc=59%)
+    retrieval[all    ] n=250: best AUC L32=0.98
+    retrieval[wrong  ] n= 41: best AUC L33=0.61 <-- suppression test
+    retrieval[correct] n=209: best AUC L32=1.00
+  CVQ: behavioral_acc=4% (n_pos=15, n_neg=385, n=400, stop=max_trials), majority_baseline=96%, 0/34 layers degenerate
+    best AUC: L14=0.76 (acc=94% vs baseline 96%, bal_acc=49%)
+    retrieval[all    ] n=400: best AUC L31=0.62
+    retrieval[wrong  ] n=385: best AUC L31=0.58 <-- suppression test
+    retrieval[correct] n= 15: (too few usable trials)
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L6=0.51
+    retrieval[wrong  ] n= 60: best AUC L24=0.60 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=1, n_neg=399, n=400, stop=max_trials), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n=400: best AUC L17=0.56
+    retrieval[wrong  ] n=399: best AUC L5=0.58 <-- suppression test
+    retrieval[correct] n=  1: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L28=0.54
+    retrieval[wrong  ] n= 60: best AUC L19=0.53 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L16=0.60
+    retrieval[wrong  ] n= 60: best AUC L21=0.61 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L21=0.58
+    retrieval[wrong  ] n= 60: best AUC L31=0.60 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_25k_50u.json  (elapsed 2517.2s)
+
+============================================================
+Cell K=25 N=75  (state=base)
+============================================================
+  FVQ: behavioral_acc=78% (n_pos=149, n_neg=41, n=190, stop=balanced), majority_baseline=78%, 0/34 layers degenerate
+    best AUC: L24=0.84 (acc=80% vs baseline 78%, bal_acc=75%)
+    retrieval[all    ] n=190: best AUC L33=0.98
+    retrieval[wrong  ] n= 41: best AUC L32=0.77 <-- suppression test
+    retrieval[correct] n=149: best AUC L31=1.00
+  CVQ: behavioral_acc=3% (n_pos=13, n_neg=387, n=400, stop=max_trials), majority_baseline=97%, 0/34 layers degenerate
+    best AUC: L11=0.89 (acc=96% vs baseline 97%, bal_acc=56%)
+    retrieval[all    ] n=400: best AUC L31=0.60
+    retrieval[wrong  ] n=387: best AUC L31=0.63 <-- suppression test
+    retrieval[correct] n= 13: (too few usable trials)
+  IVQ_d10: behavioral_acc=2% (n_pos=10, n_neg=390, n=400, stop=max_trials), majority_baseline=98%, 0/34 layers degenerate
+    best AUC: L19=0.76 (acc=96% vs baseline 98%, bal_acc=49%)
+    retrieval[all    ] n=400: best AUC L29=0.62
+    retrieval[wrong  ] n=390: best AUC L29=0.60 <-- suppression test
+    retrieval[correct] n= 10: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L27=0.50
+    retrieval[wrong  ] n= 60: best AUC L16=0.50 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L32=0.67
+    retrieval[wrong  ] n= 60: best AUC L26=0.48 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L30=0.57
+    retrieval[wrong  ] n= 60: best AUC L18=0.63 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L20=0.53
+    retrieval[wrong  ] n= 60: best AUC L17=0.53 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_25k_75u.json  (elapsed 3420.5s)
+
+============================================================
+Cell K=30 N=10  (state=base)
+============================================================
+  FVQ: behavioral_acc=89% (n_pos=330, n_neg=40, n=370, stop=balanced), majority_baseline=89%, 0/34 layers degenerate
+    best AUC: L23=0.80 (acc=86% vs baseline 89%, bal_acc=62%)
+    retrieval[all    ] n=370: best AUC L29=0.98
+    retrieval[wrong  ] n= 40: best AUC L33=0.78 <-- suppression test
+    retrieval[correct] n=330: best AUC L31=1.00
+  CVQ: behavioral_acc=20% (n_pos=41, n_neg=169, n=210, stop=balanced), majority_baseline=80%, 0/34 layers degenerate
+    best AUC: L21=0.82 (acc=80% vs baseline 80%, bal_acc=66%)
+    retrieval[all    ] n=210: best AUC L23=0.64
+    retrieval[wrong  ] n=169: best AUC L19=0.54 <-- suppression test
+    retrieval[correct] n= 41: best AUC L30=0.96
+  IVQ_d10: behavioral_acc=24% (n_pos=40, n_neg=130, n=170, stop=balanced), majority_baseline=76%, 0/34 layers degenerate
+    best AUC: L19=0.68 (acc=70% vs baseline 76%, bal_acc=60%)
+    retrieval[all    ] n=170: best AUC L31=0.68
+    retrieval[wrong  ] n=130: best AUC L23=0.54 <-- suppression test
+    retrieval[correct] n= 40: best AUC L23=0.95
+  IVQ_d25: behavioral_acc=22% (n_pos=43, n_neg=157, n=200, stop=balanced), majority_baseline=78%, 0/34 layers degenerate
+    best AUC: L18=0.75 (acc=76% vs baseline 78%, bal_acc=63%)
+    retrieval[all    ] n=200: best AUC L31=0.73
+    retrieval[wrong  ] n=157: best AUC L29=0.60 <-- suppression test
+    retrieval[correct] n= 43: best AUC L24=0.97
+  IVQ_d50: behavioral_acc=1% (n_pos=3, n_neg=397, n=400, stop=max_trials), majority_baseline=99%, 0/34 layers degenerate
+    best AUC: L9=0.82 (acc=99% vs baseline 99%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L29=0.56
+    retrieval[wrong  ] n=397: best AUC L26=0.56 <-- suppression test
+    retrieval[correct] n=  3: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L13=0.54
+    retrieval[wrong  ] n= 60: best AUC L33=0.57 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=1% (n_pos=5, n_neg=395, n=400, stop=max_trials), majority_baseline=99%, 0/34 layers degenerate
+    best AUC: L22=0.84 (acc=98% vs baseline 99%, bal_acc=49%)
+    retrieval[all    ] n=400: best AUC L30=0.60
+    retrieval[wrong  ] n=395: best AUC L30=0.62 <-- suppression test
+    retrieval[correct] n=  5: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_30k_10u.json  (elapsed 1165.1s)
+
+============================================================
+Cell K=30 N=15  (state=base)
+============================================================
+  FVQ: behavioral_acc=89% (n_pos=320, n_neg=40, n=360, stop=balanced), majority_baseline=89%, 0/34 layers degenerate
+    best AUC: L24=0.82 (acc=87% vs baseline 89%, bal_acc=63%)
+    retrieval[all    ] n=360: best AUC L32=0.98
+    retrieval[wrong  ] n= 40: best AUC L33=0.76 <-- suppression test
+    retrieval[correct] n=320: best AUC L32=1.00
+  CVQ: behavioral_acc=8% (n_pos=33, n_neg=367, n=400, stop=max_trials), majority_baseline=92%, 0/34 layers degenerate
+    best AUC: L22=0.77 (acc=90% vs baseline 92%, bal_acc=56%)
+    retrieval[all    ] n=400: best AUC L23=0.52
+    retrieval[wrong  ] n=367: best AUC L23=0.56 <-- suppression test
+    retrieval[correct] n= 33: best AUC L31=0.93
+  IVQ_d10: behavioral_acc=21% (n_pos=40, n_neg=150, n=190, stop=balanced), majority_baseline=79%, 0/34 layers degenerate
+    best AUC: L19=0.63 (acc=70% vs baseline 79%, bal_acc=55%)
+    retrieval[all    ] n=190: best AUC L29=0.75
+    retrieval[wrong  ] n=150: best AUC L29=0.57 <-- suppression test
+    retrieval[correct] n= 40: best AUC L31=0.95
+  IVQ_d25: behavioral_acc=2% (n_pos=8, n_neg=392, n=400, stop=max_trials), majority_baseline=98%, 0/34 layers degenerate
+    best AUC: L33=0.83 (acc=98% vs baseline 98%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L16=0.54
+    retrieval[wrong  ] n=392: best AUC L22=0.55 <-- suppression test
+    retrieval[correct] n=  8: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L22=0.57
+    retrieval[wrong  ] n= 60: best AUC L15=0.49 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=1% (n_pos=5, n_neg=395, n=400, stop=max_trials), majority_baseline=99%, 0/34 layers degenerate
+    best AUC: L14=0.75 (acc=99% vs baseline 99%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L29=0.64
+    retrieval[wrong  ] n=395: best AUC L24=0.60 <-- suppression test
+    retrieval[correct] n=  5: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L30=0.50
+    retrieval[wrong  ] n= 60: best AUC L29=0.53 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_30k_15u.json  (elapsed 1637.0s)
+
+============================================================
+Cell K=30 N=20  (state=base)
+============================================================
+  FVQ: behavioral_acc=81% (n_pos=187, n_neg=43, n=230, stop=balanced), majority_baseline=81%, 0/34 layers degenerate
+    best AUC: L29=0.65 (acc=75% vs baseline 81%, bal_acc=54%)
+    retrieval[all    ] n=230: best AUC L29=0.99
+    retrieval[wrong  ] n= 43: best AUC L30=0.70 <-- suppression test
+    retrieval[correct] n=187: best AUC L32=1.00
+  CVQ: behavioral_acc=5% (n_pos=19, n_neg=381, n=400, stop=max_trials), majority_baseline=95%, 0/34 layers degenerate
+    best AUC: L28=0.79 (acc=95% vs baseline 95%, bal_acc=52%)
+    retrieval[all    ] n=400: best AUC L21=0.54
+    retrieval[wrong  ] n=381: best AUC L18=0.51 <-- suppression test
+    retrieval[correct] n= 19: (too few usable trials)
+  IVQ_d10: behavioral_acc=21% (n_pos=42, n_neg=158, n=200, stop=balanced), majority_baseline=79%, 0/34 layers degenerate
+    best AUC: L33=0.64 (acc=76% vs baseline 79%, bal_acc=55%)
+    retrieval[all    ] n=200: best AUC L31=0.78
+    retrieval[wrong  ] n=158: best AUC L31=0.74 <-- suppression test
+    retrieval[correct] n= 42: best AUC L31=0.96
+  IVQ_d25: behavioral_acc=0% (n_pos=2, n_neg=398, n=400, stop=max_trials), majority_baseline=100%, 0/34 layers degenerate
+    best AUC: L22=0.86 (acc=99% vs baseline 100%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L32=0.55
+    retrieval[wrong  ] n=398: best AUC L15=0.50 <-- suppression test
+    retrieval[correct] n=  2: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L20=0.57
+    retrieval[wrong  ] n= 60: best AUC L29=0.61 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L33=0.64
+    retrieval[wrong  ] n= 60: best AUC L31=0.64 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L21=0.61
+    retrieval[wrong  ] n= 60: best AUC L24=0.48 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_30k_20u.json  (elapsed 1433.2s)
+
+============================================================
+Cell K=30 N=30  (state=base)
+============================================================
+  FVQ: behavioral_acc=85% (n_pos=229, n_neg=41, n=270, stop=balanced), majority_baseline=85%, 0/34 layers degenerate
+    best AUC: L23=0.80 (acc=81% vs baseline 85%, bal_acc=63%)
+    retrieval[all    ] n=270: best AUC L32=0.98
+    retrieval[wrong  ] n= 41: best AUC L32=0.78 <-- suppression test
+    retrieval[correct] n=229: best AUC L32=1.00
+  CVQ: behavioral_acc=3% (n_pos=12, n_neg=388, n=400, stop=max_trials), majority_baseline=97%, 0/34 layers degenerate
+    best AUC: L30=0.86 (acc=97% vs baseline 97%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L30=0.55
+    retrieval[wrong  ] n=388: best AUC L25=0.53 <-- suppression test
+    retrieval[correct] n= 12: (too few usable trials)
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L33=0.59
+    retrieval[wrong  ] n= 60: best AUC L25=0.62 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=1% (n_pos=3, n_neg=397, n=400, stop=max_trials), majority_baseline=99%, 0/34 layers degenerate
+    best AUC: L28=0.98 (acc=99% vs baseline 99%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L28=0.57
+    retrieval[wrong  ] n=397: best AUC L27=0.53 <-- suppression test
+    retrieval[correct] n=  3: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L12=0.62
+    retrieval[wrong  ] n= 60: best AUC L5=0.63 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L31=0.60
+    retrieval[wrong  ] n= 60: best AUC L28=0.64 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L23=0.62
+    retrieval[wrong  ] n= 60: best AUC L23=0.68 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_30k_30u.json  (elapsed 1908.6s)
+
+============================================================
+Cell K=30 N=50  (state=base)
+============================================================
+  FVQ: behavioral_acc=76% (n_pos=129, n_neg=41, n=170, stop=balanced), majority_baseline=76%, 0/34 layers degenerate
+    best AUC: L24=0.77 (acc=72% vs baseline 76%, bal_acc=62%)
+    retrieval[all    ] n=170: best AUC L31=0.98
+    retrieval[wrong  ] n= 41: best AUC L29=0.68 <-- suppression test
+    retrieval[correct] n=129: best AUC L32=1.00
+  CVQ: behavioral_acc=4% (n_pos=18, n_neg=382, n=400, stop=max_trials), majority_baseline=96%, 0/34 layers degenerate
+    best AUC: L27=0.87 (acc=94% vs baseline 96%, bal_acc=56%)
+    retrieval[all    ] n=400: best AUC L30=0.55
+    retrieval[wrong  ] n=382: best AUC L31=0.56 <-- suppression test
+    retrieval[correct] n= 18: (too few usable trials)
+  IVQ_d10: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L29=0.52
+    retrieval[wrong  ] n= 60: best AUC L28=0.61 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L30=0.58
+    retrieval[wrong  ] n= 60: best AUC L18=0.64 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L32=0.48
+    retrieval[wrong  ] n= 60: best AUC L27=0.67 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L26=0.65
+    retrieval[wrong  ] n= 60: best AUC L24=0.50 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L17=0.54
+    retrieval[wrong  ] n= 60: best AUC L22=0.53 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_30k_50u.json  (elapsed 2091.2s)
+
+============================================================
+Cell K=30 N=75  (state=base)
+============================================================
+  FVQ: behavioral_acc=73% (n_pos=117, n_neg=43, n=160, stop=balanced), majority_baseline=73%, 0/34 layers degenerate
+    best AUC: L23=0.83 (acc=75% vs baseline 73%, bal_acc=70%)
+    retrieval[all    ] n=160: best AUC L32=0.96
+    retrieval[wrong  ] n= 43: best AUC L30=0.74 <-- suppression test
+    retrieval[correct] n=117: best AUC L32=1.00
+  CVQ: behavioral_acc=8% (n_pos=31, n_neg=369, n=400, stop=max_trials), majority_baseline=92%, 0/34 layers degenerate
+    best AUC: L24=0.82 (acc=89% vs baseline 92%, bal_acc=56%)
+    retrieval[all    ] n=400: best AUC L31=0.64
+    retrieval[wrong  ] n=369: best AUC L32=0.58 <-- suppression test
+    retrieval[correct] n= 31: best AUC L31=0.92
+  IVQ_d10: behavioral_acc=1% (n_pos=5, n_neg=395, n=400, stop=max_trials), majority_baseline=99%, 0/34 layers degenerate
+    best AUC: L30=0.87 (acc=99% vs baseline 99%, bal_acc=50%)
+    retrieval[all    ] n=400: best AUC L31=0.51
+    retrieval[wrong  ] n=395: best AUC L33=0.58 <-- suppression test
+    retrieval[correct] n=  5: (too few usable trials)
+  IVQ_d25: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L20=0.61
+    retrieval[wrong  ] n= 60: best AUC L29=0.64 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d50: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L30=0.60
+    retrieval[wrong  ] n= 60: best AUC L18=0.52 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d75: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L25=0.41
+    retrieval[wrong  ] n= 60: best AUC L28=0.62 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  IVQ_d90: behavioral_acc=0% (n_pos=0, n_neg=60, n=60, stop=saturated), majority_baseline=100%, 34/34 layers degenerate
+    retrieval[all    ] n= 60: best AUC L23=0.66
+    retrieval[wrong  ] n= 60: best AUC L21=0.60 <-- suppression test
+    retrieval[correct] n=  0: (too few usable trials)
+  Saved: /rnd_ai_datasets1/projects/raka6003/transformer-memory-interference/lora_intervention/experiments/linear_probing/results/probe_gemma-3-4b-it-base-v3_30k_75u.json  (elapsed 4399.7s)
