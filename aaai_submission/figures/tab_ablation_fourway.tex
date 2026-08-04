@@ -1,0 +1,14 @@
+% Hand-written from lora_intervention/results/stage3_four_way_comparison.txt
+% Paired within-run Δ (ablated − normal). Stage 3C, K=2/N=5, CVQ condition.
+% Suppressor-head rows: 50 trials (separate suppressor-ablation runs).
+% Promoter-head rows:   200 trials (n=200 re-runs, May 2026).
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Ablation condition} & \textbf{$\Delta$ at L31} & \textbf{$\Delta$ at L32} & \textbf{$\Delta$ at L33} & \textbf{$\Delta$ at L35} \\
+\midrule
+Baseline $+$ 5 baseline-suppressor heads        & $+0.078$ & $-0.009$ & $-0.058$ & $+0.015$ \\
+$+$LoRA   $+$ 5 baseline-suppressor heads        & $+0.150$ & $-0.001$ & $+0.000$ & $+0.000$ \\
+$+$LoRA   $+$ 8 LoRA-promoter heads             & $+0.007$ & $\mathbf{-0.396}$ & $-0.005$ & $+0.000$ \\
+\textbf{Baseline $+$ 8 LoRA-promoter heads (control)} & $+0.014$ & $\mathbf{-0.277}$ & $-0.007$ & $-0.051$ \\
+\bottomrule
+\end{tabular}

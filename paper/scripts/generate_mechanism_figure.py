@@ -12,6 +12,10 @@ import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+
+# AAAI: no Type 3 fonts, and in-figure text must be >= 9pt when scaled.
+plt.rcParams['pdf.fonttype'] = 42
+plt.rcParams['ps.fonttype'] = 42
 import matplotlib.colors as mcolors
 import numpy as np
 
@@ -117,9 +121,9 @@ def panel_probe_logitlens(ax):
 
     xb, yb = _to_arr(pi_base); xl, yl = _to_arr(pi_lora)
     ax.plot(xb, yb, color="#9ecae1", lw=1.2, marker="o", ms=3, ls="--",
-            label="Probe PI-correctness (base)")
+            label="Probe CVQ-correctness (base)")
     ax.plot(xl, yl, color="#08519c", lw=1.5, marker="o", ms=3.5,
-            label="Probe PI-correctness (+LoRA)")
+            label="Probe CVQ-correctness (+LoRA)")
     xb2, yb2 = _to_arr(ll_base); xl2, yl2 = _to_arr(ll_lora)
     ax.plot(xb2, yb2, color="#fc9272", lw=1.2, marker="s", ms=3, ls="--",
             label="Logit lens $P(v_\\mathrm{last})$ (base)")
@@ -133,7 +137,7 @@ def panel_probe_logitlens(ax):
     ax.grid(alpha=0.3)
     ax.legend(fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.20),
               ncol=2, frameon=False)
-    ax.set_title("(a) Probing \\& logit lens", fontsize=10)
+    ax.set_title("(a) Probing & logit lens", fontsize=10)
 
 
 def panel_attention_routing(ax):
