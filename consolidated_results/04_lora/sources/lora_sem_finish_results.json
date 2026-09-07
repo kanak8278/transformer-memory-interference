@@ -1,0 +1,40 @@
+{
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "adapter": "/tmp/lora_intervention/checkpoints/main/final",
+  "dataset": "SEMANTIC_MULTI",
+  "cells": [
+    [
+      15,
+      30
+    ],
+    [
+      20,
+      30
+    ]
+  ],
+  "trials_per_condition": 10,
+  "lora": {
+    "15_30": {
+      "num_keys": 15,
+      "num_updates": 30,
+      "fvq_correct": 10,
+      "fvq_n": 10,
+      "fvq_acc": 1.0,
+      "cvq_correct": 10,
+      "cvq_n": 10,
+      "cvq_acc": 1.0,
+      "gap": 0.0
+    },
+    "20_30": {
+      "num_keys": 20,
+      "num_updates": 30,
+      "fvq_correct": 10,
+      "fvq_n": 10,
+      "fvq_acc": 1.0,
+      "cvq_correct": 10,
+      "cvq_n": 10,
+      "cvq_acc": 1.0,
+      "gap": 0.0
+    }
+  }
+}
