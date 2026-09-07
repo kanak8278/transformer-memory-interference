@@ -43,7 +43,25 @@ def query_positions(nu: int, n_points: int = 16) -> list[int]:
 
 # ─── stream generation ────────────────────────────────────────────────────────
 def shuffle_no_consecutive(items: list, rng: random.Random) -> list:
-    """Shuffle items so no two adjacent entries have the same category."""
+    """Shuffle items so no two adjacent entries have the same category.
+
+    The retry loop below only ever succeeds on tiny inputs: a uniform shuffle of
+    K*N items almost never happens to satisfy the constraint, so at realistic
+    sizes every attempt failed and the function used to `return items` — a plain
+    shuffle carrying 9-21% adjacent same-category pairs, varying by cell with no
+    relation to K or N.
+
+    The greedy repair fallback constructs a valid ordering directly instead:
+    place one item at a time, choosing only among those whose category differs
+    from the item just placed. Measured adjacency drops to ~0%. This matches
+    evaluate_ivq.shuffle_nc and data_gen.shuffle_no_consecutive, which have
+    always had the fallback — so streams built here now agree with the ones the
+    Qwen/Gemma behavioural runs used.
+
+    NOTE: this changes the stimulus for every caller (ucurve_sweep.py,
+    remedy_sweep.py). Runs made before this fix are not stream-comparable with
+    runs made after it.
+    """
     items = items[:]
     for attempt in range(200):
         rng.shuffle(items)
@@ -51,7 +69,20 @@ def shuffle_no_consecutive(items: list, rng: random.Random) -> list:
                  for i in range(len(items)-1))
         if ok:
             return items
-    return items  # best effort
+
+    result, remaining = [], items[:]
+    rng.shuffle(remaining)
+    last_cat = None
+    while remaining:
+        valid = [i for i, x in enumerate(remaining) if x["category"] != last_cat]
+        if not valid:
+            # Only the last-placed category remains; nothing left to interleave.
+            result.extend(remaining)
+            break
+        idx = rng.choice(valid)
+        result.append(remaining.pop(idx))
+        last_cat = result[-1]["category"]
+    return result
 
 
 def generate_stream(nk: int, nu: int, seed: int, dataset: str = "ARBITRARY_SINGLE"):
