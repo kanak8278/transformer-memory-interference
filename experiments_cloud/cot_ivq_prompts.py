@@ -49,6 +49,40 @@ def _stream_text(flat_items: list) -> str:
     return "\n".join(f"{it['category']}: {it['value']}" for it in flat_items)
 
 
+def _prefix(flat_items: list) -> str:
+    """Preamble + stream: the part every query in a trial shares verbatim.
+
+    Split out so callers can put a prompt-cache breakpoint here. At large N the
+    stream dominates the prompt and is re-sent once per queried position, so
+    caching it turns 17 full-price reads of the same 12k tokens into one write
+    plus 16 cheap reads.
+    """
+    return f"{_PREAMBLE}\n\n{_stream_text(flat_items)}\n\n"
+
+
+def _suffix_ordinal(test_category: str, k: int) -> str:
+    return f"What was the {ordinal(k)} value of {test_category}?\n{ANSWER_INSTRUCTION}"
+
+
+def _suffix_last(test_category: str) -> str:
+    return f"What was the last value of {test_category}?\n{ANSWER_INSTRUCTION}"
+
+
+def cached_blocks(prefix: str, suffix: str) -> list:
+    """Content blocks with an ephemeral cache breakpoint after the prefix.
+
+    Concatenating the two blocks reproduces the single-string prompt exactly, so
+    the stimulus is unchanged. Note the block boundary can shift tokenization by
+    a token or two at the seam versus one flat string; irrelevant when every
+    cell in a sweep is built the same way, but do not mix cached and uncached
+    cells inside one comparison.
+    """
+    return [
+        {"type": "text", "text": prefix, "cache_control": {"type": "ephemeral"}},
+        {"type": "text", "text": suffix},
+    ]
+
+
 _PREAMBLE = (
     "Read the following key-value stream. Each key appears multiple times "
     "as it gets updated. Count each occurrence of a key as one update."
@@ -57,12 +91,7 @@ _PREAMBLE = (
 
 def prompt_ordinal(flat_items: list, test_category: str, k: int) -> str:
     """Ordinal position query: 'the k-th value of X'."""
-    return (
-        f"{_PREAMBLE}\n\n"
-        f"{_stream_text(flat_items)}\n\n"
-        f"What was the {ordinal(k)} value of {test_category}?\n"
-        f"{ANSWER_INSTRUCTION}"
-    )
+    return _prefix(flat_items) + _suffix_ordinal(test_category, k)
 
 
 def prompt_last(flat_items: list, test_category: str) -> str:
@@ -71,21 +100,20 @@ def prompt_last(flat_items: list, test_category: str) -> str:
     Distinct from the ordinal query at k=N — same target, different phrasing —
     and the two are known to diverge, so both are collected.
     """
-    return (
-        f"{_PREAMBLE}\n\n"
-        f"{_stream_text(flat_items)}\n\n"
-        f"What was the last value of {test_category}?\n"
-        f"{ANSWER_INSTRUCTION}"
-    )
+    return _prefix(flat_items) + _suffix_last(test_category)
 
 
 def build_trial(nk: int, nu: int, trial_idx: int, positions: list,
-                dataset: str = "SEMANTIC_MULTI") -> dict:
+                dataset: str = "SEMANTIC_MULTI", cache: bool = False) -> dict:
     """One stream, all position queries built from it.
 
     Returns the stream metadata plus {position_key: (prompt, expected)}. All
     positions in a trial share one stream, so the per-position curve within a
     trial is paired by construction.
+
+    With cache=True each prompt is a two-block list instead of a string, the
+    first block carrying a cache breakpoint over the shared stream. The text is
+    identical either way.
     """
     seed = make_seed(nk, nu, trial_idx)
     cats, test, vals, flat, _block = generate_stream(nk, nu, seed, dataset=dataset)
@@ -95,11 +123,16 @@ def build_trial(nk: int, nu: int, trial_idx: int, positions: list,
     # vals[test] is chronological update order and is not the same list.
     stream_vals = [i["value"] for i in flat if i["category"] == test]
 
+    pre = _prefix(flat)
+
+    def _build(suffix):
+        return cached_blocks(pre, suffix) if cache else pre + suffix
+
     queries = {}
     for k in positions:
         if k <= len(stream_vals):
-            queries[str(k)] = (prompt_ordinal(flat, test, k), stream_vals[k - 1])
-    queries["last"] = (prompt_last(flat, test), stream_vals[-1])
+            queries[str(k)] = (_build(_suffix_ordinal(test, k)), stream_vals[k - 1])
+    queries["last"] = (_build(_suffix_last(test)), stream_vals[-1])
 
     return {
         "seed": seed,
@@ -112,6 +145,6 @@ def build_trial(nk: int, nu: int, trial_idx: int, positions: list,
 
 
 __all__ = [
-    "ANSWER_INSTRUCTION", "SEED_VERSION", "build_trial", "make_seed",
-    "prompt_last", "prompt_ordinal", "query_positions",
+    "ANSWER_INSTRUCTION", "SEED_VERSION", "build_trial", "cached_blocks",
+    "make_seed", "prompt_last", "prompt_ordinal", "query_positions",
 ]

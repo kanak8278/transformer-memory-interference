@@ -1,0 +1,122 @@
+{
+ "model_id": "claude-haiku-4-5-20251001",
+ "arm": "cot_thinking",
+ "dataset": "museum_m0",
+ "render_mode": "M0",
+ "pool_mode": "disjoint_pool",
+ "anthropic_sdk_version": "1.4.0",
+ "config": {
+  "temperature": 1.0,
+  "max_tokens": 5048,
+  "thinking": true,
+  "thinking_budget": 3000
+ },
+ "cache": true,
+ "seed_version": "museum_cot_v1",
+ "min_trials": 1000000,
+ "max_trials": 2,
+ "ci": 0.05,
+ "cells": {
+  "10_50": {
+   "num_keys": 10,
+   "num_updates": 50,
+   "dataset": "museum_m0",
+   "render_mode": "M0",
+   "pool_mode": "disjoint_pool",
+   "trials_run": 2,
+   "max_trials": 2,
+   "all_converged": false,
+   "unconverged_positions": [
+    "1",
+    "25",
+    "5",
+    "50",
+    "first",
+    "last"
+   ],
+   "positions": {
+    "1": {
+     "accuracy": 1.0,
+     "n": 2,
+     "n_correct": 2,
+     "wilson_hw": 0.381,
+     "ci_lower": 0.619,
+     "ci_upper": 1.0,
+     "n_malformed": 0,
+     "n_thinking_budget_hit": 0,
+     "query_style": "ordinal",
+     "converged": false
+    },
+    "5": {
+     "accuracy": 0.5,
+     "n": 2,
+     "n_correct": 1,
+     "wilson_hw": 0.4055,
+     "ci_lower": 0.0945,
+     "ci_upper": 0.9055,
+     "n_malformed": 0,
+     "n_thinking_budget_hit": 0,
+     "query_style": "ordinal",
+     "converged": false
+    },
+    "25": {
+     "accuracy": 0.0,
+     "n": 2,
+     "n_correct": 0,
+     "wilson_hw": 0.381,
+     "ci_lower": 0.0,
+     "ci_upper": 0.381,
+     "n_malformed": 0,
+     "n_thinking_budget_hit": 0,
+     "query_style": "ordinal",
+     "converged": false
+    },
+    "50": {
+     "accuracy": 0.0,
+     "n": 2,
+     "n_correct": 0,
+     "wilson_hw": 0.381,
+     "ci_lower": 0.0,
+     "ci_upper": 0.381,
+     "n_malformed": 0,
+     "n_thinking_budget_hit": 0,
+     "query_style": "ordinal",
+     "converged": false
+    },
+    "first": {
+     "accuracy": 1.0,
+     "n": 2,
+     "n_correct": 2,
+     "wilson_hw": 0.381,
+     "ci_lower": 0.619,
+     "ci_upper": 1.0,
+     "n_malformed": 0,
+     "n_thinking_budget_hit": 0,
+     "query_style": "semantic",
+     "converged": false
+    },
+    "last": {
+     "accuracy": 0.5,
+     "n": 2,
+     "n_correct": 1,
+     "wilson_hw": 0.4055,
+     "ci_lower": 0.0945,
+     "ci_upper": 0.9055,
+     "n_malformed": 0,
+     "n_thinking_budget_hit": 0,
+     "query_style": "semantic",
+     "converged": false
+    }
+   },
+   "usage": {
+    "input_tokens": 508,
+    "output_tokens": 9450,
+    "calls": 12,
+    "errors": 0,
+    "cache_write_tokens": 9386,
+    "cache_read_tokens": 46930
+   },
+   "elapsed_sec": 21.9
+  }
+ }
+}
