@@ -19,7 +19,8 @@ consolidated_results/
 ├── 03_prompt_format/           block / boundary / plain / labelled formatting
 ├── 04_lora/                    LoRA: adapters, held-out evals, per-position base-vs-LoRA IVQ
 ├── 05_mechanistic/             HOW LoRA closes the gap: logit lens, probing, attention routing, causal ablation
-│   └── entropy_lens/           per-layer uncertainty + calibration, one subfolder per arm (Qwen base/lora, from-scratch)
+│   ├── entropy_lens/           per-layer uncertainty + calibration, one subfolder per arm (Qwen base/lora, from-scratch)
+│   └── value_identity_probe/   is the answer VALUE decodable (50-way, chance 2%) even on trials the model gets wrong?
 ├── 06_from_scratch/            GPT-2-small trained from random init on a synthetic KV task
 ├── 07_cot_ivq/                 does chain-of-thought rescue the interior? one CSV per arm (nocot / cot_thinking)
 └── build/                      re-runnable builders (see "Rebuilding")
@@ -102,7 +103,18 @@ last layer). LoRA leaves that geometry untouched — its effect is
 representational, not a change in entropy dynamics. And only the from-scratch
 model is *calibrated*: its output entropy tracks correctness (gap +0.28 to
 +0.49), whereas base Qwen is **confidently wrong** (gap +0.005 to +0.035).
-Qwen-only, like `attention_routing`.
+Qwen-only, like `attention_routing`. A sixth method,
+**value-identity probing** (`05_mechanistic/value_identity_probe/`), tests the
+premise the rest of the theme assumes. Against a closed 50-word pool where every
+stream is a permutation of the whole pool — so "which values are in context" is
+uninformative and chance is 2% — the ground-truth answer decodes at **0.455
+(Qwen) to 0.735 (gemma) on the trials the model answers wrongly**, and only in
+the last ~10% of layers (flat at chance through L28, step change at L31). The
+value is built late, present, and not emitted. Two caveats travel with it: the
+`shuffled` control is clean (max 0.057) but the **`cv_first` control beats the
+result at every interior slot**, so the *first* value is what the stream
+robustly carries; and the arm is **base-only**, because LoRA scores 1.000
+wherever this design is valid.
 
 **6 — From scratch: the bias is not inherited from pretraining.** A GPT-2-small
 *architecture* trained from random init on a 51-symbol synthetic KV task (no
@@ -254,8 +266,9 @@ read time in `build/common.py::cond_from_ri_pi`; nothing was renamed on disk.
   per-condition CI, and cannot be recomputed without re-running the experiment.
 
 Derived rows are a small minority (118 of the 9,770 rows in themes 01–04;
-themes 05, 06 and 07 add 906, 458 and 846 rows, of which themes 06 and 07 are
-all `raw`) and are confined to:
+themes 05, 06 and 07 add 906, 458 and 846 rows, plus theme 05's two
+subfolders — `entropy_lens/` and `value_identity_probe/`, 7,421 rows — all
+`raw`; themes 06 and 07 are all `raw` too) and are confined to:
 open-weight `semantic_multi` (theme 1), the open-weight format sweep, the
 SmolLM3 post-training formats, and the **Gemma** LoRA semantic-OOD baseline.
 

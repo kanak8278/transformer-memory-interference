@@ -18,12 +18,14 @@ import build_03_formats
 import build_04_lora
 import build_05_mechanistic
 import build_05b_entropy_lens
+import build_05c_value_identity
 import build_06_from_scratch
 import build_07_cot_ivq
 
 if __name__ == "__main__":
     for mod in (build_01_fvq_cvq, build_02_ivq, build_03_formats, build_04_lora,
                 build_05_mechanistic, build_05b_entropy_lens,
+                build_05c_value_identity,
                 build_06_from_scratch, build_07_cot_ivq):
         mod.main()
         print()

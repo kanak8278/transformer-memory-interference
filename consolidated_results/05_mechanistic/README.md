@@ -2,7 +2,11 @@
 
 **Question.** Themes 1–4 are what the model *outputs*. This is what happens
 *inside*: by what mechanism does LoRA turn a suppressed current-value into a
-retrieved one? Five methods.
+retrieved one? Five methods — plus a sixth,
+[`value_identity_probe/`](value_identity_probe/), which asks the prior question
+the LoRA framing takes for granted: **is the answer value in the residual stream
+at all on trials the model gets wrong?** That one is base-only by design, so the
+theme's "how LoRA does it" title does not cover it.
 
 | file | rows | unit | question |
 |---|---|---|---|
@@ -11,13 +15,15 @@ retrieved one? Five methods.
 | `attention_routing.csv` | 45 | (model, regime, **layer / head**) | does LoRA re-point attention at the v_last round? |
 | `causal_ablation.csv` | 51 | (model, variant, cell, **layer**) | are those heads *causally* responsible? |
 | **`entropy_lens/`** | 34,164 + 465 | (arm, cell, condition, subset, **layer**) | how does *uncertainty* evolve with depth, and is the model's confidence calibrated to its correctness? |
+| **`value_identity_probe/`** | 6,967 + 454 | (model, cell, condition, subset, label_set, **layer**) | is the ground-truth *value* linearly decodable — 50-way, chance 2% — even on trials the model answers wrongly? |
 
 Primary model **Qwen2.5-3B-Instruct**; **gemma-3-4b-it** as cross-family
 replication. base vs LoRA throughout. Naming: RI→FVQ, PI→CVQ; `v_first`/`v_last`
 kept because they are the mechanistic quantity.
 
-**Gemma coverage is not uniform.** `logit_lens`, `probing` and `causal_ablation`
-have both models; **`attention_routing` and `entropy_lens` are Qwen-only.** State
+**Gemma coverage is not uniform.** `logit_lens`, `probing`, `causal_ablation`
+and `value_identity_probe` have both models; **`attention_routing` and
+`entropy_lens` are Qwen-only.** State
 that if the Qwen-primary / Gemma-replicates framing is presented as covering the
 whole mechanistic story. For `entropy_lens` a Gemma arm is a flag change costing
 ~30 min of GPU (see its README).
@@ -29,6 +35,18 @@ confusion view, and behavioural labels), so it splits one directory per arm:
 is also the only mechanistic method that touches the **from-scratch** model of
 theme 06, and its scratch arm independently replicates that theme (150 cells,
 mean |diff| 0.0156). Full detail: `entropy_lens/README.md`.
+
+`value_identity_probe/` is a subfolder for the same reason — four units of
+measurement (per-layer fits, per-fit summaries, behavioural accuracy with an
+output audit, and the value pools that define the label space). Two things to
+carry over before using it. It is the **only base-only** method here: LoRA
+scores 1.000 wherever the closed-pool design is valid, so its wrong-answer
+subset is empty at any sample size, and a LoRA arm needs a different design
+rather than more trials. And its `cv_first` control **beats** the result at
+every interior slot, so the residual stream carries the *first* value more
+strongly than the queried one — the "tracked but not surfaced" reading survives
+for the first value and weakens for interior ones. Full detail:
+`value_identity_probe/README.md`.
 
 ---
 

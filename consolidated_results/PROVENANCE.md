@@ -444,6 +444,66 @@ snapshot. A theme-02 vs theme-07 difference is therefore not purely an arm effec
 `cot_ivq_plot_ladder.py` (figures), `run_cot_ivq_full.sh` /
 `run_cot_ivq_arbitrary.sh` (invocations).
 
+---
+
+## 05_mechanistic/value_identity_probe/ — probe_layers.csv (6,967) · summary.csv (216) · behavioral.csv (38) · pools.csv (200)
+
+Built by `build/build_05c_value_identity.py`. Added 2026-09-09. All rows `raw`.
+Qwen2.5-3B-Instruct and gemma-3-4b-it, **base only**, cells (K=5,N=10) and
+(K=10,N=5).
+
+| rows | tier | source |
+|---|---|---|
+| behaviour, audit, pool | raw | `lora_intervention/experiments/linear_probing/results_probe50/{Qwen2.5-3B-Instruct,gemma-3-4b-it}_{5k_10u,10k_5u}/manifest.json` |
+| `correct` + `all` fits | raw | `.../probe_fits_ref.json` (4 files) |
+| `wrong` fits, 4 label sets | raw | `.../probe_fits_wrong.json` (4 files) |
+| later `wrong` shards | raw | `.../probe_fits_wrong_topup.json` (3), `.../probe_fits_wrong_missing.json` (1) |
+
+Design doc: `lora_intervention/experiments/linear_probing/PROBE50_DESIGN.md`.
+Producers: `probe50_collect.py` (activations), `probe50_fit.py` (probes),
+`run_probe50_all.sh` / `run_probe50_pipeline.sh` / `finish_probe50*.sh`.
+
+**Shard resolution is mandatory.** The wrong-subset fits are spread over up to
+three files per cell, and four (condition, subset) pairs are claimed twice with
+different trial counts: Qwen (10,5) CVQ at n=616 and n=1231, FVQ at 605 and 1330,
+k1 at 655 and 1297, gemma (10,5) CVQ at 244 and 1231. The larger n is the
+completed run, the smaller an under-powered first pass that was topped up. The
+builder keeps the largest n per (condition, subset), drops the other 4, and
+names the superseded shard in `notes`. Concatenating the files, or letting glob
+order win, would mix sample sizes silently.
+
+**27 fits are not estimable, and appear as rows rather than as absences.**
+`summary.csv` carries `estimable=False` plus the reason. The two subsets fail at
+opposite ends of accuracy: `wrong` empties where the model is too accurate (4
+rows — gemma FVQ/k1, n=10..22), `correct` empties where it is too inaccurate
+(23 rows — interior slots, n=0..159). A further 288 individual layer records
+inside otherwise-valid fits carry null metrics and a
+`min class support < folds` note; they are kept as rows so no layer curve has a
+silent hole.
+
+**Not used as a source.**
+`lora_intervention/experiments/linear_probing/results/probe_layer_values_raw.csv`
+is a different experiment (correctness/retrieval **AUC** on the v3 grid, base vs
+LoRA), it carries **no `model` column**, and `results/extract_and_plot.py:41,90`
+hardcodes `probe_Qwen2.5-3B-Instruct-{state}-v3_*` — so it is a Qwen-only view
+of a two-model grid (31 cells x 7 conditions x 36 layers x 2 states = 15,624
+rows exactly). See "Deliberately not consolidated" for that grid's status.
+
+**The 17 GB of `reps_*.npy` activations stay in place and are now gitignored**
+(`*/reps_*.npy` under `results_probe50/`). They are inputs to the fit, not
+results: every number derived from them is in these four CSVs and in the
+committed `probe_fits_*.json`. Keeping them matters for one specific reason —
+the C robustness sweep was never run (`C_grid` is `[0.1]` everywhere), and with
+the activations on disk that is a CPU-only re-fit rather than a GPU re-run.
+
+**Controls.** Four label sets on the same activations: `expected`, `shuffled`,
+`cv_first`, `cv_last`. `shuffled` is at chance (max top-1 0.057 vs 0.020, 0 of
+1,228 layer-rows above 4x chance), so no leakage. `cv_first` **beats**
+`expected` at every interior slot, so the primacy value is more decodable than
+the queried one — record that with any interior claim. `cv_last` at k=N and
+`cv_first` at k=1 are the same label as `expected` by construction; those rows
+are flagged `DEGENERATE:` in `notes` and must not be counted as controls.
+
 ## Deliberately not consolidated
 
 Recorded so these stay findable, not because they are unimportant.
@@ -455,6 +515,7 @@ Recorded so these stay findable, not because they are unimportant.
 | Pre-v3 probing | `mechanistic_probing_v2/` | Superseded. **Do not delete** — `core/dataset_configs.py` is a live import for `lora_intervention/data_gen.py`. |
 | Narrative-domain variant (Dota2 / ATC / ICU) | `narrative_generator/`, `data/narrative_interference/` | Abandoned line; see paper §Limitations. |
 | Older non-vLLM v3 runs | `v3/results/` | Superseded by `v3/results_vllm/`. |
+| v3 correctness / retrieval **AUC** probe grid | `lora_intervention/experiments/linear_probing/results/` — 124 JSONs (Qwen + gemma, base + LoRA, 31 cells x 7 conditions x ~36 layers), plus 36 earlier pilots and `isoaccuracy_v3*_summary.json` | A different probe question (is *correctness* decodable) and a different metric (AUC) from the value-identity probe above, and it degenerates wherever accuracy is 0% or 100% — 339 of 868 condition-cells per `PROBE50_DESIGN.md`. `05_mechanistic/probing.csv` holds a 354-row slice of this family from a different source, covering only the (2,5) cell. Consolidating the full grid is a live option; if taken, build from the 124 JSONs, not from `probe_layer_values_raw.csv`. |
 | Museum-narrative CoT sweeps | `experiments_cloud/results/{museum_cot,museum_endpoint}/` | A different stimulus domain (narrative prose, not a key-value stream), so its positions are not comparable with the KV grid. Theme 07 covers the KV CoT sweeps only. |
 | Training-dynamics checkpoint sweeps (SmolLM2 42 ckpts, SmolLM3 37 ckpts) | raw not local; survives as `paper/figures/tab_smollm2_traj.tex`, `tab_smollm3_traj.tex`, `fig3_training_dynamics.*` | Not one of the four themes. The SmolLM3 *format* slice **is** included (theme 3). |
 
