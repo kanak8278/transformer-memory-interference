@@ -1,0 +1,28 @@
+Qwen/Qwen2.5-3B-Instruct  cell={'keys': 10, 'updates': 5}  n_layers=36  d_model=2048  classes=50  chance=0.020
+C grid: [0.1]
+label sets: ['expected', 'shuffled', 'cv_first', 'cv_last']   subsets: ['wrong']
+
+  [CVQ] k=5 n=3858 acc=0.684
+      [CVQ/wrong] excluded 8 off-pool-argmax trials (format failures, not retrieval failures): 1239 -> 1231
+      [CVQ/wrong/expected] C=0.1     best L33=0.478 mean=0.102 (70s)
+      [CVQ/wrong/shuffled] C=0.1     best L0=0.041 mean=0.025 (82s)
+      [CVQ/wrong/cv_first] C=0.1     best L28=0.169 mean=0.067 (55s)
+      [CVQ/wrong/cv_last] C=0.1     best L33=0.478 mean=0.102 (69s)
+
+  [FVQ] k=1 n=5165 acc=0.686
+      [FVQ/wrong] excluded 202 off-pool-argmax trials (format failures, not retrieval failures): 1532 -> 1330
+      [FVQ/wrong/expected] C=0.1     best L32=0.420 mean=0.130 (69s)
+      [FVQ/wrong/shuffled] C=0.1     best L0=0.041 mean=0.023 (77s)
+      [FVQ/wrong/cv_first] C=0.1     best L32=0.420 mean=0.130 (70s)
+      [FVQ/wrong/cv_last] C=0.1     best L36=0.163 mean=0.047 (56s)
+
+  [k1] k=1 n=4771 acc=0.674
+      [k1/wrong] excluded 199 off-pool-argmax trials (format failures, not retrieval failures): 1496 -> 1297
+      [k1/wrong/expected] C=0.1     best L32=0.399 mean=0.122 (69s)
+      [k1/wrong/shuffled] C=0.1     best L0=0.038 mean=0.026 (70s)
+      [k1/wrong/cv_first] C=0.1     best L32=0.399 mean=0.122 (63s)
+      [k1/wrong/cv_last] C=0.1     best L36=0.153 mean=0.045 (49s)
+
+Global C = 0.1  (mean top-1 by C: {'0.1': 0.1019})
+
+Saved lora_intervention/experiments/linear_probing/results_probe50/Qwen2.5-3B-Instruct_10k_5u/probe_fits_wrong_topup.json

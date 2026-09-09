@@ -1,0 +1,31 @@
+Qwen/Qwen2.5-3B-Instruct  cell={'keys': 10, 'updates': 5}  n_layers=36  d_model=2048  classes=50  chance=0.020
+C grid: [0.1]
+label sets: ['expected']   subsets: ['correct', 'all']
+
+  [CVQ] k=5 n=1900 acc=0.674
+      [CVQ/correct/expected] C=0.1     best L35=0.939 mean=0.198 (69s)
+      [CVQ/all/expected] C=0.1     best L33=0.720 mean=0.155 (77s)
+
+  [k2] k=2 n=2200 acc=0.327
+      [k2/correct/expected] C=0.1     no valid layers
+      [k2/all/expected] C=0.1     best L29=0.361 mean=0.102 (93s)
+
+  [k3] k=3 n=2000 acc=0.209
+      [k3/correct/expected] C=0.1     no valid layers
+      [k3/all/expected] C=0.1     best L34=0.241 mean=0.061 (77s)
+
+  [k4] k=4 n=1700 acc=0.094
+      [k4/all/expected] C=0.1     best L36=0.166 mean=0.042 (90s)
+
+  [k5] k=5 n=1900 acc=0.081
+      [k5/all/expected] C=0.1     best L36=0.199 mean=0.053 (88s)
+
+  [FVQ] k=1 n=2500 acc=0.722
+      [FVQ/correct/expected] C=0.1     best L35=0.959 mean=0.256 (99s)
+      [FVQ/all/expected] C=0.1     best L32=0.780 mean=0.225 (99s)
+
+  [k1] k=1 n=2500 acc=0.698
+      [k1/correct/expected] C=0.1     best L34=0.956 mean=0.247 (90s)
+      [k1/all/expected] C=0.1     best L32=0.758 mean=0.218 (91s)
+
+Saved lora_intervention/experiments/linear_probing/results_probe50/Qwen2.5-3B-Instruct_10k_5u/probe_fits_ref.json

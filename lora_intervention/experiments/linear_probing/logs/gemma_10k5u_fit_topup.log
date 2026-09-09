@@ -1,0 +1,14 @@
+google/gemma-3-4b-it  cell={'keys': 10, 'updates': 5}  n_layers=34  d_model=2560  classes=50  chance=0.020
+C grid: [0.1]
+label sets: ['expected', 'shuffled', 'cv_first', 'cv_last']   subsets: ['wrong']
+
+  [CVQ] k=5 n=15369 acc=0.920
+      [CVQ/wrong] excluded 1 off-pool-argmax trials (format failures, not retrieval failures): 1232 -> 1231
+      [CVQ/wrong/expected] C=0.1     best L31=0.735 mean=0.254 (33s)
+      [CVQ/wrong/shuffled] C=0.1     best L0=0.057 mean=0.029 (44s)
+      [CVQ/wrong/cv_first] C=0.1     best L18=0.195 mean=0.055 (65s)
+      [CVQ/wrong/cv_last] C=0.1     best L31=0.735 mean=0.254 (33s)
+
+Global C = 0.1  (mean top-1 by C: {'0.1': 0.2542})
+
+Saved lora_intervention/experiments/linear_probing/results_probe50/gemma-3-4b-it_10k_5u/probe_fits_wrong_topup.json

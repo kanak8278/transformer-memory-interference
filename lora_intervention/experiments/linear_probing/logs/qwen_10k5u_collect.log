@@ -1,0 +1,421 @@
+Loading Qwen/Qwen2.5-3B-Instruct on mps (torch.bfloat16)...
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 9633.45it/s]
+  loaded in 5.2s  layers=36 d_model=2048
+Closed pool: 50 values (from 1292 generation-safe of 2300 raw), seed=1234
+  ['act', 'ally', 'bay', 'belief', 'blood', 'blur', 'bonus', 'camp', 'club', 'corner', 'craft', 'cult', 'enable', 'exist', 'fade', 'faith', 'fax', 'feed', 'find', 'forest', 'form', 'forum', 'gross', 'hid', 'hill', 'import', 'lace', 'launch', 'maid', 'mirror', 'path', 'pit', 'planet', 'raise', 'reveal', 'role', 'row', 'season', 'seat', 'stag', 'stock', 'stone', 'timer', 'tiny', 'union', 'water', 'week', 'wig', 'worm', 'zen']
+Conditions (7): ['CVQ', 'k2', 'k3', 'k4', 'k5', 'FVQ', 'k1']
+
+  [CVQ] slot k=5, phrased "last", 1900 trials
+      1/1900  550 ms/trial
+      43/1900  218 ms/trial
+[transformers] The attention mask is not set with a batched input, and cannot be inferred from input because pad token is same as eos token. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results.
+      83/1900  226 ms/trial
+      123/1900  228 ms/trial
+      163/1900  230 ms/trial
+      201/1900  236 ms/trial
+      241/1900  238 ms/trial
+      281/1900  240 ms/trial
+      321/1900  242 ms/trial
+      361/1900  244 ms/trial
+      400/1900  245 ms/trial
+      442/1900  254 ms/trial
+      482/1900  262 ms/trial
+      522/1900  269 ms/trial
+      562/1900  274 ms/trial
+      602/1900  277 ms/trial
+      642/1900  283 ms/trial
+      682/1900  298 ms/trial
+      722/1900  315 ms/trial
+      761/1900  325 ms/trial
+      800/1900  345 ms/trial
+      840/1900  355 ms/trial
+      880/1900  363 ms/trial
+      920/1900  371 ms/trial
+      960/1900  379 ms/trial
+      1000/1900  382 ms/trial
+      1040/1900  386 ms/trial
+      1080/1900  395 ms/trial
+      1120/1900  402 ms/trial
+      1160/1900  409 ms/trial
+      1201/1900  420 ms/trial
+      1241/1900  427 ms/trial
+      1281/1900  433 ms/trial
+      1321/1900  437 ms/trial
+      1361/1900  441 ms/trial
+      1401/1900  443 ms/trial
+      1441/1900  447 ms/trial
+      1481/1900  451 ms/trial
+      1521/1900  454 ms/trial
+      1563/1900  458 ms/trial
+      1603/1900  459 ms/trial
+      1643/1900  462 ms/trial
+      1683/1900  466 ms/trial
+      1723/1900  470 ms/trial
+      1763/1900  474 ms/trial
+      1803/1900  479 ms/trial
+      1843/1900  484 ms/trial
+      1882/1900  489 ms/trial
+    acc(single_token)=0.674 wrong_frac=0.326 492 ms/trial | gen n=40 acc=0.725 agree=1.000 | n_wrong=620
+
+  [k2] slot k=2, phrased "2nd", 2200 trials
+      2/2200  627 ms/trial
+      42/2200  646 ms/trial
+      81/2200  670 ms/trial
+      121/2200  649 ms/trial
+      161/2200  633 ms/trial
+      200/2200  636 ms/trial
+      241/2200  639 ms/trial
+      281/2200  621 ms/trial
+      321/2200  627 ms/trial
+      361/2200  631 ms/trial
+      401/2200  632 ms/trial
+      442/2200  638 ms/trial
+      483/2200  649 ms/trial
+      523/2200  651 ms/trial
+      563/2200  651 ms/trial
+      603/2200  650 ms/trial
+      643/2200  648 ms/trial
+      683/2200  647 ms/trial
+      723/2200  653 ms/trial
+      763/2200  656 ms/trial
+      803/2200  657 ms/trial
+      843/2200  658 ms/trial
+      882/2200  658 ms/trial
+      922/2200  661 ms/trial
+      962/2200  661 ms/trial
+      1002/2200  661 ms/trial
+      1042/2200  662 ms/trial
+      1082/2200  661 ms/trial
+      1122/2200  661 ms/trial
+      1162/2200  664 ms/trial
+      1202/2200  666 ms/trial
+      1242/2200  667 ms/trial
+      1282/2200  668 ms/trial
+      1322/2200  667 ms/trial
+      1362/2200  665 ms/trial
+      1363/2200  665 ms/trial
+      1403/2200  672 ms/trial
+      1443/2200  672 ms/trial
+      1483/2200  673 ms/trial
+      1523/2200  672 ms/trial
+      1563/2200  669 ms/trial
+      1603/2200  666 ms/trial
+      1643/2200  664 ms/trial
+      1683/2200  661 ms/trial
+      1723/2200  658 ms/trial
+      1760/2200  655 ms/trial
+      1801/2200  652 ms/trial
+      1841/2200  649 ms/trial
+      1881/2200  647 ms/trial
+      1921/2200  644 ms/trial
+      1961/2200  643 ms/trial
+      2001/2200  641 ms/trial
+      2043/2200  640 ms/trial
+      2083/2200  639 ms/trial
+      2123/2200  637 ms/trial
+      2163/2200  635 ms/trial
+      2200/2200  633 ms/trial
+    acc(single_token)=0.327 wrong_frac=0.673 633 ms/trial | gen n=40 acc=0.300 agree=1.000 | n_wrong=1480
+
+  [k3] slot k=3, phrased "3rd", 2000 trials
+      2/2000  413 ms/trial
+      3/2000  460 ms/trial
+      40/2000  544 ms/trial
+      83/2000  533 ms/trial
+      123/2000  533 ms/trial
+      163/2000  532 ms/trial
+      201/2000  523 ms/trial
+      243/2000  527 ms/trial
+      283/2000  520 ms/trial
+      323/2000  514 ms/trial
+      363/2000  509 ms/trial
+      403/2000  506 ms/trial
+      442/2000  503 ms/trial
+      480/2000  507 ms/trial
+      520/2000  504 ms/trial
+      560/2000  502 ms/trial
+      600/2000  500 ms/trial
+      640/2000  498 ms/trial
+      680/2000  496 ms/trial
+      720/2000  495 ms/trial
+      760/2000  494 ms/trial
+      803/2000  495 ms/trial
+      842/2000  497 ms/trial
+      882/2000  496 ms/trial
+      922/2000  495 ms/trial
+      962/2000  494 ms/trial
+      1002/2000  494 ms/trial
+      1042/2000  493 ms/trial
+      1082/2000  492 ms/trial
+      1122/2000  492 ms/trial
+      1162/2000  491 ms/trial
+      1202/2000  491 ms/trial
+      1240/2000  493 ms/trial
+      1280/2000  492 ms/trial
+      1320/2000  492 ms/trial
+      1360/2000  491 ms/trial
+      1400/2000  491 ms/trial
+      1440/2000  491 ms/trial
+      1480/2000  491 ms/trial
+      1520/2000  490 ms/trial
+      1560/2000  490 ms/trial
+      1603/2000  490 ms/trial
+      1643/2000  491 ms/trial
+      1683/2000  490 ms/trial
+      1723/2000  490 ms/trial
+      1763/2000  489 ms/trial
+      1803/2000  489 ms/trial
+      1842/2000  491 ms/trial
+      1882/2000  492 ms/trial
+      1922/2000  492 ms/trial
+      1961/2000  492 ms/trial
+      2000/2000  493 ms/trial
+    acc(single_token)=0.209 wrong_frac=0.790 493 ms/trial | gen n=40 acc=0.225 agree=1.000 | n_wrong=1581
+
+  [k4] slot k=4, phrased "4th", 1700 trials
+      1/1700  552 ms/trial
+      3/1700  418 ms/trial
+      40/1700  508 ms/trial
+      80/1700  503 ms/trial
+      120/1700  499 ms/trial
+      161/1700  507 ms/trial
+      201/1700  508 ms/trial
+      241/1700  503 ms/trial
+      281/1700  501 ms/trial
+      321/1700  499 ms/trial
+      362/1700  497 ms/trial
+      403/1700  499 ms/trial
+      443/1700  498 ms/trial
+      483/1700  496 ms/trial
+      523/1700  495 ms/trial
+      563/1700  494 ms/trial
+      603/1700  495 ms/trial
+      643/1700  494 ms/trial
+      681/1700  494 ms/trial
+      721/1700  499 ms/trial
+      761/1700  498 ms/trial
+      801/1700  498 ms/trial
+      841/1700  499 ms/trial
+      881/1700  498 ms/trial
+      921/1700  498 ms/trial
+      961/1700  497 ms/trial
+      1001/1700  497 ms/trial
+      1043/1700  499 ms/trial
+      1083/1700  503 ms/trial
+      1123/1700  503 ms/trial
+      1163/1700  503 ms/trial
+      1203/1700  503 ms/trial
+      1243/1700  503 ms/trial
+      1283/1700  502 ms/trial
+      1323/1700  503 ms/trial
+      1362/1700  502 ms/trial
+      1363/1700  502 ms/trial
+      1403/1700  504 ms/trial
+      1443/1700  504 ms/trial
+      1483/1700  504 ms/trial
+      1523/1700  503 ms/trial
+      1560/1700  504 ms/trial
+      1600/1700  505 ms/trial
+      1640/1700  505 ms/trial
+      1681/1700  506 ms/trial
+    acc(single_token)=0.094 wrong_frac=0.906 506 ms/trial | gen n=40 acc=0.150 agree=1.000 | n_wrong=1541
+
+  [k5] slot k=5, phrased "5th", 1900 trials
+      1/1900  486 ms/trial
+      43/1900  495 ms/trial
+      83/1900  502 ms/trial
+      123/1900  495 ms/trial
+      163/1900  491 ms/trial
+      201/1900  492 ms/trial
+      241/1900  490 ms/trial
+      281/1900  489 ms/trial
+      321/1900  488 ms/trial
+      361/1900  487 ms/trial
+      400/1900  487 ms/trial
+      442/1900  498 ms/trial
+      482/1900  497 ms/trial
+      522/1900  498 ms/trial
+      562/1900  497 ms/trial
+      602/1900  496 ms/trial
+      642/1900  495 ms/trial
+      682/1900  495 ms/trial
+      722/1900  493 ms/trial
+      761/1900  493 ms/trial
+      800/1900  499 ms/trial
+      840/1900  498 ms/trial
+      880/1900  498 ms/trial
+      920/1900  498 ms/trial
+      960/1900  497 ms/trial
+      1000/1900  497 ms/trial
+      1040/1900  497 ms/trial
+      1080/1900  496 ms/trial
+      1120/1900  496 ms/trial
+      1160/1900  496 ms/trial
+      1201/1900  500 ms/trial
+      1241/1900  500 ms/trial
+      1281/1900  500 ms/trial
+      1321/1900  499 ms/trial
+      1361/1900  499 ms/trial
+      1401/1900  499 ms/trial
+      1441/1900  499 ms/trial
+      1481/1900  499 ms/trial
+      1521/1900  498 ms/trial
+      1563/1900  499 ms/trial
+      1603/1900  499 ms/trial
+      1643/1900  498 ms/trial
+      1683/1900  498 ms/trial
+      1723/1900  499 ms/trial
+      1763/1900  499 ms/trial
+      1803/1900  499 ms/trial
+      1843/1900  500 ms/trial
+      1882/1900  501 ms/trial
+    acc(single_token)=0.081 wrong_frac=0.919 501 ms/trial | gen n=40 acc=0.025 agree=1.000 | n_wrong=1746
+
+  [FVQ] slot k=1, phrased "first", 2500 trials
+      1/2500  482 ms/trial
+      2/2500  444 ms/trial
+      40/2500  475 ms/trial
+      80/2500  475 ms/trial
+      81/2500  477 ms/trial
+      121/2500  486 ms/trial
+      161/2500  485 ms/trial
+      201/2500  486 ms/trial
+      240/2500  495 ms/trial
+      280/2500  496 ms/trial
+      320/2500  494 ms/trial
+      360/2500  492 ms/trial
+      400/2500  491 ms/trial
+      440/2500  492 ms/trial
+      480/2500  491 ms/trial
+      521/2500  491 ms/trial
+      560/2500  499 ms/trial
+      600/2500  499 ms/trial
+      640/2500  499 ms/trial
+      680/2500  501 ms/trial
+      720/2500  500 ms/trial
+      760/2500  500 ms/trial
+      800/2500  501 ms/trial
+      840/2500  500 ms/trial
+      880/2500  500 ms/trial
+      920/2500  500 ms/trial
+      960/2500  499 ms/trial
+      1001/2500  519 ms/trial
+      1041/2500  537 ms/trial
+      1081/2500  555 ms/trial
+      1121/2500  560 ms/trial
+      1161/2500  566 ms/trial
+      1201/2500  570 ms/trial
+      1241/2500  576 ms/trial
+      1281/2500  585 ms/trial
+      1321/2500  596 ms/trial
+      1361/2500  608 ms/trial
+      1401/2500  618 ms/trial
+      1441/2500  630 ms/trial
+      1481/2500  645 ms/trial
+      1523/2500  665 ms/trial
+      1563/2500  681 ms/trial
+      1603/2500  692 ms/trial
+      1643/2500  699 ms/trial
+      1683/2500  705 ms/trial
+      1723/2500  711 ms/trial
+      1763/2500  716 ms/trial
+      1803/2500  721 ms/trial
+      1843/2500  726 ms/trial
+      1883/2500  731 ms/trial
+      1923/2500  736 ms/trial
+      1963/2500  741 ms/trial
+      2001/2500  748 ms/trial
+      2041/2500  752 ms/trial
+      2081/2500  757 ms/trial
+      2121/2500  761 ms/trial
+      2161/2500  765 ms/trial
+      2201/2500  770 ms/trial
+      2241/2500  773 ms/trial
+      2283/2500  778 ms/trial
+      2323/2500  787 ms/trial
+      2363/2500  795 ms/trial
+      2403/2500  803 ms/trial
+      2442/2500  810 ms/trial
+      2482/2500  815 ms/trial
+    acc(single_token)=0.722 wrong_frac=0.278 818 ms/trial | gen n=40 acc=0.750 agree=0.950 | n_wrong=695
+
+  [k1] slot k=1, phrased "1st", 2500 trials
+      1/2500  726 ms/trial
+      2/2500  1105 ms/trial
+      40/2500  1103 ms/trial
+      80/2500  1088 ms/trial
+      81/2500  1087 ms/trial
+      121/2500  1094 ms/trial
+      161/2500  1059 ms/trial
+      201/2500  1034 ms/trial
+      240/2500  1056 ms/trial
+      280/2500  1047 ms/trial
+      320/2500  1036 ms/trial
+      360/2500  1041 ms/trial
+      400/2500  1043 ms/trial
+      440/2500  1041 ms/trial
+      480/2500  1041 ms/trial
+      521/2500  1042 ms/trial
+      560/2500  1055 ms/trial
+      600/2500  1054 ms/trial
+      640/2500  1052 ms/trial
+      680/2500  1059 ms/trial
+      720/2500  1059 ms/trial
+      760/2500  1049 ms/trial
+      800/2500  1041 ms/trial
+      840/2500  1036 ms/trial
+      880/2500  1032 ms/trial
+      920/2500  1027 ms/trial
+      960/2500  1022 ms/trial
+      1001/2500  1024 ms/trial
+      1041/2500  1021 ms/trial
+      1081/2500  1020 ms/trial
+      1121/2500  1017 ms/trial
+      1161/2500  1011 ms/trial
+      1201/2500  1010 ms/trial
+      1241/2500  1011 ms/trial
+      1281/2500  1009 ms/trial
+      1321/2500  1006 ms/trial
+      1361/2500  1006 ms/trial
+      1401/2500  1002 ms/trial
+      1441/2500  999 ms/trial
+      1481/2500  994 ms/trial
+      1523/2500  994 ms/trial
+      1563/2500  994 ms/trial
+      1603/2500  985 ms/trial
+      1643/2500  975 ms/trial
+      1683/2500  966 ms/trial
+      1723/2500  960 ms/trial
+      1763/2500  958 ms/trial
+      1803/2500  956 ms/trial
+      1843/2500  956 ms/trial
+      1883/2500  957 ms/trial
+      1923/2500  955 ms/trial
+      1963/2500  955 ms/trial
+      2001/2500  956 ms/trial
+      2041/2500  956 ms/trial
+      2081/2500  959 ms/trial
+      2121/2500  959 ms/trial
+      2161/2500  958 ms/trial
+      2201/2500  960 ms/trial
+      2241/2500  960 ms/trial
+      2283/2500  959 ms/trial
+      2323/2500  959 ms/trial
+      2363/2500  959 ms/trial
+      2403/2500  959 ms/trial
+      2442/2500  960 ms/trial
+      2482/2500  960 ms/trial
+    acc(single_token)=0.698 wrong_frac=0.302 960 ms/trial | gen n=40 acc=0.725 agree=0.975 | n_wrong=755
+
+wrong-subset sizes (target 1250 = 50 classes x 20 / 0.8):
+  CVQ   n= 1900 wrong=  620 wrong_frac=0.326  SHORT by 630 -> add ~1931 trials
+  k2    n= 2200 wrong= 1480 wrong_frac=0.673
+  k3    n= 2000 wrong= 1581 wrong_frac=0.790
+  k4    n= 1700 wrong= 1541 wrong_frac=0.906
+  k5    n= 1900 wrong= 1746 wrong_frac=0.919
+  FVQ   n= 2500 wrong=  695 wrong_frac=0.278  [slot-1, capped by design]
+  k1    n= 2500 wrong=  755 wrong_frac=0.302  [slot-1, capped by design]
+
+Top up with: --t_start 2500 and a --T_json containing {"CVQ": 1931}
+
+Saved to /Users/kanakraj/workspace/transformer-memory-interference/lora_intervention/experiments/linear_probing/results_probe50/Qwen2.5-3B-Instruct_10k_5u

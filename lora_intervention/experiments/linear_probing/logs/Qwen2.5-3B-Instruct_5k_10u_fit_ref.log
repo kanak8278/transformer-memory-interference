@@ -1,0 +1,47 @@
+Qwen/Qwen2.5-3B-Instruct  cell={'keys': 5, 'updates': 10}  n_layers=36  d_model=2048  classes=50  chance=0.020
+C grid: [0.1]
+label sets: ['expected']   subsets: ['correct', 'all']
+
+  [CVQ] k=10 n=3700 acc=0.662
+      [CVQ/correct/expected] C=0.1     best L33=0.924 mean=0.222 (104s)
+      [CVQ/all/expected] C=0.1     best L32=0.736 mean=0.193 (138s)
+
+  [k2] k=2 n=1800 acc=0.264
+      [k2/correct/expected] C=0.1     best L35=0.716 mean=0.152 (39s)
+      [k2/all/expected] C=0.1     best L33=0.299 mean=0.084 (94s)
+
+  [k3] k=3 n=1680 acc=0.287
+      [k3/correct/expected] C=0.1     no valid layers
+      [k3/all/expected] C=0.1     best L35=0.259 mean=0.065 (90s)
+
+  [k4] k=4 n=1600 acc=0.144
+      [k4/correct/expected] C=0.1     no valid layers
+      [k4/all/expected] C=0.1     best L34=0.158 mean=0.042 (97s)
+
+  [k5] k=5 n=1450 acc=0.093
+      [k5/all/expected] C=0.1     best L35=0.120 mean=0.034 (94s)
+
+  [k6] k=6 n=1400 acc=0.049
+      [k6/all/expected] C=0.1     best L36=0.103 mean=0.028 (82s)
+
+  [k7] k=7 n=1400 acc=0.021
+      [k7/all/expected] C=0.1     best L34=0.074 mean=0.029 (87s)
+
+  [k8] k=8 n=1400 acc=0.024
+      [k8/all/expected] C=0.1     best L36=0.084 mean=0.028 (88s)
+
+  [k9] k=9 n=1400 acc=0.025
+      [k9/all/expected] C=0.1     best L34=0.064 mean=0.030 (80s)
+
+  [k10] k=10 n=1400 acc=0.041
+      [k10/all/expected] C=0.1     best L36=0.087 mean=0.048 (82s)
+
+  [FVQ] k=1 n=6152 acc=0.742
+      [FVQ/correct/expected] C=0.1     best L34=0.978 mean=0.317 (166s)
+      [FVQ/all/expected] C=0.1     best L32=0.859 mean=0.296 (196s)
+
+  [k1] k=1 n=5315 acc=0.712
+      [k1/correct/expected] C=0.1     best L34=0.970 mean=0.301 (152s)
+      [k1/all/expected] C=0.1     best L32=0.827 mean=0.277 (178s)
+
+Saved lora_intervention/experiments/linear_probing/results_probe50/Qwen2.5-3B-Instruct_5k_10u/probe_fits_ref.json

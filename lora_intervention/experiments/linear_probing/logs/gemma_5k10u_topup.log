@@ -1,0 +1,144 @@
+Loading google/gemma-3-4b-it on mps (torch.bfloat16)...
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 1471.69it/s]
+Loading weights:   0%|          | 0/883 [00:00<?, ?it/s]Loading weights: 100%|██████████| 883/883 [00:00<00:00, 10292.58it/s]
+  loaded in 11.9s  layers=34 d_model=2560
+Closed pool: 50 values (from 1850 generation-safe of 2300 raw), seed=1234
+  ['adjust', 'agenda', 'alloy', 'arena', 'array', 'banner', 'beam', 'behind', 'blend', 'bolt', 'bounce', 'bow', 'butter', 'cane', 'class', 'crash', 'cruise', 'design', 'dish', 'energy', 'firm', 'grade', 'grand', 'group', 'home', 'liquid', 'mail', 'malt', 'mate', 'meal', 'mental', 'minor', 'ore', 'paste', 'pet', 'poor', 'quote', 'real', 'reef', 'rock', 'rouge', 'shock', 'soil', 'speak', 'stake', 'stub', 'unit', 'urban', 'viewer', 'watch']
+Resuming: /Users/kanakraj/workspace/transformer-memory-interference/lora_intervention/experiments/linear_probing/results_probe50/gemma-3-4b-it_5k_10u/manifest.json has 12 conditions (CVQ, k2, k3, k4, k5, k6, k7, k8, k9, k10, FVQ, k1)
+Conditions (2): ['CVQ', 'k10']
+
+  [CVQ] slot k=10, phrased "last", 4248 trials
+      41/4248  1415 ms/trial
+      81/4248  1262 ms/trial
+      121/4248  1247 ms/trial
+      161/4248  1230 ms/trial
+      201/4248  1221 ms/trial
+      241/4248  1199 ms/trial
+      281/4248  1176 ms/trial
+      321/4248  1161 ms/trial
+      361/4248  1147 ms/trial
+      401/4248  1129 ms/trial
+      441/4248  1106 ms/trial
+      481/4248  1093 ms/trial
+[transformers] The attention mask is not set with a batched input, and cannot be inferred from input because pad token is same as eos token. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results.
+      522/4248  1113 ms/trial
+      562/4248  1107 ms/trial
+      602/4248  1103 ms/trial
+      642/4248  1146 ms/trial
+      682/4248  1180 ms/trial
+      722/4248  1180 ms/trial
+      762/4248  1179 ms/trial
+      802/4248  1177 ms/trial
+      842/4248  1175 ms/trial
+      882/4248  1175 ms/trial
+      922/4248  1175 ms/trial
+      962/4248  1172 ms/trial
+      1002/4248  1169 ms/trial
+      1042/4248  1167 ms/trial
+      1082/4248  1167 ms/trial
+      1122/4248  1167 ms/trial
+      1162/4248  1169 ms/trial
+      1202/4248  1171 ms/trial
+      1242/4248  1170 ms/trial
+      1282/4248  1172 ms/trial
+      1322/4248  1171 ms/trial
+      1362/4248  1171 ms/trial
+      1402/4248  1169 ms/trial
+      1442/4248  1160 ms/trial
+      1482/4248  1149 ms/trial
+      1522/4248  1138 ms/trial
+      1562/4248  1127 ms/trial
+      1602/4248  1117 ms/trial
+      1642/4248  1107 ms/trial
+      1682/4248  1098 ms/trial
+      1722/4248  1090 ms/trial
+      1760/4248  1084 ms/trial
+      1800/4248  1082 ms/trial
+      1840/4248  1076 ms/trial
+      1843/4248  1075 ms/trial
+      1883/4248  1077 ms/trial
+      1923/4248  1080 ms/trial
+      1963/4248  1082 ms/trial
+      2003/4248  1083 ms/trial
+      2043/4248  1084 ms/trial
+      2083/4248  1086 ms/trial
+      2123/4248  1088 ms/trial
+      2163/4248  1089 ms/trial
+      2203/4248  1088 ms/trial
+      2243/4248  1085 ms/trial
+      2283/4248  1081 ms/trial
+      2323/4248  1077 ms/trial
+      2363/4248  1074 ms/trial
+      2403/4248  1071 ms/trial
+      2443/4248  1069 ms/trial
+      2483/4248  1067 ms/trial
+      2523/4248  1065 ms/trial
+      2563/4248  1064 ms/trial
+      2603/4248  1063 ms/trial
+      2643/4248  1061 ms/trial
+      2683/4248  1060 ms/trial
+      2723/4248  1058 ms/trial
+      2763/4248  1057 ms/trial
+      2803/4248  1056 ms/trial
+      2843/4248  1056 ms/trial
+      2883/4248  1055 ms/trial
+      2923/4248  1055 ms/trial
+      2963/4248  1054 ms/trial
+      3003/4248  1053 ms/trial
+      3043/4248  1052 ms/trial
+      3083/4248  1051 ms/trial
+      3123/4248  1051 ms/trial
+      3163/4248  1051 ms/trial
+      3203/4248  1050 ms/trial
+      3243/4248  1050 ms/trial
+      3283/4248  1050 ms/trial
+      3323/4248  1050 ms/trial
+      3362/4248  1049 ms/trial
+      3400/4248  1051 ms/trial
+      3440/4248  1051 ms/trial
+      3480/4248  1050 ms/trial
+      3520/4248  1049 ms/trial
+      3560/4248  1049 ms/trial
+      3600/4248  1048 ms/trial
+      3640/4248  1047 ms/trial
+      3680/4248  1046 ms/trial
+      3720/4248  1045 ms/trial
+      3760/4248  1045 ms/trial
+      3800/4248  1042 ms/trial
+      3840/4248  1038 ms/trial
+      3880/4248  1034 ms/trial
+      3920/4248  1030 ms/trial
+      3960/4248  1026 ms/trial
+      4000/4248  1022 ms/trial
+      4040/4248  1018 ms/trial
+      4080/4248  1014 ms/trial
+      4082/4248  1014 ms/trial
+      4123/4248  1014 ms/trial
+      4163/4248  1011 ms/trial
+      4203/4248  1008 ms/trial
+      4243/4248  1006 ms/trial
+    acc(single_token)=0.853 wrong_frac=0.147 1005 ms/trial | gen n=40 acc=0.900 agree=1.000 | n_wrong=626
+    topped up: 4400 + 4248 = 8648 trials, n_wrong=1262
+
+  [k10] slot k=10, phrased "10th", 61 trials
+      1/61  2136 ms/trial
+      2/61  1987 ms/trial
+      43/61  1284 ms/trial
+    acc(single_token)=0.098 wrong_frac=0.902 1223 ms/trial | gen n=40 acc=0.075 agree=1.000 | n_wrong=55
+    topped up: 1350 + 61 = 1411 trials, n_wrong=1252
+
+wrong-subset sizes (target 1250 = 50 classes x 20 / 0.8):
+  CVQ   n= 8648 wrong= 1262 wrong_frac=0.146
+  k2    n= 2700 wrong= 1539 wrong_frac=0.570
+  k3    n= 2600 wrong= 2579 wrong_frac=0.992
+  k4    n= 2600 wrong= 2598 wrong_frac=0.999
+  k5    n= 1300 wrong= 1297 wrong_frac=0.998
+  k6    n= 1350 wrong= 1350 wrong_frac=1.000
+  k7    n= 1350 wrong= 1332 wrong_frac=0.987
+  k8    n= 1350 wrong= 1327 wrong_frac=0.983
+  k9    n= 1350 wrong= 1316 wrong_frac=0.975
+  k10   n= 1411 wrong= 1252 wrong_frac=0.887
+  FVQ   n= 2500 wrong=   22 wrong_frac=0.009  [slot-1, capped by design]
+  k1    n= 2500 wrong=   21 wrong_frac=0.008  [slot-1, capped by design]
+
+Saved to /Users/kanakraj/workspace/transformer-memory-interference/lora_intervention/experiments/linear_probing/results_probe50/gemma-3-4b-it_5k_10u

@@ -1,0 +1,16 @@
+Loading Qwen/Qwen2.5-3B-Instruct on mps (torch.bfloat16)...
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 12429.94it/s]
+  loaded in 4.7s  layers=36 d_model=2048
+Closed pool: 50 values (from 1292 generation-safe of 2300 raw), seed=1234
+  ['act', 'ally', 'bay', 'belief', 'blood', 'blur', 'bonus', 'camp', 'club', 'corner', 'craft', 'cult', 'enable', 'exist', 'fade', 'faith', 'fax', 'feed', 'find', 'forest', 'form', 'forum', 'gross', 'hid', 'hill', 'import', 'lace', 'launch', 'maid', 'mirror', 'path', 'pit', 'planet', 'raise', 'reveal', 'role', 'row', 'season', 'seat', 'stag', 'stock', 'stone', 'timer', 'tiny', 'union', 'water', 'week', 'wig', 'worm', 'zen']
+Conditions (12): ['CVQ', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7', 'k8', 'k9', 'k10', 'FVQ', 'k1']
+
+  [CVQ] slot k=10, phrased "last", 150 trials
+      1/150  865 ms/trial
+[transformers] The attention mask is not set with a batched input, and cannot be inferred from input because pad token is same as eos token. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results.
+      3/150  705 ms/trial
+      42/150  594 ms/trial
+      80/150  606 ms/trial
+      122/150  646 ms/trial
+/Users/kanakraj/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

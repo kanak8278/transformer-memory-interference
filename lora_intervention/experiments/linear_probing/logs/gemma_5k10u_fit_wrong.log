@@ -1,0 +1,47 @@
+google/gemma-3-4b-it  cell={'keys': 5, 'updates': 10}  n_layers=34  d_model=2560  classes=50  chance=0.020
+C grid: [0.1]
+label sets: ['expected', 'shuffled', 'cv_first', 'cv_last']   subsets: ['wrong']
+
+  [k2] k=2 n=2700 acc=0.430
+      [k2/wrong/expected] C=0.1     best L30=0.638 mean=0.231 (119s)
+      [k2/wrong/shuffled] C=0.1     best L0=0.031 mean=0.023 (226s)
+      [k2/wrong/cv_first] C=0.1     best L34=0.961 mean=0.446 (162s)
+      [k2/wrong/cv_last] C=0.1     best L3=0.050 mean=0.037 (185s)
+
+  [k3] k=3 n=2600 acc=0.008
+      [k3/wrong/expected] C=0.1     best L33=0.338 mean=0.100 (291s)
+      [k3/wrong/shuffled] C=0.1     best L10=0.031 mean=0.023 (274s)
+      [k3/wrong/cv_first] C=0.1     best L29=0.674 mean=0.335 (293s)
+      [k3/wrong/cv_last] C=0.1     best L3=0.071 mean=0.057 (274s)
+
+  [k4] k=4 n=2600 acc=0.001
+      [k4/wrong/expected] C=0.1     best L30=0.177 mean=0.052 (365s)
+      [k4/wrong/shuffled] C=0.1     best L0=0.027 mean=0.020 (362s)
+      [k4/wrong/cv_first] C=0.1     best L29=0.570 mean=0.284 (326s)
+      [k4/wrong/cv_last] C=0.1     best L32=0.073 mean=0.055 (320s)
+
+  [k5] k=5 n=1300 acc=0.002
+      [k5/wrong/expected] C=0.1     best L31=0.098 mean=0.038 (271s)
+      [k5/wrong/shuffled] C=0.1     best L7=0.039 mean=0.024 (266s)
+      [k5/wrong/cv_first] C=0.1     best L18=0.330 mean=0.154 (227s)
+      [k5/wrong/cv_last] C=0.1     best L31=0.058 mean=0.039 (210s)
+
+  [k6] k=6 n=1350 acc=0.000
+      [k6/wrong/expected] C=0.1     best L34=0.064 mean=0.030 (246s)
+      [k6/wrong/shuffled] C=0.1     best L0=0.029 mean=0.020 (246s)
+      [k6/wrong/cv_first] C=0.1     best L18=0.324 mean=0.139 (227s)
+      [k6/wrong/cv_last] C=0.1     best L34=0.076 mean=0.038 (247s)
+
+  [k7] k=7 n=1350 acc=0.013
+      [k7/wrong/expected] C=0.1     best L34=0.075 mean=0.033 (242s)
+      [k7/wrong/shuffled] C=0.1     best L25=0.032 mean=0.023 (338s)
+      [k7/wrong/cv_first] C=0.1     best L18=0.278 mean=0.102 (340s)
+      [k7/wrong/cv_last] C=0.1     best L32=0.115 mean=0.056 (300s)
+
+  [k8] k=8 n=1350 acc=0.017
+      [k8/wrong/expected] C=0.1     best L34=0.091 mean=0.037 (370s)
+      [k8/wrong/shuffled] C=0.1     best L0=0.029 mean=0.020 (360s)
+      [k8/wrong/cv_first] C=0.1     best L18=0.265 mean=0.085 (278s)
+      [k8/wrong/cv_last] C=0.1     best L31=0.131 mean=0.061 (277s)
+
+  [k9] k=9 n=1350 acc=0.025

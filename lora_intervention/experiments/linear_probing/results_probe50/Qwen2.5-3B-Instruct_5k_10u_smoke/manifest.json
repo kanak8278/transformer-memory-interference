@@ -1,0 +1,2189 @@
+{
+  "base_model": "Qwen/Qwen2.5-3B-Instruct",
+  "n_layers": 36,
+  "d_model": 2048,
+  "cell": {
+    "keys": 5,
+    "updates": 10
+  },
+  "pool": [
+    "act",
+    "ally",
+    "bay",
+    "belief",
+    "blood",
+    "blur",
+    "bonus",
+    "camp",
+    "club",
+    "corner",
+    "craft",
+    "cult",
+    "enable",
+    "exist",
+    "fade",
+    "faith",
+    "fax",
+    "feed",
+    "find",
+    "forest",
+    "form",
+    "forum",
+    "gross",
+    "hid",
+    "hill",
+    "import",
+    "lace",
+    "launch",
+    "maid",
+    "mirror",
+    "path",
+    "pit",
+    "planet",
+    "raise",
+    "reveal",
+    "role",
+    "row",
+    "season",
+    "seat",
+    "stag",
+    "stock",
+    "stone",
+    "timer",
+    "tiny",
+    "union",
+    "water",
+    "week",
+    "wig",
+    "worm",
+    "zen"
+  ],
+  "pool_seed": 1234,
+  "device": "mps",
+  "dtype": "torch.bfloat16",
+  "mode": "pilot",
+  "conditions": {
+    "CVQ": {
+      "k": 10,
+      "query_word": "last",
+      "n": 4,
+      "elapsed_sec": 4.903064966201782,
+      "ms_per_trial": 1225.7662415504456,
+      "accuracy_single_token": 0.75,
+      "wrong_frac_single_token": 0.25,
+      "accuracy_generate": 0.75,
+      "wrong_frac_generate": 0.25,
+      "scoring_agreement": 1.0,
+      "audit_generate": {
+        "n": 4,
+        "counts": {
+          "exact": 3,
+          "wrong_slot_same_key": 1,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.75,
+          "wrong_slot_same_key": 0.25,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [
+            {
+              "expected": "union",
+              "got": "union",
+              "k": 10
+            },
+            {
+              "expected": "worm",
+              "got": "worm",
+              "k": 10
+            },
+            {
+              "expected": "path",
+              "got": "path",
+              "k": 10
+            }
+          ],
+          "wrong_slot_same_key": [
+            {
+              "expected": "maid",
+              "got": "blur",
+              "k": 10
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "audit_single_token": {
+        "n": 4,
+        "counts": {
+          "exact": 3,
+          "wrong_slot_same_key": 1,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.75,
+          "wrong_slot_same_key": 0.25,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [
+            {
+              "expected": "union",
+              "got": "union",
+              "k": 10
+            },
+            {
+              "expected": "worm",
+              "got": "worm",
+              "k": 10
+            },
+            {
+              "expected": "path",
+              "got": "path",
+              "k": 10
+            }
+          ],
+          "wrong_slot_same_key": [
+            {
+              "expected": "maid",
+              "got": "blur",
+              "k": 10
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "records": [
+        {
+          "expected": "union",
+          "cv": [
+            "camp",
+            "craft",
+            "stag",
+            "forum",
+            "season",
+            "tiny",
+            "raise",
+            "water",
+            "club",
+            "union"
+          ],
+          "cv_first": "camp",
+          "cv_last": "union",
+          "test_category": "telescope type",
+          "k": 10,
+          "seed": 1625688326,
+          "pred_single_token": "union",
+          "correct_single_token": true,
+          "pred_generate": "union",
+          "correct_generate": true
+        },
+        {
+          "expected": "maid",
+          "cv": [
+            "enable",
+            "worm",
+            "corner",
+            "import",
+            "club",
+            "forest",
+            "hill",
+            "blur",
+            "fax",
+            "maid"
+          ],
+          "cv_first": "enable",
+          "cv_last": "maid",
+          "test_category": "painting medium",
+          "k": 10,
+          "seed": 436689882,
+          "pred_single_token": "blur",
+          "correct_single_token": false,
+          "pred_generate": "blur",
+          "correct_generate": false
+        },
+        {
+          "expected": "worm",
+          "cv": [
+            "stone",
+            "maid",
+            "bay",
+            "camp",
+            "import",
+            "wig",
+            "club",
+            "pit",
+            "hid",
+            "worm"
+          ],
+          "cv_first": "stone",
+          "cv_last": "worm",
+          "test_category": "boat type",
+          "k": 10,
+          "seed": 1442793099,
+          "pred_single_token": "worm",
+          "correct_single_token": true,
+          "pred_generate": "worm",
+          "correct_generate": true
+        },
+        {
+          "expected": "path",
+          "cv": [
+            "blur",
+            "import",
+            "planet",
+            "fax",
+            "belief",
+            "tiny",
+            "maid",
+            "blood",
+            "week",
+            "path"
+          ],
+          "cv_first": "blur",
+          "cv_last": "path",
+          "test_category": "architectural style",
+          "k": 10,
+          "seed": 1106733518,
+          "pred_single_token": "path",
+          "correct_single_token": true,
+          "pred_generate": "path",
+          "correct_generate": true
+        }
+      ]
+    },
+    "k2": {
+      "k": 2,
+      "query_word": "2nd",
+      "n": 4,
+      "elapsed_sec": 2.068566083908081,
+      "ms_per_trial": 517.1415209770203,
+      "accuracy_single_token": 0.25,
+      "wrong_frac_single_token": 0.75,
+      "accuracy_generate": 0.25,
+      "wrong_frac_generate": 0.75,
+      "scoring_agreement": 1.0,
+      "audit_generate": {
+        "n": 4,
+        "counts": {
+          "exact": 1,
+          "wrong_slot_same_key": 3,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.25,
+          "wrong_slot_same_key": 0.75,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [
+            {
+              "expected": "lace",
+              "got": "lace",
+              "k": 2
+            }
+          ],
+          "wrong_slot_same_key": [
+            {
+              "expected": "role",
+              "got": "union",
+              "k": 2
+            },
+            {
+              "expected": "find",
+              "got": "bay",
+              "k": 2
+            },
+            {
+              "expected": "forum",
+              "got": "enable",
+              "k": 2
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "audit_single_token": {
+        "n": 4,
+        "counts": {
+          "exact": 1,
+          "wrong_slot_same_key": 3,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.25,
+          "wrong_slot_same_key": 0.75,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [
+            {
+              "expected": "lace",
+              "got": "lace",
+              "k": 2
+            }
+          ],
+          "wrong_slot_same_key": [
+            {
+              "expected": "role",
+              "got": "union",
+              "k": 2
+            },
+            {
+              "expected": "find",
+              "got": "bay",
+              "k": 2
+            },
+            {
+              "expected": "forum",
+              "got": "enable",
+              "k": 2
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "records": [
+        {
+          "expected": "role",
+          "cv": [
+            "union",
+            "role",
+            "raise",
+            "craft",
+            "timer",
+            "planet",
+            "hill",
+            "camp",
+            "stock",
+            "enable"
+          ],
+          "cv_first": "union",
+          "cv_last": "enable",
+          "test_category": "cooking method",
+          "k": 2,
+          "seed": 813246901,
+          "pred_single_token": "union",
+          "correct_single_token": false,
+          "pred_generate": "union",
+          "correct_generate": false
+        },
+        {
+          "expected": "find",
+          "cv": [
+            "bay",
+            "find",
+            "water",
+            "season",
+            "mirror",
+            "row",
+            "exist",
+            "camp",
+            "timer",
+            "maid"
+          ],
+          "cv_first": "bay",
+          "cv_last": "maid",
+          "test_category": "ocean current",
+          "k": 2,
+          "seed": 1771732105,
+          "pred_single_token": "bay",
+          "correct_single_token": false,
+          "pred_generate": "bay",
+          "correct_generate": false
+        },
+        {
+          "expected": "forum",
+          "cv": [
+            "enable",
+            "forum",
+            "seat",
+            "hid",
+            "fax",
+            "reveal",
+            "bonus",
+            "cult",
+            "union",
+            "craft"
+          ],
+          "cv_first": "enable",
+          "cv_last": "craft",
+          "test_category": "sea creature",
+          "k": 2,
+          "seed": 630351674,
+          "pred_single_token": "enable",
+          "correct_single_token": false,
+          "pred_generate": "enable",
+          "correct_generate": false
+        },
+        {
+          "expected": "lace",
+          "cv": [
+            "gross",
+            "lace",
+            "maid",
+            "timer",
+            "club",
+            "season",
+            "import",
+            "craft",
+            "bay",
+            "role"
+          ],
+          "cv_first": "gross",
+          "cv_last": "role",
+          "test_category": "constellation",
+          "k": 2,
+          "seed": 1588836878,
+          "pred_single_token": "lace",
+          "correct_single_token": true,
+          "pred_generate": "lace",
+          "correct_generate": true
+        }
+      ]
+    },
+    "k3": {
+      "k": 3,
+      "query_word": "3rd",
+      "n": 4,
+      "elapsed_sec": 2.266995906829834,
+      "ms_per_trial": 566.7489767074585,
+      "accuracy_single_token": 0.25,
+      "wrong_frac_single_token": 0.75,
+      "accuracy_generate": 0.25,
+      "wrong_frac_generate": 0.75,
+      "scoring_agreement": 1.0,
+      "audit_generate": {
+        "n": 4,
+        "counts": {
+          "exact": 1,
+          "wrong_slot_same_key": 3,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.25,
+          "wrong_slot_same_key": 0.75,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [
+            {
+              "expected": "fade",
+              "got": "fade",
+              "k": 3
+            }
+          ],
+          "wrong_slot_same_key": [
+            {
+              "expected": "planet",
+              "got": "fade",
+              "k": 3
+            },
+            {
+              "expected": "craft",
+              "got": "tiny",
+              "k": 3
+            },
+            {
+              "expected": "enable",
+              "got": "path",
+              "k": 3
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "audit_single_token": {
+        "n": 4,
+        "counts": {
+          "exact": 1,
+          "wrong_slot_same_key": 3,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.25,
+          "wrong_slot_same_key": 0.75,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [
+            {
+              "expected": "fade",
+              "got": "fade",
+              "k": 3
+            }
+          ],
+          "wrong_slot_same_key": [
+            {
+              "expected": "planet",
+              "got": "fade",
+              "k": 3
+            },
+            {
+              "expected": "craft",
+              "got": "tiny",
+              "k": 3
+            },
+            {
+              "expected": "enable",
+              "got": "path",
+              "k": 3
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "records": [
+        {
+          "expected": "planet",
+          "cv": [
+            "water",
+            "act",
+            "planet",
+            "enable",
+            "exist",
+            "hill",
+            "timer",
+            "raise",
+            "fade",
+            "path"
+          ],
+          "cv_first": "water",
+          "cv_last": "path",
+          "test_category": "spice blend",
+          "k": 3,
+          "seed": 1393630012,
+          "pred_single_token": "fade",
+          "correct_single_token": false,
+          "pred_generate": "fade",
+          "correct_generate": false
+        },
+        {
+          "expected": "craft",
+          "cv": [
+            "season",
+            "import",
+            "craft",
+            "tiny",
+            "feed",
+            "gross",
+            "wig",
+            "forum",
+            "form",
+            "mirror"
+          ],
+          "cv_first": "season",
+          "cv_last": "mirror",
+          "test_category": "tree species",
+          "k": 3,
+          "seed": 1546794366,
+          "pred_single_token": "tiny",
+          "correct_single_token": false,
+          "pred_generate": "tiny",
+          "correct_generate": false
+        },
+        {
+          "expected": "fade",
+          "cv": [
+            "enable",
+            "import",
+            "fade",
+            "faith",
+            "bonus",
+            "ally",
+            "forest",
+            "forum",
+            "corner",
+            "mirror"
+          ],
+          "cv_first": "enable",
+          "cv_last": "mirror",
+          "test_category": "visual art",
+          "k": 3,
+          "seed": 1210734785,
+          "pred_single_token": "fade",
+          "correct_single_token": true,
+          "pred_generate": "fade",
+          "correct_generate": true
+        },
+        {
+          "expected": "enable",
+          "cv": [
+            "path",
+            "union",
+            "enable",
+            "wig",
+            "role",
+            "blood",
+            "water",
+            "raise",
+            "craft",
+            "feed"
+          ],
+          "cv_first": "path",
+          "cv_last": "feed",
+          "test_category": "musical instrument",
+          "k": 3,
+          "seed": 874675204,
+          "pred_single_token": "path",
+          "correct_single_token": false,
+          "pred_generate": "path",
+          "correct_generate": false
+        }
+      ]
+    },
+    "k4": {
+      "k": 4,
+      "query_word": "4th",
+      "n": 4,
+      "elapsed_sec": 2.1015408039093018,
+      "ms_per_trial": 525.3852009773254,
+      "accuracy_single_token": 0.0,
+      "wrong_frac_single_token": 1.0,
+      "accuracy_generate": 0.0,
+      "wrong_frac_generate": 1.0,
+      "scoring_agreement": 1.0,
+      "audit_generate": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "corner",
+              "got": "worm",
+              "k": 4
+            },
+            {
+              "expected": "pit",
+              "got": "water",
+              "k": 4
+            },
+            {
+              "expected": "enable",
+              "got": "role",
+              "k": 4
+            },
+            {
+              "expected": "enable",
+              "got": "timer",
+              "k": 4
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "audit_single_token": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "corner",
+              "got": "worm",
+              "k": 4
+            },
+            {
+              "expected": "pit",
+              "got": "water",
+              "k": 4
+            },
+            {
+              "expected": "enable",
+              "got": "role",
+              "k": 4
+            },
+            {
+              "expected": "enable",
+              "got": "timer",
+              "k": 4
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "records": [
+        {
+          "expected": "corner",
+          "cv": [
+            "blood",
+            "worm",
+            "forum",
+            "corner",
+            "maid",
+            "faith",
+            "forest",
+            "blur",
+            "timer",
+            "fax"
+          ],
+          "cv_first": "blood",
+          "cv_last": "fax",
+          "test_category": "fruit variety",
+          "k": 4,
+          "seed": 649933574,
+          "pred_single_token": "worm",
+          "correct_single_token": false,
+          "pred_generate": "worm",
+          "correct_generate": false
+        },
+        {
+          "expected": "pit",
+          "cv": [
+            "faith",
+            "water",
+            "fax",
+            "pit",
+            "path",
+            "union",
+            "corner",
+            "lace",
+            "stag",
+            "planet"
+          ],
+          "cv_first": "faith",
+          "cv_last": "planet",
+          "test_category": "bridge type",
+          "k": 4,
+          "seed": 1707757665,
+          "pred_single_token": "water",
+          "correct_single_token": false,
+          "pred_generate": "water",
+          "correct_generate": false
+        },
+        {
+          "expected": "enable",
+          "cv": [
+            "fax",
+            "seat",
+            "ally",
+            "enable",
+            "planet",
+            "fade",
+            "role",
+            "row",
+            "belief",
+            "cult"
+          ],
+          "cv_first": "fax",
+          "cv_last": "cult",
+          "test_category": "cheese variety",
+          "k": 4,
+          "seed": 1371698084,
+          "pred_single_token": "role",
+          "correct_single_token": false,
+          "pred_generate": "role",
+          "correct_generate": false
+        },
+        {
+          "expected": "enable",
+          "cv": [
+            "find",
+            "wig",
+            "tiny",
+            "enable",
+            "timer",
+            "week",
+            "form",
+            "mirror",
+            "hid",
+            "seat"
+          ],
+          "cv_first": "find",
+          "cv_last": "seat",
+          "test_category": "cartoon character",
+          "k": 4,
+          "seed": 130978766,
+          "pred_single_token": "timer",
+          "correct_single_token": false,
+          "pred_generate": "timer",
+          "correct_generate": false
+        }
+      ]
+    },
+    "k5": {
+      "k": 5,
+      "query_word": "5th",
+      "n": 4,
+      "elapsed_sec": 2.2872040271759033,
+      "ms_per_trial": 571.8010067939758,
+      "accuracy_single_token": 0.0,
+      "wrong_frac_single_token": 1.0,
+      "accuracy_generate": 0.0,
+      "wrong_frac_generate": 1.0,
+      "scoring_agreement": 1.0,
+      "audit_generate": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "tiny",
+              "got": "import",
+              "k": 5
+            },
+            {
+              "expected": "blur",
+              "got": "tiny",
+              "k": 5
+            },
+            {
+              "expected": "role",
+              "got": "raise",
+              "k": 5
+            },
+            {
+              "expected": "hill",
+              "got": "forest",
+              "k": 5
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "audit_single_token": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "tiny",
+              "got": "import",
+              "k": 5
+            },
+            {
+              "expected": "blur",
+              "got": "tiny",
+              "k": 5
+            },
+            {
+              "expected": "role",
+              "got": "raise",
+              "k": 5
+            },
+            {
+              "expected": "hill",
+              "got": "forest",
+              "k": 5
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "records": [
+        {
+          "expected": "tiny",
+          "cv": [
+            "lace",
+            "import",
+            "cult",
+            "planet",
+            "tiny",
+            "camp",
+            "form",
+            "role",
+            "find",
+            "row"
+          ],
+          "cv_first": "lace",
+          "cv_last": "row",
+          "test_category": "ocean current",
+          "k": 5,
+          "seed": 1329655572,
+          "pred_single_token": "import",
+          "correct_single_token": false,
+          "pred_generate": "import",
+          "correct_generate": false
+        },
+        {
+          "expected": "blur",
+          "cv": [
+            "water",
+            "timer",
+            "tiny",
+            "ally",
+            "blur",
+            "maid",
+            "zen",
+            "camp",
+            "stock",
+            "gross"
+          ],
+          "cv_first": "water",
+          "cv_last": "gross",
+          "test_category": "sword type",
+          "k": 5,
+          "seed": 993595991,
+          "pred_single_token": "tiny",
+          "correct_single_token": false,
+          "pred_generate": "tiny",
+          "correct_generate": false
+        },
+        {
+          "expected": "role",
+          "cv": [
+            "tiny",
+            "forum",
+            "raise",
+            "row",
+            "role",
+            "stag",
+            "import",
+            "belief",
+            "union",
+            "zen"
+          ],
+          "cv_first": "tiny",
+          "cv_last": "zen",
+          "test_category": "gemstone",
+          "k": 5,
+          "seed": 1146760345,
+          "pred_single_token": "raise",
+          "correct_single_token": false,
+          "pred_generate": "raise",
+          "correct_generate": false
+        },
+        {
+          "expected": "hill",
+          "cv": [
+            "row",
+            "forest",
+            "union",
+            "fade",
+            "hill",
+            "wig",
+            "zen",
+            "craft",
+            "stag",
+            "exist"
+          ],
+          "cv_first": "row",
+          "cv_last": "exist",
+          "test_category": "programming language",
+          "k": 5,
+          "seed": 810700764,
+          "pred_single_token": "forest",
+          "correct_single_token": false,
+          "pred_generate": "forest",
+          "correct_generate": false
+        }
+      ]
+    },
+    "k6": {
+      "k": 6,
+      "query_word": "6th",
+      "n": 4,
+      "elapsed_sec": 2.256213903427124,
+      "ms_per_trial": 564.053475856781,
+      "accuracy_single_token": 0.0,
+      "wrong_frac_single_token": 1.0,
+      "accuracy_generate": 0.0,
+      "wrong_frac_generate": 1.0,
+      "scoring_agreement": 1.0,
+      "audit_generate": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "fax",
+              "got": "hill",
+              "k": 6
+            },
+            {
+              "expected": "lace",
+              "got": "enable",
+              "k": 6
+            },
+            {
+              "expected": "launch",
+              "got": "fade",
+              "k": 6
+            },
+            {
+              "expected": "week",
+              "got": "zen",
+              "k": 6
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "audit_single_token": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "fax",
+              "got": "hill",
+              "k": 6
+            },
+            {
+              "expected": "lace",
+              "got": "enable",
+              "k": 6
+            },
+            {
+              "expected": "launch",
+              "got": "fade",
+              "k": 6
+            },
+            {
+              "expected": "week",
+              "got": "zen",
+              "k": 6
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "records": [
+        {
+          "expected": "fax",
+          "cv": [
+            "hill",
+            "timer",
+            "belief",
+            "launch",
+            "season",
+            "fax",
+            "union",
+            "lace",
+            "zen",
+            "forum"
+          ],
+          "cv_first": "hill",
+          "cv_last": "forum",
+          "test_category": "cloud formation",
+          "k": 6,
+          "seed": 1169798170,
+          "pred_single_token": "hill",
+          "correct_single_token": false,
+          "pred_generate": "hill",
+          "correct_generate": false
+        },
+        {
+          "expected": "lace",
+          "cv": [
+            "stock",
+            "enable",
+            "zen",
+            "launch",
+            "ally",
+            "lace",
+            "stag",
+            "wig",
+            "season",
+            "reveal"
+          ],
+          "cv_first": "stock",
+          "cv_last": "reveal",
+          "test_category": "wine variety",
+          "k": 6,
+          "seed": 2128283374,
+          "pred_single_token": "enable",
+          "correct_single_token": false,
+          "pred_generate": "enable",
+          "correct_generate": false
+        },
+        {
+          "expected": "launch",
+          "cv": [
+            "form",
+            "fade",
+            "belief",
+            "pit",
+            "faith",
+            "launch",
+            "hid",
+            "path",
+            "water",
+            "reveal"
+          ],
+          "cv_first": "form",
+          "cv_last": "reveal",
+          "test_category": "cloud formation",
+          "k": 6,
+          "seed": 986902943,
+          "pred_single_token": "fade",
+          "correct_single_token": false,
+          "pred_generate": "fade",
+          "correct_generate": false
+        },
+        {
+          "expected": "week",
+          "cv": [
+            "role",
+            "forest",
+            "timer",
+            "zen",
+            "craft",
+            "week",
+            "tiny",
+            "lace",
+            "fade",
+            "water"
+          ],
+          "cv_first": "role",
+          "cv_last": "water",
+          "test_category": "stadium name",
+          "k": 6,
+          "seed": 1945388147,
+          "pred_single_token": "zen",
+          "correct_single_token": false,
+          "pred_generate": "zen",
+          "correct_generate": false
+        }
+      ]
+    },
+    "k7": {
+      "k": 7,
+      "query_word": "7th",
+      "n": 4,
+      "elapsed_sec": 2.178562879562378,
+      "ms_per_trial": 544.6407198905945,
+      "accuracy_single_token": 0.0,
+      "wrong_frac_single_token": 1.0,
+      "accuracy_generate": 0.0,
+      "wrong_frac_generate": 1.0,
+      "scoring_agreement": 1.0,
+      "audit_generate": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "forum",
+              "got": "feed",
+              "k": 7
+            },
+            {
+              "expected": "path",
+              "got": "seat",
+              "k": 7
+            },
+            {
+              "expected": "hid",
+              "got": "worm",
+              "k": 7
+            },
+            {
+              "expected": "corner",
+              "got": "lace",
+              "k": 7
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "audit_single_token": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "forum",
+              "got": "feed",
+              "k": 7
+            },
+            {
+              "expected": "path",
+              "got": "seat",
+              "k": 7
+            },
+            {
+              "expected": "hid",
+              "got": "worm",
+              "k": 7
+            },
+            {
+              "expected": "corner",
+              "got": "lace",
+              "k": 7
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "records": [
+        {
+          "expected": "forum",
+          "cv": [
+            "fade",
+            "row",
+            "path",
+            "role",
+            "stock",
+            "club",
+            "forum",
+            "water",
+            "feed",
+            "worm"
+          ],
+          "cv_first": "fade",
+          "cv_last": "worm",
+          "test_category": "psychology term",
+          "k": 7,
+          "seed": 1849520168,
+          "pred_single_token": "feed",
+          "correct_single_token": false,
+          "pred_generate": "feed",
+          "correct_generate": false
+        },
+        {
+          "expected": "path",
+          "cv": [
+            "bonus",
+            "seat",
+            "forum",
+            "zen",
+            "season",
+            "lace",
+            "path",
+            "pit",
+            "enable",
+            "ally"
+          ],
+          "cv_first": "bonus",
+          "cv_last": "ally",
+          "test_category": "spice blend",
+          "k": 7,
+          "seed": 608800850,
+          "pred_single_token": "seat",
+          "correct_single_token": false,
+          "pred_generate": "seat",
+          "correct_generate": false
+        },
+        {
+          "expected": "hid",
+          "cv": [
+            "seat",
+            "forest",
+            "worm",
+            "import",
+            "role",
+            "stag",
+            "hid",
+            "feed",
+            "forum",
+            "row"
+          ],
+          "cv_first": "seat",
+          "cv_last": "row",
+          "test_category": "martial art",
+          "k": 7,
+          "seed": 1567286054,
+          "pred_single_token": "worm",
+          "correct_single_token": false,
+          "pred_generate": "worm",
+          "correct_generate": false
+        },
+        {
+          "expected": "corner",
+          "cv": [
+            "bay",
+            "maid",
+            "launch",
+            "club",
+            "lace",
+            "belief",
+            "corner",
+            "bonus",
+            "hid",
+            "zen"
+          ],
+          "cv_first": "bay",
+          "cv_last": "zen",
+          "test_category": "board game",
+          "k": 7,
+          "seed": 1231226473,
+          "pred_single_token": "lace",
+          "correct_single_token": false,
+          "pred_generate": "lace",
+          "correct_generate": false
+        }
+      ]
+    },
+    "k8": {
+      "k": 8,
+      "query_word": "8th",
+      "n": 4,
+      "elapsed_sec": 2.3362960815429688,
+      "ms_per_trial": 584.0740203857422,
+      "accuracy_single_token": 0.0,
+      "wrong_frac_single_token": 1.0,
+      "accuracy_generate": 0.0,
+      "wrong_frac_generate": 1.0,
+      "scoring_agreement": 1.0,
+      "audit_generate": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "forest",
+              "got": "hill",
+              "k": 8
+            },
+            {
+              "expected": "week",
+              "got": "bay",
+              "k": 8
+            },
+            {
+              "expected": "raise",
+              "got": "enable",
+              "k": 8
+            },
+            {
+              "expected": "belief",
+              "got": "forest",
+              "k": 8
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "audit_single_token": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "forest",
+              "got": "hill",
+              "k": 8
+            },
+            {
+              "expected": "week",
+              "got": "bay",
+              "k": 8
+            },
+            {
+              "expected": "raise",
+              "got": "enable",
+              "k": 8
+            },
+            {
+              "expected": "belief",
+              "got": "forest",
+              "k": 8
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "records": [
+        {
+          "expected": "forest",
+          "cv": [
+            "form",
+            "act",
+            "forum",
+            "stock",
+            "stone",
+            "hill",
+            "camp",
+            "forest",
+            "lace",
+            "cult"
+          ],
+          "cv_first": "form",
+          "cv_last": "cult",
+          "test_category": "visual art",
+          "k": 8,
+          "seed": 1105823730,
+          "pred_single_token": "hill",
+          "correct_single_token": false,
+          "pred_generate": "hill",
+          "correct_generate": false
+        },
+        {
+          "expected": "week",
+          "cv": [
+            "bay",
+            "tiny",
+            "form",
+            "worm",
+            "raise",
+            "mirror",
+            "cult",
+            "week",
+            "faith",
+            "row"
+          ],
+          "cv_first": "bay",
+          "cv_last": "row",
+          "test_category": "coffee variety",
+          "k": 8,
+          "seed": 2064308934,
+          "pred_single_token": "bay",
+          "correct_single_token": false,
+          "pred_generate": "bay",
+          "correct_generate": false
+        },
+        {
+          "expected": "raise",
+          "cv": [
+            "stag",
+            "hill",
+            "maid",
+            "enable",
+            "water",
+            "club",
+            "forum",
+            "raise",
+            "ally",
+            "mirror"
+          ],
+          "cv_first": "stag",
+          "cv_last": "mirror",
+          "test_category": "wine variety",
+          "k": 8,
+          "seed": 1728249353,
+          "pred_single_token": "enable",
+          "correct_single_token": false,
+          "pred_generate": "enable",
+          "correct_generate": false
+        },
+        {
+          "expected": "belief",
+          "cv": [
+            "fade",
+            "bonus",
+            "enable",
+            "forest",
+            "forum",
+            "row",
+            "camp",
+            "belief",
+            "season",
+            "act"
+          ],
+          "cv_first": "fade",
+          "cv_last": "act",
+          "test_category": "visual art",
+          "k": 8,
+          "seed": 586868922,
+          "pred_single_token": "forest",
+          "correct_single_token": false,
+          "pred_generate": "forest",
+          "correct_generate": false
+        }
+      ]
+    },
+    "k9": {
+      "k": 9,
+      "query_word": "9th",
+      "n": 4,
+      "elapsed_sec": 2.1811208724975586,
+      "ms_per_trial": 545.2802181243896,
+      "accuracy_single_token": 0.0,
+      "wrong_frac_single_token": 1.0,
+      "accuracy_generate": 0.0,
+      "wrong_frac_generate": 1.0,
+      "scoring_agreement": 1.0,
+      "audit_generate": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "lace",
+              "got": "exist",
+              "k": 9
+            },
+            {
+              "expected": "raise",
+              "got": "union",
+              "k": 9
+            },
+            {
+              "expected": "week",
+              "got": "stone",
+              "k": 9
+            },
+            {
+              "expected": "stock",
+              "got": "forest",
+              "k": 9
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "audit_single_token": {
+        "n": 4,
+        "counts": {
+          "exact": 0,
+          "wrong_slot_same_key": 4,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 0.0,
+          "wrong_slot_same_key": 1.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [],
+          "wrong_slot_same_key": [
+            {
+              "expected": "lace",
+              "got": "exist",
+              "k": 9
+            },
+            {
+              "expected": "raise",
+              "got": "union",
+              "k": 9
+            },
+            {
+              "expected": "week",
+              "got": "stone",
+              "k": 9
+            },
+            {
+              "expected": "stock",
+              "got": "forest",
+              "k": 9
+            }
+          ],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "records": [
+        {
+          "expected": "lace",
+          "cv": [
+            "blood",
+            "faith",
+            "week",
+            "launch",
+            "cult",
+            "exist",
+            "union",
+            "raise",
+            "lace",
+            "forum"
+          ],
+          "cv_first": "blood",
+          "cv_last": "forum",
+          "test_category": "literary genre",
+          "k": 9,
+          "seed": 362127292,
+          "pred_single_token": "exist",
+          "correct_single_token": false,
+          "pred_generate": "exist",
+          "correct_generate": false
+        },
+        {
+          "expected": "raise",
+          "cv": [
+            "forum",
+            "stag",
+            "union",
+            "launch",
+            "seat",
+            "planet",
+            "forest",
+            "worm",
+            "raise",
+            "blood"
+          ],
+          "cv_first": "forum",
+          "cv_last": "blood",
+          "test_category": "photography technique",
+          "k": 9,
+          "seed": 1419951383,
+          "pred_single_token": "union",
+          "correct_single_token": false,
+          "pred_generate": "union",
+          "correct_generate": false
+        },
+        {
+          "expected": "week",
+          "cv": [
+            "enable",
+            "wig",
+            "hid",
+            "stone",
+            "tiny",
+            "launch",
+            "zen",
+            "mirror",
+            "week",
+            "cult"
+          ],
+          "cv_first": "enable",
+          "cv_last": "cult",
+          "test_category": "cloud formation",
+          "k": 9,
+          "seed": 1083891802,
+          "pred_single_token": "stone",
+          "correct_single_token": false,
+          "pred_generate": "stone",
+          "correct_generate": false
+        },
+        {
+          "expected": "stock",
+          "cv": [
+            "mirror",
+            "tiny",
+            "lace",
+            "forest",
+            "maid",
+            "planet",
+            "feed",
+            "bay",
+            "stock",
+            "worm"
+          ],
+          "cv_first": "mirror",
+          "cv_last": "worm",
+          "test_category": "painting medium",
+          "k": 9,
+          "seed": 747832221,
+          "pred_single_token": "forest",
+          "correct_single_token": false,
+          "pred_generate": "forest",
+          "correct_generate": false
+        }
+      ]
+    },
+    "FVQ": {
+      "k": 1,
+      "query_word": "first",
+      "n": 4,
+      "elapsed_sec": 2.3879010677337646,
+      "ms_per_trial": 596.9752669334412,
+      "accuracy_single_token": 1.0,
+      "wrong_frac_single_token": 0.0,
+      "accuracy_generate": 1.0,
+      "wrong_frac_generate": 0.0,
+      "scoring_agreement": 1.0,
+      "audit_generate": {
+        "n": 4,
+        "counts": {
+          "exact": 4,
+          "wrong_slot_same_key": 0,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 1.0,
+          "wrong_slot_same_key": 0.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [
+            {
+              "expected": "planet",
+              "got": "planet",
+              "k": 1
+            },
+            {
+              "expected": "lace",
+              "got": "lace",
+              "k": 1
+            },
+            {
+              "expected": "water",
+              "got": "water",
+              "k": 1
+            },
+            {
+              "expected": "act",
+              "got": "act",
+              "k": 1
+            }
+          ],
+          "wrong_slot_same_key": [],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "audit_single_token": {
+        "n": 4,
+        "counts": {
+          "exact": 4,
+          "wrong_slot_same_key": 0,
+          "other_key_value": 0,
+          "off_pool": 0,
+          "multi_word": 0,
+          "empty": 0
+        },
+        "fractions": {
+          "exact": 1.0,
+          "wrong_slot_same_key": 0.0,
+          "other_key_value": 0.0,
+          "off_pool": 0.0,
+          "multi_word": 0.0,
+          "empty": 0.0
+        },
+        "examples": {
+          "exact": [
+            {
+              "expected": "planet",
+              "got": "planet",
+              "k": 1
+            },
+            {
+              "expected": "lace",
+              "got": "lace",
+              "k": 1
+            },
+            {
+              "expected": "water",
+              "got": "water",
+              "k": 1
+            },
+            {
+              "expected": "act",
+              "got": "act",
+              "k": 1
+            }
+          ],
+          "wrong_slot_same_key": [],
+          "other_key_value": [],
+          "off_pool": [],
+          "multi_word": [],
+          "empty": []
+        }
+      },
+      "records": [
+        {
+          "expected": "planet",
+          "cv": [
+            "planet",
+            "bonus",
+            "stone",
+            "pit",
+            "act",
+            "camp",
+            "forest",
+            "zen",
+            "role",
+            "club"
+          ],
+          "cv_first": "planet",
+          "cv_last": "club",
+          "test_category": "ocean current",
+          "k": 1,
+          "seed": 873765416,
+          "pred_single_token": "planet",
+          "correct_single_token": true,
+          "pred_generate": "planet",
+          "correct_generate": true
+        },
+        {
+          "expected": "lace",
+          "cv": [
+            "lace",
+            "ally",
+            "act",
+            "union",
+            "form",
+            "fax",
+            "planet",
+            "camp",
+            "season",
+            "feed"
+          ],
+          "cv_first": "lace",
+          "cv_last": "feed",
+          "test_category": "psychology term",
+          "k": 1,
+          "seed": 537705835,
+          "pred_single_token": "lace",
+          "correct_single_token": true,
+          "pred_generate": "lace",
+          "correct_generate": true
+        },
+        {
+          "expected": "water",
+          "cv": [
+            "water",
+            "seat",
+            "blood",
+            "worm",
+            "cult",
+            "week",
+            "corner",
+            "hill",
+            "planet",
+            "stone"
+          ],
+          "cv_first": "water",
+          "cv_last": "stone",
+          "test_category": "dance style",
+          "k": 1,
+          "seed": 690870189,
+          "pred_single_token": "water",
+          "correct_single_token": true,
+          "pred_generate": "water",
+          "correct_generate": true
+        },
+        {
+          "expected": "act",
+          "cv": [
+            "act",
+            "launch",
+            "row",
+            "role",
+            "hid",
+            "hill",
+            "craft",
+            "forest",
+            "seat",
+            "reveal"
+          ],
+          "cv_first": "act",
+          "cv_last": "reveal",
+          "test_category": "constellation",
+          "k": 1,
+          "seed": 354810608,
+          "pred_single_token": "act",
+          "correct_single_token": true,
+          "pred_generate": "act",
+          "correct_generate": true
+        }
+      ]
+    }
+  },
+  "sizing": {
+    "n_classes": 50,
+    "target_wrong_subset": 1250,
+    "per_condition": {
+      "CVQ": {
+        "wrong_frac": 0.25,
+        "T_for_wrong_subset": 5000,
+        "T_for_all_subset": 1250
+      },
+      "k2": {
+        "wrong_frac": 0.75,
+        "T_for_wrong_subset": 1667,
+        "T_for_all_subset": 1250
+      },
+      "k3": {
+        "wrong_frac": 0.75,
+        "T_for_wrong_subset": 1667,
+        "T_for_all_subset": 1250
+      },
+      "k4": {
+        "wrong_frac": 1.0,
+        "T_for_wrong_subset": 1250,
+        "T_for_all_subset": 1250
+      },
+      "k5": {
+        "wrong_frac": 1.0,
+        "T_for_wrong_subset": 1250,
+        "T_for_all_subset": 1250
+      },
+      "k6": {
+        "wrong_frac": 1.0,
+        "T_for_wrong_subset": 1250,
+        "T_for_all_subset": 1250
+      },
+      "k7": {
+        "wrong_frac": 1.0,
+        "T_for_wrong_subset": 1250,
+        "T_for_all_subset": 1250
+      },
+      "k8": {
+        "wrong_frac": 1.0,
+        "T_for_wrong_subset": 1250,
+        "T_for_all_subset": 1250
+      },
+      "k9": {
+        "wrong_frac": 1.0,
+        "T_for_wrong_subset": 1250,
+        "T_for_all_subset": 1250
+      },
+      "FVQ": {
+        "wrong_frac": 0.0,
+        "T_for_wrong_subset": null,
+        "T_for_all_subset": 1250
+      }
+    }
+  }
+}

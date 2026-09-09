@@ -62,3 +62,10 @@ setup folder/
 
 # Pre-dedup trials.jsonl safety copies (local only)
 *.predup
+
+# Probe50 residual-stream activations: 17 GB of float16 .npy, local only.
+# These are inputs to the probe fit, not results -- every number derived from
+# them is in consolidated_results/05_mechanistic/value_identity_probe/ and in
+# the probe_fits_*.json next to them, both of which ARE committed.
+lora_intervention/experiments/linear_probing/results_probe50/*/reps_*.npy
+lora_intervention/experiments/linear_probing/results_probe50/*/.topup_done

@@ -1,0 +1,30 @@
+google/gemma-3-4b-it  cell={'keys': 10, 'updates': 5}  n_layers=34  d_model=2560  classes=50  chance=0.020
+C grid: [0.1]
+label sets: ['expected']   subsets: ['correct', 'all']
+
+  [CVQ] k=5 n=3000 acc=0.918
+      [CVQ/correct/expected] C=0.1     best L31=0.997 mean=0.403 (57s)
+      [CVQ/all/expected] C=0.1     best L31=0.951 mean=0.382 (61s)
+
+  [k2] k=2 n=3000 acc=0.355
+      [k2/correct/expected] C=0.1     best L30=0.973 mean=0.416 (48s)
+      [k2/all/expected] C=0.1     best L30=0.653 mean=0.289 (80s)
+
+  [k3] k=3 n=3000 acc=0.013
+      [k3/all/expected] C=0.1     best L33=0.293 mean=0.093 (80s)
+
+  [k4] k=4 n=2200 acc=0.001
+      [k4/all/expected] C=0.1     best L33=0.184 mean=0.056 (80s)
+
+  [k5] k=5 n=3000 acc=0.004
+      [k5/all/expected] C=0.1     best L31=0.242 mean=0.078 (81s)
+
+  [FVQ] k=1 n=1250 acc=0.992
+      [FVQ/correct/expected] C=0.1     best L27=0.999 mean=0.476 (46s)
+      [FVQ/all/expected] C=0.1     best L34=0.994 mean=0.473 (44s)
+
+  [k1] k=1 n=1250 acc=0.990
+      [k1/correct/expected] C=0.1     best L30=0.999 mean=0.473 (45s)
+      [k1/all/expected] C=0.1     best L34=0.990 mean=0.468 (44s)
+
+Saved lora_intervention/experiments/linear_probing/results_probe50/gemma-3-4b-it_10k_5u/probe_fits_ref.json

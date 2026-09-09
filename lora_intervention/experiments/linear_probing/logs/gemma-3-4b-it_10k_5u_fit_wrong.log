@@ -1,0 +1,40 @@
+google/gemma-3-4b-it  cell={'keys': 10, 'updates': 5}  n_layers=34  d_model=2560  classes=50  chance=0.020
+C grid: [0.1]
+label sets: ['expected', 'shuffled', 'cv_first', 'cv_last']   subsets: ['wrong']
+
+  [CVQ] k=5 n=3000 acc=0.918
+      [CVQ/wrong] excluded 1 off-pool-argmax trials (format failures, not retrieval failures): 245 -> 244
+      [CVQ/wrong/expected] C=0.1     no valid layers
+      [CVQ/wrong/shuffled] C=0.1     no valid layers
+      [CVQ/wrong/cv_first] C=0.1     no valid layers
+      [CVQ/wrong/cv_last] C=0.1     no valid layers
+
+  [k2] k=2 n=3000 acc=0.355
+      [k2/wrong/expected] C=0.1     best L31=0.635 mean=0.236 (80s)
+      [k2/wrong/shuffled] C=0.1     best L13=0.033 mean=0.023 (114s)
+      [k2/wrong/cv_first] C=0.1     best L34=0.934 mean=0.450 (69s)
+      [k2/wrong/cv_last] C=0.1     best L34=0.112 mean=0.043 (82s)
+
+  [k3] k=3 n=3000 acc=0.013
+      [k3/wrong/expected] C=0.1     best L33=0.309 mean=0.096 (87s)
+      [k3/wrong/shuffled] C=0.1     best L2=0.028 mean=0.023 (93s)
+      [k3/wrong/cv_first] C=0.1     best L29=0.769 mean=0.392 (78s)
+      [k3/wrong/cv_last] C=0.1     best L33=0.171 mean=0.059 (88s)
+
+  [k4] k=4 n=2200 acc=0.001
+      [k4/wrong/expected] C=0.1     best L33=0.184 mean=0.056 (88s)
+      [k4/wrong/shuffled] C=0.1     best L0=0.028 mean=0.020 (98s)
+      [k4/wrong/cv_first] C=0.1     best L29=0.658 mean=0.330 (78s)
+      [k4/wrong/cv_last] C=0.1     best L34=0.178 mean=0.061 (80s)
+
+  [k5] k=5 n=3000 acc=0.004
+      [k5/wrong/expected] C=0.1     best L32=0.247 mean=0.080 (89s)
+      [k5/wrong/shuffled] C=0.1     best L1=0.025 mean=0.021 (105s)
+      [k5/wrong/cv_first] C=0.1     best L20=0.612 mean=0.310 (83s)
+      [k5/wrong/cv_last] C=0.1     best L32=0.247 mean=0.080 (81s)
+
+  [FVQ] k=1 n=1250 acc=0.992
+
+  [k1] k=1 n=1250 acc=0.990
+
+Saved lora_intervention/experiments/linear_probing/results_probe50/gemma-3-4b-it_10k_5u/probe_fits_wrong.json

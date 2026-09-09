@@ -1,0 +1,45 @@
+google/gemma-3-4b-it  cell={'keys': 5, 'updates': 10}  n_layers=34  d_model=2560  classes=50  chance=0.020
+C grid: [0.1]
+label sets: ['expected']   subsets: ['correct', 'all']
+
+  [CVQ] k=10 n=8648 acc=0.853
+      [CVQ/correct/expected] C=0.1     best L32=0.990 mean=0.459 (136s)
+      [CVQ/all/expected] C=0.1     best L32=0.913 mean=0.428 (170s)
+
+  [k2] k=2 n=2700 acc=0.430
+      [k2/correct/expected] C=0.1     best L31=0.972 mean=0.429 (72s)
+      [k2/all/expected] C=0.1     best L30=0.692 mean=0.310 (108s)
+
+  [k3] k=3 n=2600 acc=0.008
+      [k3/all/expected] C=0.1     best L33=0.330 mean=0.100 (105s)
+
+  [k4] k=4 n=2600 acc=0.001
+      [k4/all/expected] C=0.1     best L30=0.178 mean=0.052 (118s)
+
+  [k5] k=5 n=1300 acc=0.002
+      [k5/all/expected] C=0.1     best L33=0.104 mean=0.040 (103s)
+
+  [k6] k=6 n=1350 acc=0.000
+      [k6/all/expected] C=0.1     best L34=0.064 mean=0.030 (89s)
+
+  [k7] k=7 n=1350 acc=0.013
+      [k7/all/expected] C=0.1     best L32=0.084 mean=0.035 (87s)
+
+  [k8] k=8 n=1350 acc=0.017
+      [k8/all/expected] C=0.1     best L30=0.092 mean=0.038 (88s)
+
+  [k9] k=9 n=1350 acc=0.025
+      [k9/all/expected] C=0.1     best L31=0.100 mean=0.041 (76s)
+
+  [k10] k=10 n=1411 acc=0.098
+      [k10/all/expected] C=0.1     best L31=0.262 mean=0.098 (84s)
+
+  [FVQ] k=1 n=2500 acc=0.991
+      [FVQ/correct/expected] C=0.1     best L24=1.000 mean=0.500 (73s)
+      [FVQ/all/expected] C=0.1     best L24=0.994 mean=0.498 (75s)
+
+  [k1] k=1 n=2500 acc=0.992
+      [k1/correct/expected] C=0.1     best L24=0.998 mean=0.500 (72s)
+      [k1/all/expected] C=0.1     best L24=0.994 mean=0.499 (75s)
+
+Saved lora_intervention/experiments/linear_probing/results_probe50/gemma-3-4b-it_5k_10u/probe_fits_ref.json
