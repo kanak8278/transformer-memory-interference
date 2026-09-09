@@ -17,15 +17,22 @@ Reporting conventions carried over from the main sweep:
   * Ordinal position N and the recency query 'last' hit the same target item,
     so 'last' is drawn detached rather than as a point on the curve.
 """
-import collections, csv, json, math, os
+import collections, csv, json, math, os, sys
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-RUN = ("experiments_cloud/results/cot_ivq_arbitrary_single/"
-       "claude-haiku-4-5-20251001__cot_thinking__ARBITRARY_SINGLE")
-FIGS = "experiments_cloud/results/cot_ivq_arbitrary_single/_figs"
+# Defaults to the haiku ladder; pass a run directory as argv[1] to plot another
+# model. Figures land in <run>/_figs so the three models cannot overwrite each
+# other, except for the default haiku call, which keeps its original shared
+# path for backward compatibility.
+_DEFAULT_RUN = ("experiments_cloud/results/cot_ivq_arbitrary_single/"
+                "claude-haiku-4-5-20251001__cot_thinking__ARBITRARY_SINGLE")
+RUN = sys.argv[1].rstrip("/") if len(sys.argv) > 1 else _DEFAULT_RUN
+FIGS = ("experiments_cloud/results/cot_ivq_arbitrary_single/_figs"
+        if RUN == _DEFAULT_RUN else os.path.join(RUN, "_figs"))
+MODEL = os.path.basename(RUN).split("__")[0].replace("claude-", "")
 # Reference point from the completed SEMANTIC_MULTI sweep, same K and N.
 SEMANTIC_K5N50 = 0.975
 BUDGET = 3000
@@ -101,7 +108,7 @@ def main():
             ax.set_xlim(0, 540); ax.set_ylabel("accuracy")
             ax.set_title("linear x — the interior collapses as N grows")
             ax.legend(fontsize=9, loc="upper right", ncol=2)
-    fig.suptitle("Fixed thinking budget (3000), haiku, ARBITRARY_SINGLE K=5: accuracy by query depth\n"
+    fig.suptitle(f"Fixed thinking budget ({BUDGET}), {MODEL}, ARBITRARY_SINGLE K=5: accuracy by query depth\n"
                  "filled = ordinal \"the k-th value\";  open marker = recency \"the last value\" (same target item)",
                  fontsize=12)
     fig.tight_layout(rect=(0, 0, 1, 0.88))
