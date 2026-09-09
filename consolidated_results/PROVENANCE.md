@@ -520,16 +520,21 @@ are flagged `DEGENERATE:` in `notes` and must not be counted as controls.
 
 ---
 
-## 08_museum_naturalistic/ — endpoint.csv (116) · ivq.csv (96) · cot_ivq.csv (192)
+## 08_museum_naturalistic/ — endpoint.csv (116) · ivq.csv (96) · cot_ivq.csv (288)
 
 Built by `build/build_08_museum.py`. Added 2026-09-09. All rows `raw`.
-**claude-4.5-haiku only.** Dataset `museum_m0`, prompt_format `narrative_m0`.
+Dataset `museum_m0`, prompt_format `narrative_m0`. **claude-4.5-haiku on all
+three sweeps; claude-4.5-opus on the `nocot` arm of `cot_ivq.csv` only** — so
+that file has a two-model no-CoT arm against a one-model CoT arm, and a groupby
+on `variant` alone compares different model sets. `build_08_museum.py` prints
+the matrix (`qa_arm_coverage`) on every build.
 
 | rows | tier | source |
 |---|---|---|
 | 116 | raw | `experiments_cloud/results/museum_endpoint/claude-haiku/sweep_20260722_161853.json` — 58 cells x {RI, PI} |
 | 96 | raw | `legacy/results/museum_ivq/claude-haiku/ivq_full_20260722_173410_summary.json` — 6 cells x 12-18 positions |
 | 192 | raw | `experiments_cloud/results/museum_cot/claude-haiku-4-5-20251001__{nocot,cot_thinking}/checkpoint.json` |
+| 96 | raw | `experiments_cloud/results/museum_cot/claude-opus-4-5-20251101__nocot/checkpoint.json` — complete (6/6 cells, 1,200 trials), 3.9% malformed |
 
 **Files in those directories deliberately NOT read.**
 `museum_endpoint/.../sweep_partial.json` is an in-progress snapshot of the same
@@ -558,7 +563,7 @@ careful are coverage (one model) and validity (below), not domain.
 |---|---|---|---|
 | sonnet | `nocot` | completed, 18,024 attempts | **54.1% malformed** (9,757) vs 0.0% haiku / 3.9% opus. Reported accuracy 0.350 rests on the surviving 46%, a self-selected population. Fails the >=20% off-stream rule applied to seven open-weight models in theme 01. |
 | sonnet | `cot_thinking` | **crashed** | Died at trial 64/200 of cell 1 of 6 after a leaked-semaphore warning; wrote no `checkpoint.json`; `trials.jsonl` holds 791 lines from that one cell. **`_runner_sonnet.log` records `END sonnet cot_thinking (exit 0)` and `DONE`** — the log claims success. Checkpoints are written per cell (`museum_cot_sweep.py:493`), so a mid-cell crash loses the cell entirely. |
-| opus | `nocot` | completed cleanly | Usable. Held back only because it is one arm of a pair whose other half does not exist; add it if a nocot-only cross-model comparison is wanted. |
+| opus | `nocot` | completed cleanly | **Now consolidated (2026-09-09).** 6/6 cells, 1,200 trials, 3.9% malformed. It is what makes the museum result cross-model on the no-CoT arm, and it splits the finding: haiku reads FVQ 0.827 / CVQ 0.051 on ordinal queries while opus reads 0.631 / 0.642, so the *counting* failure is haiku-specific — but both sit on the interior floor (0.142 / 0.107), so the *interior* failure is not. Same split theme 07 found on the synthetic stimulus. |
 | opus | `cot_thinking` | **never run** | A smoke now exists (below) and passes, so the full run is a spend decision, not a technical one. |
 
 **Opus smoke, 2026-09-09.**
@@ -613,7 +618,7 @@ Recorded so these stay findable, not because they are unimportant.
 | Narrative-domain variant (Dota2 / ATC / ICU) | `narrative_generator/`, `data/narrative_interference/` | Abandoned line; see paper §Limitations. |
 | Older non-vLLM v3 runs | `v3/results/` | Superseded by `v3/results_vllm/`. |
 | v3 correctness / retrieval **AUC** probe grid | `lora_intervention/experiments/linear_probing/results/` — 124 JSONs (Qwen + gemma, base + LoRA, 31 cells x 7 conditions x ~36 layers), plus 36 earlier pilots and `isoaccuracy_v3*_summary.json` | A different probe question (is *correctness* decodable) and a different metric (AUC) from the value-identity probe above, and it degenerates wherever accuracy is 0% or 100% — 339 of 868 condition-cells per `PROBE50_DESIGN.md`. `05_mechanistic/probing.csv` holds a 354-row slice of this family from a different source, covering only the (2,5) cell. Consolidating the full grid is a live option; if taken, build from the 124 JSONs, not from `probe_layer_values_raw.csv`. |
-| Museum sweeps — sonnet (both arms) and opus `cot_thinking` | `experiments_cloud/results/museum_cot/claude-{sonnet-4-5-20250929__nocot,sonnet-4-5-20250929__cot_thinking,opus-4-5-20251101__nocot}/` | **Supersedes an earlier blanket exclusion of all museum runs.** The haiku arms are now theme 08. Sonnet `nocot` is 54.1% malformed, sonnet `cot_thinking` crashed after one partial cell, opus `cot_thinking` was never run. Per-arm detail in the theme-08 section above. |
+| Museum sweeps — sonnet (both arms) and opus `cot_thinking` | `experiments_cloud/results/museum_cot/claude-sonnet-4-5-20250929__{nocot,cot_thinking}/` | **Supersedes an earlier blanket exclusion of all museum runs.** The haiku arms are now theme 08. Sonnet `nocot` is 54.1% malformed and sonnet `cot_thinking` crashed after one partial cell. Opus `nocot` is now consolidated; opus `cot_thinking` was never run beyond a smoke. Per-arm detail in the theme-08 section above. |
 | Training-dynamics checkpoint sweeps (SmolLM2 42 ckpts, SmolLM3 37 ckpts) | raw not local; survives as `paper/figures/tab_smollm2_traj.tex`, `tab_smollm3_traj.tex`, `fig3_training_dynamics.*` | Not one of the four themes. The SmolLM3 *format* slice **is** included (theme 3). |
 
 ## Related maps

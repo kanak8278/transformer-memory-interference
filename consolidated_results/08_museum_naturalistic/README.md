@@ -8,9 +8,9 @@ through galleries, where an update is a sentence, not a labelled line.
 
 | | |
 |---|---|
-| files | `endpoint.csv` (116) · `ivq.csv` (96) · `cot_ivq.csv` (192). All `raw`. |
+| files | `endpoint.csv` (116) · `ivq.csv` (96) · `cot_ivq.csv` (288). All `raw`. |
 | per-model slices | `by_model_endpoint/`, `by_model_ivq/`, `by_model_cot/` (generated) |
-| model | **claude-4.5-haiku only** — see below |
+| models | claude-4.5-haiku (all three sweeps) · claude-4.5-opus (**`nocot` arm of `cot_ivq.csv` only**) |
 | dataset | `museum_m0` |
 | prompt_format | `narrative_m0` |
 | variant | `base` (endpoint, ivq) · `nocot` / `cot_thinking` (cot_ivq) |
@@ -19,21 +19,29 @@ through galleries, where an update is a sentence, not a labelled line.
 |---|---|---|
 | `endpoint.csv` | theme 01 (FVQ vs CVQ) | **58 cells** — K ∈ {1,2,5,10,15,20,25,30,40,45} × N ∈ {5,10,15,20,30,50} |
 | `ivq.csv` | theme 02 (per-position) | 6 cells — K ∈ {5,10} × N ∈ {10,20,50}, 12–18 probed positions |
-| `cot_ivq.csv` | theme 07 (CoT vs no-CoT) | 6 cells, same grid, both arms |
+| `cot_ivq.csv` | theme 07 (CoT vs no-CoT) | 6 cells, same grid — haiku both arms, opus `nocot` only |
 
 `endpoint.csv` is the widest grid in the whole corpus — wider than the synthetic
 sweeps it mirrors.
 
-## Haiku only — and the other two models failed differently
+## Coverage is ragged — check it before any groupby
 
-claude-4.5-haiku is the only model with usable data. Both other Claude 4.5
-models were run on the CoT sweep; neither is consolidated:
+| model | `nocot` | `cot_thinking` | `endpoint` | `ivq` |
+|---|---|---|---|---|
+| haiku | ✓ 13,640 trials | ✓ 17,160 trials | ✓ | ✓ |
+| opus | ✓ 13,744 trials, 3.9% malformed — **consolidated** | ✗ never run (smoke only) | ✗ | ✗ |
+| sonnet | ⚠ **54.1% of attempts malformed** (9,757/18,024) — excluded | ✗ died 64 trials into cell 1 of 6, **no checkpoint** | ✗ | ✗ |
 
-| model | `nocot` | `cot_thinking` |
-|---|---|---|
-| haiku | ✓ 13,640 trials | ✓ 17,160 trials |
-| sonnet | ⚠ ran, but **54.1% of attempts malformed** (9,757/18,024) | ✗ died 64 trials into cell 1 of 6, **no checkpoint** |
-| opus | ✓ 13,744 trials, 3.9% malformed | ✗ never run — a smoke test now exists |
+So `cot_ivq.csv` has a **two-model `nocot` arm and a one-model `cot_thinking`
+arm**. `df.groupby("variant").accuracy.mean()` silently compares different model
+sets. Haiku is the only model where the CoT contrast is paired:
+
+```python
+df[df.model == "claude-4.5-haiku"].groupby("variant")   # the CoT effect
+df[df.variant == "nocot"].groupby("model")              # the model effect
+```
+
+`endpoint.csv` and `ivq.csv` remain haiku-only.
 
 **Sonnet is excluded on validity grounds, not convenience.** Its 54.1% malformed
 rate against haiku's 0.0% and opus's 3.9% means its reported 0.350 accuracy
@@ -106,9 +114,33 @@ A 12× difference on the identical target item, from wording alone. Same
 decomposition as theme 02 — a *counting* failure separate from a *retrieval*
 failure — reproduced on prose.
 
+## Headline 2b — the counting failure is haiku's; the interior failure is not
+
+With opus on the `nocot` arm, the museum result splits in two. Mean accuracy,
+ordinal queries:
+
+| model | arm | FVQ | IVQ | CVQ |
+|---|---|---|---|---|
+| haiku | `nocot` | 0.827 | **0.142** | **0.051** |
+| opus | `nocot` | 0.631 | **0.107** | **0.642** |
+
+Haiku shows a huge endpoint asymmetry on numbered queries — 0.83 at the first
+update, 0.05 at the last. Opus is essentially flat, 0.63 vs 0.64. So *"cannot
+count to N"* is a **haiku** failure, not a property of the narrative. But the
+interior is on the floor for both (0.142 and 0.107), so *"cannot reach the
+interior"* holds across models.
+
+This is the same split theme 07 found on the synthetic stimulus, where opus
+`nocot` scored 0.554 at CVQ-ordinal against haiku's 0.010 — so it is a model
+property that survives the format change, in both directions.
+
+Worded endpoints agree across models (`first` 0.839 haiku / 0.832 opus; `last`
+0.530 / 0.559), which is what isolates the effect to *numbered* addressing.
+
 ## Headline 3 — CoT rescues the interior here too, but only halfway
 
-`cot_ivq.csv`, ordinal queries, mean accuracy:
+`cot_ivq.csv`, ordinal queries, mean accuracy — **haiku only**, the one model
+with both arms:
 
 | arm | FVQ | IVQ | CVQ |
 |---|---|---|---|
@@ -143,8 +175,9 @@ Worded endpoints also gain: `last` goes 0.530 → 0.904 with thinking.
 
 ## Caveats
 
-- **One model.** Nothing here supports a scaling or cross-family claim. The
-  synthetic themes span 14 models; this spans one.
+- **Two models at most, one on most sweeps.** Nothing here supports a scaling
+  or cross-family claim: the synthetic themes span 14 models, this spans two on
+  one arm of one file and one everywhere else.
 - **Grids do not line up cell-for-cell** with the themes they mirror, so compare
   shapes and trends, not paired cells. `ivq.csv` names its intended comparator
   in `notes`: `plain flat_nolabel in ucurve_proprietary_results.csv` (theme 02).
@@ -156,7 +189,8 @@ Worded endpoints also gain: `last` goes 0.530 → 0.904 with thinking.
 
 `experiments_cloud/results/museum_endpoint/claude-haiku/`,
 `legacy/results/museum_ivq/claude-haiku/`,
-`experiments_cloud/results/museum_cot/claude-haiku-4-5-20251001__{nocot,cot_thinking}/`.
+`experiments_cloud/results/museum_cot/claude-haiku-4-5-20251001__{nocot,cot_thinking}/`,
+`experiments_cloud/results/museum_cot/claude-opus-4-5-20251101__nocot/`.
 Producers: `museum_endpoint_sweep.py`, `museum_ivq_haiku.py`,
 `museum_cot_sweep.py` + `museum_cot_prompts.py` + `museum_cot_score.py`,
 `run_museum_cot.sh`. See `../PROVENANCE.md` or `../build/build_08_museum.py`.

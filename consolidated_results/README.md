@@ -154,11 +154,14 @@ FVQ−CVQ across 58 cells, positive in 54**, against theme 1's +0.19 in 19/20
 series. The U-curve reappears (K=10/N=50: 0.82 at position 1, floor by position
 6, 0.01 at position 50 asked by number and **0.26** asked as "the last"). And
 CoT rescues the interior again — 0.142 → **0.579** — but tops out far below
-theme 7's 0.97–1.00, so the rescue is itself partly format-dependent. Two hard
-limits on reading it: **claude-4.5-haiku only** (sonnet's arm was 54% malformed,
-opus's CoT arm was never run), and off-stream failure is CVQ-specific and grows
-with depth, so **`accuracy_onstream` is the column to use** — the raw gap
-overstates by ~27%. Files in `08_museum_naturalistic/`.
+theme 7's 0.97–1.00, so the rescue is itself partly format-dependent. Adding opus to the no-CoT arm splits the
+finding in two: haiku reads FVQ 0.827 / CVQ 0.051 on numbered queries while opus
+reads 0.631 / **0.642**, so *counting to N* is a haiku failure — yet both sit on
+the interior floor (0.142 / 0.107), so *reaching the interior* is not. Two hard
+limits on reading it: coverage is ragged (haiku on all three sweeps, opus on one
+arm, sonnet excluded at 54% malformed), and off-stream failure is CVQ-specific
+and grows with depth, so **`accuracy_onstream` is the column to use** — the raw
+gap overstates by ~27%. Files in `08_museum_naturalistic/`.
 
 ### Seven models are excluded — do not re-add them without reading why
 
@@ -379,8 +382,10 @@ nothing more. It cannot detect an error in the run itself.
   snapshots.** Theme 07 preserves the dated API id per row in `notes`; themes 02
   and 03 have no snapshot date at all. A theme-02 vs theme-07 difference is not
   purely an arm effect.
-- **Theme 08 is one model.** `08_museum_naturalistic/` is claude-4.5-haiku
-  only. It supports no scaling or cross-family claim, and its raw `accuracy`
+- **Theme 08's coverage is ragged.** `08_museum_naturalistic/` is
+  claude-4.5-haiku on all three sweeps plus claude-4.5-opus on the `nocot` arm
+  of `cot_ivq.csv` only, so a groupby on `variant` there compares different
+  model sets. It supports no scaling or cross-family claim, and its raw `accuracy`
   overstates the endpoint gap because off-stream failure there is CVQ-specific
   and depth-dependent — use `accuracy_onstream`. 7 of its 96 `cot_thinking` rows
   are lower bounds from thinking-budget truncation.

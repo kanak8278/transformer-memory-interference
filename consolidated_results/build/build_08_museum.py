@@ -16,9 +16,13 @@ Three sweeps, one stimulus, three of the questions asked elsewhere:
   cot_ivq.csv    nocot vs cot_thinking, same cells
                  -- the theme-7 question
 
-**HAIKU ONLY, AND THAT IS THE POINT OF READING THIS FIRST.** claude-4.5-haiku is
-the only model with usable data on all three. The other two Claude 4.5 models
-were run on the CoT sweep and both failed, differently:
+**COVERAGE IS RAGGED, AND THAT IS THE POINT OF READING THIS FIRST.**
+claude-4.5-haiku is the only model on all three sweeps. `cot_ivq.csv` also holds
+claude-4.5-opus, but on the `nocot` arm ONLY -- so a groupby on `variant` alone
+mixes a two-model no-CoT arm with a one-model CoT arm. `endpoint.csv` and
+`ivq.csv` are haiku-only.
+
+Excluded, per-run reasons in COT_RUNS below:
 
   sonnet  `nocot` completed but **54.1% of its attempts were malformed**
           (9,757 of 18,024) against 0.0% for haiku and 3.9% for opus. Its
@@ -27,10 +31,18 @@ were run on the CoT sweep and both failed, differently:
           open-weight models from theme 01 this arm does not qualify. Its
           `cot_thinking` arm died 64 trials into the first of six cells and
           wrote no checkpoint -- while the runner logged `exit 0`.
-  opus    `nocot` completed cleanly. `cot_thinking` was never run.
+  opus    `cot_thinking` was never run beyond a 12-call smoke.
 
-Neither is consolidated here. `PROVENANCE.md` records where they sit and what
-would make them usable, so the omission is a decision rather than an oversight.
+`PROVENANCE.md` records where those sit and what would make them usable, so the
+omission is a decision rather than an oversight.
+
+What the opus `nocot` arm buys, beyond a second model: the museum first-value
+result turns out to be **model-specific on ordinal queries and not on the
+interior**. Haiku reads FVQ 0.827 / CVQ 0.051; opus reads FVQ 0.631 / CVQ 0.642 --
+essentially flat. But both sit on the floor in the interior (0.142 / 0.107). So
+"the model cannot count to N" is a haiku failure, while "the model cannot reach
+the interior" holds for both. That mirrors theme 07 on the synthetic stimulus,
+where opus nocot scored 0.554 at CVQ-ordinal against haiku's 0.010.
 
 Two properties of these sources that do not hold elsewhere in the corpus:
 
@@ -61,12 +73,13 @@ Sources (all RAW)
       is a 2026-07-22 run contemporaneous with the others -- the path is
       historical, not a statement about the data.
   experiments_cloud/results/museum_cot/claude-haiku-4-5-20251001__{nocot,cot_thinking}/checkpoint.json
-      6 cells x 12-18 positions x 2 arms.
+  experiments_cloud/results/museum_cot/claude-opus-4-5-20251101__nocot/checkpoint.json
+      6 cells x 12-18 positions. Haiku has both arms, opus `nocot` only.
 
 Why theme 08 and not rows added to themes 01 / 02 / 07: the stimulus is the
 manipulated variable. Filing these three sweeps under the themes whose questions
 they mirror would scatter one comparison across three directories and force the
-same haiku-only caveat into each. Read alongside those themes, not merged into
+same coverage caveat into each. Read alongside those themes, not merged into
 them -- the grids do not match cell-for-cell anyway.
 """
 
@@ -92,8 +105,31 @@ ENDPOINT_SRC = (ROOT / "experiments_cloud" / "results" / "museum_endpoint"
 IVQ_SRC = (ROOT / "legacy" / "results" / "museum_ivq" / "claude-haiku"
            / "ivq_full_20260722_173410_summary.json")
 COT_DIR = ROOT / "experiments_cloud" / "results" / "museum_cot"
-COT_ARMS = ("nocot", "cot_thinking")
-COT_MODEL_DIR = "claude-haiku-4-5-20251001__{arm}"
+
+# (directory, arm) pairs that are consolidated, and the reason each surviving
+# run is trusted. Explicit rather than a glob: three of the six runs in that
+# directory must NOT be read, and a glob would silently pick them up if the
+# exclusion note ever drifted out of date.
+#
+#   claude-sonnet-4-5-20250929__nocot          54.1% malformed (9,757/18,024)
+#                                              vs 0.0% haiku / 3.9% opus. Fails
+#                                              the >=20% off-stream rule that
+#                                              excluded seven models in theme 01.
+#   claude-sonnet-4-5-20250929__cot_thinking   died 64 trials into cell 1 of 6,
+#                                              no checkpoint written, runner
+#                                              logged `exit 0`.
+#   claude-opus-4-5-20251101__cot_thinking     never run beyond a 12-call smoke
+#                                              (..__cot_thinking__smoke).
+COT_RUNS = (
+    ("claude-haiku-4-5-20251001__nocot", "nocot"),
+    ("claude-haiku-4-5-20251001__cot_thinking", "cot_thinking"),
+    # Opus has the nocot arm ONLY. Consolidated because it is complete (6/6
+    # cells, 1,200 trials) and clean (3.9% malformed), and because a second
+    # model on the nocot arm is what makes the museum first-value result
+    # cross-model rather than anecdotal. It does NOT license a cross-model CoT
+    # claim -- there is no opus cot_thinking arm to pair it with.
+    ("claude-opus-4-5-20251101__nocot", "nocot"),
+)
 
 # Both `endpoint` and `ivq` seed from `abs(hash(...))` over a tuple containing a
 # string, which Python salts per process. Carried on every row from those two
@@ -185,11 +221,18 @@ def from_ivq() -> list[dict]:
 
 
 def from_cot() -> list[dict]:
-    """nocot vs cot_thinking on the narrative. Haiku only -- see module docstring."""
+    """nocot vs cot_thinking on the narrative.
+
+    Coverage is deliberately ragged: haiku has both arms, opus has `nocot` only.
+    See COT_RUNS for which runs are excluded and why. The consequence for
+    readers is in `qa_arm_coverage` and in the theme README -- a groupby on
+    `variant` alone mixes a two-model nocot arm with a one-model CoT arm.
+    """
     rows = []
-    for arm in COT_ARMS:
-        path = COT_DIR / COT_MODEL_DIR.format(arm=arm) / "checkpoint.json"
+    for run_dir, arm in COT_RUNS:
+        path = COT_DIR / run_dir / "checkpoint.json"
         ck = json.loads(path.read_text())
+        assert ck["arm"] == arm, f"{run_dir}: checkpoint arm={ck['arm']!r}"
         src = rel(path)
         cfg = ck["config"]
         for cell in ck["cells"].values():
@@ -232,6 +275,19 @@ def from_cot() -> list[dict]:
     return rows
 
 
+def qa_arm_coverage(rows: list[dict]) -> None:
+    """State the model x arm matrix, since it is not full."""
+    seen = {}
+    for r in rows:
+        seen.setdefault(r["variant"], set()).add(r["model"])
+    for arm in sorted(seen):
+        models = ", ".join(sorted(seen[arm]))
+        print(f"     arm coverage: {arm:13s} {len(seen[arm])} model(s) — {models}")
+    both = set.intersection(*seen.values()) if len(seen) > 1 else set()
+    print(f"     models with BOTH arms (the only valid CoT contrast): "
+          f"{', '.join(sorted(both)) or 'none'}")
+
+
 def qa_budget_truncation(rows: list[dict]) -> None:
     """Report how much of the CoT arm is a lower bound rather than a measurement."""
     cot = [r for r in rows if r["variant"] == "cot_thinking"]
@@ -257,7 +313,7 @@ def qa_offstream(rows: list[dict]) -> None:
 
 
 def main() -> None:
-    print(f"[{THEME}] museum M0 narrative — claude-4.5-haiku only")
+    print(f"[{THEME}] museum M0 narrative — haiku (3 sweeps) + opus (nocot)")
 
     endpoint = from_endpoint()
     endpoint.sort(key=lambda r: (int(r["num_keys"]), int(r["num_updates"]),
@@ -271,9 +327,10 @@ def main() -> None:
     emit(ivq, OUT, "ivq.csv", bymodel="by_model_ivq")
 
     cot = from_cot()
-    cot.sort(key=lambda r: (r["variant"], int(r["num_keys"]),
+    cot.sort(key=lambda r: (r["model"], r["variant"], int(r["num_keys"]),
                             int(r["num_updates"]), pos_key(r["position"]),
                             r["query_type"]))
+    qa_arm_coverage(cot)
     qa_budget_truncation(cot)
     emit(cot, OUT, "cot_ivq.csv", bymodel="by_model_cot")
 
