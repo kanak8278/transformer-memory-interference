@@ -1,11 +1,12 @@
 # Consolidated Results
 
-One place for every result behind the six stories this project tells, each
+One place for every result behind the seven stories this project tells, each
 with a traceable line back to the file every number came from.
 
-Built 2026-07-22 on branch `aaai-prep`. Nothing here is a new experiment — it is
-a re-presentation of results that already existed, scattered across
-`v3/`, `lora_intervention/`, `experiments_cloud/` and `paper/figures/`.
+Built 2026-07-22 on branch `aaai-prep`; theme 07 added 2026-09-09. Nothing here
+is a new experiment — it is a re-presentation of results that already existed,
+scattered across `v3/`, `lora_intervention/`, `experiments_cloud/` and
+`paper/figures/`.
 
 ```
 consolidated_results/
@@ -20,11 +21,13 @@ consolidated_results/
 ├── 05_mechanistic/             HOW LoRA closes the gap: logit lens, probing, attention routing, causal ablation
 │   └── entropy_lens/           per-layer uncertainty + calibration, one subfolder per arm (Qwen base/lora, from-scratch)
 ├── 06_from_scratch/            GPT-2-small trained from random init on a synthetic KV task
+├── 07_cot_ivq/                 does chain-of-thought rescue the interior? one CSV per arm (nocot / cot_thinking)
 └── build/                      re-runnable builders (see "Rebuilding")
 ```
 
 Each behavioural theme (01–04) holds a canonical combined CSV, a `by_model/`
-split, and a `README.md`. Themes 05 (mechanistic) and 06 (from-scratch) hold one
+split, and a `README.md`. Theme 07 holds one CSV per arm with a `by_model_<arm>/`
+split each, as theme 04 holds one per unit of measurement. Themes 05 (mechanistic) and 06 (from-scratch) hold one
 CSV per unit of measurement and their own `README.md`.
 
 ---
@@ -47,7 +50,7 @@ raw data (570 open-weight model-cells) is the *supporting* experiment; the main
 experiment's open-weight side is the thin, derived one (32 model-cells). See
 `01_fvq_cvq/README.md`.
 
-## The six stories, in one paragraph each
+## The seven stories, in one paragraph each
 
 **1 — First value vs last value.** Across 14 models and 990 paired (K, N)
 cells, the first value is easier to retrieve than the current one in 69% of
@@ -115,6 +118,20 @@ which the capability is learned*. Second, the ordering **survives competence**
 capability deficit. Files in `06_from_scratch/`; **only** the `h100_cosine` run
 was consolidated and that README lists exactly what was left behind.
 
+**7 — Chain-of-thought: a compute limit, not a missing representation.** Give
+the same three Claude 4.5 models the byte-identical prompt and turn extended
+thinking on, and the interior floor lifts from **0.17–0.30 to 0.97–1.00** on
+Semantic-Multi. Nothing about the stimulus or the weights changed, so what the
+single forward pass lacked was the serial computation to count occurrences, not
+access to the value — which constrains how theme 2's collapse can be described.
+It is not free, though: on the Arbitrary-Single depth ladder (K=5, N up to 460)
+CoT accuracy decays monotonically with depth (opus 0.998 at N=50 → **0.756** at
+N=460) and **the U-curve reappears** — at N=460 opus holds 1.00 across positions
+1–8 and scores 0.19 at position 395 while the final update reads 0.77. So CoT
+flattens the middle at moderate depth without abolishing the shape. Files in
+`07_cot_ivq/`, one CSV per arm; the CoT-vs-no-CoT contrast exists on
+Semantic-Multi **only**.
+
 ### Seven models are excluded — do not re-add them without reading why
 
 Across the original corpus, **21.6% of FVQ trials were `off-stream`**: the model
@@ -171,10 +188,10 @@ measurement. Columns a source cannot supply are left empty rather than invented.
 
 | column | meaning |
 |---|---|
-| `theme` | which of the four folders this row belongs to |
+| `theme` | which theme folder this row belongs to (`01_fvq_cvq` … `07_cot_ivq`) |
 | `model` | canonical model id (see `build/common.py` `MODELS`) |
 | `model_family`, `is_proprietary` | derived from `model` |
-| `variant` | `base`, `lora`, `lora_arith_control`, post-training stage, … — the model *version* measured |
+| `variant` | `base`, `lora`, `lora_arith_control`, `nocot`, `cot_thinking`, post-training stage, … — the model *version or inference mode* measured |
 | `dataset` | `arbitrary_single`, `semantic_multi`, `gsm8k` |
 | `prompt_format` | `plain`, `block`, `flat_nolabel`, `flat_verbose`, `landmark`, `chat_template`, `completion_few_shot`, … — **every template verbatim in `PROMPTS.md`** |
 | `num_keys`, `num_updates` | the (K, N) cell |
@@ -237,8 +254,8 @@ read time in `build/common.py::cond_from_ri_pi`; nothing was renamed on disk.
   per-condition CI, and cannot be recomputed without re-running the experiment.
 
 Derived rows are a small minority (118 of the 9,770 rows in themes 01–04;
-themes 05 and 06 add 906 and 458 rows, of which theme 06's are all `raw`) and
-are confined to:
+themes 05, 06 and 07 add 906, 458 and 846 rows, of which themes 06 and 07 are
+all `raw`) and are confined to:
 open-weight `semantic_multi` (theme 1), the open-weight format sweep, the
 SmolLM3 post-training formats, and the **Gemma** LoRA semantic-OOD baseline.
 
@@ -315,6 +332,24 @@ nothing more. It cannot detect an error in the run itself.
   run as a base-vs-LoRA comparison (all open-weight) is in
   `04_lora/lora_ivq.csv`. If you want "the U-curve for open-weight models," it's
   in theme 4.
+- **Theme 07 has no `nocot` arm on Arbitrary-Single.** The CoT-vs-no-CoT
+  contrast exists on `semantic_multi` only; the `arbitrary_single` rows are a
+  CoT-only depth ladder, and they sit in `cot_ivq_cot_thinking.csv` with no
+  counterpart in `cot_ivq_nocot.csv`. Do not compute an unqualified "CoT effect"
+  across both datasets, and do not read the two arm files' row counts (270 vs
+  576) as an arm imbalance — the 306-row difference is that ladder.
+- **Theme 07's arm files are a partition, not an overlap.** Unlike the themes
+  2/3/4 overlap below, no row is in both, so they concatenate safely. Pairing
+  them back up needs the CoT file filtered to `semantic_multi` first; see
+  `07_cot_ivq/README.md`.
+- **Theme 07 positions retire on individual Wilson half-widths.** Within one
+  cell `n_trials` ranges 51–200, so a mean across positions inside a cell
+  silently over-weights the easy ones. This is the sharpest instance of the
+  general `n_trials` warning above.
+- **The same canonical `claude-4.5-*` id spans recorded and unrecorded
+  snapshots.** Theme 07 preserves the dated API id per row in `notes`; themes 02
+  and 03 have no snapshot date at all. A theme-02 vs theme-07 difference is not
+  purely an arm effect.
 - **`by_model/` files are generated.** They are wiped and rewritten on every
   build. Edit nothing there; the combined CSV is canonical.
 
@@ -342,7 +377,7 @@ nothing more. It cannot detect an error in the run itself.
 
 ```bash
 cd consolidated_results/build
-python3 build_all.py          # all four themes, with QA checks
+python3 build_all.py          # all seven themes, with QA checks
 python3 build_03_formats.py   # or one at a time
 ```
 

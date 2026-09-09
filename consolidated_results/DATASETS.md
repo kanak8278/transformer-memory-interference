@@ -76,6 +76,16 @@ truncation, it is the ceiling. Only the bottom four lost cells to context limits
 (gemma-3-1b-it and Qwen2.5-3B run 8192-token contexts) or, for Qwen3.5-4B, to an
 interrupted run.
 
+### The same cap explains theme 07's odd top rung
+
+The CoT depth ladder (`07_cot_ivq/`, K=5) runs N ∈ {50, 100, 200, 300, 400,
+**460**}. 460 is not an arbitrary stopping point: 5 × 460 = **2,300**, the
+entire pool. K=5 cannot go deeper than N=460 without sampling with replacement,
+which would break the no-repeat guarantee above and make intrusions ambiguous.
+So the ladder ends where the dataset ends, not where the model stopped failing —
+and the accuracy still on the way down at N=460 (opus 0.756) means the depth
+limit was **not** reached. Going deeper needs a bigger pool, not a longer run.
+
 ## `SEMANTIC_MULTI` — 46 keys, **per-category** pools
 
 | | |
@@ -133,7 +143,10 @@ adapted models see byte-identical prompts — paired comparisons throughout.
   *chain depth*: the distance the model must traverse to reach the first value,
   and the number of stale candidates competing with the last one.
 
-Total context items = K × N, so K=30/N=75 is 2,250 lines.
+Total context items = K × N, so K=30/N=75 is 2,250 lines. Theme 07's deepest
+rung, K=5/N=460, is 2,300 lines — the two are near-identical context loads
+reached from opposite ends of the K/N trade-off, which is the one place in the
+corpus where interference and chain depth can be told apart at fixed length.
 
 ---
 

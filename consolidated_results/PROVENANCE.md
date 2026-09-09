@@ -1,8 +1,9 @@
 # Provenance
 
 Every consolidated file, and every source file it was built from. Row counts are
-as of the 2026-07-22 build (theme 04 rebuilt 2026-09-07). The CSVs reference
-their sources in place, via the `source_file` column on each row.
+as of the 2026-07-22 build (theme 04 rebuilt 2026-09-07; theme 07 added
+2026-09-09). The CSVs reference their sources in place, via the `source_file`
+column on each row.
 
 **One exception to that.** `04_lora/sources/` holds byte-identical copies of
 `lora_sem_validation_results.json` and `lora_sem_finish_results.json`. Those two
@@ -62,6 +63,11 @@ appears in those experiments.
    semantic_k1,ucurve_proprietary}/*/`) are **not local and were never committed
    to git** — so their off-stream rate cannot be computed from anything in this
    repo.
+
+   **Partly superseded for theme 07 (2026-09-09).** The CoT sweep persists a
+   per-trial outcome for every response, so its three claude models ARE screened:
+   0.12% off-stream corpus-wide, worst cell-arm 0.23%. That covers only theme 07's
+   runs — themes 02 and 03 remain unscreened.
 
    **Decision (2026-07-22): accepted as clean without screening**, on the
    grounds that off-stream rate tracked capability almost monotonically in the
@@ -360,6 +366,84 @@ headline exactly — Qwen L32 paired (LoRA−base) = −0.082 (K2/N5), −0.230 
 `derived` (7 late layers, with CI). Filter by `provenance_tier` before
 aggregating. `ci_analysis.txt` is also the only source of Qwen **base** probing.
 
+---
+
+## 07_cot_ivq/ — cot_ivq_nocot.csv (270) · cot_ivq_cot_thinking.csv (576)
+
+Built by `build/build_07_cot_ivq.py`. Added 2026-09-09; split into one CSV per
+arm 2026-09-09. claude-4.5-{haiku,sonnet,opus} on `flat_nolabel`, `nocot` vs
+`cot_thinking`.
+
+**Why two files.** Requested for legibility: an arm per file, each with its own
+`by_model_<arm>/` split, following the theme-04 two-CSV pattern. The two are a
+partition of the same 846 rows — every row appears exactly once — so unlike the
+theme 2/3/4 overlap noted at the end of this file, concatenating them needs no
+de-duplication. The trade-off is that the theme's headline contrast is paired
+and now crosses a file boundary; `sort_key` in the builder omits `variant` so
+the 270 shared rows emerge in the same order in both files, and
+`check_arm_alignment` re-proves that on every build (270 keys in both, 0
+nocot-only, 306 cot_thinking-only, identical order: True). The 306
+cot_thinking-only rows are the ARBITRARY_SINGLE ladder, which has no no-CoT arm.
+
+| rows | tier | source |
+|---|---|---|
+| 90 × 6 | raw | `experiments_cloud/results/cot_ivq/claude-{haiku-4-5-20251001,sonnet-4-5-20250929,opus-4-5-20251101}__{nocot,cot_thinking}/checkpoint.json` — SEMANTIC_MULTI, K ∈ {5,10} × N ∈ {10,20,50} |
+| 102 × 3 | raw | `experiments_cloud/results/cot_ivq_arbitrary_single/claude-{haiku-4-5-20251001,sonnet-4-5-20250929,opus-4-5-20251101}__cot_thinking__ARBITRARY_SINGLE/checkpoint.json` — K=5, N ∈ {50,100,200,300,400,460} |
+
+`checkpoint.json` is authoritative for every emitted number (accuracy, n,
+n_correct, wilson_hw, CI). The sibling `trials.jsonl` in each of those 9
+directories is read only to fill `n_offstream` / `accuracy_onstream` /
+`error_types_json` and to cross-check the denominators — 846/846 rows agree on
+`n_correct`. Row split across the two output files: 270 `nocot` (all
+SEMANTIC_MULTI) and 576 `cot_thinking` (270 SEMANTIC_MULTI + 306
+ARBITRARY_SINGLE).
+
+**No ARBITRARY_SINGLE `nocot` arm exists.** That dataset is a CoT-only depth
+ladder, so the arm contrast is available on SEMANTIC_MULTI only.
+
+**Two source files in that tree are deliberately NOT used.**
+`cot_ivq_arbitrary_single/_figs/ladder_summary.csv` carries no `model` column
+and holds a stale haiku-only snapshot (93 of 102 cells match the finished haiku
+checkpoint), so a reader would silently attribute haiku's mid-run numbers to
+whichever model they assumed. The per-run copies under
+`claude-{opus,sonnet}-*/_figs/` are correct but cover only 2 of 3 models.
+`cot_ivq/_figs/cot_ivq_summary.csv` **is** clean and complete (540 rows,
+model-labelled) — it is skipped only so there is one code path, not because it
+is wrong; it makes a good independent check.
+
+**Resume artifact, one position.** sonnet ARBITRARY_SINGLE K=5 N=400 position 6:
+the checkpoint counted 56 trials, `trials.jsonl` holds 64 distinct `trial_idx`
+(no duplicates). That cell was resumed, and the JSONL is append-only, so it
+holds the union of attempts while the checkpoint holds the final attempt's
+observations. The builder counts the checkpoint's prefix; the `n_correct`
+cross-check passing on that row is what proves the prefix is the right subset.
+`trials.jsonl.predup` next to it is a local-only dedup safety copy, gitignored
+via `*.predup`.
+
+**Denominator.** `n_trials` counts well-formed responses only (answer inside
+`<answer>` tags). 120 malformed responses across the corpus are excluded from it
+and carried as `n_malformed=` in `notes`, matching the upstream sweep — only the
+thinking arm can exhaust its token budget, so folding truncation into the error
+bucket would bias the arm under test.
+
+**Off-stream taxonomy differs from theme 01.** This sweep classifies five
+outcomes, so off-stream here is `garbage` alone: `out_of_context` is a real
+stream value belonging to another key, hence on-stream, and `no_answer` is
+already outside `n_trials`. 92 garbage in 79,552 trials (0.12%) — far below the
+20% exclusion threshold above.
+
+**Model registry.** `claude-4.5-opus` is new to `build/common.py` and appears in
+no other theme. The three dated snapshot ids alias onto the canonical
+`claude-4.5-*` names; the full dated id is preserved per row in `notes`, because
+theme 02's claude rows come from earlier runs whose CSVs did not record a
+snapshot. A theme-02 vs theme-07 difference is therefore not purely an arm effect.
+
+**Producers** (in `experiments_cloud/`, not copied here): `cot_ivq_sweep.py`
+(driver), `cot_ivq_prompts.py` (stimulus + blake2b seeding), `cot_ivq_score.py`
+(extraction + 5-way classification), `cot_ivq_plot.py` /
+`cot_ivq_plot_ladder.py` (figures), `run_cot_ivq_full.sh` /
+`run_cot_ivq_arbitrary.sh` (invocations).
+
 ## Deliberately not consolidated
 
 Recorded so these stay findable, not because they are unimportant.
@@ -371,6 +455,7 @@ Recorded so these stay findable, not because they are unimportant.
 | Pre-v3 probing | `mechanistic_probing_v2/` | Superseded. **Do not delete** — `core/dataset_configs.py` is a live import for `lora_intervention/data_gen.py`. |
 | Narrative-domain variant (Dota2 / ATC / ICU) | `narrative_generator/`, `data/narrative_interference/` | Abandoned line; see paper §Limitations. |
 | Older non-vLLM v3 runs | `v3/results/` | Superseded by `v3/results_vllm/`. |
+| Museum-narrative CoT sweeps | `experiments_cloud/results/{museum_cot,museum_endpoint}/` | A different stimulus domain (narrative prose, not a key-value stream), so its positions are not comparable with the KV grid. Theme 07 covers the KV CoT sweeps only. |
 | Training-dynamics checkpoint sweeps (SmolLM2 42 ckpts, SmolLM3 37 ckpts) | raw not local; survives as `paper/figures/tab_smollm2_traj.tex`, `tab_smollm3_traj.tex`, `fig3_training_dynamics.*` | Not one of the four themes. The SmolLM3 *format* slice **is** included (theme 3). |
 
 ## Related maps

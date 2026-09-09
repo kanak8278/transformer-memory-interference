@@ -114,6 +114,7 @@ MODELS = {
     "gpt-4.1-mini":            ("GPT-4.1", True),
     "claude-4.5-haiku":        ("Claude-4.5", True),
     "claude-4.5-sonnet":       ("Claude-4.5", True),
+    "claude-4.5-opus":         ("Claude-4.5", True),
     "gemini-2.5-flash":        ("Gemini-2.5", True),
     "gemini-2.5-pro":          ("Gemini-2.5", True),
 }
@@ -142,6 +143,14 @@ _ALIASES = {
     "claude-4.5-sonnet": "claude-4.5-sonnet",
     "claude-4.5-haiku": "claude-4.5-haiku",
     "claude-haiku": "claude-4.5-haiku",
+    # Dated API snapshots, as recorded by the CoT sweep (theme 07). The undated
+    # aliases above come from the earlier ucurve runs, whose CSVs did not
+    # preserve a snapshot date -- so these three ids collapse into the same
+    # canonical model as rows whose snapshot is unrecorded. Theme 07 keeps the
+    # full dated id in its `notes` column.
+    "claude-haiku-4-5-20251001": "claude-4.5-haiku",
+    "claude-sonnet-4-5-20250929": "claude-4.5-sonnet",
+    "claude-opus-4-5-20251101": "claude-4.5-opus",
     "gpt-4.1": "gpt-4.1",
     "gpt-4.1-mini": "gpt-4.1-mini",
     "gemini-2.5-flash": "gemini-2.5-flash",

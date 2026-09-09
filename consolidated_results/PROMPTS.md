@@ -229,8 +229,61 @@ but does not appear in any committed result.
   the endpoints.
 
 > **`plain` ≠ `flat_nolabel`.** Both hide indices, but they are different
-> templates from different experiments on different datasets (`plain` is
-> Arbitrary-Single, `flat_nolabel` is Semantic-Multi). Never merge them.
+> templates from different experiments. Never merge them. Note the dataset no
+> longer separates them: `flat_nolabel` was Semantic-Multi only until theme 07
+> ran it on Arbitrary-Single too (§7), so filter on `prompt_format`, not on
+> `dataset`.
+
+## 7. CoT vs non-CoT IVQ — both datasets
+
+**Models:** claude-4.5-{haiku,sonnet,opus}
+**Where:** theme 07
+**Source:** `experiments_cloud/cot_ivq_prompts.py`
+
+A variant of §5's `flat_nolabel`, with two changes and one non-change.
+
+**Change 1 — the answer is a tagged span, not a bare line.** Both arms carry
+this closing instruction identically:
+
+```
+Read the following key-value stream. Each key appears multiple times as it
+gets updated. Count each occurrence of a key as one update.
+
+<category>: <value>
+...
+
+What was the {ordinal(k)} value of <test_category>?
+Respond with only:
+<answer>the exact value</answer>
+```
+
+The `last`-query variant swaps the question line for `What was the last value
+of <test_category>?`, exactly as in §5.
+
+**Change 2 — scoring is exact-span equality, not containment.** §5's scorer
+accepts `expected in predicted`, which credits any response that merely
+enumerates the stream. Harmless for one-word answers, fatal once reasoning text
+is in the response, so this sweep extracts the span inside `<answer>` tags and
+compares by equality after normalisation. See "Scoring" below for the contrast.
+
+**Non-change — the prompt is byte-identical across the two arms.** `nocot` and
+`cot_thinking` differ only in API parameters: thinking off vs on with
+`thinking_budget=3000`, `max_tokens` 64 vs 5048, and `nocot` additionally
+prefills `<answer>` with `</answer>` as a stop sequence. Nothing in the stimulus
+differs, which is what keeps the arm contrast clean.
+
+**Seeding differs from §5, deliberately.** `cot_ivq_prompts.make_seed` uses
+`blake2b`, not `ucurve_prompts.make_seed`, whose tuple contains a string and is
+therefore `PYTHONHASHSEED`-salted and not reproducible across processes. So both
+arms see identical streams and the comparison is paired trial-by-trial — but
+theme 07's streams are **not** the same streams as theme 02's at the same (K, N).
+
+**Prompt caching.** At large N the stream dominates the prompt and is re-sent
+once per queried position, so the preamble+stream is sent as a separate content
+block with an ephemeral cache breakpoint. Concatenating the two blocks
+reproduces the single-string prompt exactly. One caveat recorded in the source:
+a block boundary can shift tokenisation by a token or two at the seam, so do not
+mix cached and uncached cells inside one comparison.
 
 ---
 
@@ -248,8 +301,10 @@ but does not appear in any committed result.
 | `plain` | arbitrary_single | Qwen2.5-3B-Instruct, gemma-3-4b-it | 6 |
 | `block` | arbitrary_single | Qwen2.5-3B-Instruct, gemma-3-4b-it | 6 |
 | `completion` / `chat_1024` | arbitrary_single | SmolLM3-3B (derived) | — |
+| `flat_nolabel` | semantic_multi | 3 claude-4.5, `nocot` + `cot_thinking`, theme 07 | 7 |
+| `flat_nolabel` | arbitrary_single | 3 claude-4.5, `cot_thinking` only, theme 07 | 7 |
 
-## Scoring (identical across all of the above)
+## Scoring (§§1–6; theme 07 differs — see below)
 
 `mechanistic_probing_v2/core/evaluation.py:48-76`
 
@@ -262,3 +317,36 @@ if exp_lower in pred_lower or pred_lower.startswith(exp_lower):
 Case-folded substring-or-prefix match over the whole generation — lenient, so a
 model answering in a sentence is not penalised. Outcome taxonomy and its
 failure modes: `01_fvq_cvq/VALIDITY.md`.
+
+### Theme 07's scorer — stricter, and five-way
+
+`experiments_cloud/cot_ivq_score.py`
+
+```python
+# exact span, not containment
+matches = re.findall(r"<answer\s*>(.*?)</\s*answer\s*>", text, re.DOTALL | re.I)
+answer = normalize(matches[-1])          # last match: a model that restates commits with the final one
+correct = answer == normalize(expected)
+```
+
+Two departures, both required once reasoning text is in the response:
+
+1. **No containment.** A CoT response that enumerates the stream contains the
+   target value whatever it concluded, so the lenient matcher above would credit
+   it. Equality over the tagged span removes that.
+2. **Failure modes are named, not silent.** Five outcomes instead of a
+   correct/incorrect split:
+
+| outcome | meaning | in `n_offstream`? |
+|---|---|---|
+| `correct` | exact match after normalisation | — |
+| `in_sequence` | a value of the **right** key at the **wrong** position — a positional-addressing error | no |
+| `out_of_context` | a real stream value belonging to **another** key — a retrieval error | no |
+| `garbage` | no stream value at all | **yes** |
+| `no_answer` | no usable `<answer>` span (truncation, or never committed) — excluded from `n_trials` entirely | n/a |
+
+Splitting `in_sequence` from `out_of_context` is the point: the three-way
+classifier collapses them and discards the more informative signal.
+`no_answer` is kept out of the error bucket because only the thinking arm can
+exhaust its token allowance, so charging truncation to it would bias the arm
+under test.
