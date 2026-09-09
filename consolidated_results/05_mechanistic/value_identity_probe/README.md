@@ -8,12 +8,53 @@ from the model's output, so it stays defined at 0% and 100% alike.
 
 | | |
 |---|---|
-| files | `probe_layers.csv` (6,967) · `summary.csv` (216) · `behavioral.csv` (38) · `pools.csv` (200). All `raw`. |
-| models | Qwen2.5-3B-Instruct, gemma-3-4b-it — **base only** |
+| arms | 4 — 2 models × 2 cells, **base only**, one directory each |
+| models | Qwen2.5-3B-Instruct, gemma-3-4b-it |
 | cells | (K=5, N=10) and (K=10, N=5) |
 | task | 50-way classification, **chance 2%** |
 | probe | logistic regression on the full residual stream (2,048 / 2,560 dims, no PCA), 5-fold stratified CV, C=0.1 |
+| rows | 6,967 layer-rows across arms. All `raw`. |
 | design doc | `lora_intervention/experiments/linear_probing/PROBE50_DESIGN.md` |
+
+## Layout — one directory per arm, three subsets per arm
+
+Directory names match the source directories exactly, so no lookup table is
+needed to get from a row back to its run.
+
+```
+value_identity_probe/
+├── Qwen2.5-3B-Instruct_5k_10u/     K=5,  N=10   36 layers, d=2048
+├── Qwen2.5-3B-Instruct_10k_5u/     K=10, N=5
+├── gemma-3-4b-it_5k_10u/           K=5,  N=10   34 layers, d=2560
+├── gemma-3-4b-it_10k_5u/           K=10, N=5
+├── summary_all_arms.csv            216 rows — the 4 arms' summaries, stacked
+└── behavioral_all_arms.csv          38 rows — the 4 arms' behaviour, stacked
+```
+
+Inside every arm directory:
+
+| file | what |
+|---|---|
+| `probe_all.csv` | **subset `all`** — every trial |
+| `probe_correct.csv` | **subset `correct`** — trials the model got right. Confounded with the output head, so this is the confound check, not a result |
+| `probe_wrong.csv` | **subset `wrong`** — trials the model got wrong. **The headline**: decodable here means tracked and not emitted |
+| `summary.csv` | best layer + best top-1 per (condition, subset, label set) for this arm |
+| `behavioral.csv` | accuracy and the 6-bucket output audit per condition |
+| `pool.csv` | this arm's 50-word label space (tokenizer-specific — see caveats) |
+
+Row counts differ across the three subset files by design, not by coverage:
+`probe_all` and `probe_correct` carry the `expected` label set only, while
+`probe_wrong` carries all four label sets, so it is ~4× larger.
+
+| arm | `probe_all` | `probe_correct` | `probe_wrong` |
+|---|---|---|---|
+| Qwen (5,10) | 444 | 222 | 1,776 |
+| Qwen (10,5) | 259 | 185 | 1,036 |
+| gemma (5,10) | 420 | 140 | 1,400 |
+| gemma (10,5) | 245 | 140 | 700 |
+
+`probe_correct` is short in the gemma arms for a real reason, not a missing run —
+see "the 27 cells that are not estimable" below.
 
 ## Why the pool is closed and exactly K×N
 
@@ -133,9 +174,10 @@ seeing as a single fact:
 | `wrong` | the model is too **accurate** | 4 rows — gemma FVQ / k1, both cells (n = 10–22) |
 | `correct` | the model is too **inaccurate** | 23 rows — interior slots, mostly gemma (n = 0–159) |
 
-All 27 appear in `summary.csv` with `estimable=False` and the reason in `notes`,
+All 27 appear in the arm's `summary.csv` (and in `summary_all_arms.csv`) with
+`estimable=False` and the reason in `notes`,
 so the gap is a row you can see rather than an absence you have to notice. They
-contribute no rows to `probe_layers.csv`. A further 288 individual layer records
+contribute no rows to the `probe_*.csv` files. A further 288 individual layer records
 inside otherwise-fine fits carry empty metrics plus
 `class support < folds` — kept as rows so a layer curve has no silent hole.
 
@@ -158,7 +200,7 @@ inside otherwise-fine fits carry empty metrics plus
   leading space, and requires that no value be a substring of another (because
   `is_correct` accepts `expected in pred`, which would score "ace" correct for
   "access"). Qwen and gemma therefore get different 50-word pools; both are in
-  `pools.csv`.
+  their arms' `pool.csv`.
 - **Scoring agreement is 1.000 in 34 of 38 conditions**, minimum 0.963 — the
   `single_token` argmax and greedy `generate` pick the same answer. The
   single-token shortcut is what halves GPU cost, so this is the check that
@@ -168,6 +210,8 @@ inside otherwise-fine fits carry empty metrics plus
 
 `lora_intervention/experiments/linear_probing/results_probe50/<model>_<cell>/` —
 `manifest.json` (behaviour, audit, pool) and `probe_fits_*.json` (the fits).
+Each arm directory here maps 1:1 onto the source directory of the same name, and
+every row repeats its own `source_file`.
 
 **Shards must be resolved, not concatenated.** The wrong-subset fits are spread
 over up to three files per cell (`probe_fits_wrong.json` plus `_topup` /

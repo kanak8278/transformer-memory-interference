@@ -446,7 +446,7 @@ snapshot. A theme-02 vs theme-07 difference is therefore not purely an arm effec
 
 ---
 
-## 05_mechanistic/value_identity_probe/ — probe_layers.csv (6,967) · summary.csv (216) · behavioral.csv (38) · pools.csv (200)
+## 05_mechanistic/value_identity_probe/ — 4 arm directories, 6,967 layer-rows
 
 Built by `build/build_05c_value_identity.py`. Added 2026-09-09. All rows `raw`.
 Qwen2.5-3B-Instruct and gemma-3-4b-it, **base only**, cells (K=5,N=10) and
@@ -458,6 +458,19 @@ Qwen2.5-3B-Instruct and gemma-3-4b-it, **base only**, cells (K=5,N=10) and
 | `correct` + `all` fits | raw | `.../probe_fits_ref.json` (4 files) |
 | `wrong` fits, 4 label sets | raw | `.../probe_fits_wrong.json` (4 files) |
 | later `wrong` shards | raw | `.../probe_fits_wrong_topup.json` (3), `.../probe_fits_wrong_missing.json` (1) |
+
+**One output directory per arm**, named exactly as its source directory, so the
+mapping needs no lookup table:
+`Qwen2.5-3B-Instruct_{5k_10u,10k_5u}/` and `gemma-3-4b-it_{5k_10u,10k_5u}/`.
+Each holds the three subsets as three files — `probe_all.csv`,
+`probe_correct.csv`, `probe_wrong.csv` — plus `summary.csv`, `behavioral.csv`
+and `pool.csv` (that arm's 50-word label space). Two stacked cross-arm views sit
+at the top level: `summary_all_arms.csv` (216 rows) and
+`behavioral_all_arms.csv` (38 rows); they contain no rows the arm files lack.
+
+Subset file sizes differ by design, not coverage: `probe_all` and
+`probe_correct` carry the `expected` label set only, `probe_wrong` carries all
+four, so it is ~4x larger.
 
 Design doc: `lora_intervention/experiments/linear_probing/PROBE50_DESIGN.md`.
 Producers: `probe50_collect.py` (activations), `probe50_fit.py` (probes),
@@ -473,7 +486,8 @@ names the superseded shard in `notes`. Concatenating the files, or letting glob
 order win, would mix sample sizes silently.
 
 **27 fits are not estimable, and appear as rows rather than as absences.**
-`summary.csv` carries `estimable=False` plus the reason. The two subsets fail at
+each arm's `summary.csv`, and `summary_all_arms.csv`, carries
+`estimable=False` plus the reason. The two subsets fail at
 opposite ends of accuracy: `wrong` empties where the model is too accurate (4
 rows — gemma FVQ/k1, n=10..22), `correct` empties where it is too inaccurate
 (23 rows — interior slots, n=0..159). A further 288 individual layer records

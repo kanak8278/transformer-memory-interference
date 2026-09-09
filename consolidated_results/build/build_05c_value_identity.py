@@ -317,8 +317,8 @@ def rows_for_cell(cell_dir: Path) -> tuple[list, list, list, list, list]:
         "provenance_tier": RAW, "source_file": man_src,
     } for i, v in enumerate(pool)]
 
-    return layer_rows, summary_rows, behavioral_rows, pool_rows, [
-        (dirname, superseded, notes_log)]
+    return (layer_rows, summary_rows, behavioral_rows, pool_rows,
+            (dirname, superseded, notes_log))
 
 
 def qa_shuffled_at_chance(layer_rows: list) -> None:
@@ -346,49 +346,71 @@ def qa_scoring_agreement(behavioral_rows: list) -> None:
 
 def main() -> None:
     print(f"[{THEME}/{SUBDIR}] closed-pool value-identity probe (base models)")
-    layer_rows, summary_rows, behavioral_rows, pool_rows = [], [], [], []
+    all_layers, all_summary, all_behav = [], [], []
     total_superseded = 0
 
     cell_dirs = sorted(d for d in SRC_ROOT.iterdir()
                        if d.is_dir() and not d.name.endswith(SKIP_DIRS)
                        and (d / "manifest.json").exists())
+
+    OUT.mkdir(parents=True, exist_ok=True)
     for cell_dir in cell_dirs:
         lr, sr, br, pr, info = rows_for_cell(cell_dir)
-        layer_rows += lr
-        summary_rows += sr
-        behavioral_rows += br
-        pool_rows += pr
-        dirname, superseded, notes_log = info[0]
+        dirname, superseded, notes_log = info
         total_superseded += superseded
-        print(f"     {dirname}: {len(lr)} layer-rows, {len(sr)} summary rows"
+        all_layers += lr
+        all_summary += sr
+        all_behav += br
+
+        # One directory per ARM = model x (K, N) cell, named exactly as the
+        # source directory so the mapping needs no lookup table. Inside it, the
+        # three subsets are three files: `all` is every trial, `correct` is
+        # confounded with the output head (expected == emitted) and is the
+        # confound check, `wrong` is the headline -- decodable there means the
+        # value is tracked and not emitted.
+        arm = OUT / dirname
+        arm.mkdir(parents=True, exist_ok=True)
+        counts = []
+        for subset in ("all", "correct", "wrong"):
+            rows = sorted((r for r in lr if r["subset"] == subset), key=sort_key)
+            _write(rows, LAYER_COLUMNS, arm / f"probe_{subset}.csv")
+            counts.append(f"{subset}={len(rows)}")
+        _write(sorted(sr, key=sort_key), SUMMARY_COLUMNS, arm / "summary.csv")
+        _write(sorted(br, key=behav_key), BEHAVIORAL_COLUMNS,
+               arm / "behavioral.csv")
+        _write(pr, POOL_COLUMNS, arm / "pool.csv")
+        print(f"  -> {SUBDIR}/{dirname}/: probe_" + ", ".join(counts)
+              + f" | summary={len(sr)}, behavioral={len(br)}, pool={len(pr)}"
               + (f", {len(notes_log)} not estimable" if notes_log else ""))
 
     print(f"     shard resolution: {total_superseded} superseded "
           f"(condition, subset) fits dropped in favour of the larger n")
-    qa_shuffled_at_chance(layer_rows)
-    qa_scoring_agreement(behavioral_rows)
+    qa_shuffled_at_chance(all_layers)
+    qa_scoring_agreement(all_behav)
 
-    def sort_key(r):
-        return (r["model"], int(r["num_keys"]), int(r["num_updates"]),
-                r.get("subset", ""), r["slot"], r.get("query_type", ""),
-                r.get("label_set", ""), float(r.get("C") or 0),
-                int(r.get("layer", 0)))
+    # Cross-arm views at the top level, so the four arms can be compared without
+    # opening four directories. Same rows as the per-arm files, re-sliced.
+    _write(sorted(all_summary, key=sort_key), SUMMARY_COLUMNS,
+           OUT / "summary_all_arms.csv")
+    _write(sorted(all_behav, key=behav_key), BEHAVIORAL_COLUMNS,
+           OUT / "behavioral_all_arms.csv")
+    print(f"  -> {SUBDIR}/summary_all_arms.csv: {len(all_summary)} rows"
+          f" (all 4 arms)")
+    print(f"  -> {SUBDIR}/behavioral_all_arms.csv: {len(all_behav)} rows"
+          f" (all 4 arms)")
+    print(f"     total layer-rows across arms: {len(all_layers)}")
 
-    layer_rows.sort(key=sort_key)
-    summary_rows.sort(key=sort_key)
-    behavioral_rows.sort(key=lambda r: (r["model"], r["num_keys"],
-                                        r["num_updates"], r["slot"],
-                                        r["query_type"]))
 
-    OUT.mkdir(parents=True, exist_ok=True)
-    for rows, cols, name in (
-        (layer_rows, LAYER_COLUMNS, "probe_layers.csv"),
-        (summary_rows, SUMMARY_COLUMNS, "summary.csv"),
-        (behavioral_rows, BEHAVIORAL_COLUMNS, "behavioral.csv"),
-        (pool_rows, POOL_COLUMNS, "pools.csv"),
-    ):
-        _write(rows, cols, OUT / name)
-        print(f"  -> {SUBDIR}/{name}: {len(rows)} rows")
+def sort_key(r):
+    return (r["model"], int(r["num_keys"]), int(r["num_updates"]),
+            r.get("subset", ""), r["slot"], r.get("query_type", ""),
+            r.get("label_set", ""), float(r.get("C") or 0),
+            int(r.get("layer", 0)))
+
+
+def behav_key(r):
+    return (r["model"], r["num_keys"], r["num_updates"], r["slot"],
+            r["query_type"])
 
 
 def _write(rows: list, columns: list, path: Path) -> None:

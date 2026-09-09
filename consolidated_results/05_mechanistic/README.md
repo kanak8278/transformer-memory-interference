@@ -15,7 +15,7 @@ theme's "how LoRA does it" title does not cover it.
 | `attention_routing.csv` | 45 | (model, regime, **layer / head**) | does LoRA re-point attention at the v_last round? |
 | `causal_ablation.csv` | 51 | (model, variant, cell, **layer**) | are those heads *causally* responsible? |
 | **`entropy_lens/`** | 34,164 + 465 | (arm, cell, condition, subset, **layer**) | how does *uncertainty* evolve with depth, and is the model's confidence calibrated to its correctness? |
-| **`value_identity_probe/`** | 6,967 + 454 | (model, cell, condition, subset, label_set, **layer**) | is the ground-truth *value* linearly decodable — 50-way, chance 2% — even on trials the model answers wrongly? |
+| **`value_identity_probe/`** | 6,967 + 254 | (model, cell, condition, subset, label_set, **layer**) | is the ground-truth *value* linearly decodable — 50-way, chance 2% — even on trials the model answers wrongly? |
 
 Primary model **Qwen2.5-3B-Instruct**; **gemma-3-4b-it** as cross-family
 replication. base vs LoRA throughout. Naming: RI→FVQ, PI→CVQ; `v_first`/`v_last`
@@ -36,9 +36,13 @@ is also the only mechanistic method that touches the **from-scratch** model of
 theme 06, and its scratch arm independently replicates that theme (150 cells,
 mean |diff| 0.0156). Full detail: `entropy_lens/README.md`.
 
-`value_identity_probe/` is a subfolder for the same reason — four units of
-measurement (per-layer fits, per-fit summaries, behavioural accuracy with an
-output audit, and the value pools that define the label space). Two things to
+`value_identity_probe/` is a subfolder for the same reason, and splits one
+directory per **arm = model x (K, N) cell** — `Qwen2.5-3B-Instruct_5k_10u/`,
+`Qwen2.5-3B-Instruct_10k_5u/`, `gemma-3-4b-it_5k_10u/`,
+`gemma-3-4b-it_10k_5u/`. Inside each, the three subsets are three files:
+`probe_all.csv`, `probe_correct.csv`, `probe_wrong.csv`, alongside that arm's
+`summary.csv`, `behavioral.csv` and `pool.csv`. `probe_wrong.csv` is the
+headline and `probe_correct.csv` the output-head confound check. Two things to
 carry over before using it. It is the **only base-only** method here: LoRA
 scores 1.000 wherever the closed-pool design is valid, so its wrong-answer
 subset is empty at any sample size, and a LoRA arm needs a different design
