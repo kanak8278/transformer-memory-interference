@@ -518,6 +518,89 @@ the queried one — record that with any interior claim. `cv_last` at k=N and
 `cv_first` at k=1 are the same label as `expected` by construction; those rows
 are flagged `DEGENERATE:` in `notes` and must not be counted as controls.
 
+---
+
+## 08_museum_naturalistic/ — endpoint.csv (116) · ivq.csv (96) · cot_ivq.csv (192)
+
+Built by `build/build_08_museum.py`. Added 2026-09-09. All rows `raw`.
+**claude-4.5-haiku only.** Dataset `museum_m0`, prompt_format `narrative_m0`.
+
+| rows | tier | source |
+|---|---|---|
+| 116 | raw | `experiments_cloud/results/museum_endpoint/claude-haiku/sweep_20260722_161853.json` — 58 cells x {RI, PI} |
+| 96 | raw | `legacy/results/museum_ivq/claude-haiku/ivq_full_20260722_173410_summary.json` — 6 cells x 12-18 positions |
+| 192 | raw | `experiments_cloud/results/museum_cot/claude-haiku-4-5-20251001__{nocot,cot_thinking}/checkpoint.json` |
+
+**Files in those directories deliberately NOT read.**
+`museum_endpoint/.../sweep_partial.json` is an in-progress snapshot of the same
+run, stat-for-stat identical on all 58 cells; only the final file carries
+`end_time`. `sweep_20260722_152429.json` is a 3-trial smoke.
+`sweep_full_*.json` duplicate the same cells plus per-trial `trial_details`.
+`museum_ivq/.../ivq_smoke_*` are three smokes. All are kept as sources of
+per-trial detail, none is a second source of truth.
+
+**Why a theme and not rows added to 01 / 02 / 07.** The stimulus is the
+manipulated variable. Filing these three sweeps under the themes whose questions
+they mirror would scatter one comparison across three directories and repeat the
+haiku-only caveat in each. The grids do not match cell-for-cell anyway.
+
+**Correction to an earlier note.** A previous version of this file excluded the
+museum runs on the grounds that "a different stimulus domain ... its positions
+are not comparable with the KV grid". That was wrong as written: the `ivq` run's
+own metadata names its comparator as
+`plain flat_nolabel in ucurve_proprietary_results.csv` — the theme-02 data that
+IS consolidated. It was built to be read against it. The real reasons to be
+careful are coverage (one model) and validity (below), not domain.
+
+### Two models were run and are NOT consolidated
+
+| model | arm | status | why excluded |
+|---|---|---|---|
+| sonnet | `nocot` | completed, 18,024 attempts | **54.1% malformed** (9,757) vs 0.0% haiku / 3.9% opus. Reported accuracy 0.350 rests on the surviving 46%, a self-selected population. Fails the >=20% off-stream rule applied to seven open-weight models in theme 01. |
+| sonnet | `cot_thinking` | **crashed** | Died at trial 64/200 of cell 1 of 6 after a leaked-semaphore warning; wrote no `checkpoint.json`; `trials.jsonl` holds 791 lines from that one cell. **`_runner_sonnet.log` records `END sonnet cot_thinking (exit 0)` and `DONE`** — the log claims success. Checkpoints are written per cell (`museum_cot_sweep.py:493`), so a mid-cell crash loses the cell entirely. |
+| opus | `nocot` | completed cleanly | Usable. Held back only because it is one arm of a pair whose other half does not exist; add it if a nocot-only cross-model comparison is wanted. |
+| opus | `cot_thinking` | **never run** | A smoke now exists (below) and passes, so the full run is a spend decision, not a technical one. |
+
+**Opus smoke, 2026-09-09.**
+`experiments_cloud/results/museum_cot/claude-opus-4-5-20251101__cot_thinking__smoke/`
+— `--smoke` on the hardest cell (K=10, N=50), 2 trials x 6 positions. 12/12
+calls returned, **0 thinking-budget truncations**, output 310-2,715 tokens
+against a 3,000 budget, 88 s, 1 of 12 `no_answer`. Mechanically clean. Projected
+full-run cost from haiku's actual 17,160 calls repriced at opus rates is
+**~$420 as a floor**; opus emitted 1.44x haiku's output tokens per call in the
+smoke, so budget $500-600 and 3-4 h.
+
+### Validity: read `accuracy_onstream`, not `accuracy`, for depth claims
+
+Off-stream failure in `endpoint.csv` is asymmetric by condition — FVQ **1.0%**
+(104/10,076) against CVQ **14.8%** (1,492/10,076) — and grows with N. All **17**
+rows past the 20% threshold are CVQ, up to **58%** at (20,50). Correcting for it
+moves the mean FVQ-CVQ gap from **+0.260 to +0.189** and flips the sign in 2 of
+58 cells ((10,50) +0.267 -> -0.087; (5,50) +0.214 -> -0.026). 54/58 cells stay
+positive, so the theme-01 replication survives — at +0.189 against theme 01's
++0.19 — but the raw column overstates it by ~27%. Rows are emitted uncorrected
+with `n_offstream` and `accuracy_onstream` populated, so the filter is the
+reader's to apply.
+
+**7 of 96 `cot_thinking` rows are lower bounds**, not measurements: >=1 call at
+that position hit the 3,000-token thinking budget. The API does not report
+truncation, so the sweep derives `thinking_budget_hit` per call and
+`n_thinking_budget_hit` per position; affected rows say so in `notes`.
+Truncation lands on deep positions and never on shallow ones, so it depresses
+exactly the numbers under test.
+
+**Seeds are not reproducible for `endpoint` and `ivq`.** Both record
+`seed_formula: abs(hash((nk,nu,t)))%(2**31)`; Python salts `hash` per process for
+the string in that tuple — the defect `cot_ivq_prompts.py` moved to blake2b to
+avoid. Accuracies are sound, individual stimuli are not regenerable. Every row
+from those two sources carries the warning in `notes`. `cot_ivq` is clean
+(`seed_version=museum_cot_v1`).
+
+**Producers** (in `experiments_cloud/`, not copied here):
+`museum_endpoint_sweep.py`, `museum_ivq_haiku.py`, `museum_cot_sweep.py`,
+`museum_cot_prompts.py`, `museum_cot_score.py`, `museum_cot_refusals.py`,
+`plot_museum_ivq.py`, `run_museum_cot.sh`.
+
 ## Deliberately not consolidated
 
 Recorded so these stay findable, not because they are unimportant.
@@ -530,7 +613,7 @@ Recorded so these stay findable, not because they are unimportant.
 | Narrative-domain variant (Dota2 / ATC / ICU) | `narrative_generator/`, `data/narrative_interference/` | Abandoned line; see paper §Limitations. |
 | Older non-vLLM v3 runs | `v3/results/` | Superseded by `v3/results_vllm/`. |
 | v3 correctness / retrieval **AUC** probe grid | `lora_intervention/experiments/linear_probing/results/` — 124 JSONs (Qwen + gemma, base + LoRA, 31 cells x 7 conditions x ~36 layers), plus 36 earlier pilots and `isoaccuracy_v3*_summary.json` | A different probe question (is *correctness* decodable) and a different metric (AUC) from the value-identity probe above, and it degenerates wherever accuracy is 0% or 100% — 339 of 868 condition-cells per `PROBE50_DESIGN.md`. `05_mechanistic/probing.csv` holds a 354-row slice of this family from a different source, covering only the (2,5) cell. Consolidating the full grid is a live option; if taken, build from the 124 JSONs, not from `probe_layer_values_raw.csv`. |
-| Museum-narrative CoT sweeps | `experiments_cloud/results/{museum_cot,museum_endpoint}/` | A different stimulus domain (narrative prose, not a key-value stream), so its positions are not comparable with the KV grid. Theme 07 covers the KV CoT sweeps only. |
+| Museum sweeps — sonnet (both arms) and opus `cot_thinking` | `experiments_cloud/results/museum_cot/claude-{sonnet-4-5-20250929__nocot,sonnet-4-5-20250929__cot_thinking,opus-4-5-20251101__nocot}/` | **Supersedes an earlier blanket exclusion of all museum runs.** The haiku arms are now theme 08. Sonnet `nocot` is 54.1% malformed, sonnet `cot_thinking` crashed after one partial cell, opus `cot_thinking` was never run. Per-arm detail in the theme-08 section above. |
 | Training-dynamics checkpoint sweeps (SmolLM2 42 ckpts, SmolLM3 37 ckpts) | raw not local; survives as `paper/figures/tab_smollm2_traj.tex`, `tab_smollm3_traj.tex`, `fig3_training_dynamics.*` | Not one of the four themes. The SmolLM3 *format* slice **is** included (theme 3). |
 
 ## Related maps

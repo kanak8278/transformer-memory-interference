@@ -1,6 +1,6 @@
 # Consolidated Results
 
-One place for every result behind the seven stories this project tells, each
+One place for every result behind the eight stories this project tells, each
 with a traceable line back to the file every number came from.
 
 Built 2026-07-22 on branch `aaai-prep`; theme 07 added 2026-09-09. Nothing here
@@ -23,10 +23,11 @@ consolidated_results/
 │   └── value_identity_probe/   is the answer VALUE decodable (50-way, chance 2%) even on trials the model gets wrong?
 ├── 06_from_scratch/            GPT-2-small trained from random init on a synthetic KV task
 ├── 07_cot_ivq/                 does chain-of-thought rescue the interior? one CSV per arm (nocot / cot_thinking)
+├── 08_museum_naturalistic/     does any of it survive continuous prose? endpoint / ivq / CoT on the museum narrative
 └── build/                      re-runnable builders (see "Rebuilding")
 ```
 
-Each behavioural theme (01–04) holds a canonical combined CSV, a `by_model/`
+Each behavioural theme (01–04, 08) holds a canonical combined CSV, a `by_model/`
 split, and a `README.md`. Theme 07 holds one CSV per arm with a `by_model_<arm>/`
 split each, as theme 04 holds one per unit of measurement. Themes 05 (mechanistic) and 06 (from-scratch) hold one
 CSV per unit of measurement and their own `README.md`.
@@ -51,7 +52,7 @@ raw data (570 open-weight model-cells) is the *supporting* experiment; the main
 experiment's open-weight side is the thin, derived one (32 model-cells). See
 `01_fvq_cvq/README.md`.
 
-## The seven stories, in one paragraph each
+## The eight stories, in one paragraph each
 
 **1 — First value vs last value.** Across 14 models and 990 paired (K, N)
 cells, the first value is easier to retrieve than the current one in 69% of
@@ -143,6 +144,21 @@ N=460) and **the U-curve reappears** — at N=460 opus holds 1.00 across positio
 flattens the middle at moderate depth without abolishing the shape. Files in
 `07_cot_ivq/`, one CSV per arm; the CoT-vs-no-CoT contrast exists on
 Semantic-Multi **only**.
+
+**8 — Naturalistic prose: the format is not the cause.** All of the above runs
+on a synthetic stream of labelled `key: value` lines, so the obvious objection
+is that the whole effect is an artefact of that format. Re-run on the **museum
+M0 narrative** — continuous prose where an update is a sentence — and the three
+signatures reappear. The endpoint gap replicates almost exactly: **+0.189 mean
+FVQ−CVQ across 58 cells, positive in 54**, against theme 1's +0.19 in 19/20
+series. The U-curve reappears (K=10/N=50: 0.82 at position 1, floor by position
+6, 0.01 at position 50 asked by number and **0.26** asked as "the last"). And
+CoT rescues the interior again — 0.142 → **0.579** — but tops out far below
+theme 7's 0.97–1.00, so the rescue is itself partly format-dependent. Two hard
+limits on reading it: **claude-4.5-haiku only** (sonnet's arm was 54% malformed,
+opus's CoT arm was never run), and off-stream failure is CVQ-specific and grows
+with depth, so **`accuracy_onstream` is the column to use** — the raw gap
+overstates by ~27%. Files in `08_museum_naturalistic/`.
 
 ### Seven models are excluded — do not re-add them without reading why
 
@@ -363,6 +379,11 @@ nothing more. It cannot detect an error in the run itself.
   snapshots.** Theme 07 preserves the dated API id per row in `notes`; themes 02
   and 03 have no snapshot date at all. A theme-02 vs theme-07 difference is not
   purely an arm effect.
+- **Theme 08 is one model.** `08_museum_naturalistic/` is claude-4.5-haiku
+  only. It supports no scaling or cross-family claim, and its raw `accuracy`
+  overstates the endpoint gap because off-stream failure there is CVQ-specific
+  and depth-dependent — use `accuracy_onstream`. 7 of its 96 `cot_thinking` rows
+  are lower bounds from thinking-budget truncation.
 - **`by_model/` files are generated.** They are wiped and rewritten on every
   build. Edit nothing there; the combined CSV is canonical.
 
@@ -390,7 +411,7 @@ nothing more. It cannot detect an error in the run itself.
 
 ```bash
 cd consolidated_results/build
-python3 build_all.py          # all seven themes, with QA checks
+python3 build_all.py          # all eight themes, with QA checks
 python3 build_03_formats.py   # or one at a time
 ```
 
